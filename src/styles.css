@@ -1,1 +1,25 @@
 /* You can add global styles to this file, and also import other style files */
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin: 0 0 30px; /* bottom = footer height */
+    padding: 25px;
+    background-position: center center;
+	background-repeat:  no-repeat;
+	background-attachment: fixed;
+	background-size:  cover;
+	background-color: #999;
+}
+
+footer {
+    background-color: orange;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 30px;
+    width: 100%;
+    overflow:hidden;
+}

@@ -1,0 +1,41 @@
+<div class="panel panel-info">
+  <div class="panel-heading text-center">
+    <button type="button" class="pull-left btn btn-primary" (click)="back()">Back</button>
+    <h2>{{route.Name}} -> {{location.Name}}</h2>
+  </div>
+  <div class="panel-body">
+    <div>
+      <div class="col-sm-6">
+        <div><label>Address: &nbsp;</label>{{location.Address}}</div>
+      </div>
+      <div class="col-sm-6">
+        <div><label>Location Details: &nbsp;</label>{{location.LocationDetails}}</div>
+      </div>
+      <div class="col-sm-6">
+        <div><label>Target Arrival Time: &nbsp;</label>{{location.TargetArrivalTime}}</div>
+      </div>
+      <div class="col-sm-6">
+        <div><label>Drive Time: &nbsp;</label>{{location.DriveTimeMinutes}}</div>
+      </div>
+      <div class="col-sm-6">
+        <div><label>Visit Time: &nbsp;</label>{{location.VisitTimeMinutes}}</div>
+      </div>
+    </div>
+    <br>
+    <div class="row"><h3>Clients</h3></div>
+    <div>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let client of clients">
+            <td>{{client.PreferredName}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,11 @@
+<div class="panel panel-info" style="opacity:0.92">
+  <div class="panel-heading text-center" style="opacity:0.93">
+    <button type="button" class="pull-left btn btn-primary" (click)="back()">Back</button>
+    <h2>{{thisRoute.Name}}</h2>
+  </div>
+  <div class="panel-body">
+    <div *ngFor="let location of locations" class="location-div text-center" (click)="openLocation(location)">
+      <b>{{location.Name}} -> Arrive at: {{location.TargetArrivalTime}}</b>
+    </div>
+  </div>
+</div>
