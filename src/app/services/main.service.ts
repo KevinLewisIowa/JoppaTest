@@ -11,7 +11,7 @@ import 'rxjs/add/operator/toPromise';
 
 import { Store } from '@ngrx/store';
 import { IMainStore } from '../state-management/main.store';
-
+//adding a new comment
 @Injectable()
 export class MainService {
   online = true;
