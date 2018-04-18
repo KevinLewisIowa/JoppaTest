@@ -2,3 +2,4 @@ export const GET_USER = "GET_USER";
 export const GET_LOCATIONS = "GET_LOCATIONS";
 export const LOCATION_SELECTED = "LOCATION_SELECTED";
 export const ROUTE_SELECTED = "ROUTE_SELECTED";
+export const USER_API_ERROR = "USER_API_ERROR";

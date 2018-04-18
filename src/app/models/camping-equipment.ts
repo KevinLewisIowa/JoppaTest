@@ -1,8 +1,7 @@
-export class Route {
+export class CampingEquipment {
   id: number = undefined;
-  city: string = undefined;
   name: string = undefined;
-  is_active: boolean = undefined;
+  is_available: boolean = undefined;
   created_at: Date = undefined;
   updated_at: Date = undefined;
 }

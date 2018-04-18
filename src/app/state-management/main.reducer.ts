@@ -1,7 +1,7 @@
 import { GET_USER, GET_LOCATIONS, LOCATION_SELECTED, ROUTE_SELECTED } from './main.actions';
-import { MainStore, IMainStore } from './main.store';
+import { IUserStore, UserStore, IMainStore } from './main.store';
 
-export function MainReducer (state : IMainStore = MainStore, {type, payload}) {
+export function MainReducer (state : IUserStore = UserStore, {type, payload}) {
     switch (type){
         case (GET_USER):
             return Object.assign({}, state, {

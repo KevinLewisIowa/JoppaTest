@@ -19,7 +19,7 @@ export class LocationDetailComponent implements OnInit {
   locationId: number;
   clients: Client[] = [];
   constructor(private store : Store<IMainStore>, private service : MainService, private router: Router, private activatedRoute : ActivatedRoute) { 
-    this.store.select('main').subscribe(data => {
+    this.store.select('user').subscribe(data => {
       console.log('getting route from store');
       console.log(data['selectedRoute']);
       
@@ -43,12 +43,12 @@ export class LocationDetailComponent implements OnInit {
   back() {
     console.log('location during back');
     console.log(this.location);
-    if(this.location == undefined || this.location.RouteId == undefined)
+    if(this.location == undefined || this.location.route_id == undefined)
     {
       this.router.navigate(['/routes']);
     }
     else{
-      this.router.navigate(['/route', this.location.RouteId]);
+      this.router.navigate(['/route', this.location.route_id]);
     }
     
   }

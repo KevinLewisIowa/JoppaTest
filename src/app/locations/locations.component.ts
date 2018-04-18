@@ -54,10 +54,14 @@ export class LocationsComponent implements OnInit {
 
   openLocation(theLocation: Location){
     this.store.dispatch({type: 'LOCATION_SELECTED', payload: theLocation});
-    this.router.navigate(['/location', theLocation.RouteLocationId]);
+    this.router.navigate(['/location', theLocation.id]);
   }
 
   back(){
     this.router.navigate(['/routes']);
+  }
+
+  newLocation(){
+    this.router.navigate(['/locationNew', this.routeId]);
   }
 }

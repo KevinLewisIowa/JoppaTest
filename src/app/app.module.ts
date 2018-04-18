@@ -1,11 +1,12 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
 
 import { Store, StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { MainReducer } from './state-management/main.reducer';
+import { APIReducer } from './state-management/error.reducer';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
@@ -25,6 +26,12 @@ import { ClientComponent } from './client/client.component';
 import { ClientEditComponent } from './client/client-edit/client-edit.component';
 import { LocationDetailEditComponent } from './location-detail-edit/location-detail-edit.component';
 import { RouteEditComponent } from './routes/route-edit/route-edit.component';
+import { CreateRouteComponent } from './create-route/create-route.component';
+
+const reducers = {
+  user: MainReducer,
+  api: APIReducer
+}
 
 @NgModule({
   declarations: [
@@ -38,15 +45,17 @@ import { RouteEditComponent } from './routes/route-edit/route-edit.component';
     ClientComponent,
     ClientEditComponent,
     LocationDetailEditComponent,
-    RouteEditComponent
+    RouteEditComponent,
+    CreateRouteComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
-    HttpModule,
+    ReactiveFormsModule,
+    HttpClientModule,
     //InMemoryWebApiModule.forRoot(InMemoryDataService),
-    StoreModule.provideStore({main: MainReducer}),
-    StoreDevtoolsModule.instrumentOnlyWithExtension(),
+    StoreModule.forRoot({main: MainReducer}),
+    StoreDevtoolsModule.instrument(),
     AppRoutingModule
   ],
   providers: [MainService],

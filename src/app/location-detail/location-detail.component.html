@@ -1,24 +1,12 @@
 <div class="panel panel-info">
   <div class="panel-heading text-center">
     <button type="button" class="pull-left btn btn-primary" (click)="back()">Back</button>
-    <h2>{{route.Name}} -> {{location.Name}}</h2>
+    <h2>{{route.name}} -> {{location.name}}</h2>
   </div>
   <div class="panel-body">
     <div>
       <div class="col-sm-6">
-        <div><label>Address: &nbsp;</label>{{location.Address}}</div>
-      </div>
-      <div class="col-sm-6">
-        <div><label>Location Details: &nbsp;</label>{{location.LocationDetails}}</div>
-      </div>
-      <div class="col-sm-6">
-        <div><label>Target Arrival Time: &nbsp;</label>{{location.TargetArrivalTime}}</div>
-      </div>
-      <div class="col-sm-6">
-        <div><label>Drive Time: &nbsp;</label>{{location.DriveTimeMinutes}}</div>
-      </div>
-      <div class="col-sm-6">
-        <div><label>Visit Time: &nbsp;</label>{{location.VisitTimeMinutes}}</div>
+        <div><label>Location Details: &nbsp;</label>{{location.notes}}</div>
       </div>
     </div>
     <br>
@@ -32,7 +20,7 @@
         </thead>
         <tbody>
           <tr *ngFor="let client of clients">
-            <td>{{client.PreferredName}}</td>
+            <td>{{client.preferredName}}</td>
           </tr>
         </tbody>
       </table>

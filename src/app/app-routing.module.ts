@@ -15,7 +15,7 @@ const routes: Routes = [
   { path: 'location/:id', component: LocationDetailComponent },
   { path: 'routeNew', component: RouteEditComponent },
   { path: 'routeEdit/:id', component: RouteEditComponent },
-  { path: 'locationNew', component: LocationDetailEditComponent },
+  { path: 'locationNew/:id', component: LocationDetailEditComponent },
   { path: 'locationEdit/:id', component: LocationDetailEditComponent },
   { path: 'clientNew', component: ClientEditComponent },
   { path: 'clientEdit/:id', component: ClientEditComponent },

@@ -1,5 +1,5 @@
 import { Injectable }    from '@angular/core';
-import { Headers, Http } from '@angular/http';
+import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs';
 import 'rxjs/Rx';
@@ -11,6 +11,9 @@ import 'rxjs/add/operator/toPromise';
 
 import { Store } from '@ngrx/store';
 import { IMainStore } from '../state-management/main.store';
+
+const theHeader = new HttpHeaders().set('Content-Type', 'application/json');
+
 //adding a new comment
 @Injectable()
 export class MainService {
@@ -19,36 +22,32 @@ export class MainService {
   private baseUrl = 'api/';  // URL to web api
   private apiUrl = 'https://kevinlewisiowa.com/JoppaTest/';
 
-  constructor(private http: Http, private store: Store<IMainStore>) { }
+  constructor(private http: HttpClient, private store: Store<IMainStore>) { }
   getRoutes() {
     return this.http.get(this.baseUrl + `routes`)
         .map((response) => {
           console.log('results:');
           console.log(response);
-          response.json();
         })
         .catch(this.handleError);
   }
   getTheRoutes(): Observable<Route[]>{
     if(this.online){
-      return this.http.get(this.apiUrl + `GetRoutes.php`)
-        .map(res => res.json())
+      return this.http.get(this.apiUrl + `routes`)
+        .map(res => res)
         .catch(err => this.handleError(err));
     }
     else{
       return this.http.get(this.baseUrl + `routes`)
-               .map(response => response.json().data as Route[])
+               .map(response => response)
                .catch(this.handleError);
     }
   }
 
   getRoute(id) : Observable<Route>{
     if(this.online){
-      let headers = new Headers({ 'Content-Type': 'application/json' });
-      let options = new RequestOptions({ headers: headers });
-
-      return this.http.get(this.apiUrl + `GetRoute.php?routeId=${id}`)
-      .map(res => {return res.json()[0]; })
+      return this.http.get(this.apiUrl + `routes/${id}`)
+      .map(res => {return res; })
       .catch(err => this.handleError(err));
     }
     else{
@@ -59,11 +58,8 @@ export class MainService {
   getClientsForRoute(id): Observable<Client[]>{
     if(this.online){
       console.log('getting clients for: ' + id);
-      let headers = new Headers({ 'Content-Type': 'application/json' });
-      let options = new RequestOptions({ headers: headers });
-
-      return this.http.get(this.apiUrl + `GetClientsForLocation.php?locationId=${id}`)
-      .map(res => {return res.json(); })
+      return this.http.get(this.apiUrl + `getClientsForLocation?locationId=${id}`)
+      .map(res => {return res; })
       .catch(err => this.handleError(err));
     }
     else{
@@ -73,11 +69,8 @@ export class MainService {
 
   getRouteLocations(id): Observable<Location[]>{
     if(this.online){
-      let headers = new Headers({ 'Content-Type': 'application/json' });
-      let options = new RequestOptions({ headers: headers });
-
-      return this.http.get(this.apiUrl + `GetRouteLocations.php?routeId=${id}`)
-      .map(res => {return res.json(); })
+      return this.http.get(this.apiUrl + `getRouteLocations?routeId=${id}`)
+      .map(res => {return res; })
       .catch(err => this.handleError(err));
     }
     else{
@@ -93,19 +86,13 @@ export class MainService {
   private mapLocations(data: Array<any>): Location[] {
     return data.map(item => 
       <Location>({
-        RouteLocationId: item.RouteLocationId,
-        RouteId: item.RouteId,
-        Name: item.Name,
-        Address: item.Address,
-        Latitude: item.Latitude,
-        Longitude: item.Longitude,
-        LocationDetails: item.LocationDetails,
-        TargetArrivalTime: item.TargetArrivalTime,
-        DriveTimeMinutes: item.DriveTimeMinutes,
-        VisitTimeMinutes: item.VisitTimeMinutes,
-        ParkingLatitude: item.ParkingLatitude,
-        ParkingLongitude: item.ParkingLongitude,
-        Position: item.Position
+        id: item.id,
+        route_id: item.route_id,
+        name: item.name,
+        latitude: item.latitude,
+        longitude: item.longitude,
+        notes: item.notes,
+        position: item.position
       })
     );
   }

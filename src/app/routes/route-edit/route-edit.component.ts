@@ -7,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RouteEditComponent implements OnInit {
 
+  newRoute = true;
   constructor() { }
 
   ngOnInit() {

@@ -1,15 +1,12 @@
 export class Location {
-  Address: string = undefined;
-  DriveTimeMinutes: number = undefined;
-  Latitude: number = undefined;
-  Longitude: number = undefined;
-  LocationDetails: string = undefined;
-  RouteId: number = undefined;
-  ParkingLatitude: number = undefined;
-  ParkingLongitude: number = undefined;
-  Name: string = undefined;
-  RouteLocationId: number = undefined;
-  Position: number = undefined;
-  TargetArrivalTime: string = undefined;
-  VisitTimeMinutes: number = undefined;
+  id: number = undefined;
+  route_id: number = undefined;
+  name: string = undefined;
+  position: number = undefined;
+  notes: string = undefined;
+  longitude: number = undefined;
+  latitude: number = undefined;
+  is_active: number = undefined;
+  created_at: Date = undefined;
+  updated_at: Date = undefined;
 }
