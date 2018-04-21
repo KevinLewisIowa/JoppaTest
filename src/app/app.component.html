@@ -3,3 +3,17 @@
     <router-outlet></router-outlet>
 </div>
 <app-footer></app-footer>
+<ng-template #errorModal let-c="close" let-d="dismiss">
+    <div class="modal-header">
+      <h4 class="modal-title">Server Error</h4>
+      <button type="button" class="close" aria-label="Close" (click)="displayError = false;d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="apiErrorText">{{apiErrorText}}</div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" id="do-not-delete-line" class="btn btn-primary" (click)="displayError = false;c('Close click')">Close</button>
+    </div>
+  </ng-template>

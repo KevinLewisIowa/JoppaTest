@@ -7,6 +7,7 @@ import { Store, StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { MainReducer } from './state-management/main.reducer';
 import { APIReducer } from './state-management/error.reducer';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
@@ -51,6 +52,7 @@ const reducers = {
   imports: [
     BrowserModule,
     FormsModule,
+    NgbModule.forRoot(),
     ReactiveFormsModule,
     HttpClientModule,
     //InMemoryWebApiModule.forRoot(InMemoryDataService),

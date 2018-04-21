@@ -16,6 +16,7 @@ import 'rxjs/add/operator/toPromise';
 
 import { Store } from '@ngrx/store';
 import { IMainStore } from '../state-management/main.store';
+import { PrayerRequestAndNeed } from "app/models/prayer-request";
 
 const theHeader = new HttpHeaders().set('Content-Type', 'application/json');
 //adding a new comment
@@ -23,7 +24,7 @@ const theHeader = new HttpHeaders().set('Content-Type', 'application/json');
 export class ClientService {
   online = true;
   private baseUrl = 'api/';  // URL to web api
-  private apiUrl = 'https://kevinlewisiowa.com/JoppaTest/';
+  private apiUrl = 'https://hidden-springs-63744.herokuapp.com/';
 
   constructor(private http: HttpClient, private store: Store<IMainStore>) { }
   getClientLikes(id) {
@@ -85,8 +86,17 @@ export class ClientService {
   }
 
   getRequestedItems(id) {
-      return this.http.get(this.baseUrl + `getRequestedItemsForClient?clientId=${id}`)
+      return this.http.get(this.baseUrl + `getClientRequestedItem?clientId=${id}`)
         .map(response => response);
+  }
+
+  getClientPrayerRequests(id) {
+    return this.http.get(this.baseUrl + `getClientPrayerRequests?clientId=${id}`)
+  }
+
+  insertClientPrayerRequest(prayerRequest: PrayerRequestAndNeed) {
+    return this.http.post(this.baseUrl + `prayer_request_and_needs`, {prayer_request_and_need: prayerRequest},
+      {headers: theHeader}).map(response => response);
   }
 
   getAllRequestedItems() {

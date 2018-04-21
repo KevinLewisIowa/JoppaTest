@@ -2,7 +2,8 @@ import { Location } from '../models/location';
 import { Route } from '../models/route';
 
 export interface IMainStore {
-    user: IUserStore
+    user: IUserStore,
+    api: IAPI_Error
 }
 export interface IUserStore {
     userName: string;
