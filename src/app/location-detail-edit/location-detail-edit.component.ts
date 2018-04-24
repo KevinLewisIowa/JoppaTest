@@ -19,6 +19,7 @@ export class LocationDetailEditComponent implements OnInit {
               private fb: FormBuilder, private store: Store<IMainStore>) { }
 
   ngOnInit() {
+    this.theLocation = new Location();
     this.locationForm = this.fb.group({
       notes: '',
       position: '',
