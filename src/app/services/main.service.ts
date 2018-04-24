@@ -80,7 +80,7 @@ export class MainService {
 
   getRouteLocations(id): Observable<Location[]>{
     if(this.online){
-      return this.http.get(this.apiUrl + `getRouteLocations?routeId=${id}`)
+      return this.http.get(this.apiUrl + `locationsForRoute?routeId=${id}`)
       .map(res => {return res; })
       .catch(err => this.handleError(err));
     }
