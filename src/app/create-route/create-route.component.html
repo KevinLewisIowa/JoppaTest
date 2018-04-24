@@ -1,3 +1,15 @@
-<p>
-  create-route works!
-</p>
+<form [formGroup]="routeForm">
+<div class="login-box">
+  <div class="col-md-12">
+    <label>Name: </label>
+    <input type="text" placeholder="name" formControlName="name"/>
+  </div>
+  <div class="col-md-12">
+    <label>City: </label>
+    <input type="text" placeholder="city" formControlName="city"/>
+  </div>
+  <div class="col-md-12">
+    <button type="button" [disabled]="!routeForm.valid" (click)="submitRoute()">Submit Route</button>
+  </div>
+</div>
+</form>

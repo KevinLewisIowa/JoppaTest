@@ -1,3 +1,23 @@
-<p>
-  location-detail-edit works!
-</p>
+<form [formGroup]="locationForm">
+<div class="login-box">
+  <div class="col-md-12">
+    <label>Name: </label>
+    <input type="text" placeholder="name" formControlName="name"/>
+  </div>
+  <div class="col-md-12">
+    <label>Position: </label>
+    <input type="number" placeholder="position" formControlName="position"/>
+  </div>
+  <div class="col-md-12">
+    <label>Notes: </label>
+    <input type="text" placeholder="Notes" formControlName="notes"/>
+  </div>
+  <div class="col-md-12">
+    <label>Active: </label>
+    <input type="checkbox" formControlName="is_active"/>
+  </div>
+  <div class="col-md-12">
+    <button type="button" [disabled]="!locationForm.valid" (click)="submitLocation()">Submit Location</button>
+  </div>
+</div>
+</form>

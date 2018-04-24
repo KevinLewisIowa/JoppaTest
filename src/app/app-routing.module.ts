@@ -7,15 +7,16 @@ import { LocationDetailComponent } from './location-detail/location-detail.compo
 import { RouteEditComponent } from './routes/route-edit/route-edit.component';
 import { LocationDetailEditComponent } from './location-detail-edit/location-detail-edit.component';
 import { ClientEditComponent } from './client/client-edit/client-edit.component';
+import { CreateRouteComponent } from "app/create-route/create-route.component";
 
 const routes: Routes = [
    
    { path: 'routes', component: RoutesComponent },
   { path: 'route/:id', component: LocationsComponent },
   { path: 'location/:id', component: LocationDetailComponent },
-  { path: 'routeNew', component: RouteEditComponent },
+  { path: 'routeNew', component: CreateRouteComponent },
   { path: 'routeEdit/:id', component: RouteEditComponent },
-  { path: 'locationNew/:id', component: LocationDetailEditComponent },
+  { path: 'locationNew', component: LocationDetailEditComponent },
   { path: 'locationEdit/:id', component: LocationDetailEditComponent },
   { path: 'clientNew', component: ClientEditComponent },
   { path: 'clientEdit/:id', component: ClientEditComponent },

@@ -44,6 +44,17 @@ export class MainService {
     }
   }
 
+  insertRoute(theRoute: Route) {
+    return this.http.post(this.apiUrl + `routes`, {route: theRoute}, {headers: theHeader})
+        .map(res => res);
+  }
+
+  insertLocation(theLocation: Location) {
+    return this.http.post(this.apiUrl + `locations`, {location: theLocation}, {headers: theHeader})
+        .map(res => res)
+        .catch(this.handleError);
+  }
+
   getRoute(id) : Observable<Route>{
     if(this.online){
       return this.http.get(this.apiUrl + `routes/${id}`)
@@ -76,6 +87,11 @@ export class MainService {
     else{
       return Observable.of([]);
     }
+  }
+
+  getRouteLocation(id) {
+    return this.http.get(this.apiUrl + `locations/${id}`)
+          .map(res => res).catch(error => this.handleError(error));
   }
 
   private handleError(error: any): Promise<any> {

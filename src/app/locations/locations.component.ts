@@ -20,6 +20,7 @@ export class LocationsComponent implements OnInit {
     this.thisRoute = new Route();
     this.locations = [];
     this.routeId = this.route.snapshot.params['id'];
+    window.sessionStorage.setItem('routeId', this.routeId.toString());
     this.service.getRoute(this.routeId).subscribe((route : Route) => {
       console.log('got route');
       console.log(route);
@@ -43,18 +44,15 @@ export class LocationsComponent implements OnInit {
 
       }
     })
-
-    // this.store.select('main').subscribe(store => {
-    //   this.locations = store['locations'];
-    // })
   }
 
   ngOnInit() {
   }
 
   openLocation(theLocation: Location){
+    window.sessionStorage.setItem('locationId', theLocation.id.toString());
     this.store.dispatch({type: 'LOCATION_SELECTED', payload: theLocation});
-    this.router.navigate(['/location', theLocation.id]);
+    this.router.navigate([`/location/${theLocation.id}`]);
   }
 
   back(){
@@ -62,6 +60,6 @@ export class LocationsComponent implements OnInit {
   }
 
   newLocation(){
-    this.router.navigate(['/locationNew', this.routeId]);
+    this.router.navigate(['/locationNew']);
   }
 }
