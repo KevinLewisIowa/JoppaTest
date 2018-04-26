@@ -14,6 +14,7 @@ export function MainReducer (state : IUserStore = UserStore, {type, payload}) {
                 locations: payload
             });
         case (ROUTE_SELECTED):
+        console.log('setting route in reducer');
             return Object.assign({}, state, { selectedRoute: payload});
         case (LOCATION_SELECTED):
             return Object.assign({}, state, {selectedLocation: payload});

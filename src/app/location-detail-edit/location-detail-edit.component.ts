@@ -5,6 +5,7 @@ import { MainService } from "app/services/main.service";
 import { Store } from "@ngrx/store";
 import { IMainStore } from "app/state-management/main.store";
 import { Location } from '../models/location';
+import { Route } from '../models/route';
 
 @Component({
   selector: 'app-location-detail-edit',
@@ -14,11 +15,28 @@ import { Location } from '../models/location';
 export class LocationDetailEditComponent implements OnInit {
   theLocation: Location;
   locationForm: FormGroup;
-
+  theRoute: Route;
   constructor(private router: Router, private mainService: MainService,
               private fb: FormBuilder, private store: Store<IMainStore>) { }
 
   ngOnInit() {
+    this.theRoute = new Route();
+    this.store.select('user').subscribe(data => {
+      console.log('in user subscribe');
+      console.log(data);
+      if (data != null && data.selectedRoute != null) {
+        this.theRoute = data.selectedRoute;
+        console.log('got route');
+        console.log(this.theRoute);
+      } else {
+        console.log('in user subscribe, about to get routeId');
+        var routeId = window.sessionStorage.getItem('routeId');
+        this.mainService.getRoute(routeId).subscribe(data => {
+          this.theRoute = data;
+          this.store.dispatch({type: 'ROUTE_SELECTED', payload: data})
+        }, error => {this.store.dispatch({type: 'USER_API_ERROR', payload: {message: 'Error getting route'}})});
+      }
+    })
     this.theLocation = new Location();
     this.locationForm = this.fb.group({
       notes: '',
@@ -31,13 +49,21 @@ export class LocationDetailEditComponent implements OnInit {
     this.locationForm.get('position').setValidators(Validators.required);
   }
 
+  back() {
+    var routeId = window.sessionStorage.getItem('routeId');
+    this.router.navigate([`route/${routeId}`]);
+  }
+
   submitLocation() {
+    var routeId = window.sessionStorage.getItem('routeId');
+    if (routeId == null) {
+      this.router.navigate(['routes']);
+    }
+    this.theLocation.route_id = Number(routeId);
     this.theLocation.name = this.locationForm.get('name').value;
     this.theLocation.position = this.locationForm.get('position').value;
     this.theLocation.is_active = this.locationForm.get('is_active').value;
-
     this.mainService.insertLocation(this.theLocation).subscribe(data => {
-      var routeId = window.sessionStorage.getItem('routeId');
       this.router.navigate([`route/${routeId}`]);
     }, error => {this.store.dispatch({type: 'USER_API_ERROR', payload: {message: error.message}})});
   }

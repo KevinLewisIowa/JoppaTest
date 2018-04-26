@@ -37,4 +37,8 @@ export class CreateRouteComponent implements OnInit {
       this.router.navigate(['/routes']);
     }, error => { this.store.dispatch({type: 'USER_API_ERROR', payload: { message: 'error' }})})
   }
+
+  back() {
+    this.router.navigate(['routes']);
+  }
 }

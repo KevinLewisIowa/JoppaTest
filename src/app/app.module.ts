@@ -56,7 +56,7 @@ const reducers = {
     ReactiveFormsModule,
     HttpClientModule,
     //InMemoryWebApiModule.forRoot(InMemoryDataService),
-    StoreModule.forRoot({main: MainReducer}),
+    StoreModule.forRoot(reducers),
     StoreDevtoolsModule.instrument(),
     AppRoutingModule
   ],

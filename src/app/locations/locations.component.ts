@@ -33,7 +33,7 @@ export class LocationsComponent implements OnInit {
         this.service.getRouteLocations(this.routeId).subscribe(locations => {
           console.log('returned locatoins');
           console.log(locations);
-          if(locations == undefined){
+          if(locations == null || locations == undefined){
             this.locations = []
           }
           else{

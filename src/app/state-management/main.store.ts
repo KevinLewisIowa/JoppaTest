@@ -6,17 +6,17 @@ export interface IMainStore {
     api: IAPI_Error
 }
 export interface IUserStore {
-    userName: string;
-    locations: Location[];
-    selectedRoute: Route;
-    selectedLocation: Location;
+    userName: string | null;
+    locations: Location[] | null;
+    selectedRoute: Route | null;
+    selectedLocation: Location | null;
 }
 
 export const UserStore : IUserStore = {
     userName: "",
     locations: [],
-    selectedRoute: undefined,
-    selectedLocation: undefined
+    selectedRoute: null,
+    selectedLocation: null
 }
 
 export interface IAPI_Error {
