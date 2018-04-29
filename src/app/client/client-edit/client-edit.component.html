@@ -1,3 +1,44 @@
-<p>
-  client-edit works!
-</p>
+<div class="card panel-info text-center" style="opacity:0.93">
+<div class="card-header">
+  <button type="button" class="btn btn-primary" (click)="back()">Back</button>
+  <h2 class="text-center">Create Client</h2>
+</div>
+<div class="panel-body" style="opacity:0.93">
+<form [formGroup]="clientForm" style="opacity:0.93">
+<div class="login-box">
+  <div class="col-md-12">
+    <label>Preferred Name: </label>
+    <input type="text" placeholder="name" formControlName="preferredName"/>
+  </div>
+  <div class="col-md-12">
+    <label>Birth Date: </label>
+    <input type="date" placeholder="mm/dd/yyyy" formControlName="birthDate"/>
+    <span>Date must be MM/DD/YYYY</span>
+  </div>
+  <div class="col-md-12">
+    <label>Shoe Size: </label>
+    <input type="text" placeholder="shoe size" formControlName="shoeSize"/>
+  </div>
+  <div class="col-md-12">
+    <label>Phone: </label>
+    <input type="text" placeholder="shoe size" formControlName="phone"/>
+  </div>
+  <div class="col-md-12">
+    <label>Is Veteran: </label>
+    <input type="checkbox" formControlName="isVeteran"/>
+  </div>
+  <div class="col-md-12">
+    <label>Is After Care: </label>
+    <input type="checkbox" formControlName="isAfterCare"/>
+  </div>
+  <div class="col-md-12">
+    <label>Joppa Apartment Number: </label>
+    <input type="text" placeholder="Joppa Apartment Number" formControlName="joppaApartmentNumber"/>
+  </div>
+  <div class="col-md-12">
+    <button type="button" [disabled]="!clientForm.valid" (click)="submitRoute()">Submit Client</button>
+  </div>
+</div>
+</form>
+</div>
+</div>

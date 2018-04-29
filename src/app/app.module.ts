@@ -21,6 +21,7 @@ import { InMemoryDataService }  from './in-memory-data.service';
 import { AppRoutingModule } from './app-routing.module';
 
 import { MainService } from './services/main.service';
+import { ClientService } from './services/client.service';
 import { LocationDetailComponent } from './location-detail/location-detail.component';
 import { LocationClientsComponent } from './location-clients/location-clients.component';
 import { ClientComponent } from './client/client.component';
@@ -28,6 +29,7 @@ import { ClientEditComponent } from './client/client-edit/client-edit.component'
 import { LocationDetailEditComponent } from './location-detail-edit/location-detail-edit.component';
 import { RouteEditComponent } from './routes/route-edit/route-edit.component';
 import { CreateRouteComponent } from './create-route/create-route.component';
+import { ClientSearchComponent } from './client-search/client-search.component';
 
 const reducers = {
   user: MainReducer,
@@ -47,7 +49,8 @@ const reducers = {
     ClientEditComponent,
     LocationDetailEditComponent,
     RouteEditComponent,
-    CreateRouteComponent
+    CreateRouteComponent,
+    ClientSearchComponent
   ],
   imports: [
     BrowserModule,
@@ -60,7 +63,7 @@ const reducers = {
     StoreDevtoolsModule.instrument(),
     AppRoutingModule
   ],
-  providers: [MainService],
+  providers: [MainService, ClientService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

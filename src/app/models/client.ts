@@ -5,6 +5,7 @@ export class Client {
     isAfterCare: boolean = undefined;
     shoeSize: string = undefined;
     phone: string = undefined;
+    isVeteran: boolean = undefined;
     joppaApartmentNumber: string = undefined;
     created_at: Date = undefined;
     updated_at: Date = undefined;

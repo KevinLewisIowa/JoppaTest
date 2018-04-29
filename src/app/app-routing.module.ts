@@ -18,7 +18,7 @@ const routes: Routes = [
   { path: 'routeEdit/:id', component: RouteEditComponent },
   { path: 'locationNew', component: LocationDetailEditComponent },
   { path: 'locationEdit/:id', component: LocationDetailEditComponent },
-  { path: 'clientNew', component: ClientEditComponent },
+  { path: 'createClient', component: ClientEditComponent },
   { path: 'clientEdit/:id', component: ClientEditComponent },
   { path: '', redirectTo: '/routes', pathMatch: 'full' }
 ];

@@ -42,6 +42,7 @@ export class LocationDetailComponent implements OnInit {
       }
     })
     let locationId = this.activatedRoute.snapshot.params['id'];
+    window.sessionStorage.setItem('locationId', locationId);
     this.service.getClientsForRoute(locationId).subscribe(data => {
       console.log('returned clients');
       console.log(data);
@@ -50,6 +51,14 @@ export class LocationDetailComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  clientSelected(client: Client) {
+    this.clients.push(client);
+  }
+
+  createClient() {
+    this.router.navigate(['/createClient']);
   }
   
   back() {

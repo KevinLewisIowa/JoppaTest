@@ -61,6 +61,7 @@ export class LocationDetailEditComponent implements OnInit {
     }
     this.theLocation.route_id = Number(routeId);
     this.theLocation.name = this.locationForm.get('name').value;
+    this.theLocation.notes = this.locationForm.get('notes').value;
     this.theLocation.position = this.locationForm.get('position').value;
     this.theLocation.is_active = this.locationForm.get('is_active').value;
     this.mainService.insertLocation(this.theLocation).subscribe(data => {

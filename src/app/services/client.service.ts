@@ -23,7 +23,7 @@ const theHeader = new HttpHeaders().set('Content-Type', 'application/json');
 @Injectable()
 export class ClientService {
   online = true;
-  private baseUrl = 'api/';  // URL to web api
+  private baseUrl = 'https://hidden-springs-63744.herokuapp.com/';  // URL to web api
   private apiUrl = 'https://hidden-springs-63744.herokuapp.com/';
 
   constructor(private http: HttpClient, private store: Store<IMainStore>) { }
@@ -59,8 +59,11 @@ export class ClientService {
       return this.http.post(this.baseUrl + `clientAppearances`, {client_appearance: clientAppearance}, {headers: theHeader})
         .map(response => response);
   }
-// OBSOLETE
+  
   getClientsByName(name) {
+    if (name == '') {
+      name = 'ALLCLIENTS';
+    }
     return this.http.get(this.baseUrl + `getClientsByName?name=${name}`)
         .map(response => response);
   }

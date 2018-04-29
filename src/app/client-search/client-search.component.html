@@ -1,0 +1,60 @@
+<ng-template #clientSearchMdl let-c="close" let-d="dismiss"> 
+  <div class="modal-header">
+    <h4 class="modal-title">Search For Clients</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')"><span aria-hidden="true">&times;</span></button>
+  </div>
+  <form>
+    <div class="modal-body">
+      <div class="form-group">
+       <div class="row">
+         <div class="col-sm-4">
+           <input id="focusMe" (keyup.enter)="performSearch()" class="wpx-250 form-control" type="text" [(ngModel)]="preferredName" placeholder="Preferred Name" name="preferredName"/>
+         </div>
+         <div class="col-sm-2">
+           <button name="btnSearch" class="btn btn-primary" type="button" [disabled]="preferredName == ''" (click)="performSearch()">Search</button>
+         </div>
+       </div>
+       <div [hidden]="clients.length > 0" class="row">
+         <div class="col-sm-12">
+           <div class="text-left">
+           <br>
+             <b>{{resultMessage}}</b>
+           </div>
+         </div>
+       </div>
+      </div>
+    </div>
+  </form>
+  <div [hidden]="clients.length===0" class="modal-body">
+    <div class="row" >
+      <div class="col-sm-12">
+        <div class="text-right">
+          {{resultMessage}}
+        </div>
+        <table class="table-sm table-striped table-hover w-100">
+          <thead>
+            <tr>
+              <th>Preferred Name</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let client of clients; index as i" (click)="selectedClient(client);c('Close click');">
+              <td class="cursorPointer w-50" id="{{i}}-name">{{client.preferredName}}</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="text-right pt-2">
+          <button type="button" class="btn btn-primary" id="prev" (click)="previousPage()" [disabled]="!previousEnabled">
+              <span class="oi oi-arrow-left" aria-hidden="true"></span>
+          </button>&nbsp;&nbsp;
+          <button type="button" class="btn btn-primary" id="next" (click)="nextPage()" [disabled]="!nextEnabled">
+              <span class="oi oi-arrow-right" aria-hidden="true"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="c('Close click')">Close</button>
+  </div>
+</ng-template>

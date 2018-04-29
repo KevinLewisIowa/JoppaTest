@@ -66,7 +66,7 @@ export class MainService {
     }
   }
 
-  getClientsForRoute(id): Observable<Client[]>{
+  getClientsForRoute(id){
     if(this.online){
       console.log('getting clients for: ' + id);
       return this.http.get(this.apiUrl + `getClientsForLocation?locationId=${id}`)
