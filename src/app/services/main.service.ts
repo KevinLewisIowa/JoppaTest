@@ -80,7 +80,7 @@ export class MainService {
   getClientsForLocationCamp(id){
     if(this.online){
       console.log('getting clients for: ' + id);
-      return this.http.get(this.apiUrl + `getClientsForLocationCamp?locationCampId=${id}`)
+      return this.http.get(this.apiUrl + `getClientsForLocationCampC?locationCampId=${id}`)
       .map(res => {return res; })
       .catch(err => this.handleError(err));
     }
