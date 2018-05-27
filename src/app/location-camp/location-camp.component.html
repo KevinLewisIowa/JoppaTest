@@ -1,0 +1,29 @@
+<div class="card text-center" style="opacity:0.93">
+  <div class="card-header text-center">
+    <button type="button" class="pull-left btn btn-primary" (click)="back()">Back</button>
+    <h2>{{route.name}} -> {{location.name}} -> {{locationCamp.name}}</h2>
+  </div>
+  <div class="panel-body">
+    <div class="card"><h3>Clients</h3>
+      <div class="pull-right">
+        <button type="button" (click)="createClient()" class="btn btn-primary">Create Client</button>&nbsp;
+        <button type="button" (click)="clientMdl.showModal();" class="btn btn-primary">Search Clients</button>
+      </div>
+    </div>
+    <div>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th class="text-center">Name</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let client of clients" (click)="viewClient(client)" class="client-row">
+            <td class="text-center">{{client.preferredName}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<app-client-search #clientMdl (clientSelected)="clientSelected($event)"></app-client-search>

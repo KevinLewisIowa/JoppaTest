@@ -1,0 +1,23 @@
+<form [formGroup]="locationCampForm">
+<div class="card text-center" style="opacity:0.93">
+<div class="card-header">
+  <button class="btn btn-primary" type="button" (click)="back()">Back</button>
+  <h2>Create New Location Camp For Location: {{location.name}}</h2>
+</div>
+<div class="panel-body" style="opacity:0.93">
+<div class="login-box">
+  <div class="col-md-12">
+    <label>Name: </label>
+    <input type="text" placeholder="name" formControlName="name"/>
+  </div>
+  <div class="col-md-12">
+    <label>Active: </label>
+    <input type="checkbox" formControlName="is_active"/>
+  </div>
+  <div class="col-md-12">
+    <button type="button" [disabled]="!locationCampForm.valid" (click)="submitLocationCamp()">Submit Location Camp</button>
+  </div>
+</div>
+</div>
+</div>
+</form>

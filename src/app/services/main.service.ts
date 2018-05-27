@@ -11,6 +11,7 @@ import 'rxjs/add/operator/toPromise';
 
 import { Store } from '@ngrx/store';
 import { IMainStore } from '../state-management/main.store';
+import { LocationCamp } from "app/models/location-camp";
 
 const theHeader = new HttpHeaders().set('Content-Type', 'application/json');
 
@@ -55,6 +56,11 @@ export class MainService {
         .catch(this.handleError);
   }
 
+  insertLocationCamp(theLocationCamp: LocationCamp) {
+    return this.http.post(this.apiUrl + `location_camps`, {location_camp: theLocationCamp}, {headers: theHeader})
+        .map(res => res);
+  }
+
   getRoute(id) : Observable<Route>{
     if(this.online){
       return this.http.get(this.apiUrl + `routes/${id}`)
@@ -66,10 +72,15 @@ export class MainService {
     }
   }
 
-  getClientsForRoute(id){
+  getLocationCamps(id) {
+    return this.http.get(this.apiUrl + `getCampsForLocation?locationId=${id}`)
+              .map(res => {return res;}).catch(err => this.handleError(err));
+  }
+
+  getClientsForLocationCamp(id){
     if(this.online){
       console.log('getting clients for: ' + id);
-      return this.http.get(this.apiUrl + `getClientsForLocation?locationId=${id}`)
+      return this.http.get(this.apiUrl + `getClientsForLocationCamp?locationCampId=${id}`)
       .map(res => {return res; })
       .catch(err => this.handleError(err));
     }
@@ -92,6 +103,11 @@ export class MainService {
   getRouteLocation(id) {
     return this.http.get(this.apiUrl + `locations/${id}`)
           .map(res => res).catch(error => this.handleError(error));
+  }
+
+  getLocationCamp(id) {
+    return this.http.get(this.apiUrl + `location_camps/${id}`)
+        .map(res => res).catch(error => this.handleError(error));
   }
 
   private handleError(error: any): Promise<any> {

@@ -37,7 +37,7 @@ export class ClientEditComponent implements OnInit {
   }
 
   submitRoute() {
-    const locationId = window.sessionStorage.getItem('locationId');
+    const locationCampId = window.sessionStorage.getItem('locationCampId');
     this.theClient.preferredName = this.clientForm.get('preferredName').value;
     this.theClient.birthDate = new Date(Date.parse(this.clientForm.get('birthDate').value));
     this.theClient.isAfterCare = this.clientForm.get('isAfterCare').value;
@@ -47,7 +47,7 @@ export class ClientEditComponent implements OnInit {
     this.theClient.joppaApartmentNumber = this.clientForm.get('joppaApartmentNumber').value;
     console.log(this.theClient);
     this.clientService.insertClient(this.theClient).subscribe(data => {
-      this.router.navigate([`/location/${locationId}`]);
+      this.router.navigate([`/locationCamp/${locationCampId}`]);
     }, error => { this.store.dispatch({type: 'USER_API_ERROR', payload: { message: 'error' }})})
   }
 

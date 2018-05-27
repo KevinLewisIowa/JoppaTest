@@ -40,9 +40,18 @@ export class ClientService {
         .map((response) => {
           console.log('results:');
           console.log(response);
-          response;
+          return response;
         })
         .catch(this.handleError);
+  }
+
+  getClientById(id) {
+    return this.http.get(this.baseUrl + `clients/${id}`)
+      .map((response) => {
+        console.log('got client');
+        console.log(response);
+        return response;
+      })
   }
 
   insertClientLike(theClientLike : ClientLike) {
@@ -54,10 +63,13 @@ export class ClientService {
       return this.http.post(this.baseUrl + `client_dislikes`, {client_dislike: theClientDislike}, {headers: theHeader})
             .map(response => response);
   }
-// OBSOLETE
+
   insertClientAppearance(clientAppearance: Appearance){
-      return this.http.post(this.baseUrl + `clientAppearances`, {client_appearance: clientAppearance}, {headers: theHeader})
-        .map(response => response);
+      return this.http.post(this.baseUrl + `client_interactions`, {client_interaction: clientAppearance}, {headers: theHeader})
+        .map(response => response).subscribe(response => {
+          console.log('inserted appearance');
+          console.log(response);
+        }, error => { console.log('error inserting appearance'); console.log(error)});
   }
   
   getClientsByName(name) {

@@ -1,7 +1,8 @@
 export class Appearance {
-  AppearanceId: number = undefined;
-  ClientId: string = undefined;
-  LocationId: string = undefined;
-  WasServiced: boolean = undefined;
-  WasPresent: boolean = undefined;
+  id: number = undefined;
+  client_id: number = undefined;
+  location_camp_id: number = undefined;
+  serviced: boolean = undefined;
+  was_seen: boolean = undefined;
+  still_lives_here: boolean = undefined;
 }

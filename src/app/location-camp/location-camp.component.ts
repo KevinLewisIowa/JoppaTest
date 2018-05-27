@@ -10,18 +10,21 @@ import { Client } from '../models/client';
 import { LocationCamp } from "app/models/location-camp";
 
 @Component({
-  selector: 'app-location-detail',
-  templateUrl: './location-detail.component.html',
-  styleUrls: ['./location-detail.component.css']
+  selector: 'app-location-camp',
+  templateUrl: './location-camp.component.html',
+  styleUrls: ['./location-camp.component.css']
 })
-export class LocationDetailComponent implements OnInit {
+export class LocationCampComponent implements OnInit {
   route : Route = new Route();
   location: Location = new Location();
   locationId: number;
   clients: Client[] = [];
-  locationCamps: LocationCamp[] = [];
+  locationCamp: LocationCamp = new LocationCamp();
   constructor(private store : Store<IMainStore>, private service : MainService, private router: Router, private activatedRoute : ActivatedRoute) { 
     this.store.select('user').subscribe(data => {
+      console.log('getting route from store');
+      console.log(data.selectedRoute);
+      
       if(data.selectedRoute != undefined && data.selectedLocation != undefined)
       {
         this.route = data.selectedRoute;
@@ -40,39 +43,46 @@ export class LocationDetailComponent implements OnInit {
         }, error => console.log('error getting location in location detail'));
       }
     })
-    let locationId = this.activatedRoute.snapshot.params['id'];
-    this.getLocationCamps(locationId);
-    window.sessionStorage.setItem('locationId', locationId);
+    let locationCampId = this.activatedRoute.snapshot.params['id'];
+    this.service.getLocationCamp(locationCampId).subscribe(data => {
+      this.locationCamp = data;
+      sessionStorage.setItem('locationCampId', this.locationCamp.id.toString());
+      this.store.dispatch({type: 'LOCATION_CAMP_SELECTED', payload: data});
+    }, error => {console.log('error getting location camp')});
+
+    window.sessionStorage.setItem('locationCampId', locationCampId);
+    this.service.getClientsForLocationCamp(locationCampId).subscribe(data => {
+      console.log('returned clients');
+      console.log(data);
+      this.clients = data;
+    })
   }
 
   ngOnInit() {
   }
 
-  getLocationCamps(id) {
-    this.service.getLocationCamps(id).subscribe(data => {
-      this.locationCamps = data;
-    }, error => console.log('error getting camps'));
+  clientSelected(client: Client) {
+    this.clients.push(client);
   }
 
-  newLocationCamp() {
-    this.router.navigate(['/locationCampNew']);
+  createClient() {
+    this.router.navigate(['/createClient']);
   }
 
-  openLocationCamp(theLocationCamp: LocationCamp) {
-    window.sessionStorage.setItem('locationCampId', theLocationCamp.id.toString());
-    this.store.dispatch({type: 'LOCATION_CAMP_SELECTED', payload: theLocationCamp});
-    this.router.navigate([`/locationCamp/${theLocationCamp.id}`]);
+  viewClient(theClient: Client) {
+    sessionStorage.setItem('selectedClient', theClient.id.toString());
+    this.router.navigate(['/serviceClient']);
   }
   
   back() {
     console.log('location during back');
     console.log(this.location);
-    if(this.location == undefined || this.location.route_id == undefined)
+    if(this.location == undefined || this.location.id == undefined)
     {
       this.router.navigate(['/routes']);
     }
     else{
-      this.router.navigate(['/route', this.location.route_id]);
+      this.router.navigate([`/location`, this.location.id]);
     }
     
   }

@@ -9,3 +9,15 @@
 .modal-backdrop.in {
   opacity: 0.5;
 }
+
+
+
+
+.location-camp-div {
+    height: 60px;
+    padding: 5px;
+    margin: 5px;
+    background-color: lightsteelblue;
+    border-left-width: 15px;
+    cursor:pointer;
+}

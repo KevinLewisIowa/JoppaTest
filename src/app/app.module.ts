@@ -30,6 +30,9 @@ import { LocationDetailEditComponent } from './location-detail-edit/location-det
 import { RouteEditComponent } from './routes/route-edit/route-edit.component';
 import { CreateRouteComponent } from './create-route/create-route.component';
 import { ClientSearchComponent } from './client-search/client-search.component';
+import { LocationCampComponent } from './location-camp/location-camp.component';
+import { CreateLocationCampComponent } from './create-location-camp/create-location-camp.component';
+import { ServicingClientComponent } from './client/servicing-client/servicing-client.component';
 
 const reducers = {
   user: MainReducer,
@@ -50,7 +53,10 @@ const reducers = {
     LocationDetailEditComponent,
     RouteEditComponent,
     CreateRouteComponent,
-    ClientSearchComponent
+    ClientSearchComponent,
+    LocationCampComponent,
+    CreateLocationCampComponent,
+    ServicingClientComponent
   ],
   imports: [
     BrowserModule,

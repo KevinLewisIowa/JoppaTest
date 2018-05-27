@@ -1,5 +1,6 @@
 import { Location } from '../models/location';
 import { Route } from '../models/route';
+import { LocationCamp } from "app/models/location-camp";
 
 export interface IMainStore {
     user: IUserStore,
@@ -10,13 +11,15 @@ export interface IUserStore {
     locations: Location[] | null;
     selectedRoute: Route | null;
     selectedLocation: Location | null;
+    selectedLocationCamp: LocationCamp | null;
 }
 
 export const UserStore : IUserStore = {
     userName: "",
     locations: [],
     selectedRoute: null,
-    selectedLocation: null
+    selectedLocation: null,
+    selectedLocationCamp: null
 }
 
 export interface IAPI_Error {
