@@ -29,7 +29,7 @@ export class ClientService {
 
   constructor(private http: HttpClient, private store: Store<IMainStore>) { }
   getClientLikes(id) {
-    return this.http.get(this.baseUrl + `getClientLikes?clientId=${id}`)
+    return this.http.get(this.baseUrl + `likesForClient?clientId=${id}`)
         .map((response) => {
           return response;
         })
@@ -37,7 +37,7 @@ export class ClientService {
   }
 
   getClientDislikes(id) {
-    return this.http.get(this.baseUrl + `getClientDislikes?clientId=${id}`)
+    return this.http.get(this.baseUrl + `dislikesForClient?clientId=${id}`)
         .map((response) => {
           console.log('results:');
           console.log(response);
@@ -107,7 +107,7 @@ export class ClientService {
   }
 
   getGoalsAndNextSteps(id) {
-    return this.http.get(this.baseUrl + `getClientGoalsAndSteps?clientId=${id}`)
+    return this.http.get(this.baseUrl + `goalsForClient?clientId=${id}`)
       .map(response => response);
   }
 
@@ -117,7 +117,7 @@ export class ClientService {
   }
 
   getClientPrayerRequests(id) {
-    return this.http.get(this.baseUrl + `getClientPrayerRequests?clientId=${id}`)
+    return this.http.get(this.baseUrl + `prayerRequestsForClient?clientId=${id}`)
   }
 
   insertClientPrayerRequest(prayerRequest: PrayerRequestAndNeed) {

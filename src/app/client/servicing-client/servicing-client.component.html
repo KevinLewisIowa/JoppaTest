@@ -47,7 +47,7 @@
                 {{goal.description}}
               </td>
               <td>
-                {{goal.created_at}}
+                {{goal.created_at | date:'shortDate'}}
               </td>
             </tr>
           </tbody>
@@ -68,7 +68,7 @@
                 {{like.description}}
               </td>
               <td>
-                {{like.created_at}}
+                {{like.created_at | date:'shortDate'}}
               </td>
             </tr>
           </tbody>
@@ -89,7 +89,7 @@
                 {{dislike.description}}
               </td>
               <td>
-                {{dislike.created_at}}
+                {{dislike.created_at | date:'shortDate'}}
               </td>
             </tr>
           </tbody>
@@ -110,7 +110,7 @@
                 {{concern.description}}
               </td>
               <td>
-                {{concern.created_at}}
+                {{concern.created_at | date:'shortDate'}}
               </td>
             </tr>
           </tbody>
