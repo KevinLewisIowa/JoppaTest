@@ -1,3 +1,29 @@
-<p>
-  client-like works!
-</p>
+<ng-template #clientLikeMdl let-c="close" let-d="dismiss"> 
+  <div class="modal-header">
+    <h4 class="modal-title">Create Like</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')"><span aria-hidden="true">&times;</span></button>
+  </div>
+  <form>
+    <div class="modal-body">
+      <div class="form-group">
+       <div class="row">
+         <div class="col-sm-4">
+           <input id="focusMe" class="form-control" type="text" [(ngModel)]="description" placeholder="Description" name="description"/>
+         </div>
+       </div>
+       <div [hidden]="clients.length > 0" class="row">
+         <div class="col-sm-12">
+           <div class="text-left">
+           <br>
+             <b>{{resultMessage}}</b>
+           </div>
+         </div>
+       </div>
+      </div>
+    </div>
+  </form>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="submitLike();c('')">Submit</button>
+    <button type="button" class="btn btn-primary" (click)="c('Close click')">Close</button>
+  </div>
+</ng-template>

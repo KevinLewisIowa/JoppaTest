@@ -54,7 +54,7 @@
         </table>
       </div>
       <div class="col-md-6">
-        <h4>Likes</h4>
+        <h4>Likes <button type="button" class="btn" (click)="likeMdl.showModal()">New</button></h4>
         <table>
           <thead>
             <tr>
@@ -75,7 +75,7 @@
         </table>
       </div>
       <div class="col-md-6">
-        <h4>Dislikes</h4>
+        <h4>Dislikes <button type="button" (click)="dislikeMdl.showModal()" class="btn">New</button></h4>
         <table>
           <thead>
             <tr>
@@ -120,8 +120,7 @@
   </div>
 </div>
 <!--these are the modals for inserting new stuff-->
-<app-client-like></app-client-like>
-<app-client-like></app-client-like>
-<app-client-dislike></app-client-dislike>
+<app-client-like #likeMdl></app-client-like>
+<app-client-dislike #dislikeMdl></app-client-dislike>
 <app-requested-item></app-requested-item>
 <app-goals-steps></app-goals-steps>
