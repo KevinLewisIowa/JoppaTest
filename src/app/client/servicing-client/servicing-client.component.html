@@ -3,20 +3,125 @@
     <button type="button" class="pull-left btn btn-primary" (click)="back()">Back</button>
     <h2>{{client.preferredName}}</h2>
   </div>
-  <div *ngIf="!sentInteraction">
-    <button type="button" class="btn btn-primary" (click)="sendInteraction(1)">Serviced & Seen</button>&nbsp;
-    <button type="button" class="btn btn-primary" (click)="sendInteraction(2)">Serviced & Not Seen</button>&nbsp;
-    <button type="button" class="btn btn-primary" (click)="sendInteraction(3)">No longer lives here</button>&nbsp;
-    <button type="button" class="btn btn-primary" (click)="sendInteraction(4)">Seen but not serviced</button>
-  </div>
   <div class="panel-body">
     <div class="row">
+      <div *ngIf="!sentInteraction">
+        <button type="button" class="btn btn-primary" (click)="sendInteraction(1)">Serviced & Seen</button>&nbsp;
+        <button type="button" class="btn btn-primary" (click)="sendInteraction(2)">Serviced & Not Seen</button>&nbsp;
+        <button type="button" class="btn btn-primary" (click)="sendInteraction(3)">No longer lives here</button>&nbsp;
+        <button type="button" class="btn btn-primary" (click)="sendInteraction(4)">Seen but not serviced</button>
+      </div>
+    </div>
+    <div class="row">
       <div class="col-md-6">
-        <h3>Requested Items</h3>
+        <h4>Requested Items</h4>
+        <table>
+          <thead>
+            <tr>
+              <th>Description</th>
+              <th>Created At</th>
+              <th>Remove</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of requestedItems">
+              <td>{{item.item_description}}</td>
+              <td>{{item.created_at}}</td>
+              <td><button type="button" class="btn btn-primary" (click)="deleteRequest()">Remove</button>
+            </tr>
+          </tbody>
+        </table>
       </div>
       <div class="col-md-6">
-        <h3>Goals/Next Steps</h3>
+        <h4>Goals/Next Steps</h4>
+        <table>
+          <thead>
+            <tr>
+              <th>Description</th>
+              <th>Created At</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let goal of goalsAndSteps">
+              <td>
+                {{goal.description}}
+              </td>
+              <td>
+                {{goal.created_at}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-md-6">
+        <h4>Likes</h4>
+        <table>
+          <thead>
+            <tr>
+              <th>Description</th>
+              <th>Created At</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let like of clientLikes">
+              <td>
+                {{like.description}}
+              </td>
+              <td>
+                {{like.created_at}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-md-6">
+        <h4>Dislikes</h4>
+        <table>
+          <thead>
+            <tr>
+              <th>Description</th>
+              <th>Created At</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let dislike of clientDislikes">
+              <td>
+                {{dislike.description}}
+              </td>
+              <td>
+                {{dislike.created_at}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-md-6">
+        <h4>Health Concerns</h4>
+        <table>
+          <thead>
+            <tr>
+              <th>Description</th>
+              <th>Created At</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let concern of healthConcerns">
+              <td>
+                {{concern.description}}
+              </td>
+              <td>
+                {{concern.created_at}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
 </div>
+<!--these are the modals for inserting new stuff-->
+<app-client-like></app-client-like>
+<app-client-like></app-client-like>
+<app-client-dislike></app-client-dislike>
+<app-requested-item></app-requested-item>
+<app-goals-steps></app-goals-steps>

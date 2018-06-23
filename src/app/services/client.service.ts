@@ -17,6 +17,7 @@ import 'rxjs/add/operator/toPromise';
 import { Store } from '@ngrx/store';
 import { IMainStore } from '../state-management/main.store';
 import { PrayerRequestAndNeed } from "app/models/prayer-request";
+import { GoalsNextStep } from "app/models/goals-next-steps";
 
 const theHeader = new HttpHeaders().set('Content-Type', 'application/json');
 //adding a new comment
@@ -102,6 +103,16 @@ export class ClientService {
 
   getRequestedItems(id) {
       return this.http.get(this.baseUrl + `getClientRequestedItem?clientId=${id}`)
+        .map(response => response);
+  }
+
+  getGoalsAndNextSteps(id) {
+    return this.http.get(this.baseUrl + `getClientGoalsAndSteps?clientId=${id}`)
+      .map(response => response);
+  }
+
+  insertGoalAndStep(goal : GoalsNextStep) {
+      return this.http.post(this.baseUrl + `goals_and_next_steps`, {goals_and_next_step: goal}, {headers: theHeader})
         .map(response => response);
   }
 

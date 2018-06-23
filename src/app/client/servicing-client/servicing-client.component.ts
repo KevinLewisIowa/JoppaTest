@@ -3,6 +3,11 @@ import { Client } from "app/models/client";
 import { ClientService } from "app/services/client.service";
 import { Router } from "@angular/router";
 import { Appearance } from "app/models/appearance";
+import { RequestedItem } from "app/models/requested-item";
+import { GoalsNextStep } from "app/models/goals-next-steps";
+import { ClientLike } from "app/models/client-like";
+import { ClientDislike } from "app/models/client-dislike";
+import { HealthConcern } from "app/models/health-concern";
 
 @Component({
   selector: 'app-servicing-client',
@@ -12,6 +17,11 @@ import { Appearance } from "app/models/appearance";
 export class ServicingClientComponent implements OnInit {
   client: Client = new Client();
   locationCampId: number;
+  requestedItems: RequestedItem[] = [];
+  goalsAndSteps: GoalsNextStep[] = [];
+  clientLikes: ClientLike[] = [];
+  clientDislikes: ClientDislike[] = [];
+  healthConcerns: HealthConcern[] = [];
   sentInteraction = false;
   constructor(private service: ClientService, private router: Router) { }
 
@@ -21,7 +31,22 @@ export class ServicingClientComponent implements OnInit {
     if (clientId !== null) {
       this.service.getClientById(clientId).subscribe((data: Client) => {
         this.client = data;
-      })
+      });
+      this.service.getGoalsAndNextSteps(clientId).subscribe((data: GoalsNextStep[]) => {
+        this.goalsAndSteps = data;
+      });
+      this.service.getRequestedItems(clientId).subscribe((data: RequestedItem[]) => {
+        this.requestedItems = data;
+      });
+      this.service.getClientLikes(clientId).subscribe((data: ClientLike[]) => {
+        this.clientLikes = data;
+      });
+      this.service.getClientDislikes(clientId).subscribe((data: ClientDislike[]) => {
+        this.clientDislikes = data;
+      });
+      this.service.getHealthConcerns(clientId).subscribe((data: HealthConcern[]) => {
+        this.healthConcerns = data;
+      });
     } else {
       this.router.navigate(['/routes']);
     }

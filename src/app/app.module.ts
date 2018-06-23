@@ -33,6 +33,11 @@ import { ClientSearchComponent } from './client-search/client-search.component';
 import { LocationCampComponent } from './location-camp/location-camp.component';
 import { CreateLocationCampComponent } from './create-location-camp/create-location-camp.component';
 import { ServicingClientComponent } from './client/servicing-client/servicing-client.component';
+import { RequestedItemComponent } from './insert-modals/requested-item/requested-item.component';
+import { HealthConcernComponent } from './insert-modals/health-concern/health-concern.component';
+import { ClientLikeComponent } from './insert-modals/client-like/client-like.component';
+import { ClientDislikeComponent } from './insert-modals/client-dislike/client-dislike.component';
+import { GoalsStepsComponent } from './insert-modals/goals-steps/goals-steps.component';
 
 const reducers = {
   user: MainReducer,
@@ -56,7 +61,12 @@ const reducers = {
     ClientSearchComponent,
     LocationCampComponent,
     CreateLocationCampComponent,
-    ServicingClientComponent
+    ServicingClientComponent,
+    RequestedItemComponent,
+    HealthConcernComponent,
+    ClientLikeComponent,
+    ClientDislikeComponent,
+    GoalsStepsComponent
   ],
   imports: [
     BrowserModule,
