@@ -1,6 +1,6 @@
 export class HealthConcern {
-  HealthConcernId: number = undefined;
-  ClientId: string = undefined;
-  Description: string = undefined;
-  CreatedDate: Date = undefined;
+  id: number = undefined;
+  client_id: number = undefined;
+  description: string = undefined;
+  created_at: Date = undefined;
 }

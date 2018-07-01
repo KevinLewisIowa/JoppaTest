@@ -1,5 +1,5 @@
 <div class="card text-center" style="opacity:0.93">
-  <div class="card-header text-center">
+  <div class="card-header text-center" id="topOfScreen">
     <button type="button" class="pull-left btn btn-primary" (click)="back()">Back</button>
     <h2>{{client.preferredName}}</h2>
   </div>
@@ -13,9 +13,9 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-md-6">
-        <h4>Requested Items</h4>
-        <table>
+      <div class="col-lg-6 col-md-12">
+        <h4>Requested Items <button type="button" (click)="goToTop();requestItemMdl.showModal()" class="btn btn-secondary">New</button></h4>
+        <table class="table" id="items">
           <thead>
             <tr>
               <th>Description</th>
@@ -26,15 +26,15 @@
           <tbody>
             <tr *ngFor="let item of requestedItems">
               <td>{{item.item_description}}</td>
-              <td>{{item.created_at}}</td>
+              <td>{{item.created_at | date: 'shortDate'}}</td>
               <td><button type="button" class="btn btn-primary" (click)="deleteRequest()">Remove</button>
             </tr>
           </tbody>
         </table>
       </div>
-      <div class="col-md-6">
-        <h4>Goals/Next Steps</h4>
-        <table>
+      <div class="col-lg-6 col-md-12">
+        <h4>Goals/Next Steps <button type="button" (click)="goToTop();goalMdl.showModal()" class="btn btn-secondary">New</button></h4>
+        <table class="table" id="goals">
           <thead>
             <tr>
               <th>Description</th>
@@ -53,9 +53,9 @@
           </tbody>
         </table>
       </div>
-      <div class="col-md-6">
-        <h4>Likes <button type="button" class="btn" (click)="likeMdl.showModal()">New</button></h4>
-        <table>
+      <div class="col-lg-6 col-md-12">
+        <h4>Likes <button type="button" class="btn btn-secondary" (click)="goToTop();likeMdl.showModal()">New</button></h4>
+        <table class="table" id="likes">
           <thead>
             <tr>
               <th>Description</th>
@@ -74,9 +74,9 @@
           </tbody>
         </table>
       </div>
-      <div class="col-md-6">
-        <h4>Dislikes <button type="button" (click)="dislikeMdl.showModal()" class="btn">New</button></h4>
-        <table>
+      <div class="col-lg-6 col-md-12">
+        <h4>Dislikes <button type="button" (click)="goToTop();dislikeMdl.showModal()" class="btn btn-secondary">New</button></h4>
+        <table class="table" id="dislikes">
           <thead>
             <tr>
               <th>Description</th>
@@ -95,9 +95,9 @@
           </tbody>
         </table>
       </div>
-      <div class="col-md-6">
-        <h4>Health Concerns</h4>
-        <table>
+      <div class="col-lg-6 col-md-12">
+        <h4>Health Concerns <button type="button" (click)="goToTop();healthMdl.showModal()" class="btn btn-secondary">New</button></h4>
+        <table class="table" id="concerns">
           <thead>
             <tr>
               <th>Description</th>
@@ -120,7 +120,8 @@
   </div>
 </div>
 <!--these are the modals for inserting new stuff-->
-<app-client-like #likeMdl></app-client-like>
-<app-client-dislike #dislikeMdl></app-client-dislike>
-<app-requested-item></app-requested-item>
-<app-goals-steps></app-goals-steps>
+<app-client-like #likeMdl (likeAdded)="likeAdded($event)"></app-client-like>
+<app-client-dislike #dislikeMdl (dislikeAdded)="dislikeAdded($event)"></app-client-dislike>
+<app-requested-item #requestItemMdl (requestedItemAdded)="requestedItemAdded($event)"></app-requested-item>
+<app-goals-steps #goalMdl (goalAdded)="goalAdded($event)"></app-goals-steps>
+<app-health-concern #healthMdl (healthConcernAdded)="healthConcernAdded($event)"></app-health-concern>

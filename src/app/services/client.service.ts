@@ -85,25 +85,25 @@ export class ClientService {
       return this.http.post(this.baseUrl + `clients`, {client: theClient}, {headers: theHeader})
         .map(response => response);
   }
-// OBSOLETE NOT IN DB
+
   insertHealthConcern(concern : HealthConcern) {
-      return this.http.post(this.baseUrl + `InsertClientHealthConcern.php`, concern)
+      return this.http.post(this.baseUrl + `health_concerns`, {health_concern: concern}, {headers: theHeader})
         .map(response => response);
   }
-// OBSOLETE NOT IN DB
+
   getHealthConcerns(id) {
-      return this.http.get(this.baseUrl + `GetClientHealthConcerns.php?clientId=${id}`)
+      return this.http.get(this.baseUrl + `getClientHealthConcerns?clientId=${id}`)
         .map(response => response);
   }
 
   insertRequestedItem(item : RequestedItem) {
-      return this.http.post(this.baseUrl + `requestedItems`, {requested_item: item}, {headers: theHeader})
+      return this.http.post(this.baseUrl + `requested_items`, {requested_item: item}, {headers: theHeader})
         .map(response => response);
   }
 
   getRequestedItems(id) {
       return this.http.get(this.baseUrl + `getClientRequestedItem?clientId=${id}`)
-        .map(response => response);
+        .map(response => { console.log(response); return response});
   }
 
   getGoalsAndNextSteps(id) {

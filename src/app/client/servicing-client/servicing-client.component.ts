@@ -77,6 +77,41 @@ export class ServicingClientComponent implements OnInit {
     this.service.insertClientAppearance(interaction);
   }
 
+  requestedItemAdded(item: RequestedItem) {
+    this.requestedItems.push(item);
+    const element = document.querySelector('#items');
+    element.scrollIntoView();
+  }
+
+  likeAdded(like: ClientLike) {
+    this.clientLikes.push(like);
+    const element = document.querySelector('#likes');
+    element.scrollIntoView();
+  }
+
+  dislikeAdded(dislike: ClientDislike) {
+    this.clientDislikes.push(dislike);
+    const element = document.querySelector('#dislikes');
+    element.scrollIntoView();
+  }
+
+  healthConcernAdded(concern: HealthConcern) {
+    this.healthConcerns.push(concern);
+    const element = document.querySelector('#concerns');
+    element.scrollIntoView();
+  }
+
+  goalAdded(goal: GoalsNextStep) {
+    this.goalsAndSteps.push(goal);
+    const element = document.querySelector('#goals');
+    element.scrollIntoView();
+  }
+
+  goToTop() {
+    const element = document.querySelector('#topOfScreen');
+    element.scrollIntoView();
+  }
+
   back() {
     this.router.navigate([`/locationCamp/${this.locationCampId}`]);
   }

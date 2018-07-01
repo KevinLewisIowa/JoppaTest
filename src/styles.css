@@ -43,3 +43,11 @@ footer {
 .modal-backdrop.fade {
     opacity: 0.5 !important;
 }
+
+
+
+@media (min-width: 768px){
+    .container {
+        max-width: 600px;
+    }
+}
