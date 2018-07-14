@@ -11,6 +11,7 @@ import { CreateRouteComponent } from "app/create-route/create-route.component";
 import { CreateLocationCampComponent } from './create-location-camp/create-location-camp.component';
 import { LocationCampComponent } from "app/location-camp/location-camp.component";
 import { ServicingClientComponent } from "app/client/servicing-client/servicing-client.component";
+import { AdminHomeComponent } from 'app/admin-home/admin-home.component';
 
 const routes: Routes = [
    
@@ -26,6 +27,7 @@ const routes: Routes = [
   { path: 'clientEdit/:id', component: ClientEditComponent },
   { path: 'locationCampNew', component: CreateLocationCampComponent },
   { path: 'serviceClient', component: ServicingClientComponent },
+  { path: 'adminHome', component: AdminHomeComponent },
   { path: '', redirectTo: '/routes', pathMatch: 'full' }
 ];
 

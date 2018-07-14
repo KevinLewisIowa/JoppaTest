@@ -38,6 +38,7 @@ import { HealthConcernComponent } from './insert-modals/health-concern/health-co
 import { ClientLikeComponent } from './insert-modals/client-like/client-like.component';
 import { ClientDislikeComponent } from './insert-modals/client-dislike/client-dislike.component';
 import { GoalsStepsComponent } from './insert-modals/goals-steps/goals-steps.component';
+import { AdminHomeComponent } from './admin-home/admin-home.component';
 
 const reducers = {
   user: MainReducer,
@@ -66,7 +67,8 @@ const reducers = {
     HealthConcernComponent,
     ClientLikeComponent,
     ClientDislikeComponent,
-    GoalsStepsComponent
+    GoalsStepsComponent,
+    AdminHomeComponent
   ],
   imports: [
     BrowserModule,
