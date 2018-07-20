@@ -36,7 +36,8 @@ export class ServicingClientComponent implements OnInit {
         this.goalsAndSteps = data;
       });
       this.service.getRequestedItems(clientId).subscribe((data: RequestedItem[]) => {
-        this.requestedItems = data;
+
+        this.requestedItems = data.filter(w => w.has_received != true);
       });
       this.service.getClientLikes(clientId).subscribe((data: ClientLike[]) => {
         this.clientLikes = data;
@@ -114,5 +115,17 @@ export class ServicingClientComponent implements OnInit {
 
   back() {
     this.router.navigate([`/locationCamp/${this.locationCampId}`]);
+  }
+
+  deleteRequest(id) {
+    this.service.deletedRequestedItem(id).subscribe(response => {
+      this.requestedItems = this.requestedItems.filter(w => w.id != id);
+    })
+  }
+
+  receivedRequest(id) {
+    this.service.receivedRequestedItem(id).subscribe(response => {
+      this.requestedItems = this.requestedItems.filter(w => w.id != id);
+    })
   }
 }

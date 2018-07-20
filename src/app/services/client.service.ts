@@ -97,6 +97,7 @@ export class ClientService {
   }
 
   insertRequestedItem(item : RequestedItem) {
+    item.has_received = false;
       return this.http.post(this.baseUrl + `requested_items`, {requested_item: item}, {headers: theHeader})
         .map(response => response);
   }
@@ -104,6 +105,14 @@ export class ClientService {
   getRequestedItems(id) {
       return this.http.get(this.baseUrl + `getClientRequestedItem?clientId=${id}`)
         .map(response => { console.log(response); return response});
+  }
+
+  deletedRequestedItem(id: number) {
+    return this.http.delete(this.baseUrl + `requested_items/${id}`);
+  }
+
+  receivedRequestedItem(id: number) {
+    return this.http.get(this.baseUrl + `receivedRequestedItem/?requestId=${id}`);
   }
 
   getGoalsAndNextSteps(id) {
