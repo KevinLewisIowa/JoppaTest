@@ -115,4 +115,16 @@ export class ServicingClientComponent implements OnInit {
   back() {
     this.router.navigate([`/locationCamp/${this.locationCampId}`]);
   }
+
+  deleteRequest(id) {
+    this.service.deletedRequestedItem(id).subscribe(response => {
+      this.requestedItems = this.requestedItems.filter(w => w.id != id);
+    })
+  }
+
+  receivedRequest(id) {
+    this.service.receivedRequestedItem(id).subscribe(response => {
+      this.requestedItems = this.requestedItems.filter(w => w.id != id);
+    })
+  }
 }

@@ -106,6 +106,14 @@ export class ClientService {
         .map(response => { console.log(response); return response});
   }
 
+  deletedRequestedItem(id: number) {
+    return this.http.delete(this.baseUrl + `requested_items/${id}`);
+  }
+
+  receivedRequestedItem(id: number) {
+    return this.http.get(this.baseUrl + `receivedRequestedItem/?requestId=${id}`);
+  }
+
   getGoalsAndNextSteps(id) {
     return this.http.get(this.baseUrl + `goalsForClient?clientId=${id}`)
       .map(response => response);

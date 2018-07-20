@@ -20,14 +20,16 @@
             <tr>
               <th>Description</th>
               <th>Created At</th>
-              <th>Remove</th>
+              <th>Received</th>
+              <th>Delete</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let item of requestedItems">
               <td>{{item.item_description}}</td>
               <td>{{item.created_at | date: 'shortDate'}}</td>
-              <td><button type="button" class="btn btn-primary" (click)="deleteRequest()">Remove</button>
+              <td><button type="button" class="btn btn-primary" (click)="receivedRequest(item.id)">Received</button></td>
+              <td><button type="button" class="btn btn-primary" (click)="deleteRequest(item.id)">Delete</button>
             </tr>
           </tbody>
         </table>
