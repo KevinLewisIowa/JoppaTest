@@ -97,6 +97,7 @@ export class ClientService {
   }
 
   insertRequestedItem(item : RequestedItem) {
+    item.has_received = false;
       return this.http.post(this.baseUrl + `requested_items`, {requested_item: item}, {headers: theHeader})
         .map(response => response);
   }
