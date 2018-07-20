@@ -36,7 +36,8 @@ export class ServicingClientComponent implements OnInit {
         this.goalsAndSteps = data;
       });
       this.service.getRequestedItems(clientId).subscribe((data: RequestedItem[]) => {
-        this.requestedItems = data;
+
+        this.requestedItems = data.filter(w => w.has_received != true);
       });
       this.service.getClientLikes(clientId).subscribe((data: ClientLike[]) => {
         this.clientLikes = data;
