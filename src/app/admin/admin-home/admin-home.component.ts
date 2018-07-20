@@ -12,4 +12,9 @@ export class AdminHomeComponent implements OnInit {
   ngOnInit() {
   }
 
+  openAdminReport(reportType :string)
+  {
+    alert('You clicked report: ' + reportType)
+  }
+
 }

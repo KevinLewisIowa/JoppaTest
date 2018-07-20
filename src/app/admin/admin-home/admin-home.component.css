@@ -1,0 +1,8 @@
+.admin-item-div {
+    height: 60px;
+    padding: 5px;
+    margin: 5px;
+    background-color: lightgreen;
+    border-left-width: 15px;
+    cursor:pointer;
+}

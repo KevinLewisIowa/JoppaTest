@@ -1,0 +1,20 @@
+<div class="card text-center" style="opacity:0.93">
+  <div class="card-header">
+    <div class="float-left"><button routerLink="/" class="btn btn-primary" type="button">Back</button></div>
+    <h2>Admin</h2>
+  </div>
+  <div class="panel-body text-center" style="opacity:0.93">
+      <div class="admin-item-div text-center" (click)="openAdminReport('OutstandingItems')">
+        Undelivered Items Listing
+      </div>
+      <div class="admin-item-div text-center" (click)="openAdminReport('MealsExpected')">
+        Meals Expected
+      </div>
+      <div class="admin-item-div text-center" (click)="openAdminReport('OutstandingGoalsNextSteps')">
+        Goals/Next Steps Not Fulfilled Listing
+      </div>
+      <div class="admin-item-div text-center" (click)="openAdminReport('OutstandingPrayerRequestsNeeds')">
+          Prayer Requests/Needs Not Fulfilled Listing
+      </div>
+  </div>
+</div>
