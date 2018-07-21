@@ -63,6 +63,12 @@ export class LocationDetailComponent implements OnInit {
     this.store.dispatch({type: 'LOCATION_CAMP_SELECTED', payload: theLocationCamp});
     this.router.navigate([`/locationCamp/${theLocationCamp.id}`]);
   }
+
+  showMap() {
+    //window.open("https://www.google.com/maps?saddr=My+Location&daddr=41.578198,-93.6130761", "_blank");
+    window.open("https://www.google.com/maps?q=41.578250,-93.612153&q=food&amp;z=14", "_blank");
+    // window.open("https://www.google.com/maps/@41.578198,-93.6130761,17z?hl=en", "_blank");
+  }
   
   back() {
     console.log('location during back');

@@ -2,7 +2,10 @@
   <div class="card-header text-center" style="opacity:0.93">
     <button type="button" class="pull-left btn btn-primary" (click)="back()">Back</button>
     <h2>Route: {{route.name}} -> {{location.name}}</h2>
-    <div class="float-right"><button (click)="newLocationCamp()" class="btn btn-primary" type="button">New Location Camp</button></div>
+    <div>
+      <button (click)="showMap()" type="button" class="btn btn-primary floag-left">Show Map</button>
+      <button (click)="newLocationCamp()" class="btn btn-primary float-right" type="button">New Location Camp</button>
+    </div>
   </div>
   <div class="panel-body">
     <div *ngFor="let camp of locationCamps" class="location-camp-div text-center" (click)="openLocationCamp(camp)">
