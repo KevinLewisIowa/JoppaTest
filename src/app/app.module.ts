@@ -39,6 +39,10 @@ import { ClientLikeComponent } from './insert-modals/client-like/client-like.com
 import { ClientDislikeComponent } from './insert-modals/client-dislike/client-dislike.component';
 import { GoalsStepsComponent } from './insert-modals/goals-steps/goals-steps.component';
 import { AdminHomeComponent } from './admin-home/admin-home.component';
+import { AdminRouteMealsComponent } from './admin-route-meals/admin-route-meals.component';
+import { AdminRouteUndeliveredItemsComponent } from './admin-route-undelivered-items/admin-route-undelivered-items.component';
+import { AdminRouteUnfulfilledGoalsNextStepsComponent } from './admin-route-unfulfilled-goals-next-steps/admin-route-unfulfilled-goals-next-steps.component';
+import { AdminRouteUnfulfilledPrayerRequestsNeedsComponent } from './admin-route-unfulfilled-prayer-requests-needs/admin-route-unfulfilled-prayer-requests-needs.component';
 
 const reducers = {
   user: MainReducer,
@@ -68,7 +72,11 @@ const reducers = {
     ClientLikeComponent,
     ClientDislikeComponent,
     GoalsStepsComponent,
-    AdminHomeComponent
+    AdminHomeComponent,
+    AdminRouteMealsComponent,
+    AdminRouteUndeliveredItemsComponent,
+    AdminRouteUnfulfilledGoalsNextStepsComponent,
+    AdminRouteUnfulfilledPrayerRequestsNeedsComponent
   ],
   imports: [
     BrowserModule,

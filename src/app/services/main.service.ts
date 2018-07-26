@@ -110,6 +110,26 @@ export class MainService {
         .map(res => res).catch(error => this.handleError(error));
   }
 
+  getAdminRouteNumberMeals() {
+    return this.http.get(this.apiUrl + `getAdminRouteNumberMeals`)
+        .map(res => res).catch(error => this.handleError(error));
+  }
+
+  getAdminRouteUndeliveredItems() {
+    return this.http.get(this.apiUrl + `getAdminRouteUndeliveredItems`)
+        .map(res => res).catch(error => this.handleError(error));
+  }
+
+  getAdminRouteUnfulfilledGoalsNextSteps() {
+    return this.http.get(this.apiUrl + `getAdminRouteUnfulfilledGoalsNextSteps`)
+        .map(res => res).catch(error => this.handleError(error));
+  }
+
+  getAdminRouteUnfulfilledPrayerRequestsNeeds() {
+    return this.http.get(this.apiUrl + `getAdminRouteUnfulfilledPrayerRequestsNeeds`)
+        .map(res => res).catch(error => this.handleError(error));
+  }
+
   private handleError(error: any): Promise<any> {
     console.error('An error occurred', error); // for demo purposes only
     return Promise.reject(error.message || error);
