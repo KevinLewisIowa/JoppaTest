@@ -4,16 +4,16 @@
     <h2>Admin</h2>
   </div>
   <div class="panel-body text-center" style="opacity:0.93">
-      <div class="admin-item-div text-center" (click)="openAdminReport('OutstandingItems')">
+      <div class="admin-item-div text-center" (click)="openAdminRouteUndeliveredItems()">
         Undelivered Items Listing
       </div>
-      <div class="admin-item-div text-center" (click)="openAdminReport('MealsExpected')">
+      <div class="admin-item-div text-center" (click)="openAdminRouteNumberMeals()">
         Meals Expected
       </div>
-      <div class="admin-item-div text-center" (click)="openAdminReport('OutstandingGoalsNextSteps')">
+      <div class="admin-item-div text-center" (click)="openAdminRouteUnfulfilledGoalsNextSteps()">
         Goals/Next Steps Not Fulfilled Listing
       </div>
-      <div class="admin-item-div text-center" (click)="openAdminReport('OutstandingPrayerRequestsNeeds')">
+      <div class="admin-item-div text-center" (click)="openAdminRouteUnfulfilledPrayerRequestsNeeds()">
           Prayer Requests/Needs Not Fulfilled Listing
       </div>
   </div>

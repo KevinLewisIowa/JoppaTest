@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-admin-home',
@@ -7,14 +8,25 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AdminHomeComponent implements OnInit {
 
-  constructor() { }
+  constructor(private router: Router) { }
 
   ngOnInit() {
   }
 
-  openAdminReport(reportType :string)
-  {
-    alert('You clicked report: ' + reportType)
+  openAdminRouteUndeliveredItems() {
+    this.router.navigate(['/admin/routeUndeliveredItems'])
+  }
+
+  openAdminRouteNumberMeals() {
+    this.router.navigate(['/admin/routeMeals'])
+  }
+
+  openAdminRouteUnfulfilledGoalsNextSteps() {
+    this.router.navigate(['/admin/routeUnfulfilledGoalsNextSteps'])
+  }
+
+  openAdminRouteUnfulfilledPrayerRequestsNeeds() {
+    this.router.navigate(['/admin/routeUnfulfilledPrayerRequestsNeeds'])
   }
 
 }

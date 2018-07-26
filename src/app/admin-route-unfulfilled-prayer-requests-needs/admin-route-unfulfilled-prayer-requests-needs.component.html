@@ -1,0 +1,24 @@
+<div class="card text-center" style="opacity:0.93">
+    <div class="card-header">
+      <div class="float-left"><button routerLink="/adminHome" class="btn btn-primary" type="button">Back</button></div>
+      <h2>Unfulfilled Prayer Requests and Needs</h2>
+    </div>
+    <div class="panel-body">
+        <table class="table" id="unfulfilledPrayerRequestsNeeds">
+            <thead>
+              <tr>
+                <th>Route</th>
+                <th>Client Name</th>
+                <th>Prayer Request/Need</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let prayerRequestNeed of unfulfilledPrayerRequestsNeeds">
+                <td>{{prayerRequestNeed.name}}</td>
+                <td>{{prayerRequestNeed.preferred_name}}</td>
+                <td>{{prayerRequestNeed.detail}}</td>
+              </tr>
+            </tbody>
+          </table>
+    </div>
+  </div>
