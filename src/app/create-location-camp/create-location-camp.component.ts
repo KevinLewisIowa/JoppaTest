@@ -22,14 +22,9 @@ export class CreateLocationCampComponent implements OnInit {
   ngOnInit() {
     this.location = new Location();
     this.store.select('user').subscribe(data => {
-      console.log('in user subscribe');
-      console.log(data);
       if (data != null && data.selectedLocation != null) {
         this.location = data.selectedLocation;
-        console.log('got location');
-        console.log(this.location);
       } else {
-        console.log('in user subscribe, about to get locationId');
         var locationId = window.sessionStorage.getItem('locationId');
         this.mainService.getRouteLocation(locationId).subscribe(data => {
           this.location = data;

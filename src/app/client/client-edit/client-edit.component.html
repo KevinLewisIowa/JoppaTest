@@ -8,16 +8,16 @@
 <div class="login-box">
   <div class="col-md-12">
     <label>Preferred Name: </label>
-    <input type="text" placeholder="name" formControlName="preferredName"/>
+    <input type="text" placeholder="name" formControlName="preferred_name"/>
   </div>
   <div class="col-md-12">
     <label>Birth Date: </label>
-    <input type="date" placeholder="mm/dd/yyyy" formControlName="birthDate"/>
+    <input type="date" placeholder="mm/dd/yyyy" formControlName="birth_date"/>
     <span>Date must be MM/DD/YYYY</span>
   </div>
   <div class="col-md-12">
     <label>Shoe Size: </label>
-    <input type="text" placeholder="shoe size" formControlName="shoeSize"/>
+    <input type="text" placeholder="shoe size" formControlName="shoe_size"/>
   </div>
   <div class="col-md-12">
     <label>Phone: </label>
@@ -25,15 +25,15 @@
   </div>
   <div class="col-md-12">
     <label>Is Veteran: </label>
-    <input type="checkbox" formControlName="isVeteran"/>
+    <input type="checkbox" formControlName="is_veteran"/>
   </div>
   <div class="col-md-12">
     <label>Is After Care: </label>
-    <input type="checkbox" formControlName="isAfterCare"/>
+    <input type="checkbox" formControlName="is_after_care"/>
   </div>
   <div class="col-md-12">
     <label>Joppa Apartment Number: </label>
-    <input type="text" placeholder="Joppa Apartment Number" formControlName="joppaApartmentNumber"/>
+    <input type="text" placeholder="Joppa Apartment Number" formControlName="joppa_apartment_number"/>
   </div>
   <div class="col-md-12">
     <button type="button" [disabled]="!clientForm.valid" (click)="submitRoute()">Submit Client</button>

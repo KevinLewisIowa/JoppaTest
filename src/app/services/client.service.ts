@@ -39,8 +39,6 @@ export class ClientService {
   getClientDislikes(id) {
     return this.http.get(this.baseUrl + `dislikesForClient?clientId=${id}`)
         .map((response) => {
-          console.log('results:');
-          console.log(response);
           return response;
         })
         .catch(this.handleError);
@@ -49,8 +47,6 @@ export class ClientService {
   getClientById(id) {
     return this.http.get(this.baseUrl + `clients/${id}`)
       .map((response) => {
-        console.log('got client');
-        console.log(response);
         return response;
       })
   }
@@ -68,8 +64,6 @@ export class ClientService {
   insertClientAppearance(clientAppearance: Appearance){
       return this.http.post(this.baseUrl + `client_interactions`, {client_interaction: clientAppearance}, {headers: theHeader})
         .map(response => response).subscribe(response => {
-          console.log('inserted appearance');
-          console.log(response);
         }, error => { console.log('error inserting appearance'); console.log(error)});
   }
   

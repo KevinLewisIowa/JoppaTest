@@ -27,8 +27,7 @@ export class MainService {
   getRoutes() {
     return this.http.get(this.baseUrl + `routes`)
         .map((response) => {
-          console.log('results:');
-          console.log(response);
+          return response;
         })
         .catch(this.handleError);
   }
@@ -79,7 +78,6 @@ export class MainService {
 
   getClientsForLocationCamp(id){
     if(this.online){
-      console.log('getting clients for: ' + id);
       return this.http.get(this.apiUrl + `getClientsForLocationCampC?locationCampId=${id}`)
       .map(res => {return res; })
       .catch(err => this.handleError(err));

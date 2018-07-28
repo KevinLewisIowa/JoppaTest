@@ -22,14 +22,9 @@ export class LocationDetailEditComponent implements OnInit {
   ngOnInit() {
     this.theRoute = new Route();
     this.store.select('user').subscribe(data => {
-      console.log('in user subscribe');
-      console.log(data);
       if (data != null && data.selectedRoute != null) {
         this.theRoute = data.selectedRoute;
-        console.log('got route');
-        console.log(this.theRoute);
       } else {
-        console.log('in user subscribe, about to get routeId');
         var routeId = window.sessionStorage.getItem('routeId');
         this.mainService.getRoute(routeId).subscribe(data => {
           this.theRoute = data;

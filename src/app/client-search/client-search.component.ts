@@ -39,7 +39,6 @@ export class ClientSearchComponent implements OnInit, OnDestroy {
   }
 
   showModal() {
-    console.log('in show modal');
     this.clients = [];
     this.preferredName = '';
     this.nextEnabled = false;
