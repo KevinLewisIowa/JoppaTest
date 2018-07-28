@@ -80,6 +80,11 @@ export class ClientService {
         .map(response => response);
   }
 
+  updateClient(theClient: Client) {
+    return this.http.patch(this.baseUrl + `clients/${theClient.id}`, { client: theClient}, {headers: theHeader})
+      .map(response => response).subscribe(data => {}, error => { console.log('error updating client')});
+  }
+
   insertHealthConcern(concern : HealthConcern) {
       return this.http.post(this.baseUrl + `health_concerns`, {health_concern: concern}, {headers: theHeader})
         .map(response => response);

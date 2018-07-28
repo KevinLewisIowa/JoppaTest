@@ -96,6 +96,10 @@ export class ServicingClientComponent implements OnInit {
     element.scrollIntoView();
   }
 
+  editedClient(theClient: Client) {
+    this.client = theClient;
+  }
+
   healthConcernAdded(concern: HealthConcern) {
     this.healthConcerns.push(concern);
     const element = document.querySelector('#concerns');

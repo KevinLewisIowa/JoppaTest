@@ -2,7 +2,7 @@ export class Client {
     id: number = undefined;
     preferred_name: string = undefined;
     birth_date: Date = undefined;
-    is_after_care: boolean = undefined;
+    is_aftercare: boolean = undefined;
     shoe_size: string = undefined;
     boot_size: string = undefined;
     phone: string = undefined;

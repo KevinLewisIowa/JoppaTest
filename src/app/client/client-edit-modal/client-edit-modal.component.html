@@ -1,10 +1,10 @@
-<div class="card panel-info text-center" style="opacity:0.93">
-<div class="card-header">
-  <button type="button" class="btn btn-primary" (click)="back()">Back</button>
-  <h2 class="text-center">Create Client</h2>
-</div>
-<div class="panel-body" style="opacity:0.93">
-<form [formGroup]="clientForm" style="opacity:0.93">
+<ng-template #editModal let-c="close" let-d="dismiss"> 
+  <div class="modal-header">
+    <h4 class="modal-title">Search For Clients</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')"><span aria-hidden="true">&times;</span></button>
+  </div>
+    <div class="modal-body">
+        <form [formGroup]="clientForm" style="opacity:0.93">
 <div class="login-box">
   <div class="col-md-12">
     <label>Preferred Name: </label>
@@ -36,9 +36,12 @@
     <input type="text" placeholder="Joppa Apartment Number" formControlName="joppa_apartment_number"/>
   </div>
   <div class="col-md-12">
-    <button type="button" [disabled]="!clientForm.valid" (click)="submitRoute()">Submit Client</button>
+    <button type="button" [disabled]="!clientForm.valid" (click)="submitRoute(); c('');">Submit Client</button>
   </div>
 </div>
 </form>
-</div>
-</div>
+    </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="c('Close click')">Close</button>
+  </div>
+</ng-template>
