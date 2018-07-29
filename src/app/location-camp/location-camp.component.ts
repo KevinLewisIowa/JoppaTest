@@ -61,6 +61,10 @@ export class LocationCampComponent implements OnInit {
   ngOnInit() {
   }
 
+  editedCamp(theCamp: LocationCamp) {
+    this.locationCamp = theCamp;
+  }
+
   clientSelected(client: Client) {
     this.clients.push(client);
   }

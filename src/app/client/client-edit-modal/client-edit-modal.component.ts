@@ -45,18 +45,5 @@ export class ClientEditModalComponent implements OnInit {
     this.clientService.updateClient(this.clientForm.value as Client);
     this.editedClient.emit(this.clientForm.value as Client);
   }
-  // submitRoute() {
-  //   const locationCampId = window.sessionStorage.getItem('locationCampId');
-  //   this.theClient.preferred_name = this.clientForm.get('preferred_name').value;
-  //   this.theClient.birth_date = new Date(Date.parse(this.clientForm.get('birth_date').value));
-  //   this.theClient.is_aftercare = this.clientForm.get('is_aftercare').value;
-  //   this.theClient.is_veteran = this.clientForm.get('is_veteran').value;
-  //   this.theClient.shoe_size = this.clientForm.get('shoe_size').value;
-  //   this.theClient.phone = this.clientForm.get('phone').value;
-  //   this.theClient.joppa_apartment_number = this.clientForm.get('joppa_apartment_number').value;
-  //   this.clientService.insertClient(this.theClient).subscribe(data => {
-  //     this.router.navigate([`/locationCamp/${locationCampId}`]);
-  //   }, error => { this.store.dispatch({type: 'USER_API_ERROR', payload: { message: 'error' }})})
-  // }
 
 }

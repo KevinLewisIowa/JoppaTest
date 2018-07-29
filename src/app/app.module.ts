@@ -44,6 +44,7 @@ import { AdminRouteUndeliveredItemsComponent } from './admin-route-undelivered-i
 import { AdminRouteUnfulfilledGoalsNextStepsComponent } from './admin-route-unfulfilled-goals-next-steps/admin-route-unfulfilled-goals-next-steps.component';
 import { AdminRouteUnfulfilledPrayerRequestsNeedsComponent } from './admin-route-unfulfilled-prayer-requests-needs/admin-route-unfulfilled-prayer-requests-needs.component';
 import { ClientEditModalComponent } from './client/client-edit-modal/client-edit-modal.component';
+import { CampEditModalComponent } from './location-camp/camp-edit-modal/camp-edit-modal.component';
 
 const reducers = {
   user: MainReducer,
@@ -78,7 +79,8 @@ const reducers = {
     AdminRouteUndeliveredItemsComponent,
     AdminRouteUnfulfilledGoalsNextStepsComponent,
     AdminRouteUnfulfilledPrayerRequestsNeedsComponent,
-    ClientEditModalComponent
+    ClientEditModalComponent,
+    CampEditModalComponent
   ],
   imports: [
     BrowserModule,

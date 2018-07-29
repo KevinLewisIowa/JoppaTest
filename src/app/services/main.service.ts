@@ -60,6 +60,11 @@ export class MainService {
         .map(res => res);
   }
 
+  updateLocationCamp(theLocationCamp: LocationCamp) {
+    return this.http.put(this.apiUrl + `location_camps/${theLocationCamp.id}`, {location_camp: theLocationCamp}, {headers: theHeader})
+        .map(res => res).subscribe(response => { }, error => {console.log('error updating camp')});
+  }
+
   getRoute(id) : Observable<Route>{
     if(this.online){
       return this.http.get(this.apiUrl + `routes/${id}`)
