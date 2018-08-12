@@ -1,29 +1,40 @@
+@font-face {
+  font-family: 'iconic';
+  src: url('/node_modules/open-iconic/font/fonts/open-iconic.eot');
+  src: url('/node_modules/open-iconic/font/fonts/open-iconic.otf');
+  src: url('/node_modules/open-iconic/font/fonts/open-iconic.svg');
+  src: url('/node_modules/open-iconic/font/fonts/open-iconic.ttf');
+  src: url('/node_modules/open-iconic/font/fonts/open-iconic.woff');
+}
+
 /* You can add global styles to this file, and also import other style files */
 html {
-    position: relative;
-    min-height: 100%;
+  position: relative;
+  min-height: 100%;
 }
 
 body {
-    margin: 0 0 30px; /* bottom = footer height */
-    padding: 25px;
-    background-position: center center;
-	background-repeat:  no-repeat;
-	background-attachment: fixed;
-	background-size:  cover;
-	background-color: #999;
+  margin: 0 0 30px; /* bottom = footer height */
+  padding: 25px;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+  background-color: #999;
 }
 
 footer {
-    background-color: orange;
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    height: 30px;
-    width: 100%;
-    overflow:hidden;
+  background-color: orange;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 30px;
+  width: 100%;
+  overflow: hidden;
 }
-
+.card .panel-body {
+  padding: 5px;
+}
 
 /* WORKAROUND FOR NGB BOOTSTRAP MODAL NOT SHOWING UP*/
 .fade.in {
@@ -39,15 +50,12 @@ footer {
   opacity: 0.5 !important;
 }
 
-
 .modal-backdrop.fade {
-    opacity: 0.5 !important;
+  opacity: 0.5 !important;
 }
 
-
-
-@media (min-width: 768px){
-    .container {
-        max-width: 600px;
-    }
+@media (min-width: 768px) {
+  .container {
+    max-width: 600px;
+  }
 }
