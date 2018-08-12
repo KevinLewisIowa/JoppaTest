@@ -1,12 +1,3 @@
-@font-face {
-  font-family: 'iconic';
-  src: url('/node_modules/open-iconic/font/fonts/open-iconic.eot');
-  src: url('/node_modules/open-iconic/font/fonts/open-iconic.otf');
-  src: url('/node_modules/open-iconic/font/fonts/open-iconic.svg');
-  src: url('/node_modules/open-iconic/font/fonts/open-iconic.ttf');
-  src: url('/node_modules/open-iconic/font/fonts/open-iconic.woff');
-}
-
 /* You can add global styles to this file, and also import other style files */
 html {
   position: relative;
@@ -32,8 +23,14 @@ footer {
   width: 100%;
   overflow: hidden;
 }
+
 .card .panel-body {
   padding: 5px;
+}
+
+.btn.center {
+  display: block;
+  margin: 0 auto;
 }
 
 /* WORKAROUND FOR NGB BOOTSTRAP MODAL NOT SHOWING UP*/
