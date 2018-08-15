@@ -10,6 +10,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
+    "prodServe": "ng server --prod --open",
     "postinstall": "ng build --aot -prod"
   },
   "private": true,
