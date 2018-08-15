@@ -1,3 +1,6 @@
+#joppaLogo svg {
+  width: 100%;
+}
 #joppaLogo svg #bg rect {
   fill: none;
 }
