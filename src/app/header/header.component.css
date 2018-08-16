@@ -1,0 +1,12 @@
+#joppaLogo svg {
+  width: 100%;
+}
+#joppaLogo svg #bg rect {
+  fill: none;
+}
+#joppaLogo:hover svg #Joppa-Outreach-Logo #logo #joppa-outreach path {
+  fill: url(#gradient);
+}
+#joppaLogo svg #Joppa-Outreach-Logo #logo #joppa-outreach path {
+  fill: #000000;
+}
