@@ -9,6 +9,8 @@ import { MainReducer } from './state-management/main.reducer';
 import { APIReducer } from './state-management/error.reducer';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
+import { InlineSVGModule} from 'ng-inline-svg';
+
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
@@ -16,7 +18,7 @@ import { RoutesComponent } from './routes/routes.component';
 import { LocationsComponent } from './locations/locations.component';
 
 import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
-import { InMemoryDataService }  from './in-memory-data.service';
+import { InMemoryDataService } from './in-memory-data.service';
 
 import { AppRoutingModule } from './app-routing.module';
 
@@ -49,7 +51,7 @@ import { CampEditModalComponent } from './location-camp/camp-edit-modal/camp-edi
 const reducers = {
   user: MainReducer,
   api: APIReducer
-}
+};
 
 @NgModule({
   declarations: [
@@ -88,12 +90,13 @@ const reducers = {
     NgbModule.forRoot(),
     ReactiveFormsModule,
     HttpClientModule,
-    //InMemoryWebApiModule.forRoot(InMemoryDataService),
+    // InMemoryWebApiModule.forRoot(InMemoryDataService),
     StoreModule.forRoot(reducers),
     StoreDevtoolsModule.instrument(),
-    AppRoutingModule
+    AppRoutingModule,
+    InlineSVGModule.forRoot()
   ],
   providers: [MainService, ClientService],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

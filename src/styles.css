@@ -27,6 +27,12 @@ footer {
 .card .panel-body {
   padding: 5px;
 }
+.card .card-header h2 {
+  margin-bottom: 0;
+}
+.card .card-header .btn {
+  margin-top: 2px;
+}
 
 .btn.center {
   display: block;
