@@ -65,6 +65,11 @@ export class MainService {
         .map(res => res).subscribe(response => { }, error => {console.log('error updating camp')});
   }
 
+  updateLocation(theLocation: Location) {
+    return this.http.put(this.apiUrl + `locations/${theLocation.id}`, {location: theLocation}, {headers: theHeader})
+        .map(res => res).subscribe(response => { }, error => {console.log('error updating location')});
+  }
+
   getRoute(id) : Observable<Route>{
     if(this.online){
       return this.http.get(this.apiUrl + `routes/${id}`)

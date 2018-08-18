@@ -48,6 +48,10 @@ export class LocationDetailComponent implements OnInit {
   ngOnInit() {
   }
 
+  editedLocation(theLocation: Location) {
+    this.location = theLocation;
+  }
+
   getLocationCamps(id) {
     this.service.getLocationCamps(id).subscribe(data => {
       this.locationCamps = data;

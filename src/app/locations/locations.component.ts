@@ -35,6 +35,15 @@ export class LocationsComponent implements OnInit {
           else{
             this.store.dispatch({type: 'GET_LOCATIONS', payload: locations});
             this.locations = locations;
+            this.locations.sort((a, b) => {
+              if (a.position > b.position) {
+                return 1;
+              } else if (a.position < b.position) {
+                return -1;
+              } else {
+                return 0;
+              }
+            })
           }
         })
 
