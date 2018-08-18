@@ -33,7 +33,7 @@ export class ClientEditComponent implements OnInit {
       phone: '',
       joppa_apartment_number: ''
     });
-    this.clientForm.get('preferredName').setValidators(Validators.required);
+    this.clientForm.get('preferred_name').setValidators(Validators.required);
     //this.clientForm.get('birthDate').setValidators(Validators.pattern(this.regExpDate));
   }
 
@@ -44,6 +44,7 @@ export class ClientEditComponent implements OnInit {
     this.theClient.is_aftercare = this.clientForm.get('is_aftercare').value;
     this.theClient.is_veteran = this.clientForm.get('is_veteran').value;
     this.theClient.shoe_size = this.clientForm.get('shoe_size').value;
+    this.theClient.boot_size = this.clientForm.get('boot_size').value;
     this.theClient.phone = this.clientForm.get('phone').value;
     this.theClient.joppa_apartment_number = this.clientForm.get('joppa_apartment_number').value;
     this.clientService.insertClient(this.theClient).subscribe(data => {

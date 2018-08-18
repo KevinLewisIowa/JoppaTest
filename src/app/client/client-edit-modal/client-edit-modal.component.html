@@ -1,6 +1,6 @@
 <ng-template #editModal let-c="close" let-d="dismiss"> 
   <div class="modal-header">
-    <h4 class="modal-title">Search For Clients</h4>
+    <h4 class="modal-title">Client Details</h4>
       <button type="button" class="close" aria-label="Close" (click)="d('Cross click')"><span aria-hidden="true">&times;</span></button>
   </div>
     <div class="modal-body">
@@ -20,8 +20,12 @@
     <input type="text" placeholder="shoe size" formControlName="shoe_size"/>
   </div>
   <div class="col-md-12">
+    <label>Boot Size: </label>
+    <input type="text" placeholder="boot size" formControlName="boot_size"/>
+  </div>
+  <div class="col-md-12">
     <label>Phone: </label>
-    <input type="text" placeholder="shoe size" formControlName="phone"/>
+    <input type="text" placeholder="phone" formControlName="phone"/>
   </div>
   <div class="col-md-12">
     <label>Is Veteran: </label>
