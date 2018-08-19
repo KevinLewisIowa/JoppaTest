@@ -18,19 +18,19 @@ export class CreateRouteComponent implements OnInit {
               private fb: FormBuilder, private store: Store<IMainStore>) { }
 
   ngOnInit() {
-    this.theRoute.city;
+    this.theRoute.region;
     this.theRoute.name;
     this.theRoute.is_active = true;
     this.routeForm = this.fb.group({
-      city: '',
+      region: '',
       name: ''
     });
-    this.routeForm.get('city').setValidators(Validators.required);
+    this.routeForm.get('region').setValidators(Validators.required);
     this.routeForm.get('name').setValidators(Validators.required);
   }
 
   submitRoute() {
-    this.theRoute.city = this.routeForm.get('city').value;
+    this.theRoute.region = this.routeForm.get('region').value;
     this.theRoute.name = this.routeForm.get('name').value;
 
     this.mainService.insertRoute(this.theRoute).subscribe(data => {
