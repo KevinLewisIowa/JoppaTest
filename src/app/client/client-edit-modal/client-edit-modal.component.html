@@ -24,6 +24,10 @@
     <input type="text" placeholder="boot size" formControlName="boot_size"/>
   </div>
   <div class="col-md-12">
+    <label>Number of Meals: </label>
+    <input type="number" placeholder="number of meals" formControlName="number_meals"/>
+  </div>
+  <div class="col-md-12">
     <label>Phone: </label>
     <input type="text" placeholder="phone" formControlName="phone"/>
   </div>
@@ -38,6 +42,32 @@
   <div class="col-md-12">
     <label>Joppa Apartment Number: </label>
     <input type="text" placeholder="Joppa Apartment Number" formControlName="joppa_apartment_number"/>
+  </div>
+  <div class="col-md-12">
+    <label>Dwelling: </label>
+    <select>
+      <option>Tent</option>
+      <option>Shack</option>
+      <option>Abandoned Structure</option>
+      <option>Vehicle</option>
+      <option>Camper</option>
+      <option>Under Bridge</option>
+      <option>Streets</option>
+      <option>House</option>
+      <option>Apartment</option>
+    </select>
+  </div>
+  <div class="col-md-12">
+    <label>Deceased: </label>
+    <input type="checkbox" formControlName="deceased"/>
+  </div>
+  <div class="col-md-12">
+    <label>Inactive: </label>
+    <input type="checkbox" formControlName="inactive"/>
+  </div>
+  <div class="col-md-12" *ngIf="clientForm.get('inactive').value == true">
+    <label>Inactive Description: </label>
+    <input type="text" placeholder="inactive description" formControlName="inactive_description"/>
   </div>
   <div class="col-md-12">
     <button type="button" [disabled]="!clientForm.valid" (click)="submitRoute(); c('');">Submit Client</button>
