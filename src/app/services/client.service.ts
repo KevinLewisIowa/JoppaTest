@@ -110,6 +110,22 @@ export class ClientService {
     return this.http.delete(this.baseUrl + `requested_items/${id}`);
   }
 
+  removeLike(id: number) {
+    return this.http.delete(this.baseUrl + `client_likes/${id}`);
+  }
+
+  removeDislike(id: number) {
+    return this.http.delete(this.baseUrl + `client_likes/${id}`);
+  }
+
+  deleteGoalAndNextStep(id: number) {
+    return this.http.delete(this.baseUrl + `goals_and_next_steps/${id}`);
+  }
+
+  completeGoalAndNextStep(theGoal: GoalsNextStep) {
+    return this.http.patch(this.baseUrl + `goals_and_next_steps/${theGoal.id}`, {goals_and_next_step: theGoal}, {headers: theHeader})
+  }
+
   receivedRequestedItem(id: number) {
     return this.http.get(this.baseUrl + `receivedRequestedItem/?requestId=${id}`);
   }

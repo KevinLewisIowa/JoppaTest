@@ -48,7 +48,8 @@ export class ClientEditComponent implements OnInit {
     this.theClient.boot_size = this.clientForm.get('boot_size').value;
     this.theClient.inactive = false;
     this.theClient.deceased = false;
-    this.theClient.number_meals = this.clientForm.get('number_meals').value;
+    this.theClient.inactive_description = '';
+    this.theClient.number_meals = this.clientForm.get('number_meals').value as number;
     this.theClient.phone = this.clientForm.get('phone').value;
     this.theClient.joppa_apartment_number = this.clientForm.get('joppa_apartment_number').value;
     this.clientService.insertClient(this.theClient).subscribe(data => {

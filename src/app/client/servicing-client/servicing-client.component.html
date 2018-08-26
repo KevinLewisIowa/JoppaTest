@@ -83,7 +83,7 @@
               <td>{{item.item_description}}</td>
               <td>{{item.created_at | date: 'shortDate'}}</td>
               <td><button type="button" class="btn btn-primary" (click)="receivedRequest(item.id)">Received</button></td>
-              <td><button type="button" class="btn btn-primary" (click)="deleteRequest(item.id)">Delete</button>
+              <td><button type="button" class="btn btn-primary" (click)="deleteRequest(item.id)">Delete</button></td>
             </tr>
           </tbody>
         </table>
@@ -95,6 +95,8 @@
             <tr>
               <th>Description</th>
               <th>Created At</th>
+              <th>Completed</th>
+              <th>Remove</th>
             </tr>
           </thead>
           <tbody>
@@ -105,6 +107,12 @@
               <td>
                 {{goal.created_at | date:'shortDate'}}
               </td>
+              <td>
+                <button type="button" class="btn btn-primary" (click)="completedGoal(goal)">Completed</button>
+              </td>
+              <td>
+                <button type="button" class="btn btn-primary" (click)="removeGoal(id)">Remove</button>
+              <td>
             </tr>
           </tbody>
         </table>
@@ -116,6 +124,7 @@
             <tr>
               <th>Description</th>
               <th>Created At</th>
+              <th>Remove</th>
             </tr>
           </thead>
           <tbody>
@@ -125,6 +134,9 @@
               </td>
               <td>
                 {{like.created_at | date:'shortDate'}}
+              </td>
+              <td>
+                <button type="button" class="btn btn-primary" (click)="removeLike(like.id)">Remove</button>
               </td>
             </tr>
           </tbody>
@@ -137,6 +149,7 @@
             <tr>
               <th>Description</th>
               <th>Created At</th>
+              <th>Remove</th>
             </tr>
           </thead>
           <tbody>
@@ -146,6 +159,9 @@
               </td>
               <td>
                 {{dislike.created_at | date:'shortDate'}}
+              </td>
+              <td>
+                <button type="button" class="btn btn-primary" (click)="removeDislike(dislike.id)">Remove</button>
               </td>
             </tr>
           </tbody>

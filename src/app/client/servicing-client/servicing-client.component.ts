@@ -127,6 +127,31 @@ export class ServicingClientComponent implements OnInit {
     })
   }
 
+  removeLike(id) {
+    this.service.removeLike(id).subscribe(response => {
+      this.clientLikes = this.clientLikes.filter(w => w.id != id);
+    })
+  }
+
+  removeDislike(id) {
+    this.service.removeDislike(id).subscribe(response => {
+      this.clientDislikes = this.clientDislikes.filter(w => w.id != id);
+    })
+  }
+
+  removeGoal(id) {
+    this.service.deleteGoalAndNextStep(id).subscribe(response => {
+      this.goalsAndSteps = this.goalsAndSteps.filter(w => w.id != id);
+    })
+  }
+
+  completedGoal(goal: GoalsNextStep) {
+    goal.is_completed = true;
+    this.service.completeGoalAndNextStep(goal).subscribe(response => {
+      this.goalsAndSteps = this.goalsAndSteps.filter(w => w.id != goal.id);
+    })
+  }
+
   receivedRequest(id) {
     this.service.receivedRequestedItem(id).subscribe(response => {
       this.requestedItems = this.requestedItems.filter(w => w.id != id);
