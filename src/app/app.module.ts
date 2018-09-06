@@ -43,6 +43,7 @@ import { AdminRouteMealsComponent } from './admin-route-meals/admin-route-meals.
 import { AdminRouteUndeliveredItemsComponent } from './admin-route-undelivered-items/admin-route-undelivered-items.component';
 import { AdminRouteUnfulfilledGoalsNextStepsComponent } from './admin-route-unfulfilled-goals-next-steps/admin-route-unfulfilled-goals-next-steps.component';
 import { AdminRouteUnfulfilledPrayerRequestsNeedsComponent } from './admin-route-unfulfilled-prayer-requests-needs/admin-route-unfulfilled-prayer-requests-needs.component';
+import { CreateHeatingUnitComponent } from './create-heating-unit/create-heating-unit.component';
 
 const reducers = {
   user: MainReducer,
@@ -76,7 +77,8 @@ const reducers = {
     AdminRouteMealsComponent,
     AdminRouteUndeliveredItemsComponent,
     AdminRouteUnfulfilledGoalsNextStepsComponent,
-    AdminRouteUnfulfilledPrayerRequestsNeedsComponent
+    AdminRouteUnfulfilledPrayerRequestsNeedsComponent,
+    CreateHeatingUnitComponent
   ],
   imports: [
     BrowserModule,

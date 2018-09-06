@@ -1,0 +1,26 @@
+<form [formGroup]="heaterForm">
+  <div class="card text-center" style="opacity:0.93">
+  <div class="card-header">
+    <button class="btn btn-primary" type="button" (click)="back()">Back</button>
+    <h2>Create New Heater</h2>
+  </div>
+  <div class="panel-body" style="opacity:0.93">
+  <div class="entry-box">
+    <div class="col-md-12">
+      <label>Serial Number: </label>
+      <input type="text" placeholder="Serial Number" formControlName="serial_number"/>
+    </div>
+    <div class="col-md-12">
+      <label>Heater Type: </label>
+      <select [(ngModel)]="heater_type_id" id="heaterType">
+        <option value="" disabled selected>Select a heater type</option>
+        <option *ngFor="let heatertype of heaterTypes" [value]="heatertype.id">{{heatertype.type_description}}</option>
+      </select>
+    </div>
+    <div class="col-md-12">
+      <button type="button" [disabled]="!heaterForm.valid" (click)="submitHeater()" class="btn btn-secondary">Submit Heater</button>
+    </div>
+  </div>
+  </div>
+  </div>
+  </form>

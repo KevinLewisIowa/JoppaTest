@@ -29,4 +29,8 @@ export class AdminHomeComponent implements OnInit {
     this.router.navigate(['/admin/routeUnfulfilledPrayerRequestsNeeds'])
   }
 
+  createNewHeater() {
+    this.router.navigate([`heaterNew`])
+  }
+
 }
