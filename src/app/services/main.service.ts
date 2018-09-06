@@ -6,6 +6,7 @@ import 'rxjs/Rx';
 import { Route } from '../models/route';
 import { Client } from '../models/client';
 import { Location } from '../models/location';
+import { Heater } from '../models/heater';
 
 import 'rxjs/add/operator/toPromise';
 
@@ -15,7 +16,6 @@ import { LocationCamp } from "app/models/location-camp";
 
 const theHeader = new HttpHeaders().set('Content-Type', 'application/json');
 
-//adding a new comment
 @Injectable()
 export class MainService {
   online = true;
@@ -68,6 +68,11 @@ export class MainService {
   updateLocation(theLocation: Location) {
     return this.http.put(this.apiUrl + `locations/${theLocation.id}`, {location: theLocation}, {headers: theHeader})
         .map(res => res).subscribe(response => { }, error => {console.log('error updating location')});
+  }
+
+  insertHeater(theHeater: Heater) {
+    return this.http.post(this.apiUrl + `heaters`, {heater: theHeater}, {headers: theHeader})
+        .map(res => res);
   }
 
   getRoute(id) : Observable<Route>{
@@ -136,6 +141,11 @@ export class MainService {
   getAdminRouteUnfulfilledPrayerRequestsNeeds() {
     return this.http.get(this.apiUrl + `getAdminRouteUnfulfilledPrayerRequestsNeeds`)
         .map(res => res).catch(error => this.handleError(error));
+  }
+
+  getHeaterTypes() {
+    return this.http.get(this.apiUrl + `getHeaterTypes`)
+      .map(res => res).catch(error => this.handleError(error));
   }
 
   private handleError(error: any): Promise<any> {
