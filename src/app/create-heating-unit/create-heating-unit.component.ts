@@ -22,10 +22,11 @@ export class CreateHeatingUnitComponent implements OnInit {
     this.getHeaterTypes();
     this.theHeater = new Heater();
     this.heaterForm = this.fb.group({
-      is_active: true,
-      name: ''
+      heater_type_id: '',
+      serial_number: ''
     });
-    this.heaterForm.get('name').setValidators(Validators.required);
+    this.heaterForm.get('heater_type_id').setValidators(Validators.required);
+    this.heaterForm.get('serial_number').setValidators(Validators.required);
   }
 
   getHeaterTypes(): void {
