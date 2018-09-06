@@ -32,7 +32,8 @@ export class ClientEditComponent implements OnInit {
       boot_size: '',
       number_meals: 0,
       phone: '',
-      joppa_apartment_number: ''
+      joppa_apartment_number: '',
+      dwelling: ''
     });
     this.clientForm.get('preferred_name').setValidators(Validators.required);
     //this.clientForm.get('birthDate').setValidators(Validators.pattern(this.regExpDate));
@@ -52,6 +53,7 @@ export class ClientEditComponent implements OnInit {
     this.theClient.number_meals = this.clientForm.get('number_meals').value as number;
     this.theClient.phone = this.clientForm.get('phone').value;
     this.theClient.joppa_apartment_number = this.clientForm.get('joppa_apartment_number').value;
+    this.theClient.dwelling = this.clientForm.get('dwelling').value;
     this.clientService.insertClient(this.theClient).subscribe(data => {
       this.router.navigate([`/locationCamp/${locationCampId}`]);
     }, error => { this.store.dispatch({type: 'USER_API_ERROR', payload: { message: 'error' }})})

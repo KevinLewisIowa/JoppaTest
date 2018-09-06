@@ -23,6 +23,7 @@ export class ServicingClientComponent implements OnInit {
   clientDislikes: ClientDislike[] = [];
   healthConcerns: HealthConcern[] = [];
   sentInteraction = false;
+  receivedItems: RequestedItem[] = [];
   constructor(private service: ClientService, private router: Router) { }
 
   ngOnInit() {
@@ -31,6 +32,9 @@ export class ServicingClientComponent implements OnInit {
     if (clientId !== null) {
       this.service.getClientById(clientId).subscribe((data: Client) => {
         this.client = data;
+      });
+      this.service.getRecentReceivedItems(clientId).subscribe((data: RequestedItem[]) => {
+        this.receivedItems = data;
       });
       this.service.getGoalsAndNextSteps(clientId).subscribe((data: GoalsNextStep[]) => {
         this.goalsAndSteps = data;
@@ -155,6 +159,9 @@ export class ServicingClientComponent implements OnInit {
   receivedRequest(id) {
     this.service.receivedRequestedItem(id).subscribe(response => {
       this.requestedItems = this.requestedItems.filter(w => w.id != id);
+      this.service.getRecentReceivedItems(this.client.id).subscribe((data: RequestedItem[]) => {
+        this.receivedItems = data;
+      })
     })
   }
 }

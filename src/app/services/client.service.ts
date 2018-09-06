@@ -130,6 +130,10 @@ export class ClientService {
     return this.http.get(this.baseUrl + `receivedRequestedItem/?requestId=${id}`);
   }
 
+  getRecentReceivedItems(id) {
+    return this.http.get(this.baseUrl + `recentReceivedItems?clientId=${id}`).map(response => response);
+  }
+
   getGoalsAndNextSteps(id) {
     return this.http.get(this.baseUrl + `goalsForClient?clientId=${id}`)
       .map(response => response);

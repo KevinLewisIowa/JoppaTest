@@ -12,6 +12,7 @@ export class Client {
     inactive_description: string = undefined;
     number_meals: number = undefined;
     joppa_apartment_number: string = undefined;
+    dwelling: string = undefined;
     created_at: Date = undefined;
     updated_at: Date = undefined;
 }
