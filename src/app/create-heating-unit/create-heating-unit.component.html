@@ -12,7 +12,7 @@
     </div>
     <div class="col-md-12">
       <label>Heater Type: </label>
-      <select [(ngModel)]="heater_type_id" id="heaterType">
+      <select id="heaterType" formControlName="heater_type_id">
         <option value="" disabled selected>Select a heater type</option>
         <option *ngFor="let heatertype of heaterTypes" [value]="heatertype.id">{{heatertype.type_description}}</option>
       </select>
