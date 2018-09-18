@@ -9,6 +9,8 @@ import { MainReducer } from './state-management/main.reducer';
 import { APIReducer } from './state-management/error.reducer';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
+import { InlineSVGModule} from 'ng-inline-svg';
+
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
@@ -16,7 +18,7 @@ import { RoutesComponent } from './routes/routes.component';
 import { LocationsComponent } from './locations/locations.component';
 
 import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
-import { InMemoryDataService }  from './in-memory-data.service';
+import { InMemoryDataService } from './in-memory-data.service';
 
 import { AppRoutingModule } from './app-routing.module';
 
@@ -43,12 +45,15 @@ import { AdminRouteMealsComponent } from './admin-route-meals/admin-route-meals.
 import { AdminRouteUndeliveredItemsComponent } from './admin-route-undelivered-items/admin-route-undelivered-items.component';
 import { AdminRouteUnfulfilledGoalsNextStepsComponent } from './admin-route-unfulfilled-goals-next-steps/admin-route-unfulfilled-goals-next-steps.component';
 import { AdminRouteUnfulfilledPrayerRequestsNeedsComponent } from './admin-route-unfulfilled-prayer-requests-needs/admin-route-unfulfilled-prayer-requests-needs.component';
+import { ClientEditModalComponent } from './client/client-edit-modal/client-edit-modal.component';
+import { CampEditModalComponent } from './location-camp/camp-edit-modal/camp-edit-modal.component';
+import { LocationEditModalComponent } from './location-detail/location-edit-modal/location-edit-modal.component';
 import { CreateHeatingUnitComponent } from './create-heating-unit/create-heating-unit.component';
 
 const reducers = {
   user: MainReducer,
   api: APIReducer
-}
+};
 
 @NgModule({
   declarations: [
@@ -78,6 +83,9 @@ const reducers = {
     AdminRouteUndeliveredItemsComponent,
     AdminRouteUnfulfilledGoalsNextStepsComponent,
     AdminRouteUnfulfilledPrayerRequestsNeedsComponent,
+    ClientEditModalComponent,
+    CampEditModalComponent,
+    LocationEditModalComponent,
     CreateHeatingUnitComponent
   ],
   imports: [
@@ -86,12 +94,13 @@ const reducers = {
     NgbModule.forRoot(),
     ReactiveFormsModule,
     HttpClientModule,
-    //InMemoryWebApiModule.forRoot(InMemoryDataService),
+    // InMemoryWebApiModule.forRoot(InMemoryDataService),
     StoreModule.forRoot(reducers),
     StoreDevtoolsModule.instrument(),
-    AppRoutingModule
+    AppRoutingModule,
+    InlineSVGModule.forRoot()
   ],
   providers: [MainService, ClientService],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

@@ -39,7 +39,7 @@
           </thead>
           <tbody>
             <tr *ngFor="let client of clients; index as i" (click)="selectedClient(client);c('Close click');">
-              <td class="cursorPointer w-50" id="{{i}}-name">{{client.preferredName}}</td>
+              <td class="cursorPointer w-50" id="{{i}}-name">{{client.preferred_name}}</td>
             </tr>
           </tbody>
         </table>

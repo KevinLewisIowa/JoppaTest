@@ -22,8 +22,6 @@ export class LocationsComponent implements OnInit {
     this.routeId = this.route.snapshot.params['id'];
     window.sessionStorage.setItem('routeId', this.routeId.toString());
     this.service.getRoute(this.routeId).subscribe((route : Route) => {
-      console.log('got route');
-      console.log(route);
       if(route == undefined){
         this.thisRoute = new Route();
       }
@@ -31,14 +29,21 @@ export class LocationsComponent implements OnInit {
         this.thisRoute = route;
         this.store.dispatch({type: 'ROUTE_SELECTED', payload: route});
         this.service.getRouteLocations(this.routeId).subscribe(locations => {
-          console.log('returned locatoins');
-          console.log(locations);
           if(locations == null || locations == undefined){
             this.locations = []
           }
           else{
             this.store.dispatch({type: 'GET_LOCATIONS', payload: locations});
             this.locations = locations;
+            this.locations.sort((a, b) => {
+              if (a.position > b.position) {
+                return 1;
+              } else if (a.position < b.position) {
+                return -1;
+              } else {
+                return 0;
+              }
+            })
           }
         })
 

@@ -27,8 +27,7 @@ export class MainService {
   getRoutes() {
     return this.http.get(this.baseUrl + `routes`)
         .map((response) => {
-          console.log('results:');
-          console.log(response);
+          return response;
         })
         .catch(this.handleError);
   }
@@ -61,6 +60,16 @@ export class MainService {
         .map(res => res);
   }
 
+  updateLocationCamp(theLocationCamp: LocationCamp) {
+    return this.http.put(this.apiUrl + `location_camps/${theLocationCamp.id}`, {location_camp: theLocationCamp}, {headers: theHeader})
+        .map(res => res).subscribe(response => { }, error => {console.log('error updating camp')});
+  }
+
+  updateLocation(theLocation: Location) {
+    return this.http.put(this.apiUrl + `locations/${theLocation.id}`, {location: theLocation}, {headers: theHeader})
+        .map(res => res).subscribe(response => { }, error => {console.log('error updating location')});
+  }
+
   insertHeater(theHeater: Heater) {
     return this.http.post(this.apiUrl + `heaters`, {heater: theHeater}, {headers: theHeader})
         .map(res => res);
@@ -84,7 +93,6 @@ export class MainService {
 
   getClientsForLocationCamp(id){
     if(this.online){
-      console.log('getting clients for: ' + id);
       return this.http.get(this.apiUrl + `getClientsForLocationCampC?locationCampId=${id}`)
       .map(res => {return res; })
       .catch(err => this.handleError(err));

@@ -2,6 +2,7 @@
   <div class="card-header text-center">
     <button type="button" class="pull-left btn btn-primary" (click)="back()">Back</button>
     <h2>{{route.name}} -> {{location.name}} -> {{locationCamp.name}}</h2>
+    <button type="button" class="btn btn-primary" (click)="campEditMdl.showModal(locationCamp)">Details</button>
   </div>
   <div class="panel-body">
     <div class="card"><h3>Clients</h3>
@@ -19,7 +20,7 @@
         </thead>
         <tbody>
           <tr *ngFor="let client of clients" (click)="viewClient(client)" class="client-row">
-            <td class="text-center">{{client.preferredName}}</td>
+            <td class="text-center">{{client.preferred_name}}</td>
           </tr>
         </tbody>
       </table>
@@ -27,3 +28,4 @@
   </div>
 </div>
 <app-client-search #clientMdl (clientSelected)="clientSelected($event)"></app-client-search>
+<app-camp-edit-modal #campEditMdl (editedCamp)="editedCamp($event)"></app-camp-edit-modal>

@@ -31,7 +31,6 @@ export class ClientLikeComponent implements OnInit {
         if (data != null && data.id != null) {
           this.likeAdded.emit(data);
         }
-        console.log('inserted like');
       });
     }
   }

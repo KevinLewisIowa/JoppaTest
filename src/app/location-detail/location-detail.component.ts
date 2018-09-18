@@ -48,6 +48,10 @@ export class LocationDetailComponent implements OnInit {
   ngOnInit() {
   }
 
+  editedLocation(theLocation: Location) {
+    this.location = theLocation;
+  }
+
   getLocationCamps(id) {
     this.service.getLocationCamps(id).subscribe(data => {
       this.locationCamps = data;
@@ -66,13 +70,11 @@ export class LocationDetailComponent implements OnInit {
 
   showMap() {
     //window.open("https://www.google.com/maps?saddr=My+Location&daddr=41.578198,-93.6130761", "_blank");
-    window.open("https://www.google.com/maps?q=41.578250,-93.612153&q=food&amp;z=14", "_blank");
+    window.open(`https://www.google.com/maps?q=${this.location.latitude},${this.location.latitude}&q=food&amp;z=14`, "_blank");
     // window.open("https://www.google.com/maps/@41.578198,-93.6130761,17z?hl=en", "_blank");
   }
   
   back() {
-    console.log('location during back');
-    console.log(this.location);
     if(this.location == undefined || this.location.route_id == undefined)
     {
       this.router.navigate(['/routes']);

@@ -28,7 +28,6 @@ description: string = '';
       concern.description = this.description;
       concern.client_id = Number(clientId);
       this.service.insertHealthConcern(concern).subscribe((data: HealthConcern) => {
-        console.log('inserted health concern');
         if (data != null && data.id != null) {
           this.healthConcernAdded.emit(data);
         }

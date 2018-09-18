@@ -51,7 +51,7 @@ export class LocationCampComponent implements OnInit {
     }, error => {console.log('error getting location camp')});
 
     window.sessionStorage.setItem('locationCampId', locationCampId);
-    this.service.getClientsForLocationCamp(locationCampId).subscribe(data => {
+    this.service.getClientsForLocationCamp(locationCampId).subscribe((data: Client[]) => {
       console.log('returned clients');
       console.log(data);
       this.clients = data;
@@ -59,6 +59,10 @@ export class LocationCampComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  editedCamp(theCamp: LocationCamp) {
+    this.locationCamp = theCamp;
   }
 
   clientSelected(client: Client) {

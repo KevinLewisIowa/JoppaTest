@@ -39,8 +39,6 @@ export class ClientService {
   getClientDislikes(id) {
     return this.http.get(this.baseUrl + `dislikesForClient?clientId=${id}`)
         .map((response) => {
-          console.log('results:');
-          console.log(response);
           return response;
         })
         .catch(this.handleError);
@@ -49,8 +47,6 @@ export class ClientService {
   getClientById(id) {
     return this.http.get(this.baseUrl + `clients/${id}`)
       .map((response) => {
-        console.log('got client');
-        console.log(response);
         return response;
       })
   }
@@ -68,8 +64,6 @@ export class ClientService {
   insertClientAppearance(clientAppearance: Appearance){
       return this.http.post(this.baseUrl + `client_interactions`, {client_interaction: clientAppearance}, {headers: theHeader})
         .map(response => response).subscribe(response => {
-          console.log('inserted appearance');
-          console.log(response);
         }, error => { console.log('error inserting appearance'); console.log(error)});
   }
   
@@ -84,6 +78,11 @@ export class ClientService {
   insertClient(theClient: Client) {
       return this.http.post(this.baseUrl + `clients`, {client: theClient}, {headers: theHeader})
         .map(response => response);
+  }
+
+  updateClient(theClient: Client) {
+    return this.http.patch(this.baseUrl + `clients/${theClient.id}`, { client: theClient}, {headers: theHeader})
+      .map(response => response).subscribe(data => {}, error => { console.log('error updating client')});
   }
 
   insertHealthConcern(concern : HealthConcern) {
@@ -111,8 +110,28 @@ export class ClientService {
     return this.http.delete(this.baseUrl + `requested_items/${id}`);
   }
 
+  removeLike(id: number) {
+    return this.http.delete(this.baseUrl + `client_likes/${id}`);
+  }
+
+  removeDislike(id: number) {
+    return this.http.delete(this.baseUrl + `client_likes/${id}`);
+  }
+
+  deleteGoalAndNextStep(id: number) {
+    return this.http.delete(this.baseUrl + `goals_and_next_steps/${id}`);
+  }
+
+  completeGoalAndNextStep(theGoal: GoalsNextStep) {
+    return this.http.patch(this.baseUrl + `goals_and_next_steps/${theGoal.id}`, {goals_and_next_step: theGoal}, {headers: theHeader})
+  }
+
   receivedRequestedItem(id: number) {
     return this.http.get(this.baseUrl + `receivedRequestedItem/?requestId=${id}`);
+  }
+
+  getRecentReceivedItems(id) {
+    return this.http.get(this.baseUrl + `recentReceivedItems?clientId=${id}`).map(response => response);
   }
 
   getGoalsAndNextSteps(id) {

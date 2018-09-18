@@ -28,7 +28,6 @@ export class GoalsStepsComponent implements OnInit {
       goal.description = this.description;
       goal.client_id = Number(clientId);
       this.service.insertGoalAndStep(goal).subscribe((data: GoalsNextStep) => {
-        console.log('inserted health concern');
         if (data != null && data.id != null) {
           this.goalAdded.emit(data);
         }

@@ -29,7 +29,6 @@ export class ClientDislikeComponent implements OnInit {
       dislike.description = this.description;
       dislike.client_id = Number(clientId);
       this.service.insertClientDislike(dislike).subscribe((data: ClientDislike) => {
-        console.log('inserted like');
         if (data != null && data.id != null) {
           this.dislikeAdded.emit(data);
         }

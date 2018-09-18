@@ -1,7 +1,7 @@
 <div class="card text-center" style="opacity:0.93">
   <div class="card-header text-center" id="topOfScreen">
     <button type="button" class="pull-left btn btn-primary" (click)="back()">Back</button>
-    <h2>{{client.preferredName}}</h2>
+    <h2>{{client.preferred_name}}</h2> &nbsp; <button class="btn btn-primary" (click)="clientEditMdl.openModal(client)" type="button">Details</button>
   </div>
   <div class="panel-body">
     <div class="row">
@@ -13,7 +13,61 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-lg-6 col-md-12">
+      <div class="col-lg-12 col-md-12">
+        <h4>Heating Equipment <button type="button" (click)="goToTop();requestItemMdl.showModal()" class="btn btn-secondary">New</button></h4>
+        <table class="table" id="items">
+          <thead>
+            <tr>
+              <th>Description</th>
+              <th>Created At</th>
+              <th>Picked Up</th>
+              <th>Stolen</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Heater</td>
+              <td>8/8/2018</td>
+              <td><select class="form-control">
+                  <option>Retrieved</option>
+                  <option>Stolen</option>
+                  <option>Lost</option>
+                  <option>Destroyed</option>
+                  <option>Broken</option>
+                  <option>Evicted</option>
+                </select></td>
+              <td><button type="button" class="btn btn-primary">Submit</button>
+            </tr>
+            <tr>
+              <td>Tank</td>
+              <td>8/8/2018</td>
+              <td><select class="form-control">
+                  <option>Retrieved</option>
+                  <option>Stolen</option>
+                  <option>Lost</option>
+                  <option>Destroyed</option>
+                  <option>Broken</option>
+                  <option>Evicted</option>
+                </select></td>
+              <td><button type="button" class="btn btn-primary">Submit</button>
+            </tr>
+            <tr>
+              <td>Tank</td>
+              <td>8/8/2018</td>
+              <td><select class="form-control">
+                  <option>Retrieved</option>
+                  <option>Stolen</option>
+                  <option>Lost</option>
+                  <option>Destroyed</option>
+                  <option>Broken</option>
+                  <option>Evicted</option>
+                </select></td>
+              <td><button type="button" class="btn btn-primary">Submit</button>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-lg-12 col-md-12">
         <h4>Requested Items <button type="button" (click)="goToTop();requestItemMdl.showModal()" class="btn btn-secondary">New</button></h4>
         <table class="table" id="items">
           <thead>
@@ -29,18 +83,39 @@
               <td>{{item.item_description}}</td>
               <td>{{item.created_at | date: 'shortDate'}}</td>
               <td><button type="button" class="btn btn-primary" (click)="receivedRequest(item.id)">Received</button></td>
-              <td><button type="button" class="btn btn-primary" (click)="deleteRequest(item.id)">Delete</button>
+              <td><button type="button" class="btn btn-primary" (click)="deleteRequest(item.id)">Delete</button></td>
             </tr>
           </tbody>
         </table>
       </div>
-      <div class="col-lg-6 col-md-12">
+      <div *ngIf="receivedItems.length > 0" class="col-lg-12 col-md-12">
+        <h4>Recently Received Items</h4>
+        <table class="table" id="items">
+          <thead>
+            <tr>
+              <th>Description</th>
+              <th>Created At</th>
+              <th>Received At</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of receivedItems">
+              <td>{{item.item_description}}</td>
+              <td>{{item.created_at | date: 'shortDate'}}</td>
+              <td>{{item.updated_at | date: 'shortDate'}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-lg-12 col-md-12">
         <h4>Goals/Next Steps <button type="button" (click)="goToTop();goalMdl.showModal()" class="btn btn-secondary">New</button></h4>
         <table class="table" id="goals">
           <thead>
             <tr>
               <th>Description</th>
               <th>Created At</th>
+              <th>Completed</th>
+              <th>Remove</th>
             </tr>
           </thead>
           <tbody>
@@ -51,17 +126,24 @@
               <td>
                 {{goal.created_at | date:'shortDate'}}
               </td>
+              <td>
+                <button type="button" class="btn btn-primary" (click)="completedGoal(goal)">Completed</button>
+              </td>
+              <td>
+                <button type="button" class="btn btn-primary" (click)="removeGoal(id)">Remove</button>
+              <td>
             </tr>
           </tbody>
         </table>
       </div>
-      <div class="col-lg-6 col-md-12">
+      <div class="col-lg-12 col-md-12">
         <h4>Likes <button type="button" class="btn btn-secondary" (click)="goToTop();likeMdl.showModal()">New</button></h4>
         <table class="table" id="likes">
           <thead>
             <tr>
               <th>Description</th>
               <th>Created At</th>
+              <th>Remove</th>
             </tr>
           </thead>
           <tbody>
@@ -72,17 +154,21 @@
               <td>
                 {{like.created_at | date:'shortDate'}}
               </td>
+              <td>
+                <button type="button" class="btn btn-primary" (click)="removeLike(like.id)">Remove</button>
+              </td>
             </tr>
           </tbody>
         </table>
       </div>
-      <div class="col-lg-6 col-md-12">
+      <div class="col-lg-12 col-md-12">
         <h4>Dislikes <button type="button" (click)="goToTop();dislikeMdl.showModal()" class="btn btn-secondary">New</button></h4>
         <table class="table" id="dislikes">
           <thead>
             <tr>
               <th>Description</th>
               <th>Created At</th>
+              <th>Remove</th>
             </tr>
           </thead>
           <tbody>
@@ -93,11 +179,14 @@
               <td>
                 {{dislike.created_at | date:'shortDate'}}
               </td>
+              <td>
+                <button type="button" class="btn btn-primary" (click)="removeDislike(dislike.id)">Remove</button>
+              </td>
             </tr>
           </tbody>
         </table>
       </div>
-      <div class="col-lg-6 col-md-12">
+      <div class="col-lg-12 col-md-12">
         <h4>Health Concerns <button type="button" (click)="goToTop();healthMdl.showModal()" class="btn btn-secondary">New</button></h4>
         <table class="table" id="concerns">
           <thead>
@@ -127,3 +216,4 @@
 <app-requested-item #requestItemMdl (requestedItemAdded)="requestedItemAdded($event)"></app-requested-item>
 <app-goals-steps #goalMdl (goalAdded)="goalAdded($event)"></app-goals-steps>
 <app-health-concern #healthMdl (healthConcernAdded)="healthConcernAdded($event)"></app-health-concern>
+<app-client-edit-modal #clientEditMdl (editedClient)="editedClient($event)"></app-client-edit-modal>

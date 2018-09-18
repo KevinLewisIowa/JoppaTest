@@ -10,6 +10,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
+    "prodServe": "ng server --prod --open",
     "postinstall": "ng build --aot -prod"
   },
   "private": true,
@@ -32,6 +33,7 @@
     "bootstrap": "next",
     "core-js": "^2.4.1",
     "express": "^4.15.4",
+    "ng-inline-svg": "^8.0.2",
     "open-iconic": "^1.1.1",
     "rxjs": "^5.5.2",
     "yarn": "^1.7.0",
@@ -53,9 +55,5 @@
     "ts-node": "~2.0.0",
     "tslint": "~4.5.0",
     "typescript": "~2.4.2"
-  },
-  "engines": {
-    "node": "6.10.3",
-    "npm": "3.10.10"
   }
 }

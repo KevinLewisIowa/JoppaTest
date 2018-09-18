@@ -1,12 +1,18 @@
 <div class="card text-center" style="opacity:0.93">
   <div class="card-header">
-    <div class="float-left"><button routerLink="/adminHome" class="btn btn-primary" type="button">Admin</button></div>
+    <div class="float-left">
+      <button routerLink="/adminHome" class="btn btn-info" type="button">
+        <span class="oi oi-person" title="Admin Login" aria-hidden="true"></span>
+      </button>
+    </div>
+    <div class="float-right">
+      <button routerLink="/routeNew" class="btn btn-primary" type="button">New Route</button>
+    </div>
     <h2>Routes</h2>
-    <div class="float-right"><button routerLink="/routeNew" class="btn btn-primary" type="button">New Route</button></div>
   </div>
   <div class="panel-body text-center" style="opacity:0.93">
     <div *ngFor="let route of routes" class="route-div well" (click)="openRoute(route.id)">
-      <h4>{{route.name}} in {{route.city}}</h4>
+      <h4>{{route.name}} in {{route.region}}</h4>
     </div>
   </div>
 </div>

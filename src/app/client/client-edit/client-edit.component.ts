@@ -24,28 +24,36 @@ export class ClientEditComponent implements OnInit {
   ngOnInit() {
     this.theClient = new Client();
     this.clientForm = this.fb.group({
-      birthDate: '',
-      preferredName: '',
-      isAfterCare: false,
-      isVeteran: false,
-      shoeSize: '',
+      birth_date: '',
+      preferred_name: '',
+      is_aftercare: false,
+      is_veteran: false,
+      shoe_size: '',
+      boot_size: '',
+      number_meals: 0,
       phone: '',
-      joppaApartmentNumber: ''
+      joppa_apartment_number: '',
+      dwelling: ''
     });
-    this.clientForm.get('preferredName').setValidators(Validators.required);
+    this.clientForm.get('preferred_name').setValidators(Validators.required);
     //this.clientForm.get('birthDate').setValidators(Validators.pattern(this.regExpDate));
   }
 
   submitRoute() {
     const locationCampId = window.sessionStorage.getItem('locationCampId');
-    this.theClient.preferredName = this.clientForm.get('preferredName').value;
-    this.theClient.birthDate = new Date(Date.parse(this.clientForm.get('birthDate').value));
-    this.theClient.isAfterCare = this.clientForm.get('isAfterCare').value;
-    this.theClient.isVeteran = this.clientForm.get('isVeteran').value;
-    this.theClient.shoeSize = this.clientForm.get('shoeSize').value;
+    this.theClient.preferred_name = this.clientForm.get('preferred_name').value;
+    this.theClient.birth_date = new Date(Date.parse(this.clientForm.get('birth_date').value));
+    this.theClient.is_aftercare = this.clientForm.get('is_aftercare').value;
+    this.theClient.is_veteran = this.clientForm.get('is_veteran').value;
+    this.theClient.shoe_size = this.clientForm.get('shoe_size').value;
+    this.theClient.boot_size = this.clientForm.get('boot_size').value;
+    this.theClient.inactive = false;
+    this.theClient.deceased = false;
+    this.theClient.inactive_description = '';
+    this.theClient.number_meals = this.clientForm.get('number_meals').value as number;
     this.theClient.phone = this.clientForm.get('phone').value;
-    this.theClient.joppaApartmentNumber = this.clientForm.get('joppaApartmentNumber').value;
-    console.log(this.theClient);
+    this.theClient.joppa_apartment_number = this.clientForm.get('joppa_apartment_number').value;
+    this.theClient.dwelling = this.clientForm.get('dwelling').value;
     this.clientService.insertClient(this.theClient).subscribe(data => {
       this.router.navigate([`/locationCamp/${locationCampId}`]);
     }, error => { this.store.dispatch({type: 'USER_API_ERROR', payload: { message: 'error' }})})
