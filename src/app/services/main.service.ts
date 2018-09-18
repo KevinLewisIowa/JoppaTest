@@ -140,6 +140,11 @@ export class MainService {
       .map(res => res).catch(error => this.handleError(error));
   }
 
+  getHeaterStatuses() {
+    return this.http.get(this.apiUrl + `getHeaterStatuses`)
+      .map(res => res).catch(error => this.handleError(error));
+  }
+
   private handleError(error: any): Promise<any> {
     console.error('An error occurred', error); // for demo purposes only
     return Promise.reject(error.message || error);

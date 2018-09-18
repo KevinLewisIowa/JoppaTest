@@ -4,6 +4,7 @@ import { HeaterType } from '../models/heater-type';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MainService } from '../services/main.service';
 import { Router } from '@angular/router';
+import { HeaterStatus } from '../models/heater-status';
 
 @Component({
   selector: 'app-create-heating-unit',
@@ -14,12 +15,14 @@ export class CreateHeatingUnitComponent implements OnInit {
   theHeater: Heater;
   heaterForm: FormGroup;
   heaterTypes: HeaterType[];
+  heaterStatuses: HeaterStatus[];
 
   constructor(private mainService: MainService, private fb: FormBuilder,
     private router: Router) { }
 
   ngOnInit() {
     this.getHeaterTypes();
+    this.getHeaterStatuses();
     this.theHeater = new Heater();
     this.heaterForm = this.fb.group({
       is_active: true,
@@ -31,6 +34,12 @@ export class CreateHeatingUnitComponent implements OnInit {
   getHeaterTypes(): void {
     this.mainService.getHeaterTypes().subscribe(heaterTypes => {
       this.heaterTypes = heaterTypes;
+    }, err => {console.log(err)});
+  }
+
+  getHeaterStatuses(): void {
+    this.mainService.getHeaterStatuses().subscribe(heaterStatuses => {
+      this.heaterStatuses = heaterStatuses;
     }, err => {console.log(err)});
   }
 

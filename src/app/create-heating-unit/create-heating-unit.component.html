@@ -12,9 +12,16 @@
     </div>
     <div class="col-md-12">
       <label>Heater Type: </label>
-      <select [(ngModel)]="heater_type_id" id="heaterType">
+      <select [(ngModel)]="heater_type_id" id="heaterType" formControlName="heater_type_id">
         <option value="" disabled selected>Select a heater type</option>
         <option *ngFor="let heatertype of heaterTypes" [value]="heatertype.id">{{heatertype.type_description}}</option>
+      </select>
+    </div>
+    <div class="col-md-12">
+      <label>Heater Status:</label>
+      <select [(ngModel)]="heater_status_id" id="heaterStatus">
+        <option value="" disabled selected>Select a heater status</option>
+        <option *ngFor="let heaterstatus of heaterStatuses" [value]="heaterstatus.id">{{heaterstatus.status_name}}</option>
       </select>
     </div>
     <div class="col-md-12">
