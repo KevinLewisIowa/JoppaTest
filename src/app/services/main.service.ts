@@ -143,6 +143,11 @@ export class MainService {
         .map(res => res).catch(error => this.handleError(error));
   }
 
+  getHeaterListing() {
+    return this.http.get(this.apiUrl + `getHeaterListing`)
+        .map(res => res).catch(error => this.handleError(error));
+  }
+
   getHeaterTypes() {
     return this.http.get(this.apiUrl + `getHeaterTypes`)
       .map(res => res).catch(error => this.handleError(error));

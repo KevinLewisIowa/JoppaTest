@@ -14,23 +14,27 @@ export class AdminHomeComponent implements OnInit {
   }
 
   openAdminRouteUndeliveredItems() {
-    this.router.navigate(['/admin/routeUndeliveredItems'])
+    this.router.navigate(['/admin/routeUndeliveredItems']);
   }
 
   openAdminRouteNumberMeals() {
-    this.router.navigate(['/admin/routeMeals'])
+    this.router.navigate(['/admin/routeMeals']);
   }
 
   openAdminRouteUnfulfilledGoalsNextSteps() {
-    this.router.navigate(['/admin/routeUnfulfilledGoalsNextSteps'])
+    this.router.navigate(['/admin/routeUnfulfilledGoalsNextSteps']);
   }
 
   openAdminRouteUnfulfilledPrayerRequestsNeeds() {
-    this.router.navigate(['/admin/routeUnfulfilledPrayerRequestsNeeds'])
+    this.router.navigate(['/admin/routeUnfulfilledPrayerRequestsNeeds']);
   }
 
   createNewHeater() {
-    this.router.navigate([`heaterNew`])
+    this.router.navigate([`heaterNew`]);
+  }
+
+  openAdminHeaterListing() {
+    this.router.navigate([`/admin/heaterListing`]);
   }
 
 }

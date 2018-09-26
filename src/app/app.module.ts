@@ -49,6 +49,7 @@ import { ClientEditModalComponent } from './client/client-edit-modal/client-edit
 import { CampEditModalComponent } from './location-camp/camp-edit-modal/camp-edit-modal.component';
 import { LocationEditModalComponent } from './location-detail/location-edit-modal/location-edit-modal.component';
 import { CreateHeatingUnitComponent } from './create-heating-unit/create-heating-unit.component';
+import { AdminHeaterListingComponent } from './admin-heater-listing/admin-heater-listing.component';
 
 const reducers = {
   user: MainReducer,
@@ -86,7 +87,8 @@ const reducers = {
     ClientEditModalComponent,
     CampEditModalComponent,
     LocationEditModalComponent,
-    CreateHeatingUnitComponent
+    CreateHeatingUnitComponent,
+    AdminHeaterListingComponent
   ],
   imports: [
     BrowserModule,

@@ -17,6 +17,7 @@ import { AdminRouteUndeliveredItemsComponent } from './admin-route-undelivered-i
 import { AdminRouteUnfulfilledGoalsNextStepsComponent } from './admin-route-unfulfilled-goals-next-steps/admin-route-unfulfilled-goals-next-steps.component';
 import { AdminRouteUnfulfilledPrayerRequestsNeedsComponent } from './admin-route-unfulfilled-prayer-requests-needs/admin-route-unfulfilled-prayer-requests-needs.component';
 import { CreateHeatingUnitComponent } from './create-heating-unit/create-heating-unit.component';
+import { AdminHeaterListingComponent } from './admin-heater-listing/admin-heater-listing.component';
 
 const routes: Routes = [
    
@@ -38,6 +39,7 @@ const routes: Routes = [
   { path: 'admin/routeMeals', component: AdminRouteMealsComponent },
   { path: 'admin/routeUnfulfilledGoalsNextSteps', component: AdminRouteUnfulfilledGoalsNextStepsComponent },
   { path: 'admin/routeUnfulfilledPrayerRequestsNeeds', component: AdminRouteUnfulfilledPrayerRequestsNeedsComponent },
+  { path: 'admin/heaterListing', component: AdminHeaterListingComponent },
   { path: '', redirectTo: '/routes', pathMatch: 'full' }
 ];
 

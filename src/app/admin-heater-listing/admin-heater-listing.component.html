@@ -1,0 +1,30 @@
+<div class="card text-center" style="opacity:0.93">
+  <div class="card-header">
+    <div class="float-left"><button routerLink="/adminHome" class="btn btn-primary" type="button">Back</button></div>
+    <h2>Heater Listing</h2>
+  </div>
+  <div class="panel-body">
+      <table class="table" id="heaterListing">
+          <thead>
+            <tr>
+              <th>Serial Number</th>
+              <th>Heater Type</th>
+              <th>Heater Status</th>
+              <th>Status Reason</th>
+              <th>Is Active</th>
+              <th>Last Updated</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let heater of heaterList">
+              <td>{{heater.serial_number}}</td>
+              <td>{{heater.type_description}}</td>
+              <td>{{heater.status_name}}</td>
+              <td>{{heater.status_reason}}</td>
+              <td>{{heater.is_active}}</td>
+              <td>{{heater.updated_at}}</td>
+            </tr>
+          </tbody>
+        </table>
+  </div>
+</div>
