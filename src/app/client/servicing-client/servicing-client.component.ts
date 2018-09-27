@@ -8,6 +8,9 @@ import { GoalsNextStep } from "app/models/goals-next-steps";
 import { ClientLike } from "app/models/client-like";
 import { ClientDislike } from "app/models/client-dislike";
 import { HealthConcern } from "app/models/health-concern";
+import { HeaterStatus } from '../../models/heater-status';
+import { MainService } from '../../services/main.service';
+import { Heater } from 'app/models/heater';
 
 @Component({
   selector: 'app-servicing-client',
@@ -25,7 +28,9 @@ export class ServicingClientComponent implements OnInit {
   sentInteraction = false;
   receivedItems: RequestedItem[] = [];
   heatRoute = false;
-  constructor(private service: ClientService, private router: Router) { }
+  heaterStatuses: HeaterStatus[] = [];
+  heaters: any[] = [];
+  constructor(private service: ClientService, private mainService: MainService, private router: Router) { }
 
   ngOnInit() {
     if (window.localStorage.getItem('routeType') === 'heat') {
@@ -40,25 +45,52 @@ export class ServicingClientComponent implements OnInit {
       this.service.getRecentReceivedItems(clientId).subscribe((data: RequestedItem[]) => {
         this.receivedItems = data;
       });
-      this.service.getGoalsAndNextSteps(clientId).subscribe((data: GoalsNextStep[]) => {
-        this.goalsAndSteps = data;
-      });
       this.service.getRequestedItems(clientId).subscribe((data: RequestedItem[]) => {
-
         this.requestedItems = data.filter(w => w.has_received != true);
       });
-      this.service.getClientLikes(clientId).subscribe((data: ClientLike[]) => {
-        this.clientLikes = data;
-      });
-      this.service.getClientDislikes(clientId).subscribe((data: ClientDislike[]) => {
-        this.clientDislikes = data;
-      });
-      this.service.getHealthConcerns(clientId).subscribe((data: HealthConcern[]) => {
-        this.healthConcerns = data;
-      });
+
+      if (this.heatRoute) {
+        // get heating equipment for this person
+        this.service.getHeatersForClient(clientId).subscribe((data: Heater[]) => {
+          this.heaters = data;
+        });
+        this.getHeaterStatuses();
+      } else {
+        this.service.getGoalsAndNextSteps(clientId).subscribe((data: GoalsNextStep[]) => {
+          this.goalsAndSteps = data;
+        });
+        this.service.getClientLikes(clientId).subscribe((data: ClientLike[]) => {
+          this.clientLikes = data;
+        });
+        this.service.getClientDislikes(clientId).subscribe((data: ClientDislike[]) => {
+          this.clientDislikes = data;
+        });
+        this.service.getHealthConcerns(clientId).subscribe((data: HealthConcern[]) => {
+          this.healthConcerns = data;
+        });
+      }
     } else {
       this.router.navigate(['/routes']);
     }
+  }
+
+  getHeaterStatuses(): void {
+    this.mainService.getHeaterStatuses().subscribe(heaterStatuses => {
+      this.heaterStatuses = heaterStatuses.filter(w => w.id !== 1 && w.id !== 2);
+    }, err => {console.log(err)} );
+  }
+
+  loaningHeater(heaterId) {
+    this.updateHeaterEntry(heaterId, 2);
+  }
+
+  updateHeaterEntry(heaterId, statusId) {
+    this.service.updateHeaterClient(this.client.id, heaterId, statusId).subscribe(response => {
+      this.service.getHeatersForClient(this.client.id).subscribe((data: any[]) => {
+        console.log(data);
+        this.heaters = data;
+      });
+    });
   }
 
   sendInteraction(interactionType: number) {
