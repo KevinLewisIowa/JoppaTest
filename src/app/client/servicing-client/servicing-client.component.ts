@@ -24,9 +24,13 @@ export class ServicingClientComponent implements OnInit {
   healthConcerns: HealthConcern[] = [];
   sentInteraction = false;
   receivedItems: RequestedItem[] = [];
+  heatRoute = false;
   constructor(private service: ClientService, private router: Router) { }
 
   ngOnInit() {
+    if (window.localStorage.getItem('routeType') === 'heat') {
+      this.heatRoute = true;
+    }
     this.locationCampId = Number(sessionStorage.getItem('locationCampId'));
     const clientId = sessionStorage.getItem('selectedClient');
     if (clientId !== null) {
