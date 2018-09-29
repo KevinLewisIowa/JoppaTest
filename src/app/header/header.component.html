@@ -1,8 +1,8 @@
 <header class="text-center" style="margin-top:-20px;margin-bottom:10px;background:white; opacity:0.7; width:100%;">
   <div id="joppaLogo" aria-label="Joppa" [inlineSVG]="'./assets/logos/joppa-outreach-logo.svg'"></div>
   <div *ngIf="routesActivated">
-    <label for="heatRoute">Heat Route <input type="checkbox" [(ngModel)]="heatRoute" class="form-control" (click)="selectedHeat()"/></label>
+    <label for="heatRoute">Heat Routes <input type="checkbox" [(ngModel)]="heatRoutes" class="form-control" (click)="selectedHeat()"/></label>
     <br/>
-    <label for="outreachRoute">Outreach Route <input type="checkbox" [(ngModel)]="outreachRoute" class="form-control" (click)="selectedOutreach()"/></label>
+    <label for="outreachRoute">Outreach Routes <input type="checkbox" [(ngModel)]="outreachRoutes" class="form-control" (click)="selectedOutreach()"/></label>
   </div>
 </header>

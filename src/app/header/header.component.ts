@@ -10,8 +10,8 @@ import { Router } from '@angular/router';
 export class HeaderComponent implements OnInit {
   title = 'Joppa';
   routesActivated = false;
-  heatRoute = false;
-  outreachRoute = false;
+  heatRoutes = false;
+  outreachRoutes = false;
   isHeatRoute = false;
   constructor(private router: Router) {}
 
@@ -27,24 +27,24 @@ export class HeaderComponent implements OnInit {
 
     if (routeType == 'heat') {
       this.isHeatRoute = true;
-      this.heatRoute = true;
+      this.heatRoutes = true;
     } else {
       this.isHeatRoute = false;
-      this.outreachRoute = true;
+      this.outreachRoutes = true;
     }
   }
 
   selectedHeat() {
     this.isHeatRoute = true;
     window.localStorage.setItem('routeType', 'heat');
-    this.heatRoute = true;
-    this.outreachRoute = false;
+    this.heatRoutes = true;
+    this.outreachRoutes = false;
   }
 
   selectedOutreach() {
     this.isHeatRoute = false;
-    this.heatRoute = false;
-    this.outreachRoute = true;
+    this.heatRoutes = false;
+    this.outreachRoutes = true;
     window.localStorage.setItem('routeType', 'outreach');
   }
 }
