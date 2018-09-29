@@ -66,7 +66,22 @@ export class ClientService {
         .map(response => response).subscribe(response => {
         }, error => { console.log('error inserting appearance'); console.log(error)});
   }
-  
+
+  getHeatersForClient(theClientId) {
+    return this.http.get(this.baseUrl + `getCurrentHeatersForClient?clientId=${theClientId}`)
+            .map(response => response);
+  }
+
+  updateHeaterClient(theClientId, theHeaterId, theStatusId) {
+    return this.http.get(this.baseUrl + `updateHeaterClient?clientId=${theClientId}&heaterId=${theHeaterId}&status=${theStatusId}`)
+          .map(response => response);
+  }
+
+  getAvailableHeaters() {
+    return this.http.get(this.baseUrl + `getAvailableHeaters`)
+          .map(response => response);
+  }
+
   getClientsByName(name) {
     if (name == '') {
       name = 'ALLCLIENTS';

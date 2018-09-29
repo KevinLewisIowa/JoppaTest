@@ -22,7 +22,7 @@
               <td>{{heater.status_name}}</td>
               <td>{{heater.status_reason}}</td>
               <td>{{heater.is_active}}</td>
-              <td>{{heater.updated_at}}</td>
+              <td>{{heater.updated_at | date: 'short'}}</td>
             </tr>
           </tbody>
         </table>

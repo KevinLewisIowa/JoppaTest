@@ -1,0 +1,27 @@
+<ng-template #heaterMdl let-c="close" let-d="dismiss"> 
+    <div class="modal-header">
+      <h4 class="modal-title">Select Heater</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')"><span aria-hidden="true">&times;</span></button>
+    </div>
+      <div class="modal-body">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Heater Type</th>
+              <th>Serial Number</th>
+              <th>Loan</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let heater of availableHeaters">
+              <td>{{heater.type_description}}</td>
+              <td>{{heater.serial_number}}</td>
+              <td><button type="button" (click)="selectedHeater(heater.id);c('close');" class="btn btn-primary">Loan</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary" (click)="c('Close click')">Close</button>
+    </div>
+  </ng-template>

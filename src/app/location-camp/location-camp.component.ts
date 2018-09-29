@@ -20,18 +20,15 @@ export class LocationCampComponent implements OnInit {
   locationId: number;
   clients: Client[] = [];
   locationCamp: LocationCamp = new LocationCamp();
-  constructor(private store : Store<IMainStore>, private service : MainService, private router: Router, private activatedRoute : ActivatedRoute) { 
+  constructor(private store: Store<IMainStore>, private service: MainService,
+    private router: Router, private activatedRoute: ActivatedRoute) {
     this.store.select('user').subscribe(data => {
-      console.log('getting route from store');
-      console.log(data.selectedRoute);
-      
-      if(data.selectedRoute != undefined && data.selectedLocation != undefined)
-      {
+      if (data.selectedRoute != undefined && data.selectedLocation != undefined) {
         this.route = data.selectedRoute;
         this.location = data.selectedLocation;
       } else {
-        var routeId = window.sessionStorage.getItem('routeId');
-        var locationId = window.sessionStorage.getItem('locationId');
+        const routeId = window.sessionStorage.getItem('routeId');
+        const locationId = window.sessionStorage.getItem('locationId');
 
         this.service.getRoute(routeId).subscribe(response => {
           this.route = response;

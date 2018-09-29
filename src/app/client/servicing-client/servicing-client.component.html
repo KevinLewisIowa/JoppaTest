@@ -13,54 +13,23 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-lg-12 col-md-12">
-        <h4>Heating Equipment <button type="button" (click)="goToTop();requestItemMdl.showModal()" class="btn btn-secondary">New</button></h4>
+      <div class="col-lg-12 col-md-12" *ngIf="heatRoute">
+        <h4>Heating Equipment <button type="button" (click)="goToTop();newHeaterModal.showModal()" class="btn btn-secondary">New Heater</button></h4>
         <table class="table" id="items">
           <thead>
             <tr>
-              <th>Description</th>
-              <th>Created At</th>
-              <th>Picked Up</th>
-              <th>Stolen</th>
+              <th>Heater Type</th>
+              <th>Date Given</th>
+              <th>Action</th>
+              <th>Submit</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>Heater</td>
-              <td>8/8/2018</td>
+            <tr *ngFor="let heater of heaters">
+              <td>{{heater.type_description}}</td>
+              <td>{{heater.updated_at | date: 'shortDate'}}</td>
               <td><select class="form-control">
-                  <option>Retrieved</option>
-                  <option>Stolen</option>
-                  <option>Lost</option>
-                  <option>Destroyed</option>
-                  <option>Broken</option>
-                  <option>Evicted</option>
-                </select></td>
-              <td><button type="button" class="btn btn-primary">Submit</button>
-            </tr>
-            <tr>
-              <td>Tank</td>
-              <td>8/8/2018</td>
-              <td><select class="form-control">
-                  <option>Retrieved</option>
-                  <option>Stolen</option>
-                  <option>Lost</option>
-                  <option>Destroyed</option>
-                  <option>Broken</option>
-                  <option>Evicted</option>
-                </select></td>
-              <td><button type="button" class="btn btn-primary">Submit</button>
-            </tr>
-            <tr>
-              <td>Tank</td>
-              <td>8/8/2018</td>
-              <td><select class="form-control">
-                  <option>Retrieved</option>
-                  <option>Stolen</option>
-                  <option>Lost</option>
-                  <option>Destroyed</option>
-                  <option>Broken</option>
-                  <option>Evicted</option>
+                  <option *ngFor="let option of heaterStatuses" value="option.id">{{option.status_name}}</option>
                 </select></td>
               <td><button type="button" class="btn btn-primary">Submit</button>
             </tr>
@@ -107,7 +76,7 @@
           </tbody>
         </table>
       </div>
-      <div class="col-lg-12 col-md-12">
+      <div class="col-lg-12 col-md-12" *ngIf="!heatRoute">
         <h4>Goals/Next Steps <button type="button" (click)="goToTop();goalMdl.showModal()" class="btn btn-secondary">New</button></h4>
         <table class="table" id="goals">
           <thead>
@@ -136,7 +105,7 @@
           </tbody>
         </table>
       </div>
-      <div class="col-lg-12 col-md-12">
+      <div class="col-lg-12 col-md-12" *ngIf="!heatRoute">
         <h4>Likes <button type="button" class="btn btn-secondary" (click)="goToTop();likeMdl.showModal()">New</button></h4>
         <table class="table" id="likes">
           <thead>
@@ -161,7 +130,7 @@
           </tbody>
         </table>
       </div>
-      <div class="col-lg-12 col-md-12">
+      <div class="col-lg-12 col-md-12" *ngIf="!heatRoute">
         <h4>Dislikes <button type="button" (click)="goToTop();dislikeMdl.showModal()" class="btn btn-secondary">New</button></h4>
         <table class="table" id="dislikes">
           <thead>
@@ -186,7 +155,7 @@
           </tbody>
         </table>
       </div>
-      <div class="col-lg-12 col-md-12">
+      <div class="col-lg-12 col-md-12" *ngIf="!heatRoute">
         <h4>Health Concerns <button type="button" (click)="goToTop();healthMdl.showModal()" class="btn btn-secondary">New</button></h4>
         <table class="table" id="concerns">
           <thead>
@@ -217,3 +186,4 @@
 <app-goals-steps #goalMdl (goalAdded)="goalAdded($event)"></app-goals-steps>
 <app-health-concern #healthMdl (healthConcernAdded)="healthConcernAdded($event)"></app-health-concern>
 <app-client-edit-modal #clientEditMdl (editedClient)="editedClient($event)"></app-client-edit-modal>
+<app-loan-heater-modal #newHeaterModal (loaningHeater)="loaningHeater($event)"></app-loan-heater-modal>
