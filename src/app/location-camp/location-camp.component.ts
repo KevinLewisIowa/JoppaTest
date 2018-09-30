@@ -20,6 +20,8 @@ export class LocationCampComponent implements OnInit {
   locationId: number;
   clients: Client[] = [];
   locationCamp: LocationCamp = new LocationCamp();
+  heatRoute: boolean = false;
+
   constructor(private store: Store<IMainStore>, private service: MainService,
     private router: Router, private activatedRoute: ActivatedRoute) {
     this.store.select('user').subscribe(data => {
@@ -51,11 +53,19 @@ export class LocationCampComponent implements OnInit {
     this.service.getClientsForLocationCamp(locationCampId).subscribe((data: Client[]) => {
       console.log('returned clients');
       console.log(data);
-      this.clients = data;
+      if (this.heatRoute) {
+        this.clients = data.filter(client => client.dwelling !== "Vehicle" && client.dwelling !== "Under Bridge" && client.dwelling !== "Streets");
+      }
+      else {
+        this.clients = data;
+      }
     })
   }
 
   ngOnInit() {
+    if (window.localStorage.getItem('routeType') === 'heat') {
+      this.heatRoute = true;
+    }
   }
 
   editedCamp(theCamp: LocationCamp) {
