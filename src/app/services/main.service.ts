@@ -21,7 +21,8 @@ export class MainService {
   online = true;
   private headers = new Headers({'Content-Type': 'application/json'});
   private baseUrl = 'api/';  // URL to web api
-  private apiUrl = 'https://hidden-springs-63744.herokuapp.com/';
+  // private apiUrl = 'https://hidden-springs-63744.herokuapp.com/';
+  private apiUrl = 'https://joppa-api-test.herokuapp.com/';
 
   constructor(private http: HttpClient, private store: Store<IMainStore>) { }
   getRoutes() {

@@ -20,12 +20,13 @@ import { PrayerRequestAndNeed } from "app/models/prayer-request";
 import { GoalsNextStep } from "app/models/goals-next-steps";
 
 const theHeader = new HttpHeaders().set('Content-Type', 'application/json');
-//adding a new comment
+// adding a new comment
 @Injectable()
 export class ClientService {
   online = true;
-  private baseUrl = 'https://hidden-springs-63744.herokuapp.com/';  // URL to web api
-  private apiUrl = 'https://hidden-springs-63744.herokuapp.com/';
+  // private baseUrl = 'https://hidden-springs-63744.herokuapp.com/';  // URL to web api
+  // private apiUrl = 'https://hidden-springs-63744.herokuapp.com/';
+  private baseUrl = 'https://joppa-api-test.herokuapp.com/';
 
   constructor(private http: HttpClient, private store: Store<IMainStore>) { }
   getClientLikes(id) {
