@@ -5,13 +5,13 @@
   </div>
   <div class="panel-body">
     <div class="row">
-      <div *ngIf="!sentInteraction">
+      <div class="col-lg-12 col-md-12" *ngIf="!sentInteraction">
         <button type="button" class="btn btn-primary" (click)="sendInteraction(1)">Seen & Serviced</button>&nbsp;
         <button type="button" class="btn btn-primary" (click)="sendInteraction(2)">Serviced & Not Seen</button>&nbsp;
-        <button type="button" class="btn btn-primary" (click)="sendInteraction(3)">No longer lives here</button>&nbsp;
-        <button type="button" class="btn btn-primary" (click)="sendInteraction(4)">Seen but not serviced</button>
+        <button type="button" class="btn btn-primary" (click)="sendInteraction(3)">No longer lives here</button>
       </div>
     </div>
+    <br />
     <div class="row">
       <div class="col-lg-12 col-md-12" *ngIf="heatRoute">
         <h4>Heating Equipment <button type="button" (click)="goToTop();newHeaterModal.showModal()" class="btn btn-secondary">New Heater</button></h4>
@@ -99,7 +99,7 @@
                 <button type="button" class="btn btn-primary" (click)="completedGoal(goal)">Completed</button>
               </td>
               <td>
-                <button type="button" class="btn btn-primary" (click)="removeGoal(id)">Remove</button>
+                <button type="button" class="btn btn-primary" (click)="removeGoal(goal.id)">Remove</button>
               <td>
             </tr>
           </tbody>
@@ -162,6 +162,7 @@
             <tr>
               <th>Description</th>
               <th>Created At</th>
+              <th>Remove</th>
             </tr>
           </thead>
           <tbody>
@@ -171,6 +172,9 @@
               </td>
               <td>
                 {{concern.created_at | date:'shortDate'}}
+              </td>
+              <td>
+                <button type="button" class="btn btn-primary" (click)="removeHealthConcern(concern.id)">Remove</button>
               </td>
             </tr>
           </tbody>
