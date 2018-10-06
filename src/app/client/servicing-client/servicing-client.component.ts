@@ -109,10 +109,6 @@ export class ServicingClientComponent implements OnInit {
       interaction.serviced = false;
       interaction.still_lives_here = false;
       interaction.was_seen = false;
-    } else if (interactionType === 4) {
-      interaction.still_lives_here = true;
-      interaction.serviced = false;
-      interaction.was_seen = true;
     }
     this.sentInteraction = true;
     this.service.insertClientAppearance(interaction);
@@ -182,6 +178,12 @@ export class ServicingClientComponent implements OnInit {
   removeGoal(id) {
     this.service.deleteGoalAndNextStep(id).subscribe(response => {
       this.goalsAndSteps = this.goalsAndSteps.filter(w => w.id != id);
+    })
+  }
+
+  removeHealthConcern(id) {
+    this.service.removeHealthConcern(id).subscribe(response => {
+      this.healthConcerns = this.healthConcerns.filter(w => w.id != id);
     })
   }
 

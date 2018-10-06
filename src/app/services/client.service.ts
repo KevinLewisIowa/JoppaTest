@@ -131,7 +131,11 @@ export class ClientService {
   }
 
   removeDislike(id: number) {
-    return this.http.delete(this.baseUrl + `client_likes/${id}`);
+    return this.http.delete(this.baseUrl + `client_dislikes/${id}`);
+  }
+
+  removeHealthConcern(id: number) {
+    return this.http.delete(this.baseUrl + `health_concerns/${id}`);
   }
 
   deleteGoalAndNextStep(id: number) {
