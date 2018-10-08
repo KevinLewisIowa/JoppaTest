@@ -11,18 +11,19 @@ import { Router } from '@angular/router';
 })
 export class FooterComponent implements OnInit {
   currentYear: number = new Date().getFullYear();
-  routeInstanceId: number;
   routeInstance: RouteInstance = new RouteInstance();
 
   constructor(private mainService: MainService, private router: Router) {
-    this.routeInstanceId = JSON.parse(window.localStorage.getItem('routeInstance'));
+    
   }
 
   ngOnInit() { }
 
   endRoute() {
-    if (this.routeInstanceId !== null) {
-      this.mainService.getRouteInstance(this.routeInstanceId).subscribe(data => {
+    var routeInstanceId = JSON.parse(window.localStorage.getItem('routeInstance'));
+
+    if (routeInstanceId !== null) {
+      this.mainService.getRouteInstance(routeInstanceId).subscribe(data => {
         this.routeInstance = data;
         this.routeInstance.end_time = new Date();
 
