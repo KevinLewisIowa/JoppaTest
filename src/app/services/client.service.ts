@@ -177,6 +177,24 @@ export class ClientService {
       return this.http.get(this.baseUrl + `getAllRequestedItems`).map(response => response);
   }
 
+  getClientLoanedTanks(clientId) {
+    return this.http.get(this.baseUrl + `getTanksLoanedToClient?clientId=${clientId}`).map(response => response);
+  }
+
+  getClientLoanedHoses(clientId) {
+    return this.http.get(this.baseUrl + `getHosesLoanedToClient?clientId=${clientId}`).map(response => response);
+  }
+
+  loanTank(clientId) {
+    return this.http.post(this.baseUrl + `client_tank_interactions`, {client_tank_interaction: {client_id: clientId, heater_status_id: 2}})
+            .map(response => response);
+  }
+
+  loanHose(clientId) {
+    return this.http.post(this.baseUrl + `client_hose_interactions`, {client_hose_interaction: {client_id: clientId, heater_status_id: 2}})
+            .map(response => response);
+  }
+
   private mapLocations(data: Array<any>): Location[] {
     return data.map(item => 
       <Location>({

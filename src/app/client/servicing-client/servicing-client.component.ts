@@ -28,6 +28,9 @@ export class ServicingClientComponent implements OnInit {
   sentInteraction = false;
   receivedItems: RequestedItem[] = [];
   heatRoute = false;
+  tankInteractions: any[] = [];
+  hoseInteractions: any[] = [];
+  clientId = null;
   heaterStatuses: HeaterStatus[] = [];
   heaters: any[] = [];
   constructor(private service: ClientService, private mainService: MainService, private router: Router) { }
@@ -35,35 +38,43 @@ export class ServicingClientComponent implements OnInit {
   ngOnInit() {
     this.heatRoute = JSON.parse(window.localStorage.getItem('heatRoute'));
     this.locationCampId = Number(sessionStorage.getItem('locationCampId'));
-    const clientId = sessionStorage.getItem('selectedClient');
-    if (clientId !== null) {
-      this.service.getClientById(clientId).subscribe((data: Client) => {
+    this.clientId = sessionStorage.getItem('selectedClient');
+    if (this.clientId !== null) {
+      this.service.getClientById(this.clientId).subscribe((data: Client) => {
         this.client = data;
       });
-      this.service.getRecentReceivedItems(clientId).subscribe((data: RequestedItem[]) => {
+      this.service.getRecentReceivedItems(this.clientId).subscribe((data: RequestedItem[]) => {
         this.receivedItems = data;
       });
-      this.service.getRequestedItems(clientId).subscribe((data: RequestedItem[]) => {
+      this.service.getRequestedItems(this.clientId).subscribe((data: RequestedItem[]) => {
         this.requestedItems = data.filter(w => w.has_received != true);
       });
 
       if (this.heatRoute) {
         // get heating equipment for this person
-        this.service.getHeatersForClient(clientId).subscribe((data: Heater[]) => {
+        this.service.getHeatersForClient(this.clientId).subscribe((data: Heater[]) => {
           this.heaters = data;
+        });
+        this.service.getClientLoanedTanks(this.clientId).subscribe((tankInteractions: any[]) => {
+          // now get the tank info
+          this.tankInteractions = tankInteractions;
+        });
+        this.service.getClientLoanedHoses(this.clientId).subscribe((hoseInteractions: any[]) => {
+          // now get the Hose info
+          this.hoseInteractions = hoseInteractions;
         });
         this.getHeaterStatuses();
       } else {
-        this.service.getGoalsAndNextSteps(clientId).subscribe((data: GoalsNextStep[]) => {
+        this.service.getGoalsAndNextSteps(this.clientId).subscribe((data: GoalsNextStep[]) => {
           this.goalsAndSteps = data;
         });
-        this.service.getClientLikes(clientId).subscribe((data: ClientLike[]) => {
+        this.service.getClientLikes(this.clientId).subscribe((data: ClientLike[]) => {
           this.clientLikes = data;
         });
-        this.service.getClientDislikes(clientId).subscribe((data: ClientDislike[]) => {
+        this.service.getClientDislikes(this.clientId).subscribe((data: ClientDislike[]) => {
           this.clientDislikes = data;
         });
-        this.service.getHealthConcerns(clientId).subscribe((data: HealthConcern[]) => {
+        this.service.getHealthConcerns(this.clientId).subscribe((data: HealthConcern[]) => {
           this.healthConcerns = data;
         });
       }
@@ -197,7 +208,27 @@ export class ServicingClientComponent implements OnInit {
       this.requestedItems = this.requestedItems.filter(w => w.id != id);
       this.service.getRecentReceivedItems(this.client.id).subscribe((data: RequestedItem[]) => {
         this.receivedItems = data;
-      })
-    })
+      });
+    });
+  }
+
+  loanTank() {
+    if (this.clientId != null) {
+      this.service.loanTank(this.clientId).subscribe(response => {
+        this.service.getClientLoanedTanks(this.clientId).subscribe((data: any) => {
+          this.tankInteractions = data;
+        });
+      });
+    }
+  }
+
+  loanHose() {
+    if (this.clientId != null) {
+      this.service.loanHose(this.clientId).subscribe(response => {
+        this.service.getClientLoanedHoses(this.clientId).subscribe((data: any) => {
+          this.hoseInteractions = data;
+        });
+      });
+    }
   }
 }

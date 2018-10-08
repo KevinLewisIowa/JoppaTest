@@ -14,7 +14,9 @@
     <br />
     <div class="row">
       <div class="col-lg-12 col-md-12" *ngIf="heatRoute">
-        <h4>Heating Equipment <button type="button" (click)="goToTop();newHeaterModal.showModal()" class="btn btn-secondary">New Heater</button></h4>
+        <h4>Heating Equipment <button type="button" (click)="goToTop();newHeaterModal.showModal()" class="btn btn-secondary">New Heater</button>
+        <button type="button" (click)="loanTank()" class="btn btn-secondary">Add Tank</button>
+        <button type="button" (click)="loanHose()" class="btn btn-secondary">Add Hose</button></h4>
         <table class="table" id="items">
           <thead>
             <tr>
@@ -34,6 +36,24 @@
                   <option *ngFor="let option of heaterStatuses" value="option.id">{{option.status_name}}</option>
                 </select></td>
               <td><button type="button" class="btn btn-primary">Submit</button>
+            </tr>
+            <tr *ngFor="let tank of tankInteractions">
+              <td>Tank</td>
+              <td>N/A</td>
+              <td>{{tank.updated_at | date: 'shortDate'}}</td>
+              <td><select class="form-control">
+                <option *ngFor="let option of heaterStatuses" value="option.id">{{option.status_name}}</option>
+              </select></td>
+              <td><button type="button" class="btn btn-primary">Submit</button></td>
+            </tr>
+            <tr *ngFor="let hose of hoseInteractions">
+              <td>Hose</td>
+              <td>N/A</td>
+              <td>{{hose.updated_at | date: 'shortDate'}}</td>
+              <td><select class="form-control">
+                <option *ngFor="let option of heaterStatuses" value="option.id">{{option.status_name}}</option>
+              </select></td>
+              <td><button type="button" class="btn btn-primary">Submit</button></td>
             </tr>
           </tbody>
         </table>
