@@ -18,10 +18,13 @@ import { AdminRouteUnfulfilledGoalsNextStepsComponent } from './admin-route-unfu
 import { AdminRouteUnfulfilledPrayerRequestsNeedsComponent } from './admin-route-unfulfilled-prayer-requests-needs/admin-route-unfulfilled-prayer-requests-needs.component';
 import { CreateHeatingUnitComponent } from './create-heating-unit/create-heating-unit.component';
 import { AdminHeaterListingComponent } from './admin-heater-listing/admin-heater-listing.component';
+import { LeaderSignInComponent } from './leader-sign-in/leader-sign-in.component';
+import { CheckoutHeatersComponent } from './checkout-heaters/checkout-heaters.component';
 
 const routes: Routes = [
-   
-   { path: 'routes', component: RoutesComponent },
+  { path: 'routes', component: RoutesComponent },
+  { path: 'login', component: LeaderSignInComponent },
+  { path: 'checkoutHeaters', component: CheckoutHeatersComponent },
   { path: 'route/:id', component: LocationsComponent },
   { path: 'location/:id', component: LocationDetailComponent },
   { path: 'locationCamp/:id', component: LocationCampComponent},
@@ -40,7 +43,7 @@ const routes: Routes = [
   { path: 'admin/routeUnfulfilledGoalsNextSteps', component: AdminRouteUnfulfilledGoalsNextStepsComponent },
   { path: 'admin/routeUnfulfilledPrayerRequestsNeeds', component: AdminRouteUnfulfilledPrayerRequestsNeedsComponent },
   { path: 'admin/heaterListing', component: AdminHeaterListingComponent },
-  { path: '', redirectTo: '/routes', pathMatch: 'full' }
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
 ];
 
 @NgModule({

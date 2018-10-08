@@ -1,0 +1,27 @@
+<div class="card text-center" style="opacity:0.93">
+  <div class="card-header text-center" id="topOfScreen">
+    <button type="button" class="pull-left btn btn-primary" routerLink="/login">Back</button>
+    <h2>Checkout Heaters</h2>
+  </div>
+  <div class="row">
+    <div class="col-lg-12 col-md-12" *ngIf="heaters">
+      <table class="table" id="items">
+        <thead>
+          <tr>
+            <th>Serial #</th>
+            <th>Checkout</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let heater of heaters">
+            <td><input type="checkbox"></td>
+            <td>{{heater.serial_number}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div>
+    <button type="button" class="btn btn-primary" (click)="checkoutHeaters()">Checkout</button>
+  </div>
+</div>

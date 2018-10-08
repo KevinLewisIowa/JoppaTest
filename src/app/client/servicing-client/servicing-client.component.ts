@@ -33,9 +33,7 @@ export class ServicingClientComponent implements OnInit {
   constructor(private service: ClientService, private mainService: MainService, private router: Router) { }
 
   ngOnInit() {
-    if (window.localStorage.getItem('routeType') === 'heat') {
-      this.heatRoute = true;
-    }
+    this.heatRoute = JSON.parse(window.localStorage.getItem('heatRoute'));
     this.locationCampId = Number(sessionStorage.getItem('locationCampId'));
     const clientId = sessionStorage.getItem('selectedClient');
     if (clientId !== null) {

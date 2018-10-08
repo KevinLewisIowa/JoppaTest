@@ -13,6 +13,7 @@ import 'rxjs/add/operator/toPromise';
 import { Store } from '@ngrx/store';
 import { IMainStore } from '../state-management/main.store';
 import { LocationCamp } from "app/models/location-camp";
+import { RouteInstance } from '../models/route-instance';
 
 const theHeader = new HttpHeaders().set('Content-Type', 'application/json');
 
@@ -32,6 +33,7 @@ export class MainService {
         })
         .catch(this.handleError);
   }
+
   getTheRoutes(): Observable<Route[]>{
     if(this.online){
       return this.http.get(this.apiUrl + `routes`)
@@ -56,6 +58,12 @@ export class MainService {
         .catch(this.handleError);
   }
 
+  insertRouteInstance(routeInstance: RouteInstance): any {
+    return this.http.post(this.apiUrl + `route_instances`, {route_instance: routeInstance}, {headers: theHeader})
+        .map(res => res)
+        .catch(this.handleError);
+  }
+
   insertLocationCamp(theLocationCamp: LocationCamp) {
     return this.http.post(this.apiUrl + `location_camps`, {location_camp: theLocationCamp}, {headers: theHeader})
         .map(res => res);
@@ -69,6 +77,11 @@ export class MainService {
   updateLocation(theLocation: Location) {
     return this.http.put(this.apiUrl + `locations/${theLocation.id}`, {location: theLocation}, {headers: theHeader})
         .map(res => res).subscribe(response => { }, error => {console.log('error updating location')});
+  }
+
+  updateRouteInstance(theRouteInstance: RouteInstance) {
+    return this.http.put(this.apiUrl + `route_instances/${theRouteInstance.id}`, {route_instance: theRouteInstance}, {headers: theHeader})
+        .map(res => res).subscribe(response => { }, error => {console.log('error updating route instance')});;
   }
 
   insertHeater(theHeater: Heater) {
@@ -90,6 +103,12 @@ export class MainService {
   getLocationCamps(id) {
     return this.http.get(this.apiUrl + `getCampsForLocation?locationId=${id}`)
               .map(res => {return res;}).catch(err => this.handleError(err));
+  }
+
+  getRouteInstance(id:number) {
+    return this.http.get(this.apiUrl + `route_instances/${id}`)
+      .map(res => {return res; })
+      .catch(err => this.handleError(err));
   }
 
   getClientsForLocationCamp(id){
@@ -156,6 +175,11 @@ export class MainService {
 
   getHeaterStatuses() {
     return this.http.get(this.apiUrl + `getHeaterStatuses`)
+      .map(res => res).catch(error => this.handleError(error));
+  }
+
+  getAvailableHeaters() {
+    return this.http.get(this.apiUrl + `getAvailableHeaters`)
       .map(res => res).catch(error => this.handleError(error));
   }
 

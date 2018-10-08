@@ -1,0 +1,34 @@
+<form [formGroup]="routeInstanceForm">
+  <div class="card text-center" style="opacity:0.93">
+    <div class="card-header">
+      <button class="btn btn-primary" type="button" (click)="back()">Back</button>
+      <h2>Route Leader Sign In</h2>
+    </div>
+    <div class="panel-body" style="opacity:0.93">
+      <div class="entry-box">
+        <div class="col-md-12">
+          <label>Leader Name: </label>
+          <input type="text" placeholder="Name" formControlName="leader_name"/>
+        </div>
+        <div class="col-md-12">
+          <label>Leader Phone: </label>
+          <input type="tel" placeholder="515-123-4567" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" formControlName="leader_phone"/>
+        </div>
+        <div class="col-md-12">
+          <label>Route: </label>
+          <select id="routes" formControlName="route_id">
+            <option value="" disabled selected>Select a route</option>
+            <option *ngFor="let route of routes" [value]="route.id">{{route.name}}</option>
+          </select>
+        </div>
+        <div class="col-md-12">
+          <label>Heat Route:</label>
+          <input type="checkbox" checked formControlName="heat_route">
+        </div>
+        <div class="col-md-12">
+          <button type="button" [disabled]="!routeInstanceForm.valid" (click)="insertRouteInstance()" class="btn btn-primary">Next</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  </form>

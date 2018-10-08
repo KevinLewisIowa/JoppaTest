@@ -51,6 +51,8 @@ import { LocationEditModalComponent } from './location-detail/location-edit-moda
 import { CreateHeatingUnitComponent } from './create-heating-unit/create-heating-unit.component';
 import { AdminHeaterListingComponent } from './admin-heater-listing/admin-heater-listing.component';
 import { LoanHeaterModalComponent } from './insert-modals/loan-heater-modal/loan-heater-modal.component';
+import { LeaderSignInComponent } from './leader-sign-in/leader-sign-in.component';
+import { CheckoutHeatersComponent } from './checkout-heaters/checkout-heaters.component';
 
 const reducers = {
   user: MainReducer,
@@ -90,7 +92,9 @@ const reducers = {
     LocationEditModalComponent,
     CreateHeatingUnitComponent,
     AdminHeaterListingComponent,
-    LoanHeaterModalComponent
+    LoanHeaterModalComponent,
+    LeaderSignInComponent,
+    CheckoutHeatersComponent,
   ],
   imports: [
     BrowserModule,

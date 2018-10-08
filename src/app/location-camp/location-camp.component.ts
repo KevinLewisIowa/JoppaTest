@@ -63,9 +63,7 @@ export class LocationCampComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (window.localStorage.getItem('routeType') === 'heat') {
-      this.heatRoute = true;
-    }
+    this.heatRoute = JSON.parse(window.localStorage.getItem('heatRoute'));
   }
 
   editedCamp(theCamp: LocationCamp) {
