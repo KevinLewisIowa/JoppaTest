@@ -186,7 +186,7 @@ export class ClientService {
   }
 
   loanTank(clientId) {
-    return this.http.post(this.baseUrl + `client_tank_interactions`, {client_tank_interaction: {client_id: clientId, heater_status_id: 2}})
+    return this.http.post(this.baseUrl + `client_tank_interactions`, {client_tank_interaction: {client_id: clientId, status_id: 2}})
             .map(response => response);
   }
 
