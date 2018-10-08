@@ -13,9 +13,6 @@
     "prodServe": "ng server --prod --open",
     "postinstall": "ng build --aot -prod"
   },
-  "engines": {
-    "node": "8.11.1"
-  },
   "private": true,
   "dependencies": {
     "@angular/cli": "^1.5.0",
