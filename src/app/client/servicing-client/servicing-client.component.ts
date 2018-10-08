@@ -231,4 +231,21 @@ export class ServicingClientComponent implements OnInit {
       });
     }
   }
+
+  submitTankStatus(interactionId, statusId) {
+    console.log('tank status value' + statusId);
+    this.service.updateTankInteraction(interactionId, statusId).subscribe(data => {
+      this.service.getClientLoanedTanks(this.clientId).subscribe((response: any[]) => {
+        this.tankInteractions = response;
+      });
+    });
+  }
+
+  submitHoseStatus(interactionId, statusId) {
+    this.service.updateHoseInteraction(interactionId, statusId).subscribe(data => {
+      this.service.getClientLoanedHoses(this.clientId).subscribe((response: any[]) => {
+        this.hoseInteractions = response;
+      });
+    });
+  }
 }

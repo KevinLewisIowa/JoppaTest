@@ -195,6 +195,16 @@ export class ClientService {
             .map(response => response);
   }
 
+  updateTankInteraction(interactionId, statusId) {
+    return this.http.get(this.baseUrl + `updateTankInteraction?interactionId=${interactionId}&statusId=${statusId}`)
+            .map(response => response);
+  }
+
+  updateHoseInteraction(interactionId, statusId) {
+    return this.http.get(this.baseUrl + `updateHoseInteraction?interactionId=${interactionId}&statusId=${statusId}`)
+            .map(response => response);
+  }
+
   private mapLocations(data: Array<any>): Location[] {
     return data.map(item => 
       <Location>({
