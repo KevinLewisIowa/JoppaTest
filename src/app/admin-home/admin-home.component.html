@@ -4,23 +4,39 @@
     <h2>Admin</h2>
   </div>
   <div class="panel-body text-center" style="opacity:0.93">
-      <div class="admin-item-div text-center" (click)="openAdminRouteUndeliveredItems()">
-        Undelivered Items Listing
-      </div>
-      <div class="admin-item-div text-center" (click)="openAdminRouteNumberMeals()">
-        Meals Expected
-      </div>
-      <div class="admin-item-div text-center" (click)="openAdminRouteUnfulfilledGoalsNextSteps()">
-        Goals/Next Steps Not Fulfilled Listing
-      </div>
-      <div class="admin-item-div text-center" (click)="openAdminRouteUnfulfilledPrayerRequestsNeeds()">
-          Prayer Requests/Needs Not Fulfilled Listing
-      </div>
-      <div class="admin-item-div text-center" (click)="createNewHeater()">
-        Create New Heater
-    </div>
-    <div class="admin-item-div text-center" (click)="openAdminHeaterListing()">
-      Heater Listing
-  </div>
+    <table class="table table-striped">
+      <tbody>
+        <tr>
+          <td class="text-center" style="height:75px;" (click)="openAdminRouteUndeliveredItems()">
+            Undelivered Items Listing
+          </td>
+        </tr>
+        <tr>
+          <td class="text-center" style="height:75px;" (click)="openAdminRouteNumberMeals()">
+            Meals Expected
+          </td>
+        </tr>
+        <tr>
+          <td class="text-center" style="height:75px;" (click)="openAdminRouteUnfulfilledGoalsNextSteps()">
+            Goals/Next Steps Not Fulfilled Listing
+          </td>
+        </tr>
+        <tr>
+          <td class="text-center" style="height:75px;" (click)="openAdminRouteUnfulfilledPrayerRequestsNeeds()">
+              Prayer Requests/Needs Not Fulfilled Listing
+          </td>
+        </tr>
+        <tr>
+          <td class="text-center" style="height:75px;" (click)="createNewHeater()">
+            Create New Heater
+          </td>
+        </tr>
+        <tr>
+          <td class="text-center" style="height:75px;" (click)="openAdminHeaterListing()">
+            Heater Listing
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>

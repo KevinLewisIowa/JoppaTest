@@ -9,9 +9,15 @@
     </div>
   </div>
   <div class="panel-body">
-    <div *ngFor="let camp of locationCamps" class="location-camp-div text-center" (click)="openLocationCamp(camp)">
-      <b>{{camp.name}}</b>
-    </div>
+    <table class="table table-striped">
+      <tbody>
+        <tr *ngFor="let camp of locationCamps" style="height: 75px" (click)="openLocationCamp(camp)">
+          <td class="text-center">
+            <b>{{camp.name}}</b>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>
 <app-location-edit-modal #locationEditMdl (editedLocation)="editedLocation($event)"></app-location-edit-modal>

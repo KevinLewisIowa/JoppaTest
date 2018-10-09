@@ -5,8 +5,12 @@
     <div class="float-right"><button (click)="newLocation()" class="btn btn-primary" type="button">New Location</button></div>
   </div>
   <div class="panel-body">
-    <div *ngFor="let location of locations" class="location-div text-center" (click)="openLocation(location)">
-      <b>{{location.name}}</b>
-    </div>
+    <table class="table table-striped">
+      <tbody>
+        <tr *ngFor="let location of locations" style="height:75px" (click)="openLocation(location)">
+          <td class="text-center"><b>{{location.name}}</b></td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>
