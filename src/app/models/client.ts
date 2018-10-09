@@ -15,4 +15,5 @@ export class Client {
     dwelling: string = undefined;
     created_at: Date = undefined;
     updated_at: Date = undefined;
+    scene_at: Date = undefined;
 }

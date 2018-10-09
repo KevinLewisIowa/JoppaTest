@@ -116,8 +116,7 @@ export class MainService {
       return this.http.get(this.apiUrl + `getClientsForLocationCampC?locationCampId=${id}`)
       .map(res => {return res; })
       .catch(err => this.handleError(err));
-    }
-    else{
+    } else {
       return Observable.of([]);
     }
   }
