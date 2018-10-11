@@ -44,4 +44,13 @@ export class LocationEditModalComponent implements OnInit {
     this.service.updateLocation(this.locationForm.value as Location);
     this.editedLocation.emit(this.locationForm.value as Location);
   }
+
+  getCurrentLocation() {
+    navigator.geolocation.getCurrentPosition((position) => {
+      this.locationForm.patchValue({
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude
+      });
+     });
+  }
 }

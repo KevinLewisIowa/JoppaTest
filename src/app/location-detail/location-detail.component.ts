@@ -70,7 +70,7 @@ export class LocationDetailComponent implements OnInit {
 
   showMap() {
     //window.open("https://www.google.com/maps?saddr=My+Location&daddr=41.578198,-93.6130761", "_blank");
-    window.open(`https://www.google.com/maps?q=${this.location.latitude},${this.location.latitude}&q=food&amp;z=14`, "_blank");
+    window.open(`https://www.google.com/maps?q=${this.location.latitude},${this.location.longitude}&q=food&amp;z=14`, "_blank");
     // window.open("https://www.google.com/maps/@41.578198,-93.6130761,17z?hl=en", "_blank");
   }
   

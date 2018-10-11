@@ -53,7 +53,7 @@ export class LeaderSignInComponent implements OnInit {
     //  this.router.navigate(['checkoutHeaters']);
     //}
     //else {
-      this.router.navigate(['routes']);
+      this.router.navigate(['route', this.routeInstance.route_id]);
     //}
   }
 

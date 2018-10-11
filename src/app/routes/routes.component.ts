@@ -15,9 +15,16 @@ export class RoutesComponent implements OnInit {
   routeInstance: RouteInstance = new RouteInstance();
 
   constructor(private mainService: MainService , private router : Router) { 
-    this.mainService.getTheRoutes().subscribe(routes => {
-      this.routes = routes.filter(route => route.id === this.route_id);
-    })
+    if (this.route_id !== null) {
+      this.mainService.getTheRoutes().subscribe(routes => {
+        this.routes = routes.filter(route => route.id === this.route_id);
+      })
+    }
+    else {
+      this.mainService.getTheRoutes().subscribe(theRoutes => {
+        this.routes = theRoutes;
+      })
+    }    
   }
 
   ngOnInit() {
