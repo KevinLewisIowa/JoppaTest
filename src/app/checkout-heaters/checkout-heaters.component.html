@@ -9,19 +9,24 @@
         <thead>
           <tr>
             <th>Serial #</th>
-            <th>Checkout</th>
+            <th>Checkout/Check-in</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let heater of heaters">
-            <td><input type="checkbox"></td>
             <td>{{heater.serial_number}}</td>
+            <td>
+                <button type="button" *ngIf="!isHeaterCheckedOut(heater.id);" class="btn btn-secondary" (click)="checkoutHeater(heater.id);">Checkout</button>
+                <button type="button" *ngIf="isHeaterCheckedOut(heater.id);" class="btn btn-secondary" (click)="checkInHeater(heater.id);">Check-in</button>
+              <!-- <button type="button" *ngIf="!checkedOutHeaterIds.includes(heater.id)" class="btn btn-secondary" (click)="checkoutHeater(heater.id);">Checkout</button>
+              <button type="button" *ngIf="checkedOutHeaterIds.includes(heater.id)" class="btn btn-secondary" (click)="checkInHeater(heater.id);">Check-in</button> -->
+            </td>
           </tr>
         </tbody>
       </table>
     </div>
   </div>
   <div>
-    <button type="button" class="btn btn-primary">Checkout</button>
+    <button type="button" class="btn btn-primary" (click)="next();">Next</button>
   </div>
 </div>

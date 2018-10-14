@@ -53,6 +53,7 @@ import { AdminHeaterListingComponent } from './admin-heater-listing/admin-heater
 import { LoanHeaterModalComponent } from './insert-modals/loan-heater-modal/loan-heater-modal.component';
 import { LeaderSignInComponent } from './leader-sign-in/leader-sign-in.component';
 import { CheckoutHeatersComponent } from './checkout-heaters/checkout-heaters.component';
+import { VolunteerInfoComponent } from './volunteer-info/volunteer-info.component';
 
 const reducers = {
   user: MainReducer,
@@ -95,6 +96,7 @@ const reducers = {
     LoanHeaterModalComponent,
     LeaderSignInComponent,
     CheckoutHeatersComponent,
+    VolunteerInfoComponent,
   ],
   imports: [
     BrowserModule,

@@ -14,6 +14,8 @@ import { Store } from '@ngrx/store';
 import { IMainStore } from '../state-management/main.store';
 import { LocationCamp } from "app/models/location-camp";
 import { RouteInstance } from '../models/route-instance';
+import { RouteInstanceHeaterInteraction } from 'app/models/route-instance-heater-interaction';
+import { and } from '@angular/router/src/utils/collection';
 
 const theHeader = new HttpHeaders().set('Content-Type', 'application/json');
 
@@ -54,19 +56,40 @@ export class MainService {
 
   insertLocation(theLocation: Location) {
     return this.http.post(this.apiUrl + `locations`, {location: theLocation}, {headers: theHeader})
-        .map(res => res)
-        .catch(this.handleError);
+      .map(res => res)
+      .catch(this.handleError);
   }
 
   insertRouteInstance(routeInstance: RouteInstance): any {
     return this.http.post(this.apiUrl + `route_instances`, {route_instance: routeInstance}, {headers: theHeader})
-        .map(res => res)
-        .catch(this.handleError);
+      .map(res => res)
+      .catch(this.handleError);
   }
 
   insertLocationCamp(theLocationCamp: LocationCamp) {
     return this.http.post(this.apiUrl + `location_camps`, {location_camp: theLocationCamp}, {headers: theHeader})
-        .map(res => res);
+      .map(res => res);
+  }
+
+  checkoutHeater(theRouteInstanceHeaterInteraction: RouteInstanceHeaterInteraction) {
+    let routeInstanceHeaterInteractions: RouteInstanceHeaterInteraction[] = [];
+    this.getRouteInstanceHeaterInteractions().subscribe(data => {
+      routeInstanceHeaterInteractions = data;
+    }, error => this.handleError(error));
+
+    let routeInstanceHeaterInteraction: RouteInstanceHeaterInteraction = routeInstanceHeaterInteractions
+      .find((routeInstanceHeater: RouteInstanceHeaterInteraction) => routeInstanceHeater.heater_id === theRouteInstanceHeaterInteraction.heater_id && routeInstanceHeater.route_instance_id === theRouteInstanceHeaterInteraction.route_instance_id);
+
+    if (routeInstanceHeaterInteraction === undefined) {
+      return this.http.post(this.apiUrl + `route_instance_heater_interactions`, {route_instance_heater_interaction: theRouteInstanceHeaterInteraction}, {headers: theHeader})
+      .map(res => res);
+    }
+    else {
+      routeInstanceHeaterInteraction.is_checked_out = true;
+      return this.http.patch(this.apiUrl + `route_instance_heater_interaction/${routeInstanceHeaterInteraction.id}`, {route_instance_heater_interaction: routeInstanceHeaterInteraction}, {headers: theHeader})
+      .map(res => res);
+    }
+    
   }
 
   updateLocationCamp(theLocationCamp: LocationCamp) {
@@ -179,6 +202,21 @@ export class MainService {
 
   getAvailableHeaters() {
     return this.http.get(this.apiUrl + `getAvailableHeaters`)
+      .map(res => res).catch(error => this.handleError(error));
+  }
+
+  getRouteInstanceHeaterInteractions(): Observable<RouteInstanceHeaterInteraction[]> {
+    return this.http.get(this.apiUrl + `route_instance_heater_interactions`)
+      .map(res => res).catch(error => this.handleError(error));
+  }
+
+  removeRouteInstanceHeaterInteraction(id: number) {
+    return this.http.delete(this.apiUrl + `route_instance_heater_interactions/${id}`)
+      .map(res => res).catch(error => this.handleError(error));
+  }
+
+  checkInHeater(theRouteInstanceHeaterInteraction: RouteInstanceHeaterInteraction) {
+    return this.http.patch(this.apiUrl + `route_instance_heater_interactions/${theRouteInstanceHeaterInteraction.id}`, {route_instance_heater_interaction: theRouteInstanceHeaterInteraction}, {headers: theHeader})
       .map(res => res).catch(error => this.handleError(error));
   }
 

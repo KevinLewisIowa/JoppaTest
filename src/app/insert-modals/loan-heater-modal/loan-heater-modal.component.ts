@@ -19,7 +19,7 @@ export class LoanHeaterModalComponent implements OnInit {
   }
 
   showModal() {
-    console.log('opening modla');
+    console.log('opening modal');
     this.service.getAvailableHeaters().subscribe((data: any[]) => {
       console.log(data);
       this.availableHeaters = data;
