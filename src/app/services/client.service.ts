@@ -83,6 +83,12 @@ export class ClientService {
           .map(response => response);
   }
 
+  getCheckedOutHeaters(id:number) {
+    return this.http.get(this.baseUrl + `getCheckedOutHeaters?routeInstanceId=${id}`)
+      .map(res => {return res;})
+      .catch(err => this.handleError(err));
+  }
+
   getClientsByName(name) {
     if (name == '') {
       name = 'ALLCLIENTS';

@@ -20,6 +20,7 @@ import { CreateHeatingUnitComponent } from './create-heating-unit/create-heating
 import { AdminHeaterListingComponent } from './admin-heater-listing/admin-heater-listing.component';
 import { LeaderSignInComponent } from './leader-sign-in/leader-sign-in.component';
 import { CheckoutHeatersComponent } from './checkout-heaters/checkout-heaters.component';
+import { VolunteerInfoComponent } from './volunteer-info/volunteer-info.component';
 
 const routes: Routes = [
   { path: 'routes', component: RoutesComponent },
@@ -43,6 +44,7 @@ const routes: Routes = [
   { path: 'admin/routeUnfulfilledGoalsNextSteps', component: AdminRouteUnfulfilledGoalsNextStepsComponent },
   { path: 'admin/routeUnfulfilledPrayerRequestsNeeds', component: AdminRouteUnfulfilledPrayerRequestsNeedsComponent },
   { path: 'admin/heaterListing', component: AdminHeaterListingComponent },
+  { path: 'volunteerInfo', component: VolunteerInfoComponent },
   { path: '', redirectTo: '/login', pathMatch: 'full' },
 ];
 

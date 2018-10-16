@@ -72,24 +72,8 @@ export class MainService {
   }
 
   checkoutHeater(theRouteInstanceHeaterInteraction: RouteInstanceHeaterInteraction) {
-    let routeInstanceHeaterInteractions: RouteInstanceHeaterInteraction[] = [];
-    this.getRouteInstanceHeaterInteractions().subscribe(data => {
-      routeInstanceHeaterInteractions = data;
-    }, error => this.handleError(error));
-
-    let routeInstanceHeaterInteraction: RouteInstanceHeaterInteraction = routeInstanceHeaterInteractions
-      .find((routeInstanceHeater: RouteInstanceHeaterInteraction) => routeInstanceHeater.heater_id === theRouteInstanceHeaterInteraction.heater_id && routeInstanceHeater.route_instance_id === theRouteInstanceHeaterInteraction.route_instance_id);
-
-    if (routeInstanceHeaterInteraction === undefined) {
-      return this.http.post(this.apiUrl + `route_instance_heater_interactions`, {route_instance_heater_interaction: theRouteInstanceHeaterInteraction}, {headers: theHeader})
+    return this.http.post(this.apiUrl + `route_instance_heater_interactions`, {route_instance_heater_interaction: theRouteInstanceHeaterInteraction}, {headers: theHeader})
       .map(res => res);
-    }
-    else {
-      routeInstanceHeaterInteraction.is_checked_out = true;
-      return this.http.patch(this.apiUrl + `route_instance_heater_interaction/${routeInstanceHeaterInteraction.id}`, {route_instance_heater_interaction: routeInstanceHeaterInteraction}, {headers: theHeader})
-      .map(res => res);
-    }
-    
   }
 
   updateLocationCamp(theLocationCamp: LocationCamp) {
@@ -103,8 +87,13 @@ export class MainService {
   }
 
   updateRouteInstance(theRouteInstance: RouteInstance) {
-    return this.http.put(this.apiUrl + `route_instances/${theRouteInstance.id}`, {route_instance: theRouteInstance}, {headers: theHeader})
-        .map(res => res).subscribe(response => { }, error => {console.log('error updating route instance')});;
+    return this.http.patch(this.apiUrl + `route_instances/${theRouteInstance.id}`, {route_instance: theRouteInstance}, {headers: theHeader})
+        .map(res => res).subscribe(response => { }, error => {console.log(error)});;
+  }
+
+  updateRouteInstanceHeaterInteraction(theRouteInstanceHeaterInteraction: RouteInstanceHeaterInteraction) {
+    return this.http.patch(this.apiUrl + `route_instance_heater_interactions/${theRouteInstanceHeaterInteraction.id}`, {route_instance_heater_interaction: theRouteInstanceHeaterInteraction}, {headers: theHeader})
+      .map(res => res).subscribe(response => { }, error => console.log(error));
   }
 
   insertHeater(theHeater: Heater) {
@@ -130,7 +119,13 @@ export class MainService {
 
   getRouteInstance(id:number) {
     return this.http.get(this.apiUrl + `route_instances/${id}`)
-      .map(res => {return res; })
+      .map(res => {return res;})
+      .catch(err => this.handleError(err));
+  }
+
+  getCheckedOutHeaters(id:number) {
+    return this.http.get(this.apiUrl + `getCheckedOutHeaters?routeInstanceId=${id}`)
+      .map(res => {return res;})
       .catch(err => this.handleError(err));
   }
 

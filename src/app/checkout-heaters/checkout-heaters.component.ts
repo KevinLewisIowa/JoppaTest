@@ -14,6 +14,7 @@ export class CheckoutHeatersComponent implements OnInit {
   routeInstanceHeaterInteraction: RouteInstanceHeaterInteraction;
   checkedOutRouteInstanceHeaters: RouteInstanceHeaterInteraction[] = [];
   routeInstanceId: number;
+  isEndOfRoute: boolean = false;
 
   constructor(private mainService: MainService, private router: Router) { }
 
@@ -23,6 +24,11 @@ export class CheckoutHeatersComponent implements OnInit {
     }, error => console.log(error));
 
     this.routeInstanceId = JSON.parse(window.localStorage.getItem('routeInstance'));
+
+    if (JSON.parse(window.localStorage.getItem('checkedOutHeaters')) !== null) {
+      this.checkedOutRouteInstanceHeaters = JSON.parse(window.localStorage.getItem('checkedOutHeaters'));
+      this.isEndOfRoute = true;
+    }
   }
 
   checkoutHeater(heaterId: number) {
@@ -56,7 +62,13 @@ export class CheckoutHeatersComponent implements OnInit {
   }
 
   next() {
+    window.localStorage.setItem('checkedOutHeaters', JSON.stringify(this.checkedOutRouteInstanceHeaters));
+
     this.router.navigate(['volunteerInfo']);
   }
 
+  endRoute() {
+    window.localStorage.clear();
+    this.router.navigate(['login']);
+  }
 }

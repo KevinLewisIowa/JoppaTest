@@ -16,10 +16,8 @@
           <tr *ngFor="let heater of heaters">
             <td>{{heater.serial_number}}</td>
             <td>
-                <button type="button" *ngIf="!isHeaterCheckedOut(heater.id);" class="btn btn-secondary" (click)="checkoutHeater(heater.id);">Checkout</button>
+                <button type="button" *ngIf="!isHeaterCheckedOut(heater.id) && !isEndOfRoute" class="btn btn-secondary" (click)="checkoutHeater(heater.id);">Checkout</button>
                 <button type="button" *ngIf="isHeaterCheckedOut(heater.id);" class="btn btn-secondary" (click)="checkInHeater(heater.id);">Check-in</button>
-              <!-- <button type="button" *ngIf="!checkedOutHeaterIds.includes(heater.id)" class="btn btn-secondary" (click)="checkoutHeater(heater.id);">Checkout</button>
-              <button type="button" *ngIf="checkedOutHeaterIds.includes(heater.id)" class="btn btn-secondary" (click)="checkInHeater(heater.id);">Check-in</button> -->
             </td>
           </tr>
         </tbody>
@@ -27,6 +25,7 @@
     </div>
   </div>
   <div>
-    <button type="button" class="btn btn-primary" (click)="next();">Next</button>
+    <button *ngIf="!isEndOfRoute" type="button" class="btn btn-primary" (click)="next();">Next</button>
+    <button *ngIf="isEndOfRoute" (click)="endRoute()" type="button" class="btn btn-primary">End Route</button>
   </div>
 </div>

@@ -13,7 +13,7 @@ export class VolunteerInfoComponent implements OnInit {
   routeInstanceId: number;
   routeId: number;
   volunteerForm: FormGroup;
-  routeInstance: RouteInstance;
+  routeInstance: RouteInstance = new RouteInstance();
 
   constructor(private router: Router, private mainService: MainService,private fb: FormBuilder) { }
 
@@ -28,12 +28,8 @@ export class VolunteerInfoComponent implements OnInit {
   }
 
   addNumberRouteMembers() {
-    this.mainService.getRouteInstance(this.routeInstanceId).subscribe(data => {
-      this.routeInstance = data;
-    }, error => console.log(error));
-
+    this.routeInstance.id = this.routeInstanceId;
     this.routeInstance.number_route_members = this.volunteerForm.get('number_route_members').value;
-
     this.mainService.updateRouteInstance(this.routeInstance);
 
     this.router.navigate(['route', this.routeId]);

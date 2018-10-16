@@ -3,6 +3,7 @@ import { MainService } from '../services/main.service';
 import { RouteInstance } from '../models/route-instance';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
+import { RouteInstanceHeaterInteraction } from 'app/models/route-instance-heater-interaction';
 
 @Component({
   selector: 'app-footer',
@@ -31,8 +32,13 @@ export class FooterComponent implements OnInit {
       }, error => console.log(error));
     }
 
-    window.localStorage.clear();
-    this.router.navigate(['/login']);
+    var checkedOutHeaters: RouteInstanceHeaterInteraction[] = JSON.parse(window.localStorage.getItem('checkedOutHeaters'));
+    if (checkedOutHeaters === null || checkedOutHeaters.length === 0) {
+      this.router.navigate(['login']);
+    }
+    else {
+      this.router.navigate(['checkoutHeaters']);
+    }
   }
 
 }
