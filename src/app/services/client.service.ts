@@ -179,6 +179,29 @@ export class ClientService {
       {headers: theHeader}).map(response => response);
   }
 
+  getHeatEquipmentNotReturned(clientId) {
+    return Observable.forkJoin(
+      this.http.get(`getHeatersNotReturnedForClient?clientId=${clientId}`),
+      this.http.get(`getHosesNotReturnedForClient?clientId=${clientId}`),
+      this.http.get(`getTanksNotReturnedForClient?clientId=${clientId}`)
+    ).map(data => {
+      const resultArray = [];
+      const heaters = data[0] as any[];
+      const hoses = data[1] as any[];
+      const tanks = data[2] as any[];
+      heaters.forEach(item => {
+        resultArray.push({Type: 'Heater', created_at: item.created_at, status_id: item.status_id, updated_at: item.updated_at});
+      });
+      hoses.forEach(item => {
+        resultArray.push({Type: 'Hose', created_at: item.created_at, status_id: item.heater_status_id, updated_at: item.updated_at});
+      });
+      tanks.forEach(item => {
+        resultArray.push({Type: 'Tank', created_at: item.created_at, status_id: item.status_id, updated_at: item.updated_at});
+      });
+      return resultArray;
+    });
+  }
+
   getAllRequestedItems() {
       return this.http.get(this.baseUrl + `getAllRequestedItems`).map(response => response);
   }

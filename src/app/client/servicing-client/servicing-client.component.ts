@@ -30,6 +30,7 @@ export class ServicingClientComponent implements OnInit {
   heatRoute = false;
   tankInteractions: any[] = [];
   hoseInteractions: any[] = [];
+  heatEquipmentNotReturned: any[] = [];
   clientId = null;
   heaterStatuses: HeaterStatus[] = [];
   heaters: any[] = [];
@@ -62,6 +63,9 @@ export class ServicingClientComponent implements OnInit {
         this.service.getClientLoanedHoses(this.clientId).subscribe((hoseInteractions: any[]) => {
           // now get the Hose info
           this.hoseInteractions = hoseInteractions;
+        });
+        this.service.getHeatEquipmentNotReturned(this.clientId).subscribe((data: any[]) => {
+          this.heatEquipmentNotReturned = data;
         });
         this.getHeaterStatuses();
       } else {
@@ -98,6 +102,9 @@ export class ServicingClientComponent implements OnInit {
       this.service.getHeatersForClient(this.client.id).subscribe((data: any[]) => {
         console.log(data);
         this.heaters = data;
+      });
+      this.service.getHeatEquipmentNotReturned(this.clientId).subscribe((data1: any[]) => {
+        this.heatEquipmentNotReturned = data1;
       });
     });
   }
@@ -233,10 +240,12 @@ export class ServicingClientComponent implements OnInit {
   }
 
   submitTankStatus(interactionId, statusId) {
-    console.log('tank status value' + statusId);
     this.service.updateTankInteraction(interactionId, statusId).subscribe(data => {
       this.service.getClientLoanedTanks(this.clientId).subscribe((response: any[]) => {
         this.tankInteractions = response;
+      });
+      this.service.getHeatEquipmentNotReturned(this.clientId).subscribe((data1: any[]) => {
+        this.heatEquipmentNotReturned = data1;
       });
     });
   }
@@ -245,6 +254,9 @@ export class ServicingClientComponent implements OnInit {
     this.service.updateHoseInteraction(interactionId, statusId).subscribe(data => {
       this.service.getClientLoanedHoses(this.clientId).subscribe((response: any[]) => {
         this.hoseInteractions = response;
+      });
+      this.service.getHeatEquipmentNotReturned(this.clientId).subscribe((data1: any[]) => {
+        this.heatEquipmentNotReturned = data1;
       });
     });
   }

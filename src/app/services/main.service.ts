@@ -92,7 +92,8 @@ export class MainService {
   }
 
   updateRouteInstanceHeaterInteraction(theRouteInstanceHeaterInteraction: RouteInstanceHeaterInteraction) {
-    return this.http.patch(this.apiUrl + `route_instance_heater_interactions/${theRouteInstanceHeaterInteraction.id}`, {route_instance_heater_interaction: theRouteInstanceHeaterInteraction}, {headers: theHeader})
+    return this.http.patch(this.apiUrl + `route_instance_heater_interactions/${theRouteInstanceHeaterInteraction.id}`,
+            {route_instance_heater_interaction: theRouteInstanceHeaterInteraction}, {headers: theHeader})
       .map(res => res).subscribe(response => { }, error => console.log(error));
   }
 
