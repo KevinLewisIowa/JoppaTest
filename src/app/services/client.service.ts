@@ -181,9 +181,9 @@ export class ClientService {
 
   getHeatEquipmentNotReturned(clientId) {
     return Observable.forkJoin(
-      this.http.get(`getHeatersNotReturnedForClient?clientId=${clientId}`),
-      this.http.get(`getHosesNotReturnedForClient?clientId=${clientId}`),
-      this.http.get(`getTanksNotReturnedForClient?clientId=${clientId}`)
+      this.http.get(this.baseUrl + `getHeatersNotReturnedForClient?clientId=${clientId}`),
+      this.http.get(this.baseUrl + `getHosesNotReturnedForClient?clientId=${clientId}`),
+      this.http.get(this.baseUrl + `getTanksNotReturnedForClient?clientId=${clientId}`)
     ).map(data => {
       const resultArray = [];
       const heaters = data[0] as any[];
