@@ -13,17 +13,16 @@ export class CheckoutHeatersComponent implements OnInit {
   heaters: any[];
   routeInstanceHeaterInteraction: RouteInstanceHeaterInteraction;
   checkedOutRouteInstanceHeaters: RouteInstanceHeaterInteraction[] = [];
-  routeInstanceId: number;
   isEndOfRoute: boolean = false;
 
-  constructor(private mainService: MainService, private router: Router) { }
+  constructor(private mainService: MainService, private router: Router) { 
+    
+  }
 
   ngOnInit() {
     this.mainService.getAvailableHeaters().subscribe(heaterList => {
       this.heaters = heaterList;
     }, error => console.log(error));
-
-    this.routeInstanceId = JSON.parse(window.localStorage.getItem('routeInstance'));
 
     if (JSON.parse(window.localStorage.getItem('checkedOutHeaters')) !== null) {
       this.checkedOutRouteInstanceHeaters = JSON.parse(window.localStorage.getItem('checkedOutHeaters'));
@@ -33,10 +32,10 @@ export class CheckoutHeatersComponent implements OnInit {
 
   checkoutHeater(heaterId: number) {
     this.routeInstanceHeaterInteraction = new RouteInstanceHeaterInteraction();
-
+    
     this.routeInstanceHeaterInteraction.heater_id = heaterId;
     this.routeInstanceHeaterInteraction.is_checked_out = true;
-    this.routeInstanceHeaterInteraction.route_instance_id = this.routeInstanceId;
+    this.routeInstanceHeaterInteraction.route_instance_id = JSON.parse(window.localStorage.getItem('routeInstance'));
 
     this.mainService.checkoutHeater(this.routeInstanceHeaterInteraction).subscribe((data: RouteInstanceHeaterInteraction) => {
       this.checkedOutRouteInstanceHeaters.push(data);
