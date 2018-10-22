@@ -5,6 +5,7 @@ import { ClientService } from "app/services/client.service";
 import { Store } from "@ngrx/store";
 import { IMainStore } from "app/state-management/main.store";
 import { Client } from "app/models/client";
+import { Appearance } from 'app/models/appearance';
 
 @Component({
   selector: 'app-client-edit',
@@ -54,9 +55,16 @@ export class ClientEditComponent implements OnInit {
     this.theClient.phone = this.clientForm.get('phone').value;
     this.theClient.joppa_apartment_number = this.clientForm.get('joppa_apartment_number').value;
     this.theClient.dwelling = this.clientForm.get('dwelling').value;
-    this.clientService.insertClient(this.theClient).subscribe(data => {
+    this.clientService.insertClient(this.theClient).subscribe((data: Client) => {
+      let clientInteraction: Appearance = new Appearance();
+      clientInteraction.client_id = data.id;
+      clientInteraction.location_camp_id = JSON.parse(locationCampId);
+      clientInteraction.still_lives_here = true;
+      
+      this.clientService.insertClientAppearance(clientInteraction);
+
       this.router.navigate([`/locationCamp/${locationCampId}`]);
-    }, error => { this.store.dispatch({type: 'USER_API_ERROR', payload: { message: 'error' }})})
+    }, error => { this.store.dispatch({type: 'USER_API_ERROR', payload: { message: 'error' }})});
   }
 
   back() {

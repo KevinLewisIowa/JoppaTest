@@ -8,6 +8,8 @@ import { IMainStore } from '../state-management/main.store';
 import { Router } from '@angular/router';
 import { Client } from '../models/client';
 import { LocationCamp } from "app/models/location-camp";
+import { Appearance } from 'app/models/appearance';
+import { ClientService } from 'app/services/client.service';
 
 @Component({
   selector: 'app-location-camp',
@@ -22,7 +24,7 @@ export class LocationCampComponent implements OnInit {
   locationCamp: LocationCamp = new LocationCamp();
   heatRoute: boolean = false;
 
-  constructor(private store: Store<IMainStore>, private service: MainService,
+  constructor(private store: Store<IMainStore>, private service: MainService, private clientService: ClientService,
     private router: Router, private activatedRoute: ActivatedRoute) {
     this.store.select('user').subscribe(data => {
       if (data.selectedRoute != undefined && data.selectedLocation != undefined) {
@@ -72,6 +74,12 @@ export class LocationCampComponent implements OnInit {
 
   clientSelected(client: Client) {
     this.clients.push(client);
+
+    let clientInteraction: Appearance = new Appearance();
+    clientInteraction.client_id = client.id;
+    clientInteraction.location_camp_id = JSON.parse(this.activatedRoute.snapshot.params['id']);
+    clientInteraction.still_lives_here = true;
+    this.clientService.insertClientAppearance(clientInteraction);
   }
 
   createClient() {
