@@ -52,6 +52,10 @@ export class ClientService {
       })
   }
 
+  getNewClients() {
+    return this.http.get(this.baseUrl + `getNewClients`).map(response => { return response; });
+  }
+
   insertClientLike(theClientLike : ClientLike) {
       return this.http.post(this.baseUrl + `client_likes`, {client_like: theClientLike}, {headers: theHeader})
         .map(response => response);

@@ -54,6 +54,8 @@ import { LoanHeaterModalComponent } from './insert-modals/loan-heater-modal/loan
 import { LeaderSignInComponent } from './leader-sign-in/leader-sign-in.component';
 import { CheckoutHeatersComponent } from './checkout-heaters/checkout-heaters.component';
 import { VolunteerInfoComponent } from './volunteer-info/volunteer-info.component';
+import { AdminReportsComponent } from './admin-reports/admin-reports.component';
+import { NewClientsReportComponent } from './admin-reports/new-clients-report/new-clients-report.component';
 
 const reducers = {
   user: MainReducer,
@@ -97,6 +99,8 @@ const reducers = {
     LeaderSignInComponent,
     CheckoutHeatersComponent,
     VolunteerInfoComponent,
+    AdminReportsComponent,
+    NewClientsReportComponent,
   ],
   imports: [
     BrowserModule,

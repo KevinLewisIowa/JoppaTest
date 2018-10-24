@@ -21,6 +21,8 @@ import { AdminHeaterListingComponent } from './admin-heater-listing/admin-heater
 import { LeaderSignInComponent } from './leader-sign-in/leader-sign-in.component';
 import { CheckoutHeatersComponent } from './checkout-heaters/checkout-heaters.component';
 import { VolunteerInfoComponent } from './volunteer-info/volunteer-info.component';
+import { AdminReportsComponent } from './admin-reports/admin-reports.component';
+import { NewClientsReportComponent } from './admin-reports/new-clients-report/new-clients-report.component';
 
 const routes: Routes = [
   { path: 'routes', component: RoutesComponent },
@@ -35,6 +37,8 @@ const routes: Routes = [
   { path: 'locationEdit/:id', component: LocationDetailEditComponent },
   { path: 'createClient', component: ClientEditComponent },
   { path: 'clientEdit/:id', component: ClientEditComponent },
+  { path: 'admin/reports', component: AdminReportsComponent },
+  { path: 'admin/reports/newClients', component: NewClientsReportComponent},
   { path: 'locationCampNew', component: CreateLocationCampComponent },
   { path: 'serviceClient', component: ServicingClientComponent },
   { path: 'adminHome', component: AdminHomeComponent },

@@ -21,6 +21,10 @@ export class AdminHomeComponent implements OnInit {
     this.router.navigate(['/admin/routeMeals']);
   }
 
+  openAdminReports() {
+    this.router.navigate(['/admin/reports']);
+  }
+
   openAdminRouteUnfulfilledGoalsNextSteps() {
     this.router.navigate(['/admin/routeUnfulfilledGoalsNextSteps']);
   }

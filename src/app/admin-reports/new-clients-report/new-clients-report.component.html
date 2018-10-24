@@ -1,0 +1,22 @@
+<div class="card text-center" style="opacity:0.93">
+  <div class="card-header">
+    <div class="float-left"><button routerLink="/admin/reports" class="btn btn-primary" type="button">Back</button></div>
+    <h2>New Clients</h2>
+  </div>
+  <div class="panel-body">
+      <table class="table" id="reportList">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Date Added</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let client of clients">
+              <td>{{client.preferred_name}}</td>
+              <td>{{client.created_at | date: 'shortDate'}}</td>
+            </tr>
+          </tbody>
+        </table>
+  </div>
+</div>
