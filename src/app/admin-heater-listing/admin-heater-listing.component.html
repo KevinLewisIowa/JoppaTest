@@ -3,10 +3,12 @@
     <div class="float-left"><button routerLink="/adminHome" class="btn btn-primary" type="button">Back</button></div>
     <h2>Heater Listing</h2>
   </div>
-  <div class="panel-body">
+  <div class="row">
+    <div class="col-md-12 col-lg-12">
       <table class="table" id="heaterListing">
           <thead>
             <tr>
+              <th>Name</th>
               <th>Serial Number</th>
               <th>Heater Type</th>
               <th>Heater Status</th>
@@ -17,6 +19,7 @@
           </thead>
           <tbody>
             <tr *ngFor="let heater of heaterList">
+              <td>{{heater.preferred_name}}</td>
               <td>{{heater.serial_number}}</td>
               <td>{{heater.type_description}}</td>
               <td>{{heater.status_name}}</td>
@@ -26,5 +29,6 @@
             </tr>
           </tbody>
         </table>
+      </div>
   </div>
 </div>
