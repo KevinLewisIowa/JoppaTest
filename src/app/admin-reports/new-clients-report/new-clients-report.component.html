@@ -16,8 +16,8 @@
           <tbody>
             <tr *ngFor="let client of clients">
               <td>{{client.preferred_name}}</td>
-              <td><span (click)="locationModal.showModal('New Location', client.current_camp_id)">{{client.current_camp_id}}</span></td>
-              <td><span *ngIf="client.previous_camp_id != 0" (click)="locationModal.showModal('Previous Location', client.previous_camp_id)">{{client.previous_camp_id}}</span><span *ngIf="client.previous_camp_id == 0">NA</span></td>
+              <td><span (click)="locationModal.showModal('New Location', client.current_camp_id)" class="link-modal">{{client.current_camp_id}}</span></td>
+              <td><span *ngIf="client.previous_camp_id != 0" class="link-modal" (click)="locationModal.showModal('Previous Location', client.previous_camp_id)">{{client.previous_camp_id}}</span><span *ngIf="client.previous_camp_id == 0">NA</span></td>
               <td><button type="button" class="btn btn-primary" (click)="confirm(client)">Confirm</button></td>
             </tr>
           </tbody>
