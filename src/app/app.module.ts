@@ -56,6 +56,7 @@ import { CheckoutHeatersComponent } from './checkout-heaters/checkout-heaters.co
 import { VolunteerInfoComponent } from './volunteer-info/volunteer-info.component';
 import { AdminReportsComponent } from './admin-reports/admin-reports.component';
 import { NewClientsReportComponent } from './admin-reports/new-clients-report/new-clients-report.component';
+import { ClientLocationModalComponent } from './admin-reports/new-clients-report/client-location-modal/client-location-modal.component';
 
 const reducers = {
   user: MainReducer,
@@ -101,6 +102,7 @@ const reducers = {
     VolunteerInfoComponent,
     AdminReportsComponent,
     NewClientsReportComponent,
+    ClientLocationModalComponent,
   ],
   imports: [
     BrowserModule,
