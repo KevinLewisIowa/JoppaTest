@@ -56,7 +56,11 @@ export class ClientService {
     return this.http.get(this.baseUrl + `getNewClients`).map(response => { return response; });
   }
 
-  insertClientLike(theClientLike : ClientLike) {
+  getClientsNewToCamps() {
+    return this.http.get(this.baseUrl + `getClientsNewToCamps`).map(response => { return response; });
+  }
+
+  insertClientLike(theClientLike: ClientLike) {
       return this.http.post(this.baseUrl + `client_likes`, {client_like: theClientLike}, {headers: theHeader})
         .map(response => response);
   }
@@ -108,7 +112,7 @@ export class ClientService {
 
   updateClient(theClient: Client) {
     return this.http.patch(this.baseUrl + `clients/${theClient.id}`, { client: theClient}, {headers: theHeader})
-      .map(response => response).subscribe(data => {}, error => { console.log('error updating client')});
+      .map(response => response);
   }
 
   insertHealthConcern(concern : HealthConcern) {

@@ -29,6 +29,8 @@ export class ClientEditComponent implements OnInit {
       preferred_name: '',
       is_aftercare: false,
       is_veteran: false,
+      previous_camp_id: 0,
+      current_camp_id: 0,
       shoe_size: '',
       boot_size: '',
       number_meals: 0,
@@ -37,7 +39,7 @@ export class ClientEditComponent implements OnInit {
       dwelling: ''
     });
     this.clientForm.get('preferred_name').setValidators(Validators.required);
-    //this.clientForm.get('birthDate').setValidators(Validators.pattern(this.regExpDate));
+    // this.clientForm.get('birthDate').setValidators(Validators.pattern(this.regExpDate));
   }
 
   submitRoute() {
@@ -46,6 +48,8 @@ export class ClientEditComponent implements OnInit {
     this.theClient.birth_date = new Date(Date.parse(this.clientForm.get('birth_date').value));
     this.theClient.is_aftercare = this.clientForm.get('is_aftercare').value;
     this.theClient.is_veteran = this.clientForm.get('is_veteran').value;
+    this.theClient.current_camp_id = 0;
+    this.theClient.previous_camp_id = 0;
     this.theClient.shoe_size = this.clientForm.get('shoe_size').value;
     this.theClient.boot_size = this.clientForm.get('boot_size').value;
     this.theClient.inactive = false;
@@ -56,7 +60,7 @@ export class ClientEditComponent implements OnInit {
     this.theClient.joppa_apartment_number = this.clientForm.get('joppa_apartment_number').value;
     this.theClient.dwelling = this.clientForm.get('dwelling').value;
     this.clientService.insertClient(this.theClient).subscribe((data: Client) => {
-      let clientInteraction: Appearance = new Appearance();
+      const clientInteraction: Appearance = new Appearance();
       clientInteraction.client_id = data.id;
       clientInteraction.location_camp_id = JSON.parse(locationCampId);
       clientInteraction.still_lives_here = true;

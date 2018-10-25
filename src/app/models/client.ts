@@ -16,4 +16,6 @@ export class Client {
     created_at: Date = undefined;
     updated_at: Date = undefined;
     scene_at: Date = undefined;
+    current_camp_id: number = undefined;
+    previous_camp_id: number = undefined;
 }

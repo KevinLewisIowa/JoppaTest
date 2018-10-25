@@ -1,20 +1,24 @@
 <div class="card text-center" style="opacity:0.93">
   <div class="card-header">
     <div class="float-left"><button routerLink="/admin/reports" class="btn btn-primary" type="button">Back</button></div>
-    <h2>New Clients</h2>
+    <h2>Clients New To A Camp</h2>
   </div>
   <div class="panel-body">
       <table class="table" id="reportList">
           <thead>
             <tr>
               <th>Name</th>
-              <th>Date Added</th>
+              <th>New Camp ID</th>
+              <th>Previous Camp ID</th>
+              <th>Confirm</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let client of clients">
               <td>{{client.preferred_name}}</td>
-              <td>{{client.created_at | date: 'shortDate'}}</td>
+              <td>{{client.current_camp_id}}</td>
+              <td><span *ngIf="client.previous_camp_id != 0">{{client.previous_camp_id}}</span><span *ngIf="client.previous_camp_id == 0">NA</span></td>
+              <td><button type="button" class="btn btn-primary" (click)="confirm(client)">Confirm</button></td>
             </tr>
           </tbody>
         </table>
