@@ -48,8 +48,8 @@ export class ClientEditComponent implements OnInit {
     this.theClient.birth_date = new Date(Date.parse(this.clientForm.get('birth_date').value));
     this.theClient.is_aftercare = this.clientForm.get('is_aftercare').value;
     this.theClient.is_veteran = this.clientForm.get('is_veteran').value;
-    this.theClient.current_camp_id = 0;
-    this.theClient.previous_camp_id = 0;
+    this.theClient.current_camp_id = null;
+    this.theClient.previous_camp_id = null;
     this.theClient.shoe_size = this.clientForm.get('shoe_size').value;
     this.theClient.boot_size = this.clientForm.get('boot_size').value;
     this.theClient.inactive = false;
