@@ -25,9 +25,11 @@ export class LeaderSignInComponent implements OnInit {
       heat_route: true
     });
 
+    const phoneRegEx = /^[\s.-]?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/;
+
     this.routeInstanceForm.get('leader_name').setValidators(Validators.required);
     this.routeInstanceForm.get('route_id').setValidators(Validators.required);
-    this.routeInstanceForm.get('leader_phone').setValidators(Validators.required);
+    this.routeInstanceForm.get('leader_phone').setValidators(Validators.compose([Validators.required, Validators.pattern(phoneRegEx)]));
 
     this.mainService.getTheRoutes().subscribe(routes => {
       this.routes = routes;
