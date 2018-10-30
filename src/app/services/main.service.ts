@@ -97,6 +97,11 @@ export class MainService {
       .map(res => res).subscribe(response => { }, error => console.log(error));
   }
 
+  isHeaterCheckedOutOnOtherRoute(heaterId: number) {
+    return this.http.get(this.apiUrl + `isHeaterCheckedOutOnOtherRoute?heaterId=${heaterId}`, {headers: theHeader})
+      .map(res => res);
+  }
+
   insertHeater(theHeater: Heater) {
     return this.http.post(this.apiUrl + `heaters`, {heater: theHeater}, {headers: theHeader})
         .map(res => res);

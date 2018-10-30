@@ -18,6 +18,17 @@ export class LeaderSignInComponent implements OnInit {
   constructor(private fb:FormBuilder, private mainService: MainService, private router: Router) { }
 
   ngOnInit() {
+    if (JSON.parse(window.localStorage.getItem('routeInstance')) !== null) {
+      if (JSON.parse(window.localStorage.getItem('heatRoute'))) {
+        this.router.navigate(['checkoutHeaters']);
+      }
+      else {
+        if (JSON.parse(window.localStorage.getItem('routeId'))) {
+          this.router.navigate(['route', JSON.parse(window.localStorage.getItem('routeId'))]);  
+        }
+      }
+    }
+
     this.routeInstanceForm = this.fb.group({
       leader_name: '',
       leader_phone: '',
@@ -33,7 +44,7 @@ export class LeaderSignInComponent implements OnInit {
 
     this.mainService.getTheRoutes().subscribe(routes => {
       this.routes = routes;
-    })
+    });
   }
 
   insertRouteInstance() {

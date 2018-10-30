@@ -17,7 +17,7 @@
             <td>{{heater.serial_number}}</td>
             <td>
                 <button type="button" *ngIf="!isHeaterCheckedOut(heater.id) && !isEndOfRoute" class="btn btn-secondary" (click)="checkoutHeater(heater.id);">Checkout</button>
-                <button type="button" *ngIf="isHeaterCheckedOut(heater.id);" class="btn btn-secondary" (click)="checkInHeater(heater.id);">Check-in</button>
+                <button type="button" *ngIf="isHeaterCheckedOut(heater.id);" class="btn checkIn" (click)="checkInHeater(heater.id);">Check-in</button>
             </td>
           </tr>
         </tbody>
