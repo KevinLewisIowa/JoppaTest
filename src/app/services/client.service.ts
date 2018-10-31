@@ -242,6 +242,11 @@ export class ClientService {
             .map(response => response);
   }
 
+  updateHeaterInteraction(interactionId, statusId) {
+    return this.http.get(this.baseUrl + `updateHeaterInteraction?interactionId=${interactionId}&statusId=${statusId}`)
+              .map(response => response);
+  }
+
   private mapLocations(data: Array<any>): Location[] {
     return data.map(item => 
       <Location>({

@@ -17,6 +17,7 @@ import { Heater } from 'app/models/heater';
   templateUrl: './servicing-client.component.html',
   styleUrls: ['./servicing-client.component.css']
 })
+
 export class ServicingClientComponent implements OnInit {
   client: Client = new Client();
   locationCampId: number;
@@ -254,6 +255,17 @@ export class ServicingClientComponent implements OnInit {
     this.service.updateHoseInteraction(interactionId, statusId).subscribe(data => {
       this.service.getClientLoanedHoses(this.clientId).subscribe((response: any[]) => {
         this.hoseInteractions = response;
+      });
+      this.service.getHeatEquipmentNotReturned(this.clientId).subscribe((data1: any[]) => {
+        this.heatEquipmentNotReturned = data1;
+      });
+    });
+  }
+
+  submitHeaterStatus(interactionId, statusId) {
+    this.service.updateHeaterInteraction(interactionId, statusId).subscribe(data => {
+      this.service.getHeatersForClient(this.clientId).subscribe((response: any[]) => {
+        this.heaters = response;
       });
       this.service.getHeatEquipmentNotReturned(this.clientId).subscribe((data1: any[]) => {
         this.heatEquipmentNotReturned = data1;
