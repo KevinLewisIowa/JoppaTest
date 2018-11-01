@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ClientService } from '../../services/client.service';
 import { Client } from 'app/models/client';
+import { Appearance } from 'app/models/appearance';
 
 @Component({
   selector: 'app-new-clients-report',
@@ -18,6 +19,16 @@ export class NewClientsReportComponent implements OnInit {
   }
 
   confirm(theClient: Client) {
+    if (theClient.previous_camp_id !== 0) {
+      let clientAppearance: Appearance = new Appearance();
+      clientAppearance.client_id = theClient.id;
+      clientAppearance.location_camp_id = theClient.previous_camp_id;
+      clientAppearance.still_lives_here = false;
+      clientAppearance.serviced = false;
+      clientAppearance.was_seen = false;
+
+      this.service.insertClientAppearance(clientAppearance);
+    }
     theClient.previous_camp_id = theClient.current_camp_id;
 
     this.service.updateClient(theClient).subscribe(data => {
