@@ -20,7 +20,11 @@ export class CheckoutHeatersComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.mainService.getAvailableHeaters().subscribe(heaterList => {
+    let routeInstanceId: number = JSON.parse(window.localStorage.getItem('routeInstanceId'));
+    if (routeInstanceId === null) {
+      routeInstanceId = 0;
+    }
+    this.mainService.getAvailableHeaters(routeInstanceId).subscribe(heaterList => {
       this.heaters = heaterList;
     }, error => console.log(error));
 

@@ -201,8 +201,8 @@ export class MainService {
       .map(res => res).catch(error => this.handleError(error));
   }
 
-  getAvailableHeaters() {
-    return this.http.get(this.apiUrl + `getAvailableHeaters`)
+  getAvailableHeaters(routeInstanceId: number) {
+    return this.http.get(this.apiUrl + `getAvailableHeaters?routeInstanceId=${routeInstanceId}`)
       .map(res => res).catch(error => this.handleError(error));
   }
 
