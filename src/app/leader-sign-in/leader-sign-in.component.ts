@@ -69,5 +69,4 @@ export class LeaderSignInComponent implements OnInit {
       this.router.navigate(['route', this.routeInstance.route_id]);
     }
   }
-
 }

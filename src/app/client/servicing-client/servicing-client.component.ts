@@ -35,10 +35,12 @@ export class ServicingClientComponent implements OnInit {
   clientId = null;
   heaterStatuses: HeaterStatus[] = [];
   heaters: any[] = [];
+  isAdmin: boolean;
   constructor(private service: ClientService, private mainService: MainService, private router: Router) { }
 
   ngOnInit() {
     this.heatRoute = JSON.parse(window.localStorage.getItem('heatRoute'));
+    this.isAdmin = JSON.parse(window.localStorage.getItem('isAdmin'));
     this.locationCampId = Number(sessionStorage.getItem('locationCampId'));
     this.clientId = sessionStorage.getItem('selectedClient');
     if (this.clientId !== null) {

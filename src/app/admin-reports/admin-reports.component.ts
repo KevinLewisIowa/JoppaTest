@@ -17,4 +17,24 @@ export class AdminReportsComponent implements OnInit {
     this.router.navigate(['/admin/reports/newClients']);
   }
 
+  openAdminRouteUndeliveredItems() {
+    this.router.navigate(['/admin/routeUndeliveredItems']);
+  }
+
+  openAdminRouteNumberMeals() {
+    this.router.navigate(['/admin/routeMeals']);
+  }
+
+  openAdminRouteUnfulfilledGoalsNextSteps() {
+    this.router.navigate(['/admin/routeUnfulfilledGoalsNextSteps']);
+  }
+
+  openAdminRouteUnfulfilledPrayerRequestsNeeds() {
+    this.router.navigate(['/admin/routeUnfulfilledPrayerRequestsNeeds']);
+  }
+
+  openAdminHeaterListing() {
+    this.router.navigate([`/admin/heaterListing`]);
+  }
+
 }

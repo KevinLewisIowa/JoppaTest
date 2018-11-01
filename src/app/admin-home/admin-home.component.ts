@@ -13,32 +13,12 @@ export class AdminHomeComponent implements OnInit {
   ngOnInit() {
   }
 
-  openAdminRouteUndeliveredItems() {
-    this.router.navigate(['/admin/routeUndeliveredItems']);
-  }
-
-  openAdminRouteNumberMeals() {
-    this.router.navigate(['/admin/routeMeals']);
-  }
-
-  openAdminReports() {
-    this.router.navigate(['/admin/reports']);
-  }
-
-  openAdminRouteUnfulfilledGoalsNextSteps() {
-    this.router.navigate(['/admin/routeUnfulfilledGoalsNextSteps']);
-  }
-
-  openAdminRouteUnfulfilledPrayerRequestsNeeds() {
-    this.router.navigate(['/admin/routeUnfulfilledPrayerRequestsNeeds']);
-  }
-
   createNewHeater() {
     this.router.navigate([`heaterNew`]);
   }
 
-  openAdminHeaterListing() {
-    this.router.navigate([`/admin/heaterListing`]);
+  openAdminReports() {
+    this.router.navigate(['/admin/reports']);
   }
 
 }

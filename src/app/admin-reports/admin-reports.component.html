@@ -8,8 +8,23 @@
           <thead>
           </thead>
           <tbody>
-            <tr (click)="openNewClientsReport()">
-              <td>Clients New To Camps</td>
+            <tr>
+              <td class="text-center" style="height:75px;" (click)="openNewClientsReport()">Clients New To Camps</td>
+            </tr>
+            <tr>
+              <td class="text-center" style="height:75px;" (click)="openAdminRouteUndeliveredItems()">Undelivered Items Listing</td>
+            </tr>
+            <tr>
+              <td class="text-center" style="height:75px;" (click)="openAdminRouteNumberMeals()">Meals Expected</td>
+            </tr>
+            <tr>
+              <td class="text-center" style="height:75px;" (click)="openAdminRouteUnfulfilledGoalsNextSteps()">Goals/Next Steps Not Fulfilled Listing</td>
+            </tr>
+            <tr>
+              <td class="text-center" style="height:75px;" (click)="openAdminRouteUnfulfilledPrayerRequestsNeeds()">Prayer Requests/Needs Not Fulfilled Listing</td>
+            </tr>
+            <tr>
+              <td class="text-center" style="height:75px;" (click)="openAdminHeaterListing()">Heater Listing</td>
             </tr>
           </tbody>
         </table>

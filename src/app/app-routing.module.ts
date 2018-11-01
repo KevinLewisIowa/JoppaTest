@@ -23,6 +23,7 @@ import { CheckoutHeatersComponent } from './checkout-heaters/checkout-heaters.co
 import { VolunteerInfoComponent } from './volunteer-info/volunteer-info.component';
 import { AdminReportsComponent } from './admin-reports/admin-reports.component';
 import { NewClientsReportComponent } from './admin-reports/new-clients-report/new-clients-report.component';
+import { AdminLoginComponent } from './admin-login/admin-login.component';
 
 const routes: Routes = [
   { path: 'routes', component: RoutesComponent },
@@ -42,6 +43,7 @@ const routes: Routes = [
   { path: 'locationCampNew', component: CreateLocationCampComponent },
   { path: 'serviceClient', component: ServicingClientComponent },
   { path: 'adminHome', component: AdminHomeComponent },
+  { path: 'adminLogin', component: AdminLoginComponent },
   { path: 'heaterNew', component: CreateHeatingUnitComponent },
   { path: 'admin/routeUndeliveredItems', component: AdminRouteUndeliveredItemsComponent },
   { path: 'admin/routeMeals', component: AdminRouteMealsComponent },
