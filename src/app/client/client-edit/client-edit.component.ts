@@ -72,7 +72,7 @@ export class ClientEditComponent implements OnInit {
   }
 
   back() {
-    const locationId = window.sessionStorage.getItem('locationId');
-    this.router.navigate([`/location/${locationId}`]);
+    const locationCampId = JSON.parse(window.sessionStorage.getItem('locationCampId'));
+    this.router.navigate([`/locationCamp/${locationCampId}`]);
   }
 }
