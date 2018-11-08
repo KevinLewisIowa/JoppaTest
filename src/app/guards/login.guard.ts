@@ -23,7 +23,7 @@ export class IsLoggedInGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): boolean {
-    const currentToken = window.localStorage.getItem('apiToken');
+    const currentToken = window.sessionStorage.getItem('apiToken');
     let isAuth = false;
     if (currentToken == null) {
       this.router.navigate(['application-login']);

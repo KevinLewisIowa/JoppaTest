@@ -19,7 +19,7 @@ export class MainLoginComponent implements OnInit {
   }
 
   login() {
-    window.sessionStorage.setItem('apiKey', 'testingApiKey');
+    window.sessionStorage.setItem('apiToken', 'testingApiKey');
     this.router.navigate(['login']);
   }
 
