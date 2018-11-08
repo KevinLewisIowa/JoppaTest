@@ -60,6 +60,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [ RouterModule.forRoot(routes) ],
-  exports: [ RouterModule ]
+  exports: [ RouterModule ],
+  providers: [IsLoggedInGuard]
 })
 export class AppRoutingModule {}
