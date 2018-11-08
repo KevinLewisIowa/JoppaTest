@@ -24,34 +24,38 @@ import { VolunteerInfoComponent } from './volunteer-info/volunteer-info.componen
 import { AdminReportsComponent } from './admin-reports/admin-reports.component';
 import { NewClientsReportComponent } from './admin-reports/new-clients-report/new-clients-report.component';
 import { AdminLoginComponent } from './admin-login/admin-login.component';
+import { MainLoginComponent } from './main-login/main-login.component';
+import { IsLoggedInGuard } from 'app/guards/login.guard';
 
 const routes: Routes = [
-  { path: 'routes', component: RoutesComponent },
-  { path: 'login', component: LeaderSignInComponent },
-  { path: 'checkoutHeaters', component: CheckoutHeatersComponent },
-  { path: 'route/:id', component: LocationsComponent },
-  { path: 'location/:id', component: LocationDetailComponent },
-  { path: 'locationCamp/:id', component: LocationCampComponent},
-  { path: 'routeNew', component: CreateRouteComponent },
-  { path: 'routeEdit/:id', component: RouteEditComponent },
-  { path: 'locationNew', component: LocationDetailEditComponent },
-  { path: 'locationEdit/:id', component: LocationDetailEditComponent },
-  { path: 'createClient', component: ClientEditComponent },
-  { path: 'clientEdit/:id', component: ClientEditComponent },
-  { path: 'admin/reports', component: AdminReportsComponent },
-  { path: 'admin/reports/newClients', component: NewClientsReportComponent},
-  { path: 'locationCampNew', component: CreateLocationCampComponent },
-  { path: 'serviceClient', component: ServicingClientComponent },
-  { path: 'adminHome', component: AdminHomeComponent },
-  { path: 'adminLogin', component: AdminLoginComponent },
-  { path: 'heaterNew', component: CreateHeatingUnitComponent },
-  { path: 'admin/routeUndeliveredItems', component: AdminRouteUndeliveredItemsComponent },
+  { path: 'routes', canActivate: [IsLoggedInGuard], component: RoutesComponent },
+  { path: 'login', canActivate: [IsLoggedInGuard], component: LeaderSignInComponent },
+  { path: 'checkoutHeaters', canActivate: [IsLoggedInGuard], component: CheckoutHeatersComponent },
+  { path: 'route/:id', canActivate: [IsLoggedInGuard], component: LocationsComponent },
+  { path: 'location/:id', canActivate: [IsLoggedInGuard], component: LocationDetailComponent },
+  { path: 'locationCamp/:id', canActivate: [IsLoggedInGuard], component: LocationCampComponent},
+  { path: 'routeNew', canActivate: [IsLoggedInGuard], component: CreateRouteComponent },
+  { path: 'routeEdit/:id', canActivate: [IsLoggedInGuard], component: RouteEditComponent },
+  { path: 'locationNew', canActivate: [IsLoggedInGuard], component: LocationDetailEditComponent },
+  { path: 'locationEdit/:id', canActivate: [IsLoggedInGuard], component: LocationDetailEditComponent },
+  { path: 'createClient', canActivate: [IsLoggedInGuard], component: ClientEditComponent },
+  { path: 'clientEdit/:id', canActivate: [IsLoggedInGuard], component: ClientEditComponent },
+  { path: 'admin/reports', canActivate: [IsLoggedInGuard], component: AdminReportsComponent },
+  { path: 'admin/reports/newClients', canActivate: [IsLoggedInGuard], component: NewClientsReportComponent},
+  { path: 'locationCampNew', canActivate: [IsLoggedInGuard], component: CreateLocationCampComponent },
+  { path: 'serviceClient', canActivate: [IsLoggedInGuard], component: ServicingClientComponent },
+  { path: 'adminHome', canActivate: [IsLoggedInGuard], component: AdminHomeComponent },
+  { path: 'adminLogin', canActivate: [IsLoggedInGuard], component: AdminLoginComponent },
+  { path: 'heaterNew', canActivate: [IsLoggedInGuard], component: CreateHeatingUnitComponent },
+  { path: 'admin/routeUndeliveredItems', canActivate: [IsLoggedInGuard], component: AdminRouteUndeliveredItemsComponent },
   { path: 'admin/routeMeals', component: AdminRouteMealsComponent },
-  { path: 'admin/routeUnfulfilledGoalsNextSteps', component: AdminRouteUnfulfilledGoalsNextStepsComponent },
-  { path: 'admin/routeUnfulfilledPrayerRequestsNeeds', component: AdminRouteUnfulfilledPrayerRequestsNeedsComponent },
-  { path: 'admin/heaterListing', component: AdminHeaterListingComponent },
-  { path: 'volunteerInfo', component: VolunteerInfoComponent },
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: 'admin/routeUnfulfilledGoalsNextSteps', canActivate: [IsLoggedInGuard], component: AdminRouteUnfulfilledGoalsNextStepsComponent },
+  { path: 'admin/routeUnfulfilledPrayerRequestsNeeds', canActivate: [IsLoggedInGuard],
+          component: AdminRouteUnfulfilledPrayerRequestsNeedsComponent },
+  { path: 'admin/heaterListing', canActivate: [IsLoggedInGuard], component: AdminHeaterListingComponent },
+  { path: 'volunteerInfo', canActivate: [IsLoggedInGuard], component: VolunteerInfoComponent },
+  { path: 'application-login', component: MainLoginComponent},
+  { path: '', redirectTo: '/login', pathMatch: 'full' }
 ];
 
 @NgModule({

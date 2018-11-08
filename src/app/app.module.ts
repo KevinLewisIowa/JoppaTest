@@ -58,6 +58,7 @@ import { AdminReportsComponent } from './admin-reports/admin-reports.component';
 import { NewClientsReportComponent } from './admin-reports/new-clients-report/new-clients-report.component';
 import { ClientLocationModalComponent } from './admin-reports/new-clients-report/client-location-modal/client-location-modal.component';
 import { AdminLoginComponent } from './admin-login/admin-login.component';
+import { MainLoginComponent } from './main-login/main-login.component';
 
 const reducers = {
   user: MainReducer,
@@ -105,6 +106,7 @@ const reducers = {
     NewClientsReportComponent,
     ClientLocationModalComponent,
     AdminLoginComponent,
+    MainLoginComponent,
   ],
   imports: [
     BrowserModule,
