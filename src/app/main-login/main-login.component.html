@@ -2,3 +2,26 @@
   <p>Press button to login</p>
   <button type="button" (click)="login()" class="btn btn-primary">Login</button>
 </div>
+
+
+<div class="card text-center" style="opacity:0.93">
+  <div class="card-header">
+    <h4 class="text-center">Login</h4>
+  </div>
+  <div class="panel-body">
+    <form [formGroup]="passwordForm">
+      <div class="entry-box">
+        <div class="col-md-12">
+          <label>Password: </label>
+          <input type="password" formControlName="the_password" />
+        </div>
+        <div class="col-md-12">
+          <button type="button" (click)="login()" class="btn btn-primary">Login</button>
+        </div>
+        <p style="color:red;" *ngIf="invalidText">Login Not Valid</p>
+      </div>
+      <p>J0ppa321 is admin password. regularPassword is the regular user password. Hit logoff 
+        button on Leader Signin to clear the type of user that's signed in and come back to this screen.</p>
+    </form>
+  </div>
+</div>

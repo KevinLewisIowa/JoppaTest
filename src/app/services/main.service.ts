@@ -36,6 +36,10 @@ export class MainService {
         .catch(this.handleError);
   }
 
+  attemptLogin(thePassword) {
+    return this.http.get(this.baseUrl + `attemptLogin?passWrd=${thePassword}`).map(response => { return response; });
+  }
+
   getTheRoutes(): Observable<Route[]>{
     if(this.online){
       return this.http.get(this.apiUrl + `routes`)

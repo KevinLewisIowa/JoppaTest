@@ -1,7 +1,7 @@
 <form [formGroup]="routeInstanceForm">
   <div class="card text-center" style="opacity:0.93">
     <div class="card-header" id="topOfScreen">
-        <button routerLink="/adminLogin" class="btn btn-info" type="button">
+        <button *ngIf="isAdmin" routerLink="/adminLogin" class="btn btn-info" type="button">
           <span class="oi oi-person" title="Admin Login" aria-hidden="true"></span>
         </button>
       <h2>Route Leader Sign In</h2>
@@ -29,6 +29,9 @@
         </div>
         <div class="col-md-12">
           <button type="button" [disabled]="!routeInstanceForm.valid" (click)="insertRouteInstance()" class="btn btn-primary">Next</button>
+        </div>
+        <div class="col-md-12">
+          <button type="button" (click)="signOut()" class="btn btn-primary">Sign Out</button>
         </div>
         <div>
             <img id="joppaLogo" aria-label="Joppa" [src]="'./assets/Joppa_Logo.png'">

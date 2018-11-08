@@ -14,10 +14,15 @@ export class LeaderSignInComponent implements OnInit {
   routeInstanceForm: FormGroup;
   routes: Route[] = [];
   routeInstance: RouteInstance;
+  isAdmin = false;
 
   constructor(private fb:FormBuilder, private mainService: MainService, private router: Router) { }
 
   ngOnInit() {
+    const adminSetting = window.sessionStorage.getItem('isAdmin');
+    if (adminSetting === 'true') {
+      this.isAdmin = true;
+    }
     if (JSON.parse(window.localStorage.getItem('routeInstance')) !== null) {
       if (JSON.parse(window.localStorage.getItem('heatRoute'))) {
         this.router.navigate(['checkoutHeaters']);
@@ -45,6 +50,11 @@ export class LeaderSignInComponent implements OnInit {
     this.mainService.getTheRoutes().subscribe(routes => {
       this.routes = routes;
     });
+  }
+
+  signOut() {
+    window.sessionStorage.clear();
+    this.router.navigate(['/application-login']);
   }
 
   insertRouteInstance() {
