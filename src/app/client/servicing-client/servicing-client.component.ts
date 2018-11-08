@@ -93,6 +93,10 @@ export class ServicingClientComponent implements OnInit {
   getHeaterStatuses(): void {
     this.mainService.getHeaterStatuses().subscribe(heaterStatuses => {
       this.heaterStatuses = heaterStatuses.filter(w => w.id !== 1 && w.id !== 2);
+      let activeStatus: HeaterStatus = new HeaterStatus();
+      activeStatus.id = -1;
+      activeStatus.status_name = 'Active';
+      this.heaterStatuses.unshift(activeStatus);
     }, err => {console.log(err)} );
   }
 
