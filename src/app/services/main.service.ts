@@ -45,8 +45,7 @@ export class MainService {
       return this.http.get(this.apiUrl + `routes`)
         .map(res => res)
         .catch(err => this.handleError(err));
-    }
-    else{
+    } else {
       return this.http.get(this.baseUrl + `routes`)
                .map(response => response)
                .catch(this.handleError);
