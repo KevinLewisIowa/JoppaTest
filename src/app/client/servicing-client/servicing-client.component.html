@@ -33,8 +33,8 @@
               <td>{{heater.serial_number}}</td>
               <td>{{heater.updated_at | date: 'shortDate'}}</td>
               <td><select class="form-control" #heaterStatus>
-                  <option *ngFor="let option of heaterStatuses" value="{{option.id}}">{{option.status_name}}</option>
-                </select></td>
+                <option *ngFor="let option of heaterStatuses" value="{{option.id}}">{{option.status_name}}</option>
+              </select></td>
               <td><button type="button" (click)="submitHeaterStatus(heater.id, heaterStatus.value)" class="btn btn-primary">Submit</button>
             </tr>
             <tr *ngFor="let tank of tankInteractions">
@@ -42,7 +42,7 @@
               <td>N/A</td>
               <td>{{tank.updated_at | date: 'shortDate'}}</td>
               <td><select class="form-control" #tankStatus>
-                <option *ngFor="let option of heaterStatuses" value="{{option.id}}">{{option.status_name}}</option>
+                <option *ngFor="let option of heatingEquipmentStatuses" value="{{option.id}}">{{option.status_name}}</option>
               </select></td>
               <td><button type="button" (click)="submitTankStatus(tank.id, tankStatus.value)" class="btn btn-primary">Submit</button></td>
             </tr>
@@ -51,7 +51,7 @@
               <td>N/A</td>
               <td>{{hose.updated_at | date: 'shortDate'}}</td>
               <td><select class="form-control" #hoseStatus>
-                <option *ngFor="let option of heaterStatuses" value="{{option.id}}">{{option.status_name}}</option>
+                <option *ngFor="let option of heatingEquipmentStatuses" value="{{option.id}}">{{option.status_name}}</option>
               </select></td>
               <td><button type="button" (click)="submitHoseStatus(hose.id, hoseStatus.value)" class="btn btn-primary">Submit</button></td>
             </tr>

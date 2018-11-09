@@ -14,6 +14,7 @@ export class CheckoutHeatersComponent implements OnInit {
   routeInstanceHeaterInteraction: RouteInstanceHeaterInteraction;
   checkedOutRouteInstanceHeaters: RouteInstanceHeaterInteraction[] = [];
   isEndOfRoute: boolean = false;
+  isInitialCheckout: boolean = true;
 
   constructor(private mainService: MainService, private router: Router) { 
     
@@ -31,7 +32,12 @@ export class CheckoutHeatersComponent implements OnInit {
 
     if (JSON.parse(window.localStorage.getItem('checkedOutHeaters')) !== null && JSON.parse(window.localStorage.getItem('checkedOutHeaters')).length > 0) {
       this.checkedOutRouteInstanceHeaters = JSON.parse(window.localStorage.getItem('checkedOutHeaters'));
-      this.isEndOfRoute = confirm('Please press OK to check in heaters at the end of the route or Cancel to continue checking out heaters.');
+      if (confirm('Please press OK to check in heaters at the end of the route or Cancel to continue checking out heaters.')) {
+        this.isEndOfRoute = true;
+      }
+      else {
+        this.isInitialCheckout = false;
+      }
     }
   }
 
@@ -78,7 +84,12 @@ export class CheckoutHeatersComponent implements OnInit {
   }
 
   next() {
-    this.router.navigate(['volunteerInfo']);
+    if (this.isInitialCheckout) {
+      this.router.navigate(['volunteerInfo']);
+    }
+    else {
+      this.router.navigate(['route', JSON.parse(window.localStorage.getItem('routeId'))]);
+    }
   }
 
   endRoute() {

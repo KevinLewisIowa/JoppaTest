@@ -32,6 +32,8 @@ export class RequestedItemComponent implements OnInit {
           this.requestedItemAdded.emit(data);
         }
       });
+
+      this.description = '';
     }
   }
 }
