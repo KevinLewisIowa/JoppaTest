@@ -34,6 +34,8 @@ export class ServicingClientComponent implements OnInit {
   heatEquipmentNotReturned: any[] = [];
   clientId = null;
   heaterStatuses: HeaterStatus[] = [];
+  heatingEquipmentStatuses: HeaterStatus[] = [];
+  heaterStatusValue: any = '-1';
   heaters: any[] = [];
   isAdmin: boolean;
   constructor(private service: ClientService, private mainService: MainService, private router: Router) { }
@@ -92,6 +94,8 @@ export class ServicingClientComponent implements OnInit {
 
   getHeaterStatuses(): void {
     this.mainService.getHeaterStatuses().subscribe(heaterStatuses => {
+      this.heatingEquipmentStatuses = heaterStatuses.filter(w => w.id !== 1 && w.id !== 2);
+
       this.heaterStatuses = heaterStatuses.filter(w => w.id !== 1 && w.id !== 2);
       let activeStatus: HeaterStatus = new HeaterStatus();
       activeStatus.id = -1;
@@ -269,13 +273,18 @@ export class ServicingClientComponent implements OnInit {
   }
 
   submitHeaterStatus(interactionId, statusId) {
-    this.service.updateHeaterInteraction(interactionId, statusId).subscribe(data => {
-      this.service.getHeatersForClient(this.clientId).subscribe((response: any[]) => {
-        this.heaters = response;
+    if (statusId == -1) {
+      alert('This heater is already active.');
+    }
+    else {
+      this.service.updateHeaterInteraction(interactionId, statusId).subscribe(data => {
+        this.service.getHeatersForClient(this.clientId).subscribe((response: any[]) => {
+          this.heaters = response;
+        });
+        this.service.getHeatEquipmentNotReturned(this.clientId).subscribe((data1: any[]) => {
+          this.heatEquipmentNotReturned = data1;
+        });
       });
-      this.service.getHeatEquipmentNotReturned(this.clientId).subscribe((data1: any[]) => {
-        this.heatEquipmentNotReturned = data1;
-      });
-    });
+    }
   }
 }
