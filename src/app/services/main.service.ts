@@ -35,9 +35,13 @@ export class MainService {
       'Authorization': window.sessionStorage.getItem('apiToken')
     });
     return this.http.get(this.baseUrl + `routes`, {headers: myHeader})
-        .map((response) => {
-          return response;
-        })
+    .map((res: any) => {
+      if (res.message === 'invalid-token') {
+        window.sessionStorage.removeItem('apiToken');
+        this.router.navigate(['/application-login']);
+      }
+      return res;
+    })
         .catch(this.handleError);
   }
 
@@ -56,7 +60,13 @@ export class MainService {
     });
     if (this.online) {
       return this.http.get(this.apiUrl + `routes`, {headers: myHeader})
-        .map(res => res)
+      .map((res: any) => {
+        if (res.message === 'invalid-token') {
+          window.sessionStorage.removeItem('apiToken');
+          this.router.navigate(['/application-login']);
+        }
+        return res;
+      })
         .catch(err => this.handleError(err));
     } else {
       return this.http.get(this.baseUrl + `routes`, {headers: myHeader})
@@ -71,7 +81,13 @@ export class MainService {
       'Authorization': window.sessionStorage.getItem('apiToken')
     });
     return this.http.post(this.apiUrl + `routes`, {route: theRoute}, {headers: myHeader})
-        .map(res => res);
+    .map((res: any) => {
+      if (res.message === 'invalid-token') {
+        window.sessionStorage.removeItem('apiToken');
+        this.router.navigate(['/application-login']);
+      }
+      return res;
+    });
   }
 
   insertLocation(theLocation: Location) {
@@ -80,7 +96,13 @@ export class MainService {
       'Authorization': window.sessionStorage.getItem('apiToken')
     });
     return this.http.post(this.apiUrl + `locations`, {location: theLocation}, {headers: myHeader})
-      .map(res => res)
+    .map((res: any) => {
+      if (res.message === 'invalid-token') {
+        window.sessionStorage.removeItem('apiToken');
+        this.router.navigate(['/application-login']);
+      }
+      return res;
+    })
       .catch(this.handleError);
   }
 
@@ -90,7 +112,13 @@ export class MainService {
       'Authorization': window.sessionStorage.getItem('apiToken')
     });
     return this.http.post(this.apiUrl + `route_instances`, {route_instance: routeInstance}, {headers: myHeader})
-      .map(res => res)
+    .map((res: any) => {
+      if (res.message === 'invalid-token') {
+        window.sessionStorage.removeItem('apiToken');
+        this.router.navigate(['/application-login']);
+      }
+      return res;
+    })
       .catch(this.handleError);
   }
 
@@ -100,7 +128,13 @@ export class MainService {
       'Authorization': window.sessionStorage.getItem('apiToken')
     });
     return this.http.post(this.apiUrl + `location_camps`, {location_camp: theLocationCamp}, {headers: myHeader})
-      .map(res => res);
+    .map((res: any) => {
+      if (res.message === 'invalid-token') {
+        window.sessionStorage.removeItem('apiToken');
+        this.router.navigate(['/application-login']);
+      }
+      return res;
+    });
   }
 
   checkoutHeater(theRouteInstanceHeaterInteraction: RouteInstanceHeaterInteraction) {
@@ -110,7 +144,13 @@ export class MainService {
     });
     return this.http.post(this.apiUrl + `route_instance_heater_interactions`,
                 {route_instance_heater_interaction: theRouteInstanceHeaterInteraction}, {headers: myHeader})
-      .map(res => res);
+                .map((res: any) => {
+                  if (res.message === 'invalid-token') {
+                    window.sessionStorage.removeItem('apiToken');
+                    this.router.navigate(['/application-login']);
+                  }
+                  return res;
+                });
   }
 
   updateLocationCamp(theLocationCamp: LocationCamp) {
@@ -119,7 +159,13 @@ export class MainService {
       'Authorization': window.sessionStorage.getItem('apiToken')
     });
     return this.http.put(this.apiUrl + `location_camps/${theLocationCamp.id}`, {location_camp: theLocationCamp}, {headers: myHeader})
-        .map(res => res).subscribe(response => { }, error => {console.log('error updating camp')});
+    .map((res: any) => {
+      if (res.message === 'invalid-token') {
+        window.sessionStorage.removeItem('apiToken');
+        this.router.navigate(['/application-login']);
+      }
+      return res;
+    }).subscribe(response => { }, error => {console.log('error updating camp')});
   }
 
   updateLocation(theLocation: Location) {
@@ -128,7 +174,13 @@ export class MainService {
       'Authorization': window.sessionStorage.getItem('apiToken')
     });
     return this.http.put(this.apiUrl + `locations/${theLocation.id}`, {location: theLocation}, {headers: myHeader})
-        .map(res => res).subscribe(response => { }, error => {console.log('error updating location')});
+    .map((res: any) => {
+      if (res.message === 'invalid-token') {
+        window.sessionStorage.removeItem('apiToken');
+        this.router.navigate(['/application-login']);
+      }
+      return res;
+    }).subscribe(response => { }, error => {console.log('error updating location')});
   }
 
   updateRouteInstance(theRouteInstance: RouteInstance) {
@@ -138,7 +190,13 @@ export class MainService {
     });
     return this.http.patch(this.apiUrl + `route_instances/${theRouteInstance.id}`,
                     {route_instance: theRouteInstance}, {headers: myHeader})
-        .map(res => res).subscribe(response => { }, error => {console.log(error)});;
+                    .map((res: any) => {
+                      if (res.message === 'invalid-token') {
+                        window.sessionStorage.removeItem('apiToken');
+                        this.router.navigate(['/application-login']);
+                      }
+                      return res;
+                    }).subscribe(response => { }, error => {console.log(error)});;
   }
 
   updateRouteInstanceHeaterInteraction(theRouteInstanceHeaterInteraction: RouteInstanceHeaterInteraction) {
@@ -148,7 +206,13 @@ export class MainService {
     });
     return this.http.patch(this.apiUrl + `route_instance_heater_interactions/${theRouteInstanceHeaterInteraction.id}`,
             {route_instance_heater_interaction: theRouteInstanceHeaterInteraction}, {headers: myHeader})
-      .map(res => res).subscribe(response => { }, error => console.log(error));
+            .map((res: any) => {
+              if (res.message === 'invalid-token') {
+                window.sessionStorage.removeItem('apiToken');
+                this.router.navigate(['/application-login']);
+              }
+              return res;
+            }).subscribe(response => { }, error => console.log(error));
   }
 
   isHeaterCheckedOutOnOtherRoute(heaterId: number) {
@@ -157,7 +221,13 @@ export class MainService {
       'Authorization': window.sessionStorage.getItem('apiToken')
     });
     return this.http.get(this.apiUrl + `isHeaterCheckedOutOnOtherRoute?heaterId=${heaterId}`, {headers: myHeader})
-      .map(res => res);
+    .map((res: any) => {
+      if (res.message === 'invalid-token') {
+        window.sessionStorage.removeItem('apiToken');
+        this.router.navigate(['/application-login']);
+      }
+      return res;
+    });
   }
 
   insertHeater(theHeater: Heater) {
@@ -166,7 +236,13 @@ export class MainService {
       'Authorization': window.sessionStorage.getItem('apiToken')
     });
     return this.http.post(this.apiUrl + `heaters`, {heater: theHeater}, {headers: myHeader})
-        .map(res => res);
+    .map((res: any) => {
+      if (res.message === 'invalid-token') {
+        window.sessionStorage.removeItem('apiToken');
+        this.router.navigate(['/application-login']);
+      }
+      return res;
+    });
   }
 
   getRoute(id): Observable<Route>{
@@ -176,7 +252,13 @@ export class MainService {
     });
     if (this.online){
       return this.http.get(this.apiUrl + `routes/${id}`, {headers: myHeader})
-      .map(res => {return res; })
+      .map((res: any) => {
+        if (res.message === 'invalid-token') {
+          window.sessionStorage.removeItem('apiToken');
+          this.router.navigate(['/application-login']);
+        }
+        return res;
+      })
       .catch(err => this.handleError(err));
     } else {
       return Observable.of(new Route());
@@ -189,7 +271,13 @@ export class MainService {
       'Authorization': window.sessionStorage.getItem('apiToken')
     });
     return this.http.get(this.apiUrl + `getCampsForLocation?locationId=${id}`, {headers: myHeader})
-              .map(res => {return res;}).catch(err => this.handleError(err));
+    .map((res: any) => {
+      if (res.message === 'invalid-token') {
+        window.sessionStorage.removeItem('apiToken');
+        this.router.navigate(['/application-login']);
+      }
+      return res;
+    }).catch(err => this.handleError(err));
   }
 
   getRouteInstance(id:number) {
@@ -198,7 +286,13 @@ export class MainService {
       'Authorization': window.sessionStorage.getItem('apiToken')
     });
     return this.http.get(this.apiUrl + `route_instances/${id}`, {headers: myHeader})
-      .map(res => {return res;})
+    .map((res: any) => {
+      if (res.message === 'invalid-token') {
+        window.sessionStorage.removeItem('apiToken');
+        this.router.navigate(['/application-login']);
+      }
+      return res;
+    })
       .catch(err => this.handleError(err));
   }
 
@@ -208,7 +302,13 @@ export class MainService {
       'Authorization': window.sessionStorage.getItem('apiToken')
     });
     return this.http.get(this.apiUrl + `getCheckedOutHeaters?routeInstanceId=${id}`, {headers: myHeader})
-      .map(res => {return res;})
+    .map((res: any) => {
+      if (res.message === 'invalid-token') {
+        window.sessionStorage.removeItem('apiToken');
+        this.router.navigate(['/application-login']);
+      }
+      return res;
+    })
       .catch(err => this.handleError(err));
   }
 
@@ -219,7 +319,13 @@ export class MainService {
     });
     if (this.online) {
       return this.http.get(this.apiUrl + `getClientsForLocationCampC?locationCampId=${id}`, {headers: myHeader})
-      .map(res => {return res; })
+      .map((res: any) => {
+        if (res.message === 'invalid-token') {
+          window.sessionStorage.removeItem('apiToken');
+          this.router.navigate(['/application-login']);
+        }
+        return res;
+      })
       .catch(err => this.handleError(err));
     } else {
       return Observable.of([]);
@@ -233,8 +339,6 @@ export class MainService {
     });
       return this.http.get(this.apiUrl + `locationsForRoute?routeId=${id}`, {headers: myHeader})
       .map((res: any) => {
-        console.log('returned route locations');
-        console.log(res);
         if (res.message === 'invalid-token') {
           window.sessionStorage.removeItem('apiToken');
           this.router.navigate(['/application-login']);
@@ -250,7 +354,13 @@ export class MainService {
       'Authorization': window.sessionStorage.getItem('apiToken')
     });
     return this.http.get(this.apiUrl + `locations/${id}`, {headers: myHeader})
-          .map(res => res).catch(error => this.handleError(error));
+    .map((res: any) => {
+      if (res.message === 'invalid-token') {
+        window.sessionStorage.removeItem('apiToken');
+        this.router.navigate(['/application-login']);
+      }
+      return res;
+    }).catch(error => this.handleError(error));
   }
 
   getLocationCamp(id) {
@@ -259,7 +369,13 @@ export class MainService {
       'Authorization': window.sessionStorage.getItem('apiToken')
     });
     return this.http.get(this.apiUrl + `location_camps/${id}`, {headers: myHeader})
-        .map(res => res).catch(error => this.handleError(error));
+    .map((res: any) => {
+      if (res.message === 'invalid-token') {
+        window.sessionStorage.removeItem('apiToken');
+        this.router.navigate(['/application-login']);
+      }
+      return res;
+    }).catch(error => this.handleError(error));
   }
 
   getAdminRouteNumberMeals() {
@@ -268,7 +384,13 @@ export class MainService {
       'Authorization': window.sessionStorage.getItem('apiToken')
     });
     return this.http.get(this.apiUrl + `getAdminRouteNumberMeals`, {headers: myHeader})
-        .map(res => res).catch(error => this.handleError(error));
+    .map((res: any) => {
+      if (res.message === 'invalid-token') {
+        window.sessionStorage.removeItem('apiToken');
+        this.router.navigate(['/application-login']);
+      }
+      return res;
+    }).catch(error => this.handleError(error));
   }
 
   getAdminRouteUndeliveredItems() {
@@ -277,7 +399,13 @@ export class MainService {
       'Authorization': window.sessionStorage.getItem('apiToken')
     });
     return this.http.get(this.apiUrl + `getAdminRouteUndeliveredItems`, {headers: myHeader})
-        .map(res => res).catch(error => this.handleError(error));
+    .map((res: any) => {
+      if (res.message === 'invalid-token') {
+        window.sessionStorage.removeItem('apiToken');
+        this.router.navigate(['/application-login']);
+      }
+      return res;
+    }).catch(error => this.handleError(error));
   }
 
   getAdminRouteUnfulfilledGoalsNextSteps() {
@@ -286,7 +414,13 @@ export class MainService {
       'Authorization': window.sessionStorage.getItem('apiToken')
     });
     return this.http.get(this.apiUrl + `getAdminRouteUnfulfilledGoalsNextSteps`, {headers: myHeader})
-        .map(res => res).catch(error => this.handleError(error));
+    .map((res: any) => {
+      if (res.message === 'invalid-token') {
+        window.sessionStorage.removeItem('apiToken');
+        this.router.navigate(['/application-login']);
+      }
+      return res;
+    }).catch(error => this.handleError(error));
   }
 
   getAdminRouteUnfulfilledPrayerRequestsNeeds() {
@@ -295,7 +429,13 @@ export class MainService {
       'Authorization': window.sessionStorage.getItem('apiToken')
     });
     return this.http.get(this.apiUrl + `getAdminRouteUnfulfilledPrayerRequestsNeeds`, {headers: myHeader})
-        .map(res => res).catch(error => this.handleError(error));
+    .map((res: any) => {
+      if (res.message === 'invalid-token') {
+        window.sessionStorage.removeItem('apiToken');
+        this.router.navigate(['/application-login']);
+      }
+      return res;
+    }).catch(error => this.handleError(error));
   }
 
   getHeaterListing() {
@@ -304,7 +444,13 @@ export class MainService {
       'Authorization': window.sessionStorage.getItem('apiToken')
     });
     return this.http.get(this.apiUrl + `getHeaterListing`, {headers: myHeader})
-        .map(res => res).catch(error => this.handleError(error));
+    .map((res: any) => {
+      if (res.message === 'invalid-token') {
+        window.sessionStorage.removeItem('apiToken');
+        this.router.navigate(['/application-login']);
+      }
+      return res;
+    }).catch(error => this.handleError(error));
   }
 
   getHeaterTypes() {
@@ -313,7 +459,13 @@ export class MainService {
       'Authorization': window.sessionStorage.getItem('apiToken')
     });
     return this.http.get(this.apiUrl + `getHeaterTypes`, {headers: myHeader})
-      .map(res => res).catch(error => this.handleError(error));
+    .map((res: any) => {
+      if (res.message === 'invalid-token') {
+        window.sessionStorage.removeItem('apiToken');
+        this.router.navigate(['/application-login']);
+      }
+      return res;
+    }).catch(error => this.handleError(error));
   }
 
   getHeaterStatuses() {
@@ -322,7 +474,13 @@ export class MainService {
       'Authorization': window.sessionStorage.getItem('apiToken')
     });
     return this.http.get(this.apiUrl + `getHeaterStatuses`, {headers: myHeader})
-      .map(res => res).catch(error => this.handleError(error));
+    .map((res: any) => {
+      if (res.message === 'invalid-token') {
+        window.sessionStorage.removeItem('apiToken');
+        this.router.navigate(['/application-login']);
+      }
+      return res;
+    }).catch(error => this.handleError(error));
   }
 
   getAvailableHeaters(routeInstanceId: number) {
@@ -331,7 +489,13 @@ export class MainService {
       'Authorization': window.sessionStorage.getItem('apiToken')
     });
     return this.http.get(this.apiUrl + `getAvailableHeaters?routeInstanceId=${routeInstanceId}`, {headers: myHeader})
-      .map(res => res).catch(error => this.handleError(error));
+    .map((res: any) => {
+      if (res.message === 'invalid-token') {
+        window.sessionStorage.removeItem('apiToken');
+        this.router.navigate(['/application-login']);
+      }
+      return res;
+    }).catch(error => this.handleError(error));
   }
 
   getRouteInstanceHeaterInteractions(): Observable<RouteInstanceHeaterInteraction[]> {
@@ -340,7 +504,13 @@ export class MainService {
       'Authorization': window.sessionStorage.getItem('apiToken')
     });
     return this.http.get(this.apiUrl + `route_instance_heater_interactions`, {headers: myHeader})
-      .map(res => res).catch(error => this.handleError(error));
+    .map((res: any) => {
+      if (res.message === 'invalid-token') {
+        window.sessionStorage.removeItem('apiToken');
+        this.router.navigate(['/application-login']);
+      }
+      return res;
+    }).catch(error => this.handleError(error));
   }
 
   removeRouteInstanceHeaterInteraction(id: number) {
@@ -349,7 +519,13 @@ export class MainService {
       'Authorization': window.sessionStorage.getItem('apiToken')
     });
     return this.http.delete(this.apiUrl + `route_instance_heater_interactions/${id}`, {headers: myHeader})
-      .map(res => res).catch(error => this.handleError(error));
+    .map((res: any) => {
+      if (res.message === 'invalid-token') {
+        window.sessionStorage.removeItem('apiToken');
+        this.router.navigate(['/application-login']);
+      }
+      return res;
+    }).catch(error => this.handleError(error));
   }
 
   checkInHeater(theRouteInstanceHeaterInteraction: RouteInstanceHeaterInteraction) {
@@ -359,7 +535,13 @@ export class MainService {
     });
     return this.http.patch(this.apiUrl + `route_instance_heater_interactions/${theRouteInstanceHeaterInteraction.id}`,
                   {route_instance_heater_interaction: theRouteInstanceHeaterInteraction}, {headers: myHeader})
-      .map(res => res).catch(error => this.handleError(error));
+                  .map((res: any) => {
+                    if (res.message === 'invalid-token') {
+                      window.sessionStorage.removeItem('apiToken');
+                      this.router.navigate(['/application-login']);
+                    }
+                    return res;
+                  }).catch(error => this.handleError(error));
   }
 
   private handleError(error: any): Promise<any> {

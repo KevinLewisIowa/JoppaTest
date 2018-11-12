@@ -18,6 +18,7 @@ import { Store } from '@ngrx/store';
 import { IMainStore } from '../state-management/main.store';
 import { PrayerRequestAndNeed } from "app/models/prayer-request";
 import { GoalsNextStep } from "app/models/goals-next-steps";
+import { Router } from '@angular/router';
 
 
 // adding a new comment
@@ -29,202 +30,479 @@ export class ClientService {
   // private apiUrl = 'https://hidden-springs-63744.herokuapp.com/';
   private baseUrl = 'https://joppa-api-test.herokuapp.com/';
 
-  constructor(private http: HttpClient, private store: Store<IMainStore>) { }
+  constructor(private http: HttpClient, private store: Store<IMainStore>, private router: Router) { }
   getClientLikes(id) {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
-    return this.http.get(this.baseUrl + `likesForClient?clientId=${id}`, {headers: this.theHeader})
-        .map((response) => {
-          return response;
-        })
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+    return this.http.get(this.baseUrl + `likesForClient?clientId=${id}`, {headers: myHeader})
+    .map((res: any) => {
+      if (res.message === 'invalid-token') {
+        window.sessionStorage.removeItem('apiToken');
+        this.router.navigate(['/application-login']);
+      }
+      return res;
+    })
         .catch(this.handleError);
   }
 
   getClientDislikes(id) {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
-    return this.http.get(this.baseUrl + `dislikesForClient?clientId=${id}`, {headers: this.theHeader})
-        .map((response) => {
-          return response;
-        })
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+    return this.http.get(this.baseUrl + `dislikesForClient?clientId=${id}`, {headers: myHeader})
+    .map((res: any) => {
+      if (res.message === 'invalid-token') {
+        window.sessionStorage.removeItem('apiToken');
+        this.router.navigate(['/application-login']);
+      }
+      return res;
+    })
         .catch(this.handleError);
   }
 
   getClientById(id) {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
-    return this.http.get(this.baseUrl + `clients/${id}`, {headers: this.theHeader})
-      .map((response) => {
-        return response;
-      })
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+    return this.http.get(this.baseUrl + `clients/${id}`, {headers: myHeader})
+    .map((res: any) => {
+      if (res.message === 'invalid-token') {
+        window.sessionStorage.removeItem('apiToken');
+        this.router.navigate(['/application-login']);
+      }
+      return res;
+    })
   }
 
   getNewClients() {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
-    return this.http.get(this.baseUrl + `getNewClients`, {headers: this.theHeader}).map(response => { return response; });
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+    return this.http.get(this.baseUrl + `getNewClients`, {headers: myHeader}).map((res: any) => {
+      if (res.message === 'invalid-token') {
+        window.sessionStorage.removeItem('apiToken');
+        this.router.navigate(['/application-login']);
+      }
+      return res;
+    });
   }
 
   getClientsNewToCamps() {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
-    return this.http.get(this.baseUrl + `getClientsNewToCamps`, {headers: this.theHeader}).map(response => { return response; });
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+    return this.http.get(this.baseUrl + `getClientsNewToCamps`, {headers: myHeader}).map((res: any) => {
+      if (res.message === 'invalid-token') {
+        window.sessionStorage.removeItem('apiToken');
+        this.router.navigate(['/application-login']);
+      }
+      return res;
+    });
   }
 
   insertClientLike(theClientLike: ClientLike) {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
-      return this.http.post(this.baseUrl + `client_likes`, {client_like: theClientLike}, {headers: this.theHeader})
-        .map(response => response);
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+      return this.http.post(this.baseUrl + `client_likes`, {client_like: theClientLike}, {headers: myHeader})
+      .map((res: any) => {
+        if (res.message === 'invalid-token') {
+          window.sessionStorage.removeItem('apiToken');
+          this.router.navigate(['/application-login']);
+        }
+        return res;
+      });
   }
 
   insertClientDislike(theClientDislike: ClientDislike) {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
-      return this.http.post(this.baseUrl + `client_dislikes`, {client_dislike: theClientDislike}, {headers: this.theHeader})
-            .map(response => response);
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+      return this.http.post(this.baseUrl + `client_dislikes`, {client_dislike: theClientDislike}, {headers: myHeader})
+      .map((res: any) => {
+        if (res.message === 'invalid-token') {
+          window.sessionStorage.removeItem('apiToken');
+          this.router.navigate(['/application-login']);
+        }
+        return res;
+      });
   }
 
   insertClientAppearance(clientAppearance: Appearance){
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
-      return this.http.post(this.baseUrl + `client_interactions`, {client_interaction: clientAppearance}, {headers: this.theHeader})
-        .map(response => response).subscribe(response => {
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+      return this.http.post(this.baseUrl + `client_interactions`, {client_interaction: clientAppearance}, {headers: myHeader})
+      .map((res: any) => {
+        if (res.message === 'invalid-token') {
+          window.sessionStorage.removeItem('apiToken');
+          this.router.navigate(['/application-login']);
+        }
+        return res;
+      }).subscribe(response => {
         }, error => { console.log('error inserting appearance'); console.log(error)});
   }
 
   getHeatersForClient(theClientId) {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
-    return this.http.get(this.baseUrl + `getCurrentHeatersForClient?clientId=${theClientId}`, {headers: this.theHeader})
-            .map(response => response);
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+    return this.http.get(this.baseUrl + `getCurrentHeatersForClient?clientId=${theClientId}`, {headers: myHeader})
+    .map((res: any) => {
+      if (res.message === 'invalid-token') {
+        window.sessionStorage.removeItem('apiToken');
+        this.router.navigate(['/application-login']);
+      }
+      return res;
+    });
   }
 
   updateHeaterClient(theClientId, theHeaterId, theStatusId) {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
-    return this.http.get(this.baseUrl + `updateHeaterClient?clientId=${theClientId}&heaterId=${theHeaterId}&status=${theStatusId}`, {headers: this.theHeader})
-          .map(response => response);
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+    return this.http.get(this.baseUrl + `updateHeaterClient?clientId=${theClientId}&heaterId=${theHeaterId}&status=${theStatusId}`,
+                          {headers: myHeader})
+                          .map((res: any) => {
+                            if (res.message === 'invalid-token') {
+                              window.sessionStorage.removeItem('apiToken');
+                              this.router.navigate(['/application-login']);
+                            }
+                            return res;
+                          });
   }
 
   getAvailableHeaters() {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
-    return this.http.get(this.baseUrl + `getAvailableHeaters`, {headers: this.theHeader})
-          .map(response => response);
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+    return this.http.get(this.baseUrl + `getAvailableHeaters`, {headers: myHeader})
+    .map((res: any) => {
+      if (res.message === 'invalid-token') {
+        window.sessionStorage.removeItem('apiToken');
+        this.router.navigate(['/application-login']);
+      }
+      return res;
+    });
   }
 
   getCheckedOutHeaters(id:number) {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
-    return this.http.get(this.baseUrl + `getCheckedOutHeaters?routeInstanceId=${id}`, {headers: this.theHeader})
-      .map(res => {return res;})
-      .catch(err => this.handleError(err));
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+    return this.http.get(this.baseUrl + `getCheckedOutHeaters?routeInstanceId=${id}`, {headers: myHeader})
+    .map((res: any) => {
+      if (res.message === 'invalid-token') {
+        window.sessionStorage.removeItem('apiToken');
+        this.router.navigate(['/application-login']);
+      }
+      return res;
+    }).catch(err => this.handleError(err));
   }
 
   getClientsByName(name) {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
     if (name == '') {
       name = 'ALLCLIENTS';
     }
-    return this.http.get(this.baseUrl + `getClientsByName?name=${name}`, {headers: this.theHeader})
-        .map(response => response);
+    return this.http.get(this.baseUrl + `getClientsByName?name=${name}`, {headers: myHeader})
+    .map((res: any) => {
+      if (res.message === 'invalid-token') {
+        window.sessionStorage.removeItem('apiToken');
+        this.router.navigate(['/application-login']);
+      }
+      return res;
+    });
   }
 
   insertClient(theClient: Client) {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
-      return this.http.post(this.baseUrl + `clients`, {client: theClient}, {headers: this.theHeader})
-        .map(response => response);
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+      return this.http.post(this.baseUrl + `clients`, {client: theClient}, {headers: myHeader})
+      .map((res: any) => {
+        if (res.message === 'invalid-token') {
+          window.sessionStorage.removeItem('apiToken');
+          this.router.navigate(['/application-login']);
+        }
+        return res;
+      });
   }
 
   updateClient(theClient: Client) {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
-    return this.http.patch(this.baseUrl + `clients/${theClient.id}`, { client: theClient}, {headers: this.theHeader})
-      .map(response => response);
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+    return this.http.patch(this.baseUrl + `clients/${theClient.id}`, { client: theClient}, {headers: myHeader})
+    .map((res: any) => {
+      if (res.message === 'invalid-token') {
+        window.sessionStorage.removeItem('apiToken');
+        this.router.navigate(['/application-login']);
+      }
+      return res;
+    });
   }
 
   insertHealthConcern(concern : HealthConcern) {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
-      return this.http.post(this.baseUrl + `health_concerns`, {health_concern: concern}, {headers: this.theHeader})
-        .map(response => response);
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+      return this.http.post(this.baseUrl + `health_concerns`, {health_concern: concern}, {headers: myHeader})
+      .map((res: any) => {
+        if (res.message === 'invalid-token') {
+          window.sessionStorage.removeItem('apiToken');
+          this.router.navigate(['/application-login']);
+        }
+        return res;
+      });
   }
 
   getHealthConcerns(id) {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
-      return this.http.get(this.baseUrl + `getClientHealthConcerns?clientId=${id}`, {headers: this.theHeader})
-        .map(response => response);
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+      return this.http.get(this.baseUrl + `getClientHealthConcerns?clientId=${id}`, {headers: myHeader})
+      .map((res: any) => {
+        if (res.message === 'invalid-token') {
+          window.sessionStorage.removeItem('apiToken');
+          this.router.navigate(['/application-login']);
+        }
+        return res;
+      });
   }
 
   insertRequestedItem(item: RequestedItem) {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
     item.has_received = false;
-      return this.http.post(this.baseUrl + `requested_items`, {requested_item: item}, {headers: this.theHeader})
-        .map(response => response);
+      return this.http.post(this.baseUrl + `requested_items`, {requested_item: item}, {headers: myHeader})
+      .map((res: any) => {
+        if (res.message === 'invalid-token') {
+          window.sessionStorage.removeItem('apiToken');
+          this.router.navigate(['/application-login']);
+        }
+        return res;
+      });
   }
 
   getRequestedItems(id) {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
-      return this.http.get(this.baseUrl + `getClientRequestedItem?clientId=${id}`, {headers: this.theHeader})
-        .map(response => { console.log(response); return response; });
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+      return this.http.get(this.baseUrl + `getClientRequestedItem?clientId=${id}`, {headers: myHeader})
+      .map((res: any) => {
+        if (res.message === 'invalid-token') {
+          window.sessionStorage.removeItem('apiToken');
+          this.router.navigate(['/application-login']);
+        }
+        return res;
+      });
   }
 
   deletedRequestedItem(id: number) {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
-    return this.http.delete(this.baseUrl + `requested_items/${id}`, {headers: this.theHeader});
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+    return this.http.delete(this.baseUrl + `requested_items/${id}`, {headers: myHeader}).map((res: any) => {
+      if (res.message === 'invalid-token') {
+        window.sessionStorage.removeItem('apiToken');
+        this.router.navigate(['/application-login']);
+      }
+      return res;
+    });
   }
 
   removeLike(id: number) {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
-    return this.http.delete(this.baseUrl + `client_likes/${id}`, {headers: this.theHeader});
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+    return this.http.delete(this.baseUrl + `client_likes/${id}`, {headers: myHeader}).map((res: any) => {
+      if (res.message === 'invalid-token') {
+        window.sessionStorage.removeItem('apiToken');
+        this.router.navigate(['/application-login']);
+      }
+      return res;
+    });
   }
 
   removeDislike(id: number) {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
-    return this.http.delete(this.baseUrl + `client_dislikes/${id}`, {headers: this.theHeader});
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+    return this.http.delete(this.baseUrl + `client_dislikes/${id}`, {headers: myHeader}).map((res: any) => {
+      if (res.message === 'invalid-token') {
+        window.sessionStorage.removeItem('apiToken');
+        this.router.navigate(['/application-login']);
+      }
+      return res;
+    });
   }
 
   removeHealthConcern(id: number) {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
-    return this.http.delete(this.baseUrl + `health_concerns/${id}`, {headers: this.theHeader});
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+    return this.http.delete(this.baseUrl + `health_concerns/${id}`, {headers: myHeader}).map((res: any) => {
+      if (res.message === 'invalid-token') {
+        window.sessionStorage.removeItem('apiToken');
+        this.router.navigate(['/application-login']);
+      }
+      return res;
+    });
   }
 
   deleteGoalAndNextStep(id: number) {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
-    return this.http.delete(this.baseUrl + `goals_and_next_steps/${id}`, {headers: this.theHeader});
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+    return this.http.delete(this.baseUrl + `goals_and_next_steps/${id}`, {headers: myHeader}).map((res: any) => {
+      if (res.message === 'invalid-token') {
+        window.sessionStorage.removeItem('apiToken');
+        this.router.navigate(['/application-login']);
+      }
+      return res;
+    });
   }
 
   completeGoalAndNextStep(theGoal: GoalsNextStep) {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
-    return this.http.patch(this.baseUrl + `goals_and_next_steps/${theGoal.id}`, {goals_and_next_step: theGoal}, {headers: this.theHeader})
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+    return this.http.patch(this.baseUrl + `goals_and_next_steps/${theGoal.id}`, {goals_and_next_step: theGoal}, {headers: myHeader})
+        .map((res: any) => {
+            if (res.message === 'invalid-token') {
+              window.sessionStorage.removeItem('apiToken');
+              this.router.navigate(['/application-login']);
+            }
+            return res;
+          } );
   }
 
   receivedRequestedItem(id: number) {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
-    return this.http.get(this.baseUrl + `receivedRequestedItem/?requestId=${id}`, {headers: this.theHeader});
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+    return this.http.get(this.baseUrl + `receivedRequestedItem/?requestId=${id}`, {headers: myHeader}).map((res: any) => {
+      if (res.message === 'invalid-token') {
+        window.sessionStorage.removeItem('apiToken');
+        this.router.navigate(['/application-login']);
+      }
+      return res;
+    });
   }
 
   getRecentReceivedItems(id) {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
-    return this.http.get(this.baseUrl + `recentReceivedItems?clientId=${id}`, {headers: this.theHeader}).map(response => response);
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+    return this.http.get(this.baseUrl + `recentReceivedItems?clientId=${id}`, {headers: myHeader}).map((res: any) => {
+      if (res.message === 'invalid-token') {
+        window.sessionStorage.removeItem('apiToken');
+        this.router.navigate(['/application-login']);
+      }
+      return res;
+    });
   }
 
   getGoalsAndNextSteps(id) {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
-    return this.http.get(this.baseUrl + `goalsForClient?clientId=${id}`, {headers: this.theHeader})
-      .map(response => response);
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+    return this.http.get(this.baseUrl + `goalsForClient?clientId=${id}`, {headers: myHeader})
+    .map((res: any) => {
+      if (res.message === 'invalid-token') {
+        window.sessionStorage.removeItem('apiToken');
+        this.router.navigate(['/application-login']);
+      }
+      return res;
+    });
   }
 
   insertGoalAndStep(goal : GoalsNextStep) {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
-      return this.http.post(this.baseUrl + `goals_and_next_steps`, {goals_and_next_step: goal}, {headers: this.theHeader})
-        .map(response => response);
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+      return this.http.post(this.baseUrl + `goals_and_next_steps`, {goals_and_next_step: goal}, {headers: myHeader})
+      .map((res: any) => {
+        if (res.message === 'invalid-token') {
+          window.sessionStorage.removeItem('apiToken');
+          this.router.navigate(['/application-login']);
+        }
+        return res;
+      });
   }
 
   getClientPrayerRequests(id) {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
-    return this.http.get(this.baseUrl + `prayerRequestsForClient?clientId=${id}`, {headers: this.theHeader})
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+    return this.http.get(this.baseUrl + `prayerRequestsForClient?clientId=${id}`, {headers: myHeader}).map((res: any) => {
+      if (res.message === 'invalid-token') {
+        window.sessionStorage.removeItem('apiToken');
+        this.router.navigate(['/application-login']);
+      }
+      return res;
+    });
   }
 
   insertClientPrayerRequest(prayerRequest: PrayerRequestAndNeed) {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
     return this.http.post(this.baseUrl + `prayer_request_and_needs`, {prayer_request_and_need: prayerRequest},
-      {headers: this.theHeader}).map(response => response);
+      {headers: myHeader}).map((res: any) => {
+        if (res.message === 'invalid-token') {
+          window.sessionStorage.removeItem('apiToken');
+          this.router.navigate(['/application-login']);
+        }
+        return res;
+      });
   }
 
   getHeatEquipmentNotReturned(clientId) {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
     return Observable.forkJoin(
-      this.http.get(this.baseUrl + `getHeatersNotReturnedForClient?clientId=${clientId}`, {headers: this.theHeader}),
-      this.http.get(this.baseUrl + `getHosesNotReturnedForClient?clientId=${clientId}`, {headers: this.theHeader}),
-      this.http.get(this.baseUrl + `getTanksNotReturnedForClient?clientId=${clientId}`, {headers: this.theHeader})
+      this.http.get(this.baseUrl + `getHeatersNotReturnedForClient?clientId=${clientId}`, {headers: myHeader}),
+      this.http.get(this.baseUrl + `getHosesNotReturnedForClient?clientId=${clientId}`, {headers: myHeader}),
+      this.http.get(this.baseUrl + `getTanksNotReturnedForClient?clientId=${clientId}`, {headers: myHeader})
     ).map(data => {
       const resultArray = [];
       const heaters = data[0] as any[];
@@ -244,57 +522,129 @@ export class ClientService {
   }
 
   getAllRequestedItems() {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
-      return this.http.get(this.baseUrl + `getAllRequestedItems`, {headers: this.theHeader}).map(response => response);
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+      return this.http.get(this.baseUrl + `getAllRequestedItems`, {headers: myHeader}).map((res: any) => {
+        if (res.message === 'invalid-token') {
+          window.sessionStorage.removeItem('apiToken');
+          this.router.navigate(['/application-login']);
+        }
+        return res;
+      });
   }
 
   getClientLoanedTanks(clientId) {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
-    return this.http.get(this.baseUrl + `getTanksLoanedToClient?clientId=${clientId}`, {headers: this.theHeader}).map(response => response);
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+    return this.http.get(this.baseUrl + `getTanksLoanedToClient?clientId=${clientId}`, {headers: myHeader}).map((res: any) => {
+      if (res.message === 'invalid-token') {
+        window.sessionStorage.removeItem('apiToken');
+        this.router.navigate(['/application-login']);
+      }
+      return res;
+    });
   }
 
   getClientLoanedHoses(clientId) {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
-    return this.http.get(this.baseUrl + `getHosesLoanedToClient?clientId=${clientId}`, {headers: this.theHeader}).map(response => response);
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+    return this.http.get(this.baseUrl + `getHosesLoanedToClient?clientId=${clientId}`, {headers: myHeader}).map((res: any) => {
+      if (res.message === 'invalid-token') {
+        window.sessionStorage.removeItem('apiToken');
+        this.router.navigate(['/application-login']);
+      }
+      return res;
+    });
   }
 
   loanTank(clientId) {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
     return this.http.post(this.baseUrl + `client_tank_interactions`,
-                {client_tank_interaction: {client_id: clientId, status_id: 2}}, {headers: this.theHeader})
-            .map(response => response);
+                {client_tank_interaction: {client_id: clientId, status_id: 2}}, {headers: myHeader})
+                .map((res: any) => {
+                  if (res.message === 'invalid-token') {
+                    window.sessionStorage.removeItem('apiToken');
+                    this.router.navigate(['/application-login']);
+                  }
+                  return res;
+                });
   }
 
   loanHose(clientId) {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
     return this.http.post(this.baseUrl + `client_hose_interactions`,
-                {client_hose_interaction: {client_id: clientId, heater_status_id: 2}}, {headers: this.theHeader})
-            .map(response => response);
+                {client_hose_interaction: {client_id: clientId, heater_status_id: 2}}, {headers: myHeader})
+                .map((res: any) => {
+                  if (res.message === 'invalid-token') {
+                    window.sessionStorage.removeItem('apiToken');
+                    this.router.navigate(['/application-login']);
+                  }
+                  return res;
+                });
   }
 
   updateTankInteraction(interactionId, statusId) {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
     return this.http.get(this.baseUrl +
-                    `updateTankInteraction?interactionId=${interactionId}&statusId=${statusId}`, {headers: this.theHeader})
-            .map(response => response);
+                    `updateTankInteraction?interactionId=${interactionId}&statusId=${statusId}`, {headers: myHeader})
+                    .map((res: any) => {
+                      if (res.message === 'invalid-token') {
+                        window.sessionStorage.removeItem('apiToken');
+                        this.router.navigate(['/application-login']);
+                      }
+                      return res;
+                    });
   }
 
   updateHoseInteraction(interactionId, statusId) {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
     return this.http.get(this.baseUrl +
-                  `updateHoseInteraction?interactionId=${interactionId}&statusId=${statusId}`, {headers: this.theHeader})
-            .map(response => response);
+                  `updateHoseInteraction?interactionId=${interactionId}&statusId=${statusId}`, {headers: myHeader})
+                  .map((res: any) => {
+                    if (res.message === 'invalid-token') {
+                      window.sessionStorage.removeItem('apiToken');
+                      this.router.navigate(['/application-login']);
+                    }
+                    return res;
+                  });
   }
 
   updateHeaterInteraction(interactionId, statusId) {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
     return this.http.get(this.baseUrl +
-                  `updateHeaterInteraction?interactionId=${interactionId}&statusId=${statusId}`, {headers: this.theHeader})
-              .map(response => response);
+                  `updateHeaterInteraction?interactionId=${interactionId}&statusId=${statusId}`, {headers: myHeader})
+                  .map((res: any) => {
+                    if (res.message === 'invalid-token') {
+                      window.sessionStorage.removeItem('apiToken');
+                      this.router.navigate(['/application-login']);
+                    }
+                    return res;
+                  });
   }
 
   private mapLocations(data: Array<any>): Location[] {
-    return data.map(item => 
+    return data.map(item =>
       <Location>({
         id: item.id,
         route_id: item.route_id,
