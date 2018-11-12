@@ -16,20 +16,22 @@ import { LocationCamp } from "app/models/location-camp";
 import { RouteInstance } from '../models/route-instance';
 import { RouteInstanceHeaterInteraction } from 'app/models/route-instance-heater-interaction';
 import { and } from '@angular/router/src/utils/collection';
+import { Router } from '@angular/router';
 
-const theHeader = new HttpHeaders().set('Content-Type', 'application/json');
 
 @Injectable()
 export class MainService {
+  theHeader = new HttpHeaders().set('Content-Type', 'application/json');
   online = true;
   private headers = new Headers({'Content-Type': 'application/json'});
   private baseUrl = 'api/';  // URL to web api
   // private apiUrl = 'https://hidden-springs-63744.herokuapp.com/';
   private apiUrl = 'https://joppa-api-test.herokuapp.com/';
 
-  constructor(private http: HttpClient, private store: Store<IMainStore>) { }
+  constructor(private http: HttpClient, private store: Store<IMainStore>, private router: Router) { }
   getRoutes() {
-    return this.http.get(this.baseUrl + `routes`)
+    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
+    return this.http.get(this.baseUrl + `routes`, {headers: this.theHeader})
         .map((response) => {
           return response;
         })
@@ -37,82 +39,99 @@ export class MainService {
   }
 
   attemptLogin(thePassword) {
-    return this.http.get(this.apiUrl + `attemptLogin?passWrd=${thePassword}`).map(response => { return response; });
+    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
+    return this.http.get(this.apiUrl + `attemptLogin?passWrd=${thePassword}`,
+                    {headers: this.theHeader}).map(response => { return response; });
   }
 
   getTheRoutes(): Observable<Route[]>{
+    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
     if(this.online){
-      return this.http.get(this.apiUrl + `routes`)
+      return this.http.get(this.apiUrl + `routes`, {headers: this.theHeader})
         .map(res => res)
         .catch(err => this.handleError(err));
     } else {
-      return this.http.get(this.baseUrl + `routes`)
+      return this.http.get(this.baseUrl + `routes`, {headers: this.theHeader})
                .map(response => response)
                .catch(this.handleError);
     }
   }
 
   insertRoute(theRoute: Route) {
-    return this.http.post(this.apiUrl + `routes`, {route: theRoute}, {headers: theHeader})
+    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
+    return this.http.post(this.apiUrl + `routes`, {route: theRoute}, {headers: this.theHeader})
         .map(res => res);
   }
 
   insertLocation(theLocation: Location) {
-    return this.http.post(this.apiUrl + `locations`, {location: theLocation}, {headers: theHeader})
+    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
+    return this.http.post(this.apiUrl + `locations`, {location: theLocation}, {headers: this.theHeader})
       .map(res => res)
       .catch(this.handleError);
   }
 
   insertRouteInstance(routeInstance: RouteInstance): any {
-    return this.http.post(this.apiUrl + `route_instances`, {route_instance: routeInstance}, {headers: theHeader})
+    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
+    return this.http.post(this.apiUrl + `route_instances`, {route_instance: routeInstance}, {headers: this.theHeader})
       .map(res => res)
       .catch(this.handleError);
   }
 
   insertLocationCamp(theLocationCamp: LocationCamp) {
-    return this.http.post(this.apiUrl + `location_camps`, {location_camp: theLocationCamp}, {headers: theHeader})
+    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
+    return this.http.post(this.apiUrl + `location_camps`, {location_camp: theLocationCamp}, {headers: this.theHeader})
       .map(res => res);
   }
 
   checkoutHeater(theRouteInstanceHeaterInteraction: RouteInstanceHeaterInteraction) {
-    return this.http.post(this.apiUrl + `route_instance_heater_interactions`, {route_instance_heater_interaction: theRouteInstanceHeaterInteraction}, {headers: theHeader})
+    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
+    return this.http.post(this.apiUrl + `route_instance_heater_interactions`,
+                {route_instance_heater_interaction: theRouteInstanceHeaterInteraction}, {headers: this.theHeader})
       .map(res => res);
   }
 
   updateLocationCamp(theLocationCamp: LocationCamp) {
-    return this.http.put(this.apiUrl + `location_camps/${theLocationCamp.id}`, {location_camp: theLocationCamp}, {headers: theHeader})
+    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
+    return this.http.put(this.apiUrl + `location_camps/${theLocationCamp.id}`, {location_camp: theLocationCamp}, {headers: this.theHeader})
         .map(res => res).subscribe(response => { }, error => {console.log('error updating camp')});
   }
 
   updateLocation(theLocation: Location) {
-    return this.http.put(this.apiUrl + `locations/${theLocation.id}`, {location: theLocation}, {headers: theHeader})
+    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
+    return this.http.put(this.apiUrl + `locations/${theLocation.id}`, {location: theLocation}, {headers: this.theHeader})
         .map(res => res).subscribe(response => { }, error => {console.log('error updating location')});
   }
 
   updateRouteInstance(theRouteInstance: RouteInstance) {
-    return this.http.patch(this.apiUrl + `route_instances/${theRouteInstance.id}`, {route_instance: theRouteInstance}, {headers: theHeader})
+    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
+    return this.http.patch(this.apiUrl + `route_instances/${theRouteInstance.id}`,
+                    {route_instance: theRouteInstance}, {headers: this.theHeader})
         .map(res => res).subscribe(response => { }, error => {console.log(error)});;
   }
 
   updateRouteInstanceHeaterInteraction(theRouteInstanceHeaterInteraction: RouteInstanceHeaterInteraction) {
+    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
     return this.http.patch(this.apiUrl + `route_instance_heater_interactions/${theRouteInstanceHeaterInteraction.id}`,
-            {route_instance_heater_interaction: theRouteInstanceHeaterInteraction}, {headers: theHeader})
+            {route_instance_heater_interaction: theRouteInstanceHeaterInteraction}, {headers: this.theHeader})
       .map(res => res).subscribe(response => { }, error => console.log(error));
   }
 
   isHeaterCheckedOutOnOtherRoute(heaterId: number) {
-    return this.http.get(this.apiUrl + `isHeaterCheckedOutOnOtherRoute?heaterId=${heaterId}`, {headers: theHeader})
+    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
+    return this.http.get(this.apiUrl + `isHeaterCheckedOutOnOtherRoute?heaterId=${heaterId}`, {headers: this.theHeader})
       .map(res => res);
   }
 
   insertHeater(theHeater: Heater) {
-    return this.http.post(this.apiUrl + `heaters`, {heater: theHeater}, {headers: theHeader})
+    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
+    return this.http.post(this.apiUrl + `heaters`, {heater: theHeater}, {headers: this.theHeader})
         .map(res => res);
   }
 
   getRoute(id) : Observable<Route>{
+    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
     if(this.online){
-      return this.http.get(this.apiUrl + `routes/${id}`)
+      return this.http.get(this.apiUrl + `routes/${id}`, {headers: this.theHeader})
       .map(res => {return res; })
       .catch(err => this.handleError(err));
     }
@@ -122,25 +141,29 @@ export class MainService {
   }
 
   getLocationCamps(id) {
-    return this.http.get(this.apiUrl + `getCampsForLocation?locationId=${id}`)
+    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
+    return this.http.get(this.apiUrl + `getCampsForLocation?locationId=${id}`, {headers: this.theHeader})
               .map(res => {return res;}).catch(err => this.handleError(err));
   }
 
   getRouteInstance(id:number) {
-    return this.http.get(this.apiUrl + `route_instances/${id}`)
+    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
+    return this.http.get(this.apiUrl + `route_instances/${id}`, {headers: this.theHeader})
       .map(res => {return res;})
       .catch(err => this.handleError(err));
   }
 
   getCheckedOutHeaters(id:number) {
-    return this.http.get(this.apiUrl + `getCheckedOutHeaters?routeInstanceId=${id}`)
+    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
+    return this.http.get(this.apiUrl + `getCheckedOutHeaters?routeInstanceId=${id}`, {headers: this.theHeader})
       .map(res => {return res;})
       .catch(err => this.handleError(err));
   }
 
-  getClientsForLocationCamp(id){
-    if(this.online){
-      return this.http.get(this.apiUrl + `getClientsForLocationCampC?locationCampId=${id}`)
+  getClientsForLocationCamp(id) {
+    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
+    if (this.online) {
+      return this.http.get(this.apiUrl + `getClientsForLocationCampC?locationCampId=${id}`, {headers: this.theHeader})
       .map(res => {return res; })
       .catch(err => this.handleError(err));
     } else {
@@ -148,10 +171,17 @@ export class MainService {
     }
   }
 
-  getRouteLocations(id): Observable<Location[]>{
+  getRouteLocations(id): Observable<Location[]> {
+    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
     //if(this.online){
-      return this.http.get(this.apiUrl + `locationsForRoute?routeId=${id}`)
-      .map(res => {return res; })
+      return this.http.get(this.apiUrl + `locationsForRoute?routeId=${id}`, {headers: this.theHeader})
+      .map((res: any) => {
+        if (res.message === 'invalid-token') {
+          window.sessionStorage.removeItem('apiToken');
+          this.router.navigate(['/application-login']);
+        }
+        return res;
+      })
       .catch(err => this.handleError(err));
     //}
     //else{
@@ -160,67 +190,81 @@ export class MainService {
   }
 
   getRouteLocation(id) {
-    return this.http.get(this.apiUrl + `locations/${id}`)
+    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
+    return this.http.get(this.apiUrl + `locations/${id}`, {headers: this.theHeader})
           .map(res => res).catch(error => this.handleError(error));
   }
 
   getLocationCamp(id) {
-    return this.http.get(this.apiUrl + `location_camps/${id}`)
+    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
+    return this.http.get(this.apiUrl + `location_camps/${id}`, {headers: this.theHeader})
         .map(res => res).catch(error => this.handleError(error));
   }
 
   getAdminRouteNumberMeals() {
-    return this.http.get(this.apiUrl + `getAdminRouteNumberMeals`)
+    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
+    return this.http.get(this.apiUrl + `getAdminRouteNumberMeals`, {headers: this.theHeader})
         .map(res => res).catch(error => this.handleError(error));
   }
 
   getAdminRouteUndeliveredItems() {
-    return this.http.get(this.apiUrl + `getAdminRouteUndeliveredItems`)
+    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
+    return this.http.get(this.apiUrl + `getAdminRouteUndeliveredItems`, {headers: this.theHeader})
         .map(res => res).catch(error => this.handleError(error));
   }
 
   getAdminRouteUnfulfilledGoalsNextSteps() {
-    return this.http.get(this.apiUrl + `getAdminRouteUnfulfilledGoalsNextSteps`)
+    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
+    return this.http.get(this.apiUrl + `getAdminRouteUnfulfilledGoalsNextSteps`, {headers: this.theHeader})
         .map(res => res).catch(error => this.handleError(error));
   }
 
   getAdminRouteUnfulfilledPrayerRequestsNeeds() {
-    return this.http.get(this.apiUrl + `getAdminRouteUnfulfilledPrayerRequestsNeeds`)
+    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
+    return this.http.get(this.apiUrl + `getAdminRouteUnfulfilledPrayerRequestsNeeds`, {headers: this.theHeader})
         .map(res => res).catch(error => this.handleError(error));
   }
 
   getHeaterListing() {
-    return this.http.get(this.apiUrl + `getHeaterListing`)
+    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
+    return this.http.get(this.apiUrl + `getHeaterListing`, {headers: this.theHeader})
         .map(res => res).catch(error => this.handleError(error));
   }
 
   getHeaterTypes() {
-    return this.http.get(this.apiUrl + `getHeaterTypes`)
+    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
+    return this.http.get(this.apiUrl + `getHeaterTypes`, {headers: this.theHeader})
       .map(res => res).catch(error => this.handleError(error));
   }
 
   getHeaterStatuses() {
-    return this.http.get(this.apiUrl + `getHeaterStatuses`)
+    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
+    return this.http.get(this.apiUrl + `getHeaterStatuses`, {headers: this.theHeader})
       .map(res => res).catch(error => this.handleError(error));
   }
 
   getAvailableHeaters(routeInstanceId: number) {
-    return this.http.get(this.apiUrl + `getAvailableHeaters?routeInstanceId=${routeInstanceId}`)
+    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
+    return this.http.get(this.apiUrl + `getAvailableHeaters?routeInstanceId=${routeInstanceId}`, {headers: this.theHeader})
       .map(res => res).catch(error => this.handleError(error));
   }
 
   getRouteInstanceHeaterInteractions(): Observable<RouteInstanceHeaterInteraction[]> {
-    return this.http.get(this.apiUrl + `route_instance_heater_interactions`)
+    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
+    return this.http.get(this.apiUrl + `route_instance_heater_interactions`, {headers: this.theHeader})
       .map(res => res).catch(error => this.handleError(error));
   }
 
   removeRouteInstanceHeaterInteraction(id: number) {
-    return this.http.delete(this.apiUrl + `route_instance_heater_interactions/${id}`)
+    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
+    return this.http.delete(this.apiUrl + `route_instance_heater_interactions/${id}`, {headers: this.theHeader})
       .map(res => res).catch(error => this.handleError(error));
   }
 
   checkInHeater(theRouteInstanceHeaterInteraction: RouteInstanceHeaterInteraction) {
-    return this.http.patch(this.apiUrl + `route_instance_heater_interactions/${theRouteInstanceHeaterInteraction.id}`, {route_instance_heater_interaction: theRouteInstanceHeaterInteraction}, {headers: theHeader})
+    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
+    return this.http.patch(this.apiUrl + `route_instance_heater_interactions/${theRouteInstanceHeaterInteraction.id}`,
+                  {route_instance_heater_interaction: theRouteInstanceHeaterInteraction}, {headers: this.theHeader})
       .map(res => res).catch(error => this.handleError(error));
   }
 
