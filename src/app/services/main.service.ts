@@ -172,9 +172,12 @@ export class MainService {
   }
 
   getRouteLocations(id): Observable<Location[]> {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
     //if(this.online){
-      return this.http.get(this.apiUrl + `locationsForRoute?routeId=${id}`, {headers: this.theHeader})
+      return this.http.get(this.apiUrl + `locationsForRoute?routeId=${id}`, {headers: myHeader})
       .map((res: any) => {
         console.log('returned route locations');
         console.log(res);
