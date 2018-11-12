@@ -30,8 +30,11 @@ export class MainService {
 
   constructor(private http: HttpClient, private store: Store<IMainStore>, private router: Router) { }
   getRoutes() {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
-    return this.http.get(this.baseUrl + `routes`, {headers: this.theHeader})
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+    return this.http.get(this.baseUrl + `routes`, {headers: myHeader})
         .map((response) => {
           return response;
         })
@@ -39,131 +42,183 @@ export class MainService {
   }
 
   attemptLogin(thePassword) {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
-    return this.http.get(this.apiUrl + `attemptLogin?passWrd=${thePassword}`,
-                    {headers: this.theHeader}).map(response => { return response; });
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+    return this.http.get(this.apiUrl + `attemptLogin?passWrd=${thePassword}`).map(response => { return response; });
   }
 
   getTheRoutes(): Observable<Route[]>{
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
-    if(this.online){
-      return this.http.get(this.apiUrl + `routes`, {headers: this.theHeader})
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+    if (this.online) {
+      return this.http.get(this.apiUrl + `routes`, {headers: myHeader})
         .map(res => res)
         .catch(err => this.handleError(err));
     } else {
-      return this.http.get(this.baseUrl + `routes`, {headers: this.theHeader})
+      return this.http.get(this.baseUrl + `routes`, {headers: myHeader})
                .map(response => response)
                .catch(this.handleError);
     }
   }
 
   insertRoute(theRoute: Route) {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
-    return this.http.post(this.apiUrl + `routes`, {route: theRoute}, {headers: this.theHeader})
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+    return this.http.post(this.apiUrl + `routes`, {route: theRoute}, {headers: myHeader})
         .map(res => res);
   }
 
   insertLocation(theLocation: Location) {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
-    return this.http.post(this.apiUrl + `locations`, {location: theLocation}, {headers: this.theHeader})
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+    return this.http.post(this.apiUrl + `locations`, {location: theLocation}, {headers: myHeader})
       .map(res => res)
       .catch(this.handleError);
   }
 
   insertRouteInstance(routeInstance: RouteInstance): any {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
-    return this.http.post(this.apiUrl + `route_instances`, {route_instance: routeInstance}, {headers: this.theHeader})
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+    return this.http.post(this.apiUrl + `route_instances`, {route_instance: routeInstance}, {headers: myHeader})
       .map(res => res)
       .catch(this.handleError);
   }
 
   insertLocationCamp(theLocationCamp: LocationCamp) {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
-    return this.http.post(this.apiUrl + `location_camps`, {location_camp: theLocationCamp}, {headers: this.theHeader})
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+    return this.http.post(this.apiUrl + `location_camps`, {location_camp: theLocationCamp}, {headers: myHeader})
       .map(res => res);
   }
 
   checkoutHeater(theRouteInstanceHeaterInteraction: RouteInstanceHeaterInteraction) {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
     return this.http.post(this.apiUrl + `route_instance_heater_interactions`,
-                {route_instance_heater_interaction: theRouteInstanceHeaterInteraction}, {headers: this.theHeader})
+                {route_instance_heater_interaction: theRouteInstanceHeaterInteraction}, {headers: myHeader})
       .map(res => res);
   }
 
   updateLocationCamp(theLocationCamp: LocationCamp) {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
-    return this.http.put(this.apiUrl + `location_camps/${theLocationCamp.id}`, {location_camp: theLocationCamp}, {headers: this.theHeader})
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+    return this.http.put(this.apiUrl + `location_camps/${theLocationCamp.id}`, {location_camp: theLocationCamp}, {headers: myHeader})
         .map(res => res).subscribe(response => { }, error => {console.log('error updating camp')});
   }
 
   updateLocation(theLocation: Location) {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
-    return this.http.put(this.apiUrl + `locations/${theLocation.id}`, {location: theLocation}, {headers: this.theHeader})
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+    return this.http.put(this.apiUrl + `locations/${theLocation.id}`, {location: theLocation}, {headers: myHeader})
         .map(res => res).subscribe(response => { }, error => {console.log('error updating location')});
   }
 
   updateRouteInstance(theRouteInstance: RouteInstance) {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
     return this.http.patch(this.apiUrl + `route_instances/${theRouteInstance.id}`,
-                    {route_instance: theRouteInstance}, {headers: this.theHeader})
+                    {route_instance: theRouteInstance}, {headers: myHeader})
         .map(res => res).subscribe(response => { }, error => {console.log(error)});;
   }
 
   updateRouteInstanceHeaterInteraction(theRouteInstanceHeaterInteraction: RouteInstanceHeaterInteraction) {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
     return this.http.patch(this.apiUrl + `route_instance_heater_interactions/${theRouteInstanceHeaterInteraction.id}`,
-            {route_instance_heater_interaction: theRouteInstanceHeaterInteraction}, {headers: this.theHeader})
+            {route_instance_heater_interaction: theRouteInstanceHeaterInteraction}, {headers: myHeader})
       .map(res => res).subscribe(response => { }, error => console.log(error));
   }
 
   isHeaterCheckedOutOnOtherRoute(heaterId: number) {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
-    return this.http.get(this.apiUrl + `isHeaterCheckedOutOnOtherRoute?heaterId=${heaterId}`, {headers: this.theHeader})
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+    return this.http.get(this.apiUrl + `isHeaterCheckedOutOnOtherRoute?heaterId=${heaterId}`, {headers: myHeader})
       .map(res => res);
   }
 
   insertHeater(theHeater: Heater) {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
-    return this.http.post(this.apiUrl + `heaters`, {heater: theHeater}, {headers: this.theHeader})
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+    return this.http.post(this.apiUrl + `heaters`, {heater: theHeater}, {headers: myHeader})
         .map(res => res);
   }
 
-  getRoute(id) : Observable<Route>{
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
-    if(this.online){
-      return this.http.get(this.apiUrl + `routes/${id}`, {headers: this.theHeader})
+  getRoute(id): Observable<Route>{
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+    if (this.online){
+      return this.http.get(this.apiUrl + `routes/${id}`, {headers: myHeader})
       .map(res => {return res; })
       .catch(err => this.handleError(err));
-    }
-    else{
+    } else {
       return Observable.of(new Route());
     }
   }
 
   getLocationCamps(id) {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
-    return this.http.get(this.apiUrl + `getCampsForLocation?locationId=${id}`, {headers: this.theHeader})
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+    return this.http.get(this.apiUrl + `getCampsForLocation?locationId=${id}`, {headers: myHeader})
               .map(res => {return res;}).catch(err => this.handleError(err));
   }
 
   getRouteInstance(id:number) {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
-    return this.http.get(this.apiUrl + `route_instances/${id}`, {headers: this.theHeader})
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+    return this.http.get(this.apiUrl + `route_instances/${id}`, {headers: myHeader})
       .map(res => {return res;})
       .catch(err => this.handleError(err));
   }
 
   getCheckedOutHeaters(id:number) {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
-    return this.http.get(this.apiUrl + `getCheckedOutHeaters?routeInstanceId=${id}`, {headers: this.theHeader})
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+    return this.http.get(this.apiUrl + `getCheckedOutHeaters?routeInstanceId=${id}`, {headers: myHeader})
       .map(res => {return res;})
       .catch(err => this.handleError(err));
   }
 
   getClientsForLocationCamp(id) {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
     if (this.online) {
-      return this.http.get(this.apiUrl + `getClientsForLocationCampC?locationCampId=${id}`, {headers: this.theHeader})
+      return this.http.get(this.apiUrl + `getClientsForLocationCampC?locationCampId=${id}`, {headers: myHeader})
       .map(res => {return res; })
       .catch(err => this.handleError(err));
     } else {
@@ -176,7 +231,6 @@ export class MainService {
       'Content-Type': 'application/json',
       'Authorization': window.sessionStorage.getItem('apiToken')
     });
-    //if(this.online){
       return this.http.get(this.apiUrl + `locationsForRoute?routeId=${id}`, {headers: myHeader})
       .map((res: any) => {
         console.log('returned route locations');
@@ -188,88 +242,123 @@ export class MainService {
         return res;
       })
       .catch(err => this.handleError(err));
-    //}
-    //else{
-    //  return Observable.of([]);
-    //}
   }
 
   getRouteLocation(id) {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
-    return this.http.get(this.apiUrl + `locations/${id}`, {headers: this.theHeader})
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+    return this.http.get(this.apiUrl + `locations/${id}`, {headers: myHeader})
           .map(res => res).catch(error => this.handleError(error));
   }
 
   getLocationCamp(id) {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
-    return this.http.get(this.apiUrl + `location_camps/${id}`, {headers: this.theHeader})
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+    return this.http.get(this.apiUrl + `location_camps/${id}`, {headers: myHeader})
         .map(res => res).catch(error => this.handleError(error));
   }
 
   getAdminRouteNumberMeals() {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
-    return this.http.get(this.apiUrl + `getAdminRouteNumberMeals`, {headers: this.theHeader})
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+    return this.http.get(this.apiUrl + `getAdminRouteNumberMeals`, {headers: myHeader})
         .map(res => res).catch(error => this.handleError(error));
   }
 
   getAdminRouteUndeliveredItems() {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
-    return this.http.get(this.apiUrl + `getAdminRouteUndeliveredItems`, {headers: this.theHeader})
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+    return this.http.get(this.apiUrl + `getAdminRouteUndeliveredItems`, {headers: myHeader})
         .map(res => res).catch(error => this.handleError(error));
   }
 
   getAdminRouteUnfulfilledGoalsNextSteps() {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
-    return this.http.get(this.apiUrl + `getAdminRouteUnfulfilledGoalsNextSteps`, {headers: this.theHeader})
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+    return this.http.get(this.apiUrl + `getAdminRouteUnfulfilledGoalsNextSteps`, {headers: myHeader})
         .map(res => res).catch(error => this.handleError(error));
   }
 
   getAdminRouteUnfulfilledPrayerRequestsNeeds() {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
-    return this.http.get(this.apiUrl + `getAdminRouteUnfulfilledPrayerRequestsNeeds`, {headers: this.theHeader})
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+    return this.http.get(this.apiUrl + `getAdminRouteUnfulfilledPrayerRequestsNeeds`, {headers: myHeader})
         .map(res => res).catch(error => this.handleError(error));
   }
 
   getHeaterListing() {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
-    return this.http.get(this.apiUrl + `getHeaterListing`, {headers: this.theHeader})
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+    return this.http.get(this.apiUrl + `getHeaterListing`, {headers: myHeader})
         .map(res => res).catch(error => this.handleError(error));
   }
 
   getHeaterTypes() {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
-    return this.http.get(this.apiUrl + `getHeaterTypes`, {headers: this.theHeader})
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+    return this.http.get(this.apiUrl + `getHeaterTypes`, {headers: myHeader})
       .map(res => res).catch(error => this.handleError(error));
   }
 
   getHeaterStatuses() {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
-    return this.http.get(this.apiUrl + `getHeaterStatuses`, {headers: this.theHeader})
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+    return this.http.get(this.apiUrl + `getHeaterStatuses`, {headers: myHeader})
       .map(res => res).catch(error => this.handleError(error));
   }
 
   getAvailableHeaters(routeInstanceId: number) {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
-    return this.http.get(this.apiUrl + `getAvailableHeaters?routeInstanceId=${routeInstanceId}`, {headers: this.theHeader})
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+    return this.http.get(this.apiUrl + `getAvailableHeaters?routeInstanceId=${routeInstanceId}`, {headers: myHeader})
       .map(res => res).catch(error => this.handleError(error));
   }
 
   getRouteInstanceHeaterInteractions(): Observable<RouteInstanceHeaterInteraction[]> {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
-    return this.http.get(this.apiUrl + `route_instance_heater_interactions`, {headers: this.theHeader})
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+    return this.http.get(this.apiUrl + `route_instance_heater_interactions`, {headers: myHeader})
       .map(res => res).catch(error => this.handleError(error));
   }
 
   removeRouteInstanceHeaterInteraction(id: number) {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
-    return this.http.delete(this.apiUrl + `route_instance_heater_interactions/${id}`, {headers: this.theHeader})
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+    return this.http.delete(this.apiUrl + `route_instance_heater_interactions/${id}`, {headers: myHeader})
       .map(res => res).catch(error => this.handleError(error));
   }
 
   checkInHeater(theRouteInstanceHeaterInteraction: RouteInstanceHeaterInteraction) {
-    this.theHeader.set('token', window.sessionStorage.getItem('apiToken'));
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
     return this.http.patch(this.apiUrl + `route_instance_heater_interactions/${theRouteInstanceHeaterInteraction.id}`,
-                  {route_instance_heater_interaction: theRouteInstanceHeaterInteraction}, {headers: this.theHeader})
+                  {route_instance_heater_interaction: theRouteInstanceHeaterInteraction}, {headers: myHeader})
       .map(res => res).catch(error => this.handleError(error));
   }
 
