@@ -73,14 +73,14 @@ export class RequestedItemComponent implements OnInit {
             this.requestedItemAdded.emit(data);
           }
         });
-
-        this.description = '';
-        this.extraInfo = '';
-        this.extraInfoNeeded = false;
       }
     }
     else {
       alert('You need to enter an item');
     }
+
+    this.description = '';
+    this.extraInfo = '';
+    this.extraInfoNeeded = false;
   }
 }
