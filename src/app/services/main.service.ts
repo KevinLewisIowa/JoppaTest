@@ -176,6 +176,8 @@ export class MainService {
     //if(this.online){
       return this.http.get(this.apiUrl + `locationsForRoute?routeId=${id}`, {headers: this.theHeader})
       .map((res: any) => {
+        console.log('returned route locations');
+        console.log(res);
         if (res.message === 'invalid-token') {
           window.sessionStorage.removeItem('apiToken');
           this.router.navigate(['/application-login']);
