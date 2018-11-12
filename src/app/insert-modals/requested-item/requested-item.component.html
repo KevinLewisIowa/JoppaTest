@@ -8,7 +8,21 @@
       <div class="form-group">
        <div class="row">
          <div class="col-sm-4">
-           <input id="focusMe" class="form-control" type="text" [(ngModel)]="description" placeholder="Description" name="description"/>
+           <select id="focusMe" class="form-control" style="float:left;" #item [(ngModel)]="description" name="description" (change)="onChange(item.value)">
+             <option>Blankets</option>
+             <option>Tent</option>
+             <option>Tarp</option>
+             <option>Rope</option>
+             <option>Socks</option>
+             <option>AA Batteries</option>
+             <option>AAA Batteries</option>
+             <option>C Batteries</option>
+             <option>D Batteries</option>
+             <option>Other</option>
+           </select>
+         </div>
+         <div class="col-sm-4">
+            <input id="extraInfo" class="form-control" style="float:left;" type="text" [(ngModel)]="extraInfo" name="extraInfo" *ngIf="extraInfoNeeded" [placeholder]="placeholderText"/>
          </div>
        </div>
       </div>
