@@ -520,7 +520,7 @@ export class MainService {
     });
     return this.http.delete(this.apiUrl + `route_instance_heater_interactions/${id}`, {headers: myHeader})
     .map((res: any) => {
-      if (res.message === 'invalid-token') {
+      if (res != null && res.message === 'invalid-token') {
         window.sessionStorage.removeItem('apiToken');
         this.router.navigate(['/application-login']);
       }

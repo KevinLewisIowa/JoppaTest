@@ -328,7 +328,7 @@ export class ClientService {
       'Authorization': window.sessionStorage.getItem('apiToken')
     });
     return this.http.delete(this.baseUrl + `requested_items/${id}`, {headers: myHeader}).map((res: any) => {
-      if (res.message === 'invalid-token') {
+      if (res != null && res.message === 'invalid-token') {
         window.sessionStorage.removeItem('apiToken');
         this.router.navigate(['/application-login']);
       }
@@ -342,7 +342,7 @@ export class ClientService {
       'Authorization': window.sessionStorage.getItem('apiToken')
     });
     return this.http.delete(this.baseUrl + `client_likes/${id}`, {headers: myHeader}).map((res: any) => {
-      if (res.message === 'invalid-token') {
+      if (res != null && res.message === 'invalid-token') {
         window.sessionStorage.removeItem('apiToken');
         this.router.navigate(['/application-login']);
       }
@@ -370,7 +370,7 @@ export class ClientService {
       'Authorization': window.sessionStorage.getItem('apiToken')
     });
     return this.http.delete(this.baseUrl + `health_concerns/${id}`, {headers: myHeader}).map((res: any) => {
-      if (res.message === 'invalid-token') {
+      if (res != null && res.message === 'invalid-token') {
         window.sessionStorage.removeItem('apiToken');
         this.router.navigate(['/application-login']);
       }
@@ -384,7 +384,7 @@ export class ClientService {
       'Authorization': window.sessionStorage.getItem('apiToken')
     });
     return this.http.delete(this.baseUrl + `goals_and_next_steps/${id}`, {headers: myHeader}).map((res: any) => {
-      if (res.message === 'invalid-token') {
+      if (res != null && res.message === 'invalid-token') {
         window.sessionStorage.removeItem('apiToken');
         this.router.navigate(['/application-login']);
       }
