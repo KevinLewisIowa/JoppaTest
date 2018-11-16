@@ -2,7 +2,7 @@ import { Component, ViewChild, OnInit } from '@angular/core';
 import { MainService } from 'app/services/main.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Location } from 'app/models/location';
-import { } from '@types/googlemaps';
+import { } from 'googlemaps';
 import { Route } from 'app/models/route';
 
 @Component({
