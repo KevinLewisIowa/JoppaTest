@@ -26,6 +26,7 @@ import { NewClientsReportComponent } from './admin-reports/new-clients-report/ne
 import { AdminLoginComponent } from './admin-login/admin-login.component';
 import { MainLoginComponent } from './main-login/main-login.component';
 import { IsLoggedInGuard } from 'app/guards/login.guard';
+import { RouteMapComponent } from './route-map/route-map.component';
 
 const routes: Routes = [
   { path: 'routes', canActivate: [IsLoggedInGuard], component: RoutesComponent },
@@ -33,6 +34,7 @@ const routes: Routes = [
   { path: 'checkoutHeaters', canActivate: [IsLoggedInGuard], component: CheckoutHeatersComponent },
   { path: 'route/:id', canActivate: [IsLoggedInGuard], component: LocationsComponent },
   { path: 'location/:id', canActivate: [IsLoggedInGuard], component: LocationDetailComponent },
+  { path: 'routeMap/:id', canActivate: [IsLoggedInGuard], component: RouteMapComponent },
   { path: 'locationCamp/:id', canActivate: [IsLoggedInGuard], component: LocationCampComponent},
   { path: 'routeNew', canActivate: [IsLoggedInGuard], component: CreateRouteComponent },
   { path: 'routeEdit/:id', canActivate: [IsLoggedInGuard], component: RouteEditComponent },

@@ -67,4 +67,8 @@ export class LocationsComponent implements OnInit {
   newLocation(){
     this.router.navigate(['/locationNew']);
   }
+
+  showRouteLocations() {
+    this.router.navigate(['/routeMap',this.routeId]);
+  }
 }

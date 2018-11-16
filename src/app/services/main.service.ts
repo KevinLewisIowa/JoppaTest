@@ -348,6 +348,22 @@ export class MainService {
       .catch(err => this.handleError(err));
   }
 
+  getRouteLocationsLongLat(id) {
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+      return this.http.get(this.apiUrl + `getRouteLocationsLongLat?routeId=${id}`, {headers: myHeader})
+      .map((res: any) => {
+        if (res.message === 'invalid-token') {
+          window.sessionStorage.removeItem('apiToken');
+          this.router.navigate(['/application-login']);
+        }
+        return res;
+      })
+      .catch(err => this.handleError(err));
+  }
+
   getRouteLocation(id) {
     const myHeader = new HttpHeaders({
       'Content-Type': 'application/json',
