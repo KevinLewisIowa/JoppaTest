@@ -34,8 +34,6 @@ export class ServicingClientComponent implements OnInit {
   heatEquipmentNotReturned: any[] = [];
   clientId = null;
   heaterStatuses: HeaterStatus[] = [];
-  heatingEquipmentStatuses: HeaterStatus[] = [];
-  heaterStatusValue: any = '-1';
   heaters: any[] = [];
   isAdmin: boolean;
   constructor(private service: ClientService, private mainService: MainService, private router: Router) { }
@@ -94,13 +92,7 @@ export class ServicingClientComponent implements OnInit {
 
   getHeaterStatuses(): void {
     this.mainService.getHeaterStatuses().subscribe(heaterStatuses => {
-      this.heatingEquipmentStatuses = heaterStatuses.filter(w => w.id !== 1 && w.id !== 2);
-
-      this.heaterStatuses = heaterStatuses.filter(w => w.id !== 1 && w.id !== 2);
-      let activeStatus: HeaterStatus = new HeaterStatus();
-      activeStatus.id = -1;
-      activeStatus.status_name = 'Active';
-      this.heaterStatuses.unshift(activeStatus);
+      this.heaterStatuses = heaterStatuses.filter(w => w.id !== 1);
     }, err => {console.log(err)} );
   }
 
@@ -251,32 +243,33 @@ export class ServicingClientComponent implements OnInit {
   }
 
   submitTankStatus(interactionId, statusId) {
-    this.service.updateTankInteraction(interactionId, statusId).subscribe(data => {
-      this.service.getClientLoanedTanks(this.clientId).subscribe((response: any[]) => {
-        this.tankInteractions = response;
+    if (statusId != 2) {
+      this.service.updateTankInteraction(interactionId, statusId).subscribe(data => {
+        this.service.getClientLoanedTanks(this.clientId).subscribe((response: any[]) => {
+          this.tankInteractions = response;
+        });
+        this.service.getHeatEquipmentNotReturned(this.clientId).subscribe((data1: any[]) => {
+          this.heatEquipmentNotReturned = data1;
+        });
       });
-      this.service.getHeatEquipmentNotReturned(this.clientId).subscribe((data1: any[]) => {
-        this.heatEquipmentNotReturned = data1;
-      });
-    });
+    }
   }
 
   submitHoseStatus(interactionId, statusId) {
-    this.service.updateHoseInteraction(interactionId, statusId).subscribe(data => {
-      this.service.getClientLoanedHoses(this.clientId).subscribe((response: any[]) => {
-        this.hoseInteractions = response;
+    if (statusId != 2) {
+      this.service.updateHoseInteraction(interactionId, statusId).subscribe(data => {
+        this.service.getClientLoanedHoses(this.clientId).subscribe((response: any[]) => {
+          this.hoseInteractions = response;
+        });
+        this.service.getHeatEquipmentNotReturned(this.clientId).subscribe((data1: any[]) => {
+          this.heatEquipmentNotReturned = data1;
+        });
       });
-      this.service.getHeatEquipmentNotReturned(this.clientId).subscribe((data1: any[]) => {
-        this.heatEquipmentNotReturned = data1;
-      });
-    });
+    }
   }
 
   submitHeaterStatus(interactionId, statusId) {
-    if (statusId == -1) {
-      alert('This heater is already active.');
-    }
-    else {
+    if (statusId != 2) {
       this.service.updateHeaterInteraction(interactionId, statusId).subscribe(data => {
         this.service.getHeatersForClient(this.clientId).subscribe((response: any[]) => {
           this.heaters = response;

@@ -14,13 +14,11 @@
             <label>Active: </label>
             <input type="checkbox" formControlName="is_active"/>
           </div>
-          <div class="col-md-12">
-            <button type="button" [disabled]="!campForm.valid" (click)="submitCamp(); c('');" class="btn btn-secondary">Submit Camp</button>
-          </div>
         </div>
       </form>
     </div>
   <div class="modal-footer">
+    <button type="button" [disabled]="!campForm.valid" (click)="submitCamp(); c('');" class="btn btn-primary">Submit Camp</button>
     <button type="button" class="btn btn-primary" (click)="c('Close click')">Close</button>
   </div>
 </ng-template>

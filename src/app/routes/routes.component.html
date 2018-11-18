@@ -1,11 +1,7 @@
 <div class="card text-center" style="opacity:0.93">
   <div class="card-header">
-    <div class="float-left">
-    </div>
-    <div class="float-right">
-      <button routerLink="/routeNew" class="btn btn-primary" type="button">New Route</button>
-    </div>
     <h2>Routes</h2>
+    <button routerLink="/routeNew" class="btn btn-primary" type="button">New Route</button>
   </div>
   <div class="panel-body text-center" style="opacity:0.93">
     <div *ngFor="let route of routes" class="route-div well" (click)="openRoute(route.id)">
