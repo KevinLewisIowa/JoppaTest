@@ -1,7 +1,7 @@
 <div class="card text-center" style="opacity:0.93">
   <div class="card-header text-center" id="topOfScreen">
     <button type="button" class="pull-left btn btn-primary" routerLink="/login">Back</button>
-    <h2>Checkout Heaters</h2>
+    <h2>Checkout Heating Equipment</h2>
   </div>
   <div class="row">
     <div class="col-lg-12 col-md-12" *ngIf="heaters">
@@ -24,8 +24,30 @@
       </table>
     </div>
   </div>
+  <form [formGroup]="routeInstanceTankHoseForm" *ngIf="routeInstanceTankHoseForm">
+      <div class="text-center" style="opacity:0.93;">
+        <div class="entry-box">
+          <div class="col-md-12" *ngIf="isInitialCheckout">
+            <label>Hoses Out: </label>
+            <input type="text" placeholder="0" formControlName="number_hoses_out"/>
+          </div>
+          <div class="col-md-12" *ngIf="isInitialCheckout">
+            <label>Tanks Out: </label>
+            <input type="tel" placeholder="0" formControlName="number_tanks_out"/>
+          </div>
+          <div class="col-md-12" *ngIf="!isInitialCheckout">
+            <label>Hoses In: </label>
+            <input type="text" placeholder="0" formControlName="number_hoses_in"/>
+          </div>
+          <div class="col-md-12" *ngIf="!isInitialCheckout">
+            <label>Tanks In: </label>
+            <input type="text" placeholder="0" formControlName="number_tanks_in"/>
+          </div>
+        </div>
+      </div>
+    </form>
   <div>
-    <button *ngIf="!isEndOfRoute" type="button" class="btn btn-primary" (click)="next();">Next</button>
-    <button *ngIf="isEndOfRoute" (click)="endRoute()" type="button" class="btn btn-primary">End Route</button>
+    <button *ngIf="!isEndOfRoute" [disabled]="routeInstanceTankHoseForm !== undefined ? !routeInstanceTankHoseForm.valid : null" type="button" class="btn btn-primary" (click)="next();">Next</button>
+    <button *ngIf="isEndOfRoute" [disabled]="routeInstanceTankHoseForm !== undefined ? !routeInstanceTankHoseForm.valid : null" (click)="endRoute()" type="button" class="btn btn-primary">End Route</button>
   </div>
 </div>

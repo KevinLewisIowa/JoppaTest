@@ -3,6 +3,8 @@ import { Heater } from '../models/heater';
 import { MainService } from '../services/main.service';
 import { Router } from '@angular/router';
 import { RouteInstanceHeaterInteraction } from 'app/models/route-instance-heater-interaction';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { RouteInstanceTankHoseInteraction } from 'app/models/route-instance-tank-hose-interaction';
 
 @Component({
   selector: 'app-checkout-heaters',
@@ -15,8 +17,9 @@ export class CheckoutHeatersComponent implements OnInit {
   checkedOutRouteInstanceHeaters: RouteInstanceHeaterInteraction[] = [];
   isEndOfRoute: boolean = false;
   isInitialCheckout: boolean = true;
+  routeInstanceTankHoseForm : FormGroup;
 
-  constructor(private mainService: MainService, private router: Router) { 
+  constructor(private fb:FormBuilder, private mainService: MainService, private router: Router) { 
     
   }
 
@@ -30,14 +33,33 @@ export class CheckoutHeatersComponent implements OnInit {
       this.heaters = heaterList;
     }, error => console.log(error));
 
-    if (JSON.parse(window.localStorage.getItem('checkedOutHeaters')) !== null && JSON.parse(window.localStorage.getItem('checkedOutHeaters')).length > 0) {
+    if (JSON.parse(window.localStorage.getItem('tankHoseInteractionId')) !== null) {
       this.checkedOutRouteInstanceHeaters = JSON.parse(window.localStorage.getItem('checkedOutHeaters'));
-      if (confirm('Please press OK to check in heaters at the end of the route or Cancel to continue checking out heaters.')) {
+      if (confirm('Please press OK to check in heating equipment at the end of the route or Cancel to continue checking out heaters.')) {
         this.isEndOfRoute = true;
       }
-      else {
-        this.isInitialCheckout = false;
-      }
+
+      this.isInitialCheckout = false;
+    }
+
+    if (this.isInitialCheckout && !this.isEndOfRoute) {
+      this.routeInstanceTankHoseForm = this.fb.group({
+        number_tanks_out: '',
+        number_hoses_out: ''
+      });
+
+      this.routeInstanceTankHoseForm.get('number_tanks_out').setValidators(Validators.required);
+      this.routeInstanceTankHoseForm.get('number_hoses_out').setValidators(Validators.required);
+    }
+
+    if (!this.isInitialCheckout && this.isEndOfRoute) {
+      this.routeInstanceTankHoseForm = this.fb.group({
+        number_tanks_in: '',
+        number_hoses_in: ''
+      });
+
+      this.routeInstanceTankHoseForm.get('number_tanks_in').setValidators(Validators.required);
+      this.routeInstanceTankHoseForm.get('number_hoses_in').setValidators(Validators.required);
     }
   }
 
@@ -85,6 +107,15 @@ export class CheckoutHeatersComponent implements OnInit {
 
   next() {
     if (this.isInitialCheckout) {
+      let routeInstanceTankHoseInteraction: RouteInstanceTankHoseInteraction = new RouteInstanceTankHoseInteraction();
+      routeInstanceTankHoseInteraction.route_instance_id = JSON.parse(window.localStorage.getItem('routeInstance'));
+      routeInstanceTankHoseInteraction.number_hoses_out = this.routeInstanceTankHoseForm.get('number_hoses_out').value;
+      routeInstanceTankHoseInteraction.number_tanks_out = this.routeInstanceTankHoseForm.get('number_tanks_out').value;
+
+      this.mainService.insertRouteInstanceTankHoseInteraction(routeInstanceTankHoseInteraction).subscribe((data: RouteInstanceTankHoseInteraction) => {
+        window.localStorage.setItem('tankHoseInteractionId', JSON.stringify(data.id))
+      }, error => console.log(error));
+
       this.router.navigate(['volunteerInfo']);
     }
     else {
@@ -93,6 +124,13 @@ export class CheckoutHeatersComponent implements OnInit {
   }
 
   endRoute() {
+    let routeInstanceTankHoseInteraction: RouteInstanceTankHoseInteraction = new RouteInstanceTankHoseInteraction();
+    routeInstanceTankHoseInteraction.id = JSON.parse(window.localStorage.getItem('tankHoseInteractionId'));
+    routeInstanceTankHoseInteraction.number_hoses_in = this.routeInstanceTankHoseForm.get('number_hoses_in').value;
+    routeInstanceTankHoseInteraction.number_tanks_in = this.routeInstanceTankHoseForm.get('number_tanks_in').value;
+
+    this.mainService.updateRouteInstanceTankHoseInteraction(routeInstanceTankHoseInteraction);
+
     window.localStorage.clear();
     this.router.navigate(['login']);
   }

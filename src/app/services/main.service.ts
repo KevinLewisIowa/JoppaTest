@@ -17,6 +17,7 @@ import { RouteInstance } from '../models/route-instance';
 import { RouteInstanceHeaterInteraction } from 'app/models/route-instance-heater-interaction';
 import { and } from '@angular/router/src/utils/collection';
 import { Router } from '@angular/router';
+import { RouteInstanceTankHoseInteraction } from 'app/models/route-instance-tank-hose-interaction';
 
 
 @Injectable()
@@ -96,6 +97,22 @@ export class MainService {
       'Authorization': window.sessionStorage.getItem('apiToken')
     });
     return this.http.post(this.apiUrl + `locations`, {location: theLocation}, {headers: myHeader})
+    .map((res: any) => {
+      if (res.message === 'invalid-token') {
+        window.sessionStorage.removeItem('apiToken');
+        this.router.navigate(['/application-login']);
+      }
+      return res;
+    })
+      .catch(this.handleError);
+  }
+
+  insertRouteInstanceTankHoseInteraction(theRouteInstanceTanksHoses: RouteInstanceTankHoseInteraction) {
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+    return this.http.post(this.apiUrl + `route_instance_tank_hose_interactions`, {route_instance_tank_hose_interaction: theRouteInstanceTanksHoses}, {headers: myHeader})
     .map((res: any) => {
       if (res.message === 'invalid-token') {
         window.sessionStorage.removeItem('apiToken');
@@ -190,6 +207,22 @@ export class MainService {
     });
     return this.http.patch(this.apiUrl + `route_instances/${theRouteInstance.id}`,
                     {route_instance: theRouteInstance}, {headers: myHeader})
+                    .map((res: any) => {
+                      if (res.message === 'invalid-token') {
+                        window.sessionStorage.removeItem('apiToken');
+                        this.router.navigate(['/application-login']);
+                      }
+                      return res;
+                    }).subscribe(response => { }, error => {console.log(error)});;
+  }
+
+  updateRouteInstanceTankHoseInteraction(theRouteInstanceTanksHoses: RouteInstanceTankHoseInteraction) {
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+    return this.http.patch(this.apiUrl + `route_instance_tank_hose_interactions/${theRouteInstanceTanksHoses.id}`,
+                    {route_instance_tank_hose_interaction: theRouteInstanceTanksHoses}, {headers: myHeader})
                     .map((res: any) => {
                       if (res.message === 'invalid-token') {
                         window.sessionStorage.removeItem('apiToken');

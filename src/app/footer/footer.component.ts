@@ -32,14 +32,7 @@ export class FooterComponent implements OnInit {
       }, error => console.log(error));
     }
 
-    var checkedOutHeaters: RouteInstanceHeaterInteraction[] = JSON.parse(window.localStorage.getItem('checkedOutHeaters'));
-    if (checkedOutHeaters === null || checkedOutHeaters.length === 0) {
-      window.localStorage.clear();
-      this.router.navigate(['login']);
-    }
-    else {
-      this.router.navigate(['checkoutHeaters']);
-    }
+    this.router.navigate(['checkoutHeaters']);
   }
 
 }
