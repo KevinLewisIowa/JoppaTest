@@ -21,4 +21,8 @@ export class AdminHomeComponent implements OnInit {
     this.router.navigate(['/admin/reports']);
   }
 
+  goToRoutes() {
+    this.router.navigate(['routes']);
+  }
+
 }
