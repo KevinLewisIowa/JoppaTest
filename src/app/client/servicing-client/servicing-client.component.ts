@@ -173,6 +173,12 @@ export class ServicingClientComponent implements OnInit {
   }
 
   back() {
+    if (!this.sentInteraction) {
+      if (!confirm('Are you sure you want to close out of this client? You have not yet marked them as seen or serviced.')) {
+        return;
+      }
+    }
+
     this.router.navigate([`/locationCamp/${this.locationCampId}`]);
   }
 
