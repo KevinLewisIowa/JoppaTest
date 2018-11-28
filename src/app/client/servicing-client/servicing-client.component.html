@@ -202,6 +202,23 @@
           </tbody>
         </table>
       </div>
+      <div class="col-lg-12 col-md-12">
+        <h4>Notes <button type="button" (click)="goToTop();notesMdl.showModal()" class="btn btn-secondary">New</button></h4>
+        <table class="table" id="notes">
+          <thead>
+            <tr>
+              <th>Note</th>
+              <th>Remove</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let note of notes">
+              <td>{{note.note}}</td>
+              <td><button type="button" class="btn btn-primary" (click)="removeNote(note.id)">Remove</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
       <div class="col-lg-12 col-md-12" *ngIf="!heatRoute">
         <h4>Health Concerns <button type="button" (click)="goToTop();healthMdl.showModal()" class="btn btn-secondary">New</button></h4>
         <table class="table" id="concerns">
@@ -236,5 +253,6 @@
 <app-requested-item #requestItemMdl (requestedItemAdded)="requestedItemAdded($event)"></app-requested-item>
 <app-goals-steps #goalMdl (goalAdded)="goalAdded($event)"></app-goals-steps>
 <app-health-concern #healthMdl (healthConcernAdded)="healthConcernAdded($event)"></app-health-concern>
+<app-notes #notesMdl (noteAdded)="noteAdded($event)"></app-notes>
 <app-client-edit-modal #clientEditMdl (editedClient)="editedClient($event)"></app-client-edit-modal>
 <app-loan-heater-modal #newHeaterModal (loaningHeater)="loaningHeater($event)"></app-loan-heater-modal>

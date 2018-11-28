@@ -19,6 +19,7 @@ import { IMainStore } from '../state-management/main.store';
 import { PrayerRequestAndNeed } from "app/models/prayer-request";
 import { GoalsNextStep } from "app/models/goals-next-steps";
 import { Router } from '@angular/router';
+import { Note } from 'app/models/note';
 
 
 // adding a new comment
@@ -106,6 +107,20 @@ export class ClientService {
     });
   }
 
+  getClientNotesForRoute(clientId: number, routeInstanceId: number) {
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+    return this.http.get(this.baseUrl + `getClientNotesForRoute?clientId=${clientId}&routeInstanceId=${routeInstanceId}`, {headers: myHeader}).map((res: any) => {
+      if (res.message === 'invalid-token') {
+        window.sessionStorage.removeItem('apiToken');
+        this.router.navigate(['/application-login']);
+      }
+      return res;
+    });
+  }
+
   insertClientLike(theClientLike: ClientLike) {
     const myHeader = new HttpHeaders({
       'Content-Type': 'application/json',
@@ -127,6 +142,21 @@ export class ClientService {
       'Authorization': window.sessionStorage.getItem('apiToken')
     });
       return this.http.post(this.baseUrl + `client_dislikes`, {client_dislike: theClientDislike}, {headers: myHeader})
+      .map((res: any) => {
+        if (res.message === 'invalid-token') {
+          window.sessionStorage.removeItem('apiToken');
+          this.router.navigate(['/application-login']);
+        }
+        return res;
+      });
+  }
+
+  insertNote(theNote: Note) {
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+      return this.http.post(this.baseUrl + `client_notes`, {client_note: theNote}, {headers: myHeader})
       .map((res: any) => {
         if (res.message === 'invalid-token') {
           window.sessionStorage.removeItem('apiToken');
@@ -370,6 +400,20 @@ export class ClientService {
       'Authorization': window.sessionStorage.getItem('apiToken')
     });
     return this.http.delete(this.baseUrl + `health_concerns/${id}`, {headers: myHeader}).map((res: any) => {
+      if (res != null && res.message === 'invalid-token') {
+        window.sessionStorage.removeItem('apiToken');
+        this.router.navigate(['/application-login']);
+      }
+      return res;
+    });
+  }
+
+  removeNote(id: number) {
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+    return this.http.delete(this.baseUrl + `client_notes/${id}`, {headers: myHeader}).map((res: any) => {
       if (res != null && res.message === 'invalid-token') {
         window.sessionStorage.removeItem('apiToken');
         this.router.navigate(['/application-login']);

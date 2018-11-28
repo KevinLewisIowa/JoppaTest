@@ -11,6 +11,7 @@ import { HealthConcern } from "app/models/health-concern";
 import { HeaterStatus } from '../../models/heater-status';
 import { MainService } from '../../services/main.service';
 import { Heater } from 'app/models/heater';
+import { Note } from 'app/models/note';
 
 @Component({
   selector: 'app-servicing-client',
@@ -26,6 +27,7 @@ export class ServicingClientComponent implements OnInit {
   clientLikes: ClientLike[] = [];
   clientDislikes: ClientDislike[] = [];
   healthConcerns: HealthConcern[] = [];
+  notes: Note[] = [];
   sentInteraction = false;
   receivedItems: RequestedItem[] = [];
   heatRoute = false;
@@ -39,6 +41,7 @@ export class ServicingClientComponent implements OnInit {
   constructor(private service: ClientService, private mainService: MainService, private router: Router) { }
 
   ngOnInit() {
+    let routeInstanceId = JSON.parse(localStorage.getItem('routeInstance'));
     this.heatRoute = JSON.parse(window.localStorage.getItem('heatRoute'));
     this.isAdmin = JSON.parse(window.sessionStorage.getItem('isAdmin'));
     this.locationCampId = Number(sessionStorage.getItem('locationCampId'));
@@ -53,6 +56,12 @@ export class ServicingClientComponent implements OnInit {
       this.service.getRequestedItems(this.clientId).subscribe((data: RequestedItem[]) => {
         this.requestedItems = data.filter(w => w.has_received != true);
       });
+
+      if (routeInstanceId != null) {
+        this.service.getClientNotesForRoute(this.clientId, routeInstanceId).subscribe((data: Note[]) => {
+          this.notes = data;
+        }, error => console.log(error));
+      }
 
       if (this.heatRoute) {
         // get heating equipment for this person
@@ -85,7 +94,8 @@ export class ServicingClientComponent implements OnInit {
           this.healthConcerns = data;
         });
       }
-    } else {
+    }
+    else {
       this.router.navigate(['/routes']);
     }
   }
@@ -167,6 +177,12 @@ export class ServicingClientComponent implements OnInit {
     element.scrollIntoView();
   }
 
+  noteAdded(note: Note) {
+    this.notes.push(note);
+    const element = document.querySelector('#notes');
+    element.scrollIntoView();
+  }
+
   goToTop() {
     const element = document.querySelector('#topOfScreen');
     element.scrollIntoView();
@@ -209,6 +225,12 @@ export class ServicingClientComponent implements OnInit {
   removeHealthConcern(id) {
     this.service.removeHealthConcern(id).subscribe(response => {
       this.healthConcerns = this.healthConcerns.filter(w => w.id != id);
+    })
+  }
+
+  removeNote(id: number) {
+    this.service.removeNote(id).subscribe(response => {
+      this.notes = this.notes.filter(w => w.id != id);
     })
   }
 

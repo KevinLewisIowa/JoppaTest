@@ -21,7 +21,8 @@ export class FooterComponent implements OnInit {
   ngOnInit() { }
 
   endRoute() {
-    var routeInstanceId = JSON.parse(window.localStorage.getItem('routeInstance'));
+    let routeInstanceId = JSON.parse(window.localStorage.getItem('routeInstance'));
+    let heatRoute: boolean = JSON.parse(window.localStorage.getItem('heatRoute'));
 
     if (routeInstanceId !== null) {
       this.mainService.getRouteInstance(routeInstanceId).subscribe(data => {
@@ -32,7 +33,13 @@ export class FooterComponent implements OnInit {
       }, error => console.log(error));
     }
 
-    this.router.navigate(['checkoutHeaters']);
+    if (heatRoute) {
+      this.router.navigate(['checkoutHeaters']);
+    }
+    else {
+      window.localStorage.clear();
+      this.router.navigate(['login']);
+    }
   }
 
 }

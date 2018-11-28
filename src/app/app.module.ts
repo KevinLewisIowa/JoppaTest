@@ -60,6 +60,7 @@ import { ClientLocationModalComponent } from './admin-reports/new-clients-report
 import { AdminLoginComponent } from './admin-login/admin-login.component';
 import { MainLoginComponent } from './main-login/main-login.component';
 import { RouteMapComponent } from './route-map/route-map.component';
+import { NotesComponent } from './insert-modals/notes/notes.component';
 
 const reducers = {
   user: MainReducer,
@@ -109,6 +110,7 @@ const reducers = {
     AdminLoginComponent,
     MainLoginComponent,
     RouteMapComponent,
+    NotesComponent,
   ],
   imports: [
     BrowserModule,
