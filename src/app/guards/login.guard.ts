@@ -33,3 +33,28 @@ export class IsLoggedInGuard implements CanActivate {
     return isAuth;
   }
 }
+
+@Injectable()
+export class IsAdminGuard implements CanActivate {
+  private isAuthorized = false;
+  private appAuth = false;
+  private Application;
+
+  constructor(
+    private router: Router
+  ) {}
+
+  canActivate(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ): boolean {
+    const isAdmin = window.sessionStorage.getItem('isAdmin');
+    let isAuth = false;
+    if (isAdmin != 'true') {
+      this.router.navigate(['application-login']);
+    } else {
+        isAuth = true;
+    }
+    return isAuth;
+  }
+}

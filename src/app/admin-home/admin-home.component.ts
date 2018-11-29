@@ -25,4 +25,8 @@ export class AdminHomeComponent implements OnInit {
     this.router.navigate(['routes']);
   }
 
+  openChangeRegularPassword() {
+    this.router.navigate(['changeRegularPassword']);
+  }
+
 }

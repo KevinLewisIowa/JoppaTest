@@ -25,9 +25,10 @@ import { AdminReportsComponent } from './admin-reports/admin-reports.component';
 import { NewClientsReportComponent } from './admin-reports/new-clients-report/new-clients-report.component';
 import { AdminLoginComponent } from './admin-login/admin-login.component';
 import { MainLoginComponent } from './main-login/main-login.component';
-import { IsLoggedInGuard } from 'app/guards/login.guard';
+import { IsLoggedInGuard, IsAdminGuard } from 'app/guards/login.guard';
 import { RouteMapComponent } from './route-map/route-map.component';
 import { RouteSummaryReportComponent } from './admin-reports/route-summary-report/route-summary-report.component';
+import { ChangeRegularPasswordComponent } from 'app/change-regular-password/change-regular-password.component';
 
 const routes: Routes = [
   { path: 'routes', canActivate: [IsLoggedInGuard], component: RoutesComponent },
@@ -43,28 +44,29 @@ const routes: Routes = [
   { path: 'locationEdit/:id', canActivate: [IsLoggedInGuard], component: LocationDetailEditComponent },
   { path: 'createClient', canActivate: [IsLoggedInGuard], component: ClientEditComponent },
   { path: 'clientEdit/:id', canActivate: [IsLoggedInGuard], component: ClientEditComponent },
-  { path: 'admin/reports', canActivate: [IsLoggedInGuard], component: AdminReportsComponent },
-  { path: 'admin/reports/newClients', canActivate: [IsLoggedInGuard], component: NewClientsReportComponent},
-  { path: 'admin/reports/routeUndeliveredItems', canActivate: [IsLoggedInGuard], component: AdminRouteUndeliveredItemsComponent },
-  { path: 'admin/reports/routeMeals', canActivate: [IsLoggedInGuard], component: AdminRouteMealsComponent },
-  { path: 'admin/reports/routeUnfulfilledGoalsNextSteps', canActivate: [IsLoggedInGuard], component: AdminRouteUnfulfilledGoalsNextStepsComponent },
-  { path: 'admin/reports/routeUnfulfilledPrayerRequestsNeeds', canActivate: [IsLoggedInGuard],
+  { path: 'admin/reports', canActivate: [IsLoggedInGuard, IsAdminGuard], component: AdminReportsComponent },
+  { path: 'admin/reports/newClients', canActivate: [IsLoggedInGuard, IsAdminGuard], component: NewClientsReportComponent},
+  { path: 'admin/reports/routeUndeliveredItems', canActivate: [IsLoggedInGuard, IsAdminGuard], component: AdminRouteUndeliveredItemsComponent },
+  { path: 'admin/reports/routeMeals', canActivate: [IsLoggedInGuard, IsAdminGuard], component: AdminRouteMealsComponent },
+  { path: 'admin/reports/routeUnfulfilledGoalsNextSteps', canActivate: [IsLoggedInGuard, IsAdminGuard], component: AdminRouteUnfulfilledGoalsNextStepsComponent },
+  { path: 'admin/reports/routeUnfulfilledPrayerRequestsNeeds', canActivate: [IsLoggedInGuard, IsAdminGuard],
           component: AdminRouteUnfulfilledPrayerRequestsNeedsComponent },
-  { path: 'admin/reports/routeSummary', canActivate: [IsLoggedInGuard], component: RouteSummaryReportComponent},
+  { path: 'admin/reports/routeSummary', canActivate: [IsLoggedInGuard, IsAdminGuard], component: RouteSummaryReportComponent},
   { path: 'locationCampNew', canActivate: [IsLoggedInGuard], component: CreateLocationCampComponent },
   { path: 'serviceClient', canActivate: [IsLoggedInGuard], component: ServicingClientComponent },
-  { path: 'adminHome', canActivate: [IsLoggedInGuard], component: AdminHomeComponent },
+  { path: 'adminHome', canActivate: [IsLoggedInGuard, IsAdminGuard], component: AdminHomeComponent },
   { path: 'adminLogin', canActivate: [IsLoggedInGuard], component: AdminLoginComponent },
-  { path: 'heaterNew', canActivate: [IsLoggedInGuard], component: CreateHeatingUnitComponent },
-  { path: 'admin/reports/heaterListing', canActivate: [IsLoggedInGuard], component: AdminHeaterListingComponent },
+  { path: 'heaterNew', canActivate: [IsLoggedInGuard, IsAdminGuard], component: CreateHeatingUnitComponent },
+  { path: 'admin/reports/heaterListing', canActivate: [IsLoggedInGuard, IsAdminGuard], component: AdminHeaterListingComponent },
   { path: 'volunteerInfo', canActivate: [IsLoggedInGuard], component: VolunteerInfoComponent },
   { path: 'application-login', component: MainLoginComponent},
+  { path: 'changeRegularPassword', canActivate: [IsLoggedInGuard, IsAdminGuard], component: ChangeRegularPasswordComponent},
   { path: '', redirectTo: '/login', pathMatch: 'full' }
 ];
 
 @NgModule({
   imports: [ RouterModule.forRoot(routes) ],
   exports: [ RouterModule ],
-  providers: [IsLoggedInGuard]
+  providers: [IsLoggedInGuard, IsAdminGuard]
 })
 export class AppRoutingModule {}
