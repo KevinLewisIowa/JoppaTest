@@ -18,23 +18,27 @@ export class AdminReportsComponent implements OnInit {
   }
 
   openAdminRouteUndeliveredItems() {
-    this.router.navigate(['/admin/routeUndeliveredItems']);
+    this.router.navigate(['/admin/reports/routeUndeliveredItems']);
   }
 
   openAdminRouteNumberMeals() {
-    this.router.navigate(['/admin/routeMeals']);
+    this.router.navigate(['/admin/reports/routeMeals']);
   }
 
   openAdminRouteUnfulfilledGoalsNextSteps() {
-    this.router.navigate(['/admin/routeUnfulfilledGoalsNextSteps']);
+    this.router.navigate(['/admin/reports/routeUnfulfilledGoalsNextSteps']);
   }
 
   openAdminRouteUnfulfilledPrayerRequestsNeeds() {
-    this.router.navigate(['/admin/routeUnfulfilledPrayerRequestsNeeds']);
+    this.router.navigate(['/admin/reports/routeUnfulfilledPrayerRequestsNeeds']);
   }
 
   openAdminHeaterListing() {
-    this.router.navigate([`/admin/heaterListing`]);
+    this.router.navigate([`/admin/reports/heaterListing`]);
+  }
+
+  openRouteSummaryReport() {
+    this.router.navigate([`/admin/reports/routeSummary`]);
   }
 
 }

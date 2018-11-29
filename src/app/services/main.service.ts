@@ -76,6 +76,26 @@ export class MainService {
     }
   }
 
+  getLatestRouteInstanceInfoForRoute(routeId: number) {
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+
+    return this.http.get(this.apiUrl + `getLatestRouteInstanceInfoForRoute?routeId=${routeId}`)
+      .map(response => response as RouteInstance).catch(err => this.handleError(err));
+  }
+
+  getNotesForRouteInstance(routeInstanceId: number) {
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+
+    return this.http.get(this.apiUrl + `getNotesForRouteInstance?routeInstanceId=${routeInstanceId}`)
+      .map(response => response).catch(err => this.handleError(err));
+  }
+
   insertRoute(theRoute: Route) {
     const myHeader = new HttpHeaders({
       'Content-Type': 'application/json',

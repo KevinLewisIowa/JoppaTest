@@ -36,7 +36,8 @@ export class FooterComponent implements OnInit {
     if (heatRoute) {
       this.router.navigate(['checkoutHeaters']);
     }
-    else {
+    else
+    {
       window.localStorage.clear();
       this.router.navigate(['login']);
     }

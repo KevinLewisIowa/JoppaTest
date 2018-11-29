@@ -76,7 +76,7 @@ export class LeaderSignInComponent implements OnInit {
      this.router.navigate(['checkoutHeaters']);
     }
     else {
-      this.router.navigate(['route', this.routeInstance.route_id]);
+      this.router.navigate(['volunteerInfo']);
     }
   }
 }

@@ -1,0 +1,47 @@
+<div class="card text-center" style="opacity:0.93">
+  <div class="card-header text-center" id="topOfScreen">
+    <button type="button" class="pull-left btn btn-primary" (click)="back()">Back</button>
+    <h2>Route Summary Report</h2>
+  </div>
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-lg-12 col-md-12">
+        <span>Please select a route to see last week's summary.</span><br /><br />
+        <button *ngFor="let route of routes" type="button" class="btn btn-primary" style="margin:0 3px;" (click)="loadRouteInstance(route.id)">{{route.name}}</button>&nbsp;
+      </div>
+    </div>
+    <br />
+    <div class="row">
+      <div class="col-lg-12 col-md-12" *ngIf="routeInstance">
+        <dl>
+          <dt>Leader Name</dt><dd>{{routeInstance.leader_name}}</dd>
+          <dt>Leader Phone</dt><dd>{{routeInstance.leader_phone}}</dd>
+          <dt>Number of Volunteers</dt><dd>{{routeInstance.number_route_members}}</dd>
+          <dt>Start Time</dt><dd>{{routeInstance.start_time | date: 'short'}}</dd>
+          <dt>End Time</dt><dd>{{routeInstance.end_time | date: 'short'}}</dd>
+          <dt>Heat Route</dt><dd>{{routeInstance.heat_route}}</dd>
+          <dt># Seen</dt><dd>{{routeInstance.seen}}</dd>
+          <dt># Serviced</dt><dd>{{routeInstance.serviced}}</dd>
+        </dl>
+      </div>
+      <br />
+      <div class="col-lg-12 col-md-12" *ngIf="notes">
+        <h4>Notes</h4>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Client</th>
+              <th>Note</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let note of notes">
+              <td>{{note.preferred_name}}</td>
+              <td>{{note.note}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
