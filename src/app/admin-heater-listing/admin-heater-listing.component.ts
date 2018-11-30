@@ -15,7 +15,17 @@ export class AdminHeaterListingComponent implements OnInit {
 
   ngOnInit() {
     this.service.getHeaterListing().subscribe(data => {
-      this.heaterList = data, error => {
+      this.heaterList = data.sort(function(heater1, heater2) {
+        if (heater1.serial_number < heater2.serial_number) {
+          return -1;
+        }
+        else if (heater1.serial_number > heater2.serial_number) {
+          return 1;
+        }
+        else {
+          return 0;
+        }
+      }), error => {
         console.log(error);
       }
     });

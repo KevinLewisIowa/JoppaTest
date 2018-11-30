@@ -23,6 +23,8 @@ export class RouteSummaryReportComponent implements OnInit {
   }
 
   loadRouteInstance(routeId: number) {
+    this.routeInstance = undefined;
+    this.notes = undefined;
     this.mainService.getLatestRouteInstanceInfoForRoute(routeId).subscribe(routeInstance => {
       if (routeInstance[0] !== undefined) {
         this.routeInstance = routeInstance[0];

@@ -30,7 +30,17 @@ export class CheckoutHeatersComponent implements OnInit {
     }
 
     this.mainService.getAvailableHeaters(routeInstanceId).subscribe(heaterList => {
-      this.heaters = heaterList;
+      this.heaters = heaterList.sort(function(heater1, heater2) {
+        if (heater1.serial_number < heater2.serial_number) {
+          return -1;
+        }
+        else if (heater1.serial_number > heater2.serial_number) {
+          return 1;
+        }
+        else {
+          return 0;
+        }
+      });
     }, error => console.log(error));
 
     if (JSON.parse(window.localStorage.getItem('tankHoseInteractionId')) !== null) {

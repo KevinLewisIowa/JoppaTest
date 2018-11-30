@@ -16,12 +16,14 @@
         <thead>
           <tr>
             <th class="text-center">Name</th>
+            <th class="text-center">Phone</th>
             <th class="text-center">Last Interaction</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let client of clients" (click)="viewClient(client)" class="client-row">
             <td class="text-center">{{client.preferred_name}}</td>
+            <td class="text-center">{{client.phone}}</td>
             <td class="text-center">{{client.updated_at | date: 'shortDate'}}</td>
           </tr>
         </tbody>

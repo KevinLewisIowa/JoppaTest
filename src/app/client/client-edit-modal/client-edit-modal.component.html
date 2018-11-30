@@ -69,13 +69,11 @@
     <label>Inactive Description: </label>
     <input type="text" placeholder="inactive description" formControlName="inactive_description"/>
   </div>
-  <div class="col-md-12">
-    <button type="button" [disabled]="!clientForm.valid" (click)="submitRoute(); c('');">Submit Client</button>
-  </div>
 </div>
 </form>
     </div>
   <div class="modal-footer">
+    <button type="button" class="btn btn-primary" [disabled]="!clientForm.valid" (click)="submitRoute(); c('');">Submit Client</button>
     <button type="button" class="btn btn-primary" (click)="c('Close click')">Close</button>
   </div>
 </ng-template>
