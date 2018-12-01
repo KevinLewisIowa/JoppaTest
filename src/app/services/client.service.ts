@@ -29,9 +29,11 @@ export class ClientService {
   online = true;
   // private baseUrl = 'https://hidden-springs-63744.herokuapp.com/';  // URL to web api
   // private apiUrl = 'https://hidden-springs-63744.herokuapp.com/';
-  private baseUrl = 'https://joppa-api-test.herokuapp.com/';
+  private baseUrl = 'https://joppa-api-prod.herokuapp.com/';
 
-  constructor(private http: HttpClient, private store: Store<IMainStore>, private router: Router) { }
+  constructor(private http: HttpClient, private store: Store<IMainStore>, private router: Router) { 
+    console.log(this.baseUrl);
+  }
   getClientLikes(id) {
     const myHeader = new HttpHeaders({
       'Content-Type': 'application/json',
