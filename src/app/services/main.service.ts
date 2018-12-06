@@ -25,9 +25,8 @@ export class MainService {
   theHeader = new HttpHeaders().set('Content-Type', 'application/json');
   online = true;
   private headers = new Headers({'Content-Type': 'application/json'});
-  private baseUrl = 'api/';  // URL to web api
   // private apiUrl = 'https://hidden-springs-63744.herokuapp.com/';
-  private apiUrl = 'https://joppa-api-prod.herokuapp.com/';
+  private apiUrl = 'https://joppa-api-test.herokuapp.com/';
 
   constructor(private http: HttpClient, private store: Store<IMainStore>, private router: Router) { 
     console.log(this.apiUrl);
@@ -37,7 +36,7 @@ export class MainService {
       'Content-Type': 'application/json',
       'Authorization': window.sessionStorage.getItem('apiToken')
     });
-    return this.http.get(this.baseUrl + `routes`, {headers: myHeader})
+    return this.http.get(this.apiUrl + `routes`, {headers: myHeader})
     .map((res: any) => {
       if (res.message === 'invalid-token') {
         window.sessionStorage.removeItem('apiToken');
@@ -72,7 +71,7 @@ export class MainService {
       })
         .catch(err => this.handleError(err));
     } else {
-      return this.http.get(this.baseUrl + `routes`, {headers: myHeader})
+      return this.http.get(this.apiUrl + `routes`, {headers: myHeader})
                .map(response => response)
                .catch(this.handleError);
     }
