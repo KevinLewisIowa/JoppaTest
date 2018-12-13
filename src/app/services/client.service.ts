@@ -215,21 +215,6 @@ export class ClientService {
                           });
   }
 
-  getAvailableHeaters() {
-    const myHeader = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': window.sessionStorage.getItem('apiToken')
-    });
-    return this.http.get(this.baseUrl + `getAvailableHeaters`, {headers: myHeader})
-    .map((res: any) => {
-      if (res.message === 'invalid-token') {
-        window.sessionStorage.removeItem('apiToken');
-        this.router.navigate(['/application-login']);
-      }
-      return res;
-    });
-  }
-
   getCheckedOutHeaters(id:number) {
     const myHeader = new HttpHeaders({
       'Content-Type': 'application/json',

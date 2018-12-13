@@ -13,12 +13,16 @@ import { RouteInstanceHeaterInteraction } from 'app/models/route-instance-heater
 export class FooterComponent implements OnInit {
   currentYear: number = new Date().getFullYear();
   routeInstance: RouteInstance = new RouteInstance();
+  isAdmin: boolean;
 
   constructor(private mainService: MainService, private router: Router) {
     
   }
 
-  ngOnInit() { }
+  ngOnInit() { 
+    this.isAdmin = JSON.parse(window.sessionStorage.getItem('isAdmin'));
+    console.log(this.isAdmin);
+  }
 
   endRoute() {
     let routeInstanceId = JSON.parse(window.localStorage.getItem('routeInstance'));
@@ -33,7 +37,7 @@ export class FooterComponent implements OnInit {
       }, error => console.log(error));
     }
 
-    if (heatRoute) {
+    if (heatRoute && !this.isAdmin) {
       this.router.navigate(['checkoutHeaters']);
     }
     else
@@ -41,6 +45,11 @@ export class FooterComponent implements OnInit {
       window.localStorage.clear();
       this.router.navigate(['login']);
     }
+  }
+
+  goToAdminHome() {
+    window.localStorage.clear();
+    this.router.navigate(['adminHome']);
   }
 
 }

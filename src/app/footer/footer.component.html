@@ -7,5 +7,6 @@
     </div>
     <div style="text-align:center;">
         <button type="button" style="line-height:1em" class="btn btn-primary" (click)="endRoute()">End Route</button>
+        <button type="button" *ngIf="isAdmin" style="line-height:1em" class="btn btn-primary" (click)="goToAdminHome()">Admin Home</button>
     </div>
 </footer>

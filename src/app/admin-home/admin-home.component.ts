@@ -25,6 +25,11 @@ export class AdminHomeComponent implements OnInit {
     this.router.navigate(['routes']);
   }
 
+  goToHeatRoutes() {
+    window.localStorage.setItem('heatRoute', JSON.stringify(true));
+    this.router.navigate(['routes']);
+  }
+
   openChangeRegularPassword() {
     this.router.navigate(['changeRegularPassword']);
   }
