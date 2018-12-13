@@ -44,9 +44,11 @@ export class CheckoutHeatersComponent implements OnInit {
     }, error => console.log(error));
 
     if (JSON.parse(window.localStorage.getItem('tankHoseInteractionId')) !== null) {
-      this.checkedOutRouteInstanceHeaters = JSON.parse(window.localStorage.getItem('checkedOutHeaters'));
-      if (confirm('Please press OK to check in heating equipment at the end of the route or Cancel to continue checking out heaters.')) {
-        this.isEndOfRoute = true;
+      if (JSON.parse(window.localStorage.getItem('checkedOutHeaters')) !== null) {
+        this.checkedOutRouteInstanceHeaters = JSON.parse(window.localStorage.getItem('checkedOutHeaters'));
+        if (confirm('Please press OK to check in heating equipment at the end of the route or Cancel to continue checking out heaters.')) {
+          this.isEndOfRoute = true;
+        }
       }
 
       this.isInitialCheckout = false;
