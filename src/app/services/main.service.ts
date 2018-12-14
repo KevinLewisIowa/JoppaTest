@@ -567,6 +567,21 @@ export class MainService {
     }).catch(error => this.handleError(error));
   }
 
+  checkInAllHeaters() {
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem('apiToken')
+    });
+    return this.http.get(this.apiUrl + `checkInAllHeaters`, {headers: myHeader})
+    .map((res: any) => {
+      if (res.message === 'invalid-token') {
+        window.sessionStorage.removeItem('apiToken');
+        this.router.navigate(['/application-login']);
+      }
+      return res;
+    }).catch(error => this.handleError(error));
+  }
+
   getAvailableHeaters(routeInstanceId: number) {
     const myHeader = new HttpHeaders({
       'Content-Type': 'application/json',
