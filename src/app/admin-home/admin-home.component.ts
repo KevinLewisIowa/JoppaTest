@@ -25,6 +25,10 @@ export class AdminHomeComponent implements OnInit {
     this.router.navigate(['routes']);
   }
 
+  checkInAllHeaters() {
+    this.router.navigate(['/admin/checkInAllHeaters']);
+  }
+
   goToHeatRoutes() {
     window.localStorage.setItem('heatRoute', JSON.stringify(true));
     this.router.navigate(['routes']);

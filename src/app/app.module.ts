@@ -63,6 +63,7 @@ import { RouteMapComponent } from './route-map/route-map.component';
 import { NotesComponent } from './insert-modals/notes/notes.component';
 import { RouteSummaryReportComponent } from './admin-reports/route-summary-report/route-summary-report.component';
 import { ChangeRegularPasswordComponent } from './change-regular-password/change-regular-password.component';
+import { AdminCheckInComponent } from './admin-check-in/admin-check-in.component';
 
 const reducers = {
   user: MainReducer,
@@ -115,6 +116,7 @@ const reducers = {
     NotesComponent,
     RouteSummaryReportComponent,
     ChangeRegularPasswordComponent,
+    AdminCheckInComponent,
   ],
   imports: [
     BrowserModule,

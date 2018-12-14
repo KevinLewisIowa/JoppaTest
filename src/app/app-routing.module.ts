@@ -29,6 +29,7 @@ import { IsLoggedInGuard, IsAdminGuard } from 'app/guards/login.guard';
 import { RouteMapComponent } from './route-map/route-map.component';
 import { RouteSummaryReportComponent } from './admin-reports/route-summary-report/route-summary-report.component';
 import { ChangeRegularPasswordComponent } from 'app/change-regular-password/change-regular-password.component';
+import { AdminCheckInComponent } from './admin-check-in/admin-check-in.component';
 
 const routes: Routes = [
   { path: 'routes', canActivate: [IsLoggedInGuard], component: RoutesComponent },
@@ -52,6 +53,7 @@ const routes: Routes = [
   { path: 'admin/reports/routeUnfulfilledPrayerRequestsNeeds', canActivate: [IsLoggedInGuard, IsAdminGuard],
           component: AdminRouteUnfulfilledPrayerRequestsNeedsComponent },
   { path: 'admin/reports/routeSummary', canActivate: [IsLoggedInGuard, IsAdminGuard], component: RouteSummaryReportComponent},
+  { path: 'admin/checkInAllHeaters', canActivate: [IsLoggedInGuard, IsAdminGuard], component: AdminCheckInComponent},
   { path: 'locationCampNew', canActivate: [IsLoggedInGuard], component: CreateLocationCampComponent },
   { path: 'serviceClient', canActivate: [IsLoggedInGuard], component: ServicingClientComponent },
   { path: 'adminHome', canActivate: [IsLoggedInGuard, IsAdminGuard], component: AdminHomeComponent },
