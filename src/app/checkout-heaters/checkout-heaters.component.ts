@@ -50,7 +50,10 @@ export class CheckoutHeatersComponent implements OnInit {
           this.isEndOfRoute = true;
         }
       }
-
+      else {
+        this.isEndOfRoute = true;
+      }
+      
       this.isInitialCheckout = false;
     }
 
