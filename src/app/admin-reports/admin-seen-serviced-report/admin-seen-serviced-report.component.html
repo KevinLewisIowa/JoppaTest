@@ -1,0 +1,35 @@
+<div class="card text-center" style="opacity:0.93">
+  <div class="card-header">
+    <button routerLink="/admin/reports" class="btn btn-primary" type="button">Back</button>
+    <h2>Seen and Serviced Report</h2>
+  </div>
+  <div class="panel-body">
+    <div>
+      From Date: <input type="date" value="fromDate" [(ngModel)]="fromDate" />
+      To Date: <input type="date" value="toDate" [(ngModel)]="toDate" />
+      <button type="button" class="btn btn-primary" (click)="searchSeenAndServiced()">Search</button>
+    </div>
+    <table class="table" id="seenServiced" *ngIf=seenServicedRecords>
+      <thead>
+        <tr>
+          <th>Route</th>
+          <th>Client Id</th>
+          <th>Client Name</th>
+          <th>Seen</th>
+          <th>Serviced</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let record of seenServicedRecords">
+          <td>{{record.name}}</td>
+          <td>{{record.client_id}}</td>
+          <td>{{record.preferred_name}}</td>
+          <td>{{record.was_seen}}</td>
+          <td>{{record.serviced}}</td>
+          <td>{{record.created_at | date:'short'}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
