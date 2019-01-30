@@ -15,7 +15,7 @@ export class AdminLoginComponent implements OnInit {
   constructor(private fb: FormBuilder, private router:Router) { }
 
   ngOnInit() {
-    let isAdmin: boolean = JSON.parse(window.sessionStorage.getItem('isAdmin'))
+    let isAdmin: boolean = JSON.parse(window.localStorage.getItem('isAdmin'))
     if (isAdmin) {
       this.router.navigate(['adminHome']);
     }
@@ -35,7 +35,7 @@ export class AdminLoginComponent implements OnInit {
     let passwordAttempt: string = this.adminPasswordForm.get('admin_password').value;
     
     if (passwordAttempt === "J0ppa 321") {
-      window.sessionStorage.setItem('isAdmin', JSON.stringify(true));
+      window.localStorage.setItem('isAdmin', JSON.stringify(true));
       this.router.navigate(['adminHome']);
     }
     else {

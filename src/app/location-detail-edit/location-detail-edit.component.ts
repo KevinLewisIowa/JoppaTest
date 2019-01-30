@@ -25,7 +25,7 @@ export class LocationDetailEditComponent implements OnInit {
       if (data != null && data.selectedRoute != null) {
         this.theRoute = data.selectedRoute;
       } else {
-        var routeId = window.sessionStorage.getItem('routeId');
+        var routeId = window.localStorage.getItem('routeId');
         this.mainService.getRoute(routeId).subscribe(data => {
           this.theRoute = data;
           this.store.dispatch({type: 'ROUTE_SELECTED', payload: data})
@@ -45,12 +45,12 @@ export class LocationDetailEditComponent implements OnInit {
   }
 
   back() {
-    var routeId = window.sessionStorage.getItem('routeId');
+    var routeId = window.localStorage.getItem('routeId');
     this.router.navigate([`route/${routeId}`]);
   }
 
   submitLocation() {
-    var routeId = window.sessionStorage.getItem('routeId');
+    var routeId = window.localStorage.getItem('routeId');
     if (routeId == null) {
       this.router.navigate(['routes']);
     }

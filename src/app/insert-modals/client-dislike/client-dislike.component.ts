@@ -24,7 +24,7 @@ export class ClientDislikeComponent implements OnInit {
 
   submitDislike() {
     const dislike = new ClientDislike();
-    const clientId = sessionStorage.getItem('selectedClient');
+    const clientId = localStorage.getItem('selectedClient');
     if (this.description != null && !isNaN(Number(clientId))) {
       dislike.description = this.description;
       dislike.client_id = Number(clientId);

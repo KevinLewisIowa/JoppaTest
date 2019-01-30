@@ -32,8 +32,8 @@ export class MainLoginComponent implements OnInit {
     this.invalidText = false;
     this.service.attemptLogin(passwordAttempt).subscribe((data: any) => {
       if (data.token != null && data.token !== 'failedLogin') {
-        window.sessionStorage.setItem('apiToken', data.token);
-        window.sessionStorage.setItem('isAdmin', JSON.stringify(data.admin));
+        window.localStorage.setItem('apiToken', data.token);
+        window.localStorage.setItem('isAdmin', JSON.stringify(data.admin));
         this.router.navigate(['login']);
       } else {
         this.invalidText = true;

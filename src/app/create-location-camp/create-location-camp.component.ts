@@ -25,7 +25,7 @@ export class CreateLocationCampComponent implements OnInit {
       if (data != null && data.selectedLocation != null) {
         this.location = data.selectedLocation;
       } else {
-        var locationId = window.sessionStorage.getItem('locationId');
+        var locationId = window.localStorage.getItem('locationId');
         this.mainService.getRouteLocation(locationId).subscribe(data => {
           this.location = data;
           this.store.dispatch({type: 'LOCATION_SELECTED', payload: data})
@@ -41,12 +41,12 @@ export class CreateLocationCampComponent implements OnInit {
   }
 
   back() {
-    var locationId = window.sessionStorage.getItem('locationId');
+    var locationId = window.localStorage.getItem('locationId');
     this.router.navigate([`location/${locationId}`]);
   }
 
   submitLocationCamp() {
-    var locationId = window.sessionStorage.getItem('locationId');
+    var locationId = window.localStorage.getItem('locationId');
     if (locationId == null) {
       this.router.navigate(['routes']);
     }

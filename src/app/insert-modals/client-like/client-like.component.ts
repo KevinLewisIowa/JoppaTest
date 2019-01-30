@@ -23,7 +23,7 @@ export class ClientLikeComponent implements OnInit {
 
   submitLike() {
     const like = new ClientLike();
-    const clientId = sessionStorage.getItem('selectedClient');
+    const clientId = localStorage.getItem('selectedClient');
     if (this.description != null && !isNaN(Number(clientId))) {
       like.description = this.description;
       like.client_id = Number(clientId);

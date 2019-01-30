@@ -23,7 +23,7 @@ export class GoalsStepsComponent implements OnInit {
 
   submitGoal() {
     const goal = new GoalsNextStep();
-    const clientId = sessionStorage.getItem('selectedClient');
+    const clientId = localStorage.getItem('selectedClient');
     if (this.description != null && !isNaN(Number(clientId))) {
       goal.description = this.description;
       goal.client_id = Number(clientId);

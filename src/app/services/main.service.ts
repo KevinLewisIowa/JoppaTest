@@ -34,12 +34,12 @@ export class MainService {
   getRoutes() {
     const myHeader = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': window.sessionStorage.getItem('apiToken')
+      'Authorization': window.localStorage.getItem('apiToken')
     });
     return this.http.get(this.apiUrl + `routes`, {headers: myHeader})
     .map((res: any) => {
       if (res.message === 'invalid-token') {
-        window.sessionStorage.removeItem('apiToken');
+        window.localStorage.removeItem('apiToken');
         this.router.navigate(['/application-login']);
       }
       return res;
@@ -50,7 +50,7 @@ export class MainService {
   attemptLogin(thePassword) {
     const myHeader = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': window.sessionStorage.getItem('apiToken')
+      'Authorization': window.localStorage.getItem('apiToken')
     });
     return this.http.get(this.apiUrl + `attemptLogin?passWrd=${thePassword}`).map(response => { return response; });
   }
@@ -58,13 +58,13 @@ export class MainService {
   getTheRoutes(): Observable<Route[]>{
     const myHeader = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': window.sessionStorage.getItem('apiToken')
+      'Authorization': window.localStorage.getItem('apiToken')
     });
     if (this.online) {
       return this.http.get(this.apiUrl + `routes`, {headers: myHeader})
       .map((res: any) => {
         if (res.message === 'invalid-token') {
-          window.sessionStorage.removeItem('apiToken');
+          window.localStorage.removeItem('apiToken');
           this.router.navigate(['/application-login']);
         }
         return res;
@@ -80,7 +80,7 @@ export class MainService {
   getLatestRouteInstanceInfoForRoute(routeId: number) {
     const myHeader = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': window.sessionStorage.getItem('apiToken')
+      'Authorization': window.localStorage.getItem('apiToken')
     });
 
     return this.http.get(this.apiUrl + `getLatestRouteInstanceInfoForRoute?routeId=${routeId}`)
@@ -90,7 +90,7 @@ export class MainService {
   getNotesForRouteInstance(routeInstanceId: number) {
     const myHeader = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': window.sessionStorage.getItem('apiToken')
+      'Authorization': window.localStorage.getItem('apiToken')
     });
 
     return this.http.get(this.apiUrl + `getNotesForRouteInstance?routeInstanceId=${routeInstanceId}`)
@@ -100,12 +100,12 @@ export class MainService {
   insertRoute(theRoute: Route) {
     const myHeader = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': window.sessionStorage.getItem('apiToken')
+      'Authorization': window.localStorage.getItem('apiToken')
     });
     return this.http.post(this.apiUrl + `routes`, {route: theRoute}, {headers: myHeader})
     .map((res: any) => {
       if (res.message === 'invalid-token') {
-        window.sessionStorage.removeItem('apiToken');
+        window.localStorage.removeItem('apiToken');
         this.router.navigate(['/application-login']);
       }
       return res;
@@ -115,11 +115,11 @@ export class MainService {
   setNewPassword(thePassword) {
     const myHeader = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': window.sessionStorage.getItem('apiToken')
+      'Authorization': window.localStorage.getItem('apiToken')
     });
     return this.http.get(this.apiUrl + `setNewPassword?pswrd=${thePassword}`, {headers: myHeader}).map((res: any) => {
       if (res.message === 'invalid-token') {
-        window.sessionStorage.removeItem('apiToken');
+        window.localStorage.removeItem('apiToken');
         this.router.navigate(['/application-login']);
       }
       return res;
@@ -129,12 +129,12 @@ export class MainService {
   insertLocation(theLocation: Location) {
     const myHeader = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': window.sessionStorage.getItem('apiToken')
+      'Authorization': window.localStorage.getItem('apiToken')
     });
     return this.http.post(this.apiUrl + `locations`, {location: theLocation}, {headers: myHeader})
     .map((res: any) => {
       if (res.message === 'invalid-token') {
-        window.sessionStorage.removeItem('apiToken');
+        window.localStorage.removeItem('apiToken');
         this.router.navigate(['/application-login']);
       }
       return res;
@@ -145,12 +145,12 @@ export class MainService {
   insertRouteInstanceTankHoseInteraction(theRouteInstanceTanksHoses: RouteInstanceTankHoseInteraction) {
     const myHeader = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': window.sessionStorage.getItem('apiToken')
+      'Authorization': window.localStorage.getItem('apiToken')
     });
     return this.http.post(this.apiUrl + `route_instance_tank_hose_interactions`, {route_instance_tank_hose_interaction: theRouteInstanceTanksHoses}, {headers: myHeader})
     .map((res: any) => {
       if (res.message === 'invalid-token') {
-        window.sessionStorage.removeItem('apiToken');
+        window.localStorage.removeItem('apiToken');
         this.router.navigate(['/application-login']);
       }
       return res;
@@ -161,12 +161,12 @@ export class MainService {
   insertRouteInstance(routeInstance: RouteInstance): any {
     const myHeader = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': window.sessionStorage.getItem('apiToken')
+      'Authorization': window.localStorage.getItem('apiToken')
     });
     return this.http.post(this.apiUrl + `route_instances`, {route_instance: routeInstance}, {headers: myHeader})
     .map((res: any) => {
       if (res.message === 'invalid-token') {
-        window.sessionStorage.removeItem('apiToken');
+        window.localStorage.removeItem('apiToken');
         this.router.navigate(['/application-login']);
       }
       return res;
@@ -177,12 +177,12 @@ export class MainService {
   insertLocationCamp(theLocationCamp: LocationCamp) {
     const myHeader = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': window.sessionStorage.getItem('apiToken')
+      'Authorization': window.localStorage.getItem('apiToken')
     });
     return this.http.post(this.apiUrl + `location_camps`, {location_camp: theLocationCamp}, {headers: myHeader})
     .map((res: any) => {
       if (res.message === 'invalid-token') {
-        window.sessionStorage.removeItem('apiToken');
+        window.localStorage.removeItem('apiToken');
         this.router.navigate(['/application-login']);
       }
       return res;
@@ -192,13 +192,13 @@ export class MainService {
   checkoutHeater(theRouteInstanceHeaterInteraction: RouteInstanceHeaterInteraction) {
     const myHeader = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': window.sessionStorage.getItem('apiToken')
+      'Authorization': window.localStorage.getItem('apiToken')
     });
     return this.http.post(this.apiUrl + `route_instance_heater_interactions`,
                 {route_instance_heater_interaction: theRouteInstanceHeaterInteraction}, {headers: myHeader})
                 .map((res: any) => {
                   if (res.message === 'invalid-token') {
-                    window.sessionStorage.removeItem('apiToken');
+                    window.localStorage.removeItem('apiToken');
                     this.router.navigate(['/application-login']);
                   }
                   return res;
@@ -208,12 +208,12 @@ export class MainService {
   updateLocationCamp(theLocationCamp: LocationCamp) {
     const myHeader = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': window.sessionStorage.getItem('apiToken')
+      'Authorization': window.localStorage.getItem('apiToken')
     });
     return this.http.put(this.apiUrl + `location_camps/${theLocationCamp.id}`, {location_camp: theLocationCamp}, {headers: myHeader})
     .map((res: any) => {
       if (res.message === 'invalid-token') {
-        window.sessionStorage.removeItem('apiToken');
+        window.localStorage.removeItem('apiToken');
         this.router.navigate(['/application-login']);
       }
       return res;
@@ -223,12 +223,12 @@ export class MainService {
   updateLocation(theLocation: Location) {
     const myHeader = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': window.sessionStorage.getItem('apiToken')
+      'Authorization': window.localStorage.getItem('apiToken')
     });
     return this.http.put(this.apiUrl + `locations/${theLocation.id}`, {location: theLocation}, {headers: myHeader})
     .map((res: any) => {
       if (res.message === 'invalid-token') {
-        window.sessionStorage.removeItem('apiToken');
+        window.localStorage.removeItem('apiToken');
         this.router.navigate(['/application-login']);
       }
       return res;
@@ -238,13 +238,13 @@ export class MainService {
   updateRouteInstance(theRouteInstance: RouteInstance) {
     const myHeader = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': window.sessionStorage.getItem('apiToken')
+      'Authorization': window.localStorage.getItem('apiToken')
     });
     return this.http.patch(this.apiUrl + `route_instances/${theRouteInstance.id}`,
                     {route_instance: theRouteInstance}, {headers: myHeader})
                     .map((res: any) => {
                       if (res.message === 'invalid-token') {
-                        window.sessionStorage.removeItem('apiToken');
+                        window.localStorage.removeItem('apiToken');
                         this.router.navigate(['/application-login']);
                       }
                       return res;
@@ -254,13 +254,13 @@ export class MainService {
   updateRouteInstanceTankHoseInteraction(theRouteInstanceTanksHoses: RouteInstanceTankHoseInteraction) {
     const myHeader = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': window.sessionStorage.getItem('apiToken')
+      'Authorization': window.localStorage.getItem('apiToken')
     });
     return this.http.patch(this.apiUrl + `route_instance_tank_hose_interactions/${theRouteInstanceTanksHoses.id}`,
                     {route_instance_tank_hose_interaction: theRouteInstanceTanksHoses}, {headers: myHeader})
                     .map((res: any) => {
                       if (res.message === 'invalid-token') {
-                        window.sessionStorage.removeItem('apiToken');
+                        window.localStorage.removeItem('apiToken');
                         this.router.navigate(['/application-login']);
                       }
                       return res;
@@ -270,13 +270,13 @@ export class MainService {
   updateRouteInstanceHeaterInteraction(theRouteInstanceHeaterInteraction: RouteInstanceHeaterInteraction) {
     const myHeader = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': window.sessionStorage.getItem('apiToken')
+      'Authorization': window.localStorage.getItem('apiToken')
     });
     return this.http.patch(this.apiUrl + `route_instance_heater_interactions/${theRouteInstanceHeaterInteraction.id}`,
             {route_instance_heater_interaction: theRouteInstanceHeaterInteraction}, {headers: myHeader})
             .map((res: any) => {
               if (res.message === 'invalid-token') {
-                window.sessionStorage.removeItem('apiToken');
+                window.localStorage.removeItem('apiToken');
                 this.router.navigate(['/application-login']);
               }
               return res;
@@ -286,12 +286,12 @@ export class MainService {
   isHeaterCheckedOutOnOtherRoute(heaterId: number) {
     const myHeader = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': window.sessionStorage.getItem('apiToken')
+      'Authorization': window.localStorage.getItem('apiToken')
     });
     return this.http.get(this.apiUrl + `isHeaterCheckedOutOnOtherRoute?heaterId=${heaterId}`, {headers: myHeader})
     .map((res: any) => {
       if (res.message === 'invalid-token') {
-        window.sessionStorage.removeItem('apiToken');
+        window.localStorage.removeItem('apiToken');
         this.router.navigate(['/application-login']);
       }
       return res;
@@ -301,12 +301,12 @@ export class MainService {
   insertHeater(theHeater: Heater) {
     const myHeader = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': window.sessionStorage.getItem('apiToken')
+      'Authorization': window.localStorage.getItem('apiToken')
     });
     return this.http.post(this.apiUrl + `heaters`, {heater: theHeater}, {headers: myHeader})
     .map((res: any) => {
       if (res.message === 'invalid-token') {
-        window.sessionStorage.removeItem('apiToken');
+        window.localStorage.removeItem('apiToken');
         this.router.navigate(['/application-login']);
       }
       return res;
@@ -316,13 +316,13 @@ export class MainService {
   getRoute(id): Observable<Route>{
     const myHeader = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': window.sessionStorage.getItem('apiToken')
+      'Authorization': window.localStorage.getItem('apiToken')
     });
     if (this.online){
       return this.http.get(this.apiUrl + `routes/${id}`, {headers: myHeader})
       .map((res: any) => {
         if (res.message === 'invalid-token') {
-          window.sessionStorage.removeItem('apiToken');
+          window.localStorage.removeItem('apiToken');
           this.router.navigate(['/application-login']);
         }
         return res;
@@ -336,12 +336,12 @@ export class MainService {
   getLocationCamps(id) {
     const myHeader = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': window.sessionStorage.getItem('apiToken')
+      'Authorization': window.localStorage.getItem('apiToken')
     });
     return this.http.get(this.apiUrl + `getCampsForLocation?locationId=${id}`, {headers: myHeader})
     .map((res: any) => {
       if (res.message === 'invalid-token') {
-        window.sessionStorage.removeItem('apiToken');
+        window.localStorage.removeItem('apiToken');
         this.router.navigate(['/application-login']);
       }
       return res;
@@ -351,12 +351,12 @@ export class MainService {
   getRouteInstance(id:number) {
     const myHeader = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': window.sessionStorage.getItem('apiToken')
+      'Authorization': window.localStorage.getItem('apiToken')
     });
     return this.http.get(this.apiUrl + `route_instances/${id}`, {headers: myHeader})
     .map((res: any) => {
       if (res.message === 'invalid-token') {
-        window.sessionStorage.removeItem('apiToken');
+        window.localStorage.removeItem('apiToken');
         this.router.navigate(['/application-login']);
       }
       return res;
@@ -367,12 +367,12 @@ export class MainService {
   getCheckedOutHeaters(id:number) {
     const myHeader = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': window.sessionStorage.getItem('apiToken')
+      'Authorization': window.localStorage.getItem('apiToken')
     });
     return this.http.get(this.apiUrl + `getCheckedOutHeaters?routeInstanceId=${id}`, {headers: myHeader})
     .map((res: any) => {
       if (res.message === 'invalid-token') {
-        window.sessionStorage.removeItem('apiToken');
+        window.localStorage.removeItem('apiToken');
         this.router.navigate(['/application-login']);
       }
       return res;
@@ -383,13 +383,13 @@ export class MainService {
   getClientsForLocationCamp(id) {
     const myHeader = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': window.sessionStorage.getItem('apiToken')
+      'Authorization': window.localStorage.getItem('apiToken')
     });
     if (this.online) {
       return this.http.get(this.apiUrl + `getClientsForLocationCampC?locationCampId=${id}`, {headers: myHeader})
       .map((res: any) => {
         if (res.message === 'invalid-token') {
-          window.sessionStorage.removeItem('apiToken');
+          window.localStorage.removeItem('apiToken');
           this.router.navigate(['/application-login']);
         }
         return res;
@@ -403,12 +403,12 @@ export class MainService {
   getRouteLocations(id): Observable<Location[]> {
     const myHeader = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': window.sessionStorage.getItem('apiToken')
+      'Authorization': window.localStorage.getItem('apiToken')
     });
       return this.http.get(this.apiUrl + `locationsForRoute?routeId=${id}`, {headers: myHeader})
       .map((res: any) => {
         if (res.message === 'invalid-token') {
-          window.sessionStorage.removeItem('apiToken');
+          window.localStorage.removeItem('apiToken');
           this.router.navigate(['/application-login']);
         }
         return res;
@@ -419,12 +419,12 @@ export class MainService {
   getRouteLocationsLongLat(id) {
     const myHeader = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': window.sessionStorage.getItem('apiToken')
+      'Authorization': window.localStorage.getItem('apiToken')
     });
       return this.http.get(this.apiUrl + `getRouteLocationsLongLat?routeId=${id}`, {headers: myHeader})
       .map((res: any) => {
         if (res.message === 'invalid-token') {
-          window.sessionStorage.removeItem('apiToken');
+          window.localStorage.removeItem('apiToken');
           this.router.navigate(['/application-login']);
         }
         return res;
@@ -435,12 +435,12 @@ export class MainService {
   getRouteLocation(id) {
     const myHeader = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': window.sessionStorage.getItem('apiToken')
+      'Authorization': window.localStorage.getItem('apiToken')
     });
     return this.http.get(this.apiUrl + `locations/${id}`, {headers: myHeader})
     .map((res: any) => {
       if (res.message === 'invalid-token') {
-        window.sessionStorage.removeItem('apiToken');
+        window.localStorage.removeItem('apiToken');
         this.router.navigate(['/application-login']);
       }
       return res;
@@ -450,12 +450,12 @@ export class MainService {
   getLocationCamp(id) {
     const myHeader = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': window.sessionStorage.getItem('apiToken')
+      'Authorization': window.localStorage.getItem('apiToken')
     });
     return this.http.get(this.apiUrl + `location_camps/${id}`, {headers: myHeader})
     .map((res: any) => {
       if (res.message === 'invalid-token') {
-        window.sessionStorage.removeItem('apiToken');
+        window.localStorage.removeItem('apiToken');
         this.router.navigate(['/application-login']);
       }
       return res;
@@ -465,12 +465,12 @@ export class MainService {
   getAdminRouteNumberMeals() {
     const myHeader = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': window.sessionStorage.getItem('apiToken')
+      'Authorization': window.localStorage.getItem('apiToken')
     });
     return this.http.get(this.apiUrl + `getAdminRouteNumberMeals`, {headers: myHeader})
     .map((res: any) => {
       if (res.message === 'invalid-token') {
-        window.sessionStorage.removeItem('apiToken');
+        window.localStorage.removeItem('apiToken');
         this.router.navigate(['/application-login']);
       }
       return res;
@@ -480,12 +480,12 @@ export class MainService {
   getAdminRouteUndeliveredItems() {
     const myHeader = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': window.sessionStorage.getItem('apiToken')
+      'Authorization': window.localStorage.getItem('apiToken')
     });
     return this.http.get(this.apiUrl + `getAdminRouteUndeliveredItems`, {headers: myHeader})
     .map((res: any) => {
       if (res.message === 'invalid-token') {
-        window.sessionStorage.removeItem('apiToken');
+        window.localStorage.removeItem('apiToken');
         this.router.navigate(['/application-login']);
       }
       return res;
@@ -495,12 +495,12 @@ export class MainService {
   getAdminRouteUnfulfilledGoalsNextSteps() {
     const myHeader = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': window.sessionStorage.getItem('apiToken')
+      'Authorization': window.localStorage.getItem('apiToken')
     });
     return this.http.get(this.apiUrl + `getAdminRouteUnfulfilledGoalsNextSteps`, {headers: myHeader})
     .map((res: any) => {
       if (res.message === 'invalid-token') {
-        window.sessionStorage.removeItem('apiToken');
+        window.localStorage.removeItem('apiToken');
         this.router.navigate(['/application-login']);
       }
       return res;
@@ -510,12 +510,12 @@ export class MainService {
   getAdminRouteUnfulfilledPrayerRequestsNeeds() {
     const myHeader = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': window.sessionStorage.getItem('apiToken')
+      'Authorization': window.localStorage.getItem('apiToken')
     });
     return this.http.get(this.apiUrl + `getAdminRouteUnfulfilledPrayerRequestsNeeds`, {headers: myHeader})
     .map((res: any) => {
       if (res.message === 'invalid-token') {
-        window.sessionStorage.removeItem('apiToken');
+        window.localStorage.removeItem('apiToken');
         this.router.navigate(['/application-login']);
       }
       return res;
@@ -525,12 +525,12 @@ export class MainService {
   getHeaterListing() {
     const myHeader = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': window.sessionStorage.getItem('apiToken')
+      'Authorization': window.localStorage.getItem('apiToken')
     });
     return this.http.get(this.apiUrl + `getHeaterListing`, {headers: myHeader})
     .map((res: any) => {
       if (res.message === 'invalid-token') {
-        window.sessionStorage.removeItem('apiToken');
+        window.localStorage.removeItem('apiToken');
         this.router.navigate(['/application-login']);
       }
       return res;
@@ -540,12 +540,12 @@ export class MainService {
   getHeaterTypes() {
     const myHeader = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': window.sessionStorage.getItem('apiToken')
+      'Authorization': window.localStorage.getItem('apiToken')
     });
     return this.http.get(this.apiUrl + `getHeaterTypes`, {headers: myHeader})
     .map((res: any) => {
       if (res.message === 'invalid-token') {
-        window.sessionStorage.removeItem('apiToken');
+        window.localStorage.removeItem('apiToken');
         this.router.navigate(['/application-login']);
       }
       return res;
@@ -555,12 +555,12 @@ export class MainService {
   getHeaterStatuses() {
     const myHeader = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': window.sessionStorage.getItem('apiToken')
+      'Authorization': window.localStorage.getItem('apiToken')
     });
     return this.http.get(this.apiUrl + `getHeaterStatuses`, {headers: myHeader})
     .map((res: any) => {
       if (res.message === 'invalid-token') {
-        window.sessionStorage.removeItem('apiToken');
+        window.localStorage.removeItem('apiToken');
         this.router.navigate(['/application-login']);
       }
       return res;
@@ -570,12 +570,12 @@ export class MainService {
   getSeenServicedReport(fromDate : Date, toDate : Date) {
     const myHeader = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': window.sessionStorage.getItem('apiToken')
+      'Authorization': window.localStorage.getItem('apiToken')
     });
     return this.http.get(this.apiUrl + `seen_and_serviced_report?fromDate=${fromDate}&toDate=${toDate}`, {headers: myHeader})
     .map((res: any) => {
       if (res.message === 'invalid-token') {
-        window.sessionStorage.removeItem('apiToken');
+        window.localStorage.removeItem('apiToken');
         this.router.navigate(['/application-login']);
       }
       return res;
@@ -585,12 +585,12 @@ export class MainService {
   checkInAllHeaters() {
     const myHeader = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': window.sessionStorage.getItem('apiToken')
+      'Authorization': window.localStorage.getItem('apiToken')
     });
     return this.http.get(this.apiUrl + `checkInAllHeaters`, {headers: myHeader})
     .map((res: any) => {
       if (res.message === 'invalid-token') {
-        window.sessionStorage.removeItem('apiToken');
+        window.localStorage.removeItem('apiToken');
         this.router.navigate(['/application-login']);
       }
       return res;
@@ -600,12 +600,12 @@ export class MainService {
   getAvailableHeaters(routeInstanceId: number) {
     const myHeader = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': window.sessionStorage.getItem('apiToken')
+      'Authorization': window.localStorage.getItem('apiToken')
     });
     return this.http.get(this.apiUrl + `getAvailableHeaters?routeInstanceId=${routeInstanceId}`, {headers: myHeader})
     .map((res: any) => {
       if (res.message === 'invalid-token') {
-        window.sessionStorage.removeItem('apiToken');
+        window.localStorage.removeItem('apiToken');
         this.router.navigate(['/application-login']);
       }
       return res;
@@ -615,12 +615,12 @@ export class MainService {
   getRouteInstanceHeaterInteractions(): Observable<RouteInstanceHeaterInteraction[]> {
     const myHeader = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': window.sessionStorage.getItem('apiToken')
+      'Authorization': window.localStorage.getItem('apiToken')
     });
     return this.http.get(this.apiUrl + `route_instance_heater_interactions`, {headers: myHeader})
     .map((res: any) => {
       if (res.message === 'invalid-token') {
-        window.sessionStorage.removeItem('apiToken');
+        window.localStorage.removeItem('apiToken');
         this.router.navigate(['/application-login']);
       }
       return res;
@@ -630,12 +630,12 @@ export class MainService {
   removeRouteInstanceHeaterInteraction(id: number) {
     const myHeader = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': window.sessionStorage.getItem('apiToken')
+      'Authorization': window.localStorage.getItem('apiToken')
     });
     return this.http.delete(this.apiUrl + `route_instance_heater_interactions/${id}`, {headers: myHeader})
     .map((res: any) => {
       if (res != null && res.message === 'invalid-token') {
-        window.sessionStorage.removeItem('apiToken');
+        window.localStorage.removeItem('apiToken');
         this.router.navigate(['/application-login']);
       }
       return res;
@@ -645,13 +645,13 @@ export class MainService {
   checkInHeater(theRouteInstanceHeaterInteraction: RouteInstanceHeaterInteraction) {
     const myHeader = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': window.sessionStorage.getItem('apiToken')
+      'Authorization': window.localStorage.getItem('apiToken')
     });
     return this.http.patch(this.apiUrl + `route_instance_heater_interactions/${theRouteInstanceHeaterInteraction.id}`,
                   {route_instance_heater_interaction: theRouteInstanceHeaterInteraction}, {headers: myHeader})
                   .map((res: any) => {
                     if (res.message === 'invalid-token') {
-                      window.sessionStorage.removeItem('apiToken');
+                      window.localStorage.removeItem('apiToken');
                       this.router.navigate(['/application-login']);
                     }
                     return res;

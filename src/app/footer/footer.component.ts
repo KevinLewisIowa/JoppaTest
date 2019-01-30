@@ -20,7 +20,7 @@ export class FooterComponent implements OnInit {
   }
 
   ngOnInit() { 
-    this.isAdmin = JSON.parse(window.sessionStorage.getItem('isAdmin'));
+    this.isAdmin = JSON.parse(window.localStorage.getItem('isAdmin'));
     console.log(this.isAdmin);
   }
 

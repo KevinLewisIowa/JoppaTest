@@ -31,8 +31,8 @@ export class LocationCampComponent implements OnInit {
         this.route = data.selectedRoute;
         this.location = data.selectedLocation;
       } else {
-        const routeId = window.sessionStorage.getItem('routeId');
-        const locationId = window.sessionStorage.getItem('locationId');
+        const routeId = window.localStorage.getItem('routeId');
+        const locationId = window.localStorage.getItem('locationId');
 
         this.service.getRoute(routeId).subscribe(response => {
           this.route = response;
@@ -47,11 +47,11 @@ export class LocationCampComponent implements OnInit {
     let locationCampId = this.activatedRoute.snapshot.params['id'];
     this.service.getLocationCamp(locationCampId).subscribe(data => {
       this.locationCamp = data;
-      sessionStorage.setItem('locationCampId', this.locationCamp.id.toString());
+      localStorage.setItem('locationCampId', this.locationCamp.id.toString());
       this.store.dispatch({type: 'LOCATION_CAMP_SELECTED', payload: data});
     }, error => {console.log('error getting location camp')});
 
-    window.sessionStorage.setItem('locationCampId', locationCampId);
+    window.localStorage.setItem('locationCampId', locationCampId);
     this.service.getClientsForLocationCamp(locationCampId).subscribe((data: Client[]) => {
       console.log('returned clients');
       console.log(data);
@@ -87,7 +87,7 @@ export class LocationCampComponent implements OnInit {
   }
 
   viewClient(theClient: Client) {
-    sessionStorage.setItem('selectedClient', theClient.id.toString());
+    localStorage.setItem('selectedClient', theClient.id.toString());
     this.router.navigate(['/serviceClient']);
   }
   

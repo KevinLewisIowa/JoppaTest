@@ -19,12 +19,12 @@ export class LeaderSignInComponent implements OnInit {
   constructor(private fb:FormBuilder, private mainService: MainService, private router: Router) { }
 
   ngOnInit() {
-    const adminSetting = window.sessionStorage.getItem('isAdmin');
+    const adminSetting = window.localStorage.getItem('isAdmin');
     if (adminSetting === 'true') {
       this.isAdmin = true;
     }
     if (JSON.parse(window.localStorage.getItem('routeInstance')) !== null) {
-      if (JSON.parse(window.localStorage.getItem('heatRoute'))) {
+      if (JSON.parse(window.localStorage.getItem('heatRoute')) && JSON.parse(window.localStorage.getItem('checkedOutHeaters')) == null) {
         this.router.navigate(['checkoutHeaters']);
       }
       else {
@@ -53,7 +53,7 @@ export class LeaderSignInComponent implements OnInit {
   }
 
   signOut() {
-    window.sessionStorage.clear();
+    window.localStorage.clear();
     this.router.navigate(['/application-login']);
   }
 

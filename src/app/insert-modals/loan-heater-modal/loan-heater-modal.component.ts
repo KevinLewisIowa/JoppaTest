@@ -20,7 +20,7 @@ export class LoanHeaterModalComponent implements OnInit {
 
   ngOnInit() {
     this.routeInstanceId = JSON.parse(window.localStorage.getItem('routeInstance'));
-    this.isAdmin = JSON.parse(window.sessionStorage.getItem('isAdmin'));
+    this.isAdmin = JSON.parse(window.localStorage.getItem('isAdmin'));
   }
 
   showModal() {

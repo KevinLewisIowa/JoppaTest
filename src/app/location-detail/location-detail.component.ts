@@ -27,8 +27,8 @@ export class LocationDetailComponent implements OnInit {
         this.route = data.selectedRoute;
         this.location = data.selectedLocation;
       } else {
-        var routeId = window.sessionStorage.getItem('routeId');
-        var locationId = window.sessionStorage.getItem('locationId');
+        var routeId = window.localStorage.getItem('routeId');
+        var locationId = window.localStorage.getItem('locationId');
 
         this.service.getRoute(routeId).subscribe(response => {
           this.route = response;
@@ -42,7 +42,7 @@ export class LocationDetailComponent implements OnInit {
     })
     let locationId = this.activatedRoute.snapshot.params['id'];
     this.getLocationCamps(locationId);
-    window.sessionStorage.setItem('locationId', locationId);
+    window.localStorage.setItem('locationId', locationId);
   }
 
   ngOnInit() {
@@ -63,7 +63,7 @@ export class LocationDetailComponent implements OnInit {
   }
 
   openLocationCamp(theLocationCamp: LocationCamp) {
-    window.sessionStorage.setItem('locationCampId', theLocationCamp.id.toString());
+    window.localStorage.setItem('locationCampId', theLocationCamp.id.toString());
     this.store.dispatch({type: 'LOCATION_CAMP_SELECTED', payload: theLocationCamp});
     this.router.navigate([`/locationCamp/${theLocationCamp.id}`]);
   }

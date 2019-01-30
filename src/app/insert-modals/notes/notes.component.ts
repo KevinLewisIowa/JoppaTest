@@ -24,7 +24,7 @@ export class NotesComponent implements OnInit {
 
   submitNote() {
     const note = new Note();
-    const clientId: number = JSON.parse(sessionStorage.getItem('selectedClient'));
+    const clientId: number = JSON.parse(localStorage.getItem('selectedClient'));
     const routeInstanceId: number = JSON.parse(localStorage.getItem('routeInstance'));
     if (this.note != null && !isNaN(clientId) && !isNaN(routeInstanceId)) {
       note.note = this.note;

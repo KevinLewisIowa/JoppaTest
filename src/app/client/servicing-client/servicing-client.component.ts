@@ -43,9 +43,9 @@ export class ServicingClientComponent implements OnInit {
   ngOnInit() {
     let routeInstanceId = JSON.parse(localStorage.getItem('routeInstance'));
     this.heatRoute = JSON.parse(window.localStorage.getItem('heatRoute'));
-    this.isAdmin = JSON.parse(window.sessionStorage.getItem('isAdmin'));
-    this.locationCampId = Number(sessionStorage.getItem('locationCampId'));
-    this.clientId = sessionStorage.getItem('selectedClient');
+    this.isAdmin = JSON.parse(window.localStorage.getItem('isAdmin'));
+    this.locationCampId = Number(localStorage.getItem('locationCampId'));
+    this.clientId = localStorage.getItem('selectedClient');
     if (this.clientId !== null) {
       this.service.getClientById(this.clientId).subscribe((data: Client) => {
         this.client = data;

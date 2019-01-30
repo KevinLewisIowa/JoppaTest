@@ -23,7 +23,7 @@ description: string = '';
 
   submitHealthConcern() {
     const concern = new HealthConcern();
-    const clientId = sessionStorage.getItem('selectedClient');
+    const clientId = localStorage.getItem('selectedClient');
     if (this.description != null && !isNaN(Number(clientId))) {
       concern.description = this.description;
       concern.client_id = Number(clientId);

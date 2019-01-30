@@ -43,7 +43,7 @@ export class ClientEditComponent implements OnInit {
   }
 
   submitRoute() {
-    const locationCampId = window.sessionStorage.getItem('locationCampId');
+    const locationCampId = window.localStorage.getItem('locationCampId');
     this.theClient.preferred_name = this.clientForm.get('preferred_name').value;
     this.theClient.birth_date = new Date(Date.parse(this.clientForm.get('birth_date').value));
     this.theClient.is_aftercare = this.clientForm.get('is_aftercare').value;
@@ -72,7 +72,7 @@ export class ClientEditComponent implements OnInit {
   }
 
   back() {
-    const locationCampId = JSON.parse(window.sessionStorage.getItem('locationCampId'));
+    const locationCampId = JSON.parse(window.localStorage.getItem('locationCampId'));
     this.router.navigate([`/locationCamp/${locationCampId}`]);
   }
 }

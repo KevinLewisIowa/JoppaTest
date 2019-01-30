@@ -23,7 +23,7 @@ export class IsLoggedInGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): boolean {
-    const currentToken = window.sessionStorage.getItem('apiToken');
+    const currentToken = window.localStorage.getItem('apiToken');
     let isAuth = false;
     if (currentToken == null) {
       this.router.navigate(['application-login']);
@@ -48,7 +48,7 @@ export class IsAdminGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): boolean {
-    const isAdmin = window.sessionStorage.getItem('isAdmin');
+    const isAdmin = window.localStorage.getItem('isAdmin');
     let isAuth = false;
     if (isAdmin != 'true') {
       this.router.navigate(['application-login']);

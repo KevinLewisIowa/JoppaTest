@@ -20,7 +20,7 @@ export class LocationsComponent implements OnInit {
     this.thisRoute = new Route();
     this.locations = [];
     this.routeId = this.route.snapshot.params['id'];
-    window.sessionStorage.setItem('routeId', this.routeId.toString());
+    window.localStorage.setItem('routeId', this.routeId.toString());
     this.service.getRoute(this.routeId).subscribe((route : Route) => {
       if(route == undefined){
         this.thisRoute = new Route();
@@ -55,7 +55,7 @@ export class LocationsComponent implements OnInit {
   }
 
   openLocation(theLocation: Location){
-    window.sessionStorage.setItem('locationId', theLocation.id.toString());
+    window.localStorage.setItem('locationId', theLocation.id.toString());
     this.store.dispatch({type: 'LOCATION_SELECTED', payload: theLocation});
     this.router.navigate([`/location/${theLocation.id}`]);
   }

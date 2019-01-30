@@ -46,7 +46,7 @@ export class RequestedItemComponent implements OnInit {
 
   submitItem() {
     const item = new RequestedItem();
-    const clientId = sessionStorage.getItem('selectedClient');
+    const clientId = localStorage.getItem('selectedClient');
     if (this.description != null && this.description !== '' && !isNaN(Number(clientId))) {
       if (this.extraInfoNeeded && (this.extraInfo === null || this.extraInfo === '')) {
         alert('Need to enter additional info for this item');
