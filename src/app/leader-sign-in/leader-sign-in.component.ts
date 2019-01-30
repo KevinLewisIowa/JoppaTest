@@ -24,7 +24,7 @@ export class LeaderSignInComponent implements OnInit {
       this.isAdmin = true;
     }
     if (JSON.parse(window.localStorage.getItem('routeInstance')) !== null) {
-      if (JSON.parse(window.localStorage.getItem('heatRoute')) && JSON.parse(window.localStorage.getItem('checkedOutHeaters')) == null) {
+      if (JSON.parse(window.localStorage.getItem('heatRoute')) && (JSON.parse(window.localStorage.getItem('checkedOutHeaters')) == null || JSON.parse(window.localStorage.getItem('tankHoseInteractionId')) == null)) {
         this.router.navigate(['checkoutHeaters']);
       }
       else {
