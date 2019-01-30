@@ -180,8 +180,7 @@ export class ClientService {
           this.router.navigate(['/application-login']);
         }
         return res;
-      }).subscribe(response => {
-        }, error => { console.log('error inserting appearance'); console.log(error)});
+      });
   }
 
   getHeatersForClient(theClientId) {

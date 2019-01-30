@@ -64,10 +64,10 @@ export class ClientEditComponent implements OnInit {
       clientInteraction.client_id = data.id;
       clientInteraction.location_camp_id = JSON.parse(locationCampId);
       clientInteraction.still_lives_here = true;
-      
-      this.clientService.insertClientAppearance(clientInteraction);
 
-      this.router.navigate([`/locationCamp/${locationCampId}`]);
+      this.clientService.insertClientAppearance(clientInteraction).subscribe(data => {
+        this.router.navigate([`/locationCamp/${locationCampId}`]);
+      });      
     }, error => { this.store.dispatch({type: 'USER_API_ERROR', payload: { message: 'error' }})});
   }
 

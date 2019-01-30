@@ -61,7 +61,7 @@ export class LocationCampComponent implements OnInit {
       else {
         this.clients = data;
       }
-    })
+    });
   }
 
   ngOnInit() {
