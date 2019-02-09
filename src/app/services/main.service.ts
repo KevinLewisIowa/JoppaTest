@@ -97,6 +97,16 @@ export class MainService {
       .map(response => response).catch(err => this.handleError(err));
   }
 
+  getHeatEquipmentPerRoute() {
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.localStorage.getItem('apiToken')
+    });
+
+    return this.http.get(this.apiUrl + `getHeatEquipmentPerRoute`)
+      .map(response => response).catch(err => this.handleError(err));
+  }
+
   insertRoute(theRoute: Route) {
     const myHeader = new HttpHeaders({
       'Content-Type': 'application/json',

@@ -41,6 +41,10 @@ export class AdminReportsComponent implements OnInit {
     this.router.navigate([`/admin/reports/routeSummary`]);
   }
 
+  openHeatEquipmentPerRouteReport() {
+    this.router.navigate([`/admin/reports/heatEquipmentPerRouteReport`]);
+  }
+
   openSeenServicedReport() {
     this.router.navigate([`/admin/reports/seenServicedReport`]);
   }

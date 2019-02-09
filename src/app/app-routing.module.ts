@@ -31,6 +31,7 @@ import { RouteSummaryReportComponent } from './admin-reports/route-summary-repor
 import { ChangeRegularPasswordComponent } from 'app/change-regular-password/change-regular-password.component';
 import { AdminCheckInComponent } from './admin-check-in/admin-check-in.component';
 import { AdminSeenServicedReportComponent } from './admin-reports/admin-seen-serviced-report/admin-seen-serviced-report.component';
+import { HeatEquipmentPerRouteReportComponent } from './heat-equipment-per-route-report/heat-equipment-per-route-report.component';
 
 const routes: Routes = [
   { path: 'routes', canActivate: [IsLoggedInGuard], component: RoutesComponent },
@@ -54,6 +55,7 @@ const routes: Routes = [
   { path: 'admin/reports/routeUnfulfilledPrayerRequestsNeeds', canActivate: [IsLoggedInGuard, IsAdminGuard],
           component: AdminRouteUnfulfilledPrayerRequestsNeedsComponent },
   { path: 'admin/reports/routeSummary', canActivate: [IsLoggedInGuard, IsAdminGuard], component: RouteSummaryReportComponent},
+  { path: 'admin/reports/heatEquipmentPerRouteReport', canActivate: [IsLoggedInGuard, IsAdminGuard], component: HeatEquipmentPerRouteReportComponent},
   { path: 'admin/reports/seenServicedReport', canActivate: [IsLoggedInGuard, IsAdminGuard], component: AdminSeenServicedReportComponent},
   { path: 'admin/checkInAllHeaters', canActivate: [IsLoggedInGuard, IsAdminGuard], component: AdminCheckInComponent},
   { path: 'locationCampNew', canActivate: [IsLoggedInGuard], component: CreateLocationCampComponent },
