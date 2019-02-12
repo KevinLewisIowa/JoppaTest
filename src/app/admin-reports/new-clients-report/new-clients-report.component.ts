@@ -10,14 +10,12 @@ import { Appearance } from 'app/models/appearance';
 })
 export class NewClientsReportComponent implements OnInit {
   clients: any[] = [];
-  constructor(private service: ClientService) { 
-    
-  }
+  constructor(private service: ClientService) { }
 
   ngOnInit() {
-    this.service.getClientsNewToCamps().subscribe((data: any[]) => {
+    this.service.getClientsNewToCamps().subscribe(data => {
       this.clients = data;
-    }, error => console.log(error));
+    }, error => {console.log(error)});
   }
 
   confirm(theClient: Client) {
@@ -37,5 +35,4 @@ export class NewClientsReportComponent implements OnInit {
       this.clients = this.clients.filter(w => w.id !== theClient.id);
     });
   }
-
 }

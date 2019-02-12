@@ -13,7 +13,6 @@ export class ClientLocationModalComponent implements OnInit {
   @ViewChild('locationModal') locationModal: ElementRef;
   modalTitle = '';
   route = new Route();
-  location = new Location();
   locationCamp = new LocationCamp();
   constructor(private modalService: NgbModal, private mainService: MainService) { }
 
