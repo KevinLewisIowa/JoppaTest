@@ -4,7 +4,6 @@ import { Router } from "@angular/router";
 import { MainService } from "app/services/main.service";
 import { Store } from "@ngrx/store";
 import { IMainStore } from "app/state-management/main.store";
-import { Location } from '../models/location';
 import { Route } from '../models/route';
 
 @Component({
@@ -49,18 +48,18 @@ export class LocationDetailEditComponent implements OnInit {
     this.router.navigate([`route/${routeId}`]);
   }
 
-  submitLocation() {
-    var routeId = window.localStorage.getItem('routeId');
-    if (routeId == null) {
-      this.router.navigate(['routes']);
-    }
-    this.theLocation.route_id = Number(routeId);
-    this.theLocation.name = this.locationForm.get('name').value;
-    this.theLocation.notes = this.locationForm.get('notes').value;
-    this.theLocation.position = this.locationForm.get('position').value;
-    this.theLocation.is_active = this.locationForm.get('is_active').value;
-    this.mainService.insertLocation(this.theLocation).subscribe(data => {
-      this.router.navigate([`route/${routeId}`]);
-    }, error => {this.store.dispatch({type: 'USER_API_ERROR', payload: {message: error.message}})});
-  }
+  // submitLocation() {
+  //   var routeId = window.localStorage.getItem('routeId');
+  //   if (routeId == null) {
+  //     this.router.navigate(['routes']);
+  //   }
+  //   this.theLocation.route_id = Number(routeId);
+  //   this.theLocation.name = this.locationForm.get('name').value;
+  //   this.theLocation.notes = this.locationForm.get('notes').value;
+  //   this.theLocation.position = this.locationForm.get('position').value;
+  //   this.theLocation.is_active = this.locationForm.get('is_active').value;
+  //   this.mainService.insertLocation(this.theLocation).subscribe(data => {
+  //     this.router.navigate([`route/${routeId}`]);
+  //   }, error => {this.store.dispatch({type: 'USER_API_ERROR', payload: {message: error.message}})});
+  // }
 }

@@ -7,7 +7,7 @@ import { Route } from '../models/route';
 import { ClientLike } from '../models/client-like';
 import { ClientDislike } from '../models/client-dislike';
 import { Client } from '../models/client';
-import { Location } from '../models/location';
+import { LocationCamp } from '../models/location-camp';
 import { Appearance } from '../models/appearance';
 import { HealthConcern } from '../models/health-concern';
 import { RequestedItem } from '../models/requested-item';
@@ -673,9 +673,9 @@ export class ClientService {
                   });
   }
 
-  private mapLocations(data: Array<any>): Location[] {
+  private mapLocations(data: Array<any>): LocationCamp[] {
     return data.map(item =>
-      <Location>({
+      <LocationCamp>({
         id: item.id,
         route_id: item.route_id,
         name: item.name,

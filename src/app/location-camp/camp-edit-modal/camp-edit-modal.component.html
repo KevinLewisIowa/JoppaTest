@@ -11,6 +11,23 @@
             <input type="text" placeholder="name" formControlName="name"/>
           </div>
           <div class="col-md-12">
+            <label>Latitude: </label>
+            <input type="text" placeholder="latitude" formControlName="latitude"/>
+            <button class="btn btn-secondary text-right" (click)="getCurrentLocation();">Get Current Location</button>
+          </div>
+          <div class="col-md-12">
+            <label>Longitude: </label>
+            <input type="text" placeholder="longitude" formControlName="longitude"/>
+          </div>
+          <div class="col-md-12">
+            <label>Notes: </label>
+            <textarea type="text" rows="3" cols="40" placeholder="notes" formControlName="notes"></textarea>
+          </div>
+          <div class="col-md-12">
+            <label>Position: </label>
+            <input type="number" placeholder="position" formControlName="position"/>
+          </div>
+          <div class="col-md-12">
             <label>Active: </label>
             <input type="checkbox" formControlName="is_active"/>
           </div>

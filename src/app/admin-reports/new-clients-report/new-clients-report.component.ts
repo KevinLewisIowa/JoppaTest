@@ -9,13 +9,15 @@ import { Appearance } from 'app/models/appearance';
   styleUrls: ['./new-clients-report.component.css']
 })
 export class NewClientsReportComponent implements OnInit {
-  clients = [];
-  constructor(private service: ClientService) { }
+  clients: any[] = [];
+  constructor(private service: ClientService) { 
+    
+  }
 
   ngOnInit() {
     this.service.getClientsNewToCamps().subscribe((data: any[]) => {
       this.clients = data;
-    });
+    }, error => console.log(error));
   }
 
   confirm(theClient: Client) {

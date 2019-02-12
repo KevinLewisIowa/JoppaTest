@@ -3,13 +3,13 @@
     <button type="button" class="pull-left btn btn-primary" (click)="back()">Back</button>
     <h2>{{thisRoute.name}}</h2>
     <div class="float-left"><button (click)="showRouteLocations()" class="btn btn-primary" type="button">Show Route Map</button></div>
-    <div class="float-right"><button (click)="newLocation()" class="btn btn-primary" type="button">New Location</button></div>
+    <div class="float-right"><button (click)="newLocationCamp()" class="btn btn-primary" type="button">New Camp</button></div>
   </div>
   <div class="panel-body">
     <table class="table table-striped">
       <tbody>
-        <tr *ngFor="let location of locations" style="height:75px" (click)="openLocation(location)">
-          <td class="text-center"><b>{{location.name}}</b></td>
+        <tr *ngFor="let locationCamp of locationCamps" style="height:75px" (click)="openLocation(locationCamp)">
+          <td class="text-center"><b>{{locationCamp.name}}</b></td>
         </tr>
       </tbody>
     </table>

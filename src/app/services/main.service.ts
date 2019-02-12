@@ -5,7 +5,6 @@ import { Observable } from 'rxjs';
 import 'rxjs/Rx';
 import { Route } from '../models/route';
 import { Client } from '../models/client';
-import { Location } from '../models/location';
 import { Heater } from '../models/heater';
 
 import 'rxjs/add/operator/toPromise';
@@ -136,22 +135,6 @@ export class MainService {
     });
   }
 
-  insertLocation(theLocation: Location) {
-    const myHeader = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': window.localStorage.getItem('apiToken')
-    });
-    return this.http.post(this.apiUrl + `locations`, {location: theLocation}, {headers: myHeader})
-    .map((res: any) => {
-      if (res.message === 'invalid-token') {
-        window.localStorage.removeItem('apiToken');
-        this.router.navigate(['/application-login']);
-      }
-      return res;
-    })
-      .catch(this.handleError);
-  }
-
   insertRouteInstanceTankHoseInteraction(theRouteInstanceTanksHoses: RouteInstanceTankHoseInteraction) {
     const myHeader = new HttpHeaders({
       'Content-Type': 'application/json',
@@ -220,29 +203,14 @@ export class MainService {
       'Content-Type': 'application/json',
       'Authorization': window.localStorage.getItem('apiToken')
     });
-    return this.http.put(this.apiUrl + `location_camps/${theLocationCamp.id}`, {location_camp: theLocationCamp}, {headers: myHeader})
+    return this.http.patch(this.apiUrl + `location_camps/${theLocationCamp.id}`, {location_camp: theLocationCamp}, {headers: myHeader})
     .map((res: any) => {
       if (res.message === 'invalid-token') {
         window.localStorage.removeItem('apiToken');
         this.router.navigate(['/application-login']);
       }
       return res;
-    }).subscribe(response => { }, error => {console.log('error updating camp')});
-  }
-
-  updateLocation(theLocation: Location) {
-    const myHeader = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': window.localStorage.getItem('apiToken')
     });
-    return this.http.put(this.apiUrl + `locations/${theLocation.id}`, {location: theLocation}, {headers: myHeader})
-    .map((res: any) => {
-      if (res.message === 'invalid-token') {
-        window.localStorage.removeItem('apiToken');
-        this.router.navigate(['/application-login']);
-      }
-      return res;
-    }).subscribe(response => { }, error => {console.log('error updating location')});
   }
 
   updateRouteInstance(theRouteInstance: RouteInstance) {
@@ -343,12 +311,12 @@ export class MainService {
     }
   }
 
-  getLocationCamps(id) {
+  getCampsForRoute(id) {
     const myHeader = new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': window.localStorage.getItem('apiToken')
     });
-    return this.http.get(this.apiUrl + `getCampsForLocation?locationId=${id}`, {headers: myHeader})
+    return this.http.get(this.apiUrl + `getCampsForRoute?routeId=${id}`, {headers: myHeader})
     .map((res: any) => {
       if (res.message === 'invalid-token') {
         window.localStorage.removeItem('apiToken');
@@ -390,13 +358,13 @@ export class MainService {
       .catch(err => this.handleError(err));
   }
 
-  getClientsForLocationCamp(id) {
+  getClientsForCamp(id) {
     const myHeader = new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': window.localStorage.getItem('apiToken')
     });
     if (this.online) {
-      return this.http.get(this.apiUrl + `getClientsForLocationCampC?locationCampId=${id}`, {headers: myHeader})
+      return this.http.get(this.apiUrl + `getClientsForCamp?locationCampId=${id}`, {headers: myHeader})
       .map((res: any) => {
         if (res.message === 'invalid-token') {
           window.localStorage.removeItem('apiToken');
@@ -410,12 +378,12 @@ export class MainService {
     }
   }
 
-  getRouteLocations(id): Observable<Location[]> {
+  getRouteCampsLongLat(id) {
     const myHeader = new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': window.localStorage.getItem('apiToken')
     });
-      return this.http.get(this.apiUrl + `locationsForRoute?routeId=${id}`, {headers: myHeader})
+      return this.http.get(this.apiUrl + `getRouteCampsLongLat?routeId=${id}`, {headers: myHeader})
       .map((res: any) => {
         if (res.message === 'invalid-token') {
           window.localStorage.removeItem('apiToken');
@@ -424,37 +392,6 @@ export class MainService {
         return res;
       })
       .catch(err => this.handleError(err));
-  }
-
-  getRouteLocationsLongLat(id) {
-    const myHeader = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': window.localStorage.getItem('apiToken')
-    });
-      return this.http.get(this.apiUrl + `getRouteLocationsLongLat?routeId=${id}`, {headers: myHeader})
-      .map((res: any) => {
-        if (res.message === 'invalid-token') {
-          window.localStorage.removeItem('apiToken');
-          this.router.navigate(['/application-login']);
-        }
-        return res;
-      })
-      .catch(err => this.handleError(err));
-  }
-
-  getRouteLocation(id) {
-    const myHeader = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': window.localStorage.getItem('apiToken')
-    });
-    return this.http.get(this.apiUrl + `locations/${id}`, {headers: myHeader})
-    .map((res: any) => {
-      if (res.message === 'invalid-token') {
-        window.localStorage.removeItem('apiToken');
-        this.router.navigate(['/application-login']);
-      }
-      return res;
-    }).catch(error => this.handleError(error));
   }
 
   getLocationCamp(id) {
@@ -671,20 +608,6 @@ export class MainService {
   private handleError(error: any): Promise<any> {
     console.error('An error occurred', error); // for demo purposes only
     return Promise.reject(error.message || error);
-  }
-
-  private mapLocations(data: Array<any>): Location[] {
-    return data.map(item => 
-      <Location>({
-        id: item.id,
-        route_id: item.route_id,
-        name: item.name,
-        latitude: item.latitude,
-        longitude: item.longitude,
-        notes: item.notes,
-        position: item.position
-      })
-    );
   }
 }
 

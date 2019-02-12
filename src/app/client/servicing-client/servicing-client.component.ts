@@ -138,6 +138,12 @@ export class ServicingClientComponent implements OnInit {
       interaction.serviced = false;
       interaction.still_lives_here = false;
       interaction.was_seen = false;
+
+      this.client.previous_camp_id = this.locationCampId;
+      this.client.current_camp_id = null;
+      this.service.updateClient(this.client).subscribe(data => {
+
+      }, error => console.log(error));
     }
     this.sentInteraction = true;
     this.service.insertClientAppearance(interaction);

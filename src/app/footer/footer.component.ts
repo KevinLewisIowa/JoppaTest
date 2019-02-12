@@ -42,13 +42,19 @@ export class FooterComponent implements OnInit {
     }
     else
     {
+      let apiKey: string = window.localStorage.getItem('apiToken');
       window.localStorage.clear();
+      window.localStorage.setItem('apiToken', apiKey);
+      window.localStorage.setItem('isAdmin', JSON.stringify(this.isAdmin));
       this.router.navigate(['login']);
     }
   }
 
   goToAdminHome() {
+    let apiKey: string = window.localStorage.getItem('apiToken');
     window.localStorage.clear();
+    window.localStorage.setItem('apiToken', apiKey);
+    window.localStorage.setItem('isAdmin', JSON.stringify(true));
     this.router.navigate(['adminHome']);
   }
 

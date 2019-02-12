@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Route } from '../models/route';
 import { ActivatedRoute } from '@angular/router';
-import { Location } from '../models/location';
 import { MainService } from '../services/main.service';
 import { Store } from '@ngrx/store';
 import { IMainStore } from '../state-management/main.store';
@@ -17,51 +16,34 @@ import { ClientService } from 'app/services/client.service';
   styleUrls: ['./location-camp.component.css']
 })
 export class LocationCampComponent implements OnInit {
-  route : Route = new Route();
-  location: Location = new Location();
-  locationId: number;
+  route: Route = new Route();
   clients: Client[] = [];
   locationCamp: LocationCamp = new LocationCamp();
   heatRoute: boolean = false;
 
-  constructor(private store: Store<IMainStore>, private service: MainService, private clientService: ClientService,
+  constructor(private mainService: MainService, private clientService: ClientService,
     private router: Router, private activatedRoute: ActivatedRoute) {
-    this.store.select('user').subscribe(data => {
-      if (data.selectedRoute != undefined && data.selectedLocation != undefined) {
-        this.route = data.selectedRoute;
-        this.location = data.selectedLocation;
-      } else {
-        const routeId = window.localStorage.getItem('routeId');
-        const locationId = window.localStorage.getItem('locationId');
+    
+      let routeId: number = JSON.parse(window.localStorage.getItem('routeId'));
+      this.mainService.getRoute(routeId).subscribe((route: Route) => {
+        this.route = route;
+      }, error => {console.log(error)});
 
-        this.service.getRoute(routeId).subscribe(response => {
-          this.route = response;
-          this.store.dispatch({type: '', payload: response});
-        }, error => console.log('error getting route in location detail'));
+      let locationCampId = this.activatedRoute.snapshot.params['id'];
+      this.mainService.getLocationCamp(locationCampId).subscribe(data => {
+        this.locationCamp = data;
+        localStorage.setItem('locationCampId', JSON.stringify(this.locationCamp.id));
+      }, error => {console.log(error)});
 
-        this.service.getRouteLocation(locationId).subscribe(data => {
-          this.location = data;
-        }, error => console.log('error getting location in location detail'));
-      }
-    })
-    let locationCampId = this.activatedRoute.snapshot.params['id'];
-    this.service.getLocationCamp(locationCampId).subscribe(data => {
-      this.locationCamp = data;
-      localStorage.setItem('locationCampId', this.locationCamp.id.toString());
-      this.store.dispatch({type: 'LOCATION_CAMP_SELECTED', payload: data});
-    }, error => {console.log('error getting location camp')});
-
-    window.localStorage.setItem('locationCampId', locationCampId);
-    this.service.getClientsForLocationCamp(locationCampId).subscribe((data: Client[]) => {
-      console.log('returned clients');
-      console.log(data);
-      if (this.heatRoute) {
-        this.clients = data.filter(client => client.dwelling !== "Vehicle" && client.dwelling !== "Under Bridge" && client.dwelling !== "Streets");
-      }
-      else {
-        this.clients = data;
-      }
-    });
+      window.localStorage.setItem('locationCampId', locationCampId);
+      this.mainService.getClientsForCamp(locationCampId).subscribe((data: Client[]) => {
+        if (this.heatRoute) {
+          this.clients = data.filter(client => client.dwelling !== "Vehicle" && client.dwelling !== "Under Bridge" && client.dwelling !== "Streets");
+        }
+        else {
+          this.clients = data;
+        }
+      });
   }
 
   ngOnInit() {
@@ -86,21 +68,16 @@ export class LocationCampComponent implements OnInit {
     this.router.navigate(['/createClient']);
   }
 
+  showMap() {
+    window.open(`https://www.google.com/maps?q=${this.locationCamp.latitude},${this.locationCamp.longitude}&q=food&amp;z=14`, "_blank");
+  }
+
   viewClient(theClient: Client) {
     localStorage.setItem('selectedClient', theClient.id.toString());
     this.router.navigate(['/serviceClient']);
   }
   
   back() {
-    console.log('location during back');
-    console.log(this.location);
-    if(this.location == undefined || this.location.id == undefined)
-    {
-      this.router.navigate(['/routes']);
-    }
-    else{
-      this.router.navigate([`/location`, this.location.id]);
-    }
-    
+    this.router.navigate(['/route', this.route.id]);
   }
 }

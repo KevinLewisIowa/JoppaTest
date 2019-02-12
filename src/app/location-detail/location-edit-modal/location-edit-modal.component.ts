@@ -3,9 +3,6 @@ import { FormGroup, FormBuilder } from "@angular/forms";
 import { Router } from "@angular/router";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { MainService } from "app/services/main.service";
-import { Store } from "@ngrx/store";
-import { Location } from "app/models/location";
-import { IMainStore } from "app/state-management/main.store";
 
 @Component({
   selector: 'app-location-edit-modal',
@@ -22,7 +19,7 @@ export class LocationEditModalComponent implements OnInit {
 
 
   constructor(private router: Router, private modalService: NgbModal, private service: MainService,
-              private fb: FormBuilder, private store: Store<IMainStore>) { }
+              private fb: FormBuilder) { }
 
   ngOnInit() {
     this.theLocation = new Location();
@@ -41,7 +38,6 @@ export class LocationEditModalComponent implements OnInit {
   }
 
   submitLocation() {
-    this.service.updateLocation(this.locationForm.value as Location);
     this.editedLocation.emit(this.locationForm.value as Location);
   }
 

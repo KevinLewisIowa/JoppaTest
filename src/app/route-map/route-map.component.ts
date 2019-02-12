@@ -1,9 +1,9 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { MainService } from 'app/services/main.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Location } from 'app/models/location';
 import { } from 'googlemaps';
 import { Route } from 'app/models/route';
+import { LocationCamp } from 'app/models/location-camp';
 
 @Component({
   selector: 'app-route-map',
@@ -14,7 +14,7 @@ export class RouteMapComponent implements OnInit {
   routeId: number;
   thisRoute: Route;
   
-  constructor(private route: ActivatedRoute, private service: MainService, private router: Router) { }
+  constructor(private route: ActivatedRoute, private mainService: MainService, private router: Router) { }
 
   ngOnInit() {
     this.thisRoute = new Route();
@@ -28,18 +28,18 @@ export class RouteMapComponent implements OnInit {
     let map = new google.maps.Map(document.getElementById('googleMap'), mapProp);
     this.routeId = this.route.snapshot.params['id'];
     
-    this.service.getRoute(this.routeId).subscribe((route : Route) => {
+    this.mainService.getRoute(this.routeId).subscribe((route : Route) => {
       this.thisRoute = route;
     });
 
-    this.service.getRouteLocationsLongLat(this.routeId).subscribe((data: Location[]) => {
-      data.forEach(function(location: Location) {
+    this.mainService.getRouteCampsLongLat(this.routeId).subscribe((data: LocationCamp[]) => {
+      data.forEach(function(locationCamp: LocationCamp) {
         
-        var marker = new google.maps.Marker({ position: new google.maps.LatLng(location.latitude, location.longitude),
+        var marker = new google.maps.Marker({ position: new google.maps.LatLng(locationCamp.latitude, locationCamp.longitude),
           map: map});
         
         var infoWindow = new google.maps.InfoWindow({
-          content: location.name
+          content: locationCamp.name
         });
         
         infoWindow.open(map, marker);

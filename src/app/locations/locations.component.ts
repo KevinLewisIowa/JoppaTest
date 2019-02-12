@@ -1,11 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Route } from '../models/route';
-import { Location } from '../models/location';
 import { MainService } from '../services/main.service';
-import { Store } from '@ngrx/store';
-import { IMainStore } from '../state-management/main.store';
 import { Router } from '@angular/router';
+import { LocationCamp } from 'app/models/location-camp';
 
 @Component({
   selector: 'app-locations',
@@ -15,27 +13,25 @@ import { Router } from '@angular/router';
 export class LocationsComponent implements OnInit {
   routeId : number;
   thisRoute : Route;
-  locations : Location[];
-  constructor(private route : ActivatedRoute, private service : MainService, private store : Store<IMainStore>, private router:Router) { 
+  locationCamps : LocationCamp[];
+  constructor(private route : ActivatedRoute, private mainService : MainService, private router:Router) { 
     this.thisRoute = new Route();
-    this.locations = [];
+    this.locationCamps = [];
     this.routeId = this.route.snapshot.params['id'];
     window.localStorage.setItem('routeId', this.routeId.toString());
-    this.service.getRoute(this.routeId).subscribe((route : Route) => {
+    this.mainService.getRoute(this.routeId).subscribe((route : Route) => {
       if(route == undefined){
         this.thisRoute = new Route();
       }
       else{
         this.thisRoute = route;
-        this.store.dispatch({type: 'ROUTE_SELECTED', payload: route});
-        this.service.getRouteLocations(this.routeId).subscribe(locations => {
+        this.mainService.getCampsForRoute(this.routeId).subscribe(locations => {
           if(locations == null || locations == undefined){
-            this.locations = []
+            this.locationCamps = []
           }
           else{
-            this.store.dispatch({type: 'GET_LOCATIONS', payload: locations});
-            this.locations = locations;
-            this.locations.sort((a, b) => {
+            this.locationCamps = locations;
+            this.locationCamps.sort((a, b) => {
               if (a.position > b.position) {
                 return 1;
               } else if (a.position < b.position) {
@@ -54,21 +50,22 @@ export class LocationsComponent implements OnInit {
   ngOnInit() {
   }
 
-  openLocation(theLocation: Location){
-    window.localStorage.setItem('locationId', theLocation.id.toString());
-    this.store.dispatch({type: 'LOCATION_SELECTED', payload: theLocation});
-    this.router.navigate([`/location/${theLocation.id}`]);
+  openLocation(theLocation: LocationCamp){
+    window.localStorage.setItem('locationCampId', JSON.stringify(theLocation.id));
+    this.router.navigate([`/locationCamp/${theLocation.id}`]);
   }
 
   back(){
     this.router.navigate(['/routes']);
   }
 
-  newLocation(){
-    this.router.navigate(['/locationNew']);
+  newLocationCamp(){
+    this.router.navigate(['/locationCampNew']);
   }
 
   showRouteLocations() {
     this.router.navigate(['/routeMap',this.routeId]);
   }
+
+  
 }

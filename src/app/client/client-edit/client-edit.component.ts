@@ -20,7 +20,7 @@ export class ClientEditComponent implements OnInit {
 
 
   constructor(private router: Router, private clientService: ClientService,
-              private fb: FormBuilder, private store: Store<IMainStore>) { }
+              private fb: FormBuilder) { }
 
   ngOnInit() {
     this.theClient = new Client();
@@ -33,22 +33,22 @@ export class ClientEditComponent implements OnInit {
       current_camp_id: 0,
       shoe_size: '',
       boot_size: '',
-      number_meals: 0,
+      number_meals: 1,
       phone: '',
       joppa_apartment_number: '',
       dwelling: ''
     });
     this.clientForm.get('preferred_name').setValidators(Validators.required);
-    // this.clientForm.get('birthDate').setValidators(Validators.pattern(this.regExpDate));
+    this.clientForm.get('dwelling').setValidators(Validators.required);
   }
 
   submitRoute() {
-    const locationCampId = window.localStorage.getItem('locationCampId');
+    const locationCampId = JSON.parse(window.localStorage.getItem('locationCampId'));
     this.theClient.preferred_name = this.clientForm.get('preferred_name').value;
     this.theClient.birth_date = new Date(Date.parse(this.clientForm.get('birth_date').value));
     this.theClient.is_aftercare = this.clientForm.get('is_aftercare').value;
     this.theClient.is_veteran = this.clientForm.get('is_veteran').value;
-    this.theClient.current_camp_id = null;
+    this.theClient.current_camp_id = locationCampId;
     this.theClient.previous_camp_id = null;
     this.theClient.shoe_size = this.clientForm.get('shoe_size').value;
     this.theClient.boot_size = this.clientForm.get('boot_size').value;
@@ -68,7 +68,7 @@ export class ClientEditComponent implements OnInit {
       this.clientService.insertClientAppearance(clientInteraction).subscribe(data => {
         this.router.navigate([`/locationCamp/${locationCampId}`]);
       });      
-    }, error => { this.store.dispatch({type: 'USER_API_ERROR', payload: { message: 'error' }})});
+    }, error => {console.log(error)});
   }
 
   back() {

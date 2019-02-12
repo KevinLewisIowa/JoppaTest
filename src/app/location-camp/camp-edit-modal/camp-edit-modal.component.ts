@@ -1,8 +1,6 @@
 import { Component, OnInit, ElementRef, EventEmitter, Output, ViewChild } from '@angular/core';
 import { LocationCamp } from "app/models/location-camp";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { Store } from "@ngrx/store";
-import { IMainStore } from "app/state-management/main.store";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { Router } from "@angular/router";
 import { MainService } from "app/services/main.service";
@@ -17,13 +15,11 @@ export class CampEditModalComponent implements OnInit {
   @Output() editedCamp = new EventEmitter<LocationCamp>();
   badDate = false;
   campForm: FormGroup;
-  regExpDate = /^\d{2}\/\d{2}\/\d{4}$/
   theCamp: LocationCamp;
   editing = false;
 
-
-  constructor(private router: Router, private modalService: NgbModal, private service: MainService,
-              private fb: FormBuilder, private store: Store<IMainStore>) { }
+  constructor(private router: Router, private modalService: NgbModal, private mainService: MainService,
+              private fb: FormBuilder) { }
 
   ngOnInit() {
     this.theCamp = new LocationCamp();
@@ -42,8 +38,20 @@ export class CampEditModalComponent implements OnInit {
   }
 
   submitCamp() {
-    this.service.updateLocationCamp(this.campForm.value as LocationCamp);
+    console.log(this.campForm.value);
+    this.mainService.updateLocationCamp(this.campForm.value as LocationCamp).subscribe(data => {
+
+    }, error => console.log(error));
     this.editedCamp.emit(this.campForm.value as LocationCamp);
+  }
+
+  getCurrentLocation() {
+    navigator.geolocation.getCurrentPosition((position) => {
+      this.campForm.patchValue({
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude
+      });
+     });
   }
 
 }

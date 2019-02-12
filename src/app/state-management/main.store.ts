@@ -1,4 +1,3 @@
-import { Location } from '../models/location';
 import { Route } from '../models/route';
 import { LocationCamp } from "app/models/location-camp";
 
@@ -8,17 +7,13 @@ export interface IMainStore {
 }
 export interface IUserStore {
     userName: string | null;
-    locations: Location[] | null;
     selectedRoute: Route | null;
-    selectedLocation: Location | null;
     selectedLocationCamp: LocationCamp | null;
 }
 
 export const UserStore : IUserStore = {
     userName: "",
-    locations: [],
     selectedRoute: null,
-    selectedLocation: null,
     selectedLocationCamp: null
 }
 
