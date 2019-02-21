@@ -145,8 +145,10 @@ export class ServicingClientComponent implements OnInit {
 
       }, error => console.log(error));
     }
-    this.sentInteraction = true;
-    this.service.insertClientAppearance(interaction);
+
+    this.service.insertClientAppearance(interaction).subscribe(data => {
+      this.sentInteraction = true;
+    }, error => console.log(error));
   }
 
   requestedItemAdded(item: RequestedItem) {
