@@ -61,7 +61,13 @@ export class LocationCampComponent implements OnInit {
     clientInteraction.client_id = client.id;
     clientInteraction.location_camp_id = JSON.parse(this.activatedRoute.snapshot.params['id']);
     clientInteraction.still_lives_here = true;
-    this.clientService.insertClientAppearance(clientInteraction);
+    this.clientService.insertClientAppearance(clientInteraction).subscribe(data => {
+      client.previous_camp_id = client.current_camp_id;
+      client.current_camp_id = JSON.parse(window.localStorage.getItem('locationCampId'));
+
+      this.clientService.updateClient(client).subscribe(data => {
+      });
+    });
   }
 
   createClient() {
