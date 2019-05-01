@@ -66,17 +66,16 @@ export class LeaderSignInComponent implements OnInit {
     this.routeInstance.start_time = new Date();
     this.mainService.insertRouteInstance(this.routeInstance).subscribe(data => {
       window.localStorage.setItem('routeInstance', data.id);
+      window.localStorage.setItem('heatRoute', this.routeInstanceForm.get('heat_route').value);
+      window.localStorage.setItem('routeId', this.routeInstanceForm.get('route_id').value);
+      window.localStorage.setItem('leaderName', this.routeInstanceForm.get('leader_name').value);
+
+      if (this.routeInstanceForm.get('heat_route').value) {
+      this.router.navigate(['checkoutHeaters']);
+      }
+      else {
+        this.router.navigate(['volunteerInfo']);
+      }
     }, error => {console.log(error)});
-
-    window.localStorage.setItem('heatRoute', this.routeInstanceForm.get('heat_route').value);
-    window.localStorage.setItem('routeId', this.routeInstanceForm.get('route_id').value);
-    window.localStorage.setItem('leaderName', this.routeInstanceForm.get('leader_name').value);
-
-    if (this.routeInstanceForm.get('heat_route').value) {
-     this.router.navigate(['checkoutHeaters']);
-    }
-    else {
-      this.router.navigate(['volunteerInfo']);
-    }
   }
 }

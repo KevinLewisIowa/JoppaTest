@@ -130,10 +130,19 @@ export class ServicingClientComponent implements OnInit {
       interaction.serviced = true;
       interaction.was_seen = true;
       interaction.still_lives_here = true;
+
+      this.service.updateClient(this.client).subscribe(data => {
+        
+      }, error => console.log(error));
+
     } else if (interactionType === 2) {
       interaction.serviced = true;
       interaction.still_lives_here = true;
       interaction.was_seen = false;
+
+      this.service.updateClient(this.client).subscribe(data => {
+        
+      }, error => console.log(error));
     } else if (interactionType === 3) {
       interaction.serviced = false;
       interaction.still_lives_here = false;
