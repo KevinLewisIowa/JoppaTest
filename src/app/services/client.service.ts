@@ -123,6 +123,20 @@ export class ClientService {
     });
   }
 
+  getClientNotesForClient(clientId: number) {
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.localStorage.getItem('apiToken')
+    });
+    return this.http.get(this.baseUrl + `getClientNotesForClient?clientId=${clientId}`, {headers: myHeader}).map((res: any) => {
+      if (res.message === 'invalid-token') {
+        window.localStorage.removeItem('apiToken');
+        this.router.navigate(['/application-login']);
+      }
+      return res;
+    });
+  }
+
   insertClientLike(theClientLike: ClientLike) {
     const myHeader = new HttpHeaders({
       'Content-Type': 'application/json',

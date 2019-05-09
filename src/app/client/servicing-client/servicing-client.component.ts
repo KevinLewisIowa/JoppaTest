@@ -62,6 +62,11 @@ export class ServicingClientComponent implements OnInit {
           this.notes = data;
         }, error => console.log(error));
       }
+      else if (this.isAdmin) {
+        this.service.getClientNotesForClient(this.clientId).subscribe((data: Note[]) => {
+          this.notes = data;
+        }, error => console.log(error));
+      }
 
       if (this.heatRoute) {
         // get heating equipment for this person
@@ -206,13 +211,23 @@ export class ServicingClientComponent implements OnInit {
   }
 
   back() {
-    if (!this.sentInteraction) {
-      if (!confirm('Are you sure you want to close out of this client? You have not yet marked them as seen or serviced.')) {
-        return;
+    if(this.isAdmin) {
+      if (confirm('Are you wanting to go back to the client listing?')) {
+        this.router.navigate(['/admin/clientListing']);
+      }
+      else {
+        this.router.navigate([`/locationCamp/${this.locationCampId}`]);
       }
     }
-
-    this.router.navigate([`/locationCamp/${this.locationCampId}`]);
+    else {
+      if (!this.sentInteraction) {
+        if (!confirm('Are you sure you want to close out of this client? You have not yet marked them as seen or serviced.')) {
+          return;
+        }
+      }
+  
+      this.router.navigate([`/locationCamp/${this.locationCampId}`]);
+    }
   }
 
   deleteRequest(id) {

@@ -38,4 +38,8 @@ export class AdminHomeComponent implements OnInit {
     this.router.navigate(['changeRegularPassword']);
   }
 
+  gotToClientListing() {
+    this.router.navigate(['/admin/clientListing']);
+  }
+
 }

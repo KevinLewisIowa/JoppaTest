@@ -66,6 +66,7 @@ import { ChangeRegularPasswordComponent } from './change-regular-password/change
 import { AdminCheckInComponent } from './admin-check-in/admin-check-in.component';
 import { AdminSeenServicedReportComponent } from './admin-reports/admin-seen-serviced-report/admin-seen-serviced-report.component';
 import { HeatEquipmentPerRouteReportComponent } from './heat-equipment-per-route-report/heat-equipment-per-route-report.component';
+import { AdminClientListingComponent } from './admin-client-listing/admin-client-listing.component';
 
 const reducers = {
   user: MainReducer,
@@ -121,6 +122,7 @@ const reducers = {
     AdminCheckInComponent,
     AdminSeenServicedReportComponent,
     HeatEquipmentPerRouteReportComponent,
+    AdminClientListingComponent,
   ],
   imports: [
     BrowserModule,
