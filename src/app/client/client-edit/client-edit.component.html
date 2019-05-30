@@ -8,7 +8,15 @@
 <div class="login-box">
   <div class="col-md-12">
     <label>Preferred Name: </label>
-    <input type="text" placeholder="name" formControlName="preferred_name"/>
+    <input type="text" placeholder="preferred name" formControlName="preferred_name"/>
+  </div>
+  <div class="col-md-12">
+    <label>First Name: </label>
+    <input type="text" placeholder="first name" formControlName="first_name"/>
+  </div>
+  <div class="col-md-12">
+    <label>Last Name: </label>
+    <input type="text" placeholder="last name" formControlName="last_name"/>
   </div>
   <div class="col-md-12">
     <label>Birth Date: </label>
@@ -21,11 +29,7 @@
   </div>
   <div class="col-md-12">
     <label>Boot Size: </label>
-    <input type="number" placeholder="boot size" formControlName="boot_size"/>
-  </div>
-  <div class="col-md-12">
-    <label>Number of Meals: </label>
-    <input type="text" placeholder="number of meals" formControlName="number_meals" required/>
+    <input type="text" placeholder="boot size" formControlName="boot_size"/>
   </div>
   <div class="col-md-12">
     <label>Phone: </label>
@@ -40,8 +44,8 @@
     <input type="checkbox" formControlName="is_aftercare"/>
   </div>
   <div class="col-md-12">
-    <label>Joppa Apartment Number: </label>
-    <input type="text" placeholder="Joppa Apartment Number" formControlName="joppa_apartment_number"/>
+    <label>Mailbox: </label>
+    <input type="text" placeholder="Joppa Mailbox Number" formControlName="joppa_apartment_number"/>
   </div>
   <div class="col-md-12">
     <label>Dwelling: </label>
@@ -55,6 +59,15 @@
       <option value="Streets">Streets</option>
       <option value="House">House</option>
       <option value="Apartment">Apartment</option>
+    </select>
+  </div>
+  <div class="col-md-12">
+    <label>Status: </label>
+    <select class="form-control" formControlName="status">
+      <option value="Active">Active</option>
+      <option value="Inactive">Inactive</option>
+      <option value="Alumni">Alumni</option>
+      <option value="Deceased">Deceased</option>
     </select>
   </div>
   <div class="col-md-12">

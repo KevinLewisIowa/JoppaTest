@@ -1,14 +1,15 @@
 export class Client {
     id: number = undefined;
+    first_name: string = undefined;
+    last_name: string = undefined;
     preferred_name: string = undefined;
     birth_date: Date = undefined;
     is_aftercare: boolean = false;
     shoe_size: string = undefined;
     boot_size: string = undefined;
     phone: string = undefined;
-    deceased: boolean = false;
+    status: string = undefined;
     is_veteran: boolean = false;
-    inactive: boolean = false;
     inactive_description: string = undefined;
     number_meals: number = undefined;
     joppa_apartment_number: string = undefined;

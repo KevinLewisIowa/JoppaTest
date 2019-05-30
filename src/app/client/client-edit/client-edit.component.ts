@@ -26,6 +26,8 @@ export class ClientEditComponent implements OnInit {
     this.theClient = new Client();
     this.clientForm = this.fb.group({
       birth_date: '',
+      first_name: '',
+      last_name: '',
       preferred_name: '',
       is_aftercare: false,
       is_veteran: false,
@@ -34,6 +36,7 @@ export class ClientEditComponent implements OnInit {
       shoe_size: '',
       boot_size: '',
       number_meals: 1,
+      status: 'Active',
       phone: '',
       joppa_apartment_number: '',
       dwelling: ''
@@ -44,6 +47,8 @@ export class ClientEditComponent implements OnInit {
 
   submitRoute() {
     const locationCampId = JSON.parse(window.localStorage.getItem('locationCampId'));
+    this.theClient.first_name = this.clientForm.get('first_name').value;
+    this.theClient.last_name = this.clientForm.get('last_name').value;
     this.theClient.preferred_name = this.clientForm.get('preferred_name').value;
     this.theClient.birth_date = new Date(Date.parse(this.clientForm.get('birth_date').value));
     this.theClient.is_aftercare = this.clientForm.get('is_aftercare').value;
@@ -52,8 +57,7 @@ export class ClientEditComponent implements OnInit {
     this.theClient.previous_camp_id = null;
     this.theClient.shoe_size = this.clientForm.get('shoe_size').value;
     this.theClient.boot_size = this.clientForm.get('boot_size').value;
-    this.theClient.inactive = false;
-    this.theClient.deceased = false;
+    this.theClient.status = this.clientForm.get('status').value;
     this.theClient.inactive_description = '';
     this.theClient.number_meals = this.clientForm.get('number_meals').value as number;
     this.theClient.phone = this.clientForm.get('phone').value;
