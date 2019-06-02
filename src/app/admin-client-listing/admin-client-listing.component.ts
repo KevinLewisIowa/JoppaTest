@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./admin-client-listing.component.css']
 })
 export class AdminClientListingComponent implements OnInit {
-  clients: Client[] = [];
+  clients: any[] = [];
 
   constructor(private clientService: ClientService, private router: Router) {
     this.clientService.getClientsByName('').subscribe(data => {
@@ -20,7 +20,7 @@ export class AdminClientListingComponent implements OnInit {
   ngOnInit() {
   }
 
-  viewClient(theClient: Client) {
+  viewClient(theClient) {
     localStorage.setItem('selectedClient', JSON.stringify(theClient.id));
     this.router.navigate(['/serviceClient']);
   }
