@@ -11,7 +11,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { InlineSVGModule} from 'ng-inline-svg';
 
-import { MatPaginatorModule, MatTableModule, MatFormFieldModule, MatInputModule } from '@angular/material';
+import { MatPaginatorModule, MatTableModule, MatFormFieldModule, MatInputModule, MatSortModule } from '@angular/material';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 
@@ -137,6 +137,7 @@ const reducers = {
     MatFormFieldModule,
     MatInputModule,
     MatTableModule,
+    MatSortModule,
     BrowserAnimationsModule,
     HttpClientModule,
     // InMemoryWebApiModule.forRoot(InMemoryDataService),
