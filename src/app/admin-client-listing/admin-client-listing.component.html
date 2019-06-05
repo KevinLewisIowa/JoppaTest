@@ -4,29 +4,49 @@
     <h2>Client Listing</h2>
   </div>
   <div class="panel-body">
+    <mat-form-field>
+      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+    </mat-form-field>
+  </div>
+  <div class="panel-body">
     <div>
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th class="text-center">Name</th>
-            <th class="text-center">Phone</th>
-            <th class="text-center">Route</th>
-            <th class="text-center">Camp</th>
-            <th class="text-center">Status</th>
-            <th class="text-center">Last Interaction</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let client of clients" (click)="viewClient(client)" class="client-row">
-            <td class="text-center">{{client.preferred_name}}</td>
-            <td class="text-center">{{client.phone}}</td>
-            <td class="text-center">{{client.route_name}}</td>
-            <td class="text-center">{{client.camp_name}}</td>
-            <td class="text-center">{{client.status}}</td>
-            <td class="text-center">{{client.updated_at | date: 'shortDate'}}</td>
-          </tr>
-        </tbody>
-      </table>
+      <mat-table #table [dataSource]="dataSource" matSort>
+
+        <ng-container matColumnDef="preferred_name">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
+          <mat-cell *matCellDef="let client">{{client.preferred_name}}</mat-cell>
+        </ng-container>
+        
+        <ng-container matColumnDef="phone">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Phone</mat-header-cell>
+          <mat-cell *matCellDef="let client">{{client.phone}}</mat-cell>
+        </ng-container>
+        
+        <ng-container matColumnDef="route_name">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Route</mat-header-cell>
+          <mat-cell *matCellDef="let client">{{client.route_name}}</mat-cell>
+        </ng-container>
+        
+        <ng-container matColumnDef="camp_name">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Camp</mat-header-cell>
+          <mat-cell *matCellDef="let client">{{client.camp_name}}</mat-cell>
+        </ng-container>
+        
+        <ng-container matColumnDef="status">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Status</mat-header-cell>
+          <mat-cell *matCellDef="let client">{{client.status}}</mat-cell>
+        </ng-container>
+        
+        <ng-container matColumnDef="updated_at">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Last Interaction</mat-header-cell>
+          <mat-cell *matCellDef="let client">{{client.updated_at | date: 'shortDate'}}</mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row (click)="viewClient(client)" *matRowDef="let client; columns: displayedColumns;"></mat-row>
+      </mat-table>
+
+      <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
     </div>
   </div>
 </div>

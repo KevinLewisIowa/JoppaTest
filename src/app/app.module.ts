@@ -11,6 +11,10 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { InlineSVGModule} from 'ng-inline-svg';
 
+import { MatPaginatorModule, MatTableModule, MatFormFieldModule, MatInputModule } from '@angular/material';
+
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
+
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
@@ -129,6 +133,11 @@ const reducers = {
     FormsModule,
     NgbModule.forRoot(),
     ReactiveFormsModule,
+    MatPaginatorModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatTableModule,
+    BrowserAnimationsModule,
     HttpClientModule,
     // InMemoryWebApiModule.forRoot(InMemoryDataService),
     StoreModule.forRoot(reducers),
