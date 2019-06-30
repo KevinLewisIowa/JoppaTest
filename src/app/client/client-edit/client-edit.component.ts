@@ -39,13 +39,15 @@ export class ClientEditComponent implements OnInit {
       status: 'Active',
       phone: '',
       joppa_apartment_number: '',
-      dwelling: ''
+      dwelling: '',
+      gender: '',
+      admin_notes: ''
     });
     this.clientForm.get('preferred_name').setValidators(Validators.required);
     this.clientForm.get('dwelling').setValidators(Validators.required);
   }
 
-  submitRoute() {
+  submitClient() {
     const locationCampId = JSON.parse(window.localStorage.getItem('locationCampId'));
     this.theClient.first_name = this.clientForm.get('first_name').value;
     this.theClient.last_name = this.clientForm.get('last_name').value;
@@ -63,6 +65,8 @@ export class ClientEditComponent implements OnInit {
     this.theClient.phone = this.clientForm.get('phone').value;
     this.theClient.joppa_apartment_number = this.clientForm.get('joppa_apartment_number').value;
     this.theClient.dwelling = this.clientForm.get('dwelling').value;
+    this.theClient.gender = this.clientForm.get('gender').value;
+    this.theClient.admin_notes = this.clientForm.get('admin_notes').value;
     this.clientService.insertClient(this.theClient).subscribe((data: Client) => {
       const clientInteraction: Appearance = new Appearance();
       clientInteraction.client_id = data.id;

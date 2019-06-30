@@ -12,6 +12,7 @@ import { HeaterStatus } from '../../models/heater-status';
 import { MainService } from '../../services/main.service';
 import { Heater } from 'app/models/heater';
 import { Note } from 'app/models/note';
+import { ClientPet } from 'app/models/client-pet';
 
 @Component({
   selector: 'app-servicing-client',
@@ -28,6 +29,7 @@ export class ServicingClientComponent implements OnInit {
   clientDislikes: ClientDislike[] = [];
   healthConcerns: HealthConcern[] = [];
   notes: Note[] = [];
+  pets: ClientPet[] = [];
   sentInteraction = false;
   receivedItems: RequestedItem[] = [];
   heatRoute = false;
@@ -55,6 +57,9 @@ export class ServicingClientComponent implements OnInit {
       });
       this.service.getRequestedItems(this.clientId).subscribe((data: RequestedItem[]) => {
         this.requestedItems = data.filter(w => w.has_received != true);
+      });
+      this.service.getClientPets(this.clientId).subscribe((data : ClientPet[]) => {
+        this.pets = data;
       });
 
       if (routeInstanceId != null) {
@@ -135,18 +140,20 @@ export class ServicingClientComponent implements OnInit {
       interaction.serviced = true;
       interaction.was_seen = true;
       interaction.still_lives_here = true;
+      this.client.last_interaction_date = new Date();
 
       this.service.updateClient(this.client).subscribe(data => {
-        
+
       }, error => console.log(error));
 
     } else if (interactionType === 2) {
       interaction.serviced = true;
       interaction.still_lives_here = true;
       interaction.was_seen = false;
-
+      
+      this.client.last_interaction_date = new Date();
       this.service.updateClient(this.client).subscribe(data => {
-        
+
       }, error => console.log(error));
     } else if (interactionType === 3) {
       interaction.serviced = false;
@@ -156,7 +163,15 @@ export class ServicingClientComponent implements OnInit {
       this.client.previous_camp_id = this.locationCampId;
       this.client.current_camp_id = null;
       this.service.updateClient(this.client).subscribe(data => {
+        
+      }, error => console.log(error));
+    } else if (interactionType === 4) {
+      interaction.serviced = false;
+      interaction.still_lives_here = false;
+      interaction.was_seen = false;
 
+      this.service.updateClient(this.client).subscribe(data => {
+        
       }, error => console.log(error));
     }
 
@@ -205,6 +220,12 @@ export class ServicingClientComponent implements OnInit {
     element.scrollIntoView();
   }
 
+  petAdded(pet: ClientPet) {
+    this.pets.push(pet);
+    const element = document.querySelector('#petList');
+    element.scrollIntoView();
+  }
+
   goToTop() {
     const element = document.querySelector('#topOfScreen');
     element.scrollIntoView();
@@ -238,12 +259,14 @@ export class ServicingClientComponent implements OnInit {
 
   removeLike(id) {
     this.service.removeLike(id).subscribe(response => {
+      console.log(this.clientLikes);
       this.clientLikes = this.clientLikes.filter(w => w.id != id);
     })
   }
 
   removeDislike(id) {
     this.service.removeDislike(id).subscribe(response => {
+      console.log(this.clientDislikes);
       this.clientDislikes = this.clientDislikes.filter(w => w.id != id);
     })
   }
@@ -251,6 +274,13 @@ export class ServicingClientComponent implements OnInit {
   removeGoal(id) {
     this.service.deleteGoalAndNextStep(id).subscribe(response => {
       this.goalsAndSteps = this.goalsAndSteps.filter(w => w.id != id);
+    })
+  }
+
+  removePet(id) {
+    this.service.removePet(id).subscribe(response => {
+      console.log(this.pets);
+      this.pets = this.pets.filter(w => w.id != id);
     })
   }
 

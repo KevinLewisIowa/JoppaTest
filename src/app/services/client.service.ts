@@ -20,6 +20,7 @@ import { PrayerRequestAndNeed } from "app/models/prayer-request";
 import { GoalsNextStep } from "app/models/goals-next-steps";
 import { Router } from '@angular/router';
 import { Note } from 'app/models/note';
+import { ClientPet } from 'app/models/client-pet';
 
 
 // adding a new comment
@@ -352,6 +353,38 @@ export class ClientService {
       });
   }
 
+  insertPet(pet: ClientPet) {
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.localStorage.getItem('apiToken')
+    });
+    
+    return this.http.post(this.baseUrl + `client_pets`, {client_pet: pet}, {headers: myHeader})
+    .map((res: any) => {
+      if (res.message === 'invalid-token') {
+        window.localStorage.removeItem('apiToken');
+        this.router.navigate(['/application-login']);
+      }
+      return res;
+    });
+  }
+
+  getClientPets(id) {
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.localStorage.getItem('apiToken')
+    });
+    
+    return this.http.get(this.baseUrl + `getClientPets?clientId=${id}`, {headers: myHeader})
+    .map((res: any) => {
+      if (res.message === 'invalid-token') {
+        window.localStorage.removeItem('apiToken');
+        this.router.navigate(['/application-login']);
+      }
+      return res;
+    });
+  }
+
   deletedRequestedItem(id: number) {
     const myHeader = new HttpHeaders({
       'Content-Type': 'application/json',
@@ -386,6 +419,20 @@ export class ClientService {
       'Authorization': window.localStorage.getItem('apiToken')
     });
     return this.http.delete(this.baseUrl + `client_dislikes/${id}`, {headers: myHeader}).map((res: any) => {
+      if (res.message === 'invalid-token') {
+        window.localStorage.removeItem('apiToken');
+        this.router.navigate(['/application-login']);
+      }
+      return res;
+    });
+  }
+
+  removePet(id: number) {
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.localStorage.getItem('apiToken')
+    });
+    return this.http.delete(this.baseUrl + `client_pets/${id}`, {headers: myHeader}).map((res: any) => {
       if (res.message === 'invalid-token') {
         window.localStorage.removeItem('apiToken');
         this.router.navigate(['/application-login']);

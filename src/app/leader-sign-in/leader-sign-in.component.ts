@@ -38,7 +38,7 @@ export class LeaderSignInComponent implements OnInit {
       leader_name: '',
       leader_phone: '',
       route_id: '',
-      heat_route: true
+      heat_route: false
     });
 
     const phoneRegEx = /^[\s.-]?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/;

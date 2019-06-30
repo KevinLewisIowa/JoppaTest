@@ -27,7 +27,7 @@
           <tr *ngFor="let client of clients" (click)="viewClient(client)" class="client-row">
             <td class="text-center">{{client.preferred_name}}</td>
             <td class="text-center">{{client.phone}}</td>
-            <td class="text-center">{{client.updated_at | date: 'shortDate'}}</td>
+            <td class="text-center">{{client.last_interaction_date}}</td>
           </tr>
         </tbody>
       </table>

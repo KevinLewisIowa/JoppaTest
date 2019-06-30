@@ -41,7 +41,7 @@ export class ClientEditModalComponent implements OnInit {
     this.editing = !this.editing;
   }
 
-  submitRoute() {
+  submitClient() {
     this.clientService.updateClient(this.clientForm.value as Client).subscribe(data => {
 
     });

@@ -16,6 +16,9 @@ export class Client {
     dwelling: string = undefined;
     created_at: Date = undefined;
     updated_at: Date = undefined;
+    last_interaction_date: Date = undefined;
+    gender: string = undefined;
+    admin_notes: string = undefined;
     scene_at: Date = undefined;
     current_camp_id: number = undefined;
     previous_camp_id: number = undefined;

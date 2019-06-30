@@ -5,9 +5,16 @@
   </div>
   <div class="panel-body">
     <div class="row">
+      <div class="col-lg-12 col-md-12">
+          <h4>Admin Notes: </h4>
+          <p>{{client.admin_notes}}</p>
+      </div>
+    </div>
+    <div class="row">
       <div class="col-lg-12 col-md-12" *ngIf="!sentInteraction">
         <button type="button" class="btn btn-primary" (click)="sendInteraction(1)">Seen & Serviced</button>&nbsp;
         <button type="button" class="btn btn-primary" (click)="sendInteraction(2)">Serviced & Not Seen</button>&nbsp;
+        <button type="button" class="btn btn-primary" (click)="sendInteraction(4)">Not Seen</button>&nbsp;
         <button type="button" *ngIf="isAdmin" class="btn btn-primary" (click)="sendInteraction(3)">No longer lives here</button>
       </div>
     </div>
@@ -220,6 +227,35 @@
         </table>
       </div>
       <div class="col-lg-12 col-md-12" *ngIf="!heatRoute || isAdmin">
+          <h4>Pets <button type="button" (click)="goToTop();petsMdl.showModal()" class="btn btn-secondary">New</button></h4>
+          <table class="table" id="petList">
+            <thead>
+              <tr>
+                <th>Pet Type</th>
+                <th>Quantity</th>
+                <th>Food Requested</th>
+                <th>Remove</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let pet of pets">
+                <td>
+                  {{pet.pet_type}}
+                </td>
+                <td>
+                  {{pet.quantity}}
+                </td>
+                <td>
+                  {{pet.food_requested}}
+                </td>
+                <td>
+                  <button type="button" class="btn btn-primary" (click)="removePet(pet.id)">Remove</button>
+                <td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      <div class="col-lg-12 col-md-12" *ngIf="!heatRoute || isAdmin">
         <h4>Health Concerns <button type="button" (click)="goToTop();healthMdl.showModal()" class="btn btn-secondary">New</button></h4>
         <table class="table" id="concerns">
           <thead>
@@ -256,3 +292,4 @@
 <app-notes #notesMdl (noteAdded)="noteAdded($event)"></app-notes>
 <app-client-edit-modal #clientEditMdl (editedClient)="editedClient($event)"></app-client-edit-modal>
 <app-loan-heater-modal #newHeaterModal (loaningHeater)="loaningHeater($event)"></app-loan-heater-modal>
+<app-pets #petsMdl (petAdded)="petAdded($event)"></app-pets>

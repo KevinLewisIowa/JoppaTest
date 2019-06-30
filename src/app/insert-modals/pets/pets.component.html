@@ -1,0 +1,32 @@
+<ng-template #petsMdl let-c="close" let-d="dismiss"> 
+  <div class="modal-header">
+    <h4 class="modal-title">Add Pet</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')"><span aria-hidden="true">&times;</span></button>
+  </div>
+  <form>
+    <div class="modal-body">
+      <div class="form-group">
+        <div class="row">
+          <div class="col-sm-4">
+              <select class="form-control" name="pet_type" [(ngModel)]="pet_type">
+                  <option value="Dog">Dog</option>
+                  <option value="Cat">Cat</option>
+                </select>
+          </div>
+          <div class="col-sm-4">
+            <input class="form-control" type="text" [(ngModel)]="quantity" placeholder="Quantity" name="quantity"/>
+          </div>
+          <div class="col-sm-4">
+            <label for="request_food">Food Requested
+              <input id="request_food" class="form-control" type="checkbox" [(ngModel)]="food_requested" name="food_requested"/>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="submitPet();c('')">Submit</button>
+    <button type="button" class="btn btn-primary" (click)="c('Close click')">Close</button>
+  </div>
+</ng-template>

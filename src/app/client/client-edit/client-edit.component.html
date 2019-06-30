@@ -19,9 +19,24 @@
     <input type="text" placeholder="last name" formControlName="last_name"/>
   </div>
   <div class="col-md-12">
+    <label>Gender: </label>
+    <select class="form-control" formControlName="gender">
+      <option value="Male">Male</option>
+      <option value="Female">Female</option>
+    </select>
+  </div>
+  <div class="col-md-12">
     <label>Birth Date: </label>
     <input type="date" placeholder="mm/dd/yyyy" formControlName="birth_date"/>
     <span>Date must be MM/DD/YYYY</span>
+  </div>
+  <div class="col-md-12">
+    <label>Phone: </label>
+    <input type="text" placeholder="phone" formControlName="phone"/>
+  </div>
+  <div class="col-md-12">
+    <label>Admin Notes: </label>
+    <textarea rows="3" placeholder="admin notes" formControlName="admin_notes"></textarea>
   </div>
   <div class="col-md-12">
     <label>Shoe Size: </label>
@@ -30,10 +45,6 @@
   <div class="col-md-12">
     <label>Boot Size: </label>
     <input type="text" placeholder="boot size" formControlName="boot_size"/>
-  </div>
-  <div class="col-md-12">
-    <label>Phone: </label>
-    <input type="text" placeholder="phone" formControlName="phone"/>
   </div>
   <div class="col-md-12">
     <label>Is Veteran: </label>
@@ -53,6 +64,9 @@
       <option value="Tent">Tent</option>
       <option value="Shack">Shack</option>
       <option value="Abandoned Structure">Abandoned Structure</option>
+      <option value="Mobile Home">Mobile Home</option>
+      <option value="Motel">Motel</option>
+      <option value="Garage">Garage</option>
       <option value="Vehicle">Vehicle</option>
       <option value="Camper">Camper</option>
       <option value="Under Bridge">Under Bridge</option>
@@ -71,7 +85,7 @@
     </select>
   </div>
   <div class="col-md-12">
-    <button class="btn btn-secondary" type="button" [disabled]="!clientForm.valid" (click)="submitRoute()">Submit Client</button>
+    <button class="btn btn-secondary" type="button" [disabled]="!clientForm.valid" (click)="submitClient()">Submit Client</button>
   </div>
 </div>
 </form>
