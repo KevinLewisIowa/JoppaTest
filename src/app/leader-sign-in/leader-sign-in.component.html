@@ -28,7 +28,7 @@
           <input type="checkbox" checked formControlName="heat_route">
         </div>
         <div class="col-md-12">
-          <button type="button" [disabled]="!routeInstanceForm.valid" (click)="insertRouteInstance()" class="btn btn-primary">Next</button>
+          <button type="submit" [disabled]="!routeInstanceForm.valid" (click)="insertRouteInstance()" class="btn btn-primary">Next</button>
         </div>
         <div class="col-md-12">
           <button type="button" (click)="signOut()" class="btn btn-primary">Sign Out</button>

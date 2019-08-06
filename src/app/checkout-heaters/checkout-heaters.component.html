@@ -47,7 +47,7 @@
       </div>
     </form>
   <div>
-    <button *ngIf="!isEndOfRoute" [disabled]="routeInstanceTankHoseForm !== undefined ? !routeInstanceTankHoseForm.valid : null" type="button" class="btn btn-primary" (click)="next();">Next</button>
-    <button *ngIf="isEndOfRoute" [disabled]="routeInstanceTankHoseForm !== undefined ? !routeInstanceTankHoseForm.valid : null" (click)="endRoute()" type="button" class="btn btn-primary">End Route</button>
+    <button *ngIf="!isEndOfRoute" [disabled]="routeInstanceTankHoseForm !== undefined ? !routeInstanceTankHoseForm.valid : null" type="submit" class="btn btn-primary" (click)="next();">Next</button>
+    <button *ngIf="isEndOfRoute" [disabled]="routeInstanceTankHoseForm !== undefined ? !routeInstanceTankHoseForm.valid : null" type="button" class="btn btn-primary" (click)="endRoute()">End Route</button>
   </div>
 </div>
