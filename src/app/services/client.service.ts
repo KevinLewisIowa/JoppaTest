@@ -82,6 +82,20 @@ export class ClientService {
     })
   }
 
+  getBirthdaysByMonth(monthInt: number) {
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.localStorage.getItem('apiToken')
+    });
+    return this.http.get(this.baseUrl + `getClientsByBirthMonth?monthInt=${monthInt}`, {headers: myHeader}).map((res: any) => {
+      if (res.message === 'invalid-token') {
+        window.localStorage.removeItem('apiToken');
+        this.router.navigate(['/application-login']);
+      }
+      return res;
+    });
+  }
+
   getNewClients() {
     const myHeader = new HttpHeaders({
       'Content-Type': 'application/json',
