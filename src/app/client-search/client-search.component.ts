@@ -17,6 +17,8 @@ export class ClientSearchComponent implements OnInit, OnDestroy {
   preferredName = '';
   nameSearch = '';
   stateSearch = '';
+  noResultsMessage = '';
+  noResultCount = 0;
   citySearch = '';
   businessUnitCode: number = -1;
   resultMessage = '';
@@ -68,23 +70,16 @@ export class ClientSearchComponent implements OnInit, OnDestroy {
       this.loading = false;
       this.clients = results as any[];
       this.resultCount = this.clients.length;
-      /*if (tot > this.pageSize * this.page) {
-        this.nextEnabled = true;
-        this.resultMessage =
-          this.showing + ` ${(this.pageSize * this.page) - (this.pageSize - 1)}-${this.pageSize * this.page} ` + this.of + ` ${tot}`;
+      if (this.clients.length == 0) {
+        this.noResultCount++;
+        this.noResultsMessage = 'No results. ' + this.noResultCount;
       } else {
-        if (this.resultCount > 0) {
-          this.resultMessage = this.showing + ` ${(this.pageSize * (this.page - 1)) + 1}-${tot} ` + this.of + ` ${tot}`;
-        } else {
-          this.resultMessage = this.noRecords;
-        }
-        this.nextEnabled = false;
+        this.noResultCount = 0;
+        this.noResultsMessage = '';
       }
-      if (this.page === 1) {
-        this.previousEnabled = false;
-      } else {
-        this.previousEnabled = true;
-      }*/
+    }, error => {
+      this.clients = [];
+      this.noResultsMessage = 'Error getting results';
     });
   }
 
