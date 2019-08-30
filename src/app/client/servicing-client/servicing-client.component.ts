@@ -52,16 +52,6 @@ export class ServicingClientComponent implements OnInit {
       this.service.getClientById(this.clientId).subscribe((data: Client) => {
         this.client = data;
       });
-      this.service.getRecentReceivedItems(this.clientId).subscribe((data: RequestedItem[]) => {
-        this.receivedItems = data;
-      });
-      this.service.getRequestedItems(this.clientId).subscribe((data: RequestedItem[]) => {
-        this.requestedItems = data.filter(w => w.has_received != true);
-      });
-      this.service.getClientPets(this.clientId).subscribe((data : ClientPet[]) => {
-        this.pets = data;
-      });
-
       if (routeInstanceId != null) {
         this.service.getClientNotesForRoute(this.clientId, routeInstanceId).subscribe((data: Note[]) => {
           this.notes = data;
@@ -91,22 +81,35 @@ export class ServicingClientComponent implements OnInit {
         });
         this.getHeaterStatuses();
       } else {
-        this.service.getGoalsAndNextSteps(this.clientId).subscribe((data: GoalsNextStep[]) => {
-          this.goalsAndSteps = data;
+        this.service.getRecentReceivedItems(this.clientId).subscribe((data: RequestedItem[]) => {
+          this.receivedItems = data;
         });
-        this.service.getClientLikes(this.clientId).subscribe((data: ClientLike[]) => {
-          this.clientLikes = data;
+        this.service.getRequestedItems(this.clientId).subscribe((data: RequestedItem[]) => {
+          this.requestedItems = data.filter(w => w.has_received != true);
         });
-        this.service.getClientDislikes(this.clientId).subscribe((data: ClientDislike[]) => {
-          this.clientDislikes = data;
-        });
-        this.service.getHealthConcerns(this.clientId).subscribe((data: HealthConcern[]) => {
-          this.healthConcerns = data;
-        });
+        // this.service.getClientPets(this.clientId).subscribe((data : ClientPet[]) => {
+        //   this.pets = data;
+        // });
+        // this.service.getGoalsAndNextSteps(this.clientId).subscribe((data: GoalsNextStep[]) => {
+        //   this.goalsAndSteps = data;
+        // });
+        // this.service.getClientLikes(this.clientId).subscribe((data: ClientLike[]) => {
+        //   this.clientLikes = data;
+        // });
+        // this.service.getClientDislikes(this.clientId).subscribe((data: ClientDislike[]) => {
+        //   this.clientDislikes = data;
+        // });
+        // this.service.getHealthConcerns(this.clientId).subscribe((data: HealthConcern[]) => {
+        //   this.healthConcerns = data;
+        // });
       }
     }
     else {
       this.router.navigate(['/routes']);
+    }
+
+    if (this.client.birth_date == null) {
+      alert('Please ask this client for their birthday');
     }
   }
 
@@ -177,6 +180,7 @@ export class ServicingClientComponent implements OnInit {
 
     this.service.insertClientAppearance(interaction).subscribe(data => {
       this.sentInteraction = true;
+      this.router.navigate([`/locationCamp/${this.locationCampId}`]);
     }, error => console.log(error));
   }
 

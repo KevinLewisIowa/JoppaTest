@@ -1,6 +1,6 @@
 <div class="card text-center" style="opacity:0.93">
   <div class="card-header text-center" id="topOfScreen">
-    <button type="button" class="pull-left btn btn-primary" (click)="back()">Back</button>
+    <button type="button" class="pull-left btn btn-primary" (click)="back()">Back to Client List</button>
     <h2>{{client.preferred_name}}</h2> &nbsp; <button class="btn btn-primary" (click)="clientEditMdl.openModal(client)" type="button">Details</button>
   </div>
   <div class="panel-body">
@@ -90,7 +90,7 @@
             </tbody>
           </table>
         </div>
-      <div class="col-lg-12 col-md-12">
+      <div class="col-lg-12 col-md-12" *ngIf="!heatRoute">
         <h4>Requested Items <button type="button" (click)="goToTop();requestItemMdl.showModal()" class="btn btn-secondary">New</button></h4>
         <table class="table" id="items">
           <thead>
@@ -111,7 +111,7 @@
           </tbody>
         </table>
       </div>
-      <div *ngIf="receivedItems.length > 0" class="col-lg-12 col-md-12">
+      <div *ngIf="receivedItems.length > 0 || !heatRoute" class="col-lg-12 col-md-12"> <!-- added !heatRoute from ngIf to pare down heat screen -->
         <h4>Recently Received Items</h4>
         <table class="table" id="items">
           <thead>
@@ -130,7 +130,7 @@
           </tbody>
         </table>
       </div>
-      <div class="col-lg-12 col-md-12" *ngIf="!heatRoute || isAdmin">
+      <div class="col-lg-12 col-md-12" *ngIf="isAdmin"> <!-- removed !heatRoute from ngIf to pare down screen -->
         <h4>Goals/Next Steps <button type="button" (click)="goToTop();goalMdl.showModal()" class="btn btn-secondary">New</button></h4>
         <table class="table" id="goals">
           <thead>
@@ -159,7 +159,7 @@
           </tbody>
         </table>
       </div>
-      <div class="col-lg-12 col-md-12" *ngIf="!heatRoute || isAdmin">
+      <div class="col-lg-12 col-md-12" *ngIf="isAdmin"> <!-- removed !heatRoute from ngIf to pare down screen -->
         <h4>Likes <button type="button" class="btn btn-secondary" (click)="goToTop();likeMdl.showModal()">New</button></h4>
         <table class="table" id="likes">
           <thead>
@@ -184,7 +184,7 @@
           </tbody>
         </table>
       </div>
-      <div class="col-lg-12 col-md-12" *ngIf="!heatRoute || isAdmin">
+      <div class="col-lg-12 col-md-12" *ngIf="isAdmin"> <!-- removed !heatRoute from ngIf to pare down screen -->
         <h4>Dislikes <button type="button" (click)="goToTop();dislikeMdl.showModal()" class="btn btn-secondary">New</button></h4>
         <table class="table" id="dislikes">
           <thead>
@@ -226,7 +226,7 @@
           </tbody>
         </table>
       </div>
-      <div class="col-lg-12 col-md-12" *ngIf="!heatRoute || isAdmin">
+      <div class="col-lg-12 col-md-12" *ngIf="isAdmin"> <!-- removed !heatRoute from ngIf to pare down screen -->
           <h4>Pets <button type="button" (click)="goToTop();petsMdl.showModal()" class="btn btn-secondary">New</button></h4>
           <table class="table" id="petList">
             <thead>
@@ -255,7 +255,7 @@
             </tbody>
           </table>
         </div>
-      <div class="col-lg-12 col-md-12" *ngIf="!heatRoute || isAdmin">
+      <div class="col-lg-12 col-md-12" *ngIf="isAdmin"> <!-- removed !heatRoute from ngIf to pare down screen -->
         <h4>Health Concerns <button type="button" (click)="goToTop();healthMdl.showModal()" class="btn btn-secondary">New</button></h4>
         <table class="table" id="concerns">
           <thead>
