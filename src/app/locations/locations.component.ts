@@ -14,6 +14,7 @@ export class LocationsComponent implements OnInit {
   routeId : number;
   thisRoute : Route;
   locationCamps : LocationCamp[];
+  isAdmin : boolean;
   constructor(private route : ActivatedRoute, private mainService : MainService, private router:Router) { 
     this.thisRoute = new Route();
     this.locationCamps = [];
@@ -48,6 +49,7 @@ export class LocationsComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.isAdmin = JSON.parse(window.localStorage.getItem('isAdmin'));
   }
 
   openLocation(theLocation: LocationCamp){

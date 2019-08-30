@@ -1,6 +1,6 @@
 <div class="card panel-info" style="opacity:0.92">
   <div class="card-header text-center" style="opacity:0.93">
-    <button type="button" class="pull-left btn btn-primary" (click)="back()">Back</button>
+    <button type="button" class="pull-left btn btn-primary" (click)="back()" *ngIf="isAdmin">Back to Routes</button>
     <h2>{{thisRoute.name}}</h2>
     <div class="float-left"><button (click)="showRouteLocations()" class="btn btn-primary" type="button">Show Route Map</button></div>
     <div class="float-right"><button (click)="newLocationCamp()" class="btn btn-primary" type="button">New Camp</button></div>
