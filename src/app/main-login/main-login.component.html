@@ -4,14 +4,17 @@
   </div>
   <div class="panel-body">
     <form [formGroup]="passwordForm" >
+      
       <div class="entry-box">
         <div class="col-md-12">
           <label>Password: </label>
+         
           <input type="password" formControlName="the_password"/>
         </div>
         <div class="col-md-12">
           <button type="button" (click)="login()" class="btn btn-primary">Login</button>
-          
+          <input type="submit" style="display: none" />
+
         </div>
         <p style="color:red;" *ngIf="invalidText">Login Not Valid</p>
     
