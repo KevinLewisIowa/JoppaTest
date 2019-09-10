@@ -16,6 +16,16 @@
           <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
           <mat-cell *matCellDef="let client">{{client.preferred_name}}</mat-cell>
         </ng-container>
+
+        <!-- <ng-container matColumnDef="first_name">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>First Name</mat-header-cell>
+          <mat-cell *matCellDef="let client">{{client.first_name}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="last_name">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Last Name</mat-header-cell>
+          <mat-cell *matCellDef="let client">{{client.last_name}}</mat-cell>
+        </ng-container> -->
         
         <ng-container matColumnDef="phone">
           <mat-header-cell *matHeaderCellDef mat-sort-header>Phone</mat-header-cell>
