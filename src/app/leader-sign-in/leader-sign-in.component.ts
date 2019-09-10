@@ -71,7 +71,7 @@ export class LeaderSignInComponent implements OnInit {
       window.localStorage.setItem('leaderName', this.routeInstanceForm.get('leader_name').value);
 
       if (this.routeInstanceForm.get('heat_route').value) {
-      this.router.navigate(['checkoutHeaters']);
+        this.router.navigate(['checkoutHeaters']);
       }
       else {
         this.router.navigate(['volunteerInfo']);

@@ -72,6 +72,7 @@ import { AdminSeenServicedReportComponent } from './admin-reports/admin-seen-ser
 import { HeatEquipmentPerRouteReportComponent } from './heat-equipment-per-route-report/heat-equipment-per-route-report.component';
 import { AdminClientListingComponent } from './admin-client-listing/admin-client-listing.component';
 import { PetsComponent } from './insert-modals/pets/pets.component';
+import { BirthdayMonthsReportComponent } from './admin-reports/birthday-months-report/birthday-months-report.component';
 
 const reducers = {
   user: MainReducer,
@@ -129,6 +130,7 @@ const reducers = {
     HeatEquipmentPerRouteReportComponent,
     AdminClientListingComponent,
     PetsComponent,
+    BirthdayMonthsReportComponent,
   ],
   imports: [
     BrowserModule,

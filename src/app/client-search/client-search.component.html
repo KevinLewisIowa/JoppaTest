@@ -25,6 +25,11 @@
       </div>
     </div>
   </form>
+  <div [hidden]="clients.length > 0" class="modal-body">
+    <div class="row">
+      {{noResultsMessage}}
+    </div>
+  </div>
   <div [hidden]="clients.length===0" class="modal-body">
     <div class="row" >
       <div class="col-sm-12">

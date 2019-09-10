@@ -49,4 +49,8 @@ export class AdminReportsComponent implements OnInit {
     this.router.navigate([`/admin/reports/seenServicedReport`]);
   }
 
+  birthdayMonthsReport() {
+    this.router.navigate([`/admin/reports/birthdayMonthsReport`]);
+  }
+
 }

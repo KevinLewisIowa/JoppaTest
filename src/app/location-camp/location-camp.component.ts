@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Route } from '../models/route';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Params } from '@angular/router';
 import { MainService } from '../services/main.service';
 import { Store } from '@ngrx/store';
 import { IMainStore } from '../state-management/main.store';
@@ -9,6 +9,7 @@ import { Client } from '../models/client';
 import { LocationCamp } from "app/models/location-camp";
 import { Appearance } from 'app/models/appearance';
 import { ClientService } from 'app/services/client.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-location-camp',
@@ -76,6 +77,12 @@ export class LocationCampComponent implements OnInit {
 
   showMap() {
     window.open(`https://www.google.com/maps?q=${this.locationCamp.latitude},${this.locationCamp.longitude}&q=food&amp;z=14`, "_blank");
+  }
+
+  nextStop() {
+    localStorage.setItem('locationCampId', "73");
+    this.router.navigate([`locationCamp/73`]);
+    this.ngOnInit();
   }
 
   viewClient(theClient: Client) {
