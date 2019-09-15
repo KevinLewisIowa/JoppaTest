@@ -46,7 +46,7 @@ export class ServicingClientComponent implements OnInit {
     let routeInstanceId = JSON.parse(localStorage.getItem('routeInstance'));
     this.heatRoute = JSON.parse(window.localStorage.getItem('heatRoute'));
     this.isAdmin = JSON.parse(window.localStorage.getItem('isAdmin'));
-    this.locationCampId = Number(localStorage.getItem('locationCampId'));
+    this.locationCampId = JSON.parse(window.localStorage.getItem('locationCampId'));
     this.clientId = localStorage.getItem('selectedClient');
     if (this.clientId !== null) {
       this.service.getClientById(this.clientId).subscribe((data: Client) => {
@@ -170,7 +170,7 @@ export class ServicingClientComponent implements OnInit {
       }, error => console.log(error));
     } else if (interactionType === 4) {
       interaction.serviced = false;
-      interaction.still_lives_here = false;
+      interaction.still_lives_here = true;
       interaction.was_seen = false;
 
       this.service.updateClient(this.client).subscribe(data => {
