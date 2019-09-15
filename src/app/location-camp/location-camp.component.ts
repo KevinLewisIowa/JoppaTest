@@ -21,34 +21,36 @@ export class LocationCampComponent implements OnInit {
   clients: Client[] = [];
   locationCamp: LocationCamp = new LocationCamp();
   heatRoute: boolean = false;
+  locationCampId: number;
 
   constructor(private mainService: MainService, private clientService: ClientService,
     private router: Router, private activatedRoute: ActivatedRoute) {
-    
-      let routeId: number = JSON.parse(window.localStorage.getItem('routeId'));
-      this.mainService.getRoute(routeId).subscribe((route: Route) => {
-        this.route = route;
-      }, error => {console.log(error)});
-
-      let locationCampId = this.activatedRoute.snapshot.params['id'];
-      this.mainService.getLocationCamp(locationCampId).subscribe(data => {
-        this.locationCamp = data;
-        localStorage.setItem('locationCampId', JSON.stringify(this.locationCamp.id));
-      }, error => {console.log(error)});
-
-      window.localStorage.setItem('locationCampId', locationCampId);
-      this.mainService.getClientsForCamp(locationCampId).subscribe((data: Client[]) => {
-        if (this.heatRoute) {
-          this.clients = data.filter(client => client.dwelling !== "Vehicle" && client.dwelling !== "Under Bridge" && client.dwelling !== "Streets");
-        }
-        else {
-          this.clients = data;
-        }
-      });
   }
 
   ngOnInit() {
-    this.heatRoute = JSON.parse(window.localStorage.getItem('heatRoute'));
+    this.activatedRoute.params.subscribe((params:Params) => {
+      this.locationCampId = this.activatedRoute.snapshot.params['id'];
+      localStorage.setItem('locationCampId', JSON.stringify(this.locationCampId));
+      this.heatRoute = JSON.parse(window.localStorage.getItem('heatRoute'));
+
+      let routeId: number = JSON.parse(window.localStorage.getItem('routeId'));
+      this.mainService.getRoute(routeId).subscribe((route: Route) => {
+        this.route = route;
+
+        this.mainService.getLocationCamp(this.locationCampId).subscribe(data => {
+          this.locationCamp = data;
+
+          this.mainService.getClientsForCamp(this.locationCampId).subscribe((data: Client[]) => {
+            if (this.heatRoute) {
+              this.clients = data.filter(client => client.dwelling !== "Vehicle" && client.dwelling !== "Under Bridge" && client.dwelling !== "Streets");
+            }
+            else {
+              this.clients = data;
+            }
+          });
+        }, error => {console.log(error)});
+      }, error => {console.log(error)});
+    });
   }
 
   editedCamp(theCamp: LocationCamp) {
@@ -80,9 +82,17 @@ export class LocationCampComponent implements OnInit {
   }
 
   nextStop() {
-    localStorage.setItem('locationCampId', "73");
-    this.router.navigate([`locationCamp/73`]);
-    this.ngOnInit();
+    //localStorage.setItem('locationCampId', "73");
+    let locationCampList:number[] = JSON.parse(window.localStorage.getItem("LocationCampIdList"));
+    let indexCurrCamp:number = locationCampList.findIndex(campId => campId == this.locationCampId);
+    if (indexCurrCamp + 1 == locationCampList.length) {
+      alert('You are at the end of route');
+    }
+    else {
+      let nextCampId:number = locationCampList[indexCurrCamp + 1];
+      this.router.navigate([`locationCamp/${nextCampId}`]);
+    }
+    
   }
 
   viewClient(theClient: Client) {
