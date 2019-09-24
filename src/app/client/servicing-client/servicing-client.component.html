@@ -1,6 +1,5 @@
 <div class="card text-center" style="opacity:0.93">
   <div class="card-header text-center" id="topOfScreen">
-    <button type="button" class="pull-left btn btn-primary" (click)="back()">Back to Client List</button>
     <h2>{{client.preferred_name}}</h2> &nbsp; <button class="btn btn-primary" (click)="clientEditMdl.openModal(client)"
       type="button">Details</button>
   </div>
@@ -11,19 +10,14 @@
         <p>{{client.admin_notes}}</p>
       </div>
     </div>
-    <div class="row">
-      <div class="col-lg-12 col-md-12" *ngIf="!sentInteraction">
-        <button type="button" *ngIf="isAdmin" class="btn btn-primary" (click)="sendInteraction(3)">No longer lives
-          here</button>
-      </div>
-    </div>
     <br />
     <div class="row">
       <div class="col-lg-12 col-md-12" *ngIf="heatRoute || isAdmin">
-        <h4>Heating Equipment <button type="button" (click)="goToTop();newHeaterModal.showModal()"
-            class="btn btn-secondary">New Heater</button>
+        <h4>Heating Equipment
+          <button type="button" (click)="goToTop();newHeaterModal.showModal()" class="btn btn-secondary">New Heater</button>
           <button type="button" (click)="loanTank()" class="btn btn-secondary">Add Tank</button>
-          <button type="button" (click)="loanHose()" class="btn btn-secondary">Add Hose</button></h4>
+          <button type="button" (click)="loanHose()" class="btn btn-secondary">Add Hose</button>
+        </h4>
         <table class="table" id="items">
           <thead>
             <tr>
@@ -42,8 +36,7 @@
               <td><select class="form-control" #heaterStatus>
                   <option *ngFor="let option of heaterStatuses" value="{{option.id}}">{{option.status_name}}</option>
                 </select></td>
-              <td><button type="button" (click)="submitHeaterStatus(heater.id, heaterStatus.value)"
-                  class="btn btn-primary">Submit</button>
+              <td><button type="button" (click)="submitHeaterStatus(heater.id, heaterStatus.value)" class="btn btn-primary">Submit</button>
             </tr>
             <tr *ngFor="let tank of tankInteractions">
               <td>Tank</td>
@@ -52,18 +45,20 @@
               <td><select class="form-control" #tankStatus>
                   <option *ngFor="let option of heaterStatuses" value="{{option.id}}">{{option.status_name}}</option>
                 </select></td>
-              <td><button type="button" (click)="submitTankStatus(tank.id, tankStatus.value)"
-                  class="btn btn-primary">Submit</button></td>
+              <td><button type="button" (click)="submitTankStatus(tank.id, tankStatus.value)" class="btn btn-primary">Submit</button></td>
             </tr>
             <tr *ngFor="let hose of hoseInteractions">
               <td>Hose</td>
               <td>N/A</td>
               <td>{{hose.updated_at | date: 'shortDate'}}</td>
-              <td><select class="form-control" #hoseStatus>
+              <td>
+                <select class="form-control" #hoseStatus>
                   <option *ngFor="let option of heaterStatuses" value="{{option.id}}">{{option.status_name}}</option>
-                </select></td>
-              <td><button type="button" (click)="submitHoseStatus(hose.id, hoseStatus.value)"
-                  class="btn btn-primary">Submit</button></td>
+                </select>
+              </td>
+              <td>
+                <button type="button" (click)="submitHoseStatus(hose.id, hoseStatus.value)" class="btn btn-primary">Submit</button>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -240,11 +235,6 @@
           </tbody>
         </table>
       </div>
-      <div class="row"></div>
-      <div class="col-lg-12 col-md-12" *ngIf="!sentInteraction">
-        <button type="button" class="btn btn-primary" (click)="sendInteraction(1)">Seen & Serviced</button>&nbsp;
-        <button type="button" class="btn btn-primary" (click)="sendInteraction(2)">Serviced & Not Seen</button>&nbsp;
-        <button type="button" class="btn btn-primary" (click)="sendInteraction(4)">Not Seen</button>&nbsp;
         <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
           <!-- removed !heatRoute from ngIf to pare down screen -->
           <h4>Pets <button type="button" (click)="goToTop();petsMdl.showModal()" class="btn btn-secondary">New</button>
@@ -306,6 +296,19 @@
         </div>
       </div>
     </div>
+    <div class="card-header text-center" *ngIf="!sentInteraction">
+      <div>
+        <button type="button" class="btn btn-primary" (click)="sendInteraction(1)">Seen & Serviced</button>&nbsp;
+        <button type="button" class="btn btn-primary" (click)="sendInteraction(2)">Serviced & Not Seen</button>&nbsp;
+        <button type="button" *ngIf="isAdmin" class="btn btn-primary" (click)="sendInteraction(3)">No longer lives here</button>
+        <button type="button" class="btn btn-primary" (click)="sendInteraction(4)">Not Seen</button>&nbsp;
+      </div>
+      <div>&nbsp;</div>
+      <div>
+          <button type="button" class="pull-left btn btn-primary" (click)="back()">Back to Client List</button>
+      </div>
+    </div>
+
   </div>
   <!--these are the modals for inserting new stuff-->
   <app-client-like #likeMdl (likeAdded)="likeAdded($event)"></app-client-like>
