@@ -25,6 +25,7 @@ export class MainLoginComponent implements OnInit {
     });
 
     this.passwordForm.get('the_password').setValidators(Validators.required);
+    this.service.showEndRoute.next(false);
   }
 
   login() {
@@ -34,6 +35,9 @@ export class MainLoginComponent implements OnInit {
       if (data.token != null && data.token !== 'failedLogin') {
         window.localStorage.setItem('apiToken', data.token);
         window.localStorage.setItem('isAdmin', JSON.stringify(data.admin));
+        if (data.admin) {
+          this.service.showAdminHome.next(true);
+        }
         this.router.navigate(['login']);
       } else {
         this.invalidText = true;

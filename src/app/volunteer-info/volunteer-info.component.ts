@@ -32,6 +32,7 @@ export class VolunteerInfoComponent implements OnInit {
     this.routeInstance.number_route_members = this.volunteerForm.get('number_route_members').value;
     this.mainService.updateRouteInstance(this.routeInstance);
 
+    this.mainService.showEndRoute.next(true);
     this.router.navigate(['route', this.routeId]);
   }
 

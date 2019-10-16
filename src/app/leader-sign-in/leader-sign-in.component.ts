@@ -54,6 +54,7 @@ export class LeaderSignInComponent implements OnInit {
 
   signOut() {
     window.localStorage.clear();
+    this.mainService.showAdminHome.next(false);
     this.router.navigate(['/application-login']);
   }
 

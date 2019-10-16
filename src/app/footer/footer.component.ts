@@ -20,19 +20,21 @@ export class FooterComponent implements OnInit {
     
   }
 
-  ngOnInit() { 
-    this.isAdmin = JSON.parse(window.localStorage.getItem('isAdmin'));
+  ngOnInit() {
+    this.mainService.showEndRoute.subscribe(value => {
+      this.showEndRoute = value;
+    });
+    this.mainService.showAdminHome.subscribe(value => {
+      this.isAdmin = value;
+    });
     console.log(this.isAdmin);
-    let urlPath : string = location.pathname;
-    console.log(urlPath);
-    if (urlPath === '/login' || urlPath === '/application-login' || urlPath.includes('admin')) {
-      this.showEndRoute = false;
-    }
   }
 
   endRoute() {
     let routeInstanceId = JSON.parse(window.localStorage.getItem('routeInstance'));
     let heatRoute: boolean = JSON.parse(window.localStorage.getItem('heatRoute'));
+
+    this.mainService.showEndRoute.next(false);
 
     if (routeInstanceId !== null) {
       this.mainService.getRouteInstance(routeInstanceId).subscribe(data => {

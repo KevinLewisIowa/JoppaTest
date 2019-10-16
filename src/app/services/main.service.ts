@@ -1,7 +1,7 @@
 import { Injectable }    from '@angular/core';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { RequestOptions } from '@angular/http';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import 'rxjs/Rx';
 import { Route } from '../models/route';
 import { Client } from '../models/client';
@@ -21,10 +21,11 @@ import { RouteInstanceTankHoseInteraction } from 'app/models/route-instance-tank
 
 @Injectable()
 export class MainService {
+  public showEndRoute: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  public showAdminHome: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   theHeader = new HttpHeaders().set('Content-Type', 'application/json');
   online = true;
   private headers = new Headers({'Content-Type': 'application/json'});
-  // private apiUrl = 'https://hidden-springs-63744.herokuapp.com/';
   private apiUrl = 'https://joppa-api-test.herokuapp.com/';
 
   constructor(private http: HttpClient, private store: Store<IMainStore>, private router: Router) { 
