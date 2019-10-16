@@ -14,6 +14,7 @@ export class FooterComponent implements OnInit {
   currentYear: number = new Date().getFullYear();
   routeInstance: RouteInstance = new RouteInstance();
   isAdmin: boolean;
+  showEndRoute: boolean = true;
 
   constructor(private mainService: MainService, private router: Router) {
     
@@ -22,6 +23,11 @@ export class FooterComponent implements OnInit {
   ngOnInit() { 
     this.isAdmin = JSON.parse(window.localStorage.getItem('isAdmin'));
     console.log(this.isAdmin);
+    let urlPath : string = location.pathname;
+    console.log(urlPath);
+    if (urlPath === '/login' || urlPath === '/application-login' || urlPath.includes('admin')) {
+      this.showEndRoute = false;
+    }
   }
 
   endRoute() {
