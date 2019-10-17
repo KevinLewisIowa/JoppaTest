@@ -3,10 +3,6 @@
     <button type="button" class="pull-left btn btn-primary" (click)="back()">Back to Camp List</button>
     <h2>{{route.name}} -> {{locationCamp.name}}</h2>
     <button type="button" class="btn btn-primary" (click)="campEditMdl.showModal(locationCamp)">Details</button>
-    <div>
-      <button (click)="showMap()" type="button" class="btn btn-primary float-left">Show Map</button>
-      <button (click)="nextStop()" type="button" class="btn btn-primary float-right">Next Stop</button>
-    </div>
   </div>
   <div class="panel-body">
     <div class="card"><h3>Clients</h3>
@@ -19,19 +15,25 @@
       <table class="table table-striped">
         <thead>
           <tr>
-            <th class="text-center">Name</th>
-            <th class="text-center">Phone</th>
-            <th class="text-center">Last Interaction</th>
+            <th class="text-left">Name</th>
+            <th class="text-left">Phone</th>
+            <th class="text-left">Last Interaction</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let client of clients" (click)="viewClient(client)" class="client-row">
-            <td class="text-center">{{client.preferred_name}}</td>
-            <td class="text-center">{{client.phone}}</td>
-            <td class="text-center">{{client.last_interaction_date}}</td>
+            <td class="text-left">{{client.preferred_name}}</td>
+            <td class="text-left">{{client.phone}}</td>
+            <td class="text-left">{{client.last_interaction_date}}</td>
           </tr>
         </tbody>
       </table>
+    </div>
+  </div>
+  <div class="card-footer">
+    <div>
+      <button (click)="showMap()" type="button" class="btn btn-primary float-left">Show Map</button>
+      <button (click)="nextStop()" type="button" class="btn btn-primary float-right">Next Stop</button>
     </div>
   </div>
 </div>

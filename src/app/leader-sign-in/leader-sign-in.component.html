@@ -30,13 +30,15 @@
         <div class="col-md-12">
           <button type="submit" [disabled]="!routeInstanceForm.valid" (click)="insertRouteInstance()" class="btn btn-primary">Next</button>
         </div>
-        <div class="col-md-12">
-          <button type="button" (click)="signOut()" class="btn btn-primary">Sign Out</button>
-        </div>
         <div>
             <img id="joppaLogo" aria-label="Joppa" [src]="'./assets/Joppa_Logo.png'">
         </div>
       </div>
     </div>
+    <div class="card-footer">
+      <div>
+        <button type="button" (click)="signOut()" class="btn btn-primary">Sign Out</button>
+      </div>
+  </div>
   </div>
 </form>

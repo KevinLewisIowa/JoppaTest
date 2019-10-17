@@ -1,7 +1,7 @@
 <div class="card text-center" style="opacity:0.93">
   <div class="card-header text-left">
     <div class="float-left">
-      <button type="button" class="btn btn-secondary" (click)="back()">
+      <button type="button" class="btn btn-primary" (click)="back()">
         <span class="oi oi-arrow-thick-left" title="arrow thick left" aria-hidden="true"></span>
       </button>
     </div>
@@ -18,8 +18,10 @@
           <label for="region">Region:</label>
           <input type="text" placeholder="Region" formControlName="region" class="form-control" id="region" />
         </div>
-        <button type="button" class="btn btn-primary center" [disabled]="!routeForm.valid" (click)="submitRoute()">Submit Route</button>
       </div>
     </form>
+  </div>
+  <div class="card-footer text-center">
+    <button type="button" class="btn btn-primary center" [disabled]="!routeForm.valid" (click)="submitRoute()">Submit Route</button>
   </div>
 </div>

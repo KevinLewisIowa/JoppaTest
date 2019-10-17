@@ -28,6 +28,7 @@ export class FooterComponent implements OnInit {
       this.isAdmin = value;
     });
     console.log(this.isAdmin);
+    console.log(this.showEndRoute);
   }
 
   endRoute() {

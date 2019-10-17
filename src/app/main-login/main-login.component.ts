@@ -26,6 +26,7 @@ export class MainLoginComponent implements OnInit {
 
     this.passwordForm.get('the_password').setValidators(Validators.required);
     this.service.showEndRoute.next(false);
+    this.service.showAdminHome.next(false);
   }
 
   login() {

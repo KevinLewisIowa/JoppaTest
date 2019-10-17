@@ -21,7 +21,7 @@ import { RouteInstanceTankHoseInteraction } from 'app/models/route-instance-tank
 
 @Injectable()
 export class MainService {
-  public showEndRoute: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  public showEndRoute: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
   public showAdminHome: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   theHeader = new HttpHeaders().set('Content-Type', 'application/json');
   online = true;

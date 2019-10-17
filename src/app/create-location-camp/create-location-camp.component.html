@@ -1,31 +1,33 @@
 <form [formGroup]="locationCampForm">
-<div class="card text-center" style="opacity:0.93">
-<div class="card-header">
-  <button class="btn btn-primary" type="button" (click)="back()">Back</button>
-  <h2>Create New Location Camp For Route: {{theRoute.name}}</h2>
-</div>
-<div class="panel-body" style="opacity:0.93">
-<div class="login-box">
-  <div class="col-md-12">
-    <label>Name: </label>
-    <input type="text" placeholder="name" formControlName="name"/>
+  <div class="card text-center" style="opacity:0.93">
+    <div class="card-header">
+      <button class="btn btn-primary" type="button" (click)="back()">Back</button>
+      <h2>Create New Location Camp For Route: {{theRoute.name}}</h2>
+    </div>
+    <div class="panel-body" style="opacity:0.93">
+      <div class="login-box">
+        <div class="col-md-12">
+          <label>Name: </label>
+          <input type="text" placeholder="name" formControlName="name" />
+        </div>
+        <div class="col-md-12">
+          <label>Position: </label>
+          <input type="number" placeholder="position" formControlName="position" />
+        </div>
+        <div class="col-md-12">
+          <label>Notes: </label>
+          <input type="text" placeholder="Notes" formControlName="notes" />
+        </div>
+        <div class="col-md-12">
+          <label>Active: </label>
+          <input type="checkbox" formControlName="is_active" />
+        </div>
+      </div>
+    </div>
+    <div class="card-footer">
+      <div class="text-center">
+        <button type="button" [disabled]="!locationCampForm.valid" (click)="submitLocationCamp()" class="btn btn-primary">Submit Location Camp</button>
+      </div>
+    </div>
   </div>
-  <div class="col-md-12">
-    <label>Position: </label>
-    <input type="number" placeholder="position" formControlName="position"/>
-  </div>
-  <div class="col-md-12">
-    <label>Notes: </label>
-    <input type="text" placeholder="Notes" formControlName="notes"/>
-  </div>
-  <div class="col-md-12">
-    <label>Active: </label>
-    <input type="checkbox" formControlName="is_active"/>
-  </div>
-  <div class="col-md-12">
-    <button type="button" [disabled]="!locationCampForm.valid" (click)="submitLocationCamp()" class="btn btn-secondary">Submit Location Camp</button>
-  </div>
-</div>
-</div>
-</div>
 </form>

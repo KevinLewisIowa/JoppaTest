@@ -1,9 +1,8 @@
-<div class="card text-center" style="opacity:0.93">
+<div class="card" style="opacity:0.93">
   <div class="card-header text-center">
-    <button type="button" class="pull-left btn btn-primary" (click)="back()">Back</button>
     <h2>Client Listing</h2>
   </div>
-  <div class="panel-body">
+  <div class="panel-body text-center">
     <mat-form-field>
       <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
     </mat-form-field>
@@ -58,5 +57,8 @@
 
       <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
     </div>
+  </div>
+  <div class="card-footer text-center">
+    <button type="button" class="pull-left btn btn-primary" (click)="back()">Back</button>
   </div>
 </div>
