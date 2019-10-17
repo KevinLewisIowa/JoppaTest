@@ -7,15 +7,15 @@
 <form [formGroup]="clientForm" style="opacity:0.93">
 <div class="login-box">
   <div class="col-md-12">
-    <label>Preferred Name: </label>
+    <label>Preferred Name:<font color="red">*</font></label> 
     <input type="text" placeholder="preferred name" formControlName="preferred_name"/>
   </div>
   <div class="col-md-12">
-    <label>First Name: </label>
+    <label>First Name:</label>
     <input type="text" placeholder="first name" formControlName="first_name"/>
   </div>
   <div class="col-md-12">
-    <label>Last Name: </label>
+    <label>Last Name:</label>
     <input type="text" placeholder="last name" formControlName="last_name"/>
   </div>
   <div class="col-md-12">
@@ -59,7 +59,7 @@
     <input type="text" placeholder="Joppa Mailbox Number" formControlName="joppa_apartment_number"/>
   </div>
   <div class="col-md-12">
-    <label>Dwelling: </label>
+    <label>Dwelling:<font color="red">*</font></label>
     <select class="form-control" formControlName="dwelling">
       <option value="Tent">Tent</option>
       <option value="Shack">Shack</option>
