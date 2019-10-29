@@ -21,6 +21,7 @@ import { ClientPet } from 'app/models/client-pet';
 })
 
 export class ServicingClientComponent implements OnInit {
+  appearance: Appearance;
   client: Client = new Client();
   locationCampId: number;
   requestedItems: RequestedItem[] = [];
@@ -48,6 +49,15 @@ export class ServicingClientComponent implements OnInit {
     this.isAdmin = JSON.parse(window.localStorage.getItem('isAdmin'));
     this.locationCampId = JSON.parse(window.localStorage.getItem('locationCampId'));
     this.clientId = localStorage.getItem('selectedClient');
+    let routeAttendanceList:Appearance[] = JSON.parse(localStorage.getItem('RouteAttendance'));
+    if (routeAttendanceList.length > 0) {
+      this.appearance = routeAttendanceList.find(x => x.client_id == this.clientId);
+    }
+
+    if (this.appearance) {
+      this.sentInteraction = true;
+    }
+    
     if (this.clientId !== null) {
       this.service.getClientById(this.clientId).subscribe((data: Client) => {
         this.client = data;
@@ -143,45 +153,33 @@ export class ServicingClientComponent implements OnInit {
       interaction.serviced = true;
       interaction.was_seen = true;
       interaction.still_lives_here = true;
-      this.client.last_interaction_date = new Date();
-
-      this.service.updateClient(this.client).subscribe(data => {
-
-      }, error => console.log(error));
-
     } else if (interactionType === 2) {
       interaction.serviced = true;
       interaction.still_lives_here = true;
       interaction.was_seen = false;
-      
-      this.client.last_interaction_date = new Date();
-      this.service.updateClient(this.client).subscribe(data => {
-
-      }, error => console.log(error));
     } else if (interactionType === 3) {
       interaction.serviced = false;
       interaction.still_lives_here = false;
       interaction.was_seen = false;
-
-      this.client.previous_camp_id = this.locationCampId;
-      this.client.current_camp_id = null;
-      this.service.updateClient(this.client).subscribe(data => {
-        
-      }, error => console.log(error));
     } else if (interactionType === 4) {
       interaction.serviced = false;
       interaction.still_lives_here = true;
       interaction.was_seen = false;
-
-      this.service.updateClient(this.client).subscribe(data => {
-        
-      }, error => console.log(error));
     }
 
-    this.service.insertClientAppearance(interaction).subscribe(data => {
-      this.sentInteraction = true;
-      this.router.navigate([`/locationCamp/${this.locationCampId}`]);
-    }, error => console.log(error));
+    let routeAttendanceList:Appearance[] = JSON.parse(window.localStorage.getItem('RouteAttendance'));
+    console.log(routeAttendanceList.toString());
+    let appearance:Appearance = routeAttendanceList.find(x => x.client_id == this.client.id);
+
+    if (appearance) {
+      routeAttendanceList[routeAttendanceList.indexOf(appearance)] = interaction;
+    }
+    else {
+      routeAttendanceList.push(interaction);
+    }
+
+    window.localStorage.setItem('RouteAttendance', JSON.stringify(routeAttendanceList));
+    this.router.navigate([`/locationCamp/${this.locationCampId}`]);
   }
 
   requestedItemAdded(item: RequestedItem) {

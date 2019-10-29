@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 import { RouteInstanceHeaterInteraction } from 'app/models/route-instance-heater-interaction';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RouteInstanceTankHoseInteraction } from 'app/models/route-instance-tank-hose-interaction';
+import { Appearance } from 'app/models/appearance';
+import { ClientService } from 'app/services/client.service';
 
 @Component({
   selector: 'app-checkout-heaters',
@@ -19,7 +21,7 @@ export class CheckoutHeatersComponent implements OnInit {
   isInitialCheckout: boolean = true;
   routeInstanceTankHoseForm : FormGroup;
 
-  constructor(private fb:FormBuilder, private mainService: MainService, private router: Router) { 
+  constructor(private fb:FormBuilder, private mainService: MainService, private clientService: ClientService, private router: Router) { 
     
   }
 
@@ -142,6 +144,9 @@ export class CheckoutHeatersComponent implements OnInit {
   }
 
   endRoute() {
+    let routeAttendanceList:Appearance[] = JSON.parse(window.localStorage.getItem('RouteAttendance'));
+    this.saveAttendanceInfo(routeAttendanceList);
+    
     let routeInstanceTankHoseInteraction: RouteInstanceTankHoseInteraction = new RouteInstanceTankHoseInteraction();
     routeInstanceTankHoseInteraction.id = JSON.parse(window.localStorage.getItem('tankHoseInteractionId'));
     routeInstanceTankHoseInteraction.number_hoses_in = this.routeInstanceTankHoseForm.get('number_hoses_in').value;
@@ -151,5 +156,11 @@ export class CheckoutHeatersComponent implements OnInit {
 
     window.localStorage.clear();
     this.router.navigate(['login']);
+  }
+
+  saveAttendanceInfo(routeAttendanceList: Appearance[]) {
+    routeAttendanceList.forEach((appearance:Appearance) => {
+      this.clientService.insertClientAppearance(appearance).subscribe(data => { }, error => console.log(error)); 
+     });
   }
 }

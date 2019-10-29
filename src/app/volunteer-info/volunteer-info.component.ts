@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MainService } from 'app/services/main.service';
 import { RouteInstance } from 'app/models/route-instance';
+import { Appearance } from 'app/models/appearance';
 
 @Component({
   selector: 'app-volunteer-info',
@@ -36,6 +37,8 @@ export class VolunteerInfoComponent implements OnInit {
     this.mainService.updateRouteInstance(this.routeInstance);
 
     this.mainService.showEndRoute.next(true);
+    let routeAttendance:Appearance[] = [];
+    window.localStorage.setItem('RouteAttendance', JSON.stringify(routeAttendance));
     this.router.navigate(['route', this.routeId]);
   }
 
