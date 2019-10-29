@@ -2,21 +2,34 @@
 <div class="card-header text-center">
   <button type="button" class="btn btn-primary" (click)="back()">Back</button>
   <h2>Create Client</h2>
+  <h6><label><font color="red">*</font></label>Indicates Required Field </h6>
 </div>
 <div class="panel-body" style="opacity:0.93">
 <form [formGroup]="clientForm" style="opacity:0.93">
 <div class="login-box">
   <div class="col-md-12">
+      <table align="right">
+          <tr>
+            <th><input type="text" placeholder="preferred name" formControlName="preferred_name"/></th>
+          </tr>
+        </table>  
     <label>Preferred Name:<font color="red">*</font></label> 
-    <input type="text" placeholder="preferred name" formControlName="preferred_name"/>
   </div>
   <div class="col-md-12">
     <label>First Name:</label>
-    <input type="text" placeholder="first name" formControlName="first_name"/>
+    <table align="right">
+        <tr>
+          <th><input type="text" placeholder="first name" formControlName="first_name"/></th>
+        </tr>
+      </table>  
   </div>
   <div class="col-md-12">
     <label>Last Name:</label>
-    <input type="text" placeholder="last name" formControlName="last_name"/>
+    <table align="right">
+        <tr>
+          <th><input type="text" placeholder="last name" formControlName="last_name"/></th>
+        </tr>
+      </table>  
   </div>
   <div class="col-md-12">
     <label>Gender: </label>
@@ -27,36 +40,67 @@
   </div>
   <div class="col-md-12">
     <label>Birth Date: </label>
-    <input type="date" placeholder="mm/dd/yyyy" formControlName="birth_date"/>
-    <span>Date must be MM/DD/YYYY</span>
+    <table align="right">
+        <tr>
+          <th><input type="date" placeholder="mm/dd/yyyy" formControlName="birth_date"/></th>
+        </tr>
+      </table>  
   </div>
   <div class="col-md-12">
     <label>Phone: </label>
-    <input type="text" placeholder="phone" formControlName="phone"/>
-  </div>
-  <div class="col-md-12">
-    <label>Admin Notes: </label>
-    <textarea rows="3" placeholder="admin notes" formControlName="admin_notes"></textarea>
+    <table align="right">
+      <tr>
+        <th><input type="text" placeholder="phone" formControlName="phone"></th>
+      </tr>
+    </table>
   </div>
   <div class="col-md-12">
     <label>Shoe Size: </label>
-    <input type="text" placeholder="shoe size" formControlName="shoe_size"/>
+    <table align="right">
+      <tr>
+        <th><input type="text" placeholder="shoe size" formControlName="shoe_size"/></th>
+      </tr>
+    </table>
   </div>
   <div class="col-md-12">
     <label>Boot Size: </label>
-    <input type="text" placeholder="boot size" formControlName="boot_size"/>
+    <table align="right">
+      <tr>
+        <th>
+          <input type="text" placeholder="boot size" formControlName="boot_size"/>
+        </th>
+      </tr>
+    </table>
   </div>
   <div class="col-md-12">
     <label>Is Veteran: </label>
-    <input type="checkbox" formControlName="is_veteran"/>
+    <table align="right">
+      <tr>
+        <th>
+          <input type="checkbox" formControlName="is_veteran"/>
+        </th>
+      </tr>
+    </table>
   </div>
   <div class="col-md-12">
     <label>Is After Care: </label>
-    <input type="checkbox" formControlName="is_aftercare"/>
+    <table align="right">
+      <tr>
+        <th>
+          <input type="checkbox" formControlName="is_aftercare"/>
+        </th>
+      </tr>
+    </table>
   </div>
   <div class="col-md-12">
     <label>Mailbox: </label>
-    <input type="text" placeholder="Joppa Mailbox Number" formControlName="joppa_apartment_number"/>
+    <table align="right">
+      <tr>
+        <th>
+          <input type="text" placeholder="Joppa Mailbox Number" formControlName="joppa_apartment_number"/>
+        </th>
+      </tr>
+    </table>
   </div>
   <div class="col-md-12">
     <label>Dwelling:<font color="red">*</font></label>
@@ -84,15 +128,20 @@
       <option value="Deceased">Deceased</option>
     </select>
   </div>
-  <br />
-  <div class="col-md-12">
-    <p>
-        <font color="red">*</font>required
-    </p>
-  </div>
+  <br/>
 </div>
 </form>
 </div>
+<div class="col-md-12">
+    <label>Admin Notes: </label>
+    <table align="right">
+        <tr>
+          <th>
+            <textarea rows=3   placeholder="admin notes" formControlName="admin_notes"></textarea>
+          </th>
+        </tr>
+      </table>
+  </div>
 <div class="card-footer text-center">
   <button class="btn btn-primary" type="button" [disabled]="!clientForm.valid" (click)="submitClient()">Submit Client</button>
 </div>
