@@ -5,7 +5,6 @@ import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { RouteInstanceHeaterInteraction } from 'app/models/route-instance-heater-interaction';
 import { Appearance } from 'app/models/appearance';
-import { exists } from 'fs';
 import { ClientService } from 'app/services/client.service';
 import { Client } from 'app/models/client';
 
