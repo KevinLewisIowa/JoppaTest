@@ -1,12 +1,12 @@
 <div class="card text-center" style="opacity:0.93">
   <div class="card-header">
-    <button routerLink="/adminHome" class="btn btn-primary" type="button">Back</button>
     <h2>Heater Check-In</h2>
   </div>
   <div class="row">
     <div class="col-md-12 col-lg-12">
       <button class="btn btn-secondary" type="button" (click)="checkInHeaters()">Check In All Heaters</button>
       <br /><br /><b *ngIf="heatersUpdated !== undefined">{{heatersUpdated}} heaters checked in</b>
-    </div>
+        <button routerLink="/adminHome" class="btn btn-primary" type="button">Back</button>
+</div>
   </div>
 </div>

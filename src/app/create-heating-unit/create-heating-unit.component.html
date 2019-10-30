@@ -1,7 +1,6 @@
 <form [formGroup]="heaterForm">
   <div class="card" style="opacity:0.93">
   <div class="card-header">
-    <button class="btn btn-outline-primary" type="button" (click)="back()">Back</button>
     <h2>Create New Heater</h2>
   </div>
   <div class="panel-body" style="opacity:0.93">
@@ -26,6 +25,8 @@
     </div>
     <div class="col-md-12">
       <button type="button" [disabled]="!heaterForm.valid" (click)="submitHeater()" class="btn btn-primary">Submit Heater</button>
+    </div>
+    <div class="col-md-12"><button class="btn btn-primary" type="button" (click)="back()">Back</button>
     </div>
   </div>
   </div>
