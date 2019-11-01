@@ -1,6 +1,5 @@
 <div class="card text-center" style="opacity:0.93">
   <div class="card-header text-center" id="topOfScreen">
-    <button type="button" class="pull-left btn btn-primary" (click)="back()">Back</button>
     <h2>Route Summary Report</h2>
   </div>
   <div class="panel-body">
@@ -10,7 +9,7 @@
         <button *ngFor="let route of routes" type="button" class="btn btn-primary" style="margin:0 3px;" (click)="loadRouteInstance(route.id)">{{route.name}}</button>&nbsp;
       </div>
     </div>
-    <br />
+    <br />    <button type="button" class="pull-left btn btn-primary" (click)="back()">Back</button>
     <div class="row">
       <div class="col-lg-12 col-md-12" *ngIf="routeInstance">
         <dl>

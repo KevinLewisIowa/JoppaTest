@@ -1,6 +1,5 @@
 <div class="card text-center" style="opacity:0.93">
   <div class="card-header">
-    <button routerLink="/admin/reports" class="btn btn-primary" type="button">Back</button>
     <br/>
     <h2>Birthdays in <select (change)="monthChanged($event)" [(ngModel)]="monthInt">
         <option value="1">January</option>
@@ -35,6 +34,7 @@
               <td>{{client.birth_date | date: 'longDate'}}</td>
             </tr>
           </tbody>
-        </table>
+        </table>          
+        <button routerLink="/admin/reports" class="btn btn-primary" type="button">Back</button>
   </div>
 </div>

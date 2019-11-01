@@ -6,18 +6,34 @@
   <div class="modal-body">
       <form [formGroup]="clientForm" style="opacity:0.93">
         <div class="col-md-12">
+            <table align="right">
+                <tr>
+                  <th><input type="text" placeholder="preferred name" formControlName="preferred_name"/></th>
+                </tr>
+              </table>  
           <label>Preferred Name: </label>
-          <input type="text" placeholder="preferred name" formControlName="preferred_name"/>
         </div>
         <div class="col-md-12">
+            <table align="right">
+                <tr>          
+                  <input type="text" placeholder="first name" formControlName="first_name"/>
+                </tr>
+              </table>  
           <label>First Name: </label>
-          <input type="text" placeholder="first name" formControlName="first_name"/>
         </div>
         <div class="col-md-12">
+            <table align="right">
+                <tr>          
+                  <input type="text" placeholder="last name" formControlName="last_name"/>
+                </tr>
+              </table>  
           <label>Last Name: </label>
-          <input type="text" placeholder="last name" formControlName="last_name"/>
         </div>
         <div class="col-md-12">
+            <table align="right">
+                <tr>
+                </tr>
+              </table>  
           <label>Gender: </label>
           <select class="form-control" formControlName="gender">
             <option value="Male">Male</option>
@@ -25,37 +41,60 @@
           </select>
         </div>
         <div class="col-md-12">
-          <label>Birth Date: </label>
-          <input type="date" placeholder="mm/dd/yyyy" formControlName="birth_date"/>
-          <span>Date must be MM/DD/YYYY</span>
+            <table align="right">
+                <tr>          
+                  <input type="date" placeholder="mm/dd/yyyy" formControlName="birth_date"/>
+                </tr>
+              </table>  
+          <label>Birth Date (Date must be MM/DD/YYYY): </label>
         </div>
         <div class="col-md-12">
           <label>Phone: </label>
-          <input type="text" placeholder="phone" formControlName="phone"/>
+          <table align="right">
+              <tr>         
+                <input type="text" placeholder="phone" formControlName="phone"/>
+              </tr>
+            </table>  
         </div>
         <div class="col-md-12">
-          <label>Admin Notes: </label>
-          <textarea type="text" rows="3" placeholder="admin notes" formControlName="admin_notes"></textarea>
-        </div>
-        <div class="col-md-12">
+            <table align="right">
+                <tr>          
+                  <input type="text" placeholder="shoe size" formControlName="shoe_size"/>
+                </tr>
+              </table>  
           <label>Shoe Size: </label>
-          <input type="text" placeholder="shoe size" formControlName="shoe_size"/>
         </div>
         <div class="col-md-12">
+            <table align="right">
+                <tr>         
+                   <input type="text" placeholder="boot size" formControlName="boot_size"/>
+                </tr>
+              </table>  
           <label>Boot Size: </label>
-          <input type="text" placeholder="boot size" formControlName="boot_size"/>
         </div>
         <div class="col-md-12">
+            <table align="right">
+                <tr>          
+                  <input type="checkbox" formControlName="is_veteran"/>
+                </tr>
+              </table>  
           <label>Is Veteran: </label>
-          <input type="checkbox" formControlName="is_veteran"/>
         </div>
         <div class="col-md-12">
+            <table align="right">
+                <tr>                    
+                  <input type="checkbox" formControlName="is_aftercare"/>
+                </tr>
+              </table>
           <label>Is After Care: </label>
-          <input type="checkbox" formControlName="is_aftercare"/>
         </div>
         <div class="col-md-12">
           <label>Mailbox: </label>
-          <input type="text" placeholder="Joppa Mailbox Number" formControlName="joppa_apartment_number"/>
+          <table align="right">
+              <tr>                    
+                <input type="text" placeholder="Joppa Mailbox Number" formControlName="joppa_apartment_number"/>
+              </tr>
+            </table>
         </div>
         <div class="col-md-12">
           <label>Dwelling: </label>
@@ -82,6 +121,14 @@
             <option value="Alumni">Alumni</option>
             <option value="Deceased">Deceased</option>
           </select>
+        </div>
+        <div class="col-md-12">
+            <table align="right">
+                <tr>            
+                  <textarea type="text" rows="3" placeholder="admin notes" formControlName="admin_notes"></textarea>
+                </tr>
+              </table>  
+            <label>Admin Notes: </label>
         </div>
     </form>
   </div>

@@ -1,6 +1,5 @@
 <div class="card text-center" style="opacity:0.93">
   <div class="card-header">
-    <button routerLink="/admin/reports" class="btn btn-primary" type="button">Back</button>
     <h2>Heater Listing</h2>
   </div>
   <div class="row">
@@ -26,9 +25,10 @@
               <td>{{heater.status_reason}}</td>
               <td>{{heater.is_active}}</td>
               <td>{{heater.updated_at | date: 'short'}}</td>
-            </tr>
+            </tr>              
           </tbody>
-        </table>
+        </table>            
+        <button routerLink="/admin/reports" class="btn btn-primary" type="button">Back</button>
       </div>
   </div>
 </div>

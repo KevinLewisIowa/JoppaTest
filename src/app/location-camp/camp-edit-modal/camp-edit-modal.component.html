@@ -6,30 +6,57 @@
     <div class="modal-body">
       <form [formGroup]="campForm" style="opacity:0.93">
         <div class="login-box">
+                     
+          <button class="btn btn-primary text-right" (click)="getCurrentLocation();">Get Current Location</button>
+
           <div class="col-md-12">
+              <table align="right">
+                  <tr>
+                      <input type="text" placeholder="name" formControlName="name"/>
+                    </tr>
+                </table> 
             <label>Name: </label>
-            <input type="text" placeholder="name" formControlName="name"/>
           </div>
           <div class="col-md-12">
+              <table align="right">
+                  <tr>            
+                    <input type="text" placeholder="latitude" formControlName="latitude"/>
+                  </tr>
+                </table> 
             <label>Latitude: </label>
-            <input type="text" placeholder="latitude" formControlName="latitude"/>
-            <button class="btn btn-primary text-right" (click)="getCurrentLocation();">Get Current Location</button>
           </div>
           <div class="col-md-12">
+              <table align="right">
+                  <tr>            
+                    <input type="text" placeholder="longitude" formControlName="longitude"/>
+                  </tr>
+                </table> 
             <label>Longitude: </label>
-            <input type="text" placeholder="longitude" formControlName="longitude"/>
           </div>
+          
           <div class="col-md-12">
-            <label>Notes: </label>
-            <textarea type="text" rows="3" cols="40" placeholder="notes" formControlName="notes"></textarea>
-          </div>
-          <div class="col-md-12">
+              <table align="right">
+                  <tr>            
+                    <input type="number" placeholder="position" formControlName="position"/>
+                  </tr>
+                </table> 
             <label>Position: </label>
-            <input type="number" placeholder="position" formControlName="position"/>
           </div>
           <div class="col-md-12">
+              <table align="right">
+                  <tr>            
+                    <input type="checkbox" formControlName="is_active"/>
+                  </tr>
+                </table> 
             <label>Active: </label>
-            <input type="checkbox" formControlName="is_active"/>
+          </div>
+          <div class="col-md-12">
+              <table align="right">
+                  <tr>            
+                    <textarea type="text" rows="3" cols="40" placeholder="notes" formControlName="notes"></textarea>
+                  </tr>
+                </table> 
+            <label>Notes: </label>
           </div>
         </div>
       </form>
