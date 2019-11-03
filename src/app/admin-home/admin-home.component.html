@@ -1,47 +1,49 @@
-<div class="card text-center" style="opacity:0.93">
-  <div class="card-header">
-    <button routerLink="/" class="btn btn-primary" type="button">Back</button>
+<div class="card" style="opacity:0.93">
+  <div class="card-header text-center">
     <h2>Admin</h2>
   </div>
   <div class="panel-body text-center" style="opacity:0.93">
     <table class="table table-striped">
       <tbody>
         <tr>
-          <td class="text-center" style="height:75px;" (click)="goToRoutes()">
+          <td style="height:75px;" (click)="goToRoutes()">
             Start Admin Outreach Route
           </td>
         </tr>
         <tr>
-          <td class="text-center" style="height:75px;" (click)="goToHeatRoutes()">
+          <td style="height:75px;" (click)="goToHeatRoutes()">
             Start Admin Heat Route
           </td>
         </tr>
         <tr>
-          <td class="text-center" style="height:75px;" (click)="createNewHeater()">
+          <td style="height:75px;" (click)="createNewHeater()">
             Create New Heater
           </td>
         </tr>
         <tr>
-          <td class="text-center" style="height:75px;" (click)="checkInAllHeaters()">
+          <td style="height:75px;" (click)="checkInAllHeaters()">
             Check In All Checked Out Heaters
           </td>
         </tr>
         <tr>
-          <td class="text-center" style="height:75px;" (click)="gotToClientListing()">
+          <td style="height:75px;" (click)="gotToClientListing()">
             Client Listing
           </td>
         </tr>
         <tr>
-          <td class="text-center" style="height:75px;" (click)="openAdminReports()">
+          <td style="height:75px;" (click)="openAdminReports()">
             Reports
           </td>
         </tr>
         <tr>
-          <td class="text-center" style="height:75px;" (click)="openChangeRegularPassword()">
+          <td style="height:75px;" (click)="openChangeRegularPassword()">
             Change Regular Password
           </td>
         </tr>
       </tbody>
     </table>
+  </div>
+  <div class="card-footer text-center">
+    <button routerLink="/" class="btn btn-primary" type="button">Back</button>
   </div>
 </div>

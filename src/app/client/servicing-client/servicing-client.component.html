@@ -1,29 +1,28 @@
 <div class="card text-center" style="opacity:0.93">
   <div class="card-header text-center" id="topOfScreen">
+<<<<<<< HEAD
     <button type="button" class="pull-left btn btn-primary" (click)="back()">Back to Client List</button>
     <h2>{{client.preferred_name}}</h2> &nbsp; <button class="btn btn-primary" (click)="clientEditMdl.openModal(client)" type="button">Client Info</button>
+=======
+    <h2>{{client.preferred_name}}</h2> &nbsp; <button class="btn btn-primary" (click)="clientEditMdl.openModal(client)"
+      type="button">Details</button>
+>>>>>>> master
   </div>
   <div class="panel-body">
     <div class="row">
       <div class="col-lg-12 col-md-12">
-          <h4>Admin Notes: </h4>
-          <p>{{client.admin_notes}}</p>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-lg-12 col-md-12" *ngIf="!sentInteraction">
-        <button type="button" class="btn btn-primary" (click)="sendInteraction(1)">Seen & Serviced</button>&nbsp;
-        <button type="button" class="btn btn-primary" (click)="sendInteraction(2)">Serviced & Not Seen</button>&nbsp;
-        <button type="button" class="btn btn-primary" (click)="sendInteraction(4)">Not Seen</button>&nbsp;
-        <button type="button" *ngIf="isAdmin" class="btn btn-primary" (click)="sendInteraction(3)">No longer lives here</button>
+        <h4>Admin Notes: </h4>
+        <p>{{client.admin_notes}}</p>
       </div>
     </div>
     <br />
     <div class="row">
       <div class="col-lg-12 col-md-12" *ngIf="heatRoute || isAdmin">
-        <h4>Heating Equipment <button type="button" (click)="goToTop();newHeaterModal.showModal()" class="btn btn-secondary">New Heater</button>
-        <button type="button" (click)="loanTank()" class="btn btn-secondary">Add Tank</button>
-        <button type="button" (click)="loanHose()" class="btn btn-secondary">Add Hose</button></h4>
+        <h4>Heating Equipment
+          <button type="button" (click)="goToTop();newHeaterModal.showModal()" class="btn btn-secondary">New Heater</button>
+          <button type="button" (click)="loanTank()" class="btn btn-secondary">Add Tank</button>
+          <button type="button" (click)="loanHose()" class="btn btn-secondary">Add Hose</button>
+        </h4>
         <table class="table" id="items">
           <thead>
             <tr>
@@ -40,8 +39,8 @@
               <td>{{heater.serial_number}}</td>
               <td>{{heater.updated_at | date: 'shortDate'}}</td>
               <td><select class="form-control" #heaterStatus>
-                <option *ngFor="let option of heaterStatuses" value="{{option.id}}">{{option.status_name}}</option>
-              </select></td>
+                  <option *ngFor="let option of heaterStatuses" value="{{option.id}}">{{option.status_name}}</option>
+                </select></td>
               <td><button type="button" (click)="submitHeaterStatus(heater.id, heaterStatus.value)" class="btn btn-primary">Submit</button>
             </tr>
             <tr *ngFor="let tank of tankInteractions">
@@ -49,49 +48,54 @@
               <td>N/A</td>
               <td>{{tank.updated_at | date: 'shortDate'}}</td>
               <td><select class="form-control" #tankStatus>
-                <option *ngFor="let option of heaterStatuses" value="{{option.id}}">{{option.status_name}}</option>
-              </select></td>
+                  <option *ngFor="let option of heaterStatuses" value="{{option.id}}">{{option.status_name}}</option>
+                </select></td>
               <td><button type="button" (click)="submitTankStatus(tank.id, tankStatus.value)" class="btn btn-primary">Submit</button></td>
             </tr>
             <tr *ngFor="let hose of hoseInteractions">
               <td>Hose</td>
               <td>N/A</td>
               <td>{{hose.updated_at | date: 'shortDate'}}</td>
-              <td><select class="form-control" #hoseStatus>
-                <option *ngFor="let option of heaterStatuses" value="{{option.id}}">{{option.status_name}}</option>
-              </select></td>
-              <td><button type="button" (click)="submitHoseStatus(hose.id, hoseStatus.value)" class="btn btn-primary">Submit</button></td>
+              <td>
+                <select class="form-control" #hoseStatus>
+                  <option *ngFor="let option of heaterStatuses" value="{{option.id}}">{{option.status_name}}</option>
+                </select>
+              </td>
+              <td>
+                <button type="button" (click)="submitHoseStatus(hose.id, hoseStatus.value)" class="btn btn-primary">Submit</button>
+              </td>
             </tr>
           </tbody>
         </table>
       </div>
-        <div class="col-lg-12 col-md-12" *ngIf="(heatRoute || isAdmin) && heatEquipmentNotReturned.length > 0">
-          <h4>Heat Equipment Not Returned</h4>
-          <table class="table">
-            <thead>
-              <tr>
-                <th>Item</th>
-                <th>Status</th>
-                <th>Date Loaned</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let equipment of heatEquipmentNotReturned">
-                <td>{{equipment.Type}}</td>
-                <td>
-                  <span *ngIf="equipment.status_id == 4">Stolen</span>
-                  <span *ngIf="equipment.status_id == 5">Lost</span>
-                  <span *ngIf="equipment.status_id == 6">Destroyed</span>
-                  <span *ngIf="equipment.status_id == 7">Broken</span>
-                  <span *ngIf="equipment.status_id == 8">Evicted</span>
-                </td>
-                <td>{{equipment.created_at | date: 'shortDate' }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+      <div class="col-lg-12 col-md-12" *ngIf="(heatRoute || isAdmin) && heatEquipmentNotReturned.length > 0">
+        <h4>Heat Equipment Not Returned</h4>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Status</th>
+              <th>Date Loaned</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let equipment of heatEquipmentNotReturned">
+              <td>{{equipment.Type}}</td>
+              <td>
+                <span *ngIf="equipment.status_id == 4">Stolen</span>
+                <span *ngIf="equipment.status_id == 5">Lost</span>
+                <span *ngIf="equipment.status_id == 6">Destroyed</span>
+                <span *ngIf="equipment.status_id == 7">Broken</span>
+                <span *ngIf="equipment.status_id == 8">Evicted</span>
+              </td>
+              <td>{{equipment.created_at | date: 'shortDate' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
       <div class="col-lg-12 col-md-12" *ngIf="!heatRoute">
-        <h4>Requested Items <button type="button" (click)="goToTop();requestItemMdl.showModal()" class="btn btn-secondary">New</button></h4>
+        <h4>Requested Items <button type="button" (click)="goToTop();requestItemMdl.showModal()"
+            class="btn btn-secondary">New</button></h4>
         <table class="table" id="items">
           <thead>
             <tr>
@@ -105,13 +109,15 @@
             <tr *ngFor="let item of requestedItems">
               <td>{{item.item_description}}</td>
               <td>{{item.created_at | date: 'shortDate'}}</td>
-              <td><button type="button" class="btn btn-primary" (click)="receivedRequest(item.id)">Received</button></td>
+              <td><button type="button" class="btn btn-primary" (click)="receivedRequest(item.id)">Received</button>
+              </td>
               <td><button type="button" class="btn btn-primary" (click)="deleteRequest(item.id)">Delete</button></td>
             </tr>
           </tbody>
         </table>
       </div>
-      <div *ngIf="receivedItems.length > 0 || !heatRoute" class="col-lg-12 col-md-12"> <!-- added !heatRoute from ngIf to pare down heat screen -->
+      <div *ngIf="receivedItems.length > 0 || !heatRoute" class="col-lg-12 col-md-12">
+        <!-- added !heatRoute from ngIf to pare down heat screen -->
         <h4>Recently Received Items</h4>
         <table class="table" id="items">
           <thead>
@@ -130,8 +136,10 @@
           </tbody>
         </table>
       </div>
-      <div class="col-lg-12 col-md-12" *ngIf="isAdmin"> <!-- removed !heatRoute from ngIf to pare down screen -->
-        <h4>Goals/Next Steps <button type="button" (click)="goToTop();goalMdl.showModal()" class="btn btn-secondary">New</button></h4>
+      <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
+        <!-- removed !heatRoute from ngIf to pare down screen -->
+        <h4>Goals/Next Steps <button type="button" (click)="goToTop();goalMdl.showModal()"
+            class="btn btn-secondary">New</button></h4>
         <table class="table" id="goals">
           <thead>
             <tr>
@@ -159,8 +167,10 @@
           </tbody>
         </table>
       </div>
-      <div class="col-lg-12 col-md-12" *ngIf="isAdmin"> <!-- removed !heatRoute from ngIf to pare down screen -->
-        <h4>Likes <button type="button" class="btn btn-secondary" (click)="goToTop();likeMdl.showModal()">New</button></h4>
+      <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
+        <!-- removed !heatRoute from ngIf to pare down screen -->
+        <h4>Likes <button type="button" class="btn btn-secondary" (click)="goToTop();likeMdl.showModal()">New</button>
+        </h4>
         <table class="table" id="likes">
           <thead>
             <tr>
@@ -184,8 +194,10 @@
           </tbody>
         </table>
       </div>
-      <div class="col-lg-12 col-md-12" *ngIf="isAdmin"> <!-- removed !heatRoute from ngIf to pare down screen -->
-        <h4>Dislikes <button type="button" (click)="goToTop();dislikeMdl.showModal()" class="btn btn-secondary">New</button></h4>
+      <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
+        <!-- removed !heatRoute from ngIf to pare down screen -->
+        <h4>Dislikes <button type="button" (click)="goToTop();dislikeMdl.showModal()"
+            class="btn btn-secondary">New</button></h4>
         <table class="table" id="dislikes">
           <thead>
             <tr>
@@ -210,7 +222,8 @@
         </table>
       </div>
       <div class="col-lg-12 col-md-12">
-        <h4>Notes <button type="button" (click)="goToTop();notesMdl.showModal()" class="btn btn-secondary">New</button></h4>
+        <h4>Notes <button type="button" (click)="goToTop();notesMdl.showModal()" class="btn btn-secondary">New</button>
+        </h4>
         <table class="table" id="notes">
           <thead>
             <tr>
@@ -218,6 +231,7 @@
               <th>Remove</th>
             </tr>
           </thead>
+
           <tbody>
             <tr *ngFor="let note of notes">
               <td>{{note.note}}</td>
@@ -226,8 +240,10 @@
           </tbody>
         </table>
       </div>
-      <div class="col-lg-12 col-md-12" *ngIf="isAdmin"> <!-- removed !heatRoute from ngIf to pare down screen -->
-          <h4>Pets <button type="button" (click)="goToTop();petsMdl.showModal()" class="btn btn-secondary">New</button></h4>
+        <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
+          <!-- removed !heatRoute from ngIf to pare down screen -->
+          <h4>Pets <button type="button" (click)="goToTop();petsMdl.showModal()" class="btn btn-secondary">New</button>
+          </h4>
           <table class="table" id="petList">
             <thead>
               <tr>
@@ -255,41 +271,57 @@
             </tbody>
           </table>
         </div>
-      <div class="col-lg-12 col-md-12" *ngIf="isAdmin"> <!-- removed !heatRoute from ngIf to pare down screen -->
-        <h4>Health Concerns <button type="button" (click)="goToTop();healthMdl.showModal()" class="btn btn-secondary">New</button></h4>
-        <table class="table" id="concerns">
-          <thead>
-            <tr>
-              <th>Description</th>
-              <th>Created At</th>
-              <th>Remove</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let concern of healthConcerns">
-              <td>
-                {{concern.description}}
-              </td>
-              <td>
-                {{concern.created_at | date:'shortDate'}}
-              </td>
-              <td>
-                <button type="button" class="btn btn-primary" (click)="removeHealthConcern(concern.id)">Remove</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
+          <!-- removed !heatRoute from ngIf to pare down screen -->
+          <h4>Health Concerns <button type="button" (click)="goToTop();healthMdl.showModal()"
+              class="btn btn-secondary">New</button></h4>
+          <table class="table" id="concerns">
+            <thead>
+              <tr>
+                <th>Description</th>
+                <th>Created At</th>
+                <th>Remove</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let concern of healthConcerns">
+                <td>
+                  {{concern.description}}
+                </td>
+                <td>
+                  {{concern.created_at | date:'shortDate'}}
+                </td>
+                <td>
+                  <button type="button" class="btn btn-primary"
+                    (click)="removeHealthConcern(concern.id)">Remove</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
+    <div class="card-header text-center">
+      <div>
+        <button type="button" [className]="appearance && appearance.was_seen == true && appearance.serviced == true ? 'btn btn-outline-primary' : 'btn btn-primary'" (click)="sendInteraction(1)">Seen & Serviced</button>&nbsp;
+        <button type="button" [className]="appearance && appearance.was_seen == false && appearance.serviced == true ? 'btn btn-outline-primary' : 'btn btn-primary'" (click)="sendInteraction(2)">Serviced & Not Seen</button>&nbsp;
+        <button type="button" *ngIf="isAdmin" [className]="appearance && appearance.was_seen == false && appearance.serviced == false && appearance.still_lives_here == false ? 'btn btn-outline-primary' : 'btn btn-primary'" (click)="sendInteraction(3)">No longer lives here</button>
+        <button type="button" [className]="appearance && appearance.was_seen == false && appearance.serviced == false && appearance.still_lives_here == false ? 'btn btn-outline-primary' : 'btn btn-primary'" (click)="sendInteraction(4)">Not Seen</button>&nbsp;
+      </div>
+      <div>&nbsp;</div>
+      <div>
+          <button type="button" class="pull-left btn btn-primary" (click)="back()">Back to Client List</button>
+      </div>
+    </div>
+
   </div>
-</div>
-<!--these are the modals for inserting new stuff-->
-<app-client-like #likeMdl (likeAdded)="likeAdded($event)"></app-client-like>
-<app-client-dislike #dislikeMdl (dislikeAdded)="dislikeAdded($event)"></app-client-dislike>
-<app-requested-item #requestItemMdl (requestedItemAdded)="requestedItemAdded($event)"></app-requested-item>
-<app-goals-steps #goalMdl (goalAdded)="goalAdded($event)"></app-goals-steps>
-<app-health-concern #healthMdl (healthConcernAdded)="healthConcernAdded($event)"></app-health-concern>
-<app-notes #notesMdl (noteAdded)="noteAdded($event)"></app-notes>
-<app-client-edit-modal #clientEditMdl (editedClient)="editedClient($event)"></app-client-edit-modal>
-<app-loan-heater-modal #newHeaterModal (loaningHeater)="loaningHeater($event)"></app-loan-heater-modal>
-<app-pets #petsMdl (petAdded)="petAdded($event)"></app-pets>
+  <!--these are the modals for inserting new stuff-->
+  <app-client-like #likeMdl (likeAdded)="likeAdded($event)"></app-client-like>
+  <app-client-dislike #dislikeMdl (dislikeAdded)="dislikeAdded($event)"></app-client-dislike>
+  <app-requested-item #requestItemMdl (requestedItemAdded)="requestedItemAdded($event)"></app-requested-item>
+  <app-goals-steps #goalMdl (goalAdded)="goalAdded($event)"></app-goals-steps>
+  <app-health-concern #healthMdl (healthConcernAdded)="healthConcernAdded($event)"></app-health-concern>
+  <app-notes #notesMdl (noteAdded)="noteAdded($event)"></app-notes>
+  <app-client-edit-modal #clientEditMdl (editedClient)="editedClient($event)"></app-client-edit-modal>
+  <app-loan-heater-modal #newHeaterModal (loaningHeater)="loaningHeater($event)"></app-loan-heater-modal>
+  <app-pets #petsMdl (petAdded)="petAdded($event)"></app-pets>

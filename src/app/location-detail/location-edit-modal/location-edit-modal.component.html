@@ -13,7 +13,7 @@
           <div class="col-md-12">
             <label>Latitude: </label>
             <input type="text" placeholder="latitude" formControlName="latitude"/>
-            <button class="btn btn-secondary text-right" (click)="getCurrentLocation();">Get Current Location</button>
+            <button class="btn btn-primary text-right" (click)="getCurrentLocation();">Get Current Location</button>
           </div>
           <div class="col-md-12">
             <label>Longitude: </label>
@@ -36,6 +36,6 @@
     </div>
   <div class="modal-footer">
     <button type="button" [disabled]="!locationForm.valid" (click)="submitLocation(); c('');" class="btn btn-primary">Submit Location</button>
-    <button type="button" class="btn btn-primary" (click)="c('Close click')">Close</button>
+    <button type="button" class="btn btn-outline-primary" (click)="c('Close click')">Close</button>
   </div>
 </ng-template>

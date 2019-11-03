@@ -41,6 +41,13 @@ export class LocationsComponent implements OnInit {
                 return 0;
               }
             })
+
+            let locationCampIdList:number[] = [];
+            this.locationCamps.forEach(camp => {
+              locationCampIdList.push(camp.id);
+            });
+            
+            window.localStorage.setItem("LocationCampIdList", JSON.stringify(locationCampIdList));
           }
         })
 
@@ -53,7 +60,6 @@ export class LocationsComponent implements OnInit {
   }
 
   openLocation(theLocation: LocationCamp){
-    window.localStorage.setItem('locationCampId', JSON.stringify(theLocation.id));
     this.router.navigate([`/locationCamp/${theLocation.id}`]);
   }
 

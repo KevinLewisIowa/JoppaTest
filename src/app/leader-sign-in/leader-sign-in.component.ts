@@ -50,10 +50,14 @@ export class LeaderSignInComponent implements OnInit {
     this.mainService.getTheRoutes().subscribe(routes => {
       this.routes = routes;
     });
+
+    this.mainService.showEndRoute.next(false);
+    this.mainService.showAdminHome.next(this.isAdmin);
   }
 
   signOut() {
     window.localStorage.clear();
+    this.mainService.showAdminHome.next(false);
     this.router.navigate(['/application-login']);
   }
 
