@@ -31,6 +31,11 @@ export class FooterComponent implements OnInit {
     this.mainService.showAdminHome.subscribe(value => {
       this.isAdmin = value;
     });
+
+    if (JSON.parse(window.localStorage.getItem('RouteAttendance')) == null) {
+      let routeAttendanceList:Appearance[] = [];
+      window.localStorage.setItem('RouteAttendance', JSON.stringify(routeAttendanceList));
+    }
   }
 
   endRoute() {
@@ -38,9 +43,11 @@ export class FooterComponent implements OnInit {
     let heatRoute: boolean = JSON.parse(window.localStorage.getItem('heatRoute'));
 
     let routeAttendanceList:Appearance[] = JSON.parse(window.localStorage.getItem('RouteAttendance'));
-    if (routeAttendanceList.length == 0) {
-      if (!confirm('You have chosen to end a route with no attendance taken.  Are you sure you want to end this route?')) {
-        return;
+    if (routeAttendanceList != null) {
+      if (routeAttendanceList.length == 0) {
+        if (!confirm('You have chosen to end a route with no attendance taken.  Are you sure you want to end this route?')) {
+          return;
+        }
       }
     }
 
