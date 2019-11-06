@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Renderer2 } from '@angular/core';
 import { Route } from '../models/route';
 import { ActivatedRoute, Params } from '@angular/router';
 import { MainService } from '../services/main.service';
@@ -10,6 +10,8 @@ import { LocationCamp } from "app/models/location-camp";
 import { Appearance } from 'app/models/appearance';
 import { ClientService } from 'app/services/client.service';
 import { Subscription } from 'rxjs';
+import { faQuestionCircle } from '@fortawesome/free-regular-svg-icons';
+import { faSearch, faPlus, faCheckCircle, faTimesCircle, faChevronLeft, faChevronRight, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-location-camp',
@@ -22,9 +24,16 @@ export class LocationCampComponent implements OnInit {
   locationCamp: LocationCamp = new LocationCamp();
   heatRoute: boolean = false;
   locationCampId: number;
+  searchIcon = faSearch;
+  createIcon = faPlus;
+  backIcon = faChevronLeft;
+  forwardIcon = faChevronRight;
+  questionCircleIcon = faQuestionCircle;
+  checkCircleIcon = faCheckCircle;
+  timesCircleIcon = faTimesCircle;
 
   constructor(private mainService: MainService, private clientService: ClientService,
-    private router: Router, private activatedRoute: ActivatedRoute) {
+    private router: Router, private activatedRoute: ActivatedRoute, private renderer:Renderer2) {
   }
 
   ngOnInit() {
@@ -93,6 +102,30 @@ export class LocationCampComponent implements OnInit {
       this.router.navigate([`locationCamp/${nextCampId}`]);
     }
     
+  }
+
+  getAttendanceIcon(client :Client) : IconDefinition {
+    let routeAttendanceList:Appearance[] = JSON.parse(window.localStorage.getItem('RouteAttendance'));
+    let appearance:Appearance = routeAttendanceList.find(x => x.client_id == client.id);
+    const attendanceIconHTMLElement:HTMLElement = document.getElementById('attendanceIcon');
+    
+    if (appearance) {
+      if (appearance.was_seen && appearance.serviced) {
+        //this.renderer.setStyle(attendanceIconHTMLElement, 'color', 'green');
+        return this.checkCircleIcon;
+      }
+      else if (!appearance.was_seen && appearance.serviced) {
+        //this.renderer.setStyle(attendanceIconHTMLElement, 'color', 'yellow');
+        return this.checkCircleIcon;
+      }
+      else {
+        //this.renderer.setStyle(attendanceIconHTMLElement, 'color', 'red');
+        return this.timesCircleIcon;
+      }
+    }
+    else {
+      return this.questionCircleIcon;
+    }
   }
 
   viewClient(theClient: Client) {
