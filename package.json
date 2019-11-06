@@ -46,7 +46,7 @@
     "ng-inline-svg": "^8.0.2",
     "open-iconic": "^1.1.1",
     "rxjs": "^5.5.2",
-    "yarn": "^1.9.4",
+    "yarn": "^1.17.3",
     "zone.js": "^0.8.4"
   },
   "devDependencies": {
