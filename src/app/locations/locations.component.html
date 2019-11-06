@@ -1,17 +1,21 @@
 <div class="card panel-info" style="opacity:0.92">
   <div class="card-header text-center" style="opacity:0.93">
-    <button type="button" class="pull-left btn btn-primary" (click)="back()" *ngIf="isAdmin">Back to Routes</button>
-    <h2>{{thisRoute.name}}</h2>
-    <div class="float-left"><button (click)="showRouteLocations()" class="btn btn-primary" type="button">Show Route Map</button></div>
-    <div class="float-right"><button (click)="newLocationCamp()" class="btn btn-primary" type="button" *ngIf="isAdmin">New Camp</button></div>
+    <h2 align="left">{{thisRoute.name}}</h2>
+    <div>
+      <button (click)="showRouteLocations()" class="btn btn-primary float-left" type="button">Show Route Map</button>
+      <button (click)="newLocationCamp()" class="btn btn-primary float-right" type="button" *ngIf="isAdmin"><fa-icon [icon]="createIcon"></fa-icon> Create Camp</button>
+    </div>
   </div>
   <div class="panel-body">
-    <table class="table table-striped">
+    <table class="table">
       <tbody>
         <tr *ngFor="let locationCamp of locationCamps" style="height:75px" (click)="openLocation(locationCamp)">
           <td class="text-center"><b>{{locationCamp.name}}</b></td>
         </tr>
       </tbody>
     </table>
+  </div>
+  <div class="card-footer">
+    <button type="button" class="pull-left btn btn-primary" (click)="back()" *ngIf="isAdmin"><fa-icon [icon]="backIcon"></fa-icon> Back to Routes</button>
   </div>
 </div>
