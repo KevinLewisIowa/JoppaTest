@@ -1,64 +1,38 @@
 <form [formGroup]="heaterForm">
   <div class="card" style="opacity:0.93">
-  <div class="card-header">
-    <h2>Create New Heater</h2>
-  </div>
-  <div class="panel-body" style="opacity:0.93">
-  <div class="entry-box">
-    <div class="col-md-12">
-        <table align="right">
-            <tr>
-              <th>      
-                <input type="text" placeholder="Serial Number" formControlName="serial_number"/>
-              </th>
-            </tr>
-          </table>  
-      <label>Serial Number: </label>
+    <div class="card-header">
+      <h2>Create New Heater</h2>
     </div>
-    <div class="col-md-12">
-        <table align="right">
-            <tr>
-              <th>
-                <select id="heaterType" formControlName="heater_type_id">
-                <option value="" disabled selected>Select a heater type</option>
-                <option *ngFor="let heatertype of heaterTypes" [value]="heatertype.id">{{heatertype.type_description}}</option>
-                </select>
-              </th>
-            </tr>
-          </table>  
-      <label>Heater Type: </label>
+    <div class="panel-body" style="opacity:0.93">
+      <div class="entry-box">
+        <div class="col-md-12">
+          <input type="text" class="float-right" placeholder="Serial Number" formControlName="serial_number" />
+          <label>Serial Number: </label>
+        </div>
+        <div class="col-md-12">
+          <select id="heaterType" class="float-right" formControlName="heater_type_id">
+            <option value="" disabled selected>Select a heater type</option>
+            <option *ngFor="let heatertype of heaterTypes" [value]="heatertype.id">{{heatertype.type_description}}
+            </option>
+          </select>
+          <label>Heater Type: </label>
+        </div>
+        <div class="col-md-12">
+          <select formControlName="heater_status_id" class="float-right" id="heaterStatus">
+            <option value="" disabled selected>Select a heater status</option>
+            <option *ngFor="let heaterstatus of heaterStatuses" [value]="heaterstatus.id">{{heaterstatus.status_name}}
+            </option>
+          </select>
+          <label>Heater Status:</label>
+        </div>
+        <div class="col-md-12" class="float-right">
+          <button type="button" [disabled]="!heaterForm.valid" (click)="submitHeater()" class="btn btn-primary">Submit
+            Heater</button>
+        </div>
+      </div>
     </div>
-    <div class="col-md-12">
-        <table align="right">
-            <tr>
-              <th><select formControlName="heater_status_id" id="heaterStatus">
-                  <option value="" disabled selected>Select a heater status</option>
-                  <option *ngFor="let heaterstatus of heaterStatuses" [value]="heaterstatus.id">{{heaterstatus.status_name}}</option>
-                </select>
-              </th>
-            </tr>
-          </table>  
-      <label>Heater Status:</label>
-    </div>
-    <div class="col-md-12">
-        <table align="right">
-            <tr>
-              <th>      
-              </th>
-            </tr>
-          </table>  
-      <button type="button" [disabled]="!heaterForm.valid" (click)="submitHeater()" class="btn btn-primary">Submit Heater</button>
-    </div>
-    <div class="col-md-12">
-        <table align="right">
-            <tr>
-              <th>      
-                <button class="btn btn-primary" type="button" (click)="back()">Back</button>
-             </th>
-            </tr>
-          </table>      
+    <div class="card-footer text-center">
+      <button routerLink="/" class="btn btn-primary" type="button">Back</button>
     </div>
   </div>
-  </div>
-  </div>
-  </form>
+</form>
