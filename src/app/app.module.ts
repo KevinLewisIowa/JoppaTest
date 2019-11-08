@@ -150,7 +150,7 @@ const reducers = {
     StoreModule.forRoot(reducers),
     StoreDevtoolsModule.instrument(),
     AppRoutingModule,
-    InlineSVGModule.forRoot()
+    InlineSVGModule.forRoot({baseUrl:'https://dev.w3.org/SVG/tools/svgweb/samples/svg-files'})
   ],
   providers: [MainService, ClientService],
   bootstrap: [AppComponent]
