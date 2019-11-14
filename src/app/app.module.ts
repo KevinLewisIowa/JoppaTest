@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { Store, StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
@@ -144,11 +145,12 @@ const reducers = {
     MatSortModule,
     BrowserAnimationsModule,
     HttpClientModule,
+    FontAwesomeModule,
     // InMemoryWebApiModule.forRoot(InMemoryDataService),
     StoreModule.forRoot(reducers),
     StoreDevtoolsModule.instrument(),
     AppRoutingModule,
-    InlineSVGModule.forRoot()
+    InlineSVGModule.forRoot({baseUrl:'https://dev.w3.org/SVG/tools/svgweb/samples/svg-files'})
   ],
   providers: [MainService, ClientService],
   bootstrap: [AppComponent]

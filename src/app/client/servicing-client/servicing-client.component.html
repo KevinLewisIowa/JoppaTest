@@ -1,7 +1,7 @@
 <div class="card text-center" style="opacity:0.93">
   <div class="card-header text-center" id="topOfScreen">
     <h2>{{client.preferred_name}}</h2> &nbsp; <button class="btn btn-primary" (click)="clientEditMdl.openModal(client)"
-      type="button">Details</button>
+      type="button">Client Info</button>
   </div>
   <div class="panel-body">
     <div class="row">
@@ -298,10 +298,10 @@
     </div>
     <div class="card-header text-center">
       <div>
-        <button type="button" [className]="appearance && appearance.was_seen == true && appearance.serviced == true ? 'btn btn-outline-primary' : 'btn btn-primary'" (click)="sendInteraction(1)">Seen & Serviced</button>&nbsp;
-        <button type="button" [className]="appearance && appearance.was_seen == false && appearance.serviced == true ? 'btn btn-outline-primary' : 'btn btn-primary'" (click)="sendInteraction(2)">Serviced & Not Seen</button>&nbsp;
-        <button type="button" *ngIf="isAdmin" [className]="appearance && appearance.was_seen == false && appearance.serviced == false && appearance.still_lives_here == false ? 'btn btn-outline-primary' : 'btn btn-primary'" (click)="sendInteraction(3)">No longer lives here</button>
-        <button type="button" [className]="appearance && appearance.was_seen == false && appearance.serviced == false && appearance.still_lives_here == false ? 'btn btn-outline-primary' : 'btn btn-primary'" (click)="sendInteraction(4)">Not Seen</button>&nbsp;
+        <button type="button" [className]="appearance && appearance.was_seen == true && appearance.serviced == true ? 'btn btn-success' : 'btn btn-primary'" (click)="sendInteraction(1)">Seen & Serviced</button>&nbsp;
+        <button type="button" [className]="appearance && appearance.was_seen == false && appearance.serviced == true ? 'btn btn-success' : 'btn btn-primary'" (click)="sendInteraction(2)">Serviced & Not Seen</button>&nbsp;
+        <button type="button" *ngIf="isAdmin" [className]="appearance && appearance.was_seen == false && appearance.serviced == false && appearance.still_lives_here == false ? 'btn btn-success' : 'btn btn-primary'" (click)="sendInteraction(3)">No longer lives here</button>
+        <button type="button" [className]="appearance && appearance.was_seen == false && appearance.serviced == false && appearance.still_lives_here == false ? 'btn btn-success' : 'btn btn-primary'" (click)="sendInteraction(4)">Not Seen</button>&nbsp;
       </div>
       <div>&nbsp;</div>
       <div>
