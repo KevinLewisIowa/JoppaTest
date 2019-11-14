@@ -1,92 +1,95 @@
-<ng-template #editModal let-c="close" let-d="dismiss"> 
+<ng-template #editModal let-c="close" let-d="dismiss">
   <div class="modal-header">
     <h4 class="modal-title">Client Details</h4>
-      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')"><span aria-hidden="true">&times;</span></button>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')"><span
+        aria-hidden="true">&times;</span></button>
   </div>
   <div class="modal-body">
-      <form [formGroup]="clientForm" style="opacity:0.93">
-        <div class="col-md-12">
-          <label>Preferred Name: </label>
-          <input type="text" placeholder="preferred name" formControlName="preferred_name"/>
-        </div>
-        <div class="col-md-12">
-          <label>First Name: </label>
-          <input type="text" placeholder="first name" formControlName="first_name"/>
-        </div>
-        <div class="col-md-12">
-          <label>Last Name: </label>
-          <input type="text" placeholder="last name" formControlName="last_name"/>
-        </div>
-        <div class="col-md-12">
-          <label>Gender: </label>
-          <select class="form-control" formControlName="gender">
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-          </select>
-        </div>
-        <div class="col-md-12">
-          <label>Birth Date: </label>
-          <input type="date" placeholder="mm/dd/yyyy" formControlName="birth_date"/>
-          <span>Date must be MM/DD/YYYY</span>
-        </div>
-        <div class="col-md-12">
-          <label>Phone: </label>
-          <input type="text" placeholder="phone" formControlName="phone"/>
-        </div>
-        <div class="col-md-12">
-          <label>Admin Notes: </label>
-          <textarea type="text" rows="3" placeholder="admin notes" formControlName="admin_notes"></textarea>
-        </div>
-        <div class="col-md-12">
-          <label>Shoe Size: </label>
-          <input type="text" placeholder="shoe size" formControlName="shoe_size"/>
-        </div>
-        <div class="col-md-12">
-          <label>Boot Size: </label>
-          <input type="text" placeholder="boot size" formControlName="boot_size"/>
-        </div>
-        <div class="col-md-12">
-          <label>Is Veteran: </label>
-          <input type="checkbox" formControlName="is_veteran"/>
-        </div>
-        <div class="col-md-12">
-          <label>Is After Care: </label>
-          <input type="checkbox" formControlName="is_aftercare"/>
-        </div>
-        <div class="col-md-12">
-          <label>Mailbox: </label>
-          <input type="text" placeholder="Joppa Mailbox Number" formControlName="joppa_apartment_number"/>
-        </div>
-        <div class="col-md-12">
-          <label>Dwelling: </label>
-          <select class="form-control" formControlName="dwelling">
-            <option value="Tent">Tent</option>
-            <option value="Shack">Shack</option>
-            <option value="Abandoned Structure">Abandoned Structure</option>
-            <option value="Mobile Home">Mobile Home</option>
-            <option value="Motel">Motel</option>
-            <option value="Garage">Garage</option>
-            <option value="Vehicle">Vehicle</option>
-            <option value="Camper">Camper</option>
-            <option value="Under Bridge">Under Bridge</option>
-            <option value="Streets">Streets</option>
-            <option value="House">House</option>
-            <option value="Apartment">Apartment</option>
-          </select>
-        </div>
-        <div class="col-md-12">
-          <label>Status: </label>
-          <select class="form-control" formControlName="status">
-            <option value="Active">Active</option>
-            <option value="Inactive">Inactive</option>
-            <option value="Alumni">Alumni</option>
-            <option value="Deceased">Deceased</option>
-          </select>
-        </div>
+    <form [formGroup]="clientForm" style="opacity:0.93">
+      <div class="col-md-12">
+        <input type="text" class="float-right" placeholder="preferred name" formControlName="preferred_name" />
+        <label>Preferred Name: </label>
+      </div>
+      <div class="col-md-12">
+        <input type="text" class="float-right" placeholder="first name" formControlName="first_name" />
+        <label>First Name: </label>
+      </div>
+      <div class="col-md-12">
+        <input type="text" class="float-right" placeholder="last name" formControlName="last_name" />
+        <label>Last Name: </label>
+      </div>
+      <div class="col-md-12">
+        <label>Gender: </label>
+        <select class="form-control" class="float-right" formControlName="gender">
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+        </select>
+      </div>
+      <div class="col-md-12">
+        <input type="date" class="float-right" placeholder="mm/dd/yyyy" formControlName="birth_date" />
+        <label>Birth Date (Date must be MM/DD/YYYY): </label>
+      </div>
+      <div class="col-md-12">
+        <label>Phone: </label>
+        <input type="text" class="float-right" placeholder="phone" formControlName="phone" />
+      </div>
+      <div class="col-md-12">
+        <input type="text" class="float-right" placeholder="shoe size" formControlName="shoe_size" />
+        <label>Shoe Size: </label>
+      </div>
+      <div class="col-md-12">
+        <input type="text" class="float-right" placeholder="boot size" formControlName="boot_size" />
+        <label>Boot Size: </label>
+      </div>
+      <div class="col-md-12">
+        <input type="checkbox" class="float-right" formControlName="is_veteran" />
+        <label>Is Veteran: </label>
+      </div>
+      <div class="col-md-12">
+        <input type="checkbox" class="float-right" formControlName="is_aftercare" />
+        <label>Is After Care: </label>
+      </div>
+      <div class="col-md-12">
+        <label>Mailbox: </label>
+        <input type="text" class="float-right" placeholder="Joppa Mailbox Number"
+          formControlName="joppa_apartment_number" />
+      </div>
+      <div class="col-md-12">
+        <label>Dwelling: </label>
+        <select class="form-control" class="float-right" formControlName="dwelling">
+          <option value="Tent">Tent</option>
+          <option value="Shack">Shack</option>
+          <option value="Abandoned Structure">Abandoned Structure</option>
+          <option value="Mobile Home">Mobile Home</option>
+          <option value="Motel">Motel</option>
+          <option value="Garage">Garage</option>
+          <option value="Vehicle">Vehicle</option>
+          <option value="Camper">Camper</option>
+          <option value="Under Bridge">Under Bridge</option>
+          <option value="Streets">Streets</option>
+          <option value="House">House</option>
+          <option value="Apartment">Apartment</option>
+        </select>
+      </div>
+      <div class="col-md-12">
+        <label>Status: </label>
+        <select class="form-control" class="float-right" formControlName="status">
+          <option value="Active">Active</option>
+          <option value="Inactive">Inactive</option>
+          <option value="Alumni">Alumni</option>
+          <option value="Deceased">Deceased</option>
+        </select>
+      </div>
+      <div class="col-md-12">
+        <textarea type="text" rows="3" placeholder="admin notes" class="float-right"
+          formControlName="admin_notes"></textarea>
+        <label>Admin Notes: </label>
+      </div>
     </form>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-primary" [disabled]="!clientForm.valid" (click)="submitClient(); c('');">Submit Client</button>
+    <button type="button" class="btn btn-primary" [disabled]="!clientForm.valid" (click)="submitClient(); c('');">Submit
+      Client</button>
     <button type="button" class="btn btn-outline-primary" (click)="c('Close click')">Close</button>
   </div>
 </ng-template>

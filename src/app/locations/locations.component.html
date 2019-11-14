@@ -14,6 +14,9 @@
         </tr>
       </tbody>
     </table>
+    <div class="card-footer text-center">
+         <button type="button" class="pull-left btn btn-primary" (click)="back()" *ngIf="isAdmin">Back to Routes</button>
+    </div>
   </div>
   <div class="card-footer">
     <button type="button" class="pull-left btn btn-primary" (click)="back()" *ngIf="isAdmin"><fa-icon [icon]="backIcon"></fa-icon> Back to Routes</button>
