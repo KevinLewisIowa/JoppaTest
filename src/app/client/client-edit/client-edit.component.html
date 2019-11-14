@@ -1,9 +1,7 @@
 <div class="card panel-info" style="opacity:0.93">
-  <div class="card-header text-center">
+  <div class="card-header text-left">
     <h2>Create Client</h2>
-    <h6><label>
-        <font color="red">*</font>
-      </label>Indicates Required Field </h6>
+    <h6><label><font color="red">*</font></label>Indicates Required Field</h6>
   </div>
   <div class="panel-body" style="opacity:0.93">
     <form [formGroup]="clientForm" style="opacity:0.93">
@@ -89,9 +87,8 @@
       </div>
     </form>
   </div>
-  <div class="card-footer text-center">
-    <button class="btn btn-primary" type="button" [disabled]="!clientForm.valid" (click)="submitClient()">Submit
-      Client</button>
-    <button type="button" class="btn btn-primary" (click)="back()">Back</button>
+  <div class="card-footer text-right">
+    <button type="button" class="btn btn-outline-primary" (click)="close()">Close</button>&nbsp;
+    <button class="btn btn-primary" type="button" [disabled]="!clientForm.valid" (click)="submitClient()">Submit Client</button>
   </div>
 </div>

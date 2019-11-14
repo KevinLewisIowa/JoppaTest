@@ -33,7 +33,6 @@ import { LocationDetailComponent } from './location-detail/location-detail.compo
 import { LocationClientsComponent } from './location-clients/location-clients.component';
 import { ClientComponent } from './client/client.component';
 import { ClientEditComponent } from './client/client-edit/client-edit.component';
-import { LocationDetailEditComponent } from './location-detail-edit/location-detail-edit.component';
 import { RouteEditComponent } from './routes/route-edit/route-edit.component';
 import { CreateRouteComponent } from './create-route/create-route.component';
 import { ClientSearchComponent } from './client-search/client-search.component';
@@ -91,7 +90,6 @@ const reducers = {
     LocationClientsComponent,
     ClientComponent,
     ClientEditComponent,
-    LocationDetailEditComponent,
     RouteEditComponent,
     CreateRouteComponent,
     ClientSearchComponent,

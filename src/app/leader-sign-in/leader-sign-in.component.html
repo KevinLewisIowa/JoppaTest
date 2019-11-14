@@ -5,19 +5,20 @@
           <span class="oi oi-person" title="Admin Login" aria-hidden="true"></span>
         </button>
       <h2>Route Leader Sign In</h2>
+      <h6><label><font color="red">*</font></label>Indicates Required Field</h6>
     </div>
     <div class="panel-body" style="opacity:0.93">
       <div class="entry-box">
         <div class="col-md-12">
-          <label>Leader Name: </label>
+          <label>Leader Name:<font color="red">*</font></label>
           <input type="text" placeholder="Name" formControlName="leader_name"/>
         </div>
         <div class="col-md-12">
-          <label>Leader Phone: </label>
+          <label>Leader Phone:<font color="red">*</font></label>
           <input type="tel" placeholder="515-123-4567" formControlName="leader_phone"/>
         </div>
         <div class="col-md-12">
-          <label>Route: </label>
+          <label>Route:<font color="red">*</font></label>
           <select id="routes" formControlName="route_id">
             <option value="" disabled selected>Select a route</option>
             <option *ngFor="let route of routes" [value]="route.id">{{route.name}}</option>
@@ -27,9 +28,6 @@
           <label>Heat Route:</label>
           <input type="checkbox" checked formControlName="heat_route">
         </div>
-        <div class="col-md-12">
-          <button type="submit" [disabled]="!routeInstanceForm.valid" (click)="insertRouteInstance()" class="btn btn-primary">Next</button>
-        </div>
         <div>
             <img id="joppaLogo" aria-label="Joppa" [src]="'./assets/Joppa_Logo.png'">
         </div>
@@ -37,7 +35,8 @@
     </div>
     <div class="card-footer">
       <div>
-        <button type="button" (click)="signOut()" class="btn btn-primary">Sign Out</button>
+        <button type="button" (click)="signOut()" class="btn btn-primary float-left"><fa-icon [icon]="signOutIcon"></fa-icon> Sign Out</button>
+        <button type="submit" [disabled]="!routeInstanceForm.valid" (click)="insertRouteInstance()" class="btn btn-primary float-right">Begin <fa-icon [icon]="forwardIcon"></fa-icon></button>
       </div>
   </div>
   </div>

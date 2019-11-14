@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Route } from '../models/route';
 import { MainService } from '../services/main.service';
 import { RouteInstance } from '../models/route-instance';
+import { faChevronRight, faChevronLeft, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-leader-sign-in',
@@ -15,6 +16,9 @@ export class LeaderSignInComponent implements OnInit {
   routes: Route[] = [];
   routeInstance: RouteInstance;
   isAdmin = false;
+  backIcon = faChevronLeft;
+  forwardIcon = faChevronRight;
+  signOutIcon = faSignOutAlt;
 
   constructor(private fb:FormBuilder, private mainService: MainService, private router: Router) { }
 

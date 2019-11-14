@@ -7,6 +7,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RouteInstanceTankHoseInteraction } from 'app/models/route-instance-tank-hose-interaction';
 import { Appearance } from 'app/models/appearance';
 import { ClientService } from 'app/services/client.service';
+import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-checkout-heaters',
@@ -20,6 +21,8 @@ export class CheckoutHeatersComponent implements OnInit {
   isEndOfRoute: boolean = false;
   isInitialCheckout: boolean = true;
   routeInstanceTankHoseForm : FormGroup;
+  isAdmin: boolean;
+  forwardIcon = faChevronRight;
 
   constructor(private fb:FormBuilder, private mainService: MainService, private clientService: ClientService, private router: Router) { 
     
@@ -30,6 +33,8 @@ export class CheckoutHeatersComponent implements OnInit {
     if (routeInstanceId === null) {
       routeInstanceId = 0;
     }
+
+    this.isAdmin = JSON.parse(window.localStorage.getItem('isAdmin'));
 
     this.mainService.getAvailableHeaters(routeInstanceId).subscribe(heaterList => {
       this.heaters = heaterList.sort(function(heater1, heater2) {
@@ -154,7 +159,10 @@ export class CheckoutHeatersComponent implements OnInit {
 
     this.mainService.updateRouteInstanceTankHoseInteraction(routeInstanceTankHoseInteraction);
 
+    let apiKey: string = window.localStorage.getItem('apiToken');
     window.localStorage.clear();
+    window.localStorage.setItem('apiToken', apiKey);
+    window.localStorage.setItem('isAdmin', JSON.stringify(this.isAdmin));
     this.router.navigate(['login']);
   }
 

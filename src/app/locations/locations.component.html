@@ -2,7 +2,7 @@
   <div class="card-header text-center" style="opacity:0.93">
     <h2 align="left">{{thisRoute.name}}</h2>
     <div>
-      <button (click)="showRouteLocations()" class="btn btn-primary float-left" type="button">Show Route Map</button>
+      <button (click)="showRouteLocations()" class="btn btn-primary float-left" type="button"><fa-icon [icon]="mapIcon"></fa-icon> Show Route Map</button>
       <button (click)="newLocationCamp()" class="btn btn-primary float-right" type="button" *ngIf="isAdmin"><fa-icon [icon]="createIcon"></fa-icon> Create Camp</button>
     </div>
   </div>
@@ -14,9 +14,6 @@
         </tr>
       </tbody>
     </table>
-    <div class="card-footer text-center">
-         <button type="button" class="pull-left btn btn-primary" (click)="back()" *ngIf="isAdmin">Back to Routes</button>
-    </div>
   </div>
   <div class="card-footer">
     <button type="button" class="pull-left btn btn-primary" (click)="back()" *ngIf="isAdmin"><fa-icon [icon]="backIcon"></fa-icon> Back to Routes</button>

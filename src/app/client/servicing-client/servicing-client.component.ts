@@ -13,6 +13,7 @@ import { MainService } from '../../services/main.service';
 import { Heater } from 'app/models/heater';
 import { Note } from 'app/models/note';
 import { ClientPet } from 'app/models/client-pet';
+import { faChevronLeft, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-servicing-client',
@@ -39,8 +40,11 @@ export class ServicingClientComponent implements OnInit {
   heatEquipmentNotReturned: any[] = [];
   clientId = null;
   heaterStatuses: HeaterStatus[] = [];
+  currentStatus: number = 2;
   heaters: any[] = [];
   isAdmin: boolean;
+  backIcon = faChevronLeft;
+  informationIcon = faInfoCircle;
   constructor(private service: ClientService, private mainService: MainService, private router: Router) { }
 
   ngOnInit() {
@@ -78,14 +82,14 @@ export class ServicingClientComponent implements OnInit {
         this.service.getHeatersForClient(this.clientId).subscribe((data: Heater[]) => {
           this.heaters = data;
         });
-        this.service.getClientLoanedTanks(this.clientId).subscribe((tankInteractions: any[]) => {
-          // now get the tank info
-          this.tankInteractions = tankInteractions;
-        });
-        this.service.getClientLoanedHoses(this.clientId).subscribe((hoseInteractions: any[]) => {
-          // now get the Hose info
-          this.hoseInteractions = hoseInteractions;
-        });
+        // this.service.getClientLoanedTanks(this.clientId).subscribe((tankInteractions: any[]) => {
+        //   // now get the tank info
+        //   this.tankInteractions = tankInteractions;
+        // });
+        // this.service.getClientLoanedHoses(this.clientId).subscribe((hoseInteractions: any[]) => {
+        //   // now get the Hose info
+        //   this.hoseInteractions = hoseInteractions;
+        // });
         this.service.getHeatEquipmentNotReturned(this.clientId).subscribe((data: any[]) => {
           this.heatEquipmentNotReturned = data;
         });
@@ -133,6 +137,10 @@ export class ServicingClientComponent implements OnInit {
     this.updateHeaterEntry(heaterId, 2);
   }
 
+  heaterStatusChanged(status_id: number) {
+    this.currentStatus = status_id;
+  }
+
   updateHeaterEntry(heaterId, statusId) {
     this.service.updateHeaterClient(this.client.id, heaterId, statusId).subscribe(response => {
       this.service.getHeatersForClient(this.client.id).subscribe((data: any[]) => {
@@ -143,6 +151,12 @@ export class ServicingClientComponent implements OnInit {
         this.heatEquipmentNotReturned = data1;
       });
     });
+  }
+
+  updateNumberTanksHoses(client: Client) {
+    this.service.updateClient(client).subscribe(data => {
+      console.log('Updated client');
+    }, error => console.log(error));
   }
 
   sendInteraction(interactionType: number) {

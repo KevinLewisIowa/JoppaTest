@@ -4,7 +4,7 @@ import { Route } from '../models/route';
 import { MainService } from '../services/main.service';
 import { Router } from '@angular/router';
 import { LocationCamp } from 'app/models/location-camp';
-import { faChevronLeft, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faPlus, faMap } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-locations',
@@ -18,6 +18,7 @@ export class LocationsComponent implements OnInit {
   isAdmin : boolean;
   backIcon = faChevronLeft;
   createIcon = faPlus;
+  mapIcon = faMap;
   
   constructor(private route : ActivatedRoute, private mainService : MainService, private router:Router) { 
     this.thisRoute = new Route();
