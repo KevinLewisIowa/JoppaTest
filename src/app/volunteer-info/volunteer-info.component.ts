@@ -15,6 +15,7 @@ export class VolunteerInfoComponent implements OnInit {
   routeInstanceId: number;
   routeId: number;
   volunteerForm: FormGroup;
+  isAdmin: boolean;
   routeInstance: RouteInstance = new RouteInstance();
   backIcon = faChevronLeft;
   forwardIcon = faChevronRight;
@@ -24,14 +25,14 @@ export class VolunteerInfoComponent implements OnInit {
   ngOnInit() {
     this.routeInstanceId = JSON.parse(window.localStorage.getItem('routeInstance'));
     this.routeId = JSON.parse(window.localStorage.getItem('routeId'));
-    let isAdmin = JSON.parse(window.localStorage.getItem('isAdmin'));
+    this.isAdmin = JSON.parse(window.localStorage.getItem('isAdmin'));
 
     this.volunteerForm = this.fb.group({
       number_route_members: ''
     });
     this.volunteerForm.get('number_route_members').setValidators(Validators.required);
     this.mainService.showEndRoute.next(false);
-    this.mainService.showAdminHome.next(isAdmin);
+    this.mainService.showAdminHome.next(this.isAdmin);
   }
 
   addNumberRouteMembers() {
