@@ -1,7 +1,6 @@
 <ng-template #editModal let-c="close" let-d="dismiss"> 
   <div class="modal-header">
     <h4 class="modal-title">Location Details</h4>
-      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')"><span aria-hidden="true">&times;</span></button>
   </div>
     <div class="modal-body">
       <form [formGroup]="locationForm" style="opacity:0.93">
@@ -13,7 +12,7 @@
           <div class="col-md-12">
             <label>Latitude: </label>
             <input type="text" placeholder="latitude" formControlName="latitude"/>
-            <button class="btn btn-primary text-right" (click)="getCurrentLocation();">Get Current Location</button>
+            <button class="btn btn-primary" (click)="getCurrentLocation();">Get Current Location</button>
           </div>
           <div class="col-md-12">
             <label>Longitude: </label>

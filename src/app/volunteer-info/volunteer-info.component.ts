@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { MainService } from 'app/services/main.service';
 import { RouteInstance } from 'app/models/route-instance';
 import { Appearance } from 'app/models/appearance';
+import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-volunteer-info',
@@ -15,6 +16,8 @@ export class VolunteerInfoComponent implements OnInit {
   routeId: number;
   volunteerForm: FormGroup;
   routeInstance: RouteInstance = new RouteInstance();
+  backIcon = faChevronLeft;
+  forwardIcon = faChevronRight;
 
   constructor(private router: Router, private mainService: MainService,private fb: FormBuilder) { }
 
@@ -42,4 +45,7 @@ export class VolunteerInfoComponent implements OnInit {
     this.router.navigate(['route', this.routeId]);
   }
 
+  back() {
+    this.router.navigate(['checkoutHeaters']);
+  }
 }

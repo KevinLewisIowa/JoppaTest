@@ -10,8 +10,8 @@ import { LocationCamp } from "app/models/location-camp";
 import { Appearance } from 'app/models/appearance';
 import { ClientService } from 'app/services/client.service';
 import { Subscription } from 'rxjs';
-import { faQuestionCircle } from '@fortawesome/free-regular-svg-icons';
-import { faSearch, faPlus, faCheckCircle, faTimesCircle, faChevronLeft, faChevronRight, IconDefinition } from '@fortawesome/free-solid-svg-icons';
+import { faQuestionCircle as farQuestionCircle, faCheckCircle as farCheckCircle } from '@fortawesome/free-regular-svg-icons';
+import { faSearch, faPlus, faCheckCircle, faTimesCircle, faChevronLeft, faChevronRight, IconDefinition, faMap, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-location-camp',
@@ -28,9 +28,12 @@ export class LocationCampComponent implements OnInit {
   createIcon = faPlus;
   backIcon = faChevronLeft;
   forwardIcon = faChevronRight;
-  questionCircleIcon = faQuestionCircle;
+  questionCircleIcon = farQuestionCircle;
+  regularCheckCircleIcon = farCheckCircle;
   checkCircleIcon = faCheckCircle;
   timesCircleIcon = faTimesCircle;
+  mapIcon = faMap;
+  informationIcon = faInfoCircle;
 
   constructor(private mainService: MainService, private clientService: ClientService,
     private router: Router, private activatedRoute: ActivatedRoute, private renderer:Renderer2) {
@@ -101,7 +104,6 @@ export class LocationCampComponent implements OnInit {
       let nextCampId:number = locationCampList[indexCurrCamp + 1];
       this.router.navigate([`locationCamp/${nextCampId}`]);
     }
-    
   }
 
   getAttendanceIcon(client :Client) : IconDefinition {
@@ -116,7 +118,7 @@ export class LocationCampComponent implements OnInit {
       }
       else if (!appearance.was_seen && appearance.serviced) {
         //this.renderer.setStyle(attendanceIconHTMLElement, 'color', 'yellow');
-        return this.checkCircleIcon;
+        return this.regularCheckCircleIcon;
       }
       else {
         //this.renderer.setStyle(attendanceIconHTMLElement, 'color', 'red');

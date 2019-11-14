@@ -2,19 +2,19 @@
   <div class="card text-center" style="opacity:0.93">
     <div class="card-header">
       <h2>Volunteer Info</h2>
+      <h6><label><font color="red">*</font></label>Indicates Required Field</h6>
     </div>
     <div class="panel-body" style="opacity:0.93">
       <div class="entry-box">
         <div class="col-md-12">
-          <label>Number of Route Members: </label>
+          <label>Number of Route Members:<font color="red">*</font></label>
           <input type="text" placeholder="0" formControlName="number_route_members" />
         </div>
-        <div class="col-md-12">
-          <button type="submit" [disabled]="!volunteerForm.valid" (click)="addNumberRouteMembers()"
-            class="btn btn-primary">Begin Route</button>
-          <button class="btn btn-primary" type="button">Back</button>
-        </div>
       </div>
+    </div>
+    <div class="card-footer">
+      <button class="btn btn-primary float-right" type="submit" [disabled]="!volunteerForm.valid" (click)="addNumberRouteMembers()"><fa-icon [icon]="forwardIcon"></fa-icon> Begin Route</button>
+      <button class="btn btn-primary float-left" type="button" (click)="back()" *ngIf="isAdmin"><fa-icon [icon]="backIcon"></fa-icon> Back</button>
     </div>
   </div>
 </form>

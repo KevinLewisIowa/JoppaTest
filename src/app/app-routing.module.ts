@@ -3,9 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { RoutesComponent }   from './routes/routes.component';
 import { LocationsComponent } from './locations/locations.component';
-import { LocationDetailComponent } from './location-detail/location-detail.component';
 import { RouteEditComponent } from './routes/route-edit/route-edit.component';
-import { LocationDetailEditComponent } from './location-detail-edit/location-detail-edit.component';
 import { ClientEditComponent } from './client/client-edit/client-edit.component';
 import { CreateRouteComponent } from "app/create-route/create-route.component";
 import { CreateLocationCampComponent } from './create-location-camp/create-location-camp.component';
