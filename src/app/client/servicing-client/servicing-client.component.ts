@@ -13,7 +13,8 @@ import { MainService } from '../../services/main.service';
 import { Heater } from 'app/models/heater';
 import { Note } from 'app/models/note';
 import { ClientPet } from 'app/models/client-pet';
-import { faChevronLeft, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import { faCheckCircle as farCheckCircle } from '@fortawesome/free-regular-svg-icons';
+import { faChevronLeft, faInfoCircle, faCheckCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-servicing-client',
@@ -45,6 +46,9 @@ export class ServicingClientComponent implements OnInit {
   isAdmin: boolean;
   backIcon = faChevronLeft;
   informationIcon = faInfoCircle;
+  seenAndServicedIcon = faCheckCircle;
+  notSeenAndServicedIcon = farCheckCircle;
+  notSeenIcon = faTimesCircle;
   constructor(private service: ClientService, private mainService: MainService, private router: Router) { }
 
   ngOnInit() {

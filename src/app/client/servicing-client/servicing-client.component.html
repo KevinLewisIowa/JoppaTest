@@ -1,21 +1,14 @@
-<div class="card text-center" style="opacity:0.93">
+<div class="card text-left" style="opacity:0.93">
   <div class="card-header" id="topOfScreen">
     <h2>{{client.preferred_name}}</h2> &nbsp; <button class="btn btn-primary float-right" (click)="clientEditMdl.openModal(client)" type="button">Client Info <fa-icon [icon]="informationIcon"></fa-icon></button>
   </div>
   <div class="panel-body">
     <div class="row">
-      <div class="col-lg-12 col-md-12">
-        <h4>Admin Notes: </h4>
-        <p>{{client.admin_notes}}</p>
-      </div>
-    </div>
-    <br />
-    <div class="row">
       <div class="col-lg-12 col-md-12" *ngIf="heatRoute || isAdmin">
         <h4>Heating Equipment
-          <button type="button" (click)="goToTop();newHeaterModal.showModal()" class="btn btn-secondary">New Heater</button>
-          <button type="button" (click)="loanTank()" class="btn btn-secondary" hidden>Add Tank</button>
-          <button type="button" (click)="loanHose()" class="btn btn-secondary" hidden>Add Hose</button>
+          <button type="button" (click)="goToTop();newHeaterModal.showModal()" class="btn btn-primary">New Heater</button>
+          <button type="button" (click)="loanTank()" class="btn btn-primary" hidden>Add Tank</button>
+          <button type="button" (click)="loanHose()" class="btn btn-primary" hidden>Add Hose</button>
         </h4>
         <table class="table" id="items">
           <thead>
@@ -104,8 +97,7 @@
         </div>
       </div>
       <div class="col-lg-12 col-md-12" *ngIf="!heatRoute">
-        <h4>Requested Items <button type="button" (click)="goToTop();requestItemMdl.showModal()"
-            class="btn btn-secondary">New</button></h4>
+        <h4>Requested Items <button type="button" (click)="goToTop();requestItemMdl.showModal()" class="btn btn-primary">New Item</button></h4>
         <table class="table" id="items">
           <thead>
             <tr>
@@ -148,8 +140,7 @@
       </div>
       <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
         <!-- removed !heatRoute from ngIf to pare down screen -->
-        <h4>Goals/Next Steps <button type="button" (click)="goToTop();goalMdl.showModal()"
-            class="btn btn-secondary">New</button></h4>
+        <h4>Goals/Next Steps <button type="button" (click)="goToTop();goalMdl.showModal()" class="btn btn-primary">New Goal/Next Step</button></h4>
         <table class="table" id="goals">
           <thead>
             <tr>
@@ -179,7 +170,7 @@
       </div>
       <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
         <!-- removed !heatRoute from ngIf to pare down screen -->
-        <h4>Likes <button type="button" class="btn btn-secondary" (click)="goToTop();likeMdl.showModal()">New</button>
+        <h4>Likes <button type="button" class="btn btn-primary" (click)="goToTop();likeMdl.showModal()">New Like</button>
         </h4>
         <table class="table" id="likes">
           <thead>
@@ -206,8 +197,7 @@
       </div>
       <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
         <!-- removed !heatRoute from ngIf to pare down screen -->
-        <h4>Dislikes <button type="button" (click)="goToTop();dislikeMdl.showModal()"
-            class="btn btn-secondary">New</button></h4>
+        <h4>Dislikes <button type="button" (click)="goToTop();dislikeMdl.showModal()" class="btn btn-primary">New Dislike</button></h4>
         <table class="table" id="dislikes">
           <thead>
             <tr>
@@ -232,7 +222,7 @@
         </table>
       </div>
       <div class="col-lg-12 col-md-12">
-        <h4>Notes <button type="button" (click)="goToTop();notesMdl.showModal()" class="btn btn-secondary">New</button>
+        <h4>Notes <button type="button" (click)="goToTop();notesMdl.showModal()" class="btn btn-primary">New Note</button>
         </h4>
         <table class="table" id="notes">
           <thead>
@@ -252,7 +242,7 @@
       </div>
         <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
           <!-- removed !heatRoute from ngIf to pare down screen -->
-          <h4>Pets <button type="button" (click)="goToTop();petsMdl.showModal()" class="btn btn-secondary">New</button>
+          <h4>Pets <button type="button" (click)="goToTop();petsMdl.showModal()" class="btn btn-primary">New Pet</button>
           </h4>
           <table class="table" id="petList">
             <thead>
@@ -283,8 +273,7 @@
         </div>
         <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
           <!-- removed !heatRoute from ngIf to pare down screen -->
-          <h4>Health Concerns <button type="button" (click)="goToTop();healthMdl.showModal()"
-              class="btn btn-secondary">New</button></h4>
+          <h4>Health Concerns <button type="button" (click)="goToTop();healthMdl.showModal()" class="btn btn-primary">New Health Concern</button></h4>
           <table class="table" id="concerns">
             <thead>
               <tr>
@@ -309,12 +298,16 @@
             </tbody>
           </table>
         </div>
-        <div class="col-md-12 text-center">
+        <div class="col-lg-12 col-md-12">
+          <h4>Admin Notes: </h4>
+          <p>{{client.admin_notes}}</p>
+        </div>
+        <div class="col-md-12 text-left">
           <h4>Attendance</h4>
-          <button type="button" [className]="appearance && appearance.was_seen == true && appearance.serviced == true ? 'btn btn-success' : 'btn btn-primary'" (click)="sendInteraction(1)">Seen & Serviced</button>&nbsp;
-          <button type="button" [className]="appearance && appearance.was_seen == false && appearance.serviced == true ? 'btn btn-success' : 'btn btn-primary'" (click)="sendInteraction(2)">Serviced & Not Seen</button>&nbsp;
+          <button type="button" [className]="appearance && appearance.was_seen == true && appearance.serviced == true ? 'btn btn-success' : 'btn btn-primary'" (click)="sendInteraction(1)"><fa-icon [icon]="seenAndServicedIcon"></fa-icon> Seen & Serviced</button>&nbsp;
+          <button type="button" [className]="appearance && appearance.was_seen == false && appearance.serviced == true ? 'btn btn-success' : 'btn btn-primary'" (click)="sendInteraction(2)"><fa-icon [icon]="notSeenAndServicedIcon"></fa-icon> Serviced & Not Seen</button>&nbsp;
           <button type="button" *ngIf="isAdmin" [className]="appearance && appearance.was_seen == false && appearance.serviced == false && appearance.still_lives_here == false ? 'btn btn-success' : 'btn btn-primary'" (click)="sendInteraction(3)">No longer lives here</button>
-          <button type="button" [className]="appearance && appearance.was_seen == false && appearance.serviced == false && appearance.still_lives_here == false ? 'btn btn-success' : 'btn btn-primary'" (click)="sendInteraction(4)">Not Seen</button>&nbsp;
+          <button type="button" [className]="appearance && appearance.was_seen == false && appearance.serviced == false && appearance.still_lives_here == false ? 'btn btn-success' : 'btn btn-primary'" (click)="sendInteraction(4)"><fa-icon [icon]="notSeenIcon"></fa-icon> Not Seen</button>&nbsp;
         </div>
       </div>
     </div>
