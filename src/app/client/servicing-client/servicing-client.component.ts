@@ -135,8 +135,10 @@ export class ServicingClientComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.updateHoseTankMessageVisible = false;
-    this.updateTimerSubscription.unsubscribe();
+    if (this.updateTimerSubscription) {
+      this.updateHoseTankMessageVisible = false;
+      this.updateTimerSubscription.unsubscribe();
+    }
   }
 
   getHeaterStatuses(): void {

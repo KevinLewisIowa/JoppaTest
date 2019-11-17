@@ -80,7 +80,7 @@
           <option value="Deceased">Deceased</option>
         </select>
       </div>
-      <div class="col-md-12">
+      <div class="col-md-12" *ngIf="isAdmin">
         <textarea type="text" rows="3" placeholder="admin notes" class="float-right"
           formControlName="admin_notes"></textarea>
         <label>Admin Notes: </label>
