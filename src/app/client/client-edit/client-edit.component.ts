@@ -17,12 +17,13 @@ export class ClientEditComponent implements OnInit {
   clientForm: FormGroup;
   regExpDate = /^\d{2}\/\d{2}\/\d{4}$/
   theClient: Client;
-
+  isAdmin: boolean;
 
   constructor(private router: Router, private clientService: ClientService,
               private fb: FormBuilder) { }
 
   ngOnInit() {
+    this.isAdmin = JSON.parse(window.localStorage.getItem('isAdmin'));
     this.theClient = new Client();
     this.clientForm = this.fb.group({
       birth_date: '',
