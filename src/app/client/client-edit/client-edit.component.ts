@@ -44,29 +44,32 @@ export class ClientEditComponent implements OnInit {
       admin_notes: ''
     });
     this.clientForm.get('preferred_name').setValidators(Validators.required);
+    this.clientForm.get('first_name').setValidators(Validators.required);
+    this.clientForm.get('last_name').setValidators(Validators.required);
+    this.clientForm.get('gender').setValidators(Validators.required);
     this.clientForm.get('dwelling').setValidators(Validators.required);
   }
 
   submitClient() {
     const locationCampId = JSON.parse(window.localStorage.getItem('locationCampId'));
-    this.theClient.first_name = this.clientForm.get('first_name').value;
-    this.theClient.last_name = this.clientForm.get('last_name').value;
-    this.theClient.preferred_name = this.clientForm.get('preferred_name').value;
+    this.theClient.first_name = String(this.clientForm.get('first_name').value).trim();
+    this.theClient.last_name = String(this.clientForm.get('last_name').value).trim();
+    this.theClient.preferred_name = String(this.clientForm.get('preferred_name').value).trim();
     this.theClient.birth_date = new Date(Date.parse(this.clientForm.get('birth_date').value));
     this.theClient.is_aftercare = this.clientForm.get('is_aftercare').value;
     this.theClient.is_veteran = this.clientForm.get('is_veteran').value;
     this.theClient.current_camp_id = locationCampId;
     this.theClient.previous_camp_id = null;
-    this.theClient.shoe_size = this.clientForm.get('shoe_size').value;
-    this.theClient.boot_size = this.clientForm.get('boot_size').value;
-    this.theClient.status = this.clientForm.get('status').value;
+    this.theClient.shoe_size = String(this.clientForm.get('shoe_size').value).trim();
+    this.theClient.boot_size = String(this.clientForm.get('boot_size').value).trim();
+    this.theClient.status = String(this.clientForm.get('status').value).trim();
     this.theClient.inactive_description = '';
     this.theClient.number_meals = this.clientForm.get('number_meals').value as number;
-    this.theClient.phone = this.clientForm.get('phone').value;
-    this.theClient.joppa_apartment_number = this.clientForm.get('joppa_apartment_number').value;
+    this.theClient.phone = String(this.clientForm.get('phone').value).trim();
+    this.theClient.joppa_apartment_number = String(this.clientForm.get('joppa_apartment_number').value).trim();
     this.theClient.dwelling = this.clientForm.get('dwelling').value;
     this.theClient.gender = this.clientForm.get('gender').value;
-    this.theClient.admin_notes = this.clientForm.get('admin_notes').value;
+    this.theClient.admin_notes = String(this.clientForm.get('admin_notes').value).trim();
     this.clientService.insertClient(this.theClient).subscribe((data: Client) => {
       const clientInteraction: Appearance = new Appearance();
       clientInteraction.client_id = data.id;
@@ -76,7 +79,10 @@ export class ClientEditComponent implements OnInit {
       this.clientService.insertClientAppearance(clientInteraction).subscribe(data => {
         this.router.navigate([`/locationCamp/${locationCampId}`]);
       });      
-    }, error => {console.log(error)});
+    }, error => {
+      console.log(error);
+      alert('Error creating client.  There may already be a client with the same name.  Please search for the client before continuing.');
+    });
   }
 
   close() {

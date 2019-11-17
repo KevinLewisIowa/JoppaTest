@@ -80,18 +80,20 @@
           </tbody>
         </table>
       </div>
-      <div class="row" *ngIf="heatRoute || isAdmin">
+      <div class="col-lg-12 col-md-12" *ngIf="heatRoute || isAdmin">
         <div class="col-md-12">
           <h4>
             Tanks/Hoses
             <button class="btn btn-primary" (click)="updateNumberTanksHoses(client)" hidden>Update Tanks/Hoses</button>
           </h4>
         </div>
-        <div class="col-md-12 text-center">
+        <div class="col-md-12">
             <label>Number Tanks: </label>
             <input type="text" placeholder="0" (change)="updateNumberTanksHoses(client)" [(ngModel)]="client.number_tanks"/>
+            &nbsp;
+            <span *ngIf="updateHoseTankMessageVisible" class="alert alert-success">Tank/Hose Updated</span>
         </div>
-        <div class="col-md-12 text-center">
+        <div class="col-md-12">
           <label>Number Hoses: </label>
           <input type="text" placeholder="0" (change)="updateNumberTanksHoses(client)" [(ngModel)]="client.number_hoses"/>
         </div>

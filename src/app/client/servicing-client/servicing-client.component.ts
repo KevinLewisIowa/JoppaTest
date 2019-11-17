@@ -15,6 +15,7 @@ import { Note } from 'app/models/note';
 import { ClientPet } from 'app/models/client-pet';
 import { faCheckCircle as farCheckCircle } from '@fortawesome/free-regular-svg-icons';
 import { faChevronLeft, faInfoCircle, faCheckCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-servicing-client',
@@ -44,6 +45,8 @@ export class ServicingClientComponent implements OnInit {
   currentStatus: number = 2;
   heaters: any[] = [];
   isAdmin: boolean;
+  updateTimerSubscription: Subscription;
+  updateHoseTankMessageVisible: boolean = false;
   backIcon = faChevronLeft;
   informationIcon = faInfoCircle;
   seenAndServicedIcon = faCheckCircle;
@@ -131,6 +134,11 @@ export class ServicingClientComponent implements OnInit {
     }
   }
 
+  ngOnDestroy() {
+    this.updateHoseTankMessageVisible = false;
+    this.updateTimerSubscription.unsubscribe();
+  }
+
   getHeaterStatuses(): void {
     this.mainService.getHeaterStatuses().subscribe(heaterStatuses => {
       this.heaterStatuses = heaterStatuses.filter(w => w.id !== 1);
@@ -148,7 +156,6 @@ export class ServicingClientComponent implements OnInit {
   updateHeaterEntry(heaterId, statusId) {
     this.service.updateHeaterClient(this.client.id, heaterId, statusId).subscribe(response => {
       this.service.getHeatersForClient(this.client.id).subscribe((data: any[]) => {
-        console.log(data);
         this.heaters = data;
       });
       this.service.getHeatEquipmentNotReturned(this.clientId).subscribe((data1: any[]) => {
@@ -159,8 +166,17 @@ export class ServicingClientComponent implements OnInit {
 
   updateNumberTanksHoses(client: Client) {
     this.service.updateClient(client).subscribe(data => {
-      console.log('Updated client');
+      let updateTimer = Observable.timer(2000, 2000);
+      this.updateTimerSubscription = updateTimer.subscribe(data => {
+        this.hideConfirmationMessage()
+      });
+      this.updateHoseTankMessageVisible = true;
     }, error => console.log(error));
+  }
+
+  hideConfirmationMessage(): any {
+    this.updateHoseTankMessageVisible = false;
+    this.updateTimerSubscription.unsubscribe();
   }
 
   sendInteraction(interactionType: number) {
