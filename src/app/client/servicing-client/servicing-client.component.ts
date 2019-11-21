@@ -108,21 +108,21 @@ export class ServicingClientComponent implements OnInit {
         this.service.getRequestedItems(this.clientId).subscribe((data: RequestedItem[]) => {
           this.requestedItems = data.filter(w => w.has_received != true);
         });
-        // this.service.getClientPets(this.clientId).subscribe((data : ClientPet[]) => {
-        //   this.pets = data;
-        // });
-        // this.service.getGoalsAndNextSteps(this.clientId).subscribe((data: GoalsNextStep[]) => {
-        //   this.goalsAndSteps = data;
-        // });
-        // this.service.getClientLikes(this.clientId).subscribe((data: ClientLike[]) => {
-        //   this.clientLikes = data;
-        // });
-        // this.service.getClientDislikes(this.clientId).subscribe((data: ClientDislike[]) => {
-        //   this.clientDislikes = data;
-        // });
-        // this.service.getHealthConcerns(this.clientId).subscribe((data: HealthConcern[]) => {
-        //   this.healthConcerns = data;
-        // });
+        this.service.getClientPets(this.clientId).subscribe((data : ClientPet[]) => {
+          this.pets = data;
+        });
+        this.service.getGoalsAndNextSteps(this.clientId).subscribe((data: GoalsNextStep[]) => {
+          this.goalsAndSteps = data;
+        });
+        this.service.getClientLikes(this.clientId).subscribe((data: ClientLike[]) => {
+          this.clientLikes = data;
+        });
+        this.service.getClientDislikes(this.clientId).subscribe((data: ClientDislike[]) => {
+          this.clientDislikes = data;
+        });
+        this.service.getHealthConcerns(this.clientId).subscribe((data: HealthConcern[]) => {
+          this.healthConcerns = data;
+        });
       }
     }
     else {

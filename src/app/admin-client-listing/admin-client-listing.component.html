@@ -30,6 +30,11 @@
           <mat-header-cell *matHeaderCellDef mat-sort-header>Phone</mat-header-cell>
           <mat-cell *matCellDef="let client">{{client.phone}}</mat-cell>
         </ng-container>
+
+        <ng-container matColumnDef="birth_date">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Birthday</mat-header-cell>
+          <mat-cell *matCellDef="let client">{{client.birth_date}}</mat-cell>
+        </ng-container>
         
         <ng-container matColumnDef="route_name">
           <mat-header-cell *matHeaderCellDef mat-sort-header>Route</mat-header-cell>
@@ -44,6 +49,16 @@
         <ng-container matColumnDef="status">
           <mat-header-cell *matHeaderCellDef mat-sort-header>Status</mat-header-cell>
           <mat-cell *matCellDef="let client">{{client.status}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="Items">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Items</mat-header-cell>
+          <mat-cell *matCellDef="let client">{{client.Items}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="Pets">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Pets</mat-header-cell>
+          <mat-cell *matCellDef="let client">{{client.Pets}}</mat-cell>
         </ng-container>
         
         <ng-container matColumnDef="updated_at">

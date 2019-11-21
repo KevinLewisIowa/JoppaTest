@@ -10,7 +10,7 @@ import { filter } from 'rxjs/operators';
   styleUrls: ['./admin-client-listing.component.css']
 })
 export class AdminClientListingComponent implements OnInit {
-  displayedColumns = ['first_name', 'last_name', 'preferred_name', 'phone', 'route_name', 'camp_name', 'status', 'updated_at']
+  displayedColumns = ['first_name', 'last_name', 'preferred_name', 'phone', 'birth_date', 'route_name', 'camp_name', 'status', 'updated_at', 'Pets', 'Items']
   clients: any[] = [];
   dataSource: MatTableDataSource<any>;
 
