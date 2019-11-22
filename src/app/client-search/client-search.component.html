@@ -12,8 +12,8 @@
             <input id="focusMe" (keyup.enter)="performSearch()" class="wpx-250 form-control" type="text"
               [(ngModel)]="preferredName" placeholder="Preferred Name" name="preferredName" />
           </div>
-          <div class="col-sm-2">
-            <button name="btnSearch" class="btn btn-primary" type="button" [disabled]="preferredName == ''"
+          <div class="col-sm-8">
+            <button name="btnSearch" class="btn btn-primary float-right" type="button" [disabled]="preferredName == ''"
               (click)="performSearch()">Search</button>
           </div>
         </div>
