@@ -1,0 +1,31 @@
+<div class="card" style="opacity:0.93">
+  <div class="card-header">
+    <h2>Overall Attendance</h2>
+  </div>
+  <div class="panel-body">
+    <div>
+      <mat-form-field>
+        <input matInput [matDatepicker]="startDateDP" [min]="minDate" [max]="maxDate" placeholder="Choose start date" [(ngModel)]="startDate">
+        <mat-datepicker-toggle matSuffix [for]="startDateDP"></mat-datepicker-toggle>
+        <mat-datepicker #startDateDP></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput [matDatepicker]="endDateDP" [min]="minDate" [max]="maxDate" placeholder="Choose end date" [(ngModel)]="endDate">
+        <mat-datepicker-toggle matSuffix [for]="endDateDP"></mat-datepicker-toggle>
+        <mat-datepicker #endDateDP></mat-datepicker>
+      </mat-form-field>
+      <button class="btn btn-primary" type="submit" (click)="retrieveOverallAttendance()"><fa-icon [icon]="searchIcon"></fa-icon> Search</button>
+    </div>
+    <div *ngIf="attendanceCounts != undefined">
+      <label>Seen and Serviced: {{attendanceCounts.seenAndServiced}}</label><br/>
+      <label>Not Seen and Serviced: {{attendanceCounts.notSeenAndServiced}}</label><br/>
+      <label>Not Seen: {{attendanceCounts.notSeen}}</label>
+    </div>
+    <div *ngIf="attendanceCounts == undefined">
+      <label>Enter a date range to see the number of seen and serviced over the specified period</label><br/>
+    </div>
+  </div>
+  <div class="card-footer">
+    <button type="button" class="btn btn-primary" (click)="back()"><fa-icon [icon]="backIcon"></fa-icon> Back</button>
+  </div>
+</div>

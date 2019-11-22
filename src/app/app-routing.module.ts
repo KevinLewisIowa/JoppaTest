@@ -32,6 +32,7 @@ import { AdminSeenServicedReportComponent } from './admin-reports/admin-seen-ser
 import { HeatEquipmentPerRouteReportComponent } from './heat-equipment-per-route-report/heat-equipment-per-route-report.component';
 import { AdminClientListingComponent } from './admin-client-listing/admin-client-listing.component';
 import { BirthdayMonthsReportComponent } from './admin-reports/birthday-months-report/birthday-months-report.component';
+import { AdminOverallAttendanceComponent } from './admin-overall-attendance/admin-overall-attendance.component';
 
 const routes: Routes = [
   { path: 'routes', canActivate: [IsLoggedInGuard], component: RoutesComponent },
@@ -49,6 +50,7 @@ const routes: Routes = [
   { path: 'admin/reports/routeUndeliveredItems', canActivate: [IsLoggedInGuard, IsAdminGuard], component: AdminRouteUndeliveredItemsComponent },
   { path: 'admin/reports/routeMeals', canActivate: [IsLoggedInGuard, IsAdminGuard], component: AdminRouteMealsComponent },
   { path: 'admin/reports/routeUnfulfilledGoalsNextSteps', canActivate: [IsLoggedInGuard, IsAdminGuard], component: AdminRouteUnfulfilledGoalsNextStepsComponent },
+  { path: 'admin/reports/overallAttendance', canActivate: [IsLoggedInGuard, IsAdminGuard], component: AdminOverallAttendanceComponent },
   { path: 'admin/reports/routeUnfulfilledPrayerRequestsNeeds', canActivate: [IsLoggedInGuard, IsAdminGuard],
           component: AdminRouteUnfulfilledPrayerRequestsNeedsComponent },
   { path: 'admin/reports/routeSummary', canActivate: [IsLoggedInGuard, IsAdminGuard], component: RouteSummaryReportComponent},

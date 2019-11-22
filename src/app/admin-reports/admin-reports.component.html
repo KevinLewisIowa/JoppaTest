@@ -1,41 +1,42 @@
-<div class="card text-center" style="opacity:0.93">
+<div class="card" style="opacity:0.93">
   <div class="card-header">
     <h2>Reports</h2>
   </div>
   <div class="panel-body">
       <table class="table" id="reportList">
-          <thead>
-          </thead>
           <tbody>
             <tr>
-              <td class="text-center" style="height:75px;" (click)="openNewClientsReport()">Clients New To Camps</td>
+              <td style="height:75px;" (click)="openOverallAttendanceReport()">Overall Attendance</td>
             </tr>
             <tr>
-              <td class="text-center" style="height:75px;" (click)="openAdminRouteUndeliveredItems()">Undelivered Items Listing</td>
+              <td style="height:75px;" (click)="openNewClientsReport()">Clients New To Camps</td>
             </tr>
             <tr>
-              <td class="text-center" style="height:75px;" (click)="openAdminRouteNumberMeals()">Meals Expected</td>
+              <td style="height:75px;" (click)="openAdminRouteUndeliveredItems()">Undelivered Items Listing</td>
             </tr>
             <tr>
-              <td class="text-center" style="height:75px;" (click)="openAdminRouteUnfulfilledGoalsNextSteps()">Goals/Next Steps Not Fulfilled Listing</td>
+              <td style="height:75px;" (click)="openAdminRouteNumberMeals()">Meals Expected</td>
             </tr>
             <tr>
-              <td class="text-center" style="height:75px;" (click)="openAdminRouteUnfulfilledPrayerRequestsNeeds()">Prayer Requests/Needs Not Fulfilled Listing</td>
+              <td style="height:75px;" (click)="openAdminRouteUnfulfilledGoalsNextSteps()">Goals/Next Steps Not Fulfilled Listing</td>
             </tr>
             <tr>
-              <td class="text-center" style="height:75px;" (click)="openAdminHeaterListing()">Heater Listing</td>
+              <td style="height:75px;" (click)="openAdminRouteUnfulfilledPrayerRequestsNeeds()">Prayer Requests/Needs Not Fulfilled Listing</td>
             </tr>
             <tr>
-              <td class="text-center" style="height:75px;" (click)="openRouteSummaryReport()">Route Summary Report</td>
+              <td style="height:75px;" (click)="openAdminHeaterListing()">Heater Listing</td>
             </tr>
             <tr>
-              <td class="text-center" style="height:75px;" (click)="openHeatEquipmentPerRouteReport()">Heat Equipment Per Route Report</td>
+              <td style="height:75px;" (click)="openRouteSummaryReport()">Route Summary Report</td>
             </tr>
             <tr>
-              <td class="text-center" style="height:75px;" (click)="openSeenServicedReport()">Seen and Serviced Report</td>
+              <td style="height:75px;" (click)="openHeatEquipmentPerRouteReport()">Heat Equipment Per Route Report</td>
             </tr>
             <tr>
-              <td class="text-center" style="height:75px;" (click)="birthdayMonthsReport()">Birthday Months</td>
+              <td style="height:75px;" (click)="openSeenServicedReport()">Seen and Serviced Report</td>
+            </tr>
+            <tr>
+              <td style="height:75px;" (click)="birthdayMonthsReport()">Birthday Months</td>
             </tr>
           </tbody>        
           <button routerLink="/adminHome" class="btn btn-primary" type="button">Back</button>

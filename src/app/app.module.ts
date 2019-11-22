@@ -12,7 +12,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { InlineSVGModule} from 'ng-inline-svg';
 
-import { MatPaginatorModule, MatTableModule, MatFormFieldModule, MatInputModule, MatSortModule } from '@angular/material';
+import { MatPaginatorModule, MatTableModule, MatFormFieldModule, MatInputModule, MatSortModule, MatDatepicker, MatDatepickerModule, MatNativeDateModule } from '@angular/material';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 
@@ -73,6 +73,7 @@ import { HeatEquipmentPerRouteReportComponent } from './heat-equipment-per-route
 import { AdminClientListingComponent } from './admin-client-listing/admin-client-listing.component';
 import { PetsComponent } from './insert-modals/pets/pets.component';
 import { BirthdayMonthsReportComponent } from './admin-reports/birthday-months-report/birthday-months-report.component';
+import { AdminOverallAttendanceComponent } from './admin-overall-attendance/admin-overall-attendance.component';
 
 const reducers = {
   user: MainReducer,
@@ -130,6 +131,7 @@ const reducers = {
     AdminClientListingComponent,
     PetsComponent,
     BirthdayMonthsReportComponent,
+    AdminOverallAttendanceComponent,
   ],
   imports: [
     BrowserModule,
@@ -141,6 +143,8 @@ const reducers = {
     MatInputModule,
     MatTableModule,
     MatSortModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
     BrowserAnimationsModule,
     HttpClientModule,
     FontAwesomeModule,

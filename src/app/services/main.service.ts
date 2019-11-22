@@ -606,6 +606,21 @@ export class MainService {
                   }).catch(error => this.handleError(error));
   }
 
+  getOverallAttendanceReport(startDate: string, endDate: string) {
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.localStorage.getItem('apiToken')
+    });
+    return this.http.get(this.apiUrl + `getOverallAttendanceReport?startDate=${startDate}&endDate=${endDate}`, {headers: myHeader})
+                  .map((res: any) => {
+                    if (res.message === 'invalid-token') {
+                      window.localStorage.removeItem('apiToken');
+                      this.router.navigate(['/application-login']);
+                    }
+                    return res;
+                  }).catch(error => this.handleError(error));
+  }
+
   private handleError(error: any): Promise<any> {
     console.error('An error occurred', error); // for demo purposes only
     return Promise.reject(error.message || error);

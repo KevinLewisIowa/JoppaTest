@@ -72,6 +72,9 @@ export class ServicingClientComponent implements OnInit {
     if (this.clientId !== null) {
       this.service.getClientById(this.clientId).subscribe((data: Client) => {
         this.client = data;
+        if (this.client.birth_date == null) {
+          alert('Please ask this client for their birthday');
+        }
       });
       if (routeInstanceId != null) {
         this.service.getClientNotesForRoute(this.clientId, routeInstanceId).subscribe((data: Note[]) => {
@@ -127,10 +130,6 @@ export class ServicingClientComponent implements OnInit {
     }
     else {
       this.router.navigate(['/routes']);
-    }
-
-    if (this.client.birth_date == null) {
-      alert('Please ask this client for their birthday');
     }
   }
 
