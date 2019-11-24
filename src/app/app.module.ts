@@ -74,6 +74,7 @@ import { AdminClientListingComponent } from './admin-client-listing/admin-client
 import { PetsComponent } from './insert-modals/pets/pets.component';
 import { BirthdayMonthsReportComponent } from './admin-reports/birthday-months-report/birthday-months-report.component';
 import { AdminOverallAttendanceComponent } from './admin-overall-attendance/admin-overall-attendance.component';
+import { InventoryReportComponent } from './admin-reports/inventory-report/inventory-report.component';
 
 const reducers = {
   user: MainReducer,
@@ -132,6 +133,7 @@ const reducers = {
     PetsComponent,
     BirthdayMonthsReportComponent,
     AdminOverallAttendanceComponent,
+    InventoryReportComponent,
   ],
   imports: [
     BrowserModule,

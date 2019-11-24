@@ -1,0 +1,46 @@
+<div class="card text-center" style="opacity:0.93">
+  <div class="card-header text-center" id="topOfScreen">
+    <h2>Route Summary Report</h2>
+  </div>
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-lg-12 col-md-12">
+        <span>Please select a route to see last week's summary.</span><br /><br />
+        <button *ngFor="let route of routes" type="button" class="btn btn-primary" style="margin:0 3px;" (click)="loadRouteInstance(route.id)">{{route.name}}</button>&nbsp;
+      </div>
+    </div>
+    <br />    
+    <div class="row">
+      <div class="col-lg-12 col-md-12">
+        <dl>
+          <dt>Tanks Out</dt><dd>{{inventory.tanksOut}}</dd>
+          <dt>Hoses Out</dt><dd>{{inventory.hosesOut}}</dd>
+          <dt>Heaters Out</dt><dd>{{inventory.heatersOut}}</dd>
+          <dt>Broken Heaters</dt><dd>{{inventory.brokenHeaters}}</dd>
+          <dt>Lost Heaters</dt><dd>{{inventory.lostHeaters}}</dd>
+          <dt>Destroyed Heaters</dt><dd>{{inventory.destroyedHeaters}}</dd>
+          <dt>Stolen Heaters</dt><dd>{{inventory.stolenHeaters}}</dd>
+        </dl>
+      </div>
+      <br />
+      <div class="col-lg-12 col-md-12">
+        <h4>Heaters</h4>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Client</th>
+              <th>Serial Number</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let heater of inventory.heaterList">
+              <td>{{heater.first_name}} {{heater.last_name}} or {{heater.preferred_name}}</td>
+              <td>{{heater.serial_number}}</td>
+            </tr>
+          </tbody>
+        </table>
+        <button type="button" class="pull-left btn btn-primary" (click)="back()">Back</button>
+      </div>
+    </div>
+  </div>
+</div>

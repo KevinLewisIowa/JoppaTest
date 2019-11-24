@@ -17,6 +17,7 @@ import { RouteInstanceHeaterInteraction } from 'app/models/route-instance-heater
 import { and } from '@angular/router/src/utils/collection';
 import { Router } from '@angular/router';
 import { RouteInstanceTankHoseInteraction } from 'app/models/route-instance-tank-hose-interaction';
+import { Inventory } from 'app/admin-reports/inventory-report/inventory-report.component';
 
 
 @Injectable()
@@ -85,6 +86,16 @@ export class MainService {
 
     return this.http.get(this.apiUrl + `getLatestRouteInstanceInfoForRoute?routeId=${routeId}`)
       .map(response => response as RouteInstance).catch(err => this.handleError(err));
+  }
+
+  getInventorySummary() {
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.localStorage.getItem('apiToken')
+    });
+
+    return this.http.get(this.apiUrl + `getAdminInventoryReport?`)
+      .map(response => response as Inventory).catch(err => this.handleError(err));
   }
 
   getNotesForRouteInstance(routeInstanceId: number) {

@@ -17,6 +17,10 @@ export class AdminReportsComponent implements OnInit {
     this.router.navigate(['/admin/reports/newClients']);
   }
 
+  openInventoryReport() {
+    this.router.navigate(['/admin/reports/inventoryReport']);
+  }
+
   openOverallAttendanceReport() {
     this.router.navigate(['/admin/reports/overallAttendance']);
   }

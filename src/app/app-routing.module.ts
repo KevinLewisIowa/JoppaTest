@@ -33,6 +33,7 @@ import { HeatEquipmentPerRouteReportComponent } from './heat-equipment-per-route
 import { AdminClientListingComponent } from './admin-client-listing/admin-client-listing.component';
 import { BirthdayMonthsReportComponent } from './admin-reports/birthday-months-report/birthday-months-report.component';
 import { AdminOverallAttendanceComponent } from './admin-overall-attendance/admin-overall-attendance.component';
+import { InventoryReportComponent } from './admin-reports/inventory-report/inventory-report.component';
 
 const routes: Routes = [
   { path: 'routes', canActivate: [IsLoggedInGuard], component: RoutesComponent },
@@ -48,6 +49,7 @@ const routes: Routes = [
   { path: 'admin/reports', canActivate: [IsLoggedInGuard, IsAdminGuard], component: AdminReportsComponent },
   { path: 'admin/reports/newClients', canActivate: [IsLoggedInGuard, IsAdminGuard], component: NewClientsReportComponent},
   { path: 'admin/reports/routeUndeliveredItems', canActivate: [IsLoggedInGuard, IsAdminGuard], component: AdminRouteUndeliveredItemsComponent },
+  { path: 'admin/reports/inventoryReport', canActivate: [IsLoggedInGuard, IsAdminGuard], component: InventoryReportComponent},
   { path: 'admin/reports/routeMeals', canActivate: [IsLoggedInGuard, IsAdminGuard], component: AdminRouteMealsComponent },
   { path: 'admin/reports/routeUnfulfilledGoalsNextSteps', canActivate: [IsLoggedInGuard, IsAdminGuard], component: AdminRouteUnfulfilledGoalsNextStepsComponent },
   { path: 'admin/reports/overallAttendance', canActivate: [IsLoggedInGuard, IsAdminGuard], component: AdminOverallAttendanceComponent },
