@@ -6,11 +6,11 @@
     <div class="panel-body" style="opacity:0.93">
       <div class="entry-box">
         <div class="col-md-12">
-          <input type="text" class="float-right" placeholder="Serial Number" formControlName="serial_number" />
+          <input type="text" class="float-right" placeholder="Serial Number" formControlName="serial_number" style="width: 185px"/>
           <label>Serial Number: </label>
         </div>
         <div class="col-md-12">
-          <select id="heaterType" class="float-right" formControlName="heater_type_id">
+          <select id="heaterType" class="float-right" formControlName="heater_type_id" style="width: 185px">
             <option value="" disabled selected>Select a heater type</option>
             <option *ngFor="let heatertype of heaterTypes" [value]="heatertype.id">{{heatertype.type_description}}
             </option>
