@@ -78,6 +78,7 @@ export class ClientSearchComponent implements OnInit, OnDestroy {
         this.noResultsMessage = '';
       }
     }, error => {
+      console.log(error);
       this.clients = [];
       this.noResultsMessage = 'Error getting results';
     });
