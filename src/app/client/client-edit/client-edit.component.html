@@ -20,14 +20,14 @@
         </div>
         <div class="col-md-12">
           <label>Gender:<font color="red">*</font></label>
-          <select class="form-control" class="float-right" formControlName="gender">
+          <select class="form-control" class="float-right" formControlName="gender" style="width: 173px">
             <option value="Male">Male</option>
             <option value="Female">Female</option>
           </select>
         </div>
         <div class="col-md-12">
           <label>Birth Date: </label>
-          <input type="date" class="float-right" placeholder="mm/dd/yyyy" formControlName="birth_date" />
+          <input type="date" class="float-right" placeholder="mm/dd/yyyy" formControlName="birth_date" style="width: 173px"/>
         </div>
         <div class="col-md-12">
           <label>Phone: </label>
@@ -56,7 +56,7 @@
         </div>
         <div class="col-md-12">
           <label>Dwelling:<font color="red">*</font></label>
-          <select class="form-control" class="float-right" formControlName="dwelling">
+          <select class="form-control" class="float-right" formControlName="dwelling" style="width: 173px">
             <option value="Tent">Tent</option>
             <option value="Shack">Shack</option>
             <option value="Abandoned Structure">Abandoned Structure</option>
@@ -73,7 +73,7 @@
         </div>
         <div class="col-md-12">
           <label>Status: </label>
-          <select class="form-control" class="float-right" formControlName="status">
+          <select class="form-control" class="float-right" formControlName="status" style="width: 173px">
             <option value="Active">Active</option>
             <option value="Inactive">Inactive</option>
             <option value="Alumni">Alumni</option>
@@ -82,7 +82,7 @@
         </div>
         <div class="col-md-12" *ngIf="isAdmin">
           <label>Admin Notes: </label>
-          <textarea rows=3 class="float-right" placeholder="admin notes" formControlName="admin_notes"></textarea>
+          <textarea rows=3 class="float-right" style="width: 173px" placeholder="admin notes" formControlName="admin_notes"></textarea>
         </div>
       </div>
     </form>
