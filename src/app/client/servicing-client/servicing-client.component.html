@@ -6,7 +6,7 @@
     <div class="row">
       <div class="col-lg-12 col-md-12" *ngIf="heatRoute || isAdmin">
         <h4>Heating Equipment
-          <button type="button" (click)="goToTop();newHeaterModal.showModal()" class="btn btn-primary">New Heater</button>
+          <button type="button" (click)="goToTop();newHeaterModal.showModal()" class="btn btn-primary float-right">New Heater</button>
           <button type="button" (click)="loanTank()" class="btn btn-primary" hidden>Add Tank</button>
           <button type="button" (click)="loanHose()" class="btn btn-primary" hidden>Add Hose</button>
         </h4>
@@ -82,10 +82,10 @@
       </div>
       <div class="col-lg-12 col-md-12" *ngIf="heatRoute || isAdmin">
         <div class="col-md-12">
-          <h4>
+          <h5>
             Tanks/Hoses
             <button class="btn btn-primary" (click)="updateNumberTanksHoses(client)" hidden>Update Tanks/Hoses</button>
-          </h4>
+          </h5>
         </div>
         <div class="col-md-12">
             <label>Number Tanks: </label>
@@ -99,8 +99,14 @@
         </div>
       </div>
       <div class="col-lg-12 col-md-12" *ngIf="!heatRoute">
-        <h4>Requested Items <button type="button" (click)="goToTop();requestItemMdl.showModal()" class="btn btn-primary">New Item</button></h4>
+        <h4>Requested Items <button type="button" (click)="goToTop();requestItemMdl.showModal()" class="btn btn-primary float-right">New Item</button></h4>
         <table class="table" id="items">
+            <colgroup>
+              <col span="1" style="width: 25%;">
+              <col span="1" style="width: 25%;">
+              <col span="1" style="width: 25%;">
+              <col span="1" style="width: 25%;">
+           </colgroup>
           <thead>
             <tr>
               <th>Description</th>
@@ -124,11 +130,18 @@
         <!-- added !heatRoute from ngIf to pare down heat screen -->
         <h4>Recently Received Items</h4>
         <table class="table" id="items">
+            <colgroup>
+              <col span="1" style="width: 25%;">
+              <col span="1" style="width: 25%;">
+              <col span="1" style="width: 25%;">
+              <col span="1" style="width: 25%;">
+           </colgroup>
           <thead>
             <tr>
               <th>Description</th>
               <th>Created At</th>
               <th>Received At</th>
+              <th>&nbsp;</th>
             </tr>
           </thead>
           <tbody>
@@ -142,8 +155,14 @@
       </div>
       <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
         <!-- removed !heatRoute from ngIf to pare down screen -->
-        <h4>Goals/Next Steps <button type="button" (click)="goToTop();goalMdl.showModal()" class="btn btn-primary">New Goal/Next Step</button></h4>
+        <h4>Goals/Next Steps <button type="button" (click)="goToTop();goalMdl.showModal()" class="btn btn-primary float-right">New Goal/Next Step</button></h4>
         <table class="table" id="goals">
+            <colgroup>
+              <col span="1" style="width: 25%;">
+              <col span="1" style="width: 25%;">
+              <col span="1" style="width: 25%;">
+              <col span="1" style="width: 25%;">
+           </colgroup>
           <thead>
             <tr>
               <th>Description</th>
@@ -172,14 +191,21 @@
       </div>
       <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
         <!-- removed !heatRoute from ngIf to pare down screen -->
-        <h4>Likes <button type="button" class="btn btn-primary" (click)="goToTop();likeMdl.showModal()">New Like</button>
+        <h4>Likes <button type="button" class="btn btn-primary float-right" (click)="goToTop();likeMdl.showModal()">New Like</button>
         </h4>
         <table class="table" id="likes">
+            <colgroup>
+              <col span="1" style="width: 25%;">
+              <col span="1" style="width: 25%;">
+              <col span="1" style="width: 25%;">
+              <col span="1" style="width: 25%;">
+           </colgroup>
           <thead>
             <tr>
               <th>Description</th>
               <th>Created At</th>
               <th>Remove</th>
+              <th>&nbsp;</th>
             </tr>
           </thead>
           <tbody>
@@ -191,7 +217,7 @@
                 {{like.created_at | date:'shortDate'}}
               </td>
               <td>
-                <button type="button" class="btn btn-primary" (click)="removeLike(like.id)">Remove</button>
+                <button type="button" class="btn btn-primary float-right" (click)="removeLike(like.id)">Remove</button>
               </td>
             </tr>
           </tbody>
@@ -199,13 +225,20 @@
       </div>
       <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
         <!-- removed !heatRoute from ngIf to pare down screen -->
-        <h4>Dislikes <button type="button" (click)="goToTop();dislikeMdl.showModal()" class="btn btn-primary">New Dislike</button></h4>
+        <h4>Dislikes <button type="button" (click)="goToTop();dislikeMdl.showModal()" class="btn btn-primary float-right">New Dislike</button></h4>
         <table class="table" id="dislikes">
+            <colgroup>
+              <col span="1" style="width: 25%;">
+              <col span="1" style="width: 25%;">
+              <col span="1" style="width: 25%;">
+              <col span="1" style="width: 25%;">
+           </colgroup>
           <thead>
             <tr>
               <th>Description</th>
               <th>Created At</th>
               <th>Remove</th>
+              <th>&nbsp;</th>
             </tr>
           </thead>
           <tbody>
@@ -224,13 +257,21 @@
         </table>
       </div>
       <div class="col-lg-12 col-md-12">
-        <h4>Notes <button type="button" (click)="goToTop();notesMdl.showModal()" class="btn btn-primary">New Note</button>
+        <h4>Notes <button type="button" (click)="goToTop();notesMdl.showModal()" class="btn btn-primary float-right">New Note</button>
         </h4>
         <table class="table" id="notes">
+            <colgroup>
+              <col span="1" style="width: 25%;">
+              <col span="1" style="width: 25%;">
+              <col span="1" style="width: 25%;">
+              <col span="1" style="width: 25%;">
+           </colgroup>
           <thead>
             <tr>
               <th>Note</th>
               <th>Remove</th>
+              <th>&nbsp;</th>
+              <th>&nbsp;</th>
             </tr>
           </thead>
 
@@ -244,9 +285,15 @@
       </div>
         <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
           <!-- removed !heatRoute from ngIf to pare down screen -->
-          <h4>Pets <button type="button" (click)="goToTop();petsMdl.showModal()" class="btn btn-primary">New Pet</button>
+          <h4>Pets <button type="button" (click)="goToTop();petsMdl.showModal()" class="btn btn-primary float-right">New Pet</button>
           </h4>
           <table class="table" id="petList">
+              <colgroup>
+                <col span="1" style="width: 25%;">
+                <col span="1" style="width: 25%;">
+                <col span="1" style="width: 25%;">
+                <col span="1" style="width: 25%;">
+             </colgroup>
             <thead>
               <tr>
                 <th>Pet Type</th>
@@ -275,13 +322,20 @@
         </div>
         <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
           <!-- removed !heatRoute from ngIf to pare down screen -->
-          <h4>Health Concerns <button type="button" (click)="goToTop();healthMdl.showModal()" class="btn btn-primary">New Health Concern</button></h4>
+          <h4>Health Concerns <button type="button" (click)="goToTop();healthMdl.showModal()" class="btn btn-primary float-right">New Health Concern</button></h4>
           <table class="table" id="concerns">
+              <colgroup>
+                <col span="1" style="width: 25%;">
+                <col span="1" style="width: 25%;">
+                <col span="1" style="width: 25%;">
+                <col span="1" style="width: 25%;">
+             </colgroup>
             <thead>
               <tr>
                 <th>Description</th>
                 <th>Created At</th>
                 <th>Remove</th>
+                <th>&nbsp;</th>
               </tr>
             </thead>
             <tbody>
