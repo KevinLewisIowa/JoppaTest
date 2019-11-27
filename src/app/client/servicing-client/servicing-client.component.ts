@@ -341,12 +341,8 @@ export class ServicingClientComponent implements OnInit {
   }
 
   receivedRequest(id) {
-    console.log('In receivedRequest with id:' + id.toString());
     this.service.receivedRequestedItem(id).subscribe(response => {
-      console.log(response);
-      console.log('Before filtering');
       this.requestedItems = this.requestedItems.filter(w => w.id != id);
-      console.log('Before getting recent received items');
       this.service.getRecentReceivedItems(this.client.id).subscribe((data: RequestedItem[]) => {
         this.receivedItems = data;
       });
