@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Appearance } from 'app/models/appearance';
 
 @Component({
   selector: 'app-admin-home',
@@ -22,6 +23,7 @@ export class AdminHomeComponent implements OnInit {
   }
 
   goToRoutes() {
+    this.setRouteAttendance();
     this.router.navigate(['routes']);
   }
 
@@ -31,6 +33,7 @@ export class AdminHomeComponent implements OnInit {
 
   goToHeatRoutes() {
     window.localStorage.setItem('heatRoute', JSON.stringify(true));
+    this.setRouteAttendance();
     this.router.navigate(['routes']);
   }
 
@@ -42,4 +45,10 @@ export class AdminHomeComponent implements OnInit {
     this.router.navigate(['/admin/clientListing']);
   }
 
+  setRouteAttendance() {
+    if (JSON.parse(window.localStorage.getItem('RouteAttendance')) == null) {
+      let routeAttendanceList:Appearance[] = [];
+      window.localStorage.setItem('RouteAttendance', JSON.stringify(routeAttendanceList));
+    }
+  }
 }
