@@ -14,7 +14,6 @@ export class ClientSearchComponent implements OnInit, OnDestroy {
   @Output() clientSelected = new EventEmitter<Client>();
   @ViewChild('clientSearchMdl') clientSearchMdl: ElementRef;
   clients: Client[] = [];
-  preferredName = '';
   nameSearch = '';
   stateSearch = '';
   noResultsMessage = '';
@@ -42,7 +41,7 @@ export class ClientSearchComponent implements OnInit, OnDestroy {
 
   showModal() {
     this.clients = [];
-    this.preferredName = '';
+    this.nameSearch = '';
     this.nextEnabled = false;
     this.previousEnabled = false;
     this.modalService.open(this.clientSearchMdl/*,{ size: 'lg', backdrop: 'static'}*/);
@@ -59,14 +58,12 @@ export class ClientSearchComponent implements OnInit, OnDestroy {
 
   performSearch() {
     this.page = 1;
-    this.nameSearch = this.preferredName;
     this.search();
   }
 
   search() {
     this.loading = true;
-    this.searchSubscription = this.clientService.getClientsByName(this.preferredName)
-    .subscribe(results => {
+    this.searchSubscription = this.clientService.getClientsByName(this.nameSearch).subscribe(results => {
       this.loading = false;
       this.clients = results as any[];
       this.resultCount = this.clients.length;

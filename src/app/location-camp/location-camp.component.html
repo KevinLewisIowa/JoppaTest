@@ -23,7 +23,7 @@
         </thead>
         <tbody>
           <tr *ngFor="let client of clients" (click)="viewClient(client)" class="client-row">
-            <td class="text-left">{{client.preferred_name}}</td>
+            <td class="text-left">{{client.first_name}} <span *ngIf="client.preferred_name != ''">({{client.preferred_name}})</span> {{client.last_name}}</td>
             <td class="text-left">{{client.phone}}</td>
             <td class="text-left"><fa-icon id="attendanceIcon" [icon]="getAttendanceIcon(client)"></fa-icon> {{client.last_interaction_date}}</td>
           </tr>

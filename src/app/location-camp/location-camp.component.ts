@@ -81,6 +81,8 @@ export class LocationCampComponent implements OnInit {
       client.current_camp_id = JSON.parse(window.localStorage.getItem('locationCampId'));
 
       this.clientService.updateClient(client).subscribe(data => {
+        console.log('updated client');
+        console.log(data);
       });
     });
   }

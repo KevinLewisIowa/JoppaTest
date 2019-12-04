@@ -8,12 +8,12 @@
     <div class="modal-body">
       <div class="form-group">
         <div class="row">
-          <div class="col-sm-4">
-            <input id="focusMe" (keyup.enter)="performSearch()" class="wpx-250 form-control" type="text"
-              [(ngModel)]="preferredName" placeholder="Preferred Name" name="preferredName" />
-          </div>
           <div class="col-sm-8">
-            <button name="btnSearch" class="btn btn-primary float-right" type="button" [disabled]="preferredName == ''"
+            <input id="focusMe" (keyup.enter)="performSearch()" class="form-control" type="text"
+              [(ngModel)]="nameSearch" placeholder="Name" name="nameSearch" />
+          </div>
+          <div class="col-sm-4">
+            <button name="btnSearch" class="btn btn-primary float-right" type="button" [disabled]="nameSearch == ''"
               (click)="performSearch()">Search</button>
           </div>
         </div>
@@ -47,7 +47,7 @@
           </thead>
           <tbody>
             <tr *ngFor="let client of clients; index as i" (click)="selectedClient(client);c('Close click');">
-              <td class="cursorPointer w-50" id="{{i}}-name">{{client.preferred_name}}</td>
+              <td class="cursorPointer w-50" id="{{i}}-name">{{client.first_name}} <span *ngIf="client.preferred_name != ''">({{client.preferred_name}})</span> {{client.last_name}}</td>
             </tr>
           </tbody>
         </table>

@@ -44,7 +44,6 @@ export class ClientEditComponent implements OnInit {
       gender: '',
       admin_notes: ''
     });
-    this.clientForm.get('preferred_name').setValidators(Validators.required);
     this.clientForm.get('first_name').setValidators(Validators.required);
     this.clientForm.get('last_name').setValidators(Validators.required);
     this.clientForm.get('gender').setValidators(Validators.required);
