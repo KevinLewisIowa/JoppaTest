@@ -61,8 +61,12 @@ export class ServicingClientComponent implements OnInit {
     this.locationCampId = JSON.parse(window.localStorage.getItem('locationCampId'));
     this.clientId = localStorage.getItem('selectedClient');
     let routeAttendanceList:Appearance[] = JSON.parse(localStorage.getItem('RouteAttendance'));
-    if (routeAttendanceList.length > 0) {
+    if (routeAttendanceList.length != null) {
       this.appearance = routeAttendanceList.find(x => x.client_id == this.clientId);
+    }
+    else {
+      routeAttendanceList = [];
+      window.localStorage.setItem('RouteAttendance', JSON.stringify(routeAttendanceList));
     }
 
     if (this.appearance) {
