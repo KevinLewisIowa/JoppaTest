@@ -103,6 +103,8 @@ export class FooterComponent implements OnInit {
     window.localStorage.clear();
     window.localStorage.setItem('apiToken', apiKey);
     window.localStorage.setItem('isAdmin', JSON.stringify(true));
+    let routeAttendanceList:Appearance[] = [];
+    window.localStorage.setItem('RouteAttendance', JSON.stringify(routeAttendanceList));
     this.router.navigate(['adminHome']);
   }
 
