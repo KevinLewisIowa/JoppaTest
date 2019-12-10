@@ -207,7 +207,6 @@ export class ServicingClientComponent implements OnInit {
     }
 
     let routeAttendanceList:Appearance[] = JSON.parse(window.localStorage.getItem('RouteAttendance'));
-    console.log(routeAttendanceList.toString());
     let appearance:Appearance = routeAttendanceList.find(x => x.client_id == this.client.id);
 
     if (appearance) {
@@ -218,6 +217,7 @@ export class ServicingClientComponent implements OnInit {
     }
 
     window.localStorage.setItem('RouteAttendance', JSON.stringify(routeAttendanceList));
+    console.log('Attendance records in list: ' + routeAttendanceList.length.toString());
     this.router.navigate([`/locationCamp/${this.locationCampId}`]);
   }
 

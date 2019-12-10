@@ -8,6 +8,7 @@ import { RouteInstanceTankHoseInteraction } from 'app/models/route-instance-tank
 import { Appearance } from 'app/models/appearance';
 import { ClientService } from 'app/services/client.service';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { Client } from 'app/models/client';
 
 @Component({
   selector: 'app-checkout-heaters',
@@ -168,7 +169,24 @@ export class CheckoutHeatersComponent implements OnInit {
 
   saveAttendanceInfo(routeAttendanceList: Appearance[]) {
     routeAttendanceList.forEach((appearance:Appearance) => {
-      this.clientService.insertClientAppearance(appearance).subscribe(data => { }, error => console.log(error)); 
+      console.log('Inserting route attendance');
+      let client:Client = new Client();
+      this.clientService.getClientById(appearance.client_id).subscribe(data => {
+        client = data;
+
+        if (appearance.serviced) {
+          client.last_interaction_date = new Date();
+        } else if (appearance.still_lives_here == false) {
+          client.previous_camp_id = appearance.location_camp_id;
+          client.current_camp_id = null;
+        }
+
+        this.clientService.updateClient(client).subscribe(data => {
+  
+        }, error => console.log(error));
+
+        this.clientService.insertClientAppearance(appearance).subscribe(data => { }, error => console.log(error));
+      }); 
      });
   }
 }
