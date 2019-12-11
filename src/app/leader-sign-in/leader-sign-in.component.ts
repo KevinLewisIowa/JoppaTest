@@ -28,6 +28,7 @@ export class LeaderSignInComponent implements OnInit {
       this.isAdmin = true;
     }
     if (JSON.parse(window.localStorage.getItem('routeInstance')) !== null) {
+      this.mainService.showEndRoute.next(true);
       if (JSON.parse(window.localStorage.getItem('heatRoute')) && (JSON.parse(window.localStorage.getItem('checkedOutHeaters')) == null || JSON.parse(window.localStorage.getItem('tankHoseInteractionId')) == null)) {
         this.router.navigate(['checkoutHeaters']);
       }
@@ -37,6 +38,11 @@ export class LeaderSignInComponent implements OnInit {
         }
       }
     }
+    else {
+      this.mainService.showEndRoute.next(false);
+    }
+
+    this.mainService.showAdminHome.next(this.isAdmin);
 
     this.routeInstanceForm = this.fb.group({
       leader_name: '',
@@ -54,9 +60,6 @@ export class LeaderSignInComponent implements OnInit {
     this.mainService.getTheRoutes().subscribe(routes => {
       this.routes = routes;
     });
-
-    this.mainService.showEndRoute.next(false);
-    this.mainService.showAdminHome.next(this.isAdmin);
   }
 
   signOut() {

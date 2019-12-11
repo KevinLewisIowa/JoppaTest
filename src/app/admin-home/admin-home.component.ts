@@ -41,7 +41,8 @@ export class AdminHomeComponent implements OnInit {
     this.router.navigate(['changeRegularPassword']);
   }
 
-  gotToClientListing() {
+  goToClientListing() {
+    this.setRouteAttendance();
     this.router.navigate(['/admin/clientListing']);
   }
 
