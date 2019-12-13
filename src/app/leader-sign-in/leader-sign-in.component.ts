@@ -23,8 +23,8 @@ export class LeaderSignInComponent implements OnInit {
   constructor(private fb:FormBuilder, private mainService: MainService, private router: Router) { }
 
   ngOnInit() {
-    const adminSetting = window.localStorage.getItem('isAdmin');
-    if (adminSetting === 'true') {
+    const adminSetting = JSON.parse(window.localStorage.getItem('isAdmin'));
+    if (adminSetting) {
       this.isAdmin = true;
     }
     if (JSON.parse(window.localStorage.getItem('routeInstance')) !== null) {
