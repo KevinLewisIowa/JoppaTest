@@ -47,7 +47,7 @@
           </thead>
           <tbody>
             <tr *ngFor="let client of clients; index as i" (click)="selectedClient(client);c('Close click');">
-              <td class="cursorPointer w-50" id="{{i}}-name">{{client.first_name}} <span *ngIf="client.preferred_name != ''">({{client.preferred_name}})</span> {{client.last_name}}</td>
+              <td class="cursorPointer w-50" id="{{i}}-name">{{client.first_name}} <span *ngIf="client.preferred_name != '' && client.preferred_name != null">({{client.preferred_name}})</span> {{client.last_name}}</td>
             </tr>
           </tbody>
         </table>
