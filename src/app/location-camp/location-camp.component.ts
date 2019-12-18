@@ -24,6 +24,8 @@ export class LocationCampComponent implements OnInit {
   locationCamp: LocationCamp = new LocationCamp();
   heatRoute: boolean = false;
   locationCampId: number;
+  numPeopleWithTanksAtCamp: number;
+  numberTanksAtCamp: number;
   searchIcon = faSearch;
   createIcon = faPlus;
   backIcon = faChevronLeft;
@@ -55,6 +57,10 @@ export class LocationCampComponent implements OnInit {
           this.mainService.getClientsForCamp(this.locationCampId).subscribe((data: Client[]) => {
             if (this.heatRoute) {
               this.clients = data.filter(client => client.dwelling !== "Vehicle" && client.dwelling !== "Under Bridge" && client.dwelling !== "Streets");
+              this.numberTanksAtCamp = this.clients.reduce(function(prevValue, currClient) {
+                return prevValue + currClient.number_tanks;
+              }, 0);
+              this.numPeopleWithTanksAtCamp = this.clients.filter(client => client.number_tanks > 0).length;
             }
             else {
               this.clients = data;

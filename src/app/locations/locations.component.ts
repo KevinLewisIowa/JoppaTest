@@ -69,6 +69,9 @@ export class LocationsComponent implements OnInit {
   }
 
   back(){
+    if (this.isAdmin) {
+      window.localStorage.removeItem('routeId');
+    }
     this.router.navigate(['/routes']);
   }
 

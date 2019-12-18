@@ -1,6 +1,11 @@
 <div class="card text-center" style="opacity:0.93">
   <div class="card-header text-center">
     <h2 align="left">{{route.name}} -> {{locationCamp.name}}</h2>
+    <h5 align="left">{{locationCamp.notes}}</h5>
+    <p align="left" *ngIf="heatRoute">
+      <b>Number of People with Tanks: {{numPeopleWithTanksAtCamp}}</b><br/>
+      <b>Total Tanks: {{numberTanksAtCamp}}</b>
+    </p>
     <button (click)="showMap()" type="button" class="btn btn-primary float-left"><fa-icon [icon]="mapIcon"></fa-icon> Show Map</button>
     <button type="button" class="btn btn-primary float-right" (click)="campEditMdl.showModal(locationCamp)">Location Info <fa-icon [icon]="informationIcon"></fa-icon></button>
   </div>

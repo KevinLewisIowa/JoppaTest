@@ -19,7 +19,8 @@ export class Client {
     last_interaction_date: Date = undefined;
     gender: string = undefined;
     admin_notes: string = undefined;
-    scene_at: Date = undefined;
     current_camp_id: number = undefined;
     previous_camp_id: number = undefined;
+    number_tanks: number = undefined;
+    number_hoses: number = undefined;
 }
