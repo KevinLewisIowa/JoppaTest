@@ -14,6 +14,7 @@
               <th>Status Reason</th>
               <th>Is Active</th>
               <th>Last Updated</th>
+              <th>Mark Unassigned</th>
             </tr>
           </thead>
           <tbody>
@@ -25,6 +26,7 @@
               <td>{{heater.status_reason}}</td>
               <td>{{heater.is_active}}</td>
               <td>{{heater.updated_at | date: 'short'}}</td>
+              <td><button type="button" class="btn btn-primary" (click)="unassignHeater(heater.id)" *ngIf="heater.status_name == 'Assigned'">Mark Unassigned</button></td>
             </tr>              
           </tbody>
         </table>

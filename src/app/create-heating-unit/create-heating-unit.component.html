@@ -17,14 +17,14 @@
           </select>
           <label>Heater Type: </label>
         </div>
-        <div class="col-md-12">
+        <!-- <div class="col-md-12">
           <select formControlName="heater_status_id" class="float-right" id="heaterStatus">
             <option value="" disabled selected>Select a heater status</option>
             <option *ngFor="let heaterstatus of heaterStatuses" [value]="heaterstatus.id">{{heaterstatus.status_name}}
             </option>
           </select>
           <label>Heater Status:</label>
-        </div>
+        </div> -->
         <div class="col-md-12" class="float-right">
           <button type="button" [disabled]="!heaterForm.valid" (click)="submitHeater()" class="btn btn-primary">Submit
             Heater</button>
