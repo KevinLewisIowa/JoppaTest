@@ -91,7 +91,7 @@ export class ServicingClientComponent implements OnInit {
         }, error => console.log(error));
       }
 
-      if (this.heatRoute) {
+      if (this.heatRoute || this.isAdmin) {
         // get heating equipment for this person
         this.service.getHeatersForClient(this.clientId).subscribe((data: Heater[]) => {
           this.heaters = data;
