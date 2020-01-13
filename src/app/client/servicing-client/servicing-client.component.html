@@ -354,6 +354,43 @@
             </tbody>
           </table>
         </div>
+        <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
+          <h4>Weekly Attendance</h4>
+          <div>
+            From Date: <input type="date" name="attendanceFromDate" [(ngModel)]="attendanceFromDate" />
+            To Date: <input type="date" name="attendanceToDate" [(ngModel)]="attendanceToDate" />
+            <button type="button" class="btn btn-primary" (click)="searchWeeklyAttendance()">Search</button>
+          </div>
+          <table class="table" id="weeklyAttendance">
+              <colgroup>
+                <col span="1" style="width: 25%;">
+                <col span="1" style="width: 25%;">
+                <col span="1" style="width: 25%;">
+                <col span="1" style="width: 25%;">
+             </colgroup>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Seen</th>
+                <th>Serviced</th>
+                <th>&nbsp;</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let interaction of clientInteractions">
+                <td>
+                  {{interaction.created_at | date:'short'}}
+                </td>
+                <td>
+                  {{interaction.was_seen}}
+                </td>
+                <td>
+                  {{interaction.serviced}}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
         <div class="col-lg-12 col-md-12">
           <h4>Admin Notes: </h4>
           <p><span style="background-color: yellow;">{{client.admin_notes}}</span></p>
