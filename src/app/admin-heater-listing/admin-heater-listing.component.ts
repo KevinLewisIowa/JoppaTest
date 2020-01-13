@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MainService } from '../services/main.service';
 import { Observable } from 'rxjs';
 import { ClientService } from 'app/services/client.service';
+import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-admin-heater-listing',
@@ -12,7 +13,10 @@ export class AdminHeaterListingComponent implements OnInit {
 
   heaterList: Observable<any>[];
 
-  constructor(private mainService: MainService, private clientService: ClientService) { }
+  constructor(private mainService: MainService, private clientService: ClientService) { };
+
+  backIcon = faChevronLeft;
+
 
   ngOnInit() {
     this.getHeaterListing();

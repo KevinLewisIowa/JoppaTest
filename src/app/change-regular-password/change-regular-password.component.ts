@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MainService } from 'app/services/main.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-change-regular-password',
@@ -10,6 +11,7 @@ import { Router } from '@angular/router';
 })
 export class ChangeRegularPasswordComponent implements OnInit {
   passwordForm: FormGroup;
+  backIcon = faChevronLeft;
   constructor(private mainService: MainService, private fb: FormBuilder,
     private router: Router) { }
 

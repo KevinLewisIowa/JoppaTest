@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Client } from 'app/models/client';
 import { ClientService } from '../../services/client.service';
+import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-birthday-months-report',
@@ -12,7 +13,9 @@ export class BirthdayMonthsReportComponent implements OnInit, OnDestroy {
   monthInt = 1;
   subscriptions: any[] = [];
   resultMessage = '';
-  constructor(private service: ClientService) { }
+  constructor(private service: ClientService) { };
+  backIcon = faChevronLeft;
+
 
   ngOnInit() {
     this.monthChanged(null);

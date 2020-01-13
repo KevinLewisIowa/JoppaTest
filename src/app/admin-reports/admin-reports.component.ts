@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-admin-reports',
@@ -8,7 +9,10 @@ import { Router } from '@angular/router';
 })
 export class AdminReportsComponent implements OnInit {
 
-  constructor(private router: Router) { }
+  constructor(private router: Router) { };
+
+  backIcon = faChevronLeft;
+
 
   ngOnInit() {
   }

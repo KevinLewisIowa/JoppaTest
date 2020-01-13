@@ -5,6 +5,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MainService } from '../services/main.service';
 import { Router } from '@angular/router';
 import { HeaterStatus } from '../models/heater-status';
+import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-create-heating-unit',
@@ -16,6 +17,8 @@ export class CreateHeatingUnitComponent implements OnInit {
   heaterForm: FormGroup;
   heaterTypes: HeaterType[];
   heaterStatuses: HeaterStatus[];
+  backIcon = faChevronLeft;
+
 
   constructor(private mainService: MainService, private fb: FormBuilder,
     private router: Router) { }

@@ -3,6 +3,7 @@ import { MainService } from 'app/services/main.service';
 import { Router } from '@angular/router';
 import { Route } from 'app/models/route';
 import { RouteInstance } from 'app/models/route-instance';
+import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-route-summary-report',
@@ -13,6 +14,8 @@ export class RouteSummaryReportComponent implements OnInit {
   routes: Route[] = [];
   routeInstance: RouteInstance;
   notes: any[];
+  backIcon = faChevronLeft;
+
 
   constructor(private mainService: MainService, private router: Router) { }
 
