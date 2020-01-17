@@ -4,6 +4,8 @@ import { MainService } from '../services/main.service';
 import { Router } from '@angular/router';
 import { RouteInstance } from '../models/route-instance';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+
 
 @Component({
   selector: 'app-routes',
@@ -15,6 +17,8 @@ export class RoutesComponent implements OnInit {
   route_id: number = JSON.parse(window.localStorage.getItem('routeId'));
   routeInstance: RouteInstance = new RouteInstance();
   faPlus = faPlus;
+  backIcon = faChevronLeft;
+
 
   constructor(private mainService: MainService , private router : Router) { 
     if (this.route_id !== null) {

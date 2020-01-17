@@ -6,7 +6,7 @@
     <div class="row">
       <div class="col-lg-12 col-md-12">
         <span>Please select a route to see last week's summary.</span><br /><br />
-        <button *ngFor="let route of routes" type="button" class="btn btn-primary" style="margin:0 3px;" (click)="loadRouteInstance(route.id)">{{route.name}}</button>&nbsp;
+        <button *ngFor="let route of routes" type="button" class="btn btn-primary" style="margin:10px 5px;" (click)="loadRouteInstance(route.id)">{{route.name}}</button>&nbsp;
       </div>
     </div>
     <br />    
@@ -40,8 +40,10 @@
             </tr>
           </tbody>
         </table>
-        <button type="button" class="pull-left btn btn-primary" (click)="back()">Back</button>
       </div>
     </div>
+  </div>
+  <div class="card-footer">
+    <button routerLink="/admin/reports" class="btn btn-primary" style="float: left" (click)="back()"><fa-icon [icon]="backIcon"></fa-icon> Back</button>
   </div>
 </div>

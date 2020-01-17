@@ -5,6 +5,8 @@ import { MainService } from "app/services/main.service";
 import { Store } from "@ngrx/store";
 import { IMainStore } from "app/state-management/main.store";
 import { Route } from "app/models/route";
+import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+
 
 @Component({
   selector: 'app-create-route',
@@ -14,6 +16,8 @@ import { Route } from "app/models/route";
 export class CreateRouteComponent implements OnInit {
   routeForm: FormGroup;
   theRoute = new Route();
+  backIcon = faChevronLeft;
+
   constructor(private router: Router, private mainService: MainService,
               private fb: FormBuilder, private store: Store<IMainStore>) { }
 
