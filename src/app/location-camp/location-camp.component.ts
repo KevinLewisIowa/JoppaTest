@@ -42,6 +42,10 @@ export class LocationCampComponent implements OnInit {
   }
 
   ngOnInit() {
+    let routeInstanceId:number = JSON.parse(window.localStorage.getItem('routeInstance'));
+    if (routeInstanceId > 0) {
+      this.mainService.showEndRoute.next(true);
+    }
     this.activatedRoute.params.subscribe((params:Params) => {
       this.locationCampId = this.activatedRoute.snapshot.params['id'];
       localStorage.setItem('locationCampId', JSON.stringify(this.locationCampId));
