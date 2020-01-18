@@ -3,7 +3,7 @@
       <h2>Undelivered Items</h2>
     </div>
     <div class="panel-body">
-        <table class="table" id="undeliveredItems">
+        <!-- <table class="table" id="undeliveredItems">
             <thead>
               <tr>
                 <th>Route</th>
@@ -18,7 +18,32 @@
                 <td>{{item.item_description}}</td>
               </tr>
             </tbody>
-          </table>
+          </table> -->
+          <div>
+            <!-- <table mat-table [dataSource]="dataSource" matSort>
+      
+              <ng-container matColumnDef="name">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Route</mat-header-cell>
+                <mat-cell *matCellDef="let row">{{item.name}}</mat-cell>
+              </ng-container>
+      
+              <ng-container matColumnDef="preferred_name">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Client Name</mat-header-cell>
+                <mat-cell *matCellDef="let row">{{item.preferred_name}}</mat-cell>
+              </ng-container>
+      
+              <ng-container matColumnDef="item_description">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Item</mat-header-cell>
+                <mat-cell *matCellDef="let row">{{item.item_description}}</mat-cell>
+              </ng-container>
+      
+              <tr mat-head-row *matHeadRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+              </tr>
+            </table> -->
+      
+            <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+          </div>
           <button routerLink="/admin/reports" class="btn btn-primary" type="button">Back</button>
     </div>
   </div>
