@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+import { MainService } from 'app/services/main.service';
 
 @Component({
   selector: 'app-admin-reports',
@@ -9,12 +10,17 @@ import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 })
 export class AdminReportsComponent implements OnInit {
 
-  constructor(private router: Router) { };
+  constructor(private mainService:MainService, private router: Router) { };
 
   backIcon = faChevronLeft;
-
+  isAdmin: boolean;
+  routeInstanceId: number;
 
   ngOnInit() {
+    this.isAdmin = JSON.parse(window.localStorage.getItem('isAdmin'));
+    this.mainService.showAdminHome.next(this.isAdmin);
+    this.routeInstanceId = JSON.parse(window.localStorage.getItem('routeInstance'));
+    this.mainService.showEndRoute.next(this.routeInstanceId != null);
   }
 
   openNewClientsReport() {
