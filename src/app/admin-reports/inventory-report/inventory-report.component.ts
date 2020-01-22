@@ -16,6 +16,7 @@ export class InventoryReportComponent implements OnInit {
 
   ngOnInit() {
     this.mainService.getInventorySummary().subscribe(data => {
+      console.log(data);
       this.inventory = data;
     })
   }
