@@ -28,7 +28,7 @@
           </thead>
           <tbody>
             <tr *ngFor="let heater of inventory.heaterList">
-              <td>{{heater.first_name}} {{heater.last_name}} or {{heater.preferred_name}}</td>
+              <td>{{heater.first_name}} <span *ngIf="heater.preferr_name != ''">({{heater.preferred_name}})</span> {{heater.last_name}}</td>
               <td>{{heater.serial_number}}</td>
             </tr>
           </tbody>
