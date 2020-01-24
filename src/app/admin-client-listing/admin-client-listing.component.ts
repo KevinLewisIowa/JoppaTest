@@ -20,7 +20,6 @@ export class AdminClientListingComponent implements OnInit {
   constructor(private clientService: ClientService, private router: Router) {
     this.clientService.getClientsByName('').subscribe(data => {
       this.clients = data;
-      
       this.dataSource = new MatTableDataSource(this.clients);
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
