@@ -149,6 +149,7 @@
               <td>{{item.item_description}}</td>
               <td>{{item.created_at | date: 'shortDate'}}</td>
               <td>{{item.updated_at | date: 'shortDate'}}</td>
+              <td></td>
             </tr>
           </tbody>
         </table>
@@ -268,17 +269,19 @@
            </colgroup>
           <thead>
             <tr>
+              <th>Date Added</th>
               <th>Note</th>
               <th>Remove</th>
-              <th>&nbsp;</th>
               <th>&nbsp;</th>
             </tr>
           </thead>
 
           <tbody>
             <tr *ngFor="let note of notes">
+              <td>{{note.created_at | date:'short'}}</td>
               <td>{{note.note}}</td>
               <td><button type="button" class="btn btn-primary" (click)="removeNote(note.id)">Remove</button></td>
+              <td></td>
             </tr>
           </tbody>
         </table>
@@ -387,6 +390,7 @@
                 <td>
                   {{interaction.serviced}}
                 </td>
+                <td></td>
               </tr>
             </tbody>
           </table>
