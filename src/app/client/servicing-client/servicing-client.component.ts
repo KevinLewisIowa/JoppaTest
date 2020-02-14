@@ -102,6 +102,7 @@ export class ServicingClientComponent implements OnInit {
       if (this.isAdmin) {
         this.service.getClientNotesForClient(this.clientId).subscribe((data: Note[]) => {
           this.notes = data;
+          console.log(data);
         }, error => console.log(error));
         this.service.getRecentReceivedItems(this.clientId).subscribe((data: RequestedItem[]) => {
           this.receivedItems = data;
