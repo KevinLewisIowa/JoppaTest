@@ -404,7 +404,7 @@
           <button type="button" [className]="appearance && appearance.was_seen == true && appearance.serviced == true ? 'btn btn-success' : 'btn btn-primary'" (click)="sendInteraction(1)"><fa-icon [icon]="seenAndServicedIcon"></fa-icon> Seen & Serviced</button>&nbsp;
           <button type="button" [className]="appearance && appearance.was_seen == false && appearance.serviced == true ? 'btn btn-success' : 'btn btn-primary'" (click)="sendInteraction(2)"><fa-icon [icon]="notSeenAndServicedIcon"></fa-icon> Serviced & Not Seen</button>&nbsp;
           <button type="button" *ngIf="isAdmin" [className]="appearance && appearance.was_seen == false && appearance.serviced == false && appearance.still_lives_here == false ? 'btn btn-success' : 'btn btn-primary'" (click)="sendInteraction(3)">No longer lives here</button>
-          <button type="button" [className]="appearance && appearance.was_seen == false && appearance.serviced == false && appearance.still_lives_here == false ? 'btn btn-success' : 'btn btn-primary'" (click)="sendInteraction(4)"><fa-icon [icon]="notSeenIcon"></fa-icon> Not Seen</button>&nbsp;
+          <button type="button" [className]="appearance && appearance.was_seen == false && appearance.serviced == false ? 'btn btn-success' : 'btn btn-primary'" (click)="sendInteraction(4)"><fa-icon [icon]="notSeenIcon"></fa-icon> Not Seen</button>&nbsp;
         </div>
       </div>
     </div>

@@ -17,6 +17,7 @@ import { faCheckCircle as farCheckCircle } from '@fortawesome/free-regular-svg-i
 import { faChevronLeft, faInfoCircle, faCheckCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import { Observable, Subscription } from 'rxjs';
 import { DatePipe } from '@angular/common';
+import { isNullOrUndefined } from 'util';
 
 @Component({
   selector: 'app-servicing-client',
@@ -268,18 +269,41 @@ export class ServicingClientComponent implements OnInit {
     }
 
     let routeAttendanceList:Appearance[] = JSON.parse(window.localStorage.getItem('RouteAttendance'));
-    let appearance:Appearance = routeAttendanceList.find(x => x.client_id == this.client.id);
-
+    let appearance:Appearance = routeAttendanceList.find(x => x.client_id == interaction.client_id);
+    
     if (appearance) {
-      routeAttendanceList[routeAttendanceList.indexOf(appearance)] = interaction;
+      interaction.id = appearance.id;
+
+      this.service.updateClientAppearance(interaction).subscribe(data => {
+        routeAttendanceList[routeAttendanceList.indexOf(appearance)] = interaction;
+        
+        this.updateClientAndAttendanceListing(interaction, routeAttendanceList);
+      }, error => console.log(error));
     }
     else {
-      routeAttendanceList.push(interaction);
+      this.service.insertClientAppearance(interaction).subscribe(data => {
+        interaction.id = data.id;
+        routeAttendanceList.push(interaction);
+        
+        this.updateClientAndAttendanceListing(interaction, routeAttendanceList);
+      }, error => console.log(error));
     }
+  }
 
-    window.localStorage.setItem('RouteAttendance', JSON.stringify(routeAttendanceList));
-    console.log('Attendance records in list: ' + routeAttendanceList.length.toString());
-    this.router.navigate([`/locationCamp/${this.locationCampId}`]);
+  updateClientAndAttendanceListing(interaction: Appearance, routeAttendanceList: Appearance[]) {
+    if (interaction.serviced) {
+      this.client.last_interaction_date = new Date();
+    }
+    else if (interaction.still_lives_here == false) {
+      this.client.previous_camp_id = interaction.location_camp_id;
+      this.client.current_camp_id = null;
+    }
+    this.service.updateClient(this.client).subscribe(data => {
+      window.localStorage.setItem('RouteAttendance', JSON.stringify(routeAttendanceList));
+      console.log('Number of interactions in route attendance list: ' + routeAttendanceList.length);
+      console.log(JSON.stringify(routeAttendanceList));
+      this.router.navigate([`/locationCamp/${this.locationCampId}`]);
+    }, error => console.log(error));
   }
 
   requestedItemAdded(item: RequestedItem) {

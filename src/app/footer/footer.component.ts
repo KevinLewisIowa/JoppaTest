@@ -66,36 +66,12 @@ export class FooterComponent implements OnInit {
     }
     else
     {
-      this.saveAttendanceInfo(routeAttendanceList)
       let apiKey: string = window.localStorage.getItem('apiToken');
       window.localStorage.clear();
       window.localStorage.setItem('apiToken', apiKey);
       window.localStorage.setItem('isAdmin', JSON.stringify(this.isAdmin));
       this.router.navigate(['login']);
     }
-  }
-
-  saveAttendanceInfo(routeAttendanceList: Appearance[]) {
-    routeAttendanceList.forEach((appearance:Appearance) => {
-      console.log('Inserting route attendance');
-      let client:Client = new Client();
-      this.clientService.getClientById(appearance.client_id).subscribe(data => {
-        client = data;
-
-        if (appearance.serviced) {
-          client.last_interaction_date = new Date();
-        } else if (appearance.still_lives_here == false) {
-          client.previous_camp_id = appearance.location_camp_id;
-          client.current_camp_id = null;
-        }
-
-        this.clientService.updateClient(client).subscribe(data => {
-  
-        }, error => console.log(error));
-
-        this.clientService.insertClientAppearance(appearance).subscribe(data => { }, error => console.log(error));
-      }); 
-     });
   }
 
   goToAdminHome() {

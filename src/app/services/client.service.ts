@@ -210,6 +210,21 @@ export class ClientService {
       });
   }
 
+  updateClientAppearance(clientAppearance: Appearance) {
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.localStorage.getItem('apiToken')
+    });
+      return this.http.patch(this.baseUrl + `client_interactions/${clientAppearance.id}`, {client_interaction: clientAppearance}, {headers: myHeader})
+      .map((res: any) => {
+        if (res.message === 'invalid-token') {
+          window.localStorage.removeItem('apiToken');
+          this.router.navigate(['/application-login']);
+        }
+        return res;
+      });
+  }
+
   getHeatersForClient(theClientId) {
     const myHeader = new HttpHeaders({
       'Content-Type': 'application/json',
