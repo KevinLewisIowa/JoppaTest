@@ -7,14 +7,18 @@
             <thead>
               <tr>
                 <th>Route</th>
-                <th>Client Name</th>
+                <th>First Name</th>
+                <th>Preferred Name</th>
+                <th>Last Name</th>
                 <th>Item</th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let item of undeliveredItems">
-                <td>{{item.name}}</td>
+                <td></td>
+                <td>{{item.first_name}}</td>
                 <td>{{item.preferred_name}}</td>
+                <td>{{item.last_name}}</td>
                 <td>{{item.item_description}}</td>
               </tr>
             </tbody>

@@ -11,7 +11,7 @@ import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
   styleUrls: ['./admin-client-listing.component.css']
 })
 export class AdminClientListingComponent implements OnInit {
-  displayedColumns = ['first_name', 'last_name', 'preferred_name', 'phone', 'birth_date', 'route_name', 'camp_name', 'status', 'updated_at', 'Pets', 'Items']
+  displayedColumns = ['first_name', 'preferred_name', 'last_name', 'phone', 'birth_date', 'route_name', 'camp_name', 'status', 'updated_at', 'Pets', 'Items']
   clients: any[] = [];
   dataSource: MatTableDataSource<any>;
   backIcon = faChevronLeft;

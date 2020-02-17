@@ -29,13 +29,17 @@
         <table class="table">
           <thead>
             <tr>
-              <th>Client</th>
+              <th>First Name</th>
+              <th>Preferred Name</th>
+              <th>Last Name</th>
               <th>Note</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let note of notes">
+              <td>{{note.first_name}}</td>
               <td>{{note.preferred_name}}</td>
+              <td>{{note.last_name}}</td>
               <td>{{note.note}}</td>
             </tr>
           </tbody>

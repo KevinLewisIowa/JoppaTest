@@ -7,14 +7,17 @@
             <thead>
               <tr>
                 <th>Route</th>
-                <th>Client Name</th>
+                <th>First Name</th>
+                <th>Preferred Name</th>
+                <th>Last Name</th>
                 <th>Prayer Request/Need</th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let prayerRequestNeed of unfulfilledPrayerRequestsNeeds">
-                <td>{{prayerRequestNeed.name}}</td>
+                <td>{{prayerRequestNeed.first_name}}</td>
                 <td>{{prayerRequestNeed.preferred_name}}</td>
+                <td>{{prayerRequestNeed.last_name}}</td>
                 <td>{{prayerRequestNeed.detail}}</td>
               </tr>
             </tbody>
