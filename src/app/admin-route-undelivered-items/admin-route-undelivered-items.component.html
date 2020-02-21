@@ -14,7 +14,7 @@
             <tbody>
               <tr *ngFor="let item of undeliveredItems">
                 <td>{{item.name}}</td>
-                <td>{{item.preferred_name}}</td>
+                <td class="text-middle">{{item.first_name}} <span *ngIf="item.preferred_name != '' && item.preferred_name != null">({{item.preferred_name}})</span> {{item.last_name}}</td>
                 <td>{{item.item_description}}</td>
               </tr>
             </tbody>

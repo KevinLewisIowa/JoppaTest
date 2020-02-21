@@ -14,7 +14,7 @@
             <tbody>
               <tr *ngFor="let goalNextStep of unfulfilledGoalsNextSteps">
                 <td>{{goalNextStep.name}}</td>
-                <td>{{goalNextStep.preferred_name}}</td>
+                <td>{{goalNextStep.first_name}} <span *ngIf="goalNextStep.preferred_name != '' && goalNextStep.preferred_name != null">({{goalNextStep.preferred_name}})</span> {{goalNextStep.last_name}}</td>
                 <td>{{goalNextStep.description}}</td>
               </tr>
             </tbody>
