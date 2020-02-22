@@ -29,13 +29,13 @@
         <table class="table">
           <thead>
             <tr>
-              <th>Client</th>
+              <th>Client Name</th>
               <th>Note</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let note of notes">
-              <td>{{note.preferred_name}}</td>
+              <td>{{note.first_name}} <span *ngIf="note.preferred_name != '' && note.preferred_name != null">({{note.preferred_name}})</span> {{note.last_name}}</td>
               <td>{{note.note}}</td>
             </tr>
           </tbody>

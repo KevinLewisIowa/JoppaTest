@@ -22,13 +22,13 @@
         <table class="table">
           <thead>
             <tr>
-              <th>Client</th>
+              <th>Client Name</th>
               <th>Serial Number</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let heater of inventory.heaterList">
-              <td>{{heater.first_name}} <span *ngIf="heater.preferred_name != ''">({{heater.preferred_name}})</span> {{heater.last_name}}</td>
+              <td >{{heater.first_name}} <span *ngIf="heater.preferred_name != '' && heater.preferred_name != null">({{heater.preferred_name}})</span> {{heater.last_name}}</td>
               <td>{{heater.serial_number}}</td>
             </tr>
           </tbody>
