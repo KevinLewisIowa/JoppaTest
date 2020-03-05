@@ -9,6 +9,7 @@
        <div class="row">
          <div class="col-sm-4">
            <select id="focusMe" class="form-control" style="float:left;" #item [(ngModel)]="description" name="description" (change)="onChange(item.value)">
+             <option value="" disabled selected>Select your option</option>
              <option>Blankets</option>
              <option>Tent</option>
              <option>Tarp</option>

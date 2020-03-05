@@ -125,15 +125,15 @@ export class LocationCampComponent implements OnInit {
     
     if (appearance) {
       if (appearance.was_seen && appearance.serviced) {
-        //this.renderer.setStyle(attendanceIconHTMLElement, 'color', 'green');
+        this.renderer.setStyle(attendanceIconHTMLElement, 'color', 'green');
         return this.checkCircleIcon;
       }
       else if (!appearance.was_seen && appearance.serviced) {
-        //this.renderer.setStyle(attendanceIconHTMLElement, 'color', 'yellow');
+        this.renderer.setStyle(attendanceIconHTMLElement, 'color', 'yellow');
         return this.regularCheckCircleIcon;
       }
       else {
-        //this.renderer.setStyle(attendanceIconHTMLElement, 'color', 'red');
+       this.renderer.setStyle(attendanceIconHTMLElement, 'color', 'red');
         return this.timesCircleIcon;
       }
     }
