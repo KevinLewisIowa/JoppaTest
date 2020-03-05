@@ -44,8 +44,4 @@ export class AdminRouteUndeliveredItemsComponent implements OnInit {
     }
   }
 
-  // back() {
-  //   this.router.navigate(['/adminHome']);
-  // }
-
 }

@@ -19,30 +19,32 @@
               </tr>
             </tbody>
           </table> -->
-          <div>
-            <table mat-table [dataSource]="dataSource" matSort>
-      
-              <ng-container matColumnDef="name">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>Route</mat-header-cell>
-                <mat-cell *matCellDef="let row">{{item.name}}</mat-cell>
-              </ng-container>
-      
-              <ng-container matColumnDef="preferred_name">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>Client Name</mat-header-cell>
-                <mat-cell *matCellDef="let row">{{item.preferred_name}}</mat-cell>
-              </ng-container>
-      
-              <ng-container matColumnDef="item_description">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>Item</mat-header-cell>
-                <mat-cell *matCellDef="let row">{{item.item_description}}</mat-cell>
-              </ng-container>
-      
-              <tr mat-head-row *matHeadRowDef="displayedColumns"></tr>
-              <tr mat-row *matRowDef="let row; columns: displayedColumns;">
-              </tr>
-            </table>
-      
-            <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+          <div class="panel-body">
+            <div>
+              <mat-table #table [dataSource]="dataSource" matSort>
+        
+                <ng-container matColumnDef="name">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Route</mat-header-cell>
+                  <mat-cell *matCellDef="let row">{{item.name}}</mat-cell>
+                </ng-container>
+        
+                <ng-container matColumnDef="preferred_name">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Client Name</mat-header-cell>
+                  <mat-cell *matCellDef="let row">{{item.preferred_name}}</mat-cell>
+                </ng-container>
+        
+                <ng-container matColumnDef="item_description">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Item</mat-header-cell>
+                  <mat-cell *matCellDef="let row">{{item.item_description}}</mat-cell>
+                </ng-container>
+        
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;">
+                </mat-row>
+              </mat-table>
+        
+              <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+            </div>
           </div>
           <button routerLink="/admin/reports" class="btn btn-primary" type="button">Back</button>
     </div>
