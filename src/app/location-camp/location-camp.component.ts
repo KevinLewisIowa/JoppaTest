@@ -118,22 +118,35 @@ export class LocationCampComponent implements OnInit {
     }
   }
 
-  getAttendanceIcon(client :Client) : IconDefinition {
+  getAttendanceColor(client: Client) : string {
     let routeAttendanceList:Appearance[] = JSON.parse(window.localStorage.getItem('RouteAttendance'));
     let appearance:Appearance = routeAttendanceList.find(x => x.client_id == client.id);
-    const attendanceIconHTMLElement:HTMLElement = document.getElementById('attendanceIcon');
     
     if (appearance) {
       if (appearance.was_seen && appearance.serviced) {
-        this.renderer.setStyle(attendanceIconHTMLElement, 'color', 'green');
+        return 'green';
+      }
+      else if (!appearance.was_seen && appearance.serviced) {
+        return 'orange';
+      }
+      else {
+        return 'red';
+      }
+    }
+  }
+
+  getAttendanceIcon(client: Client) : IconDefinition {
+    let routeAttendanceList:Appearance[] = JSON.parse(window.localStorage.getItem('RouteAttendance'));
+    let appearance:Appearance = routeAttendanceList.find(x => x.client_id == client.id);
+    
+    if (appearance) {
+      if (appearance.was_seen && appearance.serviced) {
         return this.checkCircleIcon;
       }
       else if (!appearance.was_seen && appearance.serviced) {
-        this.renderer.setStyle(attendanceIconHTMLElement, 'color', 'yellow');
         return this.regularCheckCircleIcon;
       }
       else {
-       this.renderer.setStyle(attendanceIconHTMLElement, 'color', 'red');
         return this.timesCircleIcon;
       }
     }
