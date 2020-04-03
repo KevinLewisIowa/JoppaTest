@@ -63,7 +63,7 @@
         
         <ng-container matColumnDef="updated_at">
           <mat-header-cell *matHeaderCellDef mat-sort-header>Last Interaction</mat-header-cell>
-          <mat-cell *matCellDef="let client">{{client.updated_at | date: 'shortDate'}}</mat-cell>
+          <mat-cell *matCellDef="let client">{{client.last_interaction_date | date: 'shortDate'}}</mat-cell>
         </ng-container>
 
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
@@ -73,7 +73,7 @@
       <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
     </div>
   </div>
-  <div class="card-footer text-center">
-    <button type="button" class="pull-left btn btn-primary" (click)="back()">Back</button>
+  <div class="card-footer">
+    <button routerLink="/adminHome" class="btn btn-primary" style="float: left" (click)="back()"><fa-icon [icon]="backIcon"></fa-icon> Back</button>
   </div>
 </div>

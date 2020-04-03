@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ClientService } from '../../services/client.service';
 import { Client } from 'app/models/client';
 import { Appearance } from 'app/models/appearance';
-
+import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 @Component({
   selector: 'app-new-clients-report',
   templateUrl: './new-clients-report.component.html',
@@ -10,7 +10,8 @@ import { Appearance } from 'app/models/appearance';
 })
 export class NewClientsReportComponent implements OnInit {
   clients: any[] = [];
-  constructor(private service: ClientService) { }
+  constructor(private service: ClientService) { };
+  backIcon = faChevronLeft;
 
   ngOnInit() {
     this.service.getClientsNewToCamps().subscribe(data => {

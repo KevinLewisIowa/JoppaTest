@@ -14,11 +14,13 @@
             <tbody>
               <tr *ngFor="let prayerRequestNeed of unfulfilledPrayerRequestsNeeds">
                 <td>{{prayerRequestNeed.name}}</td>
-                <td>{{prayerRequestNeed.preferred_name}}</td>
+                <td>{{prayerRequestNeed.first_name}} <span *ngIf="prayerRequestNeed.preferred_name != '' && prayerRequestNeed.preferred_name != null">({{prayerRequestNeed.preferred_name}})</span> {{prayerRequestNeed.last_name}}</td>
                 <td>{{prayerRequestNeed.detail}}</td>
               </tr>
             </tbody>
           </table>
-          <button routerLink="/admin/reports" class="btn btn-primary" type="button">Back</button>
+    </div>
+    <div class="card-footer">
+      <button routerLink="/admin/reports" class="btn btn-primary" style="float: left"><fa-icon [icon]="backIcon"></fa-icon> Back</button>
     </div>
   </div>

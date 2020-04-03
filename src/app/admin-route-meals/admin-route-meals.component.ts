@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { MainService } from 'app/services/main.service';
+import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-admin-route-meals',
@@ -12,6 +13,8 @@ export class AdminRouteMealsComponent implements OnInit {
   routeMeals: Observable<any>[] = [];
 
   constructor(private service: MainService) { }
+
+  backIcon = faChevronLeft;
 
   ngOnInit() {
     this.service.getAdminRouteNumberMeals().subscribe(data => {

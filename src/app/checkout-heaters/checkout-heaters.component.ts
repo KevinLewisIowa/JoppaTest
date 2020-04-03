@@ -150,9 +150,6 @@ export class CheckoutHeatersComponent implements OnInit {
   }
 
   endRoute() {
-    let routeAttendanceList:Appearance[] = JSON.parse(window.localStorage.getItem('RouteAttendance'));
-    this.saveAttendanceInfo(routeAttendanceList);
-    
     let routeInstanceTankHoseInteraction: RouteInstanceTankHoseInteraction = new RouteInstanceTankHoseInteraction();
     routeInstanceTankHoseInteraction.id = JSON.parse(window.localStorage.getItem('tankHoseInteractionId'));
     routeInstanceTankHoseInteraction.number_hoses_in = this.routeInstanceTankHoseForm.get('number_hoses_in').value;
@@ -165,28 +162,5 @@ export class CheckoutHeatersComponent implements OnInit {
     window.localStorage.setItem('apiToken', apiKey);
     window.localStorage.setItem('isAdmin', JSON.stringify(this.isAdmin));
     this.router.navigate(['login']);
-  }
-
-  saveAttendanceInfo(routeAttendanceList: Appearance[]) {
-    routeAttendanceList.forEach((appearance:Appearance) => {
-      console.log('Inserting route attendance');
-      let client:Client = new Client();
-      this.clientService.getClientById(appearance.client_id).subscribe(data => {
-        client = data;
-
-        if (appearance.serviced) {
-          client.last_interaction_date = new Date();
-        } else if (appearance.still_lives_here == false) {
-          client.previous_camp_id = appearance.location_camp_id;
-          client.current_camp_id = null;
-        }
-
-        this.clientService.updateClient(client).subscribe(data => {
-  
-        }, error => console.log(error));
-
-        this.clientService.insertClientAppearance(appearance).subscribe(data => { }, error => console.log(error));
-      }); 
-     });
   }
 }

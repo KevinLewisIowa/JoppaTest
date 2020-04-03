@@ -13,8 +13,8 @@ import { faSearch, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 export class AdminOverallAttendanceComponent implements OnInit {
   startDate: Date = new Date();
   endDate: Date = new Date();
-  minDate: Date = new Date(2000, 0, 1);
-  maxDate = new Date(2020, 0, 1);
+  minDate: Date = new Date(2018, 8, 1);
+  maxDate = new Date();
   attendanceCounts: any;
   pipe = new DatePipe('en-US');
   searchIcon = faSearch;

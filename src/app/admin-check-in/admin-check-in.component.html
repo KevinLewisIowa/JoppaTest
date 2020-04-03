@@ -6,7 +6,9 @@
     <div class="col-md-12 col-lg-12">
       <button class="btn btn-secondary" type="button" (click)="checkInHeaters()">Check In All Heaters</button>
       <br /><br /><b *ngIf="heatersUpdated !== undefined">{{heatersUpdated}} heaters checked in</b>
-      <button routerLink="/adminHome" class="btn btn-primary" type="button">Back</button>
     </div>
+  </div>
+  <div class="card-footer">
+    <button routerLink="/adminHome" class="btn btn-primary" style="float: left"><fa-icon [icon]="backIcon"></fa-icon> Back</button>
   </div>
 </div>

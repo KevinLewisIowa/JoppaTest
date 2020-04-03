@@ -16,6 +16,8 @@ import { ClientPet } from 'app/models/client-pet';
 import { faCheckCircle as farCheckCircle } from '@fortawesome/free-regular-svg-icons';
 import { faChevronLeft, faInfoCircle, faCheckCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import { Observable, Subscription } from 'rxjs';
+import { DatePipe } from '@angular/common';
+import { isNullOrUndefined } from 'util';
 
 @Component({
   selector: 'app-servicing-client',
@@ -44,7 +46,10 @@ export class ServicingClientComponent implements OnInit {
   heaterStatuses: HeaterStatus[] = [];
   currentStatus: number = 2;
   heaters: any[] = [];
+  clientInteractions: any[] = [];
   isAdmin: boolean;
+  attendanceFromDate: string;
+  attendanceToDate: string;
   updateTimerSubscription: Subscription;
   updateHoseTankMessageVisible: boolean = false;
   backIcon = faChevronLeft;
@@ -52,6 +57,8 @@ export class ServicingClientComponent implements OnInit {
   seenAndServicedIcon = faCheckCircle;
   notSeenAndServicedIcon = farCheckCircle;
   notSeenIcon = faTimesCircle;
+  pipe: DatePipe = new DatePipe('en-us');
+
   constructor(private service: ClientService, private mainService: MainService, private router: Router) { }
 
   ngOnInit() {
@@ -60,6 +67,13 @@ export class ServicingClientComponent implements OnInit {
     this.isAdmin = JSON.parse(window.localStorage.getItem('isAdmin'));
     this.locationCampId = JSON.parse(window.localStorage.getItem('locationCampId'));
     this.clientId = localStorage.getItem('selectedClient');
+
+    let attendToDate: Date = new Date();
+    attendToDate.setDate(attendToDate.getDate() + 1);
+    this.attendanceToDate = this.pipe.transform(attendToDate, 'yyyy-MM-dd');
+    let attendFromDate: Date = new Date();
+    attendFromDate.setMonth(attendFromDate.getMonth() - 1);
+    this.attendanceFromDate = this.pipe.transform(attendFromDate, 'yyyy-MM-dd');
     let routeAttendanceList:Appearance[] = JSON.parse(localStorage.getItem('RouteAttendance'));
     if (routeAttendanceList.length != null) {
       this.appearance = routeAttendanceList.find(x => x.client_id == this.clientId);
@@ -85,13 +99,54 @@ export class ServicingClientComponent implements OnInit {
           this.notes = data;
         }, error => console.log(error));
       }
-      else if (this.isAdmin) {
+      
+      if (this.isAdmin) {
         this.service.getClientNotesForClient(this.clientId).subscribe((data: Note[]) => {
           this.notes = data;
+          console.log(data);
+        }, error => console.log(error));
+        this.service.getRecentReceivedItems(this.clientId).subscribe((data: RequestedItem[]) => {
+          this.receivedItems = data;
+        }, error => console.log(error));
+        this.service.getRequestedItems(this.clientId).subscribe((data: RequestedItem[]) => {
+          this.requestedItems = data.filter(w => w.has_received != true);
+        }, error => console.log(error));
+        this.service.getClientPets(this.clientId).subscribe((data : ClientPet[]) => {
+          this.pets = data;
+        }, error => console.log(error));
+        this.service.getGoalsAndNextSteps(this.clientId).subscribe((data: GoalsNextStep[]) => {
+          this.goalsAndSteps = data;
+        }, error => console.log(error));
+        this.service.getClientLikes(this.clientId).subscribe((data: ClientLike[]) => {
+          this.clientLikes = data;
+        }, error => console.log(error));
+        this.service.getClientDislikes(this.clientId).subscribe((data: ClientDislike[]) => {
+          this.clientDislikes = data;
+        }, error => console.log(error));
+        this.service.getHealthConcerns(this.clientId).subscribe((data: HealthConcern[]) => {
+          this.healthConcerns = data;
+        }, error => console.log(error));
+        this.service.getHeatersForClient(this.clientId).subscribe((data: Heater[]) => {
+          this.heaters = data;
+        }, error => console.log(error));
+        // this.service.getClientLoanedTanks(this.clientId).subscribe((tankInteractions: any[]) => {
+        //   // now get the tank info
+        //   this.tankInteractions = tankInteractions;
+        // });
+        // this.service.getClientLoanedHoses(this.clientId).subscribe((hoseInteractions: any[]) => {
+        //   // now get the Hose info
+        //   this.hoseInteractions = hoseInteractions;
+        // });
+        this.service.getHeatEquipmentNotReturned(this.clientId).subscribe((data: any[]) => {
+          this.heatEquipmentNotReturned = data;
+        }, error => console.log(error));
+        this.mainService.getClientAttendanceHistory(this.clientId, this.pipe.transform(this.attendanceFromDate, 'yyyy-MM-dd'), this.pipe.transform(this.attendanceToDate, 'yyyy-MM-dd')).subscribe((data: any[]) => {
+          this.clientInteractions = data;
+          console.log(data);
         }, error => console.log(error));
       }
 
-      if (this.heatRoute || this.isAdmin) {
+      if (this.heatRoute) {
         // get heating equipment for this person
         this.service.getHeatersForClient(this.clientId).subscribe((data: Heater[]) => {
           this.heaters = data;
@@ -135,6 +190,13 @@ export class ServicingClientComponent implements OnInit {
     else {
       this.router.navigate(['/routes']);
     }
+  }
+
+  searchWeeklyAttendance() {
+    this.mainService.getClientAttendanceHistory(this.clientId, this.pipe.transform(this.attendanceFromDate, 'yyyy-MM-dd'), this.pipe.transform(this.attendanceToDate, 'yyyy-MM-dd')).subscribe((data: any[]) => {
+      this.clientInteractions = data;
+      console.log(data);
+    }, error => console.log(error));
   }
 
   ngOnDestroy() {
@@ -207,18 +269,41 @@ export class ServicingClientComponent implements OnInit {
     }
 
     let routeAttendanceList:Appearance[] = JSON.parse(window.localStorage.getItem('RouteAttendance'));
-    let appearance:Appearance = routeAttendanceList.find(x => x.client_id == this.client.id);
-
+    let appearance:Appearance = routeAttendanceList.find(x => x.client_id == interaction.client_id);
+    
     if (appearance) {
-      routeAttendanceList[routeAttendanceList.indexOf(appearance)] = interaction;
+      interaction.id = appearance.id;
+
+      this.service.updateClientAppearance(interaction).subscribe(data => {
+        routeAttendanceList[routeAttendanceList.indexOf(appearance)] = interaction;
+        
+        this.updateClientAndAttendanceListing(interaction, routeAttendanceList);
+      }, error => console.log(error));
     }
     else {
-      routeAttendanceList.push(interaction);
+      this.service.insertClientAppearance(interaction).subscribe(data => {
+        interaction.id = data.id;
+        routeAttendanceList.push(interaction);
+        
+        this.updateClientAndAttendanceListing(interaction, routeAttendanceList);
+      }, error => console.log(error));
     }
+  }
 
-    window.localStorage.setItem('RouteAttendance', JSON.stringify(routeAttendanceList));
-    console.log('Attendance records in list: ' + routeAttendanceList.length.toString());
-    this.router.navigate([`/locationCamp/${this.locationCampId}`]);
+  updateClientAndAttendanceListing(interaction: Appearance, routeAttendanceList: Appearance[]) {
+    if (interaction.serviced) {
+      this.client.last_interaction_date = new Date();
+    }
+    else if (interaction.still_lives_here == false) {
+      this.client.previous_camp_id = interaction.location_camp_id;
+      this.client.current_camp_id = null;
+    }
+    this.service.updateClient(this.client).subscribe(data => {
+      window.localStorage.setItem('RouteAttendance', JSON.stringify(routeAttendanceList));
+      console.log('Number of interactions in route attendance list: ' + routeAttendanceList.length);
+      console.log(JSON.stringify(routeAttendanceList));
+      this.router.navigate([`/locationCamp/${this.locationCampId}`]);
+    }, error => console.log(error));
   }
 
   requestedItemAdded(item: RequestedItem) {

@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MainService } from 'app/services/main.service';
 import { Router } from '@angular/router';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { Observable } from 'rxjs';
+import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-admin-route-undelivered-items',
@@ -25,6 +27,8 @@ export class AdminRouteUndeliveredItemsComponent implements OnInit {
       }, error => console.log(error));
     }
   
+
+  backIcon = faChevronLeft;
 
   ngOnInit() {
 

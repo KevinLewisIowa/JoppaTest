@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MainService } from 'app/services/main.service';
 import { Router } from '@angular/router';
+import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-inventory-report',
@@ -9,7 +10,9 @@ import { Router } from '@angular/router';
 })
 export class InventoryReportComponent implements OnInit {
   inventory: Inventory = new Inventory();
-  constructor(private mainService: MainService, private router: Router) { }
+  constructor(private mainService: MainService, private router: Router) { };
+  backIcon = faChevronLeft;
+
 
   ngOnInit() {
     this.mainService.getInventorySummary().subscribe(data => {

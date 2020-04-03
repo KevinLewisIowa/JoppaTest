@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MainService } from 'app/services/main.service';
 import { Router } from '@angular/router';
+import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-admin-seen-serviced-report',
@@ -11,6 +12,8 @@ export class AdminSeenServicedReportComponent implements OnInit {
   seenServicedRecords : any[];
   fromDate : Date = new Date();
   toDate : Date = new Date();
+  backIcon = faChevronLeft;
+
 
   constructor(private mainService : MainService) { }
 

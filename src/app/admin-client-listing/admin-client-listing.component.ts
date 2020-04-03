@@ -3,6 +3,7 @@ import { ClientService } from 'app/services/client.service';
 import { Router } from '@angular/router';
 import { MatPaginator, MatSort, MatTableDataSource, MatTable } from '@angular/material';
 import { filter } from 'rxjs/operators';
+import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-admin-client-listing',
@@ -13,6 +14,8 @@ export class AdminClientListingComponent implements OnInit {
   displayedColumns = ['first_name', 'last_name', 'preferred_name', 'phone', 'birth_date', 'route_name', 'camp_name', 'status', 'updated_at', 'Pets', 'Items']
   clients: any[] = [];
   dataSource: MatTableDataSource<any>;
+  backIcon = faChevronLeft;
+
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;

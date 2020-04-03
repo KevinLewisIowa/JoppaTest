@@ -149,6 +149,7 @@
               <td>{{item.item_description}}</td>
               <td>{{item.created_at | date: 'shortDate'}}</td>
               <td>{{item.updated_at | date: 'shortDate'}}</td>
+              <td></td>
             </tr>
           </tbody>
         </table>
@@ -268,17 +269,19 @@
            </colgroup>
           <thead>
             <tr>
+              <th>Date Added</th>
               <th>Note</th>
               <th>Remove</th>
-              <th>&nbsp;</th>
               <th>&nbsp;</th>
             </tr>
           </thead>
 
           <tbody>
             <tr *ngFor="let note of notes">
+              <td>{{note.created_at | date:'short'}}</td>
               <td>{{note.note}}</td>
               <td><button type="button" class="btn btn-primary" (click)="removeNote(note.id)">Remove</button></td>
+              <td></td>
             </tr>
           </tbody>
         </table>
@@ -354,6 +357,44 @@
             </tbody>
           </table>
         </div>
+        <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
+          <h4>Weekly Attendance</h4>
+          <div>
+            From Date: <input type="date" name="attendanceFromDate" [(ngModel)]="attendanceFromDate" />
+            To Date: <input type="date" name="attendanceToDate" [(ngModel)]="attendanceToDate" />
+            <button type="button" class="btn btn-primary" (click)="searchWeeklyAttendance()">Search</button>
+          </div>
+          <table class="table" id="weeklyAttendance">
+              <colgroup>
+                <col span="1" style="width: 25%;">
+                <col span="1" style="width: 25%;">
+                <col span="1" style="width: 25%;">
+                <col span="1" style="width: 25%;">
+             </colgroup>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Seen</th>
+                <th>Serviced</th>
+                <th>&nbsp;</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let interaction of clientInteractions">
+                <td>
+                  {{interaction.created_at | date:'short'}}
+                </td>
+                <td>
+                  {{interaction.was_seen}}
+                </td>
+                <td>
+                  {{interaction.serviced}}
+                </td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
         <div class="col-lg-12 col-md-12">
           <h4>Admin Notes: </h4>
           <p><span style="background-color: yellow;">{{client.admin_notes}}</span></p>
@@ -363,7 +404,7 @@
           <button type="button" [className]="appearance && appearance.was_seen == true && appearance.serviced == true ? 'btn btn-success' : 'btn btn-primary'" (click)="sendInteraction(1)"><fa-icon [icon]="seenAndServicedIcon"></fa-icon> Seen & Serviced</button>&nbsp;
           <button type="button" [className]="appearance && appearance.was_seen == false && appearance.serviced == true ? 'btn btn-success' : 'btn btn-primary'" (click)="sendInteraction(2)"><fa-icon [icon]="notSeenAndServicedIcon"></fa-icon> Serviced & Not Seen</button>&nbsp;
           <button type="button" *ngIf="isAdmin" [className]="appearance && appearance.was_seen == false && appearance.serviced == false && appearance.still_lives_here == false ? 'btn btn-success' : 'btn btn-primary'" (click)="sendInteraction(3)">No longer lives here</button>
-          <button type="button" [className]="appearance && appearance.was_seen == false && appearance.serviced == false && appearance.still_lives_here == false ? 'btn btn-success' : 'btn btn-primary'" (click)="sendInteraction(4)"><fa-icon [icon]="notSeenIcon"></fa-icon> Not Seen</button>&nbsp;
+          <button type="button" [className]="appearance && appearance.was_seen == false && appearance.serviced == false ? 'btn btn-success' : 'btn btn-primary'" (click)="sendInteraction(4)"><fa-icon [icon]="notSeenIcon"></fa-icon> Not Seen</button>&nbsp;
         </div>
       </div>
     </div>

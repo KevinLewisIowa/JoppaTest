@@ -14,11 +14,13 @@
             <tbody>
               <tr *ngFor="let goalNextStep of unfulfilledGoalsNextSteps">
                 <td>{{goalNextStep.name}}</td>
-                <td>{{goalNextStep.preferred_name}}</td>
+                <td>{{goalNextStep.first_name}} <span *ngIf="goalNextStep.preferred_name != '' && goalNextStep.preferred_name != null">({{goalNextStep.preferred_name}})</span> {{goalNextStep.last_name}}</td>
                 <td>{{goalNextStep.description}}</td>
               </tr>
             </tbody>
           </table>
-          <button routerLink="/admin/reports" class="btn btn-primary" type="button">Back</button>
+    </div>
+    <div class="card-footer">
+      <button routerLink="/admin/reports" class="btn btn-primary" style="float: left"><fa-icon [icon]="backIcon"></fa-icon> Back</button>
     </div>
   </div>
