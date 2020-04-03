@@ -1,4 +1,4 @@
-<div class="card text-center" style="opacity:0.93">
+<div class="card" style="opacity:0.93">
     <div class="card-header">
       <h2>Undelivered Items</h2>
     </div>
@@ -25,25 +25,24 @@
         
                 <ng-container matColumnDef="name">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Route</mat-header-cell>
-                  <mat-cell *matCellDef="let row">{{item.name}}</mat-cell>
+                  <mat-cell *matCellDef="let row">{{row.name}}</mat-cell>
                 </ng-container>
         
                 <ng-container matColumnDef="preferred_name">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Client Name</mat-header-cell>
-                  <mat-cell *matCellDef="let row">{{item.preferred_name}}</mat-cell>
+                  <mat-cell *matCellDef="let row">{{row.first_name}} <span *ngIf="row.preferred_name != '' && row.preferred_name != null">({{row.preferred_name}})</span> {{row.last_name}}</mat-cell>
                 </ng-container>
         
                 <ng-container matColumnDef="item_description">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Item</mat-header-cell>
-                  <mat-cell *matCellDef="let row">{{item.item_description}}</mat-cell>
+                  <mat-cell *matCellDef="let row">{{row.item_description}}</mat-cell>
                 </ng-container>
         
                 <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                <mat-row *matRowDef="let row; columns: displayedColumns;">
-                </mat-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
               </mat-table>
         
-              <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+              <mat-paginator [pageSizeOptions]="[25, 10, 50, 100]"></mat-paginator>
             </div>
           </div>
           <button routerLink="/admin/reports" class="btn btn-primary" type="button">Back</button>

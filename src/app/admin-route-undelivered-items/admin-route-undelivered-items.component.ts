@@ -9,7 +9,7 @@ import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
   styleUrls: ['./admin-route-undelivered-items.component.css']
 })
 export class AdminRouteUndeliveredItemsComponent implements OnInit {
-  displayedColumns = ['name', 'preferred_name', 'item_description']
+  displayedColumns = ['preferred_name', 'name', 'item_description']
   undeliveredItems: any[] = [];
   dataSource: MatTableDataSource<any>;
 
