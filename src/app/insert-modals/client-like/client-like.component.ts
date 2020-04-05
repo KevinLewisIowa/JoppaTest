@@ -9,8 +9,8 @@ import { ClientService } from "app/services/client.service";
   styleUrls: ['./client-like.component.css']
 })
 export class ClientLikeComponent implements OnInit {
-@ViewChild('clientLikeMdl') clientLikeMdl: ElementRef;
-@Output() likeAdded = new EventEmitter<ClientLike>();
+  @ViewChild('clientLikeMdl') clientLikeMdl: ElementRef;
+  @Output() likeAdded = new EventEmitter<ClientLike>();
   description: string = '';
   constructor(private modalService: NgbModal, private service: ClientService) { }
 

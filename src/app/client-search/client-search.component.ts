@@ -46,14 +46,6 @@ export class ClientSearchComponent implements OnInit, OnDestroy {
     this.previousEnabled = false;
     this.modalService.open(this.clientSearchMdl/*,{ size: 'lg', backdrop: 'static'}*/);
     this.resultMessage = '';
-    //const inputElement = this.renderer.selectRootElement('#focusMe');
-    //const docBody = document.body;
-    //const docEl = document.documentElement;
-    //const scrollTop = window.pageYOffset || docEl.scrollTop || docBody.scrollTop;
-    //const clientTop = docEl.clientTop || docBody.clientTop || 0;
-    //const newTop = scrollTop - clientTop;
-    //inputElement.focus();
-    //window.scrollTo(0, newTop);
   }
 
   performSearch() {
@@ -82,26 +74,9 @@ export class ClientSearchComponent implements OnInit, OnDestroy {
   }
 
   selectedClient(client: Client) {
-    this.clientSelected.emit(client);
-    // this.store.dispatch({type: 'CLIENT', payload: client});
-  }
-
-  nextPage() {
-    // if (this.resultCount <= (this.page * this.pageSize)) {
-    //   return;
-    // } else {
-    //   this.page++;
-    //   this.search();
-    // }
-  }
-
-  previousPage() {
-    // if (this.page === 1) {
-    //   return;
-    // } else {
-    //   this.page--;
-    //   this.search();
-    // }
+    if (confirm('Are you sure you want to select ' + client.first_name + ' ' + client.last_name + '?')) {
+      this.clientSelected.emit(client);
+    }
   }
 
   ngOnDestroy() {

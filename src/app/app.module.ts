@@ -75,6 +75,7 @@ import { PetsComponent } from './insert-modals/pets/pets.component';
 import { BirthdayMonthsReportComponent } from './admin-reports/birthday-months-report/birthday-months-report.component';
 import { AdminOverallAttendanceComponent } from './admin-overall-attendance/admin-overall-attendance.component';
 import { InventoryReportComponent } from './admin-reports/inventory-report/inventory-report.component';
+import { PrayerRequestsAndNeedsComponent } from './insert-modals/prayer-requests-and-needs/prayer-requests-and-needs.component';
 
 const reducers = {
   user: MainReducer,
@@ -134,6 +135,7 @@ const reducers = {
     BirthdayMonthsReportComponent,
     AdminOverallAttendanceComponent,
     InventoryReportComponent,
+    PrayerRequestsAndNeedsComponent,
   ],
   imports: [
     BrowserModule,

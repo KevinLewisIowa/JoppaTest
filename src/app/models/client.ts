@@ -23,4 +23,5 @@ export class Client {
     previous_camp_id: number = undefined;
     number_tanks: number = undefined;
     number_hoses: number = undefined;
+    household_id: number = undefined;
 }

@@ -192,6 +192,40 @@
       </div>
       <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
         <!-- removed !heatRoute from ngIf to pare down screen -->
+        <h4>Prayer Requests/Needs <button type="button" (click)="goToTop();prayerRequestsNeedsMdl.showModal()" class="btn btn-primary float-right">New Prayer Request/Need</button></h4>
+        <table class="table" id="prayerRequestsNeeds">
+            <colgroup>
+              <col span="1" style="width: 25%;">
+              <col span="1" style="width: 25%;">
+              <col span="1" style="width: 25%;">
+              <col span="1" style="width: 25%;">
+           </colgroup>
+          <thead>
+            <tr>
+              <th>Description</th>
+              <th>Created At</th>
+              <th>Remove</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let request of prayerRequestsAndNeeds">
+              <td>
+                {{request.detail}}
+              </td>
+              <td>
+                {{request.created_at | date:'shortDate'}}
+              </td>
+              <td>
+                <button type="button" class="btn btn-primary" (click)="removePrayerRequestNeed(request.id)">Remove</button>
+              </td>
+              <td><td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
+        <!-- removed !heatRoute from ngIf to pare down screen -->
         <h4>Likes <button type="button" class="btn btn-primary float-right" (click)="goToTop();likeMdl.showModal()">New Like</button>
         </h4>
         <table class="table" id="likes">
@@ -358,6 +392,37 @@
           </table>
         </div>
         <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
+          <h4>Household <button type="button" (click)="goToTop();clientMdl.showModal()" class="btn btn-primary float-right">New Household Member</button></h4>
+          <table class="table" id="household">
+              <colgroup>
+                <col span="1" style="width: 25%;">
+                <col span="1" style="width: 25%;">
+                <col span="1" style="width: 25%;">
+                <col span="1" style="width: 25%;">
+             </colgroup>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th></th>
+                <th>Remove</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let client of householdClients">
+                <td>
+                  {{client.first_name}} <span *ngIf="client.preferred_name != '' && client.preferred_name != null">({{client.preferred_name}})</span> {{client.last_name}}
+                </td>
+                <td></td>
+                <td>
+                  <button type="button" class="btn btn-primary" (click)="removeHouseholdClient(client)" *ngIf="client.id != client.household_id">Remove</button>
+                </td>
+                <td><td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
           <h4>Weekly Attendance</h4>
           <div>
             From Date: <input type="date" name="attendanceFromDate" [(ngModel)]="attendanceFromDate" />
@@ -425,3 +490,5 @@
   <app-client-edit-modal #clientEditMdl (editedClient)="editedClient($event)"></app-client-edit-modal>
   <app-loan-heater-modal #newHeaterModal (loaningHeater)="loaningHeater($event)"></app-loan-heater-modal>
   <app-pets #petsMdl (petAdded)="petAdded($event)"></app-pets>
+  <app-prayer-requests-and-needs #prayerRequestsNeedsMdl (prayerRequestNeedAdded)="prayerRequestNeedAdded($event)"></app-prayer-requests-and-needs>
+  <app-client-search #clientMdl (clientSelected)="clientSelected($event)"></app-client-search>

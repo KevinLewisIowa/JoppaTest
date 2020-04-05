@@ -412,6 +412,22 @@ export class ClientService {
     });
   }
 
+  getClientHousehold(household_id) {
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.localStorage.getItem('apiToken')
+    });
+    
+    return this.http.get(this.baseUrl + `getHousehold?householdId=${household_id}`, {headers: myHeader})
+    .map((res: any) => {
+      if (res.message === 'invalid-token') {
+        window.localStorage.removeItem('apiToken');
+        this.router.navigate(['/application-login']);
+      }
+      return res;
+    });
+  }
+
   deletedRequestedItem(id: number) {
     const myHeader = new HttpHeaders({
       'Content-Type': 'application/json',
@@ -494,6 +510,35 @@ export class ClientService {
       }
       return res;
     });
+  }
+
+  removePrayerRequestNeed(id: number) {
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.localStorage.getItem('apiToken')
+    });
+    return this.http.delete(this.baseUrl + `prayer_request_and_needs/${id}`, {headers: myHeader}).map((res: any) => {
+      if (res != null && res.message === 'invalid-token') {
+        window.localStorage.removeItem('apiToken');
+        this.router.navigate(['/application-login']);
+      }
+      return res;
+    });
+  }
+
+  completePrayerRequestNeed(thePrayerRequestNeed: PrayerRequestAndNeed) {
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.localStorage.getItem('apiToken')
+    });
+    return this.http.patch(this.baseUrl + `prayer_request_and_needs/${thePrayerRequestNeed.id}`, {prayer_request_and_need: thePrayerRequestNeed}, {headers: myHeader})
+        .map((res: any) => {
+            if (res.message === 'invalid-token') {
+              window.localStorage.removeItem('apiToken');
+              this.router.navigate(['/application-login']);
+            }
+            return res;
+          } );
   }
 
   deleteGoalAndNextStep(id: number) {

@@ -18,6 +18,7 @@ import { faChevronLeft, faInfoCircle, faCheckCircle, faTimesCircle } from '@fort
 import { Observable, Subscription } from 'rxjs';
 import { DatePipe } from '@angular/common';
 import { isNullOrUndefined } from 'util';
+import { PrayerRequestAndNeed } from 'app/models/prayer-request';
 
 @Component({
   selector: 'app-servicing-client',
@@ -34,6 +35,8 @@ export class ServicingClientComponent implements OnInit {
   clientLikes: ClientLike[] = [];
   clientDislikes: ClientDislike[] = [];
   healthConcerns: HealthConcern[] = [];
+  prayerRequestsAndNeeds: PrayerRequestAndNeed[] = [];
+  householdClients: Client[] = [];
   notes: Note[] = [];
   pets: ClientPet[] = [];
   sentInteraction = false;
@@ -90,9 +93,14 @@ export class ServicingClientComponent implements OnInit {
     if (this.clientId !== null) {
       this.service.getClientById(this.clientId).subscribe((data: Client) => {
         this.client = data;
+        
         if (this.client.birth_date == null) {
           alert('Please ask this client for their birthday');
         }
+
+        this.service.getClientHousehold(this.client.household_id).subscribe((data: Client[]) => {
+          this.householdClients = data;
+        }, error => console.log(error));
       });
       if (routeInstanceId != null) {
         this.service.getClientNotesForRoute(this.clientId, routeInstanceId).subscribe((data: Note[]) => {
@@ -103,7 +111,6 @@ export class ServicingClientComponent implements OnInit {
       if (this.isAdmin) {
         this.service.getClientNotesForClient(this.clientId).subscribe((data: Note[]) => {
           this.notes = data;
-          console.log(data);
         }, error => console.log(error));
         this.service.getRecentReceivedItems(this.clientId).subscribe((data: RequestedItem[]) => {
           this.receivedItems = data;
@@ -129,6 +136,9 @@ export class ServicingClientComponent implements OnInit {
         this.service.getHeatersForClient(this.clientId).subscribe((data: Heater[]) => {
           this.heaters = data;
         }, error => console.log(error));
+        this.service.getClientPrayerRequests(this.clientId).subscribe((data: PrayerRequestAndNeed[]) => {
+          this.prayerRequestsAndNeeds = data;
+        }, error => console.log(error));
         // this.service.getClientLoanedTanks(this.clientId).subscribe((tankInteractions: any[]) => {
         //   // now get the tank info
         //   this.tankInteractions = tankInteractions;
@@ -142,7 +152,6 @@ export class ServicingClientComponent implements OnInit {
         }, error => console.log(error));
         this.mainService.getClientAttendanceHistory(this.clientId, this.pipe.transform(this.attendanceFromDate, 'yyyy-MM-dd'), this.pipe.transform(this.attendanceToDate, 'yyyy-MM-dd')).subscribe((data: any[]) => {
           this.clientInteractions = data;
-          console.log(data);
         }, error => console.log(error));
       }
 
@@ -195,7 +204,6 @@ export class ServicingClientComponent implements OnInit {
   searchWeeklyAttendance() {
     this.mainService.getClientAttendanceHistory(this.clientId, this.pipe.transform(this.attendanceFromDate, 'yyyy-MM-dd'), this.pipe.transform(this.attendanceToDate, 'yyyy-MM-dd')).subscribe((data: any[]) => {
       this.clientInteractions = data;
-      console.log(data);
     }, error => console.log(error));
   }
 
@@ -340,6 +348,12 @@ export class ServicingClientComponent implements OnInit {
     element.scrollIntoView();
   }
 
+  prayerRequestNeedAdded(request: PrayerRequestAndNeed) {
+    this.prayerRequestsAndNeeds.push(request);
+    const element = document.querySelector('#prayerRequestsNeeds');
+    element.scrollIntoView();
+  }
+
   noteAdded(note: Note) {
     this.notes.push(note);
     const element = document.querySelector('#notes');
@@ -350,6 +364,14 @@ export class ServicingClientComponent implements OnInit {
     this.pets.push(pet);
     const element = document.querySelector('#petList');
     element.scrollIntoView();
+  }
+
+  clientSelected(client: Client) {
+    this.householdClients.push(client);
+
+    client.household_id = this.client.household_id;
+    this.service.updateClient(client).subscribe(data => {
+    }, error => console.log(error));
   }
 
   goToTop() {
@@ -385,14 +407,12 @@ export class ServicingClientComponent implements OnInit {
 
   removeLike(id) {
     this.service.removeLike(id).subscribe(response => {
-      console.log(this.clientLikes);
       this.clientLikes = this.clientLikes.filter(w => w.id != id);
     })
   }
 
   removeDislike(id) {
     this.service.removeDislike(id).subscribe(response => {
-      console.log(this.clientDislikes);
       this.clientDislikes = this.clientDislikes.filter(w => w.id != id);
     })
   }
@@ -405,7 +425,6 @@ export class ServicingClientComponent implements OnInit {
 
   removePet(id) {
     this.service.removePet(id).subscribe(response => {
-      console.log(this.pets);
       this.pets = this.pets.filter(w => w.id != id);
     })
   }
@@ -420,6 +439,21 @@ export class ServicingClientComponent implements OnInit {
     this.service.removeNote(id).subscribe(response => {
       this.notes = this.notes.filter(w => w.id != id);
     })
+  }
+
+  removePrayerRequestNeed(id: number) {
+    this.service.removePrayerRequestNeed(id).subscribe(response => {
+      this.prayerRequestsAndNeeds = this.prayerRequestsAndNeeds.filter(w => w.id != id);
+    });
+  }
+
+  removeHouseholdClient(client: Client) {
+    client.household_id = client.id;
+    this.service.updateClient(client).subscribe(data => {
+      this.service.getClientHousehold(client.id).subscribe((data: Client[]) => {
+        this.householdClients = data;
+      });
+    });
   }
 
   completedGoal(goal: GoalsNextStep) {
