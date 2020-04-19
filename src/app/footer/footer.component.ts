@@ -62,10 +62,18 @@ export class FooterComponent implements OnInit {
     }
 
     if (heatRoute && !this.isAdmin) {
+      if (!confirm('Are you sure you want to end the route?')) {
+        this.mainService.showEndRoute.next(true);
+        return;
+      }
       this.router.navigate(['checkoutHeaters']);
     }
     else
     {
+      if (!confirm('Are you sure you want to end the route?')) {
+        this.mainService.showEndRoute.next(true);
+        return;
+      }
       let apiKey: string = window.localStorage.getItem('apiToken');
       window.localStorage.clear();
       window.localStorage.setItem('apiToken', apiKey);
@@ -75,6 +83,10 @@ export class FooterComponent implements OnInit {
   }
 
   goToAdminHome() {
+    if (!confirm('Are you sure you want to end the route?')) {
+      this.mainService.showEndRoute.next(true);
+      return;
+    }
     let apiKey: string = window.localStorage.getItem('apiToken');
     window.localStorage.clear();
     window.localStorage.setItem('apiToken', apiKey);
