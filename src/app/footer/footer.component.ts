@@ -42,13 +42,6 @@ export class FooterComponent implements OnInit {
     let heatRoute: boolean = JSON.parse(window.localStorage.getItem('heatRoute'));
 
     let routeAttendanceList:Appearance[] = JSON.parse(window.localStorage.getItem('RouteAttendance'));
-    if (routeAttendanceList != null) {
-      if (routeAttendanceList.length == 0) {
-        if (!confirm('You have chosen to end a route with no attendance taken.  Are you sure you want to end this route?')) {
-          return;
-        }
-      }
-    }
 
     this.mainService.showEndRoute.next(false);
 
@@ -65,28 +58,26 @@ export class FooterComponent implements OnInit {
       if (!confirm('Are you sure you want to end the route?')) {
         this.mainService.showEndRoute.next(true);
         return;
-      }
-      this.router.navigate(['checkoutHeaters']);
+      } else{
+        this.router.navigate(['checkoutHeaters']);
+        }
     }
     else
     {
       if (!confirm('Are you sure you want to end the route?')) {
         this.mainService.showEndRoute.next(true);
         return;
+      } else {
+        let apiKey: string = window.localStorage.getItem('apiToken');
+        window.localStorage.clear();
+        window.localStorage.setItem('apiToken', apiKey);
+        window.localStorage.setItem('isAdmin', JSON.stringify(this.isAdmin));
+        this.router.navigate(['login']);
       }
-      let apiKey: string = window.localStorage.getItem('apiToken');
-      window.localStorage.clear();
-      window.localStorage.setItem('apiToken', apiKey);
-      window.localStorage.setItem('isAdmin', JSON.stringify(this.isAdmin));
-      this.router.navigate(['login']);
     }
   }
 
   goToAdminHome() {
-    if (!confirm('Are you sure you want to end the route?')) {
-      this.mainService.showEndRoute.next(true);
-      return;
-    }
     let apiKey: string = window.localStorage.getItem('apiToken');
     window.localStorage.clear();
     window.localStorage.setItem('apiToken', apiKey);
