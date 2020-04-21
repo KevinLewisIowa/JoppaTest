@@ -368,7 +368,7 @@ export class ServicingClientComponent implements OnInit {
 
   clientSelected(client: Client) {
     this.householdClients.push(client);
-
+    
     client.household_id = this.client.household_id;
     this.service.updateClient(client).subscribe(data => {
     }, error => console.log(error));
@@ -449,8 +449,13 @@ export class ServicingClientComponent implements OnInit {
 
   removeHouseholdClient(client: Client) {
     client.household_id = client.id;
+    
+    if (this.client.id == client.household_id) {
+      this.client.household_id = client.id;
+    }
+    
     this.service.updateClient(client).subscribe(data => {
-      this.service.getClientHousehold(client.id).subscribe((data: Client[]) => {
+      this.service.getClientHousehold(this.clientId).subscribe((data: Client[]) => {
         this.householdClients = data;
       });
     });

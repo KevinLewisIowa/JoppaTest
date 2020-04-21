@@ -464,7 +464,7 @@
           <h4>Admin Notes: </h4>
           <p><span style="background-color: yellow;">{{client.admin_notes}}</span></p>
         </div>
-        <div class="col-md-12 text-left">
+        <div class="col-md-12 text-left" *ngIf="!isAdmin">
           <h4>Attendance</h4>
           <button type="button" [className]="appearance && appearance.was_seen == true && appearance.serviced == true ? 'btn btn-success' : 'btn btn-primary'" (click)="sendInteraction(1)"><fa-icon [icon]="seenAndServicedIcon"></fa-icon> Seen & Serviced</button>&nbsp;
           <button type="button" [className]="appearance && appearance.was_seen == false && appearance.serviced == true ? 'btn btn-success' : 'btn btn-primary'" (click)="sendInteraction(2)"><fa-icon [icon]="notSeenAndServicedIcon"></fa-icon> Serviced & Not Seen</button>&nbsp;
