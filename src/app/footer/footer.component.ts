@@ -42,35 +42,67 @@ export class FooterComponent implements OnInit {
     let heatRoute: boolean = JSON.parse(window.localStorage.getItem('heatRoute'));
 
     let routeAttendanceList:Appearance[] = JSON.parse(window.localStorage.getItem('RouteAttendance'));
-    if (routeAttendanceList != null) {
-      if (routeAttendanceList.length == 0) {
-        if (!confirm('You have chosen to end a route with no attendance taken.  Are you sure you want to end this route?')) {
-          return;
-        }
+
+    if (routeAttendanceList == null) {
+      return;
+    }
+
+    if (routeAttendanceList.length == 0 && heatRoute && !this.isAdmin) {
+      if (confirm('You have chosen to end a route with no attendance taken. Are you sure you want to end this route?')) {
+        this.router.navigate(['checkoutHeaters']);
+      } else {
+        this.mainService.showEndRoute.next(true);
+        return;
+      }
+    }
+
+    if (routeAttendanceList.length == 0) {
+      if (confirm('You have chosen to end a route with no attendance taken. Are you sure you want to end this route?')) {
+        this.mainService.showEndRoute.next(false);
+        this.mainService.getRouteInstance(routeInstanceId).subscribe(data => {
+          this.routeInstance = data;
+          this.routeInstance.end_time = new Date();
+  
+          this.mainService.updateRouteInstance(this.routeInstance);
+        }, error => console.log(error));
+        let apiKey: string = window.localStorage.getItem('apiToken');
+        window.localStorage.clear();
+        window.localStorage.setItem('apiToken', apiKey);
+        window.localStorage.setItem('isAdmin', JSON.stringify(this.isAdmin));
+        this.router.navigate(['login']);
+      } else {
+        return;
       }
     }
 
     this.mainService.showEndRoute.next(false);
 
-    if (routeInstanceId !== null) {
-      this.mainService.getRouteInstance(routeInstanceId).subscribe(data => {
-        this.routeInstance = data;
-        this.routeInstance.end_time = new Date();
+    this.mainService.getRouteInstance(routeInstanceId).subscribe(data => {
+      this.routeInstance = data;
+      this.routeInstance.end_time = new Date();
 
-        this.mainService.updateRouteInstance(this.routeInstance);
-      }, error => console.log(error));
-    }
+      this.mainService.updateRouteInstance(this.routeInstance);
+    }, error => console.log(error));
 
     if (heatRoute && !this.isAdmin) {
-      this.router.navigate(['checkoutHeaters']);
+      if (!confirm('Are you sure you want to end the route?')) {
+        this.mainService.showEndRoute.next(true);
+        return;
+      } else{
+        this.router.navigate(['checkoutHeaters']);
+        }
     }
-    else
-    {
-      let apiKey: string = window.localStorage.getItem('apiToken');
-      window.localStorage.clear();
-      window.localStorage.setItem('apiToken', apiKey);
-      window.localStorage.setItem('isAdmin', JSON.stringify(this.isAdmin));
-      this.router.navigate(['login']);
+    else if (routeAttendanceList.length !== null && routeAttendanceList.length !== 0) {
+      if (!confirm('Are you sure you want to end the route?')) {
+        this.mainService.showEndRoute.next(true);
+        return;
+      } else {
+        let apiKey: string = window.localStorage.getItem('apiToken');
+        window.localStorage.clear();
+        window.localStorage.setItem('apiToken', apiKey);
+        window.localStorage.setItem('isAdmin', JSON.stringify(this.isAdmin));
+        this.router.navigate(['login']);
+      }
     }
   }
 
