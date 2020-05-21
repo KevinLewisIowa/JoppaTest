@@ -152,7 +152,7 @@
             <tr>
               <th>Description</th>
               <th>Created At</th>
-              <th></th>
+              <th>Received At</th>
               <th></th>
             </tr>
           </thead>
@@ -160,6 +160,7 @@
             <tr *ngFor="let item of receivedItems">
               <td>{{item.item_description}}</td>
               <td>{{item.created_at | date: 'shortDate'}}</td>
+              <td>{{item.updated_at | date: 'shortDate'}}</td>
               <td></td>
               <td></td>
             </tr>
@@ -273,8 +274,7 @@
                   {{like.created_at | date:'shortDate'}}
                 </td>
                 <td>
-                  <button type="button" class="btn btn-primary"
-                    (click)="removeLike(like.id)">Remove</button>
+                  <button type="button" class="btn btn-primary" (click)="removeLike(like.id)">Remove</button>
                 </td>
 
               </tr>
