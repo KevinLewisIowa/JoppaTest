@@ -26,6 +26,7 @@ export class LeaderSignInComponent implements OnInit {
     const adminSetting = JSON.parse(window.localStorage.getItem('isAdmin'));
     if (adminSetting) {
       this.isAdmin = true;
+      this.mainService.showAdminHome.next(adminSetting);
     }
     if (JSON.parse(window.localStorage.getItem('routeInstance')) !== null) {
       this.mainService.showEndRoute.next(true);

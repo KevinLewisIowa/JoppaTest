@@ -60,12 +60,14 @@ export class ServicingClientComponent implements OnInit {
   seenAndServicedIcon = faCheckCircle;
   notSeenAndServicedIcon = farCheckCircle;
   notSeenIcon = faTimesCircle;
+  routeInstanceId: number;
   pipe: DatePipe = new DatePipe('en-us');
 
   constructor(private service: ClientService, private mainService: MainService, private router: Router) { }
 
   ngOnInit() {
-    let routeInstanceId = JSON.parse(localStorage.getItem('routeInstance'));
+    this.routeInstanceId = JSON.parse(localStorage.getItem('routeInstance'));
+    console.log(this.routeInstanceId);
     this.heatRoute = JSON.parse(window.localStorage.getItem('heatRoute'));
     this.isAdmin = JSON.parse(window.localStorage.getItem('isAdmin'));
     this.locationCampId = JSON.parse(window.localStorage.getItem('locationCampId'));
@@ -102,8 +104,8 @@ export class ServicingClientComponent implements OnInit {
           this.householdClients = data;
         }, error => console.log(error));
       });
-      if (routeInstanceId != null) {
-        this.service.getClientNotesForRoute(this.clientId, routeInstanceId).subscribe((data: Note[]) => {
+      if (this.routeInstanceId != null) {
+        this.service.getClientNotesForRoute(this.clientId, this.routeInstanceId).subscribe((data: Note[]) => {
           this.notes = data;
         }, error => console.log(error));
       }
