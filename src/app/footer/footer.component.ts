@@ -47,18 +47,44 @@ export class FooterComponent implements OnInit {
       return;
     }
 
-    if (routeAttendanceList.length == 0 && heatRoute && !this.isAdmin) {
+    //TODO
+    //Check if routeAttendanceList length is 0
+    ////If so, ask modified message 'with no attendance'
+    //////If confirmed, mark as clearing out
+    //
+    //If routeAttendanceList length is more than 0
+    ////Ask message of wanting to end route
+    //////If confirmed, mark as clearing out
+    //
+    //For clearing out, if heatRoute, go to checkoutHeaters screen
+    //If outreach route, clear out things
+    ///If admin, add admin route things back
+
+    let continueWithEndingRoute: boolean = false;
+    if (routeAttendanceList.length == 0) {
       if (confirm('You have chosen to end a route with no attendance taken. Are you sure you want to end this route?')) {
-        this.router.navigate(['checkoutHeaters']);
+        continueWithEndingRoute = true;
       } else {
         this.mainService.showEndRoute.next(true);
         return;
       }
     }
+    else {
+      if (confirm('Are you sure you want to end the route?')) {
+        continueWithEndingRoute = true;
+      }
+      else {
+        this.mainService.showEndRoute.next(true);
+        return;
+      }
+    }
 
-    if (routeAttendanceList.length == 0) {
-      if (confirm('You have chosen to end a route with no attendance taken. Are you sure you want to end this route?')) {
-        this.mainService.showEndRoute.next(false);
+    if (continueWithEndingRoute) {
+      this.mainService.showEndRoute.next(false);
+      
+      if (heatRoute) {
+        this.router.navigate(['checkoutHeaters']);
+      } else {
         this.mainService.getRouteInstance(routeInstanceId).subscribe(data => {
           this.routeInstance = data;
           this.routeInstance.end_time = new Date();
@@ -69,41 +95,40 @@ export class FooterComponent implements OnInit {
         window.localStorage.clear();
         window.localStorage.setItem('apiToken', apiKey);
         window.localStorage.setItem('isAdmin', JSON.stringify(this.isAdmin));
-        this.router.navigate(['login']);
-      } else {
-        return;
-      }
-    }
-
-    this.mainService.showEndRoute.next(false);
-
-    this.mainService.getRouteInstance(routeInstanceId).subscribe(data => {
-      this.routeInstance = data;
-      this.routeInstance.end_time = new Date();
-
-      this.mainService.updateRouteInstance(this.routeInstance);
-    }, error => console.log(error));
-
-    if (heatRoute && !this.isAdmin) {
-      if (!confirm('Are you sure you want to end the route?')) {
-        this.mainService.showEndRoute.next(true);
-        return;
-      } else{
-        this.router.navigate(['checkoutHeaters']);
-        }
-    }
-    else if (routeAttendanceList.length !== null && routeAttendanceList.length !== 0) {
-      if (!confirm('Are you sure you want to end the route?')) {
-        this.mainService.showEndRoute.next(true);
-        return;
-      } else {
-        let apiKey: string = window.localStorage.getItem('apiToken');
-        window.localStorage.clear();
-        window.localStorage.setItem('apiToken', apiKey);
-        window.localStorage.setItem('isAdmin', JSON.stringify(this.isAdmin));
+        
         this.router.navigate(['login']);
       }
     }
+
+    // this.mainService.showEndRoute.next(false);
+
+    // this.mainService.getRouteInstance(routeInstanceId).subscribe(data => {
+    //   this.routeInstance = data;
+    //   this.routeInstance.end_time = new Date();
+
+    //   this.mainService.updateRouteInstance(this.routeInstance);
+    // }, error => console.log(error));
+
+    // if (heatRoute && !this.isAdmin) {
+    //   if (!confirm('Are you sure you want to end the route?')) {
+    //     this.mainService.showEndRoute.next(true);
+    //     return;
+    //   } else{
+    //     this.router.navigate(['checkoutHeaters']);
+    //   }
+    // }
+    // else if (routeAttendanceList.length !== null && routeAttendanceList.length !== 0) {
+    //   if (!confirm('Are you sure you want to end the route?')) {
+    //     this.mainService.showEndRoute.next(true);
+    //     return;
+    //   } else {
+    //     let apiKey: string = window.localStorage.getItem('apiToken');
+    //     window.localStorage.clear();
+    //     window.localStorage.setItem('apiToken', apiKey);
+    //     window.localStorage.setItem('isAdmin', JSON.stringify(this.isAdmin));
+    //     this.router.navigate(['login']);
+    //   }
+    // }
   }
 
   goToAdminHome() {

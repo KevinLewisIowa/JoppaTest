@@ -17,9 +17,8 @@
       <button class="btn btn-primary" type="submit" (click)="retrieveOverallAttendance()"><fa-icon [icon]="searchIcon"></fa-icon> Search</button>
     </div>
     <div *ngIf="attendanceCounts != undefined">
-      <label>Seen and Serviced: {{attendanceCounts.seenAndServiced}}</label><br/>
-      <label>Not Seen and Serviced: {{attendanceCounts.notSeenAndServiced}}</label><br/>
-      <label>Not Seen: {{attendanceCounts.notSeen}}</label>
+      <label>Individuals Serviced: {{attendanceCounts.individualsServiced}}</label><br/>
+      <label>Households Serviced: {{attendanceCounts.householdsServiced}}</label><br/>
     </div>
     <div *ngIf="attendanceCounts == undefined">
       <label>Enter a date range to see the number of seen and serviced over the specified period</label><br/>

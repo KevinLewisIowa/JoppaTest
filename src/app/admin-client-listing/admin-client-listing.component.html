@@ -68,7 +68,7 @@
         
         <ng-container matColumnDef="updated_at">
           <mat-header-cell *matHeaderCellDef mat-sort-header>Last Interaction</mat-header-cell>
-          <mat-cell *matCellDef="let client">{{client.last_interaction_date | date: 'shortDate'}}</mat-cell>
+          <mat-cell [class.bg-warning]="isOverMonthOld(client.last_interaction_date)" *matCellDef="let client">{{client.last_interaction_date | date: 'shortDate'}}</mat-cell>
         </ng-container>
 
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

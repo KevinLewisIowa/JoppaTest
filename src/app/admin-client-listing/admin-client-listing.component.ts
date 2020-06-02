@@ -15,7 +15,7 @@ export class AdminClientListingComponent implements OnInit {
   clients: any[] = [];
   dataSource: MatTableDataSource<any>;
   backIcon = faChevronLeft;
-
+  pastDate: Date = new Date();
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -25,11 +25,22 @@ export class AdminClientListingComponent implements OnInit {
       this.clients = data;
       this.dataSource = new MatTableDataSource(this.clients);
       this.dataSource.sort = this.sort;
+      this.dataSource.sortingDataAccessor = (item, property) => {
+        switch (property) {
+          case 'updated_at': return new Date(item.last_interaction_date);
+          default: return item[property];
+        }
+      };
       this.dataSource.paginator = this.paginator;
     }, error => console.log(error));
   }
 
   ngOnInit() {
+    this.pastDate.setDate(this.pastDate.getDate() - 28);
+  }
+
+  isOverMonthOld(date: string) {
+    return new Date(date) < this.pastDate;
   }
 
   viewClient(theClient) {
