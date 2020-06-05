@@ -1,3 +1,16 @@
 .client-row:hover {
     cursor: pointer;
 }
+
+@media (max-width: 420px) {
+     .panel-body, 
+     button {
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 420px) {
+    button {
+       font-size: 12px;
+   }
+}

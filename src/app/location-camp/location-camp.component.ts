@@ -102,8 +102,9 @@ export class LocationCampComponent implements OnInit {
   }
 
   showMap() {
-    window.open(`https://www.google.com/maps?q=${this.locationCamp.latitude},${this.locationCamp.longitude}&q=food&amp;z=14`, "_blank");
-  }
+    // window.open(`https://www.google.com/maps/dir/${this.locationCamp.latitude},${this.locationCamp.longitude}&q=food&amp;z=14`, "_blank");
+    window.open('https://www.google.com/maps/dir/41.5945054,-93.6116504/41.583072,-93.644612/@41.5882346,-93.6436362,14z/data=!3m1!4b1!4m4!4m3!1m1!4e1!1m0', "_blank");
+  } 
 
   nextStop() {
     //localStorage.setItem('locationCampId', "73");
