@@ -102,8 +102,9 @@ export class LocationCampComponent implements OnInit {
   }
 
   showMap() {
-    window.open(`https://www.google.com/maps?q=${this.locationCamp.latitude},${this.locationCamp.longitude}&q=food&amp;z=14`, "_blank");
-  }
+    console.log(`latitude: ${this.locationCamp.latitude}, longitude: ${this.locationCamp.longitude}`)
+    window.open(`https://www.google.com/maps/dir/?api=1&destination=${this.locationCamp.latitude},${this.locationCamp.longitude}`, "_blank");
+  } 
 
   nextStop() {
     //localStorage.setItem('locationCampId', "73");
