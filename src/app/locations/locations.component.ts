@@ -80,7 +80,18 @@ export class LocationsComponent implements OnInit {
   }
 
   showRouteLocations() {
-    this.router.navigate(['/routeMap',this.routeId]);
+    let routeUrl:string = `https://www.google.com/maps/dir`;
+    this.mainService.getRouteCampsLongLat(this.routeId).subscribe((data: LocationCamp[]) => {
+      data.forEach(function(locationCamp: LocationCamp) {
+        if (locationCamp.longitude != null && locationCamp.latitude != null) {
+          routeUrl = routeUrl + `/${locationCamp.latitude},${locationCamp.longitude}`;
+        }
+      });
+
+      routeUrl = routeUrl + `/@//`;
+      console.log(routeUrl);
+      window.open(routeUrl, "_blank");
+    });
   }
 
   
