@@ -93,6 +93,4 @@ export class LocationsComponent implements OnInit {
       window.open(routeUrl, "_blank");
     });
   }
-
-  
 }
