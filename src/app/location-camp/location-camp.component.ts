@@ -89,6 +89,7 @@ export class LocationCampComponent implements OnInit {
     this.clientService.insertClientAppearance(clientInteraction).subscribe(data => {
       client.previous_camp_id = client.current_camp_id;
       client.current_camp_id = JSON.parse(window.localStorage.getItem('locationCampId'));
+      client.status = 'Active';
 
       this.clientService.updateClient(client).subscribe(data => {
         console.log('updated client');

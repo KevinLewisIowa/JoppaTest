@@ -40,7 +40,7 @@ export class ClientEditComponent implements OnInit {
       status: 'Active',
       phone: '',
       joppa_apartment_number: '',
-      dwelling: '',
+      dwelling: 'Tent',
       gender: '',
       admin_notes: ''
     });
