@@ -6,28 +6,28 @@
   <div class="panel-body" style="opacity:0.93">
     <form [formGroup]="clientForm" style="opacity:0.93">
       <div class="login-box">
-        <div class="col-sm-11 col-md-11 col-lg-11">
-          <label>First Name:<font color="red">*</font></label>
-          <input type="text" class="float-right" placeholder="first name" formControlName="first_name" />
+        <div class="row">
+          <label class="col-sm-4 col-md-4 col-lg-4">First Name:<font color="red">*</font></label>
+          <input type="text" class="col-sm-4 col-md-4 col-lg-4 float-right" placeholder="first name" formControlName="first_name" />
         </div>
-        <div class="col-sm-11 col-md-11 col-lg-11">
-          <label>Last Name:<font color="red">*</font></label>
-          <input type="text" class="float-right" placeholder="last name" formControlName="last_name" />
+        <div class="row">
+          <label class="col-sm-4 col-md-4 col-lg-4">Last Name:<font color="red">*</font></label>
+          <input type="text" class="col-sm-4 col-md-4 col-lg-4 float-right" placeholder="last name" formControlName="last_name" />
         </div>
-        <div class="col-sm-11 col-md-11 col-lg-11">
-          <label>Preferred Name:</label>
-          <input type="text" class="float-right" placeholder="preferred name" formControlName="preferred_name" />
+        <div class="row">
+          <label class="col-sm-4 col-md-4 col-lg-4">Preferred Name:</label>
+          <input type="text" class="col-sm-4 col-md-4 col-lg-4 float-right" placeholder="preferred name" formControlName="preferred_name" />
         </div>
-        <div class="col-sm-11 col-md-11 col-lg-11">
-          <label>Gender:<font color="red">*</font></label>
-          <select class="form-control" class="float-right" formControlName="gender" style="width: 173px">
+        <div class="row">
+          <label class="col-sm-4 col-md-4 col-lg-4">Gender:<font color="red">*</font></label>
+          <select class="col-sm-4 col-md-4 col-lg-4 form-control" class="float-right" formControlName="gender" style="width: 173px">
             <option value="Male">Male</option>
             <option value="Female">Female</option>
           </select>
         </div>
-        <div class="col-sm-11 col-md-11 col-lg-11">
-          <label>Birth Date: </label>
-          <input type="date" class="float-right" placeholder="mm/dd/yyyy" formControlName="birth_date" style="width: 173px"/>
+        <div class="row">
+          <label class="col-sm-4 col-md-4 col-lg-4">Birth Date: </label>
+          <input type="date" class="col-sm-4 col-md-4 col-lg-4 float-right" placeholder="mm/dd/yyyy" formControlName="birth_date" style="width: 173px"/>
         </div>
         <div class="col-sm-11 col-md-11 col-lg-11">
           <label>Phone: </label>
