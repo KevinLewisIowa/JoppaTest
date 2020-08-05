@@ -19,75 +19,97 @@
           </div>
         </div>
         <div class="row">
-          <label class="col-sm-4 col-md-4 col-lg-4">Preferred Name:</label>
-          <span class="col-sm-4 col-md-4 col-lg-4"></span>
-          <input type="text" class="col-sm-4 col-md-4 col-lg-4" placeholder="preferred name" formControlName="preferred_name" />
+          <div class="col-sm-12 col-md-12 col-lg-12">
+            <label>Preferred Name:</label>
+            <input type="text" class="float-right" placeholder="preferred name" formControlName="preferred_name" />
+          </div>
         </div>
         <div class="row">
-          <label class="col-sm-4 col-md-4 col-lg-4">Gender:<font color="red">*</font></label>
-          <select class="col-sm-4 col-md-4 col-lg-4 form-control" class="float-right" formControlName="gender" style="width: 173px">
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-          </select>
+          <div class="col-sm-12 col-md-12 col-lg-12">
+            <label>Gender:<font color="red">*</font></label>
+            <select class="form-control float-right" formControlName="gender" style="width: 173px">
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
+          </div>
         </div>
         <div class="row">
-          <label class="col-sm-4 col-md-4 col-lg-4">Birth Date: </label>
-          <input type="date" class="col-sm-4 col-md-4 col-lg-4 float-right" placeholder="mm/dd/yyyy" formControlName="birth_date" style="width: 173px"/>
+          <div class="col-sm-12 col-md-12 col-lg-12">
+            <label>Birth Date: </label>
+            <input type="date" class="float-right" placeholder="mm/dd/yyyy" formControlName="birth_date" style="width: 173px"/>
+          </div>
         </div>
-        <div class="col-sm-11 col-md-11 col-lg-11">
-          <label>Phone: </label>
-          <input type="text" class="float-right" placeholder="phone" formControlName="phone">
+        <div class="row">
+          <div class="col-sm-12 col-md-12 col-lg-12">
+            <label>Phone: </label>
+            <input type="text" class="float-right" placeholder="phone" formControlName="phone">
+          </div>
         </div>
-        <div class="col-sm-11 col-md-11 col-lg-11">
-          <label>Shoe Size: </label>
-          <input type="text" class="float-right" placeholder="shoe size" formControlName="shoe_size" />
+        <div class="row">
+          <div class="col-sm-12 col-md-12 col-lg-12">
+            <label>Shoe Size: </label>
+            <input type="text" class="float-right" placeholder="shoe size" formControlName="shoe_size" />
+          </div>
         </div>
-        <div class="col-sm-11 col-md-11 col-lg-11">
-          <label>Boot Size: </label>
-          <input type="text" class="float-right" placeholder="boot size" formControlName="boot_size" />
+        <div class="row">
+          <div class="col-sm-12 col-md-12 col-lg-12">
+            <label>Boot Size: </label>
+            <input type="text" class="float-right" placeholder="boot size" formControlName="boot_size" />
+          </div>
         </div>
-        <div class="col-sm-11 col-md-11 col-lg-11">
-          <label>Is Veteran: </label>
-          <input type="checkbox" class="float-right" formControlName="is_veteran" />
+        <div class="row">
+          <div class="col-sm-12 col-md-12 col-lg-12">
+            <label>Is Veteran: </label>
+            <input type="checkbox" class="float-right" formControlName="is_veteran" />
+          </div>
         </div>
-        <div class="col-sm-11 col-md-11 col-lg-11">
-          <label>Is After Care: </label>
-          <input type="checkbox" class="float-right" formControlName="is_aftercare" />
+        <div class="row">
+          <div class="col-sm-12 col-md-12 col-lg-12">
+            <label>Is After Care: </label>
+            <input type="checkbox" class="float-right" formControlName="is_aftercare" />
+          </div>
         </div>
-        <div class="col-sm-11 col-md-11 col-lg-11">
-          <label>Mailbox: </label>
-          <input type="text" class="float-right" placeholder="Joppa Mailbox Number"
-            formControlName="joppa_apartment_number" />
+        <div class="row">
+          <div class="col-sm-12 col-md-12 col-lg-12">
+            <label>Mailbox: </label>
+            <input type="text" class="float-right" placeholder="Joppa Mailbox Number" formControlName="joppa_apartment_number" />
+          </div>
         </div>
-        <div class="col-sm-11 col-md-11 col-lg-11">
-          <label>Dwelling:<font color="red">*</font></label>
-          <select class="form-control" class="float-right" formControlName="dwelling" style="width: 173px">
-            <option value="Tent">Tent</option>
-            <option value="Shack">Shack</option>
-            <option value="Abandoned Structure">Abandoned Structure</option>
-            <option value="Mobile Home">Mobile Home</option>
-            <option value="Motel">Motel</option>
-            <option value="Garage">Garage</option>
-            <option value="Vehicle">Vehicle</option>
-            <option value="Camper">Camper</option>
-            <option value="Under Bridge">Under Bridge</option>
-            <option value="Streets">Streets</option>
-            <option value="House">House</option>
-            <option value="Apartment">Apartment</option>
-          </select>
+        <div class="row">
+          <div class="col-sm-12 col-md-12 col-lg-12">
+            <label>Dwelling:<font color="red">*</font></label>
+            <select class="form-control" class="float-right" formControlName="dwelling" style="width: 173px">
+              <option value="Tent">Tent</option>
+              <option value="Shack">Shack</option>
+              <option value="Abandoned Structure">Abandoned Structure</option>
+              <option value="Mobile Home">Mobile Home</option>
+              <option value="Motel">Motel</option>
+              <option value="Garage">Garage</option>
+              <option value="Vehicle">Vehicle</option>
+              <option value="Camper">Camper</option>
+              <option value="Under Bridge">Under Bridge</option>
+              <option value="Streets">Streets</option>
+              <option value="House">House</option>
+              <option value="Apartment">Apartment</option>
+            </select>
+          </div>
         </div>
-        <div class="col-sm-11 col-md-11 col-lg-11">
-          <label>Status: </label>
-          <select class="form-control" class="float-right" formControlName="status" style="width: 173px">
-            <option value="Active">Active</option>
-            <option value="Inactive">Inactive</option>
-            <option value="Alumni">Alumni</option>
-            <option value="Deceased">Deceased</option>
-          </select>
+        <div class="row">
+          <div class="col-sm-12 col-md-12 col-lg-12">
+            <label>Status: </label>
+            <select class="form-control" class="float-right" formControlName="status" style="width: 173px">
+              <option value="Active">Active</option>
+              <option value="Inactive">Inactive</option>
+              <option value="Alumni">Alumni</option>
+              <option value="Deceased">Deceased</option>
+            </select>
+          </div>
         </div>
-        <div class="col-sm-11 col-md-11 col-lg-11" *ngIf="isAdmin">
-          <label>Admin Notes: </label>
-          <textarea rows=3 class="float-right" style="width: 173px" placeholder="admin notes" formControlName="admin_notes"></textarea>
+        <div class="row" *ngIf="isAdmin">
+          <div class="col-sm-12 col-md-12 col-lg-12">
+            <label>Admin Notes: </label>
+            <textarea rows=3 class="float-right" style="width: 173px" placeholder="admin notes" formControlName="admin_notes"></textarea>
+          </div>
         </div>
       </div>
     </form>
