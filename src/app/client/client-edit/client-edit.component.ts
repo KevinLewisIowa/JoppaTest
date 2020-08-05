@@ -6,6 +6,7 @@ import { Store } from "@ngrx/store";
 import { IMainStore } from "app/state-management/main.store";
 import { Client } from "app/models/client";
 import { Appearance } from 'app/models/appearance';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-client-edit',
@@ -48,6 +49,8 @@ export class ClientEditComponent implements OnInit {
     this.clientForm.get('last_name').setValidators(Validators.required);
     this.clientForm.get('gender').setValidators(Validators.required);
     this.clientForm.get('dwelling').setValidators(Validators.required);
+
+    //this.clientForm.get('birth_date').setValue(new Date());
   }
 
   submitClient() {
