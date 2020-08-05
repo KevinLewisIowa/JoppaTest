@@ -1,3 +1,7 @@
 .apiErrorText {
     overflow-wrap: break-word;
 }
+
+.container-fluid:before, .container-fluid:after {
+    display: inline-block;
+}
