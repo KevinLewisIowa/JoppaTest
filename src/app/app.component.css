@@ -1,3 +1,7 @@
 .apiErrorText {
     overflow-wrap: break-word;
 }
+
+.row:before, .row:after {
+    display: none;
+}
