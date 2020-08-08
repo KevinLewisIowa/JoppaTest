@@ -43,8 +43,13 @@ export class ClientEditModalComponent implements OnInit {
   }
 
   submitClient() {
-    this.clientService.updateClient(this.clientForm.value as Client).subscribe(data => {
-      this.editedClient.emit(this.clientForm.value as Client);
+    let updatedClient: Client = this.clientForm.value;
+    if (updatedClient.status == 'Inactive') {
+      updatedClient.previous_camp_id = updatedClient.current_camp_id;
+      updatedClient.current_camp_id = 0;
+    }
+    this.clientService.updateClient(updatedClient).subscribe(data => {
+      this.editedClient.emit(updatedClient);
     }, error => {
       console.log(error);
       alert('Error creating client.  There may already be a client with the same name.  Please search for the client before continuing.');
