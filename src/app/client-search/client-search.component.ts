@@ -17,7 +17,6 @@ export class ClientSearchComponent implements OnInit, OnDestroy {
   nameSearch = '';
   stateSearch = '';
   noResultsMessage = '';
-  noResultCount = 0;
   citySearch = '';
   businessUnitCode: number = -1;
   resultMessage = '';
@@ -60,10 +59,8 @@ export class ClientSearchComponent implements OnInit, OnDestroy {
       this.clients = results as any[];
       this.resultCount = this.clients.length;
       if (this.clients.length == 0) {
-        this.noResultCount++;
-        this.noResultsMessage = 'No results. ' + this.noResultCount;
+        this.noResultsMessage = 'No results.';
       } else {
-        this.noResultCount = 0;
         this.noResultsMessage = '';
       }
     }, error => {
