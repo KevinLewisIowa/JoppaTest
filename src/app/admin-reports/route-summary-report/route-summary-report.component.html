@@ -8,7 +8,7 @@
         <span>Please select a date and route to see the route summary.</span><br /><br />
         <div class="form-group">
           <label for="routeDate">Route Date:</label>
-          <input type="date" [(ngModel)]="routeDate" name="routeDate" [placeholder]="Date"/>
+          <input type="date" [(ngModel)]="routeDate" name="routeDate"/>
         </div>
         <button *ngFor="let route of routes" type="button" class="btn btn-primary" style="margin:10px 5px;" (click)="loadRouteInstance(route.id)">{{route.name}}</button>&nbsp;
       </div>
