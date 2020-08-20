@@ -24,7 +24,7 @@
 
               <ng-container matColumnDef="date_requested">
                 <mat-header-cell *matHeaderCellDef mat-sort-header>Date Requested</mat-header-cell>
-                <mat-cell *matCellDef="let row">{{row.date_requested}}</mat-cell>
+                <mat-cell *matCellDef="let row">{{row.created_at | date:'shortDate'}}</mat-cell>
               </ng-container>
 
               <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
