@@ -11,7 +11,7 @@ import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
   styleUrls: ['./admin-route-undelivered-items.component.css']
 })
 export class AdminRouteUndeliveredItemsComponent implements OnInit {
-  displayedColumns = ['preferred_name', 'name', 'item_description']
+  displayedColumns = ['preferred_name', 'name', 'item_description', 'date_requested']
   undeliveredItems: any[] = [];
   dataSource: MatTableDataSource<any>;
 
@@ -33,11 +33,6 @@ export class AdminRouteUndeliveredItemsComponent implements OnInit {
   ngOnInit() {
 
   }
-
-  // viewItems(theItems) {
-  //   localStorage.setItem('selectedItem', JSON.stringify(theItems.id));
-  //   this.router.navigate(['/serviceItem']);
-  // }
 
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();

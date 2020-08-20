@@ -22,6 +22,11 @@
                 <mat-cell *matCellDef="let row">{{row.item_description}}</mat-cell>
               </ng-container>
 
+              <ng-container matColumnDef="date_requested">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Date Requested</mat-header-cell>
+                <mat-cell *matCellDef="let row">{{row.date_requested}}</mat-cell>
+              </ng-container>
+
               <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
               <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
             </mat-table>

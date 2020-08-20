@@ -5,11 +5,40 @@
   <div class="panel-body">
     <div class="row">
       <div class="col-lg-12 col-md-12">
-        <span>Please select a route to see last week's summary.</span><br /><br />
+        <span>Please select a date and route to see the route summary.</span><br /><br />
+        <div class="form-group">
+          <label for="routeDate">Route Date:</label>
+          <input type="date" [(ngModel)]="routeDate" name="routeDate" [placeholder]="Date"/>
+        </div>
         <button *ngFor="let route of routes" type="button" class="btn btn-primary" style="margin:10px 5px;" (click)="loadRouteInstance(route.id)">{{route.name}}</button>&nbsp;
       </div>
     </div>
-    <br />    
+    <br />
+    <div class="row">
+      <div class="col-lg-12 col-md-12" *ngIf="routeInstances && routeInstances.length == 0">
+        <span>There were no routes for this day</span>
+      </div>
+      <div class="col-lg-12 col-md-12" *ngIf="routeInstances && routeInstances.length > 0">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Leader Name</th>
+              <th>Heat Route</th>
+              <th>Start Time</th>
+              <th>End Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let instance of routeInstances" (click)="selectRouteInstance(instance.id)">
+              <td>{{instance.leader_name}}</td>
+              <td>{{instance.heat_route}}</td>
+              <td>{{instance.start_time | date:'short'}}</td>
+              <td>{{instance.end_time | date:'short'}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
     <div class="row">
       <div class="col-lg-12 col-md-12" *ngIf="routeInstance">
         <dl>
@@ -19,8 +48,8 @@
           <dt>Start Time</dt><dd>{{routeInstance.start_time | date: 'short'}}</dd>
           <dt>End Time</dt><dd>{{routeInstance.end_time | date: 'short'}}</dd>
           <dt>Heat Route</dt><dd>{{routeInstance.heat_route}}</dd>
-          <dt># Seen</dt><dd>{{routeInstance.seen}}</dd>
-          <dt># Serviced</dt><dd>{{routeInstance.serviced}}</dd>
+          <dt>Number Seen & Service</dt><dd>{{routeInstance.seenandserviced}}</dd>
+          <dt>Number Serviced & Not Seen</dt><dd>{{routeInstance.servicednotseen}}</dd>
         </dl>
       </div>
       <br />

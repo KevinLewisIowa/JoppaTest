@@ -78,13 +78,23 @@ export class MainService {
     }
   }
 
-  getLatestRouteInstanceInfoForRoute(routeId: number) {
+  getRouteInstancesForDate(date: Date, routeId: number) {
     const myHeader = new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': window.localStorage.getItem('apiToken')
     });
 
-    return this.http.get(this.apiUrl + `getLatestRouteInstanceInfoForRoute?routeId=${routeId}`)
+    return this.http.get(this.apiUrl + `getRouteInstancesForDate?date=${date}&routeId=${routeId}`)
+      .map(response => response as RouteInstance).catch(err => this.handleError(err));
+  }
+
+  getLatestRouteInstanceInfoForRoute(routeInstanceId: number) {
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.localStorage.getItem('apiToken')
+    });
+
+    return this.http.get(this.apiUrl + `getRouteSummaryInfoForRoute?routeInstanceId=${routeInstanceId}`)
       .map(response => response as RouteInstance).catch(err => this.handleError(err));
   }
 

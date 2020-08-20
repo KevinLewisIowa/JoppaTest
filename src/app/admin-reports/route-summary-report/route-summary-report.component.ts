@@ -15,7 +15,8 @@ export class RouteSummaryReportComponent implements OnInit {
   routeInstance: RouteInstance;
   notes: any[];
   backIcon = faChevronLeft;
-
+  routeDate: Date;
+  routeInstances: RouteInstance[];
 
   constructor(private mainService: MainService, private router: Router) { }
 
@@ -26,12 +27,28 @@ export class RouteSummaryReportComponent implements OnInit {
   }
 
   loadRouteInstance(routeId: number) {
+    this.routeInstances = undefined;
     this.routeInstance = undefined;
     this.notes = undefined;
-    this.mainService.getLatestRouteInstanceInfoForRoute(routeId).subscribe(routeInstance => {
+    if (this.routeDate) {
+      this.mainService.getRouteInstancesForDate(this.routeDate, routeId).subscribe(data => {
+        // Select route instance from data list
+        this.routeInstances = data;
+      }, error => console.log(error)); 
+    }
+    else {
+      alert('Please enter a date.');
+      return;
+    }
+  }
+
+  selectRouteInstance(routeInstanceId: number) {
+    this.routeInstance = undefined;
+    this.notes = undefined;
+    this.mainService.getLatestRouteInstanceInfoForRoute(routeInstanceId).subscribe(routeInstance => {
       if (routeInstance[0] !== undefined) {
         this.routeInstance = routeInstance[0];
-      
+        
         this.mainService.getNotesForRouteInstance(this.routeInstance.id).subscribe(routeNotes => {
           this.notes = routeNotes;
         }, error => console.log(error));

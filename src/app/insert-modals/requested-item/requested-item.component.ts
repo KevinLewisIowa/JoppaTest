@@ -68,6 +68,7 @@ export class RequestedItemComponent implements OnInit {
 
         item.item_description = itemDescription;
         item.client_id = Number(clientId);
+        item.date_requested = new Date();
         this.service.insertRequestedItem(item).subscribe((data: RequestedItem) => {
           if (data != null && data.id != null) {
             this.requestedItemAdded.emit(data);
