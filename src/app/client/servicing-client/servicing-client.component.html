@@ -138,7 +138,7 @@
           </table>
         </div>
       </div>
-      <div *ngIf="receivedItems.length > 0 || !heatRoute" class="col-lg-12 col-md-12">
+      <div *ngIf="receivedItems.length > 0 && !heatRoute" class="col-lg-12 col-md-12">
         <!-- added !heatRoute from ngIf to pare down heat screen -->
         <h4>Recently Received Items</h4>
         <table class="table" id="items">
