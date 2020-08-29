@@ -10,4 +10,5 @@ export class LocationCamp {
     notes: string = undefined;
     longitude: number = undefined;
     latitude: number = undefined;
+    expected_arrival_time: string = undefined;
 }
