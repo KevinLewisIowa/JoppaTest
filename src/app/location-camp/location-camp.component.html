@@ -2,6 +2,7 @@
   <div class="card-header text-center">
     <h2 align="left">{{route.name}} -> {{locationCamp.name}}</h2>
     <h5 align="left">{{locationCamp.notes}}</h5>
+    <h5 align="left">Expected arrival time: {{locationCamp.expected_arrival_time}}</h5>
     <p align="left" *ngIf="heatRoute">
       <b>Number of People with Tanks: {{numPeopleWithTanksAtCamp}}</b><br/>
       <b>Total Tanks: {{numberTanksAtCamp}}</b>
