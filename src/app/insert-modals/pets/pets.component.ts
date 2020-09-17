@@ -13,8 +13,10 @@ export class PetsComponent implements OnInit {
   @Output() petAdded = new EventEmitter<ClientPet>();
   pet_type: string;
   quantity: number;
+  placeholderText: string = '';
   food_requested: boolean = true;
-
+  extraInfoNeeded: boolean = false;
+  species: string;
   constructor(private modalService: NgbModal, private service: ClientService) { }
 
   ngOnInit() {
@@ -24,11 +26,34 @@ export class PetsComponent implements OnInit {
     this.modalService.open(this.petsMdl, {size: 'lg', backdrop: 'static'});
   }
 
+  onChange(selectedPet: string) {
+    switch (true) {
+      case selectedPet === 'Dog':
+        this.extraInfoNeeded = false;
+        break;
+        case selectedPet === 'Cat':
+          this.extraInfoNeeded = false;
+          break;
+      case selectedPet === 'Other':
+        this.placeholderText = 'Type'
+        this.extraInfoNeeded = true;
+        break;
+      default:
+        this.extraInfoNeeded = false;
+        break;
+    }
+  }
+
   submitPet() {
     const pet = new ClientPet();
     const clientId = JSON.parse(localStorage.getItem('selectedClient'));
+    console.log(this.extraInfoNeeded);
     if (this.pet_type != null && !isNaN(clientId) && !isNaN(this.quantity) && this.quantity > 0) {
+      if (this.extraInfoNeeded && (this.species === null || this.species === '')) {
+        alert('Need to enter species of pet');
+      } else {
       pet.pet_type = this.pet_type;
+      pet.species = this.species;
       pet.client_id = clientId;
       pet.quantity = this.quantity;
       pet.food_requested = this.food_requested;
@@ -37,6 +62,7 @@ export class PetsComponent implements OnInit {
           this.petAdded.emit(data);
         }
       }, error => console.log(error));
+      }
     }
   }
 

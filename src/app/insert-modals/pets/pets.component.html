@@ -8,11 +8,15 @@
       <div class="form-group">
         <div class="row">
           <div class="col-sm-4">
-              <select class="form-control" name="pet_type" [(ngModel)]="pet_type">
+              <select class="form-control" name="pet_type" [(ngModel)]="pet_type" #item (change)="onChange(item.value)">
                   <option value="Dog">Dog</option>
                   <option value="Cat">Cat</option>
+                  <option value="Other">Other</option>"
                 </select>
           </div>
+          <div class="col-sm-4">
+            <input id="extraInfo" class="form-control" style="float:inherit;" type="text" [(ngModel)]="species" name="extraInfo" *ngIf="extraInfoNeeded" [placeholder]="placeholderText"/>
+         </div>
           <div class="col-sm-4">
             <input class="form-control" type="text" [(ngModel)]="quantity" placeholder="Quantity" name="quantity"/>
           </div>
