@@ -9,13 +9,13 @@
         <div class="row">
           <div class="col-sm-3">
               <select class="form-control" name="pet_type" [(ngModel)]="pet_type" #item (change)="onChange(item.value)">
-                  <option value="Dog">Dog</option>
-                  <option value="Cat">Cat</option>
-                  <option value="Other">Other</option>"
+                  <option>Dog</option>
+                  <option>Cat</option>
+                  <option>Other</option>
                 </select>
           </div>
           <div class="col-sm-3">
-            <input class="form-control" type="text" [(ngModel)]="species" name="species" *ngIf="extraInfoNeeded" placeholder="Species"/>
+            <input class="form-control" type="text" [(ngModel)]="extraInfo" name="extraInfo" *ngIf="extraInfoNeeded" placeholder="Species" required/>
          </div>
           <div class="col-sm-3">
             <input class="form-control" type="text" [(ngModel)]="quantity" placeholder="Quantity" name="quantity"/>
