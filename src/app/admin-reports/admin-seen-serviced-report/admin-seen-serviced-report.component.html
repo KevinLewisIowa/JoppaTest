@@ -23,7 +23,7 @@
         <tr *ngFor="let record of seenServicedRecords">
           <td>{{record.name}}</td>
           <td>{{record.client_id}}</td>
-          <td>{{record.preferred_name}}</td>
+          <td>{{record.first_name}} <span *ngIf="record.preferred_name != '' && record.preferred_name != null">({{record.preferred_name}})</span> {{record.last_name}}</td>
           <td>{{record.was_seen}}</td>
           <td>{{record.serviced}}</td>
           <td>{{record.created_at | date:'short'}}</td>
