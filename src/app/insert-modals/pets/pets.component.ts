@@ -13,10 +13,10 @@ export class PetsComponent implements OnInit {
   @Output() petAdded = new EventEmitter<ClientPet>();
   pet_type: string;
   quantity: number;
+  extraInfo: string;
   placeholderText: string = '';
   food_requested: boolean = true;
   extraInfoNeeded: boolean = false;
-  species: string = '';
   constructor(private modalService: NgbModal, private service: ClientService) { }
 
   ngOnInit() {
@@ -47,12 +47,15 @@ export class PetsComponent implements OnInit {
     const pet = new ClientPet();
     const clientId = JSON.parse(localStorage.getItem('selectedClient'));
     if (this.pet_type != null && !isNaN(clientId) && !isNaN(this.quantity) && this.quantity > 0) {
-      pet.pet_type = this.pet_type;
-      pet.species = this.species;
+      if (this.extraInfoNeeded){
+        pet.pet_type = this.extraInfo;
+      } else {
+        pet.pet_type = this.pet_type;
+      }
       pet.client_id = clientId;
       pet.quantity = this.quantity;
       pet.food_requested = this.food_requested;
-      if (this.extraInfoNeeded && (pet.species === '' || pet.species === null)) {
+      if (this.extraInfoNeeded && (pet.pet_type === '' || pet.pet_type === null)) {
         alert('Need to enter species of pet');
       }
       this.service.insertPet(pet).subscribe((data: ClientPet) => {
@@ -60,7 +63,6 @@ export class PetsComponent implements OnInit {
           this.petAdded.emit(data);
         }
       }, error => console.log(error));
-      console.log(pet.species);
     }
   }
 

@@ -360,12 +360,10 @@
             <col span="1" style="width: 20%;">
             <col span="1" style="width: 20%;">
             <col span="1" style="width: 20%;">
-            <col span="1" style="width: 20%;">
           </colgroup>
           <thead>
             <tr>
               <th>Pet Type</th>
-              <th>Species (if other)</th>
               <th>Quantity</th>
               <th>Food Requested</th>
               <th></th>
@@ -375,9 +373,6 @@
             <tr *ngFor="let pet of pets">
               <td>
                 {{pet.pet_type}}
-              </td>
-              <td>
-                {{pet.species}}
               </td>
               <td>
                 {{pet.quantity}}
