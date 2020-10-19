@@ -71,4 +71,8 @@ export class AdminReportsComponent implements OnInit {
     this.router.navigate([`/admin/reports/birthdayMonthsReport`]);
   }
 
+  openFirstTimeHomelessnessReport() {
+    this.router.navigate([`/admin/reports/firstTimeHomelessnessReport`]);
+  }
+
 }

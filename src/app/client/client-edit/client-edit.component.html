@@ -60,6 +60,31 @@
         </div>
         <div class="row">
           <div class="col-sm-12 col-md-12 col-lg-12">
+            <input type="checkbox" class="float-right" formControlName="first_time_homeless" />
+            <label>First Time Homeless:<font color="red">*</font> </label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12 col-md-12 col-lg-12">
+            <label>Date Became Homeless (Date must be MM/DD/YYYY):<font color="red">*</font> </label>
+            <input type="date" class="float-right form-control" placeholder="mm/dd/yyyy" formControlName="date_became_homeless" style="width: 173px; min-height:1em;"/>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12 col-md-12 col-lg-12">
+            <label>Reason for Homelessness:<font color="red">*</font> </label>
+            <select class="form-control" class="float-right" #item formControlName="homeless_reason" style="width: 173px;" (change)="onChange(item.value)">
+              <option *ngFor="let option of homelessReasonOptions" [value]="option">{{option}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12 col-md-12 col-lg-12">
+            <input type="text" class="float-right" placeholder="Reason" [(ngModel)]="otherHomelessReason" [ngModelOptions]="{standalone: true}" *ngIf="extraInfoNeeded" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12 col-md-12 col-lg-12">
             <label>Is Veteran: </label>
             <input type="checkbox" class="float-right" formControlName="is_veteran" />
           </div>

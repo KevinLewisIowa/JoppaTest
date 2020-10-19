@@ -10,10 +10,10 @@ import { CreateLocationCampComponent } from './create-location-camp/create-locat
 import { LocationCampComponent } from "app/location-camp/location-camp.component";
 import { ServicingClientComponent } from "app/client/servicing-client/servicing-client.component";
 import { AdminHomeComponent } from 'app/admin-home/admin-home.component';
-import { AdminRouteMealsComponent } from './admin-route-meals/admin-route-meals.component';
-import { AdminRouteUndeliveredItemsComponent } from './admin-route-undelivered-items/admin-route-undelivered-items.component';
-import { AdminRouteUnfulfilledGoalsNextStepsComponent } from './admin-route-unfulfilled-goals-next-steps/admin-route-unfulfilled-goals-next-steps.component';
-import { AdminRouteUnfulfilledPrayerRequestsNeedsComponent } from './admin-route-unfulfilled-prayer-requests-needs/admin-route-unfulfilled-prayer-requests-needs.component';
+import { AdminRouteMealsComponent } from './admin-reports/admin-route-meals/admin-route-meals.component';
+import { AdminRouteUndeliveredItemsComponent } from './admin-reports/admin-route-undelivered-items/admin-route-undelivered-items.component';
+import { AdminRouteUnfulfilledGoalsNextStepsComponent } from './admin-reports/admin-route-unfulfilled-goals-next-steps/admin-route-unfulfilled-goals-next-steps.component';
+import { AdminRouteUnfulfilledPrayerRequestsNeedsComponent } from './admin-reports/admin-route-unfulfilled-prayer-requests-needs/admin-route-unfulfilled-prayer-requests-needs.component';
 import { CreateHeatingUnitComponent } from './create-heating-unit/create-heating-unit.component';
 import { AdminHeaterListingComponent } from './admin-heater-listing/admin-heater-listing.component';
 import { LeaderSignInComponent } from './leader-sign-in/leader-sign-in.component';
@@ -34,6 +34,7 @@ import { AdminClientListingComponent } from './admin-client-listing/admin-client
 import { BirthdayMonthsReportComponent } from './admin-reports/birthday-months-report/birthday-months-report.component';
 import { AdminOverallAttendanceComponent } from './admin-overall-attendance/admin-overall-attendance.component';
 import { InventoryReportComponent } from './admin-reports/inventory-report/inventory-report.component';
+import { FirstTimeHomelessnessReportComponent } from './admin-reports/first-time-homelessness-report/first-time-homelessness-report.component';
 
 const routes: Routes = [
   { path: 'routes', canActivate: [IsLoggedInGuard], component: RoutesComponent },
@@ -59,6 +60,7 @@ const routes: Routes = [
   { path: 'admin/reports/heatEquipmentPerRouteReport', canActivate: [IsLoggedInGuard, IsAdminGuard], component: HeatEquipmentPerRouteReportComponent},
   { path: 'admin/reports/seenServicedReport', canActivate: [IsLoggedInGuard, IsAdminGuard], component: AdminSeenServicedReportComponent},
   { path: 'admin/reports/birthdayMonthsReport', canActivate: [IsLoggedInGuard, IsAdminGuard], component: BirthdayMonthsReportComponent},
+  { path: 'admin/reports/firstTimeHomelessnessReport', canActivate: [IsLoggedInGuard, IsAdminGuard], component: FirstTimeHomelessnessReportComponent},
   { path: 'admin/checkInAllHeaters', canActivate: [IsLoggedInGuard, IsAdminGuard], component: AdminCheckInComponent},
   { path: 'admin/clientListing', canActivate: [IsLoggedInGuard, IsAdminGuard], component: AdminClientListingComponent},
   { path: 'locationCampNew', canActivate: [IsLoggedInGuard], component: CreateLocationCampComponent },

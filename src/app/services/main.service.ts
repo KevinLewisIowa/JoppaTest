@@ -551,6 +551,21 @@ export class MainService {
     }).catch(error => this.handleError(error));
   }
 
+  getFirstTimeHomelessnessReport() {
+    const myHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': window.localStorage.getItem('apiToken')
+    });
+    return this.http.get(this.apiUrl + `getFirstTimeHomelessnessReport`, {headers: myHeader})
+    .map((res: any) => {
+      if (res.message === 'invalid-token') {
+        window.localStorage.removeItem('apiToken');
+        this.router.navigate(['/application-login']);
+      }
+      return res;
+    }).catch(error => this.handleError(error));
+  }
+
   getClientAttendanceHistory(clientId: number, fromDate : string, toDate : string) {
     const myHeader = new HttpHeaders({
       'Content-Type': 'application/json',

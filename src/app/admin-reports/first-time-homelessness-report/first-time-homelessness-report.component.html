@@ -1,0 +1,32 @@
+<div class="card text-center" style="opacity:0.93">
+  <div class="card-header">
+    <h2>First Time Homelessness Report</h2>
+  </div>
+  <div class="panel-body">
+      <table class="table" id="reportList">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Birth Date</th>
+              <th>Phone</th>
+              <th>First Time Homeless</th>
+              <th>Date Became Homeless</th>
+              <th>Reason for Being Homeless</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let client of clients">
+              <td>{{client.first_name}} <span *ngIf="client.preferred_name != '' && client.preferred_name != null">({{client.preferred_name}})</span> {{client.last_name}}</td>
+              <td>{{client.birth_date}}</td>
+              <td>{{client.phone}}</td>
+              <td>{{client.first_time_homeless}}</td>
+              <td>{{client.date_became_homeless}}</td>
+              <td>{{client.homeless_reason}}</td>
+            </tr>
+          </tbody>
+        </table>
+  </div>
+  <div class="card-footer">
+    <button routerLink="/admin/reports" class="btn btn-primary" style="float: left"><fa-icon [icon]="backIcon"></fa-icon> Back</button>
+  </div>
+</div>

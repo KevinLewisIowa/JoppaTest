@@ -44,10 +44,10 @@ import { ClientLikeComponent } from './insert-modals/client-like/client-like.com
 import { ClientDislikeComponent } from './insert-modals/client-dislike/client-dislike.component';
 import { GoalsStepsComponent } from './insert-modals/goals-steps/goals-steps.component';
 import { AdminHomeComponent } from './admin-home/admin-home.component';
-import { AdminRouteMealsComponent } from './admin-route-meals/admin-route-meals.component';
-import { AdminRouteUndeliveredItemsComponent } from './admin-route-undelivered-items/admin-route-undelivered-items.component';
-import { AdminRouteUnfulfilledGoalsNextStepsComponent } from './admin-route-unfulfilled-goals-next-steps/admin-route-unfulfilled-goals-next-steps.component';
-import { AdminRouteUnfulfilledPrayerRequestsNeedsComponent } from './admin-route-unfulfilled-prayer-requests-needs/admin-route-unfulfilled-prayer-requests-needs.component';
+import { AdminRouteMealsComponent } from './admin-reports/admin-route-meals/admin-route-meals.component';
+import { AdminRouteUndeliveredItemsComponent } from './admin-reports/admin-route-undelivered-items/admin-route-undelivered-items.component';
+import { AdminRouteUnfulfilledGoalsNextStepsComponent } from './admin-reports/admin-route-unfulfilled-goals-next-steps/admin-route-unfulfilled-goals-next-steps.component';
+import { AdminRouteUnfulfilledPrayerRequestsNeedsComponent } from './admin-reports/admin-route-unfulfilled-prayer-requests-needs/admin-route-unfulfilled-prayer-requests-needs.component';
 import { ClientEditModalComponent } from './client/client-edit-modal/client-edit-modal.component';
 import { CampEditModalComponent } from './location-camp/camp-edit-modal/camp-edit-modal.component';
 import { CreateHeatingUnitComponent } from './create-heating-unit/create-heating-unit.component';
@@ -58,7 +58,7 @@ import { CheckoutHeatersComponent } from './checkout-heaters/checkout-heaters.co
 import { VolunteerInfoComponent } from './volunteer-info/volunteer-info.component';
 import { AdminReportsComponent } from './admin-reports/admin-reports.component';
 import { NewClientsReportComponent } from './admin-reports/new-clients-report/new-clients-report.component';
-import { ClientLocationModalComponent } from './admin-reports/new-clients-report/client-location-modal/client-location-modal.component';
+import { ClientLocationModalComponent } from './client-location-modal/client-location-modal.component';
 import { AdminLoginComponent } from './admin-login/admin-login.component';
 import { MainLoginComponent } from './main-login/main-login.component';
 import { RouteMapComponent } from './route-map/route-map.component';
@@ -74,6 +74,7 @@ import { BirthdayMonthsReportComponent } from './admin-reports/birthday-months-r
 import { AdminOverallAttendanceComponent } from './admin-overall-attendance/admin-overall-attendance.component';
 import { InventoryReportComponent } from './admin-reports/inventory-report/inventory-report.component';
 import { PrayerRequestsAndNeedsComponent } from './insert-modals/prayer-requests-and-needs/prayer-requests-and-needs.component';
+import { FirstTimeHomelessnessReportComponent } from './admin-reports/first-time-homelessness-report/first-time-homelessness-report.component';
 
 const reducers = {
   user: MainReducer,
@@ -132,6 +133,7 @@ const reducers = {
     AdminOverallAttendanceComponent,
     InventoryReportComponent,
     PrayerRequestsAndNeedsComponent,
+    FirstTimeHomelessnessReportComponent,
   ],
   imports: [
     BrowserModule,

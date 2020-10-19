@@ -1,5 +1,3 @@
-import { AdminRouteUndeliveredItemsComponent } from "../admin-route-undelivered-items/admin-route-undelivered-items.component";
-
 export class Heater {
     id: number = undefined;
     heater_type_id: number = undefined;

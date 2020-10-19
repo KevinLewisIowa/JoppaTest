@@ -19,12 +19,17 @@ export class ClientEditComponent implements OnInit {
   regExpDate = /^\d{2}\/\d{2}\/\d{4}$/
   theClient: Client;
   isAdmin: boolean;
+  otherHomelessReason: string;
+  homelessReasonOptions: string[] = ['Eviction', 'Job Loss', 'Family Dispute', 'Legal Issues', 'Health Issues', 'Addictions', 'Mental Health Issues', 'Other'];
+  extraInfoNeeded: boolean = false;
+  locationCampId: number;
 
   constructor(private router: Router, private clientService: ClientService,
               private fb: FormBuilder) { }
 
   ngOnInit() {
     this.isAdmin = JSON.parse(window.localStorage.getItem('isAdmin'));
+    this.locationCampId = JSON.parse(window.localStorage.getItem('locationCampId'))
     this.theClient = new Client();
     this.clientForm = this.fb.group({
       birth_date: '',
@@ -43,25 +48,36 @@ export class ClientEditComponent implements OnInit {
       joppa_apartment_number: '',
       dwelling: 'Tent',
       gender: '',
-      admin_notes: ''
+      admin_notes: '',
+      homeless_reason: '',
+      first_time_homeless: false,
+      date_became_homeless: ''
     });
     this.clientForm.get('first_name').setValidators(Validators.required);
     this.clientForm.get('last_name').setValidators(Validators.required);
     this.clientForm.get('gender').setValidators(Validators.required);
     this.clientForm.get('dwelling').setValidators(Validators.required);
+    this.clientForm.get('first_time_homeless').setValidators(Validators.required);
+    this.clientForm.get('date_became_homeless').setValidators(Validators.required);
+    this.clientForm.get('homeless_reason').setValidators(Validators.required);
 
     //this.clientForm.get('birth_date').setValue(new Date());
   }
 
+  onChange(value: string) {
+    if (value == 'Other') {
+      this.extraInfoNeeded = true;
+    }
+   }
+
   submitClient() {
-    const locationCampId = JSON.parse(window.localStorage.getItem('locationCampId'));
     this.theClient.first_name = String(this.clientForm.get('first_name').value).trim();
     this.theClient.last_name = String(this.clientForm.get('last_name').value).trim();
     this.theClient.preferred_name = String(this.clientForm.get('preferred_name').value).trim();
     this.theClient.birth_date = new Date(Date.parse(this.clientForm.get('birth_date').value));
     this.theClient.is_aftercare = this.clientForm.get('is_aftercare').value;
     this.theClient.is_veteran = this.clientForm.get('is_veteran').value;
-    this.theClient.current_camp_id = locationCampId;
+    this.theClient.current_camp_id = this.locationCampId;
     this.theClient.previous_camp_id = null;
     this.theClient.shoe_size = String(this.clientForm.get('shoe_size').value).trim();
     this.theClient.boot_size = String(this.clientForm.get('boot_size').value).trim();
@@ -73,15 +89,30 @@ export class ClientEditComponent implements OnInit {
     this.theClient.dwelling = this.clientForm.get('dwelling').value;
     this.theClient.gender = this.clientForm.get('gender').value;
     this.theClient.admin_notes = String(this.clientForm.get('admin_notes').value).trim();
-    this.clientService.insertClient(this.theClient).subscribe((data: Client) => {
+    this.theClient.first_time_homeless = this.clientForm.get('first_time_homeless').value;
+    this.theClient.date_became_homeless = new Date(Date.parse(this.clientForm.get('date_became_homeless').value));
+    let homelessReason = String(this.clientForm.get('homeless_reason').value.trim());
+    if (homelessReason == 'Other' && this.otherHomelessReason != '') {
+      homelessReason = this.otherHomelessReason;
+    }
+    else if (homelessReason == 'Other' && this.otherHomelessReason == '') {
+      alert('If you select Other as Homeless Reason, need to indicate reason.');
+      return;
+    }
+    this.theClient.homeless_reason = homelessReason;
+    this.clientService.insertClient(this.theClient).subscribe((insertedClient: Client) => {
       const clientInteraction: Appearance = new Appearance();
-      clientInteraction.client_id = data.id;
-      clientInteraction.location_camp_id = JSON.parse(locationCampId);
+      clientInteraction.client_id = insertedClient.id;
+      clientInteraction.location_camp_id = this.locationCampId;
       clientInteraction.still_lives_here = true;
 
       this.clientService.insertClientAppearance(clientInteraction).subscribe(data => {
-        this.router.navigate([`/locationCamp/${locationCampId}`]);
-      });      
+        insertedClient.household_id = insertedClient.id;
+        this.clientService.updateClient(insertedClient).subscribe(updatedClient => {
+          console.log(JSON.stringify(updatedClient));
+          this.router.navigate([`/locationCamp/${this.locationCampId}`]);
+        }, error => console.log(error));
+      }, error => console.log(error));      
     }, error => {
       console.log(error);
       alert('Error creating client.  There may already be a client with the same name.  Please search for the client before continuing.');
@@ -89,7 +120,6 @@ export class ClientEditComponent implements OnInit {
   }
 
   close() {
-    const locationCampId = JSON.parse(window.localStorage.getItem('locationCampId'));
-    this.router.navigate([`/locationCamp/${locationCampId}`]);
+    this.router.navigate([`/locationCamp/${this.locationCampId}`]);
   }
 }

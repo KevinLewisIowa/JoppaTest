@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { MainService } from '../services/main.service';
+import { MainService } from '../../services/main.service';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 
 @Component({

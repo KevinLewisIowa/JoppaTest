@@ -96,8 +96,8 @@ export class ServicingClientComponent implements OnInit {
       this.service.getClientById(this.clientId).subscribe((data: Client) => {
         this.client = data;
         
-        if (this.client.birth_date == null) {
-          alert('Please ask this client for their birthday');
+        if (this.client.homeless_reason == '' || this.client.date_became_homeless == null) {
+          alert('Please ask this client for why they are homeless and when they became homeless.');
         }
 
         this.service.getClientHousehold(this.client.household_id).subscribe((data: Client[]) => {

@@ -24,4 +24,7 @@ export class Client {
     number_tanks: number = undefined;
     number_hoses: number = undefined;
     household_id: number = undefined;
+    first_time_homeless: boolean = false;
+    date_became_homeless: Date = undefined;
+    homeless_reason: string = undefined;
 }

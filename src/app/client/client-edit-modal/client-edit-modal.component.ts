@@ -19,8 +19,12 @@ export class ClientEditModalComponent implements OnInit {
   clientForm: FormGroup;
   regExpDate = /^\d{2}\/\d{2}\/\d{4}$/
   theClient: Client;
+  otherHomelessReason: string;
   editing = false;
   isAdmin: boolean;
+  extraInfo: string = '';
+  extraInfoNeeded: boolean = false;
+  homelessReasonOptions: string[] = ['Eviction', 'Job Loss', 'Family Dispute', 'Legal Issues', 'Health Issues', 'Addictions', 'Mental Health Issues', 'Other'];
 
   constructor(private router: Router, private modalService: NgbModal, private clientService: ClientService,
               private fb: FormBuilder, private store: Store<IMainStore>) { }
@@ -31,8 +35,17 @@ export class ClientEditModalComponent implements OnInit {
     this.isAdmin = JSON.parse(window.localStorage.getItem('isAdmin'));
   }
 
+  onChange(value: string) {
+    if (value == 'Other') {
+      this.extraInfoNeeded = true;
+    }
+  }
+
   openModal(client: Client) {
     this.theClient = client;
+    if (!this.homelessReasonOptions.includes(client.homeless_reason)) {
+      this.homelessReasonOptions.push(client.homeless_reason);
+    }
     this.clientForm = null;
     this.clientForm = this.fb.group(this.theClient);
     this.modalService.open(this.editModal, { size: 'lg', backdrop: 'static'});
@@ -48,6 +61,14 @@ export class ClientEditModalComponent implements OnInit {
       updatedClient.previous_camp_id = updatedClient.current_camp_id;
       updatedClient.current_camp_id = 0;
     }
+    if (updatedClient.homeless_reason == 'Other' && this.otherHomelessReason != '') {
+      updatedClient.homeless_reason = this.otherHomelessReason;
+    }
+    else if (updatedClient.homeless_reason == 'Other' && this.otherHomelessReason == '') {
+      alert('If you select Other as Homeless Reason, need to indicate reason.');
+      return;
+    }
+
     this.clientService.updateClient(updatedClient).subscribe(data => {
       this.editedClient.emit(updatedClient);
     }, error => {
