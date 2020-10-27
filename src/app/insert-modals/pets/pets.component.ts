@@ -47,17 +47,17 @@ export class PetsComponent implements OnInit {
     const pet = new ClientPet();
     const clientId = JSON.parse(localStorage.getItem('selectedClient'));
     if (this.pet_type != null && !isNaN(clientId) && !isNaN(this.quantity) && this.quantity > 0) {
-      if (this.extraInfoNeeded){
-        pet.pet_type = this.extraInfo;
+      if (this.extraInfoNeeded && (this.extraInfo === '' || this.extraInfo === null)){ 
+          alert('Need to enter species of pet');
+        } else {
+          pet.pet_type = this.extraInfo;
+        }
       } else {
         pet.pet_type = this.pet_type;
       }
       pet.client_id = clientId;
       pet.quantity = this.quantity;
       pet.food_requested = this.food_requested;
-      if (this.extraInfoNeeded && (pet.pet_type === '' || pet.pet_type === null)) {
-        alert('Need to enter species of pet');
-      }
       this.service.insertPet(pet).subscribe((data: ClientPet) => {
         if (data != null && data.id != null) {
           this.petAdded.emit(data);
