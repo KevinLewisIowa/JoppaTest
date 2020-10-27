@@ -29,7 +29,6 @@ import { AppRoutingModule } from './app-routing.module';
 
 import { MainService } from './services/main.service';
 import { ClientService } from './services/client.service';
-import { LocationDetailComponent } from './location-detail/location-detail.component';
 import { LocationClientsComponent } from './location-clients/location-clients.component';
 import { ClientComponent } from './client/client.component';
 import { ClientEditComponent } from './client/client-edit/client-edit.component';
@@ -51,7 +50,6 @@ import { AdminRouteUnfulfilledGoalsNextStepsComponent } from './admin-route-unfu
 import { AdminRouteUnfulfilledPrayerRequestsNeedsComponent } from './admin-route-unfulfilled-prayer-requests-needs/admin-route-unfulfilled-prayer-requests-needs.component';
 import { ClientEditModalComponent } from './client/client-edit-modal/client-edit-modal.component';
 import { CampEditModalComponent } from './location-camp/camp-edit-modal/camp-edit-modal.component';
-import { LocationEditModalComponent } from './location-detail/location-edit-modal/location-edit-modal.component';
 import { CreateHeatingUnitComponent } from './create-heating-unit/create-heating-unit.component';
 import { AdminHeaterListingComponent } from './admin-heater-listing/admin-heater-listing.component';
 import { LoanHeaterModalComponent } from './insert-modals/loan-heater-modal/loan-heater-modal.component';
@@ -89,7 +87,6 @@ const reducers = {
     FooterComponent,
     RoutesComponent,
     LocationsComponent,
-    LocationDetailComponent,
     LocationClientsComponent,
     ClientComponent,
     ClientEditComponent,
@@ -111,7 +108,6 @@ const reducers = {
     AdminRouteUnfulfilledPrayerRequestsNeedsComponent,
     ClientEditModalComponent,
     CampEditModalComponent,
-    LocationEditModalComponent,
     CreateHeatingUnitComponent,
     AdminHeaterListingComponent,
     LoanHeaterModalComponent,

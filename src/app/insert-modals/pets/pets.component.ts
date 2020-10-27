@@ -9,6 +9,7 @@ import { ClientService } from 'app/services/client.service';
   styleUrls: ['./pets.component.css']
 })
 export class PetsComponent implements OnInit {
+
   @ViewChild('petsMdl') petsMdl: ElementRef
   @Output() petAdded = new EventEmitter<ClientPet>();
   pet_type: string;
@@ -65,5 +66,3 @@ export class PetsComponent implements OnInit {
       }, error => console.log(error));
     }
   }
-
-}
