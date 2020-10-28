@@ -462,7 +462,7 @@ export class ClientService {
       'Authorization': window.localStorage.getItem('apiToken')
     });
     return this.http.delete(this.baseUrl + `client_dislikes/${id}`, {headers: myHeader}).map((res: any) => {
-      if (res.message === 'invalid-token') {
+      if (res != null && res.message === 'invalid-token') {
         window.localStorage.removeItem('apiToken');
         this.router.navigate(['/application-login']);
       }
