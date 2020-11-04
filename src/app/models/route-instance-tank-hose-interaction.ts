@@ -1,6 +1,8 @@
 export class RouteInstanceTankHoseInteraction {
     id: number = undefined;
     route_instance_id: number = undefined;
+    number_heaters_out: number = undefined;
+    number_heaters_in: boolean = undefined;
     number_hoses_out: number = undefined;
     number_hoses_in: boolean = undefined;
     number_tanks_out: number = undefined;

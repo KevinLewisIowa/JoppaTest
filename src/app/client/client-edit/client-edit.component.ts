@@ -57,9 +57,11 @@ export class ClientEditComponent implements OnInit {
     this.clientForm.get('last_name').setValidators(Validators.required);
     this.clientForm.get('gender').setValidators(Validators.required);
     this.clientForm.get('dwelling').setValidators(Validators.required);
-    this.clientForm.get('first_time_homeless').setValidators(Validators.required);
-    this.clientForm.get('date_became_homeless').setValidators(Validators.required);
-    this.clientForm.get('homeless_reason').setValidators(Validators.required);
+    if (!this.isAdmin) {
+      this.clientForm.get('first_time_homeless').setValidators(Validators.required);
+      this.clientForm.get('date_became_homeless').setValidators(Validators.required);
+      this.clientForm.get('homeless_reason').setValidators(Validators.required);
+    }
 
     //this.clientForm.get('birth_date').setValue(new Date());
   }

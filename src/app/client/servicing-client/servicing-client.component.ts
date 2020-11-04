@@ -152,6 +152,7 @@ export class ServicingClientComponent implements OnInit {
         this.service.getHeatEquipmentNotReturned(this.clientId).subscribe((data: any[]) => {
           this.heatEquipmentNotReturned = data;
         }, error => console.log(error));
+        this.getHeaterStatuses();
         this.mainService.getClientAttendanceHistory(this.clientId, this.pipe.transform(this.attendanceFromDate, 'yyyy-MM-dd'), this.pipe.transform(this.attendanceToDate, 'yyyy-MM-dd')).subscribe((data: any[]) => {
           this.clientInteractions = data;
         }, error => console.log(error));
@@ -234,7 +235,7 @@ export class ServicingClientComponent implements OnInit {
     this.service.updateHeaterClient(this.client.id, heaterId, statusId).subscribe(response => {
       this.service.getHeatersForClient(this.client.id).subscribe((data: any[]) => {
         this.heaters = data;
-      });
+      }, error => console.log(error));
       this.service.getHeatEquipmentNotReturned(this.clientId).subscribe((data1: any[]) => {
         this.heatEquipmentNotReturned = data1;
       });
@@ -477,6 +478,22 @@ export class ServicingClientComponent implements OnInit {
         this.receivedItems = data;
       });
     });
+  }
+
+  loanHeater() {
+    if (this.clientId != null) {
+      let newHeater: Heater = new Heater();
+      newHeater.serial_number = "Heater";
+      newHeater.heater_type_id = 1;
+      newHeater.heater_status_id = 2;
+      newHeater.is_active = true;
+
+      this.mainService.insertHeater(newHeater).subscribe((response:Heater) => {
+        this.updateHeaterEntry(response.id, 2);
+        this.getHeaterStatuses();
+      }, error => console.log(error));
+      
+    }
   }
 
   loanTank() {
