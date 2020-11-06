@@ -100,9 +100,9 @@ export class ServicingClientComponent implements OnInit {
         
         if (this.client.homeless_reason == '' || this.client.date_became_homeless == null) {
           alert('Please ask this client 1) If this is first time homeless? 2) Why they are homeless? and 3) When they became homeless? Please record this in the Client Details screen, where you will be directed now.');
-          //if (!this.isAdmin) {
+          if (!this.isAdmin) {
             this.clientInfo.nativeElement.click();
-          //}
+          }
         }
 
         this.service.getClientHousehold(this.client.household_id).subscribe((data: Client[]) => {
