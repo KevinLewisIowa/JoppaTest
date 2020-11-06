@@ -245,15 +245,14 @@ export class ClientService {
       'Content-Type': 'application/json',
       'Authorization': window.localStorage.getItem('apiToken')
     });
-    return this.http.get(this.baseUrl + `updateHeaterClient?clientId=${theClientId}&heaterId=${theHeaterId}&status=${theStatusId}`,
-                          {headers: myHeader})
-                          .map((res: any) => {
-                            if (res.message === 'invalid-token') {
-                              window.localStorage.removeItem('apiToken');
-                              this.router.navigate(['/application-login']);
-                            }
-                            return res;
-                          });
+    return this.http.get(this.baseUrl + `updateHeaterClient?clientId=${theClientId}&heaterId=${theHeaterId}&status=${theStatusId}`,{headers: myHeader})
+    .map((res: any) => {
+      if (res.message === 'invalid-token') {
+        window.localStorage.removeItem('apiToken');
+        this.router.navigate(['/application-login']);
+      }
+      return res;
+    });
   }
 
   getCheckedOutHeaters(id:number) {

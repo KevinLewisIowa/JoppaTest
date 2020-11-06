@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Client } from "app/models/client";
 import { ClientService } from "app/services/client.service";
 import { Router } from "@angular/router";
@@ -63,6 +63,8 @@ export class ServicingClientComponent implements OnInit {
   routeInstanceId: number;
   pipe: DatePipe = new DatePipe('en-us');
 
+  @ViewChild('clientInfo') clientInfo: ElementRef;
+
   constructor(private service: ClientService, private mainService: MainService, private router: Router) { }
 
   ngOnInit() {
@@ -97,7 +99,10 @@ export class ServicingClientComponent implements OnInit {
         this.client = data;
         
         if (this.client.homeless_reason == '' || this.client.date_became_homeless == null) {
-          alert('Please ask this client for why they are homeless and when they became homeless.');
+          alert('Please ask this client 1) If this is first time homeless? 2) Why they are homeless? and 3) When they became homeless? Please record this in the Client Details screen, where you will be directed now.');
+          //if (!this.isAdmin) {
+            this.clientInfo.nativeElement.click();
+          //}
         }
 
         this.service.getClientHousehold(this.client.household_id).subscribe((data: Client[]) => {
