@@ -53,6 +53,8 @@ export class PetsComponent implements OnInit {
         } else {
           pet.pet_type = this.extraInfo;
         }
+      } else if (!this.extraInfoNeeded) {
+        pet.pet_type = this.pet_type;
       } else {
         pet.pet_type = this.pet_type;
       }
