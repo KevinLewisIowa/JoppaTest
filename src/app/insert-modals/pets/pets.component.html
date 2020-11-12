@@ -7,16 +7,20 @@
     <div class="modal-body">
       <div class="form-group">
         <div class="row">
-          <div class="col-sm-4">
-              <select class="form-control" name="pet_type" [(ngModel)]="pet_type">
-                  <option value="Dog">Dog</option>
-                  <option value="Cat">Cat</option>
+          <div class="col-sm-3">
+              <select class="form-control" name="pet_type" [(ngModel)]="pet_type" #item (change)="onChange(item.value)">
+                  <option>Dog</option>
+                  <option>Cat</option>
+                  <option>Other</option>
                 </select>
           </div>
-          <div class="col-sm-4">
+          <div class="col-sm-3">
+            <input class="form-control" type="text" [(ngModel)]="extraInfo" name="extraInfo" *ngIf="extraInfoNeeded" placeholder="Species" required/>
+         </div>
+          <div class="col-sm-3">
             <input class="form-control" type="text" [(ngModel)]="quantity" placeholder="Quantity" name="quantity"/>
           </div>
-          <div class="col-sm-4">
+          <div class="col-sm-3">
             <label for="request_food">Food Requested
               <input id="request_food" class="form-control" type="checkbox" [(ngModel)]="food_requested" name="food_requested"/>
             </label>
