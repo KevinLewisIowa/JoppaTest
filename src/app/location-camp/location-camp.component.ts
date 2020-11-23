@@ -58,8 +58,10 @@ export class LocationCampComponent implements OnInit {
 
         this.mainService.getLocationCamp(this.locationCampId).subscribe(data => {
           this.locationCamp = data;
-          let timeArray:string[] = this.locationCamp.expected_arrival_time.split(':');
-          this.expectedArrivalTime = new Date(null, null, null, parseInt(timeArray[0]), parseInt(timeArray[1]));
+          if (this.locationCamp.expected_arrival_time && this.locationCamp.expected_arrival_time != '') {
+            let timeArray:string[] = this.locationCamp.expected_arrival_time.split(':');
+            this.expectedArrivalTime = new Date(null, null, null, parseInt(timeArray[0]), parseInt(timeArray[1]));
+          }
 
           this.mainService.getClientsForCamp(this.locationCampId).subscribe((data: Client[]) => {
             if (this.heatRoute) {
