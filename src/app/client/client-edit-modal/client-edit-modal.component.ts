@@ -41,6 +41,30 @@ export class ClientEditModalComponent implements OnInit {
     }
   }
 
+  onFTHChange(value: string) {
+    if (value == 'Unknown') {
+      this.clientForm.patchValue({first_time_homeless: null});
+    }
+    else if (value == 'Yes') {
+      this.clientForm.patchValue({first_time_homeless: true});
+    }
+    else {
+      this.clientForm.patchValue({first_time_homeless: false});
+    }
+  }
+
+  onDTCChange(value: string) {
+    if (value == 'Unknown') {
+      this.clientForm.patchValue({due_to_covid: null});
+    }
+    else if (value == 'Yes') {
+      this.clientForm.patchValue({due_to_covid: true});
+    }
+    else {
+      this.clientForm.patchValue({due_to_covid: false});
+    }
+  }
+
   openModal(client: Client) {
     this.theClient = client;
     if (!this.homelessReasonOptions.includes(client.homeless_reason)) {

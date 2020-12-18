@@ -27,4 +27,5 @@ export class Client {
     first_time_homeless: boolean = false;
     date_became_homeless: Date = undefined;
     homeless_reason: string = undefined;
+    //due_to_covid: boolean = false;
 }

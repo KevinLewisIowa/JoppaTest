@@ -50,8 +50,9 @@ export class ClientEditComponent implements OnInit {
       gender: '',
       admin_notes: '',
       homeless_reason: '',
-      first_time_homeless: false,
-      date_became_homeless: ''
+      first_time_homeless: null,
+      date_became_homeless: '',
+      due_to_covid: null
     });
     this.clientForm.get('first_name').setValidators(Validators.required);
     this.clientForm.get('last_name').setValidators(Validators.required);
@@ -61,6 +62,7 @@ export class ClientEditComponent implements OnInit {
       this.clientForm.get('first_time_homeless').setValidators(Validators.required);
       this.clientForm.get('date_became_homeless').setValidators(Validators.required);
       this.clientForm.get('homeless_reason').setValidators(Validators.required);
+      this.clientForm.get('due_to_covid').setValidators(Validators.required);
     }
 
     //this.clientForm.get('birth_date').setValue(new Date());
@@ -70,7 +72,31 @@ export class ClientEditComponent implements OnInit {
     if (value == 'Other') {
       this.extraInfoNeeded = true;
     }
-   }
+  }
+
+  onFTHChange(value: string) {
+    if (value == 'Unknown') {
+      this.clientForm.patchValue({first_time_homeless: null});
+    }
+    else if (value == 'Yes') {
+      this.clientForm.patchValue({first_time_homeless: true});
+    }
+    else {
+      this.clientForm.patchValue({first_time_homeless: false});
+    }
+  }
+
+  onDTCChange(value: string) {
+    if (value == 'Unknown') {
+      this.clientForm.patchValue({due_to_covid: null});
+    }
+    else if (value == 'Yes') {
+      this.clientForm.patchValue({due_to_covid: true});
+    }
+    else {
+      this.clientForm.patchValue({due_to_covid: false});
+    }
+  }
 
   submitClient() {
     this.theClient.first_name = String(this.clientForm.get('first_name').value).trim();
@@ -102,6 +128,7 @@ export class ClientEditComponent implements OnInit {
       return;
     }
     this.theClient.homeless_reason = homelessReason;
+    //this.theClient.due_to_covid = this.clientForm.get('due_to_covid').value;
     this.clientService.insertClient(this.theClient).subscribe((insertedClient: Client) => {
       const clientInteraction: Appearance = new Appearance();
       clientInteraction.client_id = insertedClient.id;
