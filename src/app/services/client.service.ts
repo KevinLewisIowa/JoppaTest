@@ -28,7 +28,7 @@ import { ClientPet } from 'app/models/client-pet';
 export class ClientService {
   theHeader = new HttpHeaders().set('Content-Type', 'application/json');
   online = true;
-  private baseUrl = 'https://joppa-api-test.herokuapp.com/';
+  private baseUrl = 'https://joppa-api-prod.herokuapp.com/';
 
   constructor(private http: HttpClient, private store: Store<IMainStore>, private router: Router) { 
     console.log(this.baseUrl);
