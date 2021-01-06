@@ -19,6 +19,8 @@ export class ClientEditModalComponent implements OnInit {
   clientForm: FormGroup;
   regExpDate = /^\d{2}\/\d{2}\/\d{4}$/
   theClient: Client;
+  firstTimeHomeless: string = 'Unknown';
+  dueToCovid: string = 'Unknown';
   otherHomelessReason: string;
   editing = false;
   isAdmin: boolean;
@@ -42,6 +44,7 @@ export class ClientEditModalComponent implements OnInit {
   }
 
   onFTHChange(value: string) {
+    this.firstTimeHomeless = value;
     if (value == 'Unknown') {
       this.clientForm.patchValue({first_time_homeless: null});
     }
@@ -54,6 +57,7 @@ export class ClientEditModalComponent implements OnInit {
   }
 
   onDTCChange(value: string) {
+    this.dueToCovid = value;
     if (value == 'Unknown') {
       this.clientForm.patchValue({due_to_covid: null});
     }
@@ -67,9 +71,25 @@ export class ClientEditModalComponent implements OnInit {
 
   openModal(client: Client) {
     this.theClient = client;
+    console.log(JSON.stringify(this.theClient));
     if (!this.homelessReasonOptions.includes(client.homeless_reason)) {
       this.homelessReasonOptions.push(client.homeless_reason);
     }
+
+    if (this.theClient.first_time_homeless) {
+      this.firstTimeHomeless = 'Yes';
+    }
+    else if (!this.theClient.first_time_homeless && this.theClient.first_time_homeless != null) {
+      this.firstTimeHomeless = 'No';
+    }
+
+    if (this.theClient.due_to_covid) {
+      this.dueToCovid = 'Yes';
+    }
+    else if (!this.theClient.due_to_covid && this.theClient.due_to_covid != null) {
+      this.dueToCovid = 'No';
+    }
+
     this.clientForm = null;
     this.clientForm = this.fb.group(this.theClient);
     this.modalService.open(this.editModal, { size: 'lg', backdrop: 'static'});

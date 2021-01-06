@@ -61,7 +61,7 @@
       <div class="row">
         <div class="col-sm-12 col-md-12 col-lg-12">
           <label><span style="background-color: yellow;">First Time Homeless:</span><font color="red" *ngIf="!isAdmin">*</font> </label>
-          <select class="form-control float-right" #fthitem style="width: 173px;" (change)="onFTHChange(fthitem.value)">
+          <select class="form-control float-right" #fthitem style="width: 173px;" [(ngModel)]="firstTimeHomeless" [ngModelOptions]="{standalone: true}" (change)="onFTHChange(fthitem.value)">
             <option value='Unknown'>Unknown</option>
             <option value='Yes'>Yes</option>
             <option value='No'>No</option>
@@ -90,7 +90,7 @@
       <div class="row">
         <div class="col-sm-12 col-md-12 col-lg-12">
           <label><span style="background-color: yellow;">Due to Covid:</span><font color="red" *ngIf="!isAdmin">*</font> </label>
-          <select class="form-control float-right" #dtcitem style="width: 173px;" (change)="onDTCChange(dtcitem.value)">
+          <select class="form-control float-right" #dtcitem style="width: 173px;" [(ngModel)]="dueToCovid" [ngModelOptions]="{standalone: true}" (change)="onDTCChange(dtcitem.value)">
             <option value='Unknown'>Unknown</option>
             <option value='Yes'>Yes</option>
             <option value='No'>No</option>

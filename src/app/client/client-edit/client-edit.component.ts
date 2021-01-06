@@ -128,7 +128,7 @@ export class ClientEditComponent implements OnInit {
       return;
     }
     this.theClient.homeless_reason = homelessReason;
-    //this.theClient.due_to_covid = this.clientForm.get('due_to_covid').value;
+    this.theClient.due_to_covid = this.clientForm.get('due_to_covid').value;
     this.clientService.insertClient(this.theClient).subscribe((insertedClient: Client) => {
       const clientInteraction: Appearance = new Appearance();
       clientInteraction.client_id = insertedClient.id;
