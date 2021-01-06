@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { MainService } from '../services/main.service';
 import { RouteInstance } from '../models/route-instance';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { Router } from '@angular/router';
 import { RouteInstanceHeaterInteraction } from 'app/models/route-instance-heater-interaction';
 import { Appearance } from 'app/models/appearance';
 import { ClientService } from 'app/services/client.service';
 import { Client } from 'app/models/client';
+import { MatDialog } from '@angular/material';
+import { ConfirmDialogModel, CustomConfirmationDialogComponent } from 'app/custom-confirmation-dialog/custom-confirmation-dialog.component';
 
 @Component({
   selector: 'app-footer',
@@ -19,7 +21,7 @@ export class FooterComponent implements OnInit {
   isAdmin: boolean;
   showEndRoute: boolean = true;
 
-  constructor(private mainService: MainService, private clientService:ClientService, private router: Router) {
+  constructor(private mainService: MainService, private clientService:ClientService, private router: Router, public dialog: MatDialog) {
     
   }
 
@@ -47,7 +49,6 @@ export class FooterComponent implements OnInit {
       return;
     }
 
-    //TODO
     //Check if routeAttendanceList length is 0
     ////If so, ask modified message 'with no attendance'
     //////If confirmed, mark as clearing out
@@ -60,75 +61,57 @@ export class FooterComponent implements OnInit {
     //If outreach route, clear out things
     ///If admin, add admin route things back
 
-    let continueWithEndingRoute: boolean = false;
+    let title: string = 'Confirm Action';
+    let confirmText: string = 'Yes';
+    let dismissText: string = 'No';
+    let message: string;
     if (routeAttendanceList.length == 0) {
-      if (confirm('You have chosen to end a route with no attendance taken. Are you sure you want to end this route?')) {
-        continueWithEndingRoute = true;
-      } else {
-        this.mainService.showEndRoute.next(true);
-        return;
-      }
+      message = 'You have chosen to end a route with no attendance taken. Are you sure you want to end this route?';
     }
     else {
-      if (confirm('Are you sure you want to end the route?')) {
-        continueWithEndingRoute = true;
+      message = 'Are you sure you want to end the route';
+    }
+
+    const dialogData = new ConfirmDialogModel(title, message, confirmText, dismissText);
+    const dialogRef = this.dialog.open(CustomConfirmationDialogComponent, {data: dialogData, maxWidth:'400px'});
+
+    dialogRef.afterClosed().subscribe(result => {
+      let canContinue: boolean = JSON.parse(result);
+
+      if (canContinue) {
+        this.continueWithEndingRoute(heatRoute, routeInstanceId);
       }
       else {
         this.mainService.showEndRoute.next(true);
         return;
       }
+    });
+  }
+
+  private continueWithEndingRoute(heatRoute: boolean, routeInstanceId: any) {
+    this.mainService.showEndRoute.next(false);
+    console.log(this.isAdmin);
+
+    if (heatRoute) {
+      this.router.navigate(['checkoutHeaters']);
     }
-
-    if (continueWithEndingRoute) {
-      this.mainService.showEndRoute.next(false);
-      
-      if (heatRoute) {
-        this.router.navigate(['checkoutHeaters']);
-      } else {
-        this.mainService.getRouteInstance(routeInstanceId).subscribe(data => {
-          this.routeInstance = data;
-          this.routeInstance.end_time = new Date();
-  
-          this.mainService.updateRouteInstance(this.routeInstance);
-        }, error => console.log(error));
-        let apiKey: string = window.localStorage.getItem('apiToken');
-        window.localStorage.clear();
-        window.localStorage.setItem('apiToken', apiKey);
-        window.localStorage.setItem('isAdmin', JSON.stringify(this.isAdmin));
-        
-        this.router.navigate(['login']);
-      }
+    else if (this.isAdmin) {
+      this.goToAdminHome();
     }
+    else {
+      this.mainService.getRouteInstance(routeInstanceId).subscribe(data => {
+        this.routeInstance = data;
+        this.routeInstance.end_time = new Date();
 
-    // this.mainService.showEndRoute.next(false);
+        this.mainService.updateRouteInstance(this.routeInstance);
+      }, error => console.log(error));
+      let apiKey: string = window.localStorage.getItem('apiToken');
+      window.localStorage.clear();
+      window.localStorage.setItem('apiToken', apiKey);
+      window.localStorage.setItem('isAdmin', JSON.stringify(this.isAdmin));
 
-    // this.mainService.getRouteInstance(routeInstanceId).subscribe(data => {
-    //   this.routeInstance = data;
-    //   this.routeInstance.end_time = new Date();
-
-    //   this.mainService.updateRouteInstance(this.routeInstance);
-    // }, error => console.log(error));
-
-    // if (heatRoute && !this.isAdmin) {
-    //   if (!confirm('Are you sure you want to end the route?')) {
-    //     this.mainService.showEndRoute.next(true);
-    //     return;
-    //   } else{
-    //     this.router.navigate(['checkoutHeaters']);
-    //   }
-    // }
-    // else if (routeAttendanceList.length !== null && routeAttendanceList.length !== 0) {
-    //   if (!confirm('Are you sure you want to end the route?')) {
-    //     this.mainService.showEndRoute.next(true);
-    //     return;
-    //   } else {
-    //     let apiKey: string = window.localStorage.getItem('apiToken');
-    //     window.localStorage.clear();
-    //     window.localStorage.setItem('apiToken', apiKey);
-    //     window.localStorage.setItem('isAdmin', JSON.stringify(this.isAdmin));
-    //     this.router.navigate(['login']);
-    //   }
-    // }
+      this.router.navigate(['login']);
+    }
   }
 
   goToAdminHome() {
@@ -136,8 +119,6 @@ export class FooterComponent implements OnInit {
     window.localStorage.clear();
     window.localStorage.setItem('apiToken', apiKey);
     window.localStorage.setItem('isAdmin', JSON.stringify(true));
-    let routeAttendanceList:Appearance[] = [];
-    window.localStorage.setItem('RouteAttendance', JSON.stringify(routeAttendanceList));
     this.router.navigate(['adminHome']);
   }
 

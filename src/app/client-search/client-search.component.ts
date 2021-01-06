@@ -4,6 +4,8 @@ import { ClientService } from "app/services/client.service";
 import { Store } from "@ngrx/store";
 import { IMainStore } from "app/state-management/main.store";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { MatDialog } from '@angular/material';
+import { ConfirmDialogModel, CustomConfirmationDialogComponent } from 'app/custom-confirmation-dialog/custom-confirmation-dialog.component';
 
 @Component({
   selector: 'app-client-search',
@@ -33,7 +35,7 @@ export class ClientSearchComponent implements OnInit, OnDestroy {
   noRecords = '';
 
   constructor(private clientService: ClientService, private store: Store<IMainStore>,
-              private modalService: NgbModal, private renderer: Renderer2,) { }
+              private modalService: NgbModal, private renderer: Renderer2, private dialog: MatDialog) { }
 
   ngOnInit() {
   }
@@ -71,9 +73,21 @@ export class ClientSearchComponent implements OnInit, OnDestroy {
   }
 
   selectedClient(client: Client) {
-    if (confirm('Are you sure you want to select ' + client.first_name + ' ' + client.last_name + '?')) {
-      this.clientSelected.emit(client);
-    }
+    let title: string = 'Confirm Action';
+    let confirmText: string = 'Yes';
+    let dismissText: string = 'No';
+    let message: string;
+
+    message = 'Are you sure you want to select ' + client.first_name + ' ' + client.last_name + '?';
+    const dialogData = new ConfirmDialogModel(title, message, confirmText, dismissText);
+    const dialogRef = this.dialog.open(CustomConfirmationDialogComponent, {data: dialogData, maxWidth:'400px'});
+
+    dialogRef.afterClosed().subscribe(result => {
+      let canContinue: boolean = JSON.parse(result);
+      if(canContinue) {
+        this.clientSelected.emit(client);
+      }
+    });
   }
 
   ngOnDestroy() {

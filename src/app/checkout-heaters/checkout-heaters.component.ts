@@ -36,44 +36,70 @@ export class CheckoutHeatersComponent implements OnInit {
 
     this.isAdmin = JSON.parse(window.localStorage.getItem('isAdmin'));
 
-    if (JSON.parse(window.localStorage.getItem('checkedOutHeaters')) !== null) {
-      this.checkedOutRouteInstanceHeaters = JSON.parse(window.localStorage.getItem('checkedOutHeaters'));
-    }
-
     if (JSON.parse(window.localStorage.getItem('tankHoseInteractionId')) !== null) {
-      if (JSON.parse(window.localStorage.getItem('checkedOutHeaters')) !== null) {
-        if (confirm('Please press OK to check in heating equipment at the end of the route or Cancel to continue checking out heaters.')) {
-          this.isEndOfRoute = true;
-        }
-      }
-      else {
-        this.isEndOfRoute = true;
-      }
-      
       this.isInitialCheckout = false;
+      this.isEndOfRoute = true;
+      this.routeInstanceTankHoseForm = this.fb.group({
+            number_heaters_in: '',
+            number_tanks_in: '',
+            number_hoses_in: ''
+          });
+    
+          this.routeInstanceTankHoseForm.get('number_heaters_in').setValidators(Validators.required);
+          this.routeInstanceTankHoseForm.get('number_tanks_in').setValidators(Validators.required);
+          this.routeInstanceTankHoseForm.get('number_hoses_in').setValidators(Validators.required);
     }
-
-    if (this.isInitialCheckout && !this.isEndOfRoute) {
+    else {
       this.routeInstanceTankHoseForm = this.fb.group({
         number_heaters_out: '',
         number_tanks_out: '',
         number_hoses_out: ''
       });
 
+      this.routeInstanceTankHoseForm.get('number_heaters_out').setValidators(Validators.required);
       this.routeInstanceTankHoseForm.get('number_tanks_out').setValidators(Validators.required);
       this.routeInstanceTankHoseForm.get('number_hoses_out').setValidators(Validators.required);
     }
 
-    if (!this.isInitialCheckout && this.isEndOfRoute) {
-      this.routeInstanceTankHoseForm = this.fb.group({
-        number_heaters_in: '',
-        number_tanks_in: '',
-        number_hoses_in: ''
-      });
+    //// Deprecated as no longer checking out/in heaters
+    // if (JSON.parse(window.localStorage.getItem('checkedOutHeaters')) !== null) {
+    //   this.checkedOutRouteInstanceHeaters = JSON.parse(window.localStorage.getItem('checkedOutHeaters'));
+    // }
 
-      this.routeInstanceTankHoseForm.get('number_tanks_in').setValidators(Validators.required);
-      this.routeInstanceTankHoseForm.get('number_hoses_in').setValidators(Validators.required);
-    }
+    // if (JSON.parse(window.localStorage.getItem('tankHoseInteractionId')) !== null) {
+    //   if (JSON.parse(window.localStorage.getItem('checkedOutHeaters')) !== null) {
+    //     if (confirm('Please press OK to check in heating equipment at the end of the route or Cancel to continue checking out heaters.')) {
+    //       this.isEndOfRoute = true;
+    //     }
+    //   }
+    //   else {
+    //     this.isEndOfRoute = true;
+    //   }
+      
+    //   this.isInitialCheckout = false;
+    // }
+
+    // if (this.isInitialCheckout && !this.isEndOfRoute) {
+    //   this.routeInstanceTankHoseForm = this.fb.group({
+    //     number_heaters_out: '',
+    //     number_tanks_out: '',
+    //     number_hoses_out: ''
+    //   });
+
+    //   this.routeInstanceTankHoseForm.get('number_tanks_out').setValidators(Validators.required);
+    //   this.routeInstanceTankHoseForm.get('number_hoses_out').setValidators(Validators.required);
+    // }
+
+    // if (!this.isInitialCheckout && this.isEndOfRoute) {
+    //   this.routeInstanceTankHoseForm = this.fb.group({
+    //     number_heaters_in: '',
+    //     number_tanks_in: '',
+    //     number_hoses_in: ''
+    //   });
+
+    //   this.routeInstanceTankHoseForm.get('number_tanks_in').setValidators(Validators.required);
+    //   this.routeInstanceTankHoseForm.get('number_hoses_in').setValidators(Validators.required);
+    // }
   }
 
   next() {

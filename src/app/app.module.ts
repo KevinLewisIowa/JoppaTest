@@ -12,7 +12,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { InlineSVGModule} from 'ng-inline-svg';
 
-import { MatPaginatorModule, MatTableModule, MatFormFieldModule, MatInputModule, MatSortModule, MatDatepicker, MatDatepickerModule, MatNativeDateModule } from '@angular/material';
+import { MatPaginatorModule, MatTableModule, MatFormFieldModule, MatInputModule, MatSortModule, MatDatepicker, MatDatepickerModule, MatNativeDateModule, MatButtonModule, MatDialogModule } from '@angular/material';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 
@@ -75,6 +75,7 @@ import { AdminOverallAttendanceComponent } from './admin-overall-attendance/admi
 import { InventoryReportComponent } from './admin-reports/inventory-report/inventory-report.component';
 import { PrayerRequestsAndNeedsComponent } from './insert-modals/prayer-requests-and-needs/prayer-requests-and-needs.component';
 import { FirstTimeHomelessnessReportComponent } from './admin-reports/first-time-homelessness-report/first-time-homelessness-report.component';
+import { CustomConfirmationDialogComponent } from './custom-confirmation-dialog/custom-confirmation-dialog.component';
 
 const reducers = {
   user: MainReducer,
@@ -134,6 +135,7 @@ const reducers = {
     InventoryReportComponent,
     PrayerRequestsAndNeedsComponent,
     FirstTimeHomelessnessReportComponent,
+    CustomConfirmationDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -142,6 +144,8 @@ const reducers = {
     ReactiveFormsModule,
     MatPaginatorModule,
     MatFormFieldModule,
+    MatButtonModule,
+    MatDialogModule,
     MatInputModule,
     MatTableModule,
     MatSortModule,
@@ -157,6 +161,7 @@ const reducers = {
     InlineSVGModule.forRoot({baseUrl:'https://dev.w3.org/SVG/tools/svgweb/samples/svg-files'})
   ],
   providers: [MainService, ClientService],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [CustomConfirmationDialogComponent]
 })
 export class AppModule {}

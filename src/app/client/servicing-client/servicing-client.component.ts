@@ -19,6 +19,8 @@ import { Observable, Subscription } from 'rxjs';
 import { DatePipe } from '@angular/common';
 import { isNullOrUndefined } from 'util';
 import { PrayerRequestAndNeed } from 'app/models/prayer-request';
+import { ConfirmDialogModel, CustomConfirmationDialogComponent } from 'app/custom-confirmation-dialog/custom-confirmation-dialog.component';
+import { MatDialog } from '@angular/material';
 
 @Component({
   selector: 'app-servicing-client',
@@ -65,7 +67,7 @@ export class ServicingClientComponent implements OnInit {
 
   @ViewChild('clientInfo') clientInfo: ElementRef;
 
-  constructor(private service: ClientService, private mainService: MainService, private router: Router) { }
+  constructor(private service: ClientService, private mainService: MainService, private router: Router, public dialog: MatDialog) { }
 
   ngOnInit() {
     this.routeInstanceId = JSON.parse(localStorage.getItem('routeInstance'));
@@ -388,22 +390,33 @@ export class ServicingClientComponent implements OnInit {
   }
 
   back() {
+    let title: string = 'Confirm Action';
+    let confirmText: string = 'Yes';
+    let dismissText: string = 'No';
+    let message: string;
+
     if(this.isAdmin) {
-      if (confirm('Are you wanting to go back to the client listing?')) {
-        this.router.navigate(['/admin/clientListing']);
+      this.router.navigate(['/admin/clientListing']);
+    }
+    else {
+      if (!this.sentInteraction) {
+        message = 'Are you sure you want to close out of this client? You have not yet marked them as seen or serviced.';
+        const dialogData = new ConfirmDialogModel(title, message, confirmText, dismissText);
+        const dialogRef = this.dialog.open(CustomConfirmationDialogComponent, {data: dialogData, maxWidth:'400px'});
+
+        dialogRef.afterClosed().subscribe(result => {
+          let canContinue: boolean = JSON.parse(result);
+
+          if (!canContinue) {
+            return;
+          }
+
+          this.router.navigate([`/locationCamp/${this.locationCampId}`]);
+        });
       }
       else {
         this.router.navigate([`/locationCamp/${this.locationCampId}`]);
       }
-    }
-    else {
-      if (!this.sentInteraction) {
-        if (!confirm('Are you sure you want to close out of this client? You have not yet marked them as seen or serviced.')) {
-          return;
-        }
-      }
-  
-      this.router.navigate([`/locationCamp/${this.locationCampId}`]);
     }
   }
 
