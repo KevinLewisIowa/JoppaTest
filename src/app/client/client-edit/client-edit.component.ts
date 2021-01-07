@@ -59,10 +59,8 @@ export class ClientEditComponent implements OnInit {
     this.clientForm.get('gender').setValidators(Validators.required);
     this.clientForm.get('dwelling').setValidators(Validators.required);
     if (!this.isAdmin) {
-      this.clientForm.get('first_time_homeless').setValidators(Validators.required);
       this.clientForm.get('date_became_homeless').setValidators(Validators.required);
       this.clientForm.get('homeless_reason').setValidators(Validators.required);
-      this.clientForm.get('due_to_covid').setValidators(Validators.required);
     }
 
     //this.clientForm.get('birth_date').setValue(new Date());
@@ -129,13 +127,25 @@ export class ClientEditComponent implements OnInit {
     }
     this.theClient.homeless_reason = homelessReason;
     this.theClient.due_to_covid = this.clientForm.get('due_to_covid').value;
+    this.theClient.last_interaction_date = new Date();
     this.clientService.insertClient(this.theClient).subscribe((insertedClient: Client) => {
+      // create appearance of client as they were seen and serviced
       const clientInteraction: Appearance = new Appearance();
       clientInteraction.client_id = insertedClient.id;
       clientInteraction.location_camp_id = this.locationCampId;
       clientInteraction.still_lives_here = true;
+      clientInteraction.serviced = true;
+      clientInteraction.was_seen = true;
 
-      this.clientService.insertClientAppearance(clientInteraction).subscribe(data => {
+      this.clientService.insertClientAppearance(clientInteraction).subscribe((data: Appearance) => {
+        // if during route, add this interaction to route interaction list
+        if (!this.isAdmin) {
+          let routeAttendanceList:Appearance[] = JSON.parse(window.localStorage.getItem('RouteAttendance'));
+          clientInteraction.id = data.id;
+          routeAttendanceList.push(clientInteraction);
+          window.localStorage.setItem('RouteAttendance', JSON.stringify(routeAttendanceList));
+        }
+
         insertedClient.household_id = insertedClient.id;
         this.clientService.updateClient(insertedClient).subscribe(updatedClient => {
           console.log(JSON.stringify(updatedClient));

@@ -33,6 +33,7 @@ export class ClientService {
   constructor(private http: HttpClient, private store: Store<IMainStore>, private router: Router) { 
     console.log(this.baseUrl);
   }
+  
   getClientLikes(id) {
     const myHeader = new HttpHeaders({
       'Content-Type': 'application/json',

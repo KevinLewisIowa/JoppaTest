@@ -24,6 +24,7 @@
           <tr>
             <th class="text-left">Name</th>
             <th class="text-left">Phone</th>
+            <th class="text-left">Admin Notes</th>
             <th class="text-left">Last Interaction</th>
           </tr>
         </thead>
@@ -31,6 +32,7 @@
           <tr *ngFor="let client of clients" (click)="viewClient(client)" class="client-row">
             <td class="text-left">{{client.first_name}} <span *ngIf="client.preferred_name != '' && client.preferred_name != null">({{client.preferred_name}})</span> {{client.last_name}}</td>
             <td class="text-left">{{client.phone}}</td>
+            <td class="text-left">{{client.admin_notes}}</td>
             <td class="text-left"><fa-icon id="attendanceIcon" [style.color]="getAttendanceColor(client)" [icon]="getAttendanceIcon(client)"></fa-icon> {{client.last_interaction_date}}</td>
           </tr>
         </tbody>

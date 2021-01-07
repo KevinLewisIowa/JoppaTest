@@ -91,10 +91,21 @@ export class LocationCampComponent implements OnInit {
     clientInteraction.client_id = client.id;
     clientInteraction.location_camp_id = JSON.parse(this.activatedRoute.snapshot.params['id']);
     clientInteraction.still_lives_here = true;
-    this.clientService.insertClientAppearance(clientInteraction).subscribe(data => {
+    clientInteraction.was_seen = true;
+    clientInteraction.serviced = true;
+    this.clientService.insertClientAppearance(clientInteraction).subscribe((data: Appearance) => {
+      let isAdmin: boolean = JSON.parse(window.localStorage.getItem('isAdmin'));
+      if (!isAdmin) {
+        let routeAttendanceList:Appearance[] = JSON.parse(window.localStorage.getItem('RouteAttendance'));
+        clientInteraction.id = data.id;
+        routeAttendanceList.push(clientInteraction);
+        window.localStorage.setItem('RouteAttendance', JSON.stringify(routeAttendanceList));
+      }
+
       client.previous_camp_id = client.current_camp_id;
       client.current_camp_id = JSON.parse(window.localStorage.getItem('locationCampId'));
       client.status = 'Active';
+      client.last_interaction_date = new Date();
 
       this.clientService.updateClient(client).subscribe(data => {
         console.log('updated client');
