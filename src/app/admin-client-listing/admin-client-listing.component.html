@@ -55,16 +55,6 @@
           <mat-header-cell *matHeaderCellDef mat-sort-header>Household</mat-header-cell>
           <mat-cell *matCellDef="let client">{{client.household_id}}</mat-cell>
         </ng-container>
-
-        <ng-container matColumnDef="Items">
-          <mat-header-cell *matHeaderCellDef mat-sort-header>Items</mat-header-cell>
-          <mat-cell *matCellDef="let client">{{client.Items}}</mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="Pets">
-          <mat-header-cell *matHeaderCellDef mat-sort-header>Pets</mat-header-cell>
-          <mat-cell *matCellDef="let client">{{client.Pets}}</mat-cell>
-        </ng-container>
         
         <ng-container matColumnDef="updated_at">
           <mat-header-cell *matHeaderCellDef mat-sort-header>Last Interaction</mat-header-cell>
