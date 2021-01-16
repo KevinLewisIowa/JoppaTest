@@ -17,6 +17,7 @@ export class CampEditModalComponent implements OnInit {
   campForm: FormGroup;
   theCamp: LocationCamp;
   editing = false;
+  isAdmin: boolean;
 
   constructor(private router: Router, private modalService: NgbModal, private mainService: MainService,
               private fb: FormBuilder) { }
@@ -24,6 +25,7 @@ export class CampEditModalComponent implements OnInit {
   ngOnInit() {
     this.theCamp = new LocationCamp();
     this.campForm = this.fb.group(this.theCamp);
+    this.isAdmin = JSON.parse(window.localStorage.getItem('isAdmin'));
   }
 
   showModal(camp: LocationCamp) {
