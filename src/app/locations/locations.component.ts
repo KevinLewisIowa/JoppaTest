@@ -24,6 +24,7 @@ export class LocationsComponent implements OnInit {
     this.thisRoute = new Route();
     this.locationCamps = [];
     this.routeId = this.route.snapshot.params['id'];
+    let heatRoute: boolean = JSON.parse(window.localStorage.getItem('heatRoute'));
     window.localStorage.setItem('routeId', this.routeId.toString());
     this.mainService.getRoute(this.routeId).subscribe((route : Route) => {
       if(route == undefined){
@@ -32,27 +33,50 @@ export class LocationsComponent implements OnInit {
       else{
         this.thisRoute = route;
         this.mainService.getCampsForRoute(this.routeId).subscribe(locations => {
+          console.log('Got locations for Route: ' + JSON.stringify(locations));
           if(locations == null || locations == undefined){
             this.locationCamps = []
           }
           else{
-            this.locationCamps = locations;
-            this.locationCamps.sort((a, b) => {
-              if (a.position > b.position) {
-                return 1;
-              } else if (a.position < b.position) {
-                return -1;
-              } else {
-                return 0;
-              }
-            })
-
             let locationCampIdList:number[] = [];
-            this.locationCamps.forEach(camp => {
-              locationCampIdList.push(camp.id);
+            locations.forEach((location: LocationCamp) => {
+              this.mainService.getClientsForCamp(location.id).subscribe((data: any[]) => {
+                // If heat route, then filter down client list to only those that would show up
+                if (heatRoute) {
+                  data = data.filter(client => client.dwelling !== "Vehicle" && client.dwelling !== "Under Bridge" && client.dwelling !== "Streets");
+                }
+
+                // Only add camp if there is at least one client at the site
+                if (data.length > 0) {
+                  this.locationCamps.push(location);
+
+                  this.locationCamps.sort((a, b) => {
+                    if (a.position > b.position) {
+                      return 1;
+                    } else if (a.position < b.position) {
+                      return -1;
+                    } else {
+                      return 0;
+                    }
+                  });
+
+                  // add camp to camp list to allow for navigation
+                  locationCampIdList.push(location.id);
+                  locationCampIdList.sort((a, b) => {
+                    if (a > b) {
+                      return 1;
+                    } else if (a < b) {
+                      return -1;
+                    } else {
+                      return 0;
+                    }
+                  });
+                  window.localStorage.setItem("LocationCampIdList", JSON.stringify(locationCampIdList));
+                  console.log(JSON.stringify(locationCampIdList));
+                }
+              });
             });
             
-            window.localStorage.setItem("LocationCampIdList", JSON.stringify(locationCampIdList));
           }
         })
 
