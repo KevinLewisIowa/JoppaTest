@@ -1,0 +1,58 @@
+<div class="card" style="opacity: 0.93">
+  <div class="card-header">
+    <h2>Camp Listing</h2>
+  </div>
+  <div class="panel-body">
+    <mat-form-field>
+      <input
+        matInput
+        (keyup)="applyFilter($event.target.value)"
+        placeholder="Filter"
+      />
+    </mat-form-field>
+  </div>
+  <div class="panel-body">
+    <div>
+      <mat-table #table [dataSource]="dataSource" matSort>
+        <ng-container matColumnDef="route_name">
+          <mat-header-cell *matHeaderCellDef mat-sort-header
+            >Route</mat-header-cell
+          >
+          <mat-cell *matCellDef="let camp">{{ camp.route_name }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="camp_name">
+          <mat-header-cell *matHeaderCellDef mat-sort-header
+            >Camp</mat-header-cell
+          >
+          <mat-cell *matCellDef="let camp">{{ camp.camp_name }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="is_active">
+          <mat-header-cell *matHeaderCellDef mat-sort-header
+            >Is Active?</mat-header-cell
+          >
+          <mat-cell *matCellDef="let camp">{{ camp.is_active }}</mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row
+          (click)="viewCamp(camp)"
+          *matRowDef="let camp; columns: displayedColumns"
+        ></mat-row>
+      </mat-table>
+
+      <mat-paginator [pageSizeOptions]="[50, 25, 75, 100]"></mat-paginator>
+    </div>
+  </div>
+  <div class="card-footer">
+    <button
+      routerLink="/adminHome"
+      class="btn btn-primary"
+      style="float: left"
+      (click)="back()"
+    >
+      <fa-icon [icon]="backIcon"></fa-icon> Back
+    </button>
+  </div>
+</div>

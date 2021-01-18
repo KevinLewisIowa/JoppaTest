@@ -76,6 +76,7 @@ import { InventoryReportComponent } from './admin-reports/inventory-report/inven
 import { PrayerRequestsAndNeedsComponent } from './insert-modals/prayer-requests-and-needs/prayer-requests-and-needs.component';
 import { FirstTimeHomelessnessReportComponent } from './admin-reports/first-time-homelessness-report/first-time-homelessness-report.component';
 import { CustomConfirmationDialogComponent } from './custom-confirmation-dialog/custom-confirmation-dialog.component';
+import { AdminCampListingComponent } from './admin-camp-listing/admin-camp-listing.component';
 
 const reducers = {
   user: MainReducer,
@@ -136,6 +137,7 @@ const reducers = {
     PrayerRequestsAndNeedsComponent,
     FirstTimeHomelessnessReportComponent,
     CustomConfirmationDialogComponent,
+    AdminCampListingComponent,
   ],
   imports: [
     BrowserModule,
