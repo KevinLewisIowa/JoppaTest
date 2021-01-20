@@ -8,7 +8,8 @@
     <form [formGroup]="campForm" style="opacity:0.93">
       <div class="login-box">
         <div class="col-md-12">
-          <button class="btn btn-primary float-right text-right" (click)="getCurrentLocation();">Get Current Location</button>
+          <button class="btn btn-primary float-right text-right" (click)="getCurrentLocation();">Get Current
+            Location</button>
         </div>
         <div class="space_lg">&nbsp;</div>
         <div class="space_lg">&nbsp;</div>
@@ -60,14 +61,14 @@
             <label>Notes: </label>
             <textarea type="text" class="float-right" rows="3" cols="19" placeholder="notes"
               formControlName="notes"></textarea>
-          </div>          
+          </div>
         </div>
         <div class="row" *ngIf="isAdmin">
           <div class="col-sm-12 col-md-12 col-lg-12">
             <label>Admin Notes: </label>
             <textarea type="text" class="float-right" rows="3" cols="19" placeholder="Admin Notes"
               formControlName="admin_notes"></textarea>
-          </div>          
+          </div>
         </div>
       </div>
     </form>

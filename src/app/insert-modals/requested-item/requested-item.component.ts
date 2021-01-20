@@ -22,9 +22,9 @@ export class RequestedItemComponent implements OnInit {
   placeholderText: string = "Test";
   extraInfo: string = "";
   extraInfoNeeded: boolean = false;
-  constructor(private modalService: NgbModal, private service: ClientService) {}
+  constructor(private modalService: NgbModal, private service: ClientService) { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   showModal() {
     this.modalService.open(this.requestedItemMdl, {

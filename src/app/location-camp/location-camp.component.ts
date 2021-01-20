@@ -58,7 +58,7 @@ export class LocationCampComponent implements OnInit {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private renderer: Renderer2
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.isAdmin = JSON.parse(window.localStorage.getItem("isAdmin"));
@@ -116,7 +116,7 @@ export class LocationCampComponent implements OnInit {
                     ) {
                       return prevValue + currClient.number_tanks;
                     },
-                    0);
+                      0);
                     this.numPeopleWithTanksAtCamp = this.clients.filter(
                       (client) => client.number_tanks > 0
                     ).length;
@@ -140,9 +140,9 @@ export class LocationCampComponent implements OnInit {
   editedCamp(theCamp: LocationCamp) {
     this.locationCamp = theCamp;
     let routeId: number = JSON.parse(window.localStorage.getItem("routeId"));
-      this.mainService.getRoute(routeId).subscribe(data => {
-        this.route = data;
-      });
+    this.mainService.getRoute(routeId).subscribe(data => {
+      this.route = data;
+    });
   }
 
   clientSelected(client: Client) {

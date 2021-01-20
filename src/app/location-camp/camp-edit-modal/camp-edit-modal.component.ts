@@ -22,7 +22,7 @@ export class CampEditModalComponent implements OnInit {
   isAdmin: boolean;
 
   constructor(private router: Router, private modalService: NgbModal, private mainService: MainService,
-              private fb: FormBuilder) { }
+    private fb: FormBuilder) { }
 
   ngOnInit() {
     this.theCamp = new LocationCamp();
@@ -38,7 +38,7 @@ export class CampEditModalComponent implements OnInit {
     this.theCamp = camp;
     this.campForm = null;
     this.campForm = this.fb.group(this.theCamp);
-    this.modalService.open(this.editModal, { size: 'lg', backdrop: 'static'});
+    this.modalService.open(this.editModal, { size: 'lg', backdrop: 'static' });
   }
 
   toggleEditMode() {
@@ -59,7 +59,7 @@ export class CampEditModalComponent implements OnInit {
         latitude: position.coords.latitude,
         longitude: position.coords.longitude
       });
-     });
+    });
   }
 
 }

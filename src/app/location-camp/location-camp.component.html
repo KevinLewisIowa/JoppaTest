@@ -5,28 +5,19 @@
     <h5 align="left">
       <span style="background-color: yellow">{{
         locationCamp.admin_notes
-      }}</span>
+        }}</span>
     </h5>
     <h5 align="left">
       Expected arrival time: {{ expectedArrivalTime | date: "shortTime" }}
     </h5>
     <p align="left" *ngIf="heatRoute">
-      <b>Number of People with Tanks: {{ numPeopleWithTanksAtCamp }}</b
-      ><br />
+      <b>Number of People with Tanks: {{ numPeopleWithTanksAtCamp }}</b><br />
       <b>Total Tanks: {{ numberTanksAtCamp }}</b>
     </p>
-    <button
-      (click)="showMap()"
-      type="button"
-      class="btn btn-primary float-left"
-    >
+    <button (click)="showMap()" type="button" class="btn btn-primary float-left">
       <fa-icon [icon]="mapIcon"></fa-icon> Show Directions
     </button>
-    <button
-      type="button"
-      class="btn btn-primary float-right"
-      (click)="campEditMdl.showModal(locationCamp)"
-    >
+    <button type="button" class="btn btn-primary float-right" (click)="campEditMdl.showModal(locationCamp)">
       Location Info <fa-icon [icon]="informationIcon"></fa-icon>
     </button>
   </div>
@@ -34,20 +25,12 @@
     <div class="card">
       <h3 align="left">Clients</h3>
       <div>
-        <button
-          type="button"
-          (click)="clientMdl.showModal()"
-          class="btn btn-primary float-left"
-        >
+        <button type="button" (click)="clientMdl.showModal()" class="btn btn-primary float-left">
           <fa-icon [icon]="searchIcon"></fa-icon> Search Clients
         </button>
-        <button
-          type="button"
-          (click)="createClient()"
-          class="btn btn-primary float-right"
-        >
-          <fa-icon [icon]="createIcon"></fa-icon> Create Client</button
-        >&nbsp;
+        <button type="button" (click)="createClient()" class="btn btn-primary float-right">
+          <fa-icon [icon]="createIcon"></fa-icon> Create Client
+        </button>&nbsp;
       </div>
     </div>
     <div>
@@ -61,29 +44,19 @@
           </tr>
         </thead>
         <tbody>
-          <tr
-            *ngFor="let client of clients"
-            (click)="viewClient(client)"
-            class="client-row"
-          >
+          <tr *ngFor="let client of clients" (click)="viewClient(client)" class="client-row">
             <td class="text-left">
               {{ client.first_name }}
-              <span
-                *ngIf="
+              <span *ngIf="
                   client.preferred_name != '' && client.preferred_name != null
-                "
-                >({{ client.preferred_name }})</span
-              >
+                ">({{ client.preferred_name }})</span>
               {{ client.last_name }}
             </td>
             <td class="text-left">{{ client.phone }}</td>
             <td class="text-left">{{ client.admin_notes }}</td>
             <td class="text-left">
-              <fa-icon
-                id="attendanceIcon"
-                [style.color]="getAttendanceColor(client)"
-                [icon]="getAttendanceIcon(client)"
-              ></fa-icon>
+              <fa-icon id="attendanceIcon" [style.color]="getAttendanceColor(client)"
+                [icon]="getAttendanceIcon(client)"></fa-icon>
               {{ client.last_interaction_date }}
             </td>
           </tr>
@@ -97,7 +70,8 @@
         <fa-icon [icon]="backIcon"></fa-icon> Back to Camp List
       </button>
 
-      <button (click)="nextStop()" type="button" class="btn btn-primary float-right">Next Stop <fa-icon [icon]="forwardIcon"></fa-icon></button>
+      <button (click)="nextStop()" type="button" class="btn btn-primary float-right">Next Stop <fa-icon
+          [icon]="forwardIcon"></fa-icon></button>
     </div>
   </div>
 </div>
