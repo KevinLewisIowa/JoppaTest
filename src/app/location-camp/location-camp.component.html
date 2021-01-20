@@ -97,21 +97,9 @@
         <fa-icon [icon]="backIcon"></fa-icon> Back to Camp List
       </button>
 
-      <button
-        (click)="nextStop()"
-        type="button"
-        class="btn btn-primary float-right"
-      >
-        Next Stop <fa-icon [icon]="forwardIcon"></fa-icon>
-      </button>
+      <button (click)="nextStop()" type="button" class="btn btn-primary float-right">Next Stop <fa-icon [icon]="forwardIcon"></fa-icon></button>
     </div>
   </div>
 </div>
-<app-client-search
-  #clientMdl
-  (clientSelected)="clientSelected($event)"
-></app-client-search>
-<app-camp-edit-modal
-  #campEditMdl
-  (editedCamp)="editedCamp($event)"
-></app-camp-edit-modal>
+<app-client-search #clientMdl (clientSelected)="clientSelected($event)"></app-client-search>
+<app-camp-edit-modal #campEditMdl (editedCamp)="editedCamp($event)"></app-camp-edit-modal>

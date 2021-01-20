@@ -139,6 +139,10 @@ export class LocationCampComponent implements OnInit {
 
   editedCamp(theCamp: LocationCamp) {
     this.locationCamp = theCamp;
+    let routeId: number = JSON.parse(window.localStorage.getItem("routeId"));
+      this.mainService.getRoute(routeId).subscribe(data => {
+        this.route = data;
+      });
   }
 
   clientSelected(client: Client) {
