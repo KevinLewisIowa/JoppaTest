@@ -25,7 +25,7 @@ export class ClientEditComponent implements OnInit {
   locationCampId: number;
 
   constructor(private router: Router, private clientService: ClientService,
-              private fb: FormBuilder) { }
+    private fb: FormBuilder) { }
 
   ngOnInit() {
     this.isAdmin = JSON.parse(window.localStorage.getItem('isAdmin'));
@@ -74,25 +74,25 @@ export class ClientEditComponent implements OnInit {
 
   onFTHChange(value: string) {
     if (value == 'Unknown') {
-      this.clientForm.patchValue({first_time_homeless: null});
+      this.clientForm.patchValue({ first_time_homeless: null });
     }
     else if (value == 'Yes') {
-      this.clientForm.patchValue({first_time_homeless: true});
+      this.clientForm.patchValue({ first_time_homeless: true });
     }
     else {
-      this.clientForm.patchValue({first_time_homeless: false});
+      this.clientForm.patchValue({ first_time_homeless: false });
     }
   }
 
   onDTCChange(value: string) {
     if (value == 'Unknown') {
-      this.clientForm.patchValue({due_to_covid: null});
+      this.clientForm.patchValue({ due_to_covid: null });
     }
     else if (value == 'Yes') {
-      this.clientForm.patchValue({due_to_covid: true});
+      this.clientForm.patchValue({ due_to_covid: true });
     }
     else {
-      this.clientForm.patchValue({due_to_covid: false});
+      this.clientForm.patchValue({ due_to_covid: false });
     }
   }
 
@@ -105,8 +105,6 @@ export class ClientEditComponent implements OnInit {
     this.theClient.is_veteran = this.clientForm.get('is_veteran').value;
     this.theClient.current_camp_id = this.locationCampId;
     this.theClient.previous_camp_id = null;
-    this.theClient.shoe_size = String(this.clientForm.get('shoe_size').value).trim();
-    this.theClient.boot_size = String(this.clientForm.get('boot_size').value).trim();
     this.theClient.status = String(this.clientForm.get('status').value).trim();
     this.theClient.inactive_description = '';
     this.theClient.number_meals = this.clientForm.get('number_meals').value as number;
@@ -140,7 +138,7 @@ export class ClientEditComponent implements OnInit {
       this.clientService.insertClientAppearance(clientInteraction).subscribe((data: Appearance) => {
         // if during route, add this interaction to route interaction list
         if (!this.isAdmin) {
-          let routeAttendanceList:Appearance[] = JSON.parse(window.localStorage.getItem('RouteAttendance'));
+          let routeAttendanceList: Appearance[] = JSON.parse(window.localStorage.getItem('RouteAttendance'));
           clientInteraction.id = data.id;
           routeAttendanceList.push(clientInteraction);
           window.localStorage.setItem('RouteAttendance', JSON.stringify(routeAttendanceList));
@@ -151,7 +149,7 @@ export class ClientEditComponent implements OnInit {
           console.log(JSON.stringify(updatedClient));
           this.router.navigate([`/locationCamp/${this.locationCampId}`]);
         }, error => console.log(error));
-      }, error => console.log(error));      
+      }, error => console.log(error));
     }, error => {
       console.log(error);
       alert('Error creating client.  There may already be a client with the same name.  Please search for the client before continuing.');

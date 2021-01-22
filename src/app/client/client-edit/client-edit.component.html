@@ -48,18 +48,6 @@
         </div>
         <div class="row">
           <div class="col-sm-12 col-md-12 col-lg-12">
-            <label>Shoe Size: </label>
-            <input type="text" class="float-right" placeholder="shoe size" formControlName="shoe_size" />
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-sm-12 col-md-12 col-lg-12">
-            <label>Boot Size: </label>
-            <input type="text" class="float-right" placeholder="boot size" formControlName="boot_size" />
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-sm-12 col-md-12 col-lg-12">
             <label><span style="background-color: yellow;">First Time Homeless:</span><font color="red" *ngIf="!isAdmin">*</font> </label>
             <select class="form-control float-right" #fthitem style="width: 173px;" (change)="onFTHChange(fthitem.value)">
               <option value='Unknown'>Unknown</option>
