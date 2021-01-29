@@ -32,47 +32,59 @@ export class LocationsComponent implements OnInit {
       }
       else{
         this.thisRoute = route;
-        this.mainService.getCampsForRoute(this.routeId).subscribe(locations => {
-          console.log('Got locations for Route: ' + JSON.stringify(locations));
+        this.mainService.getCampsForRoute(this.routeId).subscribe((locations: LocationCamp[]) => {
           if(locations == null || locations == undefined){
             this.locationCamps = []
           }
           else{
+            let sortedlocations = locations.sort((a, b) => {
+              if (a.position > b.position) {
+                return 1;
+              } else if (a.position < b.position) {
+                return -1;
+              } else {
+                return 0;
+              }
+            });
+
+            this.locationCamps = sortedlocations;
             let locationCampIdList:number[] = [];
-            locations.forEach((location: LocationCamp) => {
+            sortedlocations.forEach((loc: LocationCamp) => {
+              locationCampIdList.push(loc.id);
+              window.localStorage.setItem("LocationCampIdList", JSON.stringify(locationCampIdList));
+            });
+            
+            // locations getting out of order because getClientsForCamp returns at weird times - TODO
+            sortedlocations.forEach((location: LocationCamp, index: number) => {
               this.mainService.getClientsForCamp(location.id).subscribe((data: any[]) => {
                 // If heat route, then filter down client list to only those that would show up
                 if (heatRoute) {
                   data = data.filter(client => client.dwelling !== "Vehicle" && client.dwelling !== "Under Bridge" && client.dwelling !== "Streets");
                 }
 
-                // Only add camp if there is at least one client at the site
-                if (data.length > 0) {
-                  this.locationCamps.push(location);
+                // Remove camp if there are no clients at the site
+                if (data.length == 0) {
+                  console.log('location has no people: ' + JSON.stringify(location));
+                  if (index < sortedlocations.length - 1) {
+                    this.locationCamps.splice(index, 1);
+                  } else {
+                    this.locationCamps.pop();
+                  }
+                  console.log(JSON.stringify(this.locationCamps));
 
-                  this.locationCamps.sort((a, b) => {
-                    if (a.position > b.position) {
-                      return 1;
-                    } else if (a.position < b.position) {
-                      return -1;
-                    } else {
-                      return 0;
+                  locationCampIdList.forEach((id: number, index: number) => {
+                    if (id == location.id) {
+                      console.log('remove id: ' + id);
+                      if (index < locationCampIdList.length - 1) {
+                        locationCampIdList.splice(index, 1);
+                      } else {
+                        locationCampIdList.pop();
+                      }
+                      console.log(JSON.stringify(locationCampIdList));
                     }
                   });
 
-                  // add camp to camp list to allow for navigation
-                  locationCampIdList.push(location.id);
-                  locationCampIdList.sort((a, b) => {
-                    if (a > b) {
-                      return 1;
-                    } else if (a < b) {
-                      return -1;
-                    } else {
-                      return 0;
-                    }
-                  });
                   window.localStorage.setItem("LocationCampIdList", JSON.stringify(locationCampIdList));
-                  console.log(JSON.stringify(locationCampIdList));
                 }
               });
             });
