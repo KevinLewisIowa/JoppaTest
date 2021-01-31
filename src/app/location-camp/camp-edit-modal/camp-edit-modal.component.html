@@ -19,6 +19,13 @@
             <label>Name: </label>
           </div>
         </div>
+        <div class="col-md-12" *ngIf="isAdmin">
+          <label>Route:</label>
+          <select id="routes" class="float-right" formControlName="route_id">
+            <option value="" disabled selected>Select a route</option>
+            <option *ngFor="let route of routes" [value]="route.id">{{route.name}}</option>
+          </select>
+        </div>
         <div class="row">
           <div class="col-sm-12 col-md-12 col-lg-12">
             <input type="time" class="float-right" placeholder="time" formControlName="expected_arrival_time" />
@@ -36,13 +43,6 @@
             <input type="text" class="float-right" placeholder="longitude" formControlName="longitude" />
             <label>Longitude: </label>
           </div>
-        </div>
-        <div class="col-md-12" *ngIf="isAdmin">
-          <label>Route:</label>
-          <select id="routes" class="float-right" formControlName="route_id">
-            <option value="" disabled selected>Select a route</option>
-            <option *ngFor="let route of routes" [value]="route.id">{{route.name}}</option>
-          </select>
         </div>
         <div class="row" *ngIf="isAdmin">
           <div class="col-sm-12 col-md-12 col-lg-12">

@@ -9,6 +9,13 @@
           <label>Name: </label>
           <input type="text" placeholder="name" formControlName="name" />
         </div>
+        <div class="col-md-12" *ngIf="isAdmin">
+          <label>Route:</label>
+          <select id="routes" class="float-right" formControlName="route_id">
+            <option value="" disabled selected>Select a route</option>
+            <option *ngFor="let route of routes" [value]="route.id">{{route.name}}</option>
+          </select>
+        </div>
         <div class="col-md-12">
           <label>Expected Arrival Time: </label>
           <input type="time" placeholder="expected time" formControlName="expected_arrival_time" />

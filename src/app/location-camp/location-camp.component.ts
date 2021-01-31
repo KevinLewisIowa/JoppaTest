@@ -261,13 +261,10 @@ export class LocationCampComponent implements OnInit {
   }
 
   back() {
-    console.log(this.isAdmin);
-    if (this.isAdmin) {
-      this.router.navigate(["/admin/campListing"]);
-    } else {
-      this.router.navigate(["/route", this.route.id]);
-    }
+    this.router.navigate(["/route", this.route.id]);
+  }
 
-    // else condition is above
+  backToCampListing() {
+    this.router.navigate(["/admin/campListing"]);
   }
 }

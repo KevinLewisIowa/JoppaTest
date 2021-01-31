@@ -63,28 +63,30 @@ export class LocationsComponent implements OnInit {
                 }
 
                 // Remove camp if there are no clients at the site
-                if (data.length == 0) {
-                  console.log('location has no people: ' + JSON.stringify(location));
-                  if (index < sortedlocations.length - 1) {
-                    this.locationCamps.splice(index, 1);
-                  } else {
-                    this.locationCamps.pop();
-                  }
-                  console.log(JSON.stringify(this.locationCamps));
-
-                  locationCampIdList.forEach((id: number, index: number) => {
-                    if (id == location.id) {
-                      console.log('remove id: ' + id);
-                      if (index < locationCampIdList.length - 1) {
-                        locationCampIdList.splice(index, 1);
-                      } else {
-                        locationCampIdList.pop();
-                      }
-                      console.log(JSON.stringify(locationCampIdList));
+                if (!this.isAdmin) {
+                  if (data.length == 0) {
+                    console.log('location has no people: ' + JSON.stringify(location));
+                    if (index < sortedlocations.length - 1) {
+                      this.locationCamps.splice(index, 1);
+                    } else {
+                      this.locationCamps.pop();
                     }
-                  });
-
-                  window.localStorage.setItem("LocationCampIdList", JSON.stringify(locationCampIdList));
+                    console.log(JSON.stringify(this.locationCamps));
+  
+                    locationCampIdList.forEach((id: number, index: number) => {
+                      if (id == location.id) {
+                        console.log('remove id: ' + id);
+                        if (index < locationCampIdList.length - 1) {
+                          locationCampIdList.splice(index, 1);
+                        } else {
+                          locationCampIdList.pop();
+                        }
+                        console.log(JSON.stringify(locationCampIdList));
+                      }
+                    });
+  
+                    window.localStorage.setItem("LocationCampIdList", JSON.stringify(locationCampIdList));
+                  }
                 }
               });
             });

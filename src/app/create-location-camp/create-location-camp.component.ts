@@ -14,6 +14,7 @@ export class CreateLocationCampComponent implements OnInit {
   theLocationCamp: LocationCamp;
   locationCampForm: FormGroup;
   theRoute: Route;
+  routes: Route[];
   constructor(private router: Router, private mainService: MainService,
               private fb: FormBuilder) { }
 
@@ -23,6 +24,10 @@ export class CreateLocationCampComponent implements OnInit {
     this.mainService.getRoute(routeId).subscribe((route: Route) => {
       this.theRoute = route;
     }, error => console.log(error));
+
+    this.mainService.getTheRoutes().subscribe(routes => {
+      this.routes = routes;
+    });
 
     this.theLocationCamp = new LocationCamp();
     this.locationCampForm = this.fb.group({
