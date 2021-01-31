@@ -15,12 +15,14 @@ export class CreateLocationCampComponent implements OnInit {
   locationCampForm: FormGroup;
   theRoute: Route;
   routes: Route[];
+  isAdmin: boolean;
   constructor(private router: Router, private mainService: MainService,
               private fb: FormBuilder) { }
 
   ngOnInit() {
     this.theRoute = new Route();
     let routeId: number = JSON.parse(window.localStorage.getItem('routeId'));
+    this.isAdmin = JSON.parse(window.localStorage.getItem('isAdmin'));
     this.mainService.getRoute(routeId).subscribe((route: Route) => {
       this.theRoute = route;
     }, error => console.log(error));
