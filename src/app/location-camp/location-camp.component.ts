@@ -100,23 +100,12 @@ export class LocationCampComponent implements OnInit {
                 );
               }
 
-              this.mainService
-                .getClientsForCamp(this.locationCampId)
-                .subscribe((data: Client[]) => {
+              this.mainService.getClientsForCamp(this.locationCampId).subscribe((data: Client[]) => {
                   if (this.heatRoute) {
-                    this.clients = data.filter(
-                      (client) =>
-                        client.dwelling !== "Vehicle" &&
-                        client.dwelling !== "Under Bridge" &&
-                        client.dwelling !== "Streets"
-                    );
-                    this.numberTanksAtCamp = this.clients.reduce(function (
-                      prevValue,
-                      currClient
-                    ) {
+                    this.clients = data.filter((client) => client.dwelling !== "Vehicle" && client.dwelling !== "Under Bridge" && client.dwelling !== "Streets");
+                    this.numberTanksAtCamp = this.clients.reduce(function (prevValue, currClient) {
                       return prevValue + currClient.number_tanks;
-                    },
-                      0);
+                    }, 0);
                     this.numPeopleWithTanksAtCamp = this.clients.filter(
                       (client) => client.number_tanks > 0
                     ).length;
@@ -238,17 +227,21 @@ export class LocationCampComponent implements OnInit {
     let routeAttendanceList: Appearance[] = JSON.parse(
       window.localStorage.getItem("RouteAttendance")
     );
-    let appearance: Appearance = routeAttendanceList.find(
-      (x) => x.client_id == client.id
-    );
-
-    if (appearance) {
-      if (appearance.was_seen && appearance.serviced) {
-        return this.checkCircleIcon;
-      } else if (!appearance.was_seen && appearance.serviced) {
-        return this.regularCheckCircleIcon;
+    if (routeAttendanceList.length > 0) {
+      let appearance: Appearance = routeAttendanceList.find(
+        (x) => x.client_id == client.id
+      );
+  
+      if (appearance) {
+        if (appearance.was_seen && appearance.serviced) {
+          return this.checkCircleIcon;
+        } else if (!appearance.was_seen && appearance.serviced) {
+          return this.regularCheckCircleIcon;
+        } else {
+          return this.timesCircleIcon;
+        }
       } else {
-        return this.timesCircleIcon;
+        return this.questionCircleIcon;
       }
     } else {
       return this.questionCircleIcon;

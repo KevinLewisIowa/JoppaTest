@@ -54,8 +54,7 @@ export class LocationsComponent implements OnInit {
               window.localStorage.setItem("LocationCampIdList", JSON.stringify(locationCampIdList));
             });
             
-            // locations getting out of order because getClientsForCamp returns at weird times - TODO
-            sortedlocations.forEach((location: LocationCamp, index: number) => {
+            sortedlocations.forEach((location: LocationCamp) => {
               this.mainService.getClientsForCamp(location.id).subscribe((data: any[]) => {
                 // If heat route, then filter down client list to only those that would show up
                 if (heatRoute) {
@@ -66,6 +65,7 @@ export class LocationsComponent implements OnInit {
                 if (!this.isAdmin) {
                   if (data.length == 0) {
                     console.log('location has no people: ' + JSON.stringify(location));
+                    let index:number = sortedlocations.findIndex(camp => camp.id == location.id);
                     if (index < sortedlocations.length - 1) {
                       this.locationCamps.splice(index, 1);
                     } else {
