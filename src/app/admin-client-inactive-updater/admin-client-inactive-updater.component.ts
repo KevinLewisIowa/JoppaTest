@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ClientService } from 'app/services/client.service';
+import { Client } from 'app/models/client';
 import {Router} from '@angular/router';
 // tslint:disable-next-line:comment-format
 //Add the clientService in the component.ts file in the constructor and import ClientService
@@ -10,11 +11,17 @@ import {Router} from '@angular/router';
 })
 export class AdminClientInactiveUpdaterComponent implements OnInit {
   clients: any[] = [];
+  inactivityLimit = 28;
   constructor(private clientService: ClientService, private router: Router) {
     this.clientService.getClientsByName('').subscribe(data =>{
       this.clients = data;
+      var today = new Date();
+
+
       this.clients.forEach((client: Client) => {
-        if(client.last_interaction_date){
+        var difference = today.getTime() - client.last_interaction_date.getTime();
+        difference = Math.ceil(difference / (1000 * 3600 * 24));
+        if(difference > this.inactivityLimit){
           client.status = "Inactive";
           client.current_camp_id = 0;
           this.clientService.updateClient(client).subscribe(data => {

@@ -166,6 +166,7 @@ export class LocationCampComponent implements OnInit {
         );
         client.status = "Active";
         client.last_interaction_date = new Date();
+        console.log("yooooooo : " + client.last_interaction_date);
 
         this.clientService.updateClient(client).subscribe((data) => {
           console.log("updated client");
@@ -231,7 +232,7 @@ export class LocationCampComponent implements OnInit {
       let appearance: Appearance = routeAttendanceList.find(
         (x) => x.client_id == client.id
       );
-  
+
       if (appearance) {
         if (appearance.was_seen && appearance.serviced) {
           return this.checkCircleIcon;
