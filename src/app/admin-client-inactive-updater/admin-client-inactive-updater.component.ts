@@ -12,7 +12,11 @@ import {Router} from '@angular/router';
 export class AdminClientInactiveUpdaterComponent implements OnInit {
   clients: any[] = [];
   inactivityLimit = 28;
+  countInactivated = 0;
   constructor(private clientService: ClientService, private router: Router) {
+  }
+
+  updateInactive() {
     this.clientService.getClientsByName('').subscribe(data =>{
       this.clients = data;
       var today = new Date();
@@ -25,10 +29,11 @@ export class AdminClientInactiveUpdaterComponent implements OnInit {
           client.status = "Inactive";
           client.current_camp_id = 0;
           this.clientService.updateClient(client).subscribe(data => {
-            //not implemented
+            this.countInactivated++;
           })
         }
       })
+      console.log(this.countInactivated + " clients marked as inactivated.");
     })
   }
 

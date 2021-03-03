@@ -70,4 +70,8 @@ export class AdminHomeComponent implements OnInit {
       );
     }
   }
+
+  openInactiveUpdater() {
+    this.router.navigate(["/admin/inactiveUpdater"]);
+  }
 }
