@@ -21,11 +21,10 @@ export class AdminClientInactiveUpdaterComponent implements OnInit {
       this.clients = data;
       var today = new Date();
 
-
       this.clients.forEach((client: Client) => {
-        var difference = today.getTime() - client.last_interaction_date.getTime();
+        var difference = today.getTime() - new Date(client.last_interaction_date).getTime();
         difference = Math.ceil(difference / (1000 * 3600 * 24));
-        if(difference > this.inactivityLimit){
+        if(difference > this.inactivityLimit && this.countInactivated < 5){
           client.status = "Inactive";
           client.current_camp_id = 0;
           this.clientService.updateClient(client).subscribe(data => {
