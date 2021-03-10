@@ -1,0 +1,10 @@
+<div class="card" style="opacity: 0.93">
+<div class="card-header">
+  <h2>Client Inactive Updater</h2>
+</div>
+  <div class="panel-body" style="opacity: 0.93">
+    <button (click)="updateInactive()">run updater</button>
+    <p *ngIf="countInactivated>0"> number of clients inactivated: {{countInactivated}}</p>
+  </div>
+</div>
+

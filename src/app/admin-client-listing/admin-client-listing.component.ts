@@ -11,7 +11,7 @@ import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
   styleUrls: ['./admin-client-listing.component.css']
 })
 export class AdminClientListingComponent implements OnInit {
-  displayedColumns = ['first_name', 'last_name', 'preferred_name', 'phone', 'birth_date', 'route_name', 'camp_name', 'status', 'household_id', 'updated_at']
+  displayedColumns = ['first_name', 'last_name', 'preferred_name', 'phone', 'birth_date', 'route_name', 'camp_name', 'status', 'household_id', 'updated_at'];
   clients: any[] = [];
   dataSource: MatTableDataSource<any>;
   backIcon = faChevronLeft;
@@ -19,7 +19,7 @@ export class AdminClientListingComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  
+
   constructor(private clientService: ClientService, private router: Router) {
     this.clientService.getClientsByName('').subscribe(data => {
       this.clients = data;
