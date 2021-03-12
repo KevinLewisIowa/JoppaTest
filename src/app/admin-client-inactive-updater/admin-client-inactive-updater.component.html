@@ -1,10 +1,25 @@
 <div class="card" style="opacity: 0.93">
-<div class="card-header">
-  <h2>Client Inactive Updater</h2>
-</div>
+  <div class="card-header">
+    <h2>Client Inactive Updater</h2>
+  </div>
   <div class="panel-body" style="opacity: 0.93">
-    <button class="btn btn-primary" (click)="updateInactive()">Run Updater</button>
-    <p *ngIf="countInactivated>0"> Number of Clients Inactivated: {{countInactivated}}</p>
+    <div class="col-md-12 col-lg-12">
+      <button class="btn btn-primary mt-3 mb-3" (click)="updateInactive()">
+        Run Updater
+      </button>
+      <p *ngIf="countInactivated > 0">
+        Number of Clients Inactivated: {{ countInactivated }}
+      </p>
+    </div>
+  </div>
+  <div class="card-footer">
+    <button
+      routerLink="/adminHome"
+      class="btn btn-primary"
+      style="float: left"
+      (click)="back()"
+    >
+      <fa-icon [icon]="backIcon"></fa-icon> Back
+    </button>
   </div>
 </div>
-
