@@ -23,7 +23,7 @@ export class AdminClientInactiveUpdaterComponent implements OnInit {
     this.clientService.getClientsByName("").subscribe((data) => {
       this.clients = data;
       var today = new Date();
-      console.log(data[0]);
+      // console.log(data[0]);
 
       this.clients.forEach((client: Client) => {
         console.log(client.status);
@@ -42,7 +42,7 @@ export class AdminClientInactiveUpdaterComponent implements OnInit {
             this.countInactivated++;
           });
         }
-        console.log(this.countInactivated + " clients marked as inactivated.");
+        // console.log(this.countInactivated + " clients marked as inactivated.");
       });
     });
   }
