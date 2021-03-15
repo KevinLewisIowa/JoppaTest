@@ -7,8 +7,11 @@
       <button class="btn btn-primary mt-3 mb-3" (click)="updateInactive()">
         Run Updater
       </button>
-      <p *ngIf="countInactivated > 0">
+      <p *ngIf="countInactivated > 0 || processComplete">
         Number of Clients Inactivated: {{ countInactivated }}
+      </p>
+      <p *ngIf="inactiveUpdaterRunning">
+        Running...
       </p>
     </div>
   </div>

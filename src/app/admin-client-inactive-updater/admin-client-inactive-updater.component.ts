@@ -15,34 +15,40 @@ export class AdminClientInactiveUpdaterComponent implements OnInit {
   clients: any[] = [];
   inactivityLimit = 28;
   countInactivated = 0;
+  inactiveUpdaterRunning: boolean = false;
+  processComplete: boolean = false;
   backIcon = faChevronLeft;
 
   constructor(private clientService: ClientService, private router: Router) {}
 
   updateInactive() {
+    this.inactiveUpdaterRunning = true;
+    this.processComplete = false;
     this.clientService.getClientsByName("").subscribe((data) => {
       this.clients = data;
       var today = new Date();
-      // console.log(data[0]);
 
+      var numClients = this.clients.length;
+
+      var i = 0;
       this.clients.forEach((client: Client) => {
-        console.log(client.status);
-        // console.log(
-        //   "client status true or false: " + (client.status === "Active")
-        // );
-        var difference =
-          today.getTime() - new Date(client.last_interaction_date).getTime();
+        i++;        
+        var difference = today.getTime() - new Date(client.last_interaction_date).getTime();
         difference = Math.ceil(difference / (1000 * 3600 * 24));
-        // var clientBool = client.status === "Active";
-
-        if (difference > this.inactivityLimit && (client.status = "Active")) {
+        
+        if (difference > this.inactivityLimit && (client.status == "Active")) {
+          console.log(client.first_name + client.preferred_name + client.last_name);
           client.status = "Inactive";
           client.current_camp_id = 0;
           this.clientService.updateClient(client).subscribe(() => {
             this.countInactivated++;
           });
         }
-        // console.log(this.countInactivated + " clients marked as inactivated.");
+
+        if (i == numClients) {
+          this.inactiveUpdaterRunning = false;
+          this.processComplete = true;
+        }
       });
     });
   }
