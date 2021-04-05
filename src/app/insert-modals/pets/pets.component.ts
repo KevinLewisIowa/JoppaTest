@@ -12,7 +12,7 @@ export class PetsComponent implements OnInit {
 
   @ViewChild('petsMdl') petsMdl: ElementRef
   @Output() petAdded = new EventEmitter<ClientPet>();
-  pet_type: string;
+  pet_type: string = '';
   quantity: number;
   extraInfo: string;
   placeholderText: string = '';
@@ -27,21 +27,15 @@ export class PetsComponent implements OnInit {
     this.modalService.open(this.petsMdl, {size: 'lg', backdrop: 'static'});
   }
 
-  onChange(selectedPet: string) {
-    switch (true) {
-      case selectedPet === 'Dog':
-        this.extraInfoNeeded = false;
-        break;
-      case selectedPet === 'Cat':
-        this.extraInfoNeeded = false;
-        break;
-      case selectedPet === 'Other':
-        this.extraInfoNeeded = true;
-        break;
-      default:
-        this.extraInfoNeeded = false;
-        break;
+  onChange() {
+    if (this.pet_type == 'Other') {
+      this.extraInfoNeeded = true;
     }
+    else {
+      this.extraInfoNeeded = false;
+    }
+    
+    console.log(this.pet_type);
   }
 
   submitPet() {
@@ -50,17 +44,17 @@ export class PetsComponent implements OnInit {
     if (this.pet_type != null && !isNaN(clientId) && !isNaN(this.quantity) && this.quantity > 0) {
       if (this.extraInfoNeeded && (this.extraInfo === '' || this.extraInfo === null)){ 
           alert('Need to enter species of pet');
-        } else {
-          pet.pet_type = this.extraInfo;
+        } else if (this.extraInfoNeeded) {
+          this.pet_type = this.extraInfo;
         }
-      } else if (!this.extraInfoNeeded) {
-        pet.pet_type = this.pet_type;
-      } else {
-        pet.pet_type = this.pet_type;
       }
+      
+      pet.pet_type = this.pet_type;
       pet.client_id = clientId;
       pet.quantity = this.quantity;
       pet.food_requested = this.food_requested;
+
+      console.log(JSON.stringify(pet));
       this.service.insertPet(pet).subscribe((data: ClientPet) => {
         if (data != null && data.id != null) {
           this.petAdded.emit(data);

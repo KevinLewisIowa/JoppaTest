@@ -8,10 +8,10 @@
       <div class="form-group">
         <div class="row">
           <div class="col-sm-3">
-              <select class="form-control" name="pet_type" [(ngModel)]="pet_type" #item (change)="onChange(item.value)">
-                  <option>Dog</option>
-                  <option>Cat</option>
-                  <option>Other</option>
+              <select class="form-control" name="pet_type" [(ngModel)]="pet_type" (change)="onChange()">
+                  <option value="Dog">Dog</option>
+                  <option value="Cat">Cat</option>
+                  <option value="Other">Other</option>
                 </select>
           </div>
           <div class="col-sm-3">
