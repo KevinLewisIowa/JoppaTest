@@ -37,7 +37,8 @@ export class ClientService {
   getClientLikes(id) {
     const myHeader = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': window.localStorage.getItem('apiToken')
+      'Authorization': window.localStorage.getItem('apiToken'),
+      'Access-Control-Allow-Origin': 'joppa-api-prod.herokuapp.com'
     });
     return this.http.get(this.baseUrl + `likesForClient?clientId=${id}`, {headers: myHeader})
     .map((res: any) => {
