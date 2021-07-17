@@ -43,7 +43,7 @@ export class MainService {
     const myHeader = new HttpHeaders({
       "Content-Type": "application/json",
       Authorization: window.localStorage.getItem("apiToken"),
-      'Access-Control-Allow-Origin': 'joppa-api-prod.herokuapp.com'
+      'Access-Control-Allow-Origin': '*'
     });
     return this.http
       .get(this.apiUrl + `routes`, { headers: myHeader })
