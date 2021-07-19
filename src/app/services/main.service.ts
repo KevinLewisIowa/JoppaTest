@@ -30,7 +30,7 @@ export class MainService {
   theHeader = new HttpHeaders().set("Content-Type", "application/json");
   online = true;
   private headers = new Headers({ "Content-Type": "application/json" });
-  private apiUrl = "https://joppa-api-prod.herokuapp.com/";
+  private apiUrl = "https://joppa-api-test.herokuapp.com/";
 
   constructor(
     private http: HttpClient,
@@ -42,8 +42,7 @@ export class MainService {
   getRoutes() {
     const myHeader = new HttpHeaders({
       "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-      'Access-Control-Allow-Origin': '*'
+      Authorization: window.localStorage.getItem("apiToken")
     });
     return this.http
       .get(this.apiUrl + `routes`, { headers: myHeader })
