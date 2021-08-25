@@ -18,26 +18,32 @@
           <mat-header-cell *matHeaderCellDef mat-sort-header
             >Route</mat-header-cell
           >
-          <mat-cell *matCellDef="let camp">{{ camp.route_name }}</mat-cell>
+          <mat-cell (click)="viewCamp(camp)" *matCellDef="let camp">{{ camp.route_name }}</mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="camp_name">
           <mat-header-cell *matHeaderCellDef mat-sort-header
             >Camp</mat-header-cell
           >
-          <mat-cell *matCellDef="let camp">{{ camp.camp_name }}</mat-cell>
+          <mat-cell (click)="viewCamp(camp)" *matCellDef="let camp">{{ camp.camp_name }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="position">
+          <mat-header-cell *matHeaderCellDef mat-sort-header
+            >Position</mat-header-cell
+          >
+          <mat-cell *matCellDef="let camp"><input type="number" placeholder="position" [(ngModel)]="camp.position" /> <button type="button" class="btn btn-primary btn-sm" (click)="submitCamp(camp)">Update position</button></mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="is_active">
           <mat-header-cell *matHeaderCellDef mat-sort-header
             >Is Active?</mat-header-cell
           >
-          <mat-cell *matCellDef="let camp">{{ camp.is_active }}</mat-cell>
+          <mat-cell (click)="viewCamp(camp)" *matCellDef="let camp">{{ camp.is_active }}</mat-cell>
         </ng-container>
 
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
         <mat-row
-          (click)="viewCamp(camp)"
           *matRowDef="let camp; columns: displayedColumns"
         ></mat-row>
       </mat-table>
