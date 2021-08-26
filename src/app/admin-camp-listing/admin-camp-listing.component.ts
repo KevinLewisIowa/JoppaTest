@@ -43,12 +43,14 @@ export class AdminCampListingComponent implements OnInit {
     this.router.navigate([`/locationCamp/${theCamp.id}`]);
   }
 
-  submitCamp(camp) {
-    console.log(camp);
-    this.mainService.updateLocationCamp(camp as LocationCamp).subscribe(data => {
-      window.localStorage.setItem('routeId', JSON.stringify(data.route_id));
-      this.editedCamp.emit(camp as LocationCamp);
-    }, error => console.log(error));
+  submitCamp() {
+    this.camps.forEach(camp => {
+      this.mainService.updateLocationCamp(camp as LocationCamp).subscribe(data => {
+        window.localStorage.setItem('routeId', JSON.stringify(data.route_id));
+        this.editedCamp.emit(camp as LocationCamp);
+      }, error => console.log(error));
+    });
+    window.location.reload();
   }
 
   applyFilter(filterValue: string) {

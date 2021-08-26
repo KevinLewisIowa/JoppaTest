@@ -32,7 +32,7 @@
           <mat-header-cell *matHeaderCellDef mat-sort-header
             >Position</mat-header-cell
           >
-          <mat-cell *matCellDef="let camp"><input type="number" placeholder="position" [(ngModel)]="camp.position" /> <button type="button" class="btn btn-primary btn-sm" (click)="submitCamp(camp)">Update position</button></mat-cell>
+          <mat-cell *matCellDef="let camp"><input type="number" placeholder="position" [(ngModel)]="camp.position" /></mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="is_active">
@@ -59,6 +59,13 @@
       (click)="back()"
     >
       <fa-icon [icon]="backIcon"></fa-icon> Back
+    </button>
+    <button
+      class="btn btn-primary"
+      style="float: right"
+      (click)="submitCamp()"
+    >
+    Update Changed Positions
     </button>
   </div>
 </div>
