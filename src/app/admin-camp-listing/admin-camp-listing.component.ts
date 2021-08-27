@@ -44,13 +44,29 @@ export class AdminCampListingComponent implements OnInit {
   }
 
   submitCamp() {
+    let count: number = 0;
     this.camps.forEach(camp => {
       this.mainService.updateLocationCamp(camp as LocationCamp).subscribe(data => {
         window.localStorage.setItem('routeId', JSON.stringify(data.route_id));
         this.editedCamp.emit(camp as LocationCamp);
-      }, error => console.log(error));
+
+        count++;
+        console.log(count + ' updated');
+        if (count >= this.camps.length) {
+          console.log('Everything done updating');
+          window.location.reload();
+        }
+      }, error => {
+        console.log(error);
+        
+        count++;
+        console.log(count + ' updated');
+        if (count >= this.camps.length) {
+          console.log('Everything done updating');
+          window.location.reload();
+        }
+      });
     });
-    window.location.reload();
   }
 
   applyFilter(filterValue: string) {
