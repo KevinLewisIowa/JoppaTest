@@ -18,7 +18,21 @@
           <mat-header-cell *matHeaderCellDef mat-sort-header
             >Route</mat-header-cell
           >
-          <mat-cell (click)="viewCamp(camp)" *matCellDef="let camp">{{ camp.route_name }}</mat-cell>
+          <mat-cell *matCellDef="let camp">
+            <select type="string" placeholder="route" [(ngModel)]="camp.route_name">
+              <option value="Blue">Blue</option>
+              <option value="Blue New Test">Blue New Test</option>
+              <option value="Green">Green</option>
+              <option value="Green New Test">Green New Test</option>
+              <option value="Orange">Orange</option>
+              <option value="Orange New Test">Orange New Test</option>
+              <option value="Red">Red</option>
+              <option value="Red- New Test">Red- New Test</option>
+              <option value="Training Route">Training Route</option>
+              <option value="Yellow">Yellow</option>
+              <option value="Yellow- New Test">Yellow- New Test</option>
+            </select>
+          </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="camp_name">
@@ -65,7 +79,7 @@
       style="float: right"
       (click)="submitCamp()"
     >
-    Update Changed Positions
+    Save Camp Changes
     </button>
   </div>
 </div>
