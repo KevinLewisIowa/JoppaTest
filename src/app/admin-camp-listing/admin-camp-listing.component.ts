@@ -4,6 +4,7 @@ import { MatPaginator, MatSort, MatTableDataSource } from "@angular/material";
 import { Router } from "@angular/router";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { LocationCamp } from "app/models/location-camp";
+import { Route } from "app/models/route";
 import { MainService } from "app/services/main.service";
 
 @Component({
@@ -14,6 +15,7 @@ import { MainService } from "app/services/main.service";
 export class AdminCampListingComponent implements OnInit {
   displayedColumns = ["camp_name", "route_name", "position", "is_active"];
   camps: any[] = [];
+  routes: Route[] = [];
   camp: LocationCamp;
   @Output() editedCamp = new EventEmitter<LocationCamp>();
   dataSource: MatTableDataSource<any>;
@@ -25,7 +27,6 @@ export class AdminCampListingComponent implements OnInit {
   constructor(private mainService: MainService, private router: Router) {
     this.mainService.getCampListing().subscribe(
       (data) => {
-        console.log(JSON.stringify(data));
         this.camps = data;
         this.dataSource = new MatTableDataSource(this.camps);
         this.dataSource.sort = this.sort;
@@ -34,6 +35,10 @@ export class AdminCampListingComponent implements OnInit {
       },
       (error) => console.log(error)
     );
+
+    this.mainService.getTheRoutes().subscribe(routes => {
+      this.routes = routes;
+    });
   }
 
   ngOnInit() {}
@@ -46,6 +51,7 @@ export class AdminCampListingComponent implements OnInit {
   submitCamp() {
     let count: number = 0;
     this.camps.forEach(camp => {
+      console.log(JSON.stringify(camp));
       this.mainService.updateLocationCamp(camp as LocationCamp).subscribe(data => {
         window.localStorage.setItem('routeId', JSON.stringify(data.route_id));
         this.editedCamp.emit(camp as LocationCamp);
