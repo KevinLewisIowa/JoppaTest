@@ -21,6 +21,7 @@ import { GoalsNextStep } from "app/models/goals-next-steps";
 import { Router } from '@angular/router';
 import { Note } from 'app/models/note';
 import { ClientPet } from 'app/models/client-pet';
+import { environment } from 'environments/environment';
 
 
 // adding a new comment
@@ -28,7 +29,7 @@ import { ClientPet } from 'app/models/client-pet';
 export class ClientService {
   theHeader = new HttpHeaders().set('Content-Type', 'application/json');
   online = true;
-  private baseUrl = 'https://joppa-api-test.herokuapp.com/';
+  private baseUrl = environment.api_url;
 
   constructor(private http: HttpClient, private store: Store<IMainStore>, private router: Router) { 
     console.log(this.baseUrl);

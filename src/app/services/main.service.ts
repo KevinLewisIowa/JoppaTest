@@ -18,6 +18,7 @@ import { and } from "@angular/router/src/utils/collection";
 import { Router } from "@angular/router";
 import { RouteInstanceTankHoseInteraction } from "app/models/route-instance-tank-hose-interaction";
 import { Inventory } from "app/admin-reports/inventory-report/inventory-report.component";
+import { environment } from "environments/environment";
 
 @Injectable()
 export class MainService {
@@ -30,7 +31,7 @@ export class MainService {
   theHeader = new HttpHeaders().set("Content-Type", "application/json");
   online = true;
   private headers = new Headers({ "Content-Type": "application/json" });
-  private apiUrl = "https://joppa-api-test.herokuapp.com/";
+  private apiUrl = environment.api_url;
 
   constructor(
     private http: HttpClient,
