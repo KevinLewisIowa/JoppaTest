@@ -31,7 +31,7 @@ export class MainService {
   theHeader = new HttpHeaders().set("Content-Type", "application/json");
   online = true;
   private headers = new Headers({ "Content-Type": "application/json" });
-  private apiUrl  = environment.api_url;
+  private apiUrl = environment.api_url;
 
   constructor(
     private http: HttpClient,
