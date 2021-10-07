@@ -25,12 +25,14 @@ export class NotesComponent implements OnInit {
   submitNote() {
     const note = new Note();
     const clientId: number = JSON.parse(localStorage.getItem('selectedClient'));
-    const routeInstanceId: number = JSON.parse(localStorage.getItem('routeInstance'));
+    const isAdmin: boolean = JSON.parse(localStorage.getItem('isAdmin'));
+    const routeInstanceId: number = isAdmin ? -1 : JSON.parse(localStorage.getItem('routeInstance'));
     if (this.note != null && !isNaN(clientId) && !isNaN(routeInstanceId)) {
       note.note = this.note;
       note.client_id = clientId;
       note.route_instance_id = routeInstanceId;
       
+      console.log(JSON.stringify(note));
       this.clientService.insertNote(note).subscribe((data: Note) => {
         if (data != null && data.id != null) {
           this.noteAdded.emit(data);

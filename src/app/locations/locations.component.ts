@@ -4,7 +4,7 @@ import { Route } from '../models/route';
 import { MainService } from '../services/main.service';
 import { Router } from '@angular/router';
 import { LocationCamp } from 'app/models/location-camp';
-import { faChevronLeft, faPlus, faMap } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faPlus, faMap, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-locations',
@@ -19,6 +19,7 @@ export class LocationsComponent implements OnInit {
   backIcon = faChevronLeft;
   createIcon = faPlus;
   mapIcon = faMap;
+  informationIcon = faInfoCircle;
   
   constructor(private route : ActivatedRoute, private mainService : MainService, private router:Router) { 
     this.thisRoute = new Route();
@@ -100,6 +101,10 @@ export class LocationsComponent implements OnInit {
 
   ngOnInit() {
     this.isAdmin = JSON.parse(window.localStorage.getItem('isAdmin'));
+  }
+
+  editedRoute(theRoute: Route) {
+    this.thisRoute = theRoute;
   }
 
   openLocation(theLocation: LocationCamp){

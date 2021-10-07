@@ -25,26 +25,11 @@ export class AdminHomeComponent implements OnInit {
     this.mainService.showEndRoute.next(this.routeInstanceId != null);
   }
 
-  createNewHeater() {
-    this.router.navigate([`heaterNew`]);
-  }
-
   openAdminReports() {
     this.router.navigate(["/admin/reports"]);
   }
 
   goToRoutes() {
-    this.setRouteAttendance();
-    this.router.navigate(["routes"]);
-  }
-
-  checkInAllHeaters() {
-    this.router.navigate(["/admin/checkInAllHeaters"]);
-  }
-
-  goToHeatRoutes() {
-    window.localStorage.setItem("heatRoute", JSON.stringify(true));
-    this.setRouteAttendance();
     this.router.navigate(["routes"]);
   }
 
@@ -74,4 +59,12 @@ export class AdminHomeComponent implements OnInit {
   openInactiveUpdater() {
     this.router.navigate(["/admin/inactiveUpdater"]);
   }
+
+  // createNewHeater() {
+  //   this.router.navigate([`heaterNew`]);
+  // }
+
+  // checkInAllHeaters() {
+  //   this.router.navigate(["/admin/checkInAllHeaters"]);
+  // }
 }
