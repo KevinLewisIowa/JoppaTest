@@ -4,26 +4,17 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
-import { Store, StoreModule } from '@ngrx/store';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { MainReducer } from './state-management/main.reducer';
 import { APIReducer } from './state-management/error.reducer';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-
-import { InlineSVGModule} from 'ng-inline-svg';
-
 import { MatPaginatorModule, MatTableModule, MatFormFieldModule, MatInputModule, MatSortModule, MatDatepicker, MatDatepickerModule, MatNativeDateModule, MatButtonModule, MatDialogModule } from '@angular/material';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 
 import { AppComponent } from './app.component';
-import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { RoutesComponent } from './routes/routes.component';
 import { LocationsComponent } from './locations/locations.component';
-
-import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
-import { InMemoryDataService } from './in-memory-data.service';
 
 import { AppRoutingModule } from './app-routing.module';
 
@@ -87,7 +78,6 @@ const reducers = {
 @NgModule({
   declarations: [
     AppComponent,
-    HeaderComponent,
     FooterComponent,
     RoutesComponent,
     LocationsComponent,
@@ -144,7 +134,7 @@ const reducers = {
   imports: [
     BrowserModule,
     FormsModule,
-    NgbModule.forRoot(),
+    NgbModule,
     ReactiveFormsModule,
     MatPaginatorModule,
     MatFormFieldModule,
@@ -158,11 +148,7 @@ const reducers = {
     BrowserAnimationsModule,
     HttpClientModule,
     FontAwesomeModule,
-    // InMemoryWebApiModule.forRoot(InMemoryDataService),
-    StoreModule.forRoot(reducers),
-    StoreDevtoolsModule.instrument(),
-    AppRoutingModule,
-    InlineSVGModule.forRoot({baseUrl:'https://dev.w3.org/SVG/tools/svgweb/samples/svg-files'})
+    AppRoutingModule
   ],
   providers: [MainService, ClientService],
   bootstrap: [AppComponent],

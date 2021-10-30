@@ -49,7 +49,12 @@ export class RoutesComponent implements OnInit {
         this.routeInstance.end_time = new Date();
 
         console.log(this.routeInstance);
-        this.mainService.updateRouteInstance(this.routeInstance);
+        this.mainService.updateRouteInstance(this.routeInstance).subscribe(
+          (response) => { },
+          (error) => {
+            console.log(error);
+          }
+        );
         console.log(this.routeInstance);
       }, error => console.log(error));
     }

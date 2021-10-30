@@ -5,9 +5,7 @@ import {
   RouterStateSnapshot,
   Router
 } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
-import { Store } from '@ngrx/store';
-import { concat } from 'rxjs/operator/concat';
+
 
 @Injectable()
 export class IsLoggedInGuard implements CanActivate {

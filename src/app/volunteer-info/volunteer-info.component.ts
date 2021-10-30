@@ -38,7 +38,9 @@ export class VolunteerInfoComponent implements OnInit {
   addNumberRouteMembers() {
     this.routeInstance.id = this.routeInstanceId;
     this.routeInstance.number_route_members = this.volunteerForm.get('number_route_members').value;
-    this.mainService.updateRouteInstance(this.routeInstance);
+    this.mainService.updateRouteInstance(this.routeInstance).subscribe((response) => { 
+
+    }, (error) => { console.log(error); });
 
     this.mainService.showEndRoute.next(true);
     let routeAttendance:Appearance[] = [];

@@ -1,10 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+import { FormGroup, FormBuilder } from "@angular/forms";
 import { Client } from "app/models/client";
 import { ClientService } from "app/services/client.service";
-import { Store } from "@ngrx/store";
 import { Router } from "@angular/router";
-import { IMainStore } from "app/state-management/main.store";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
@@ -29,7 +27,7 @@ export class ClientEditModalComponent implements OnInit {
   homelessReasonOptions: string[] = ['Eviction', 'Job Loss', 'Family Dispute', 'Legal Issues', 'Health Issues', 'Addictions', 'Mental Health Issues', 'Other'];
 
   constructor(private router: Router, private modalService: NgbModal, private clientService: ClientService,
-              private fb: FormBuilder, private store: Store<IMainStore>) { }
+              private fb: FormBuilder) { }
 
   ngOnInit() {
     this.theClient = new Client();

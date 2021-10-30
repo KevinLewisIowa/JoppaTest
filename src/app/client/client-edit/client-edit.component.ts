@@ -1,12 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, FormArray, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from "@angular/router";
 import { ClientService } from "app/services/client.service";
-import { Store } from "@ngrx/store";
-import { IMainStore } from "app/state-management/main.store";
 import { Client } from "app/models/client";
 import { Appearance } from 'app/models/appearance';
-import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-client-edit',

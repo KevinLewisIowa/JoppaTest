@@ -15,7 +15,7 @@ import { Note } from 'app/models/note';
 import { ClientPet } from 'app/models/client-pet';
 import { faCheckCircle as farCheckCircle } from '@fortawesome/free-regular-svg-icons';
 import { faChevronLeft, faInfoCircle, faCheckCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, timer } from 'rxjs';
 import { DatePipe } from '@angular/common';
 import { isNullOrUndefined } from 'util';
 import { PrayerRequestAndNeed } from 'app/models/prayer-request';
@@ -251,7 +251,7 @@ export class ServicingClientComponent implements OnInit {
 
   updateNumberTanksHoses(client: Client) {
     this.service.updateClient(client).subscribe(data => {
-      let updateTimer = Observable.timer(2000, 2000);
+      let updateTimer = timer(2000, 2000);
       this.updateTimerSubscription = updateTimer.subscribe(data => {
         this.hideConfirmationMessage()
       });

@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
 import { MainService } from 'app/services/main.service';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 
@@ -10,7 +9,7 @@ import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 })
 export class AdminRouteUnfulfilledPrayerRequestsNeedsComponent implements OnInit {
 
-  unfulfilledPrayerRequestsNeeds: Observable<any>[] = [];
+  unfulfilledPrayerRequestsNeeds = [];
 
   constructor(private service: MainService) { };
 
@@ -18,10 +17,8 @@ export class AdminRouteUnfulfilledPrayerRequestsNeedsComponent implements OnInit
 
   ngOnInit() {
     this.service.getAdminRouteUnfulfilledPrayerRequestsNeeds().subscribe(data => {
-      this.unfulfilledPrayerRequestsNeeds = data, error => {
-        console.log(error);
-      }
-    })
+      this.unfulfilledPrayerRequestsNeeds = data;
+    }, error => console.log(error));
   }
 
 }

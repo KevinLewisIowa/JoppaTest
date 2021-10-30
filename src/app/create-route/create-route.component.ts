@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormArray, Validators } from '@angular/forms';
 import { Router } from "@angular/router";
 import { MainService } from "app/services/main.service";
-import { Store } from "@ngrx/store";
-import { IMainStore } from "app/state-management/main.store";
 import { Route } from "app/models/route";
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 
@@ -19,7 +17,7 @@ export class CreateRouteComponent implements OnInit {
   backIcon = faChevronLeft;
 
   constructor(private router: Router, private mainService: MainService,
-              private fb: FormBuilder, private store: Store<IMainStore>) { }
+              private fb: FormBuilder) { }
 
   ngOnInit() {
     this.theRoute.region;
@@ -39,7 +37,7 @@ export class CreateRouteComponent implements OnInit {
 
     this.mainService.insertRoute(this.theRoute).subscribe(data => {
       this.router.navigate(['/routes']);
-    }, error => { this.store.dispatch({type: 'USER_API_ERROR', payload: { message: 'error' }})})
+    }, error => { console.log(error) });
   }
 
   back() {

@@ -2,14 +2,11 @@ import { Component, OnInit, Renderer2 } from "@angular/core";
 import { Route } from "../models/route";
 import { ActivatedRoute, Params } from "@angular/router";
 import { MainService } from "../services/main.service";
-import { Store } from "@ngrx/store";
-import { IMainStore } from "../state-management/main.store";
 import { Router } from "@angular/router";
 import { Client } from "../models/client";
 import { LocationCamp } from "app/models/location-camp";
 import { Appearance } from "app/models/appearance";
 import { ClientService } from "app/services/client.service";
-import { Subscription } from "rxjs";
 import {
   faQuestionCircle as farQuestionCircle,
   faCheckCircle as farCheckCircle,

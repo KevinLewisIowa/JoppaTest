@@ -1,8 +1,6 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ElementRef, ViewChild, Renderer2} from '@angular/core';
 import { Client } from "app/models/client";
 import { ClientService } from "app/services/client.service";
-import { Store } from "@ngrx/store";
-import { IMainStore } from "app/state-management/main.store";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { MatDialog } from '@angular/material';
 import { ConfirmDialogModel, CustomConfirmationDialogComponent } from 'app/custom-confirmation-dialog/custom-confirmation-dialog.component';
@@ -34,8 +32,7 @@ export class ClientSearchComponent implements OnInit, OnDestroy {
   of = '';
   noRecords = '';
 
-  constructor(private clientService: ClientService, private store: Store<IMainStore>,
-              private modalService: NgbModal, private renderer: Renderer2, private dialog: MatDialog) { }
+  constructor(private clientService: ClientService, private modalService: NgbModal, private renderer: Renderer2, private dialog: MatDialog) { }
 
   ngOnInit() {
   }

@@ -1,5 +1,5 @@
 import { GET_USER, GET_LOCATIONS, LOCATION_SELECTED, LOCATION_CAMP_SELECTED, ROUTE_SELECTED } from './main.actions';
-import { IUserStore, UserStore, IMainStore } from './main.store';
+import { IUserStore, UserStore } from './main.store';
 
 export function MainReducer (state : IUserStore = UserStore, {type, payload}) {
     switch (type){
