@@ -106,6 +106,7 @@ export class ClientEditComponent implements OnInit {
     this.theClient.admin_notes = String(this.clientForm.get('admin_notes').value).trim();
     this.theClient.first_time_homeless = this.clientForm.get('first_time_homeless').value;
     this.theClient.date_became_homeless = new Date(Date.parse(this.clientForm.get('date_became_homeless').value));
+    
     let homelessReason = String(this.clientForm.get('homeless_reason').value.trim());
     if (homelessReason == 'Other' && this.otherHomelessReason != '') {
       homelessReason = this.otherHomelessReason;
@@ -114,9 +115,24 @@ export class ClientEditComponent implements OnInit {
       alert('If you select Other as Homeless Reason, need to indicate reason.');
       return;
     }
+
     this.theClient.homeless_reason = homelessReason;
     this.theClient.due_to_covid = this.clientForm.get('due_to_covid').value;
     this.theClient.last_interaction_date = new Date();
+
+    // validate that client birth date is not unreasonable
+    let now: Date = new Date();
+    let birthday: Date = new Date(this.theClient.birth_date);
+    let pastDate: Date = new Date(now.getFullYear() - 100, now.getMonth(), now.getDate());
+    if (birthday.getTime() > now.getTime()) {
+      alert('You cannot select a birth date that is in the future');
+      return;
+    }
+    else if (birthday.getTime() < pastDate.getTime()) {
+      alert('You cannot set a birth date this far back in the past');
+      return;
+    }
+
     this.clientService.insertClient(this.theClient).subscribe((insertedClient: Client) => {
       // create appearance of client as they were seen and serviced
       const clientInteraction: Appearance = new Appearance();

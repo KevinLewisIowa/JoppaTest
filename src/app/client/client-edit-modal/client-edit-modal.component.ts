@@ -4,6 +4,7 @@ import { Client } from "app/models/client";
 import { ClientService } from "app/services/client.service";
 import { Router } from "@angular/router";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { exit } from 'process';
 
 @Component({
   selector: 'app-client-edit-modal',
@@ -99,6 +100,19 @@ export class ClientEditModalComponent implements OnInit {
 
   submitClient() {
     let updatedClient: Client = this.clientForm.value;
+
+    let now: Date = new Date();
+    let birthday: Date = new Date(updatedClient.birth_date);
+    let pastDate: Date = new Date(now.getFullYear() - 100, now.getMonth(), now.getDate());
+    if (birthday.getTime() > now.getTime()) {
+      alert('You cannot select a birth date that is in the future');
+      return;
+    }
+    else if (birthday.getTime() < pastDate.getTime()) {
+      alert('You cannot set a birth date this far back in the past');
+      return;
+    }
+
     if (updatedClient.status == 'Inactive') {
       updatedClient.previous_camp_id = updatedClient.current_camp_id;
       updatedClient.current_camp_id = 0;
