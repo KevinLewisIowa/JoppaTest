@@ -1,32 +1,32 @@
 <form [formGroup]="routeInstanceForm">
   <div class="card text-center" style="opacity:0.93">
     <div class="card-header" id="topOfScreen">
-        <button *ngIf="isAdmin" routerLink="/adminLogin" class="btn btn-info" type="button">
+        <button *ngIf="isAdmin" routerLink="/adminHome" class="btn btn-info" type="button">
           <span class="oi oi-person" title="Admin Login" aria-hidden="true"></span>
         </button>
       <h2>Route Leader Sign In</h2>
       <h6><label><font color="red">*</font></label>Indicates Required Field</h6>
     </div>
     <div class="panel-body" style="opacity:0.93">
-      <div class="entry-box">
-        <div class="col-md-12">
-          <label>Leader Name:<font color="red">*</font></label>
-          <input type="text" placeholder="Name" formControlName="leader_name"/>
+      <div class="entry-box" style="margin:0 auto; max-width:50%">
+        <div class="form-group">
+          <label for="name">Leader Name:<font color="red">*</font></label>
+          <input type="text" class="form-control" style="text-align: center;" id="name" placeholder="Name" formControlName="leader_name"/>
         </div>
-        <div class="col-md-12">
-          <label>Leader Phone:<font color="red">*</font></label>
-          <input type="tel" placeholder="515-123-4567" formControlName="leader_phone"/>
+        <div class="form-group">
+          <label for="phone">Leader Phone:<font color="red">*</font></label>
+          <input id="phone" type="tel" style="text-align: center;" class="form-control" placeholder="515-123-4567" formControlName="leader_phone"/>
         </div>
-        <div class="col-md-12">
-          <label>Route:<font color="red">*</font></label>
-          <select id="routes" formControlName="route_id">
+        <div class="form-group">
+          <label id="routes">Route:<font color="red">*</font></label>
+          <select id="routes" class="form-control" style="text-align: center;" formControlName="route_id">
             <option value="" disabled selected>Select a route</option>
             <option *ngFor="let route of routes" [value]="route.id">{{route.name}}</option>
           </select>
         </div>
-        <div class="col-md-12">
-          <label>Heat Route:</label>
-          <input type="checkbox" checked formControlName="heat_route">
+        <div class="form-group">
+          <label for="heat">Heat Route:</label>
+          <input id="heat" type="checkbox" class="form-control" checked formControlName="heat_route">
         </div>
         <div>
             <img id="joppaLogo" aria-label="Joppa" [src]="'./assets/Joppa_Logo.png'">

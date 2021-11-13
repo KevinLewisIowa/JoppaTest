@@ -21,7 +21,6 @@ import { CheckoutHeatersComponent } from "./checkout-heaters/checkout-heaters.co
 import { VolunteerInfoComponent } from "./volunteer-info/volunteer-info.component";
 import { AdminReportsComponent } from "./admin-reports/admin-reports.component";
 import { NewClientsReportComponent } from "./admin-reports/new-clients-report/new-clients-report.component";
-import { AdminLoginComponent } from "./admin-login/admin-login.component";
 import { MainLoginComponent } from "./main-login/main-login.component";
 import { IsLoggedInGuard, IsAdminGuard } from "app/guards/login.guard";
 import { RouteMapComponent } from "./route-map/route-map.component";
@@ -183,11 +182,6 @@ const routes: Routes = [
     path: "adminHome",
     canActivate: [IsLoggedInGuard, IsAdminGuard],
     component: AdminHomeComponent,
-  },
-  {
-    path: "adminLogin",
-    canActivate: [IsLoggedInGuard],
-    component: AdminLoginComponent,
   },
   {
     path: "heaterNew",

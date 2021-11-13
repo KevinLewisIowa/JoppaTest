@@ -50,7 +50,6 @@ import { VolunteerInfoComponent } from './volunteer-info/volunteer-info.componen
 import { AdminReportsComponent } from './admin-reports/admin-reports.component';
 import { NewClientsReportComponent } from './admin-reports/new-clients-report/new-clients-report.component';
 import { ClientLocationModalComponent } from './client-location-modal/client-location-modal.component';
-import { AdminLoginComponent } from './admin-login/admin-login.component';
 import { MainLoginComponent } from './main-login/main-login.component';
 import { RouteMapComponent } from './route-map/route-map.component';
 import { NotesComponent } from './insert-modals/notes/notes.component';
@@ -111,7 +110,6 @@ const reducers = {
     AdminReportsComponent,
     NewClientsReportComponent,
     ClientLocationModalComponent,
-    AdminLoginComponent,
     MainLoginComponent,
     RouteMapComponent,
     NotesComponent,

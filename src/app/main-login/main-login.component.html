@@ -5,11 +5,11 @@
   <div class="panel-body">
     <form [formGroup]="passwordForm">
       <div class="entry-box">
-        <div class="col-md-12">
-          <label>Password: </label>
-          <input type="password" formControlName="the_password" />
+        <div class="form-group">
+          <label for="pwd">Password: </label>
+          <input id="pwd" class="form-control" style="max-width: 50%; margin:0 auto; text-align: center;" type="password" formControlName="the_password" />
         </div>
-        <div class="col-md-12">
+        <div class="form-group">
           <button type="submit" (click)="login()" class="btn btn-primary">Login</button>
         </div>
         <p style="color:red;" *ngIf="invalidText">Login Not Valid</p>
