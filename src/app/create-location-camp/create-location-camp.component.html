@@ -5,32 +5,32 @@
     </div>
     <div class="panel-body" style="opacity:0.93">
       <div class="login-box">
-        <div class="col-md-12">
-          <label>Name: </label>
-          <input type="text" placeholder="name" formControlName="name" />
+        <div class="form-group">
+          <label for="name">Name: </label>
+          <input id="name" type="text" class="form-control" style="margin:0 auto; max-width:50%;" placeholder="Camp Name" formControlName="name" />
         </div>
-        <div class="col-md-12" *ngIf="isAdmin">
-          <label>Route:</label>
-          <select id="routes" class="float-right" formControlName="route_id">
+        <div class="form-group" *ngIf="isAdmin">
+          <label for="routes">Route:</label>
+          <select id="routes" class="form-control" style="margin:0 auto; max-width: 50%;" formControlName="route_id">
             <option value="" disabled selected>Select a route</option>
             <option *ngFor="let route of routes" [value]="route.id">{{route.name}}</option>
           </select>
         </div>
-        <div class="col-md-12">
-          <label>Expected Arrival Time: </label>
-          <input type="time" placeholder="expected time" formControlName="expected_arrival_time" />
+        <div class="form-group">
+          <label for="arrival_time">Expected Arrival Time: </label>
+          <input id="arrival_time" type="time" class="form-control" style="margin:0 auto; max-width:50%;" placeholder="Expected Arrival Time" formControlName="expected_arrival_time" />
         </div>
-        <div class="col-md-12">
-          <label>Position: </label>
-          <input type="number" placeholder="position" formControlName="position" />
+        <div class="form-group">
+          <label id="position">Position: </label>
+          <input id="position" type="number" class="form-control" style="margin:0 auto; max-width:50%;" placeholder="Position" formControlName="position" />
         </div>
-        <div class="col-md-12">
-          <label>Notes: </label>
-          <input type="text" placeholder="notes" formControlName="notes" />
+        <div class="form-group">
+          <label for="notes">Notes: </label>
+          <input id="notes" type="text" placeholder="Notes" class="form-control" style="margin:0 auto; max-width:50%;" formControlName="notes" />
         </div>
-        <div class="col-md-12">
-          <label>Active: </label>
-          <input type="checkbox" formControlName="is_active" />
+        <div class="form-group">
+          <label for="active">Active: </label>
+          <input id="active" type="checkbox" class="form-control" style="margin:0 auto; max-width:50%;" formControlName="is_active" />
         </div>
       </div>
     </div>

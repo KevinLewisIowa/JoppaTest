@@ -15,6 +15,7 @@ export class CreateRouteComponent implements OnInit {
   routeForm: FormGroup;
   theRoute = new Route();
   backIcon = faChevronLeft;
+  isAdmin: boolean;
 
   constructor(private router: Router, private mainService: MainService,
               private fb: FormBuilder) { }
@@ -29,6 +30,8 @@ export class CreateRouteComponent implements OnInit {
     });
     this.routeForm.get('region').setValidators(Validators.required);
     this.routeForm.get('name').setValidators(Validators.required);
+
+    this.isAdmin = JSON.parse(window.localStorage.getItem('isAdmin'));
   }
 
   submitRoute() {
@@ -41,6 +44,9 @@ export class CreateRouteComponent implements OnInit {
   }
 
   back() {
-    this.router.navigate(['routes']);
+    if (this.isAdmin) {
+      window.localStorage.removeItem('routeId');
+    }
+    this.router.navigate(['/routes']);
   }
 }
