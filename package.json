@@ -15,26 +15,25 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "^8.2.14",
+    "@angular/animations": "^9.1.13",
     "@angular/cdk": "^7.3.7",
-    "@angular/cli": "^8.3.29",
-    "@angular/common": "^8.2.14",
-    "@angular/compiler": "^8.2.14",
-    "@angular/compiler-cli": "^8.2.14",
-    "@angular/core": "^8.2.14",
-    "@angular/forms": "^8.2.14",
+    "@angular/cli": "^9.1.15",
+    "@angular/common": "^9.1.13",
+    "@angular/compiler": "^9.1.13",
+    "@angular/compiler-cli": "^9.1.13",
+    "@angular/core": "^9.1.13",
+    "@angular/forms": "^9.1.13",
     "@angular/material": "^7.3.7",
-    "@angular/platform-browser": "^8.2.14",
-    "@angular/platform-browser-dynamic": "^8.2.14",
-    "@angular/router": "^8.2.14",
-    "@fortawesome/angular-fontawesome": "^0.5.0",
+    "@angular/platform-browser": "^9.1.13",
+    "@angular/platform-browser-dynamic": "^9.1.13",
+    "@angular/router": "^9.1.13",
+    "@fortawesome/angular-fontawesome": "^0.6.1",
     "@fortawesome/fontawesome-svg-core": "^1.2.25",
     "@fortawesome/free-regular-svg-icons": "^5.11.2",
     "@fortawesome/free-solid-svg-icons": "^5.11.2",
     "@ng-bootstrap/ng-bootstrap": "^5.1.0",
     "@ngrx/core": "^1.2.0",
     "@types/googlemaps": "^3.30.16",
-    "angular-font-awesome": "^3.1.2",
     "bootstrap": "^4.0.0",
     "chokidar": "^3.5.2",
     "core-js": "^2.4.1",
@@ -46,10 +45,10 @@
     "tslib": "^1.9.0",
     "uuid": "^7.0.3",
     "yarn": "^1.22.0",
-    "zone.js": "^0.9.1"
+    "zone.js": "^0.10.3"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~0.803.29",
+    "@angular-devkit/build-angular": "~0.901.15",
     "@types/jasmine": "2.5.38",
     "@types/node": "~6.0.60",
     "codelyzer": "^4.5.0",
@@ -64,6 +63,6 @@
     "protractor": "~5.1.0",
     "ts-node": "~2.0.0",
     "tslint": "~4.5.0",
-    "typescript": "~3.5.3"
+    "typescript": "~3.8.3"
   }
 }
