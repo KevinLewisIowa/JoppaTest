@@ -15,8 +15,8 @@ export class AdminRouteUndeliveredItemsComponent implements OnInit {
   undeliveredItems: any[] = [];
   dataSource: MatTableDataSource<any>;
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
+  @ViewChild(MatSort, {static: false}) sort: MatSort;
 
   constructor(private mainService: MainService, private router: Router) { 
     this.mainService.getAdminRouteUndeliveredItems().subscribe(data => {

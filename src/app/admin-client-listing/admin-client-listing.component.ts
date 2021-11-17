@@ -16,8 +16,8 @@ export class AdminClientListingComponent implements OnInit {
   backIcon = faChevronLeft;
   pastDate: Date = new Date();
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
+  @ViewChild(MatSort, {static: false}) sort: MatSort;
 
   constructor(private clientService: ClientService, private router: Router) {
     this.clientService.getClientsByName('').subscribe(data => {

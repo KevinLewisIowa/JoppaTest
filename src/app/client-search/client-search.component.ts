@@ -12,7 +12,7 @@ import { ConfirmDialogModel, CustomConfirmationDialogComponent } from 'app/custo
 })
 export class ClientSearchComponent implements OnInit, OnDestroy {
   @Output() clientSelected = new EventEmitter<Client>();
-  @ViewChild('clientSearchMdl') clientSearchMdl: ElementRef;
+  @ViewChild('clientSearchMdl', {static: false}) clientSearchMdl: ElementRef;
   clients: Client[] = [];
   nameSearch = '';
   stateSearch = '';

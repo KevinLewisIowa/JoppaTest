@@ -11,7 +11,7 @@ import { MainService } from 'app/services/main.service';
   styleUrls: ['./route-edit-modal.component.css']
 })
 export class RouteEditModalComponent implements OnInit {
-  @ViewChild('editModal') editModal: ElementRef;
+  @ViewChild('editModal', {static: false}) editModal: ElementRef;
   @Output() editedRoute = new EventEmitter<Route>();
   routeForm: FormGroup;
   theRoute: Route;

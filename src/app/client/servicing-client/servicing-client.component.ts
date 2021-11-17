@@ -65,7 +65,7 @@ export class ServicingClientComponent implements OnInit {
   routeInstanceId: number;
   pipe: DatePipe = new DatePipe('en-us');
 
-  @ViewChild('clientInfo') clientInfo: ElementRef;
+  @ViewChild('clientInfo', {static: false}) clientInfo: ElementRef;
 
   constructor(private service: ClientService, private mainService: MainService, private router: Router, public dialog: MatDialog) { }
 

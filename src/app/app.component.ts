@@ -8,7 +8,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 })
 export class AppComponent implements OnInit {
   title = 'app works!';
-  @ViewChild('errorModal') theModal: ElementRef;
+  @ViewChild('errorModal', {static: false}) theModal: ElementRef;
   displayError = false;
   apiErrorText = '';
 

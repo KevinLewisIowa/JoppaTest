@@ -9,7 +9,7 @@ import { Note } from 'app/models/note';
   styleUrls: ['./notes.component.css']
 })
 export class NotesComponent implements OnInit {
-  @ViewChild('notesMdl') notesMdl: ElementRef;
+  @ViewChild('notesMdl', {static: false}) notesMdl: ElementRef;
   @Output() noteAdded = new EventEmitter<Note>();
   note: string = '';
 

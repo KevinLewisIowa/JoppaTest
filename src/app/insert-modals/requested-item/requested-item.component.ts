@@ -16,7 +16,7 @@ import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
   styleUrls: ["./requested-item.component.css"],
 })
 export class RequestedItemComponent implements OnInit {
-  @ViewChild("requestedItemMdl") requestedItemMdl: ElementRef;
+  @ViewChild("requestedItemMdl", {static: false}) requestedItemMdl: ElementRef;
   @Output() requestedItemAdded = new EventEmitter<RequestedItem>();
   description: string = "";
   placeholderText: string = "Test";
