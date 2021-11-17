@@ -12,7 +12,7 @@ import { exit } from 'process';
   styleUrls: ['./client-edit-modal.component.css']
 })
 export class ClientEditModalComponent implements OnInit {
-  @ViewChild('editModal') editModal: ElementRef;
+  @ViewChild('editModal', {static: false}) editModal: ElementRef;
   @Output() editedClient = new EventEmitter<Client>();
   badDate = false;
   clientForm: FormGroup;
