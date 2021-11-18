@@ -1,6 +1,8 @@
 import { ViewChild, Output, EventEmitter } from "@angular/core";
 import { Component, OnInit } from "@angular/core";
-import { MatPaginator, MatSort, MatTableDataSource } from "@angular/material";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatSort } from "@angular/material/sort";
+import { MatTableDataSource } from "@angular/material/table";
 import { Router } from "@angular/router";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { LocationCamp } from "app/models/location-camp";

@@ -1,7 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ClientService } from 'app/services/client.service';
 import { Router } from '@angular/router';
-import { MatPaginator, MatSort, MatTableDataSource, MatTable } from '@angular/material';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource, MatTable } from '@angular/material/table';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 
 @Component({

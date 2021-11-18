@@ -20,7 +20,7 @@ import { DatePipe } from '@angular/common';
 import { isNullOrUndefined } from 'util';
 import { PrayerRequestAndNeed } from 'app/models/prayer-request';
 import { ConfirmDialogModel, CustomConfirmationDialogComponent } from 'app/custom-confirmation-dialog/custom-confirmation-dialog.component';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-servicing-client',
