@@ -39,7 +39,7 @@ import '@angular/localize/init';
 
 
 /** Evergreen browsers require these. **/
-import 'core-js/es6/reflect';
+import 'core-js/es/array';
 
 
 
