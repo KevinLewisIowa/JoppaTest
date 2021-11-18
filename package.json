@@ -1,6 +1,6 @@
 {
   "name": "joppa",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "license": "MIT",
   "scripts": {
     "ng": "ng",
@@ -10,8 +10,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "prodServe": "ng server --prod --open",
-    "postinstall": "ng build --aot --prod"
+    "prodServe": "ng server --configuration production --open",
+    "postinstall": "ng build --aot --configuration production"
   },
   "private": true,
   "dependencies": {
