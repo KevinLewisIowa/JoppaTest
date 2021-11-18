@@ -2,8 +2,6 @@
 import { throwError as observableThrowError, Observable, forkJoin } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
-import { RequestOptions } from '@angular/http';
-import { Route } from '../models/route';
 import { ClientLike } from '../models/client-like';
 import { ClientDislike } from '../models/client-dislike';
 import { Client } from '../models/client';
