@@ -4,7 +4,6 @@ import { Client } from "app/models/client";
 import { ClientService } from "app/services/client.service";
 import { Router } from "@angular/router";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { exit } from 'process';
 
 @Component({
   selector: 'app-client-edit-modal',
