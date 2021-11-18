@@ -15,19 +15,19 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "^9.1.13",
+    "@angular/animations": "^10.2.5",
     "@angular/cdk": "^9.2.4",
-    "@angular/cli": "^9.1.15",
-    "@angular/common": "^9.1.13",
-    "@angular/compiler": "^9.1.13",
-    "@angular/compiler-cli": "^9.1.13",
-    "@angular/core": "^9.1.13",
-    "@angular/forms": "^9.1.13",
-    "@angular/localize": "^9.1.13",
+    "@angular/cli": "^10.2.3",
+    "@angular/common": "^10.2.5",
+    "@angular/compiler": "^10.2.5",
+    "@angular/compiler-cli": "^10.2.5",
+    "@angular/core": "^10.2.5",
+    "@angular/forms": "^10.2.5",
+    "@angular/localize": "^10.2.5",
     "@angular/material": "^9.2.4",
-    "@angular/platform-browser": "^9.1.13",
-    "@angular/platform-browser-dynamic": "^9.1.13",
-    "@angular/router": "^9.1.13",
+    "@angular/platform-browser": "^10.2.5",
+    "@angular/platform-browser-dynamic": "^10.2.5",
+    "@angular/router": "^10.2.5",
     "@fortawesome/angular-fontawesome": "^0.6.1",
     "@fortawesome/fontawesome-svg-core": "^1.2.25",
     "@fortawesome/free-regular-svg-icons": "^5.11.2",
@@ -49,7 +49,7 @@
     "zone.js": "^0.10.3"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~0.901.15",
+    "@angular-devkit/build-angular": "~0.1002.3",
     "@types/jasmine": "2.5.38",
     "@types/node": "~6.0.60",
     "codelyzer": "^6.0.2",
@@ -64,6 +64,6 @@
     "protractor": "~5.1.0",
     "ts-node": "~2.0.0",
     "tslint": "~4.5.0",
-    "typescript": "~3.8.3"
+    "typescript": "~4.0.8"
   }
 }
