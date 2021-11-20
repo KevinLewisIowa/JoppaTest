@@ -1,12 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  CanActivate,
-  ActivatedRouteSnapshot,
-  RouterStateSnapshot,
-  Router
-} from '@angular/router';
+import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MainService } from 'app/services/main.service';
+import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-main-login',
@@ -16,6 +12,7 @@ import { MainService } from 'app/services/main.service';
 export class MainLoginComponent implements OnInit {
   passwordForm: FormGroup;
   invalidText = false;
+  forwardIcon = faChevronRight;
 
   constructor(private fb: FormBuilder, private router: Router, private service: MainService) { }
 

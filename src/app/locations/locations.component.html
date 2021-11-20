@@ -2,15 +2,15 @@
   <div class="card-header text-center" style="opacity:0.93">
     <h2 align="left">{{thisRoute.name}}</h2>
     <div>
-      <button (click)="showRouteLocations()" class="btn btn-primary float-left" type="button"><fa-icon [icon]="mapIcon"></fa-icon> Show Route Map</button>
-      <button (click)="routeEditMdl.showModal(thisRoute)" class="btn btn-primary float-right" type="button" *ngIf="isAdmin">Route Info <fa-icon [icon]="informationIcon"></fa-icon></button>
+      <button (click)="showRouteLocations()" class="btn btn-primary" style="float:left;" type="button"><fa-icon [icon]="mapIcon"></fa-icon> Show Route Map</button>
+      <button (click)="routeEditMdl.showModal(thisRoute)" class="btn btn-primary" style="float:right;" type="button" *ngIf="isAdmin">Route Info <fa-icon [icon]="informationIcon"></fa-icon></button>
     </div>
   </div>
   <div class="panel-body">
     <div class="card">
       <h3 align="left">Camps</h3>
       <div>
-        <button (click)="newLocationCamp()" class="btn btn-primary float-right" type="button" *ngIf="isAdmin"><fa-icon [icon]="createIcon"></fa-icon> Create Camp</button>
+        <button (click)="newLocationCamp()" class="btn btn-primary" style="float:right;" type="button" *ngIf="isAdmin"><fa-icon [icon]="createIcon"></fa-icon> Create Camp</button>
       </div>
     </div>
     <table class="table">

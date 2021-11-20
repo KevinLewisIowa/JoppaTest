@@ -8,65 +8,65 @@
     <form [formGroup]="campForm" style="opacity:0.93">
       <div class="login-box">
         <div class="col-md-12">
-          <button class="btn btn-primary float-right text-right" (click)="getCurrentLocation();">Get Current
+          <button class="btn btn-primary text-right" style="float:right;" (click)="getCurrentLocation();">Get Current
             Location</button>
         </div>
         <div class="space_lg">&nbsp;</div>
         <div class="space_lg">&nbsp;</div>
         <div class="row">
           <div class="col-sm-12 col-md-12 col-lg-12">
-            <input type="text" class="float-right" placeholder="name" formControlName="name" />
+            <input type="text" style="float:right;" placeholder="name" formControlName="name" />
             <label>Name: </label>
           </div>
         </div>
         <div class="col-md-12" *ngIf="isAdmin">
           <label>Route:</label>
-          <select id="routes" class="float-right" formControlName="route_id">
+          <select id="routes" style="float:right;" formControlName="route_id">
             <option value="" disabled selected>Select a route</option>
             <option *ngFor="let route of routes" [value]="route.id">{{route.name}}</option>
           </select>
         </div>
         <div class="row">
           <div class="col-sm-12 col-md-12 col-lg-12">
-            <input type="time" class="float-right" placeholder="time" formControlName="expected_arrival_time" />
+            <input type="time" style="float:right;" placeholder="time" formControlName="expected_arrival_time" />
             <label>Expected Arrival Time: </label>
           </div>
         </div>
         <div class="row">
           <div class="col-sm-12 col-md-12 col-lg-12">
-            <input type="text" class="float-right" placeholder="latitude" formControlName="latitude" />
+            <input type="text" style="float:right;" placeholder="latitude" formControlName="latitude" />
             <label>Latitude: </label>
           </div>
         </div>
         <div class="row">
           <div class="col-sm-12 col-md-12 col-lg-12">
-            <input type="text" class="float-right" placeholder="longitude" formControlName="longitude" />
+            <input type="text" style="float:right;" placeholder="longitude" formControlName="longitude" />
             <label>Longitude: </label>
           </div>
         </div>
         <div class="row" *ngIf="isAdmin">
           <div class="col-sm-12 col-md-12 col-lg-12">
-            <input type="number" class="float-right" placeholder="position" formControlName="position" />
+            <input type="number" style="float:right;" placeholder="position" formControlName="position" />
             <label>Position: </label>
           </div>
         </div>
         <div class="row" *ngIf="isAdmin">
           <div class="col-sm-12 col-md-12 col-lg-12">
-            <input type="checkbox" class="float-right" formControlName="is_active" />
+            <input type="checkbox" style="float:right;" formControlName="is_active" />
             <label>Active: </label>
           </div>
         </div>
         <div class="row">
           <div class="col-sm-12 col-md-12 col-lg-12">
             <label>Notes: </label>
-            <textarea type="text" class="float-right" rows="3" cols="19" placeholder="notes"
+            <textarea type="text" style="float:right;" rows="3" cols="19" placeholder="notes"
               formControlName="notes"></textarea>
           </div>
         </div>
         <div class="row" *ngIf="isAdmin">
           <div class="col-sm-12 col-md-12 col-lg-12">
             <label>Admin Notes: </label>
-            <textarea type="text" class="float-right" rows="3" cols="19" placeholder="Admin Notes"
+            <textarea type="text" style="float:right;" rows="3" cols="19" placeholder="Admin Notes"
               formControlName="admin_notes"></textarea>
           </div>
         </div>

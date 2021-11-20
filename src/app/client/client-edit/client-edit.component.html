@@ -9,25 +9,25 @@
         <div class="row">
           <div class="col-sm-12 col-md-12 col-lg-12">
             <label>First Name:<font color="red">*</font></label>
-            <input type="text" class="float-right" placeholder="first name" formControlName="first_name" />
+            <input type="text" style="float:right;" placeholder="first name" formControlName="first_name" />
           </div>
         </div>
         <div class="row">
           <div class="col-sm-12 col-md-12 col-lg-12">
             <label>Last Name:<font color="red">*</font></label>
-            <input type="text" class="float-right" placeholder="last name" formControlName="last_name" />
+            <input type="text" style="float:right;" placeholder="last name" formControlName="last_name" />
           </div>
         </div>
         <div class="row">
           <div class="col-sm-12 col-md-12 col-lg-12">
             <label>Preferred Name:</label>
-            <input type="text" class="float-right" placeholder="preferred name" formControlName="preferred_name" />
+            <input type="text" style="float:right;" placeholder="preferred name" formControlName="preferred_name" />
           </div>
         </div>
         <div class="row">
           <div class="col-sm-12 col-md-12 col-lg-12">
             <label>Gender:<font color="red">*</font></label>
-            <select class="form-control float-right" formControlName="gender" style="width: 173px">
+            <select class="form-control" style="float:right;" formControlName="gender" style="width: 173px">
               <option value="Male">Male</option>
               <option value="Female">Female</option>
               <option value="Other">Other</option>
@@ -37,19 +37,19 @@
         <div class="row">
           <div class="col-sm-12 col-md-12 col-lg-12">
             <label>Birth Date: </label>
-            <input type="date" class="float-right" placeholder="mm/dd/yyyy" formControlName="birth_date" style="width: 173px; min-height:1em;"/>
+            <input type="date" style="float:right;" placeholder="mm/dd/yyyy" formControlName="birth_date" style="width: 173px; min-height:1em;"/>
           </div>
         </div>
         <div class="row">
           <div class="col-sm-12 col-md-12 col-lg-12">
             <label>Phone: </label>
-            <input type="text" class="float-right" placeholder="phone" formControlName="phone">
+            <input type="text" style="float:right;" placeholder="phone" formControlName="phone">
           </div>
         </div>
         <div class="row">
           <div class="col-sm-12 col-md-12 col-lg-12">
             <label><span style="background-color: yellow;">First Time Homeless:</span><font color="red" *ngIf="!isAdmin">*</font> </label>
-            <select class="form-control float-right" #fthitem style="width: 173px;" (change)="onFTHChange(fthitem.value)">
+            <select class="form-control" style="float:right;" #fthitem style="width: 173px;" (change)="onFTHChange(fthitem.value)">
               <option value='Unknown'>Unknown</option>
               <option value='Yes'>Yes</option>
               <option value='No'>No</option>
@@ -59,26 +59,26 @@
         <div class="row">
           <div class="col-sm-12 col-md-12 col-lg-12">
             <label><span style="background-color: yellow;">Date Became Homeless (Date must be MM/DD/YYYY):</span><font color="red" *ngIf="!isAdmin">*</font> </label>
-            <input type="date" class="float-right form-control" placeholder="mm/dd/yyyy" formControlName="date_became_homeless" style="width: 173px; min-height:1em;"/>
+            <input type="date" class="form-control" style="float:right;" placeholder="mm/dd/yyyy" formControlName="date_became_homeless" style="width: 173px; min-height:1em;"/>
           </div>
         </div>
         <div class="row">
           <div class="col-sm-12 col-md-12 col-lg-12">
             <label><span style="background-color: yellow;">Reason for Homelessness:</span><font color="red" *ngIf="!isAdmin">*</font> </label>
-            <select class="form-control" class="float-right" #item formControlName="homeless_reason" style="width: 173px;" (change)="onChange(item.value)">
+            <select class="form-control" #item formControlName="homeless_reason" style="width: 173px; float:right;" (change)="onChange(item.value)">
               <option *ngFor="let option of homelessReasonOptions" [value]="option">{{option}}</option>
             </select>
           </div>
         </div>
         <div class="row">
           <div class="col-sm-12 col-md-12 col-lg-12">
-            <input type="text" class="float-right" placeholder="Reason" [(ngModel)]="otherHomelessReason" [ngModelOptions]="{standalone: true}" *ngIf="extraInfoNeeded" />
+            <input type="text" style="float:right;" placeholder="Reason" [(ngModel)]="otherHomelessReason" [ngModelOptions]="{standalone: true}" *ngIf="extraInfoNeeded" />
           </div>
         </div>
         <div class="row">
           <div class="col-sm-12 col-md-12 col-lg-12">
             <label><span style="background-color: yellow;">Due to Covid:</span><font color="red" *ngIf="!isAdmin">*</font> </label>
-            <select class="form-control float-right" #dtcitem style="width: 173px;" (change)="onDTCChange(dtcitem.value)">
+            <select class="form-control" #dtcitem style="width: 173px; float:right; " (change)="onDTCChange(dtcitem.value)">
               <option value='Unknown'>Unknown</option>
               <option value='Yes'>Yes</option>
               <option value='No'>No</option>
@@ -88,25 +88,25 @@
         <div class="row">
           <div class="col-sm-12 col-md-12 col-lg-12">
             <label>Is Veteran: </label>
-            <input type="checkbox" class="float-right" formControlName="is_veteran" />
+            <input type="checkbox" style="float:right;" formControlName="is_veteran" />
           </div>
         </div>
         <div class="row">
           <div class="col-sm-12 col-md-12 col-lg-12">
             <label>Is After Care: </label>
-            <input type="checkbox" class="float-right" formControlName="is_aftercare" />
+            <input type="checkbox" style="float:right;" formControlName="is_aftercare" />
           </div>
         </div>
         <div class="row">
           <div class="col-sm-12 col-md-12 col-lg-12">
             <label>Mailbox: </label>
-            <input type="text" class="float-right" placeholder="Joppa Mailbox Number" formControlName="joppa_apartment_number" />
+            <input type="text" style="float:right;" placeholder="Joppa Mailbox Number" formControlName="joppa_apartment_number" />
           </div>
         </div>
         <div class="row">
           <div class="col-sm-12 col-md-12 col-lg-12">
             <label>Dwelling:<font color="red">*</font></label>
-            <select class="form-control" class="float-right" formControlName="dwelling" style="width: 173px">
+            <select class="form-control" style="float:right;" formControlName="dwelling" style="width: 173px">
               <option value="Tent">Tent</option>
               <option value="Shack">Shack</option>
               <option value="Abandoned Structure">Abandoned Structure</option>
@@ -125,7 +125,7 @@
         <div class="row">
           <div class="col-sm-12 col-md-12 col-lg-12">
             <label>Status: </label>
-            <select class="form-control" class="float-right" formControlName="status" style="width: 173px">
+            <select class="form-control" style="float:right;" formControlName="status" style="width: 173px">
               <option value="Active">Active</option>
               <option value="Inactive">Inactive</option>
               <option value="Alumni">Alumni</option>
@@ -136,7 +136,7 @@
         <div class="row" *ngIf="isAdmin">
           <div class="col-sm-12 col-md-12 col-lg-12">
             <label>Admin Notes: </label>
-            <textarea rows=3 class="float-right" style="width: 173px" placeholder="admin notes" formControlName="admin_notes"></textarea>
+            <textarea rows=3 style="width: 173px; float:right;" placeholder="admin notes" formControlName="admin_notes"></textarea>
           </div>
         </div>
       </div>
