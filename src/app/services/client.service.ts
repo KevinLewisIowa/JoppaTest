@@ -9,9 +9,6 @@ import { LocationCamp } from '../models/location-camp';
 import { Appearance } from '../models/appearance';
 import { HealthConcern } from '../models/health-concern';
 import { RequestedItem } from '../models/requested-item';
-
-
-
 import { PrayerRequestAndNeed } from "app/models/prayer-request";
 import { GoalsNextStep } from "app/models/goals-next-steps";
 import { Router } from '@angular/router';
@@ -19,7 +16,6 @@ import { Note } from 'app/models/note';
 import { ClientPet } from 'app/models/client-pet';
 import { environment } from 'environments/environment';
 import { map, catchError } from 'rxjs/operators';
-
 
 // adding a new comment
 @Injectable()
