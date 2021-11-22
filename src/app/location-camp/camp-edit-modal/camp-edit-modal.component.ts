@@ -12,7 +12,7 @@ import { Route } from 'app/models/route';
   styleUrls: ['./camp-edit-modal.component.css']
 })
 export class CampEditModalComponent implements OnInit {
-  @ViewChild('editModal') editModal: ElementRef;
+  @ViewChild('editModal', {static: false}) editModal: ElementRef;
   @Output() editedCamp = new EventEmitter<LocationCamp>();
   badDate = false;
   routes: Route[] = [];

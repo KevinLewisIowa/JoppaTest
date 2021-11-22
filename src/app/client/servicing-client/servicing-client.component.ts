@@ -15,12 +15,11 @@ import { Note } from 'app/models/note';
 import { ClientPet } from 'app/models/client-pet';
 import { faCheckCircle as farCheckCircle } from '@fortawesome/free-regular-svg-icons';
 import { faChevronLeft, faInfoCircle, faCheckCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
-import { Observable, Subscription, timer } from 'rxjs';
+import { Subscription, timer } from 'rxjs';
 import { DatePipe } from '@angular/common';
-import { isNullOrUndefined } from 'util';
 import { PrayerRequestAndNeed } from 'app/models/prayer-request';
 import { ConfirmDialogModel, CustomConfirmationDialogComponent } from 'app/custom-confirmation-dialog/custom-confirmation-dialog.component';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-servicing-client',
@@ -65,7 +64,7 @@ export class ServicingClientComponent implements OnInit {
   routeInstanceId: number;
   pipe: DatePipe = new DatePipe('en-us');
 
-  @ViewChild('clientInfo') clientInfo: ElementRef;
+  @ViewChild('clientInfo', {static: false}) clientInfo: ElementRef;
 
   constructor(private service: ClientService, private mainService: MainService, private router: Router, public dialog: MatDialog) { }
 

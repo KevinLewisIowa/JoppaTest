@@ -9,7 +9,7 @@ import { ClientService } from "app/services/client.service";
   styleUrls: ['./goals-steps.component.css']
 })
 export class GoalsStepsComponent implements OnInit {
-  @ViewChild('goalMdl') goalMdl: ElementRef
+  @ViewChild('goalMdl', {static: false}) goalMdl: ElementRef
   @Output() goalAdded = new EventEmitter<GoalsNextStep>();
   description: string = '';
   constructor(private modalService: NgbModal, private service: ClientService) { }

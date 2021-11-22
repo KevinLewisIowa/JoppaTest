@@ -14,7 +14,7 @@ export class LoanHeaterModalComponent implements OnInit {
   availableHeaters = [];
   routeInstanceId: number;
   isAdmin: boolean = false;
-  @ViewChild('heaterMdl') heaterMdl: ElementRef;
+  @ViewChild('heaterMdl', {static: false}) heaterMdl: ElementRef;
   @Output() loaningHeater = new EventEmitter<number>();
   constructor(private service: ClientService, private mainService: MainService, private modalService: NgbModal) { }
 

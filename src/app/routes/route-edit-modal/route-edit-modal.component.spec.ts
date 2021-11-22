@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { RouteEditModalComponent } from './route-edit-modal.component';
 
@@ -6,7 +6,7 @@ describe('RouteEditComponent', () => {
   let component: RouteEditModalComponent;
   let fixture: ComponentFixture<RouteEditModalComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ RouteEditModalComponent ]
     })

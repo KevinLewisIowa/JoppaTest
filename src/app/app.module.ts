@@ -7,7 +7,15 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { MainReducer } from './state-management/main.reducer';
 import { APIReducer } from './state-management/error.reducer';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { MatPaginatorModule, MatTableModule, MatFormFieldModule, MatInputModule, MatSortModule, MatDatepicker, MatDatepickerModule, MatNativeDateModule, MatButtonModule, MatDialogModule } from '@angular/material';
+import { MatButtonModule } from '@angular/material/button';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatDatepicker, MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
+import { MatTableModule } from '@angular/material/table';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 

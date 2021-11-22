@@ -7,7 +7,7 @@ import { RouteInstanceHeaterInteraction } from 'app/models/route-instance-heater
 import { Appearance } from 'app/models/appearance';
 import { ClientService } from 'app/services/client.service';
 import { Client } from 'app/models/client';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogModel, CustomConfirmationDialogComponent } from 'app/custom-confirmation-dialog/custom-confirmation-dialog.component';
 
 @Component({

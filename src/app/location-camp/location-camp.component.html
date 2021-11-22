@@ -14,10 +14,10 @@
       <b>Number of People with Tanks: {{ numPeopleWithTanksAtCamp }}</b><br />
       <b>Total Tanks: {{ numberTanksAtCamp }}</b>
     </p>
-    <button (click)="showMap()" type="button" class="btn btn-primary float-left">
+    <button (click)="showMap()" type="button" style="float:left;" class="btn btn-primary">
       <fa-icon [icon]="mapIcon"></fa-icon> Show Directions
     </button>
-    <button type="button" class="btn btn-primary float-right" (click)="campEditMdl.showModal(locationCamp)">
+    <button type="button" class="btn btn-primary" style="float:right;" (click)="campEditMdl.showModal(locationCamp)">
       Location Info <fa-icon [icon]="informationIcon"></fa-icon>
     </button>
   </div>
@@ -25,10 +25,10 @@
     <div class="card">
       <h3 align="left">Clients</h3>
       <div>
-        <button type="button" (click)="clientMdl.showModal()" class="btn btn-primary float-left">
+        <button type="button" (click)="clientMdl.showModal()" class="btn btn-primary" style="float:left;">
           <fa-icon [icon]="searchIcon"></fa-icon> Search Clients
         </button>
-        <button type="button" (click)="createClient()" class="btn btn-primary float-right">
+        <button type="button" (click)="createClient()" class="btn btn-primary" style="float:right;">
           <fa-icon [icon]="createIcon"></fa-icon> Create Client
         </button>&nbsp;
       </div>
@@ -66,14 +66,14 @@
   </div>
   <div class="card-footer">
     <div>
-      <button type="button" class="float-left btn btn-primary" (click)="back()">
+      <button type="button" class="btn btn-primary" style="float:left;" (click)="back()">
         <fa-icon [icon]="backIcon"></fa-icon> Back to Camp List
       </button>
-      <button type="button" class="float-left btn btn-primary" style="margin-left: 1%;" *ngIf="isAdmin"
+      <button type="button" class="btn btn-primary" style="margin-left: 1%; float:left;" *ngIf="isAdmin"
         (click)="backToCampListing()">
         <fa-icon [icon]="backIcon"></fa-icon> Back to Camp Listing
       </button>
-      <button (click)="nextStop()" type="button" class="btn btn-primary float-right">Next Stop <fa-icon
+      <button (click)="nextStop()" type="button" class="btn btn-primary" style="float:right;">Next Stop <fa-icon
           [icon]="forwardIcon"></fa-icon></button>
     </div>
   </div>

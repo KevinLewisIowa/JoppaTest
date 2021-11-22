@@ -10,7 +10,7 @@ import { ClientService } from "app/services/client.service";
 })
 export class ClientDislikeComponent implements OnInit {
   //@Output() clientSelected = new EventEmitter<ClientDislike>();
-  @ViewChild('clientDislikeMdl') clientDislikeMdl: ElementRef;
+  @ViewChild('clientDislikeMdl', {static: false}) clientDislikeMdl: ElementRef;
   @Output() dislikeAdded = new EventEmitter<ClientDislike>();
   description: string = '';
   constructor(private modalService: NgbModal, private service: ClientService) { }

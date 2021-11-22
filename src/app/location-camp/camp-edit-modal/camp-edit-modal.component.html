@@ -1,72 +1,69 @@
 <ng-template #editModal let-c="close" let-d="dismiss">
   <div class="modal-header">
     <h4 class="modal-title">Camp Details</h4>
-    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')"><span
-        aria-hidden="true">&times;</span></button>
+    <button type="button" class="btn btn-primary" aria-label="Close" (click)="d('Cross click')"><span
+        aria-hidden="true">x</span></button>
   </div>
   <div class="modal-body">
     <form [formGroup]="campForm" style="opacity:0.93">
       <div class="login-box">
-        <div class="col-md-12">
-          <button class="btn btn-primary float-right text-right" (click)="getCurrentLocation();">Get Current
-            Location</button>
-        </div>
-        <div class="space_lg">&nbsp;</div>
-        <div class="space_lg">&nbsp;</div>
         <div class="row">
-          <div class="col-sm-12 col-md-12 col-lg-12">
-            <input type="text" class="float-right" placeholder="name" formControlName="name" />
-            <label>Name: </label>
+          <div class="form-group">
+            <label>Camp Name:</label>
+            <input type="text" class="form-control" style="max-width: 50%;" placeholder="name" formControlName="name" />
           </div>
         </div>
-        <div class="col-md-12" *ngIf="isAdmin">
+        <div class="form-group" *ngIf="isAdmin">
           <label>Route:</label>
-          <select id="routes" class="float-right" formControlName="route_id">
+          <select id="routes" class="form-control" style="max-width: 50%;" formControlName="route_id">
             <option value="" disabled selected>Select a route</option>
             <option *ngFor="let route of routes" [value]="route.id">{{route.name}}</option>
           </select>
         </div>
         <div class="row">
-          <div class="col-sm-12 col-md-12 col-lg-12">
-            <input type="time" class="float-right" placeholder="time" formControlName="expected_arrival_time" />
-            <label>Expected Arrival Time: </label>
+          <div class="form-group">
+            <label>Expected Arrival Time:</label>
+            <input type="time" class="form-control" style="max-width: 50%;" placeholder="time" formControlName="expected_arrival_time" />
           </div>
         </div>
         <div class="row">
-          <div class="col-sm-12 col-md-12 col-lg-12">
-            <input type="text" class="float-right" placeholder="latitude" formControlName="latitude" />
+          <div class="col">
             <label>Latitude: </label>
+            <input type="text" class="form-control" style="max-width: 100%;" placeholder="latitude" formControlName="latitude" />
+          </div>
+          <div class="col">
+            <button class="btn btn-primary" style="float:right;margin-top:20px;" (click)="getCurrentLocation();">Get Current Location</button>
           </div>
         </div>
         <div class="row">
-          <div class="col-sm-12 col-md-12 col-lg-12">
-            <input type="text" class="float-right" placeholder="longitude" formControlName="longitude" />
+          <div class="form-group">
             <label>Longitude: </label>
+            <input type="text" class="form-control" style="max-width: 50%;" placeholder="longitude" formControlName="longitude" />
           </div>
         </div>
         <div class="row" *ngIf="isAdmin">
-          <div class="col-sm-12 col-md-12 col-lg-12">
-            <input type="number" class="float-right" placeholder="position" formControlName="position" />
+          <div class="form-group">
             <label>Position: </label>
+            <input type="number" class="form-control" style="max-width: 50%;" placeholder="position" formControlName="position" />
           </div>
         </div>
         <div class="row" *ngIf="isAdmin">
-          <div class="col-sm-12 col-md-12 col-lg-12">
-            <input type="checkbox" class="float-right" formControlName="is_active" />
-            <label>Active: </label>
+          <div class="form-group">
+            <input type="checkbox" class="form-check-input" style="margin-right: 5px;" formControlName="is_active" />
+            <label class="form-check-label">Active</label>
           </div>
         </div>
         <div class="row">
-          <div class="col-sm-12 col-md-12 col-lg-12">
+          <div class="form-group">
             <label>Notes: </label>
-            <textarea type="text" class="float-right" rows="3" cols="19" placeholder="notes"
+            <textarea type="text" class="form-control" style="max-width: 50%;" rows="3" cols="19" placeholder="notes"
               formControlName="notes"></textarea>
           </div>
         </div>
         <div class="row" *ngIf="isAdmin">
-          <div class="col-sm-12 col-md-12 col-lg-12">
+          <div class="form-group">
             <label>Admin Notes: </label>
-            <textarea type="text" class="float-right" rows="3" cols="19" placeholder="Admin Notes"
+            <textarea type="text" class="form-control" style="max-width: 50%;" rows="3" cols="19" placeholder="Admin Notes"
               formControlName="admin_notes"></textarea>
           </div>
         </div>

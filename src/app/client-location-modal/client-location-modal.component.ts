@@ -10,7 +10,7 @@ import { MainService } from 'app/services/main.service';
   styleUrls: ['./client-location-modal.component.css']
 })
 export class ClientLocationModalComponent implements OnInit {
-  @ViewChild('locationModal') locationModal: ElementRef;
+  @ViewChild('locationModal', {static: false}) locationModal: ElementRef;
   modalTitle = '';
   route = new Route();
   locationCamp = new LocationCamp();

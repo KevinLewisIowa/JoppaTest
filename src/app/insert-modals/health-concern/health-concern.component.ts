@@ -9,7 +9,7 @@ import { ClientService } from "app/services/client.service";
   styleUrls: ['./health-concern.component.css']
 })
 export class HealthConcernComponent implements OnInit {
-@ViewChild('healthConcernMdl') healthConcernMdl: ElementRef;
+@ViewChild('healthConcernMdl', {static: false}) healthConcernMdl: ElementRef;
 @Output() healthConcernAdded = new EventEmitter<HealthConcern>();
 description: string = '';
   constructor(private modalService: NgbModal, private service: ClientService) { }

@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { AdminRouteUnfulfilledGoalsNextStepsComponent } from './admin-route-unfulfilled-goals-next-steps.component';
 
@@ -6,7 +6,7 @@ describe('AdminRouteUnfulfilledGoalsNextStepsComponent', () => {
   let component: AdminRouteUnfulfilledGoalsNextStepsComponent;
   let fixture: ComponentFixture<AdminRouteUnfulfilledGoalsNextStepsComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ AdminRouteUnfulfilledGoalsNextStepsComponent ]
     })

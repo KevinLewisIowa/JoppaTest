@@ -1,33 +1,33 @@
 <ng-template #editModal let-c="close" let-d="dismiss">
   <div class="modal-header">
     <h4 class="modal-title">Client Details</h4>
-    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')"><span
-        aria-hidden="true">&times;</span></button>
+    <button type="button" class="btn btn-primary" aria-label="Close" (click)="d('Cross click')"><span
+        aria-hidden="true">x</span></button>
   </div>
   <div class="modal-body">
     <form [formGroup]="clientForm" style="opacity:0.93">
       <div class="row">
-        <div class="col-sm-12 col-md-12 col-lg-12">
-          <input type="text" class="float-right" placeholder="first name" formControlName="first_name" />
+        <div class="form-group">
+          <input type="text" class="form-control" style="max-width: 25%;" placeholder="First Name" formControlName="first_name" />
           <label>First Name: </label>
         </div>
       </div>
       <div class="row">
-        <div class="col-sm-12 col-md-12 col-lg-12">
-          <input type="text" class="float-right" placeholder="last name" formControlName="last_name" />
+        <div class="form-group">
+          <input type="text" class="form-control" style="max-width: 25%;" placeholder="Last Name" formControlName="last_name" />
           <label>Last Name: </label>
         </div>
       </div>
       <div class="row">
-        <div class="col-sm-12 col-md-12 col-lg-12">
-          <input type="text" class="float-right" placeholder="preferred name" formControlName="preferred_name" />
+        <div class="form-group">
           <label>Preferred Name: </label>
+          <input type="text" class="form-control" style="max-width: 25%;" placeholder="Preferred Name" formControlName="preferred_name" />
         </div>
       </div>
       <div class="row">
-        <div class="col-sm-12 col-md-12 col-lg-12">
+        <div class="form-group">
           <label>Gender: </label>
-          <select class= "form-control" class="float-right" formControlName="gender" style="width: 173px;">
+          <select class= "form-control" formControlName="gender" style="width: 173px;">
             <option value="Male">Male</option>
             <option value="Female">Female</option>
             <option value="Other">Other</option>
@@ -35,21 +35,21 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-sm-12 col-md-12 col-lg-12">
+        <div class="form-group">
           <label>Birth Date (Date must be MM/DD/YYYY): </label>
-          <input type="date" class="float-right form-control" placeholder="mm/dd/yyyy" formControlName="birth_date" style="width: 173px; min-height:1em;"/>
+          <input type="date" class="form-control" placeholder="mm/dd/yyyy" formControlName="birth_date" style="min-height:1em; max-width: 25%;"/>
         </div>
       </div>
       <div class="row">
-        <div class="col-sm-12 col-md-12 col-lg-12">
+        <div class="form-group">
           <label>Phone: </label>
-          <input type="text" class="float-right" placeholder="phone" formControlName="phone" />
+          <input type="text" class="form-control" style="max-width: 25%;" placeholder="phone" formControlName="phone" />
         </div>
       </div>
       <div class="row">
-        <div class="col-sm-12 col-md-12 col-lg-12">
+        <div class="form-group">
           <label><span style="background-color: yellow;">First Time Homeless:</span><font color="red" *ngIf="!isAdmin">*</font> </label>
-          <select class="form-control float-right" #fthitem style="width: 173px;" [(ngModel)]="firstTimeHomeless" [ngModelOptions]="{standalone: true}" (change)="onFTHChange(fthitem.value)">
+          <select class="form-control" #fthitem style="width: 173px;" [(ngModel)]="firstTimeHomeless" [ngModelOptions]="{standalone: true}" (change)="onFTHChange(fthitem.value)">
             <option value='Unknown'>Unknown</option>
             <option value='Yes'>Yes</option>
             <option value='No'>No</option>
@@ -57,28 +57,28 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-sm-12 col-md-12 col-lg-12">
+        <div class="form-group">
           <label><span style="background-color: yellow;">Date Became Homeless (Date must be MM/DD/YYYY):</span> </label>
-          <input type="date" class="float-right form-control" placeholder="mm/dd/yyyy" formControlName="date_became_homeless" style="width: 173px; min-height:1em;"/>
+          <input type="date" class="form-control" placeholder="mm/dd/yyyy" formControlName="date_became_homeless" style="max-width: 25%; min-height:1em;"/>
         </div>
       </div>
       <div class="row">
-        <div class="col-sm-12 col-md-12 col-lg-12">
+        <div class="form-group">
           <label><span style="background-color: yellow;">Reason for Homelessness:</span> </label>
-          <select class="form-control" class="float-right" #item formControlName="homeless_reason" style="width: 173px;" (change)="onChange(item.value)">
+          <select class="form-control" #item formControlName="homeless_reason" style="width: 173px;" (change)="onChange(item.value)">
             <option *ngFor="let option of homelessReasonOptions" [value]="option">{{option}}</option>
           </select>
         </div>
       </div>
       <div class="row">
-        <div class="col-sm-12 col-md-12 col-lg-12">
-          <input type="text" class="float-right" placeholder="Reason" [(ngModel)]="otherHomelessReason" [ngModelOptions]="{standalone: true}" *ngIf="extraInfoNeeded" />
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Reason" [(ngModel)]="otherHomelessReason" [ngModelOptions]="{standalone: true}" *ngIf="extraInfoNeeded" />
         </div>
       </div>
       <div class="row">
-        <div class="col-sm-12 col-md-12 col-lg-12">
+        <div class="form-group">
           <label><span style="background-color: yellow;">Due to Covid:</span><font color="red" *ngIf="!isAdmin">*</font> </label>
-          <select class="form-control float-right" #dtcitem style="width: 173px;" [(ngModel)]="dueToCovid" [ngModelOptions]="{standalone: true}" (change)="onDTCChange(dtcitem.value)">
+          <select class="form-control" style="float:right;" #dtcitem style="width: 173px;" [(ngModel)]="dueToCovid" [ngModelOptions]="{standalone: true}" (change)="onDTCChange(dtcitem.value)">
             <option value='Unknown'>Unknown</option>
             <option value='Yes'>Yes</option>
             <option value='No'>No</option>
@@ -86,27 +86,27 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-sm-12 col-md-12 col-lg-12">
-          <input type="checkbox" class="float-right" formControlName="is_veteran" />
-          <label>Is Veteran: </label>
+        <div class="form-group">
+          <input class="form-check-input" type="checkbox" formControlName="is_veteran" />
+          <label class="form-check-label" style="margin-left:5px;">Is Veteran</label>
         </div>
       </div>
       <div class="row">
-        <div class="col-sm-12 col-md-12 col-lg-12">
-          <input type="checkbox" class="float-right" formControlName="is_aftercare" />
-          <label>Is After Care: </label>
+        <div class="form-group">
+          <input type="checkbox" class="form-check-input" formControlName="is_aftercare" />
+          <label class="form-check-label" style="margin-left:5px;">Is After Care</label>
         </div>
       </div>
       <div class="row">
-        <div class="col-sm-12 col-md-12 col-lg-12">
+        <div class="form-group">
           <label>Mailbox: </label>
-          <input type="text" class="float-right" placeholder="Joppa Mailbox Number" formControlName="joppa_apartment_number" />
+          <input type="text" class="form-control" style="max-width: 25%;" placeholder="Joppa Mailbox Number" formControlName="joppa_apartment_number" />
         </div>
       </div>
       <div class="row">
-        <div class="col-sm-12 col-md-12 col-lg-12">
+        <div class="form-group">
           <label>Dwelling: </label>
-          <select class="form-control" class="float-right" formControlName="dwelling" style="width: 173px;">
+          <select class="form-control" style="float:right;" formControlName="dwelling" style="width: 173px;">
             <option value="Tent">Tent</option>
             <option value="Shack">Shack</option>
             <option value="Abandoned Structure">Abandoned Structure</option>
@@ -123,9 +123,9 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-sm-12 col-md-12 col-lg-12">
+        <div class="form-group">
           <label>Status: </label>
-          <select class="form-control" class="float-right" formControlName="status" style="width: 173px;">
+          <select class="form-control" style="max-width: 25%;" formControlName="status">
             <option value="Active">Active</option>
             <option value="Inactive">Inactive</option>
             <option value="Alumni">Alumni</option>
@@ -134,16 +134,16 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-sm-12 col-md-12 col-lg-12" *ngIf="isAdmin">
-          <textarea type="text" rows="3" placeholder="admin notes" class="float-right"
-            formControlName="admin_notes"></textarea>
+        <div class="form-group" *ngIf="isAdmin">
           <label>Admin Notes: </label>
+          <textarea type="text" class="form-control" rows="3" placeholder="admin notes" style="float:right;"
+            formControlName="admin_notes"></textarea>
         </div>
       </div>
     </form>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-primary float-right" [disabled]="!clientForm.valid" (click)="submitClient(); c('');">Submit Client</button>
-    <button type="button" class="btn btn-outline-primary float-right" (click)="c('Close click')">Close</button>
+    <button type="button" class="btn btn-primary" style="float:right;" [disabled]="!clientForm.valid" (click)="submitClient(); c('');">Submit Client</button>
+    <button type="button" class="btn btn-outline-primary" style="float:right;" (click)="c('Close click')">Close</button>
   </div>
 </ng-template>

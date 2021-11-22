@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { AdminClientInactiveUpdaterComponent } from './admin-client-inactive-updater.component';
 
@@ -6,7 +6,7 @@ describe('AdminClientInactiveUpdaterComponent', () => {
   let component: AdminClientInactiveUpdaterComponent;
   let fixture: ComponentFixture<AdminClientInactiveUpdaterComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ AdminClientInactiveUpdaterComponent ]
     })

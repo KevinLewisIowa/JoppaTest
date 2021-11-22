@@ -10,7 +10,7 @@ import { ClientService } from 'app/services/client.service';
 })
 export class PrayerRequestsAndNeedsComponent implements OnInit {
 
-  @ViewChild('prayerRequestNeedMdl') prayerRequestNeedMdl: ElementRef;
+  @ViewChild('prayerRequestNeedMdl', {static: false}) prayerRequestNeedMdl: ElementRef;
   @Output() prayerRequestNeedAdded = new EventEmitter<PrayerRequestAndNeed>();
   detail: string = '';
 

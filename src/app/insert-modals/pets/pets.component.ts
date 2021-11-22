@@ -10,7 +10,7 @@ import { ClientService } from 'app/services/client.service';
 })
 export class PetsComponent implements OnInit {
 
-  @ViewChild('petsMdl') petsMdl: ElementRef
+  @ViewChild('petsMdl', {static: false}) petsMdl: ElementRef
   @Output() petAdded = new EventEmitter<ClientPet>();
   pet_type: string = '';
   quantity: number;

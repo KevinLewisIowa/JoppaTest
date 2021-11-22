@@ -1,7 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { MainService } from 'app/services/main.service';
-import { MatPaginator, MatSort, MatTableDataSource, MatTable } from '@angular/material';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource, MatTable } from '@angular/material/table';
 
 @Component({
   selector: 'app-first-time-homelessness-report',
@@ -14,8 +16,8 @@ export class FirstTimeHomelessnessReportComponent implements OnInit {
   dataSource: MatTableDataSource<any>;
   backIcon = faChevronLeft;
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
+  @ViewChild(MatSort, {static: false}) sort: MatSort;
 
   constructor(private service: MainService) { };
 

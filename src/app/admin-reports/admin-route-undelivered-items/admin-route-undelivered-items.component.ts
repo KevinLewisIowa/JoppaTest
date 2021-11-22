@@ -1,7 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MainService } from 'app/services/main.service';
 import { Router } from '@angular/router';
-import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import { Observable } from 'rxjs';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 
@@ -15,8 +17,8 @@ export class AdminRouteUndeliveredItemsComponent implements OnInit {
   undeliveredItems: any[] = [];
   dataSource: MatTableDataSource<any>;
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
+  @ViewChild(MatSort, {static: false}) sort: MatSort;
 
   constructor(private mainService: MainService, private router: Router) { 
     this.mainService.getAdminRouteUndeliveredItems().subscribe(data => {

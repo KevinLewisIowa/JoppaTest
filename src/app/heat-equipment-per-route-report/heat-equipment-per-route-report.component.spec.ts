@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { HeatEquipmentPerRouteReportComponent } from './heat-equipment-per-route-report.component';
 
@@ -6,7 +6,7 @@ describe('HeatEquipmentPerRouteReportComponent', () => {
   let component: HeatEquipmentPerRouteReportComponent;
   let fixture: ComponentFixture<HeatEquipmentPerRouteReportComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ HeatEquipmentPerRouteReportComponent ]
     })

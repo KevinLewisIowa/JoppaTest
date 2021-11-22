@@ -2,7 +2,7 @@
   <div class="card-header" id="topOfScreen">
     <h2>{{client.first_name}} <span
         *ngIf="client.preferred_name != '' && client.preferred_name != null">({{client.preferred_name}})</span>
-      {{client.last_name}}</h2> &nbsp; <button #clientInfo class="btn btn-primary float-right"
+      {{client.last_name}}</h2> &nbsp; <button #clientInfo class="btn btn-primary" style="float:right;"
       (click)="clientEditMdl.openModal(client)" type="button">Client Info <fa-icon [icon]="informationIcon"></fa-icon>
     </button>
   </div>
@@ -10,7 +10,7 @@
     <div class="row">
       <div class="col-lg-12 col-md-12" *ngIf="heatRoute || isAdmin">
         <h4>Heating Equipment
-          <button type="button" (click)="loanHeater()" class="btn btn-primary float-right">New Heater</button>
+          <button type="button" (click)="loanHeater()" class="btn btn-primary" style="float:right;">New Heater</button>
           <button type="button" (click)="loanTank()" class="btn btn-primary" hidden>Add Tank</button>
           <button type="button" (click)="loanHose()" class="btn btn-primary" hidden>Add Hose</button>
         </h4>
@@ -63,31 +63,27 @@
           </tbody>
         </table>
       </div>
-      <div class="col-lg-12 col-md-12" *ngIf="heatRoute || isAdmin">
+      <div style="padding-bottom: 12px;" *ngIf="heatRoute || isAdmin">
         <div class="col-md-12">
-          <h5>
-            Tanks/Hoses
+          <h5>Tanks/Hoses
             <button class="btn btn-primary" (click)="updateNumberTanksHoses(client)" hidden>Update Tanks/Hoses</button>
           </h5>
         </div>
-        <div class="col-md-12">
+        <div class="form-group">
           <label>Number Tanks: </label>
-          <input type="text" placeholder="0" (change)="updateNumberTanksHoses(client)"
-            [(ngModel)]="client.number_tanks" />
-          &nbsp;
+          <input class="form-control" style="max-width:25%;" type="text" placeholder="0" (change)="updateNumberTanksHoses(client)" [(ngModel)]="client.number_tanks" />
           <span *ngIf="updateHoseTankMessageVisible" class="alert alert-success">Tank/Hose Updated</span>
         </div>
-        <div class="col-md-12">
+        <div class="form-group">
           <label>Number Hoses: </label>
-          <input type="text" placeholder="0" (change)="updateNumberTanksHoses(client)"
-            [(ngModel)]="client.number_hoses" />
+          <input type="text" class="form-control" style="max-width:25%;" placeholder="0" (change)="updateNumberTanksHoses(client)" [(ngModel)]="client.number_hoses" />
         </div>
       </div>
 
       <div class="col-lg-12 col-md-12" *ngIf="!heatRoute">
         <div class="background-color">
           <h4>Requested Items <button type="button" (click)="goToTop();requestItemMdl.showModal()"
-              class="btn btn-primary float-right">New Item</button></h4>
+              class="btn btn-primary" style="float:right;">New Item</button></h4>
           <table class="table" id="items">
             <colgroup>
               <col span="1" style="width: 25%;">
@@ -148,7 +144,7 @@
         <!-- removed !heatRoute from ngIf to pare down screen -->
         <div class="background-color">
           <h4>Goals/Next Steps <button type="button" (click)="goToTop();goalMdl.showModal()"
-              class="btn btn-primary float-right">New Goal/Next Step</button></h4>
+              class="btn btn-primary" style="float:right;">New Goal/Next Step</button></h4>
           <table class="table" id="goals">
             <colgroup>
               <col span="1" style="width: 25%;">
@@ -186,7 +182,7 @@
       <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
         <!-- removed !heatRoute from ngIf to pare down screen -->
         <h4>Prayer Requests/Needs <button type="button" (click)="goToTop();prayerRequestsNeedsMdl.showModal()"
-            class="btn btn-primary float-right">New Prayer Request/Need</button></h4>
+            class="btn btn-primary" style="float:right;">New Prayer Request/Need</button></h4>
         <table class="table" id="prayerRequestsNeeds">
           <colgroup>
             <col span="1" style="width: 25%;">
@@ -223,7 +219,7 @@
       <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
         <!-- removed !heatRoute from ngIf to pare down screen -->
         <div class="background-color">
-          <h4>Likes <button type="button" class="btn btn-primary float-right"
+          <h4>Likes <button type="button" class="btn btn-primary" style="float:right;"
               (click)="goToTop();likeMdl.showModal()">New
               Like</button>
           </h4>
@@ -262,7 +258,7 @@
       <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
         <!-- removed !heatRoute from ngIf to pare down screen -->
         <h4>Dislikes <button type="button" (click)="goToTop();dislikeMdl.showModal()"
-            class="btn btn-primary float-right">New Dislike</button></h4>
+            class="btn btn-primary" style="float:right;">New Dislike</button></h4>
         <table class="table" id="dislikes">
           <colgroup>
             <col span="1" style="width: 25%;">
@@ -296,7 +292,7 @@
       <div class="col-lg-12 col-md-12">
         <div class="background-color">
           <h4>Notes <button type="button" (click)="goToTop();notesMdl.showModal()"
-              class="btn btn-primary float-right">New
+              class="btn btn-primary" style="float:right;">New
               Note</button>
           </h4>
           <table class="table" id="notes">
@@ -328,7 +324,7 @@
       </div>
       <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
         <!-- removed !heatRoute from ngIf to pare down screen -->
-        <h4>Pets <button type="button" (click)="goToTop();petsMdl.showModal()" class="btn btn-primary float-right">New
+        <h4>Pets <button type="button" (click)="goToTop();petsMdl.showModal()" class="btn btn-primary" style="float:right;">New
             Pet</button>
         </h4>
         <table class="table" id="petList">
@@ -368,7 +364,7 @@
         <!-- removed !heatRoute from ngIf to pare down screen -->
         <div class="background-color">
           <h4>Health Concerns <button type="button" (click)="goToTop();healthMdl.showModal()"
-              class="btn btn-primary float-right">New Health Concern</button></h4>
+              class="btn btn-primary" style="float:right;">New Health Concern</button></h4>
           <table class="table" id="concerns">
             <colgroup>
               <col span="1" style="width: 25%;">
@@ -403,7 +399,7 @@
       </div>
       <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
         <h4>Household <button type="button" (click)="goToTop();clientMdl.showModal()"
-            class="btn btn-primary float-right">New Household Member</button></h4>
+            class="btn btn-primary" style="float:right;">New Household Member</button></h4>
         <table class="table" id="household">
           <colgroup>
             <col span="1" style="width: 25%;">
@@ -446,7 +442,7 @@
           <div>
             From Date: <input type="date" name="attendanceFromDate" [(ngModel)]="attendanceFromDate" />
             To Date: <input type="date" name="attendanceToDate" [(ngModel)]="attendanceToDate" />
-            <button type="button" class="btn btn-primary" (click)="searchWeeklyAttendance()">Search</button>
+            <button type="button" class="btn btn-primary" style="margin-left: 5px;" (click)="searchWeeklyAttendance()">Search</button>
           </div>
           <table class="table" id="weeklyAttendance">
             <colgroup>
@@ -516,7 +512,7 @@
   </div>
   <div class="card-footer">
     <div>
-      <button type="button" class="float-left btn btn-primary" (click)="back()">
+      <button type="button" class="btn btn-primary" style="float:left;" (click)="back()">
         <fa-icon [icon]="backIcon"></fa-icon> Back to Client List
       </button>
     </div>
