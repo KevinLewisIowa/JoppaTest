@@ -1,43 +1,43 @@
 <form [formGroup]="locationCampForm">
-  <div class="card text-center" style="opacity:0.93">
+  <div class="card" style="opacity:0.93">
     <div class="card-header">
       <h2>Create New Location Camp For Route: {{theRoute.name}}</h2>
     </div>
     <div class="panel-body" style="opacity:0.93">
-      <div class="login-box">
-        <div class="form-group">
+      <div class="row">
+        <div class="col">
           <label for="name">Name: </label>
-          <input id="name" type="text" class="form-control" style="margin:0 auto; max-width:50%;" placeholder="Camp Name" formControlName="name" />
+          <input id="name" type="text" class="form-control" style="max-width:75%;" placeholder="Camp Name" formControlName="name" />
         </div>
-        <div class="form-group" *ngIf="isAdmin">
+        <div class="col" *ngIf="isAdmin">
           <label for="routes">Route:</label>
-          <select id="routes" class="form-control" style="margin:0 auto; max-width: 50%;" formControlName="route_id">
+          <select id="routes" class="form-control" style="max-width: 75%;" formControlName="route_id">
             <option value="" disabled selected>Select a route</option>
             <option *ngFor="let route of routes" [value]="route.id">{{route.name}}</option>
           </select>
         </div>
-        <div class="form-group">
+      </div>
+      <div class="row">
+        <div class="col">
           <label for="arrival_time">Expected Arrival Time: </label>
-          <input id="arrival_time" type="time" class="form-control" style="margin:0 auto; max-width:50%;" placeholder="Expected Arrival Time" formControlName="expected_arrival_time" />
+          <input id="arrival_time" type="time" class="form-control" style="max-width:75%;" placeholder="Expected Arrival Time" formControlName="expected_arrival_time" />
         </div>
-        <div class="form-group">
+        <div class="col">
           <label id="position">Position: </label>
-          <input id="position" type="number" class="form-control" style="margin:0 auto; max-width:50%;" placeholder="Position" formControlName="position" />
+          <input id="position" type="number" class="form-control" style="max-width:75%;" placeholder="Position" formControlName="position" />
         </div>
+      </div>
+      <div class="row">
         <div class="form-group">
           <label for="notes">Notes: </label>
-          <input id="notes" type="text" placeholder="Notes" class="form-control" style="margin:0 auto; max-width:50%;" formControlName="notes" />
-        </div>
-        <div class="form-group">
-          <label for="active">Active: </label>
-          <input id="active" type="checkbox" class="form-control" style="margin:0 auto; max-width:50%;" formControlName="is_active" />
+          <textarea id="notes" placeholder="Notes" class="form-control" rows="3" cols="19" style="max-width:50%;" formControlName="notes" ></textarea>
         </div>
       </div>
     </div>
     <div class="card-footer">
       <div class="text-center">
-        <button type="button" [disabled]="!locationCampForm.valid" (click)="submitLocationCamp()" class="btn btn-primary">Submit Location Camp</button>
-        <button class="btn btn-primary" type="button" (click)="back()">Back</button>
+        <button type="button" class="btn btn-primary" style="float:right;" [disabled]="!locationCampForm.valid" (click)="submitLocationCamp()" >Submit Location Camp</button>
+        <button type="button" class="btn btn-primary" style="float:left;" (click)="back()">Back</button>
       </div>
     </div>
   </div>

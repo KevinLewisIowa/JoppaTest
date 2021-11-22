@@ -19,7 +19,7 @@
             >Route</mat-header-cell
           >
           <mat-cell *matCellDef="let camp">
-            <select type="string" placeholder="route" [(ngModel)]="camp.route_id">
+            <select type="string" placeholder="route" style="max-width: 75%;" [(ngModel)]="camp.route_id">
               <option *ngFor="let route of routes" [value]="route.id">{{route.name}}</option>
             </select>
           </mat-cell>
@@ -36,7 +36,7 @@
           <mat-header-cell *matHeaderCellDef mat-sort-header
             >Position</mat-header-cell
           >
-          <mat-cell *matCellDef="let camp"><input type="number" placeholder="position" [(ngModel)]="camp.position" /></mat-cell>
+          <mat-cell *matCellDef="let camp"><input type="number" placeholder="position" style="max-width: 75%;" [(ngModel)]="camp.position" /></mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="is_active">

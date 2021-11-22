@@ -33,7 +33,6 @@ export class CreateLocationCampComponent implements OnInit {
 
     this.theLocationCamp = new LocationCamp();
     this.locationCampForm = this.fb.group({
-      is_active: true,
       name: '',
       notes: '',
       position: '',
@@ -55,7 +54,7 @@ export class CreateLocationCampComponent implements OnInit {
     }
     this.theLocationCamp.route_id = Number(routeId);
     this.theLocationCamp.name = this.locationCampForm.get('name').value;
-    this.theLocationCamp.is_active = this.locationCampForm.get('is_active').value;
+    this.theLocationCamp.is_active = true;
     this.theLocationCamp.notes = this.locationCampForm.get('notes').value;
     this.theLocationCamp.position = this.locationCampForm.get('position').value;
     this.theLocationCamp.expected_arrival_time = this.locationCampForm.get('expected_arrival_time').value;

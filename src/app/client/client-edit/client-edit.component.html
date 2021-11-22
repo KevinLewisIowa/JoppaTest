@@ -7,78 +7,69 @@
     <form [formGroup]="clientForm" style="opacity:0.93">
       <div class="login-box">
         <div class="row">
-          <div class="col-sm-12 col-md-12 col-lg-12">
+          <div class="col">
             <label>First Name:<font color="red">*</font></label>
-            <input type="text" style="float:right;" placeholder="first name" formControlName="first_name" />
+            <input type="text" class="form-control" style="max-width: 75%;" placeholder="first name" formControlName="first_name" />
           </div>
-        </div>
-        <div class="row">
-          <div class="col-sm-12 col-md-12 col-lg-12">
+          <div class="col">
             <label>Last Name:<font color="red">*</font></label>
-            <input type="text" style="float:right;" placeholder="last name" formControlName="last_name" />
+            <input type="text" class="form-control" style="max-width: 75%;" placeholder="last name" formControlName="last_name" />
           </div>
         </div>
         <div class="row">
-          <div class="col-sm-12 col-md-12 col-lg-12">
+          <div class="form-group">
             <label>Preferred Name:</label>
-            <input type="text" style="float:right;" placeholder="preferred name" formControlName="preferred_name" />
+            <input type="text" class="form-control" style="max-width: 37.5%;" placeholder="preferred name" formControlName="preferred_name" />
           </div>
         </div>
         <div class="row">
-          <div class="col-sm-12 col-md-12 col-lg-12">
+          <div class="col">
             <label>Gender:<font color="red">*</font></label>
-            <select class="form-control" style="float:right;" formControlName="gender" style="width: 173px">
+            <select class="form-control" formControlName="gender" style="max-width: 75%;">
               <option value="Male">Male</option>
               <option value="Female">Female</option>
               <option value="Other">Other</option>
             </select>
           </div>
-        </div>
-        <div class="row">
-          <div class="col-sm-12 col-md-12 col-lg-12">
-            <label>Birth Date: </label>
-            <input type="date" style="float:right;" placeholder="mm/dd/yyyy" formControlName="birth_date" style="width: 173px; min-height:1em;"/>
+          <div class="col">
+            <label>Birth Date:</label>
+            <input type="date" class="form-control" placeholder="mm/dd/yyyy" formControlName="birth_date" style="max-width: 75%; min-height:1em;"/>
           </div>
         </div>
         <div class="row">
-          <div class="col-sm-12 col-md-12 col-lg-12">
-            <label>Phone: </label>
-            <input type="text" style="float:right;" placeholder="phone" formControlName="phone">
+          <div class="form-group">
+            <label>Phone:</label>
+            <input type="text" class="form-control" style="max-width: 37.5%;" placeholder="phone" formControlName="phone">
           </div>
         </div>
         <div class="row">
-          <div class="col-sm-12 col-md-12 col-lg-12">
+          <div class="col">
             <label><span style="background-color: yellow;">First Time Homeless:</span><font color="red" *ngIf="!isAdmin">*</font> </label>
-            <select class="form-control" style="float:right;" #fthitem style="width: 173px;" (change)="onFTHChange(fthitem.value)">
+            <select class="form-control" style="max-width: 75%;" #fthitem (change)="onFTHChange(fthitem.value)">
               <option value='Unknown'>Unknown</option>
               <option value='Yes'>Yes</option>
               <option value='No'>No</option>
             </select>
           </div>
-        </div>
-        <div class="row">
-          <div class="col-sm-12 col-md-12 col-lg-12">
+          <div class="col">
             <label><span style="background-color: yellow;">Date Became Homeless (Date must be MM/DD/YYYY):</span><font color="red" *ngIf="!isAdmin">*</font> </label>
-            <input type="date" class="form-control" style="float:right;" placeholder="mm/dd/yyyy" formControlName="date_became_homeless" style="width: 173px; min-height:1em;"/>
+            <input type="date" class="form-control" placeholder="mm/dd/yyyy" formControlName="date_became_homeless" style="max-width: 75%; min-height:1em;"/>
           </div>
         </div>
         <div class="row">
-          <div class="col-sm-12 col-md-12 col-lg-12">
+          <div class="col">
             <label><span style="background-color: yellow;">Reason for Homelessness:</span><font color="red" *ngIf="!isAdmin">*</font> </label>
-            <select class="form-control" #item formControlName="homeless_reason" style="width: 173px; float:right;" (change)="onChange(item.value)">
+            <select class="form-control" #item formControlName="homeless_reason" style="max-width: 75%;" (change)="onChange(item.value)">
               <option *ngFor="let option of homelessReasonOptions" [value]="option">{{option}}</option>
             </select>
           </div>
-        </div>
-        <div class="row">
-          <div class="col-sm-12 col-md-12 col-lg-12">
-            <input type="text" style="float:right;" placeholder="Reason" [(ngModel)]="otherHomelessReason" [ngModelOptions]="{standalone: true}" *ngIf="extraInfoNeeded" />
+          <div class="col">
+            <label *ngIf="extraInfoNeeded"><span style="background-color: yellow;">Other Reason:</span><font color="red" *ngIf="!isAdmin">*</font> </label>
+            <input type="text" class="form-control" placeholder="Reason" style="max-width: 75%;" [(ngModel)]="otherHomelessReason" [ngModelOptions]="{standalone: true}" *ngIf="extraInfoNeeded" />
           </div>
-        </div>
-        <div class="row">
-          <div class="col-sm-12 col-md-12 col-lg-12">
+          <div class="col">
             <label><span style="background-color: yellow;">Due to Covid:</span><font color="red" *ngIf="!isAdmin">*</font> </label>
-            <select class="form-control" #dtcitem style="width: 173px; float:right; " (change)="onDTCChange(dtcitem.value)">
+            <select class="form-control" style="max-width: 75%;" #dtcitem (change)="onDTCChange(dtcitem.value)">
               <option value='Unknown'>Unknown</option>
               <option value='Yes'>Yes</option>
               <option value='No'>No</option>
@@ -86,27 +77,25 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-sm-12 col-md-12 col-lg-12">
-            <label>Is Veteran: </label>
-            <input type="checkbox" style="float:right;" formControlName="is_veteran" />
+          <div class="col">
+            <input type="checkbox" class="form-check-input" style="margin-right: 5px;" formControlName="is_veteran" />
+            <label class="form-check-label">Is Veteran</label>
+          </div>
+          <div class="col">
+            <input type="checkbox" class="form-check-input" style="margin-right: 5px;" formControlName="is_aftercare" />
+            <label class="form-check-label">Is After Care</label>
           </div>
         </div>
         <div class="row">
-          <div class="col-sm-12 col-md-12 col-lg-12">
-            <label>Is After Care: </label>
-            <input type="checkbox" style="float:right;" formControlName="is_aftercare" />
+          <div class="form-group">
+            <label>Mailbox:</label>
+            <input type="text" class="form-control" style="max-width: 37.5%;" placeholder="Joppa Mailbox Number" formControlName="joppa_apartment_number" />
           </div>
         </div>
         <div class="row">
-          <div class="col-sm-12 col-md-12 col-lg-12">
-            <label>Mailbox: </label>
-            <input type="text" style="float:right;" placeholder="Joppa Mailbox Number" formControlName="joppa_apartment_number" />
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-sm-12 col-md-12 col-lg-12">
+          <div class="col">
             <label>Dwelling:<font color="red">*</font></label>
-            <select class="form-control" style="float:right;" formControlName="dwelling" style="width: 173px">
+            <select class="form-control" formControlName="dwelling" style="max-width: 75%;">
               <option value="Tent">Tent</option>
               <option value="Shack">Shack</option>
               <option value="Abandoned Structure">Abandoned Structure</option>
@@ -121,11 +110,9 @@
               <option value="Apartment">Apartment</option>
             </select>
           </div>
-        </div>
-        <div class="row">
-          <div class="col-sm-12 col-md-12 col-lg-12">
+          <div class="col">
             <label>Status: </label>
-            <select class="form-control" style="float:right;" formControlName="status" style="width: 173px">
+            <select class="form-control" formControlName="status" style="max-width: 75%;">
               <option value="Active">Active</option>
               <option value="Inactive">Inactive</option>
               <option value="Alumni">Alumni</option>
@@ -134,16 +121,16 @@
           </div>
         </div>
         <div class="row" *ngIf="isAdmin">
-          <div class="col-sm-12 col-md-12 col-lg-12">
+          <div class="form-group">
             <label>Admin Notes: </label>
-            <textarea rows=3 style="width: 173px; float:right;" placeholder="admin notes" formControlName="admin_notes"></textarea>
+            <textarea class="form-control" rows=3 style="max-width: 37.5%;" placeholder="admin notes" formControlName="admin_notes"></textarea>
           </div>
         </div>
       </div>
     </form>
   </div>
   <div class="card-footer text-right">
-    <button type="button" class="btn btn-outline-primary" (click)="close()">Close</button>&nbsp;
-    <button class="btn btn-primary" type="button" [disabled]="!clientForm.valid" (click)="submitClient()">Submit Client</button>
+    <button type="button" class="btn btn-outline-primary" style="float:left;" (click)="close()">Close</button>
+    <button class="btn btn-primary" type="button" style="float:right;" [disabled]="!clientForm.valid" (click)="submitClient()">Submit Client</button>
   </div>
 </div>

@@ -1,28 +1,28 @@
 <ng-template #editModal let-c="close" let-d="dismiss">
   <div class="modal-header">
     <h4 class="modal-title">Route Details</h4>
-    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')"><span
-        aria-hidden="true">&times;</span></button>
+    <button type="button" class="btn btn-primary" aria-label="Close" (click)="d('Cross click')"><span
+        aria-hidden="true">x</span></button>
   </div>
   <div class="modal-body">
     <form [formGroup]="routeForm" style="opacity:0.93">
       <div class="login-box">
         <div class="row">
-          <div class="col-sm-12 col-md-12 col-lg-12">
+          <div class="form-group">
             <label>Name: </label>
-            <input type="text" style="float:right;" placeholder="Name" formControlName="name" />
+            <input type="text" class="form-control" style="max-width: 50%;" placeholder="Name" formControlName="name" />
           </div>
         </div>
         <div class="row">
-          <div class="col-sm-12 col-md-12 col-lg-12">
+          <div class="form-group">
             <label>Region: </label>
-            <input type="text" style="float:right;" placeholder="Region" formControlName="region" />
+            <input type="text" class="form-control" style="max-width: 50%;" placeholder="Region" formControlName="region" />
           </div>
         </div>
         <div class="row">
-          <div class="col-sm-12 col-md-12 col-lg-12">
-            <label>Active: </label>
-            <input type="checkbox" style="float:right;" formControlName="is_active" />
+          <div class="form-group">
+            <input type="checkbox" class="form-check-input" style="margin-right:5px;" formControlName="is_active" />
+            <label class="form-check-label">Active</label>
           </div>
         </div>
       </div>
