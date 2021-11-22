@@ -13,6 +13,9 @@
     "prodServe": "ng server --configuration production --open",
     "postinstall": "ng build --aot --configuration production"
   },
+  "engines": {
+    "node": "16.x"
+  },
   "private": true,
   "dependencies": {
     "@angular/animations": "^13.0.2",
