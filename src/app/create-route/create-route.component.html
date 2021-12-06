@@ -1,5 +1,5 @@
-<div class="card text-center" style="opacity:0.93">
-  <div class="card-header text-left">
+<div class="card" style="opacity:0.93">
+  <div class="card-header text-center">
     <div style="float:left;">
       <button type="button" class="btn btn-primary" (click)="back()">
         <span class="oi oi-arrow-thick-left" title="arrow thick left" aria-hidden="true"></span>
@@ -9,19 +9,22 @@
   </div>
   <div class="panel-body" style="opacity:0.93">
     <form [formGroup]="routeForm" style="opacity:0.93">
-      <div class="row">
-        <div class="col">
-          <label for="name">Name:</label>
-          <input id="name" type="text" placeholder="Name" formControlName="name" class="form-control" style="max-width: 75%;" />
-        </div>
-        <div class="col">
-          <label for="region">Region:</label>
-          <input id="region" type="text" placeholder="Region" formControlName="region" class="form-control" style="max-width: 75%;" />
+      <div class="form-group row">
+          <label for="name" class="col-6 col-form-label" style="float:left">Name:</label>
+          <div class="col-6">
+            <input id="name" class="form-control" type="text" placeholder="Name" formControlName="name" style="float:right" />
+          </div>
+      </div>
+      <div class="form-group row">
+        <label for="region" class="col-6 col-form-label" style="float:left">Region:</label>
+        <div class="col-6">
+          <input id="region" class="form-control" type="text" placeholder="Region" formControlName="region" style="float:right" />
         </div>
       </div>
     </form>
   </div>
   <div class="card-footer text-center">
-    <button type="button" class="btn btn-primary" style="float:right" [disabled]="!routeForm.valid" (click)="submitRoute()">Submit Route</button>
+    <button type="button" class="btn btn-primary" style="float:right" [disabled]="!routeForm.valid"
+      (click)="submitRoute()">Submit Route</button>
   </div>
 </div>

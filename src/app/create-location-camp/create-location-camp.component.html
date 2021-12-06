@@ -4,33 +4,37 @@
       <h2>Create New Location Camp For Route: {{theRoute.name}}</h2>
     </div>
     <div class="panel-body" style="opacity:0.93">
-      <div class="row">
-        <div class="col">
-          <label for="name">Name: </label>
-          <input id="name" type="text" class="form-control" style="max-width:75%;" placeholder="Camp Name" formControlName="name" />
+      <div class="form-group row">
+        <label for="name" class="col-sm-6 col-form-label">Name: </label>
+        <div class="col-sm-6">
+          <input id="name" type="text" class="form-control" style="float:right;" placeholder="Camp Name" formControlName="name" />
         </div>
-        <div class="col" *ngIf="isAdmin">
-          <label for="routes">Route:</label>
-          <select id="routes" class="form-control" style="max-width: 75%;" formControlName="route_id">
+      </div>
+      <div class="form-group row">
+        <label for="routes" class="col-sm-6 col-form-label">Route:</label>
+        <div class="col-sm-6">
+          <select id="routes" class="form-control" style="float:right;" formControlName="route_id">
             <option value="" disabled selected>Select a route</option>
             <option *ngFor="let route of routes" [value]="route.id">{{route.name}}</option>
           </select>
         </div>
       </div>
-      <div class="row">
-        <div class="col">
-          <label for="arrival_time">Expected Arrival Time: </label>
-          <input id="arrival_time" type="time" class="form-control" style="max-width:75%;" placeholder="Expected Arrival Time" formControlName="expected_arrival_time" />
-        </div>
-        <div class="col">
-          <label id="position">Position: </label>
-          <input id="position" type="number" class="form-control" style="max-width:75%;" placeholder="Position" formControlName="position" />
+      <div class="form-group row">        
+        <label for="arrival_time" class="col-sm-6 col-form-label">Expected Arrival Time: </label>
+        <div class="col-sm-6">
+          <input id="arrival_time" type="time" class="form-control" style="float:right;" placeholder="Expected Arrival Time" formControlName="expected_arrival_time" />
         </div>
       </div>
-      <div class="row">
-        <div class="form-group">
-          <label for="notes">Notes: </label>
-          <textarea id="notes" placeholder="Notes" class="form-control" rows="3" cols="19" style="max-width:50%;" formControlName="notes" ></textarea>
+      <div class="form-group row">
+        <label id="position" class="col-sm-6 col-form-label">Position: </label>
+        <div class="col-sm-6">
+          <input id="position" type="number" class="form-control" style="float:right;" placeholder="Position" formControlName="position" />
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="notes" class="col-sm-6 col-form-label">Notes: </label>
+        <div class="col-sm-6">
+          <textarea id="notes" placeholder="Notes" class="form-control" rows="3" cols="19" style="float:right;;" formControlName="notes" ></textarea>
         </div>
       </div>
     </div>

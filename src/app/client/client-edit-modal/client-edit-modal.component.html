@@ -6,107 +6,108 @@
   </div>
   <div class="modal-body">
     <form [formGroup]="clientForm" style="opacity:0.93">
-      <div class="row">
-        <div class="form-group">
-          <input type="text" class="form-control" style="max-width: 25%;" placeholder="First Name" formControlName="first_name" />
-          <label>First Name: </label>
+      <div class="form-group row">
+        <label for="first-name" class="col-6 col-form-label">First Name: </label>
+        <div class="col-6">
+          <input id="first-name" type="text" class="form-control" style="float:right;" placeholder="First Name" formControlName="first_name" />
         </div>
       </div>
-      <div class="row">
-        <div class="form-group">
-          <input type="text" class="form-control" style="max-width: 25%;" placeholder="Last Name" formControlName="last_name" />
-          <label>Last Name: </label>
+      <div class="form-group row">
+        <label for="last-name" class="col-6 col-form-label">Last Name: </label>
+        <div class="col-6">
+          <input id="last-name" type="text" class="form-control" style="float:right;" placeholder="Last Name" formControlName="last_name" />
         </div>
       </div>
-      <div class="row">
-        <div class="form-group">
-          <label>Preferred Name: </label>
-          <input type="text" class="form-control" style="max-width: 25%;" placeholder="Preferred Name" formControlName="preferred_name" />
+      <div class="form-group row">
+        <label for="preferred-name" class="col-6 col-form-label">Preferred Name: </label>
+        <div class="col-6">
+          <input id="preferred-name" type="text" class="form-control" style="float:right;" placeholder="Preferred Name" formControlName="preferred_name" />
         </div>
       </div>
-      <div class="row">
-        <div class="form-group">
-          <label>Gender: </label>
-          <select class= "form-control" formControlName="gender" style="width: 173px;">
+      <div class="form-group row">
+        <label for="gender" class="col-6 col-form-label">Gender: </label>
+        <div class="col-6">
+          <select id="gender" class= "form-control" formControlName="gender" style="float:right;">
             <option value="Male">Male</option>
             <option value="Female">Female</option>
             <option value="Other">Other</option>
           </select>
         </div>
       </div>
-      <div class="row">
-        <div class="form-group">
-          <label>Birth Date (Date must be MM/DD/YYYY): </label>
-          <input type="date" class="form-control" placeholder="mm/dd/yyyy" formControlName="birth_date" style="min-height:1em; max-width: 25%;"/>
+      <div class="form-group row">
+        <label for="birth-date" class="col-6 col-form-label">Birth Date (Date must be MM/DD/YYYY): </label>
+        <div class="col-6">
+          <input id="birth-date" type="date" class="form-control" placeholder="mm/dd/yyyy" formControlName="birth_date" style="float:right;"/>
         </div>
       </div>
-      <div class="row">
-        <div class="form-group">
-          <label>Phone: </label>
-          <input type="text" class="form-control" style="max-width: 25%;" placeholder="phone" formControlName="phone" />
+      <div class="form-group row">
+        <label for="phone" class="col-6 col-form-label">Phone: </label>
+        <div class="col-6">
+          <input id="phone" type="text" class="form-control" style="float:right;" placeholder="phone" formControlName="phone" />
         </div>
       </div>
-      <div class="row">
-        <div class="form-group">
-          <label><span style="background-color: yellow;">First Time Homeless:</span><font color="red" *ngIf="!isAdmin">*</font> </label>
-          <select class="form-control" #fthitem style="width: 173px;" [(ngModel)]="firstTimeHomeless" [ngModelOptions]="{standalone: true}" (change)="onFTHChange(fthitem.value)">
+      <div class="form-group row">
+        <label for="fth" class="col-6 col-form-label"><span style="background-color: yellow;">First Time Homeless:</span><font color="red" *ngIf="!isAdmin">*</font> </label>
+        <div class="col-6">
+          <select id="fth" class="form-control" #fthitem style="float:right;" [(ngModel)]="firstTimeHomeless" [ngModelOptions]="{standalone: true}" (change)="onFTHChange(fthitem.value)">
             <option value='Unknown'>Unknown</option>
             <option value='Yes'>Yes</option>
             <option value='No'>No</option>
           </select>
         </div>
       </div>
-      <div class="row">
-        <div class="form-group">
-          <label><span style="background-color: yellow;">Date Became Homeless (Date must be MM/DD/YYYY):</span> </label>
-          <input type="date" class="form-control" placeholder="mm/dd/yyyy" formControlName="date_became_homeless" style="max-width: 25%; min-height:1em;"/>
+      <div class="form-group row">
+        <label for="dbh" class="col-6 col-form-label"><span style="background-color: yellow;">Date Became Homeless (Date must be MM/DD/YYYY):</span> </label>
+        <div class="col-6">
+          <input id="dbh" type="date" class="form-control" placeholder="mm/dd/yyyy" formControlName="date_became_homeless" style="float:right;"/>
         </div>
       </div>
-      <div class="row">
-        <div class="form-group">
-          <label><span style="background-color: yellow;">Reason for Homelessness:</span> </label>
-          <select class="form-control" #item formControlName="homeless_reason" style="width: 173px;" (change)="onChange(item.value)">
+      <div class="form-group row">
+        <label for="rfh" class="col-6 col-form-label"><span style="background-color: yellow;">Reason for Homelessness:</span> </label>
+        <div class="col-6">
+          <select id="rfh" class="form-control" #item formControlName="homeless_reason" (change)="onChange(item.value)">
             <option *ngFor="let option of homelessReasonOptions" [value]="option">{{option}}</option>
           </select>
         </div>
       </div>
-      <div class="row">
-        <div class="form-group">
+      <div class="form-group row">
+        <label class="col-6"></label>
+        <div class="col-6">
           <input type="text" class="form-control" placeholder="Reason" [(ngModel)]="otherHomelessReason" [ngModelOptions]="{standalone: true}" *ngIf="extraInfoNeeded" />
         </div>
       </div>
-      <div class="row">
-        <div class="form-group">
-          <label><span style="background-color: yellow;">Due to Covid:</span><font color="red" *ngIf="!isAdmin">*</font> </label>
-          <select class="form-control" style="float:right;" #dtcitem style="width: 173px;" [(ngModel)]="dueToCovid" [ngModelOptions]="{standalone: true}" (change)="onDTCChange(dtcitem.value)">
+      <div class="form-group row">
+        <label for="dtc" class="col-6 col-form-label"><span style="background-color: yellow;">Due to Covid:</span><font color="red" *ngIf="!isAdmin">*</font> </label>
+        <div class="col-6">
+          <select id="dtc" class="form-control" style="float:right;" #dtcitem [(ngModel)]="dueToCovid" [ngModelOptions]="{standalone: true}" (change)="onDTCChange(dtcitem.value)">
             <option value='Unknown'>Unknown</option>
             <option value='Yes'>Yes</option>
             <option value='No'>No</option>
           </select>
         </div>
       </div>
-      <div class="row">
-        <div class="form-group">
-          <input class="form-check-input" type="checkbox" formControlName="is_veteran" />
-          <label class="form-check-label" style="margin-left:5px;">Is Veteran</label>
+      <div class="form-group row">
+        <label for="veteran" class="col-6 col-form-label">Is Veteran:</label>
+        <div class="col-6">
+          <input id="veteran" class="form-control-checkbox" type="checkbox" style="float:right; width:5%; height:100%;" formControlName="is_veteran" />
         </div>
       </div>
-      <div class="row">
-        <div class="form-group">
-          <input type="checkbox" class="form-check-input" formControlName="is_aftercare" />
-          <label class="form-check-label" style="margin-left:5px;">Is After Care</label>
+      <div class="form-group row">
+        <label for="aftercare" class="col-6 col-form-label">Is After Care:</label>
+        <div class="col-6">
+          <input id="aftercare" type="checkbox" class="form-control-checkbox" style="float:right; width:5%; height:100%;" formControlName="is_aftercare" />
         </div>
       </div>
-      <div class="row">
-        <div class="form-group">
-          <label>Mailbox: </label>
-          <input type="text" class="form-control" style="max-width: 25%;" placeholder="Joppa Mailbox Number" formControlName="joppa_apartment_number" />
+      <div class="form-group row">
+        <label for="mailbox" class="col-6 col-form-label">Mailbox: </label>
+        <div class="col-6">
+          <input id="mailbox" type="text" class="form-control" style="float:right;" placeholder="Joppa Mailbox Number" formControlName="joppa_apartment_number" />
         </div>
       </div>
-      <div class="row">
-        <div class="form-group">
-          <label>Dwelling: </label>
-          <select class="form-control" style="float:right;" formControlName="dwelling" style="width: 173px;">
+      <div class="form-group row">
+        <label for="dwelling" class="col-6 col-form-label">Dwelling: </label>
+        <div class="col-6">
+          <select id="dwelling" class="form-control" style="float:right;" formControlName="dwelling">
             <option value="Tent">Tent</option>
             <option value="Shack">Shack</option>
             <option value="Abandoned Structure">Abandoned Structure</option>
@@ -122,10 +123,10 @@
           </select>
         </div>
       </div>
-      <div class="row">
-        <div class="form-group">
-          <label>Status: </label>
-          <select class="form-control" style="max-width: 25%;" formControlName="status">
+      <div class="form-group row">
+        <label for="status" class="col-6 col-form-label">Status: </label>
+        <div class="col-6">
+          <select id="status" class="form-control" style="float:right;" formControlName="status">
             <option value="Active">Active</option>
             <option value="Inactive">Inactive</option>
             <option value="Alumni">Alumni</option>
@@ -133,11 +134,10 @@
           </select>
         </div>
       </div>
-      <div class="row">
-        <div class="form-group" *ngIf="isAdmin">
-          <label>Admin Notes: </label>
-          <textarea type="text" class="form-control" rows="3" placeholder="admin notes" style="float:right;"
-            formControlName="admin_notes"></textarea>
+      <div class="form-group row" *ngIf="isAdmin">
+        <label for="admin-notes" class="col-6 col-form-label">Admin Notes: </label>
+        <div class="col-6">
+          <textarea id="admin-notes" type="text" class="form-control" rows="3" placeholder="admin notes" style="float:right;" formControlName="admin_notes"></textarea>
         </div>
       </div>
     </form>
