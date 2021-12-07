@@ -22,6 +22,8 @@ export class AdminClientListingComponent implements OnInit {
   @ViewChild(MatSort, {static: false}) sort: MatSort;
 
   constructor(private clientService: ClientService, private router: Router) {
+    window.localStorage.removeItem('routeId');
+
     this.clientService.getClientsByName('').subscribe(data => {
       this.clients = data;
       this.dataSource = new MatTableDataSource(this.clients);

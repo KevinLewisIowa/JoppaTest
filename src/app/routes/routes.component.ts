@@ -13,30 +13,23 @@ import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
   styleUrls: ['./routes.component.css']
 })
 export class RoutesComponent implements OnInit {
-  routes : Route[] = [];
+  routes: Route[] = [];
   route_id: number = JSON.parse(window.localStorage.getItem('routeId'));
   routeInstance: RouteInstance = new RouteInstance();
   faPlus = faPlus;
   backIcon = faChevronLeft;
 
 
-  constructor(private mainService: MainService , private router : Router) { 
-    if (this.route_id !== null) {
-      this.mainService.getTheRoutes().subscribe(routes => {
-        this.routes = routes.filter(route => route.id === this.route_id);
-      })
-    }
-    else {
-      this.mainService.getTheRoutes().subscribe(theRoutes => {
-        this.routes = theRoutes;
-      })
-    }    
+  constructor(private mainService: MainService, private router: Router) {
+    this.mainService.getTheRoutes().subscribe(theRoutes => {
+      this.routes = theRoutes;
+    });
   }
 
   ngOnInit() {
   }
 
-  openRoute(id){
+  openRoute(id) {
     this.router.navigate(['/route', id]);
   }
 

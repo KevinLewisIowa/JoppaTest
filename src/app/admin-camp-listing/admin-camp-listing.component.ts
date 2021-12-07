@@ -27,6 +27,8 @@ export class AdminCampListingComponent implements OnInit {
   @ViewChild(MatSort, {static: false}) sort: MatSort;
 
   constructor(private mainService: MainService, private router: Router) {
+    window.localStorage.removeItem('routeId');
+    
     this.mainService.getCampListing().subscribe(
       (data) => {
         this.camps = data;
