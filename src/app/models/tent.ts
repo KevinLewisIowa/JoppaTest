@@ -7,5 +7,5 @@ export class Tent {
     given_by: string = undefined;
     set_up_by: string = undefined;
     detail: string = undefined;
-    rejected; boolean;
+    rejected: boolean;
   }
