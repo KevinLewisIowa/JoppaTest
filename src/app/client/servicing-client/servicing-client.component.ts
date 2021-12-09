@@ -233,11 +233,11 @@ export class ServicingClientComponent implements OnInit {
 
   getHeaterStatuses(): void {
     this.mainService.getHeaterStatuses().subscribe(heaterStatuses => {
-      this.heaterStatuses = heaterStatuses.filter(w => w.id !== 1);
+      this.heaterStatuses = heaterStatuses.filter((w: { id: number; }) => w.id !== 1);
     }, err => {console.log(err)} );
   }
 
-  loaningHeater(heaterId) {
+  loaningHeater(heaterId: any) {
     this.updateHeaterEntry(heaterId, 2);
   }
 
@@ -245,7 +245,7 @@ export class ServicingClientComponent implements OnInit {
     this.currentStatus = status_id;
   }
 
-  updateHeaterEntry(heaterId, statusId) {
+  updateHeaterEntry(heaterId: number, statusId: number) {
     this.service.updateHeaterClient(this.client.id, heaterId, statusId).subscribe(response => {
       this.service.getHeatersForClient(this.client.id).subscribe((data: any[]) => {
         this.heaters = data;
@@ -433,59 +433,49 @@ export class ServicingClientComponent implements OnInit {
     }
   }
 
-  deleteRequest(id) {
-    this.service.deletedRequestedItem(id).subscribe(response => {
-      this.requestedItems = this.requestedItems.filter(w => w.id != id);
-    })
+  deleteRequest(id: number) {
+    this.service.deletedRequestedItem(id);
+    this.requestedItems = this.requestedItems.filter(w => w.id != id);
   }
 
-  removeLike(id) {
-    this.service.removeLike(id).subscribe(response => {
-      this.clientLikes = this.clientLikes.filter(w => w.id != id);
-    })
+  removeLike(id: number) {
+    this.service.removeLike(id);
+    this.clientLikes = this.clientLikes.filter(w => w.id != id);
   }
 
-  removeDislike(id) {
-    this.service.removeDislike(id).subscribe(response => {
-      this.clientDislikes = this.clientDislikes.filter(w => w.id != id);
-    })
+  removeDislike(id: number) {
+    this.service.removeDislike(id);
+    this.clientDislikes = this.clientDislikes.filter(w => w.id != id);
   }
 
-  removeTent(id) {
-    console.log(id);
-    this.service.removeTent(id).subscribe(response => {
-      this.tents = this.tents.filter(w => w.id != id);
-    })
+  removeTent(tent: Tent) {
+    this.service.removeTent(tent.id);
+    this.tents = this.tents.filter(w => w.id != tent.id);
   }
 
-  removeGoal(id) {
-    this.service.deleteGoalAndNextStep(id).subscribe(response => {
-      this.goalsAndSteps = this.goalsAndSteps.filter(w => w.id != id);
-    })
+  removeGoal(id: number) {
+    this.service.deleteGoalAndNextStep(id);
+    this.goalsAndSteps = this.goalsAndSteps.filter(w => w.id != id);
   }
 
-  removePet(id) {
-    this.service.removePet(id).subscribe(response => {
-      this.pets = this.pets.filter(w => w.id != id);
-    })
+  removePet(id: number) {
+    this.service.removePet(id);
+    this.pets = this.pets.filter(w => w.id != id);
   }
 
-  removeHealthConcern(id) {
-    this.service.removeHealthConcern(id).subscribe(response => {
-      this.healthConcerns = this.healthConcerns.filter(w => w.id != id);
-    })
+  removeHealthConcern(id: number) {
+    this.service.removeHealthConcern(id);
+    this.healthConcerns = this.healthConcerns.filter(w => w.id != id);
   }
 
   removeNote(id: number) {
-    this.service.removeNote(id).subscribe(response => {
-      this.notes = this.notes.filter(w => w.id != id);
-    })
+    this.service.removeNote(id);
+    this.notes = this.notes.filter(w => w.id != id);
   }
 
   removePrayerRequestNeed(id: number) {
-    this.service.removePrayerRequestNeed(id).subscribe(response => {
-      this.prayerRequestsAndNeeds = this.prayerRequestsAndNeeds.filter(w => w.id != id);
-    });
+    this.service.removePrayerRequestNeed(id);
+    this.prayerRequestsAndNeeds = this.prayerRequestsAndNeeds.filter(w => w.id != id);
   }
 
   removeHouseholdClient(client: Client) {
@@ -509,7 +499,7 @@ export class ServicingClientComponent implements OnInit {
     })
   }
 
-  receivedRequest(id) {
+  receivedRequest(id: number) {
     this.service.receivedRequestedItem(id).subscribe(response => {
       this.requestedItems = this.requestedItems.filter(w => w.id != id);
       this.service.getRecentReceivedItems(this.client.id).subscribe((data: RequestedItem[]) => {
@@ -544,7 +534,7 @@ export class ServicingClientComponent implements OnInit {
     }
   }
 
-  loanHose() {
+  loanHose(): void {
     if (this.clientId != null) {
       this.service.loanHose(this.clientId).subscribe(response => {
         this.service.getClientLoanedHoses(this.clientId).subscribe((data: any) => {
@@ -554,7 +544,7 @@ export class ServicingClientComponent implements OnInit {
     }
   }
 
-  submitTankStatus(interactionId, statusId) {
+  submitTankStatus(interactionId: number, statusId: number): void {
     if (statusId != 2) {
       this.service.updateTankInteraction(interactionId, statusId).subscribe(data => {
         this.service.getClientLoanedTanks(this.clientId).subscribe((response: any[]) => {
@@ -567,7 +557,7 @@ export class ServicingClientComponent implements OnInit {
     }
   }
 
-  submitHoseStatus(interactionId, statusId) {
+  submitHoseStatus(interactionId: any, statusId: number): void {
     if (statusId != 2) {
       this.service.updateHoseInteraction(interactionId, statusId).subscribe(data => {
         this.service.getClientLoanedHoses(this.clientId).subscribe((response: any[]) => {
@@ -580,7 +570,7 @@ export class ServicingClientComponent implements OnInit {
     }
   }
 
-  submitHeaterStatus(interactionId, statusId) {
+  submitHeaterStatus(interactionId: any, statusId: number) {
     if (statusId != 2) {
       this.service.updateHeaterInteraction(interactionId, statusId).subscribe(data => {
         this.service.getHeatersForClient(this.clientId).subscribe((response: any[]) => {

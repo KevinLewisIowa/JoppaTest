@@ -350,7 +350,7 @@
             </thead>
 
             <tbody>
-              <tr *ngFor="let tent of tents">
+              <tr *ngFor="let tent of tents; let rowIndex = index;">
                 <td>{{tent.date_given | date:'short'}}</td>
                 <td>{{tent.tent_type}}</td>
                 <td>{{tent.condition}}</td>
@@ -358,7 +358,7 @@
                 <td>{{tent.setup_by}}</td>
                 <td>{{tent.rejected}}</td>
                 <td>{{tent.notes}}</td>
-                <td><button type="button" class="btn btn-primary" (click)="removeTent(tent.id)">Remove</button></td>
+                <td><button type="button" class="btn btn-primary" (click)="removeTent(tent)">Remove</button></td>
                 <td></td>
               </tr>
             </tbody>
