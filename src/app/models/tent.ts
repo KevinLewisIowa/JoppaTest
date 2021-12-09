@@ -1,11 +1,11 @@
 export class Tent {
     id: number = undefined;
     client_id: number = undefined;
-    type: string = undefined;
+    tent_type: string = undefined;
     condition: string = undefined;
-    given_at: Date = undefined;
+    date_given: Date = undefined;
     given_by: string = undefined;
-    set_up_by: string = undefined;
-    detail: string = undefined;
+    setup_by: string = undefined;
+    notes: string = undefined;
     rejected: boolean;
   }

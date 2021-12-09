@@ -15,10 +15,9 @@ export class TentComponent implements OnInit {
   detail: string = '';
   type: string = '';
   condition: string = '';
-  given_at: Date;
   given_by: string;
   set_up_by: string;
-  rejected: boolean;
+  rejected: boolean = false;
 
   constructor(private modalService: NgbModal, private service: ClientService) { }
 
@@ -33,20 +32,22 @@ export class TentComponent implements OnInit {
     const tent = new Tent();
     const clientId = localStorage.getItem('selectedClient');
     if (this.detail != null && !isNaN(Number(clientId))) {
-      tent.detail = this.detail;
+      tent.notes = this.detail;
       tent.client_id = Number(clientId);
-      tent.type = this.type;
+      tent.tent_type = this.type;
       tent.condition = this.condition;
-      tent.given_at = this.given_at;
+      tent.date_given = new Date();
       tent.given_by = this.given_by;
-      tent.set_up_by = this.set_up_by;
+      tent.setup_by = this.set_up_by;
       tent.rejected = this.rejected;
+
+      console.log(`tent to insert ${JSON.stringify(tent)}`);
 
       this.service.insertClientTent(tent).subscribe((data: Tent) => {
         if (data != null && data.id != null) {
           this.tentAdded.emit(data);
         }
-      });
+      }, error => {console.log(error)});
     }
   }
 

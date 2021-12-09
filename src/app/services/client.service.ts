@@ -205,19 +205,21 @@ export class ClientService {
         catchError(this.handleError));
   }
 
-  getClientTent(id: number) {
+  getTentsForClient(client_id: number) {
     const myHeader = new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': window.localStorage.getItem('apiToken')
     });
-    return this.http.get(this.baseUrl + `tentForClient?clientId=${id}`, { headers: myHeader }).pipe(map((res: any) => {
+    return this.http.get(this.baseUrl + `getTentsForClient?clientId=${client_id}`, { headers: myHeader })
+    .pipe(map((res: any) => {
       if (res.message === 'invalid-token') {
         window.localStorage.removeItem('apiToken');
         this.router.navigate(['/application-login']);
       }
+      console.log(res);
       return res;
     }),
-      catchError(this.handleError));
+    catchError(this.handleError));
   }
 
   insertClientTent(theTent: Tent) {
@@ -225,9 +227,9 @@ export class ClientService {
       'Content-Type': 'application/json',
       'Authorization': window.localStorage.getItem('apiToken')
     });
-    return this.http.post(this.baseUrl + `client_tent`, { tent: theTent }, { headers: myHeader })
+    return this.http.post(this.baseUrl + `client_tents`, { client_tent: theTent }, { headers: myHeader })
       .pipe(map((res: any) => {
-        if (res.message === 'invalid=token') {
+        if (res.message === 'invalid-token') {
           window.localStorage.removeItem('apiToken');
           this.router.navigate(['/application-login']);
         }
@@ -536,7 +538,7 @@ export class ClientService {
       'Content-Type': 'application/json',
       'Authorization': window.localStorage.getItem('apiToken')
     });
-    return this.http.delete(this.baseUrl + `client_tent/${id}`, { headers: myHeader })
+    return this.http.delete(this.baseUrl + `client_tents/${id}`, { headers: myHeader })
       .pipe(map((res: any) => {
         if (res.message === 'invalid-token') {
           window.localStorage.removeItem('apiToken');

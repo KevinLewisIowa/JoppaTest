@@ -351,13 +351,13 @@
 
             <tbody>
               <tr *ngFor="let tent of tents">
-                <td>{{tent.given_at | date:'short'}}</td>
-                <td>{{tent.type}}</td>
+                <td>{{tent.date_given | date:'short'}}</td>
+                <td>{{tent.tent_type}}</td>
                 <td>{{tent.condition}}</td>
                 <td>{{tent.given_by}}</td>
-                <td>{{tent.set_up_by}}</td>
+                <td>{{tent.setup_by}}</td>
                 <td>{{tent.rejected}}</td>
-                <td>{{tent.detail}}</td>
+                <td>{{tent.notes}}</td>
                 <td><button type="button" class="btn btn-primary" (click)="removeTent(tent.id)">Remove</button></td>
                 <td></td>
               </tr>

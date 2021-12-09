@@ -131,7 +131,7 @@ export class ServicingClientComponent implements OnInit {
         this.service.getClientPets(this.clientId).subscribe((data : ClientPet[]) => {
           this.pets = data;
         }, error => console.log(error));
-        this.service.getClientTent(this.clientId).subscribe((data : Tent[]) => {
+        this.service.getTentsForClient(this.clientId).subscribe((data : Tent[]) => {
           this.tents = data;
         }, error => console.log(error));
         this.service.getGoalsAndNextSteps(this.clientId).subscribe((data: GoalsNextStep[]) => {
@@ -196,7 +196,7 @@ export class ServicingClientComponent implements OnInit {
         this.service.getClientPets(this.clientId).subscribe((data : ClientPet[]) => {
           this.pets = data;
         });
-        this.service.getClientTent(this.clientId).subscribe((data : Tent[]) => {
+        this.service.getTentsForClient(this.clientId).subscribe((data : Tent[]) => {
           this.tents = data;
         });
         this.service.getGoalsAndNextSteps(this.clientId).subscribe((data: GoalsNextStep[]) => {
@@ -452,6 +452,7 @@ export class ServicingClientComponent implements OnInit {
   }
 
   removeTent(id) {
+    console.log(id);
     this.service.removeTent(id).subscribe(response => {
       this.tents = this.tents.filter(w => w.id != id);
     })
