@@ -322,8 +322,51 @@
           </table>
         </div>
       </div>
+      <div class="col-lg-12 col-md-12">
+          <h4>Tent <button type="button" (click)="goToTop();tentMdl.showModal()"
+              class="btn btn-primary" style="float:right;">New
+              Tent</button>
+          </h4>
+          <table class="table" id="tents">
+            <colgroup>
+              <col span="1" style="width: 14%;">
+              <col span="1" style="width: 14%;">
+              <col span="1" style="width: 14%;">
+              <col span="1" style="width: 14%;">
+              <col span="1" style="width: 14%;">
+              <col span="1" style="width: 14%;">
+              <col span="1" style="width: 14%;">
+            </colgroup>
+            <thead>
+              <tr>
+                <th>Date Added</th>
+                <th>Type</th>
+                <th>Condition</th>
+                <th>Given by</th>
+                <th>Set up by</th>
+                <th>Rejected?</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr *ngFor="let tent of tents">
+                <td>{{tent.given_at | date:'short'}}</td>
+                <td>{{tent.type}}</td>
+                <td>{{tent.condition}}</td>
+                <td>{{tent.given_by}}</td>
+                <td>{{tent.set_up_by}}</td>
+                <td>{{tent.rejected}}</td>
+                <td>{{tent.detail}}</td>
+                <td><button type="button" class="btn btn-primary" (click)="removeTent(tent.id)">Remove</button></td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+      </div>
       <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
         <!-- removed !heatRoute from ngIf to pare down screen -->
+        <div class="background-color">
         <h4>Pets <button type="button" (click)="goToTop();petsMdl.showModal()" class="btn btn-primary" style="float:right;">New
             Pet</button>
         </h4>
@@ -360,9 +403,9 @@
           </tbody>
         </table>
       </div>
+      </div>
       <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
         <!-- removed !heatRoute from ngIf to pare down screen -->
-        <div class="background-color">
           <h4>Health Concerns <button type="button" (click)="goToTop();healthMdl.showModal()"
               class="btn btn-primary" style="float:right;">New Health Concern</button></h4>
           <table class="table" id="concerns">
@@ -395,9 +438,9 @@
               </tr>
             </tbody>
           </table>
-        </div>
       </div>
       <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
+        <div class="background-color">
         <h4>Household <button type="button" (click)="goToTop();clientMdl.showModal()"
             class="btn btn-primary" style="float:right;">New Household Member</button></h4>
         <table class="table" id="household">
@@ -436,8 +479,8 @@
           </tbody>
         </table>
       </div>
+      </div>
       <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
-        <div class="background-color">
           <h4>Weekly Attendance</h4>
           <div>
             From Date: <input type="date" name="attendanceFromDate" [(ngModel)]="attendanceFromDate" />
@@ -474,7 +517,6 @@
               </tr>
             </tbody>
           </table>
-        </div>
         <div class="col-lg-12 col-md-12">
           <h4>Admin Notes: </h4>
           <p><span style="background-color: yellow;">{{client.admin_notes}}</span></p>
@@ -530,4 +572,5 @@
 <app-pets #petsMdl (petAdded)="petAdded($event)"></app-pets>
 <app-prayer-requests-and-needs #prayerRequestsNeedsMdl (prayerRequestNeedAdded)="prayerRequestNeedAdded($event)">
 </app-prayer-requests-and-needs>
+<app-tents #tentMdl (tentAdded)="tentAdded($event)"></app-tents>
 <app-client-search #clientMdl (clientSelected)="clientSelected($event)"></app-client-search>

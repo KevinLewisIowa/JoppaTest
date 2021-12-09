@@ -13,6 +13,7 @@ import { MainService } from '../../services/main.service';
 import { Heater } from 'app/models/heater';
 import { Note } from 'app/models/note';
 import { ClientPet } from 'app/models/client-pet';
+import { Tent } from 'app/models/tent';
 import { faCheckCircle as farCheckCircle } from '@fortawesome/free-regular-svg-icons';
 import { faChevronLeft, faInfoCircle, faCheckCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import { Subscription, timer } from 'rxjs';
@@ -40,6 +41,7 @@ export class ServicingClientComponent implements OnInit {
   householdClients: Client[] = [];
   notes: Note[] = [];
   pets: ClientPet[] = [];
+  tents: Tent[] = [];
   sentInteraction = false;
   receivedItems: RequestedItem[] = [];
   heatRoute = false;
@@ -129,6 +131,9 @@ export class ServicingClientComponent implements OnInit {
         this.service.getClientPets(this.clientId).subscribe((data : ClientPet[]) => {
           this.pets = data;
         }, error => console.log(error));
+        this.service.getClientTent(this.clientId).subscribe((data : Tent[]) => {
+          this.tents = data;
+        }, error => console.log(error));
         this.service.getGoalsAndNextSteps(this.clientId).subscribe((data: GoalsNextStep[]) => {
           this.goalsAndSteps = data;
         }, error => console.log(error));
@@ -190,6 +195,9 @@ export class ServicingClientComponent implements OnInit {
         });
         this.service.getClientPets(this.clientId).subscribe((data : ClientPet[]) => {
           this.pets = data;
+        });
+        this.service.getClientTent(this.clientId).subscribe((data : Tent[]) => {
+          this.tents = data;
         });
         this.service.getGoalsAndNextSteps(this.clientId).subscribe((data: GoalsNextStep[]) => {
           this.goalsAndSteps = data;
@@ -335,6 +343,12 @@ export class ServicingClientComponent implements OnInit {
     element.scrollIntoView();
   }
 
+  tentAdded(tent: Tent) {
+    this.tents.push(tent);
+    const element = document.querySelector('#tents');
+    element.scrollIntoView();
+  }
+
   dislikeAdded(dislike: ClientDislike) {
     this.clientDislikes.push(dislike);
     const element = document.querySelector('#dislikes');
@@ -434,6 +448,12 @@ export class ServicingClientComponent implements OnInit {
   removeDislike(id) {
     this.service.removeDislike(id).subscribe(response => {
       this.clientDislikes = this.clientDislikes.filter(w => w.id != id);
+    })
+  }
+
+  removeTent(id) {
+    this.service.removeTent(id).subscribe(response => {
+      this.tents = this.tents.filter(w => w.id != id);
     })
   }
 

@@ -68,6 +68,7 @@ import { AdminSeenServicedReportComponent } from './admin-reports/admin-seen-ser
 import { HeatEquipmentPerRouteReportComponent } from './heat-equipment-per-route-report/heat-equipment-per-route-report.component';
 import { AdminClientListingComponent } from './admin-client-listing/admin-client-listing.component';
 import { PetsComponent } from './insert-modals/pets/pets.component';
+import { TentComponent } from './insert-modals/tents/tent.component';
 import { BirthdayMonthsReportComponent } from './admin-reports/birthday-months-report/birthday-months-report.component';
 import { AdminOverallAttendanceComponent } from './admin-overall-attendance/admin-overall-attendance.component';
 import { InventoryReportComponent } from './admin-reports/inventory-report/inventory-report.component';
@@ -136,6 +137,7 @@ const reducers = {
     CustomConfirmationDialogComponent,
     AdminCampListingComponent,
     AdminClientInactiveUpdaterComponent,
+    TentComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,53 @@
+<ng-template #tentMdl let-c="close" let-d="dismiss"> 
+    <div class="modal-header">
+      <h4 class="modal-title">Create Tent</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')"><span aria-hidden="true">&times;</span></button>
+    </div>
+    <form>
+      <div class="modal-body">
+        <div class="form-group">
+          <div class="row">
+            <div class="col-sm-3">
+              <label for="tent_type">Type</label>
+              <select id="tent_type" class="form-control" [(ngModel)]="type" name="type">
+                <option value="Summer">Summer</option>
+                <option value="Winter">Winter</option>
+                <option value="Emergency">Emergency</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="col-sm-3">
+              <label for="tent_condition">Condition</label>
+              <select id="tent_condition" class="form-control" [(ngModel)]="condition" name="condition">
+                <option value="New">New</option>
+                <option value="Used">Used</option>
+              </select>
+            </div>
+            <div class="col-sm-3">
+              <label for="tent_given_by">Given by</label>
+              <input type="text" id="tent_given_by" class="form-control" [(ngModel)]="given_by" name="given_by" />
+            </div>
+            <div class="col-sm-3">
+              <label for="tent_set_up_by">Set up by</label>
+              <input type="text" id="tent_set_up_by" class="form-control" [(ngModel)]="set_up_by" name="set_up_by" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-2">
+              <label for="tent_rejected">Rejected?</label>
+              <input type="checkbox" id="tent_rejected" class="form-control form-check-input" [(ngModel)]="rejected" name="rejected" />
+            </div>
+            <div class="col-sm-10">
+              <label for="tent_notes">Notes</label>
+              <input type="text" id="tent_notes" class="form-control" [(ngModel)]="detail" name="detail" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary" (click)="submitTent();c('')">Submit</button>
+      <button type="button" class="btn btn-outline-primary" (click)="c('Close click')">Close</button>
+    </div>
+  </ng-template>
+  
