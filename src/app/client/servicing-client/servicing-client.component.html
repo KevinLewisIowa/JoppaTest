@@ -527,25 +527,30 @@
           <button type="button" *ngIf="isAdmin" [className]="appearance && appearance.was_seen == false && appearance.serviced == false && appearance.still_lives_here == false ? 'btn btn-success' : 'btn btn-primary'" (click)="sendInteraction(3)" style="margin-right:3px;">No longer lives here</button>
         </div>
       </div>
-      <div class="col-md-12 text-left" *ngIf="!isAdmin">
+      <div class="col-md-12 text-left">
         <h4>Attendance</h4>
         <button type="button"
-          [className]="appearance && appearance.was_seen == true && appearance.serviced == true ? 'btn btn-success' : 'btn btn-primary'"
+          [className]="appearance && appearance.was_seen == true && appearance.serviced == true && appearance.at_homeless_resource_center == false ? 'btn btn-success' : 'btn btn-primary'"
           (click)="sendInteraction(1)">
           <fa-icon [icon]="seenAndServicedIcon"></fa-icon> Seen & Serviced
         </button>&nbsp;
         <button type="button"
-          [className]="appearance && appearance.was_seen == false && appearance.serviced == true ? 'btn btn-success' : 'btn btn-primary'"
+          [className]="appearance && appearance.was_seen == false && appearance.serviced == true && appearance.at_homeless_resource_center == false ? 'btn btn-success' : 'btn btn-primary'"
           (click)="sendInteraction(2)">
           <fa-icon [icon]="notSeenAndServicedIcon"></fa-icon> Serviced & Not Seen
         </button>&nbsp;
         <button type="button" *ngIf="isAdmin"
-          [className]="appearance && appearance.was_seen == false && appearance.serviced == false && appearance.still_lives_here == false ? 'btn btn-success' : 'btn btn-primary'"
-          (click)="sendInteraction(3)">No longer lives here</button>
+          [className]="appearance && appearance.was_seen == false && appearance.serviced == false && appearance.still_lives_here == false && appearance.at_homeless_resource_center == false ? 'btn btn-success' : 'btn btn-primary'"
+          (click)="sendInteraction(3)">No longer lives here</button>&nbsp;
         <button type="button"
           [className]="appearance && appearance.was_seen == false && appearance.serviced == false ? 'btn btn-success' : 'btn btn-primary'"
           (click)="sendInteraction(4)">
           <fa-icon [icon]="notSeenIcon"></fa-icon> Not Seen
+        </button>&nbsp;
+        <button type="button" *ngIf="isAdmin"
+          [className]="appearance && appearance.was_seen == false && appearance.serviced == false && appearance.at_homeless_resource_center == true ? 'btn btn-success' : 'btn btn-primary'"
+          (click)="sendInteraction(5)">
+          <fa-icon [icon]="seenAndServicedIcon"></fa-icon> Homeless Resource Center
         </button>&nbsp;
       </div>
     </div>
@@ -568,7 +573,6 @@
 <app-notes #notesMdl (noteAdded)="noteAdded($event)"></app-notes>
 <app-client-edit-modal #clientEditMdl (editedClient)="editedClient($event)"></app-client-edit-modal>
 <app-pets #petsMdl (petAdded)="petAdded($event)"></app-pets>
-<app-prayer-requests-and-needs #prayerRequestsNeedsMdl (prayerRequestNeedAdded)="prayerRequestNeedAdded($event)">
-</app-prayer-requests-and-needs>
+<app-prayer-requests-and-needs #prayerRequestsNeedsMdl (prayerRequestNeedAdded)="prayerRequestNeedAdded($event)"></app-prayer-requests-and-needs>
 <app-tents #tentMdl (tentAdded)="tentAdded($event)"></app-tents>
 <app-client-search #clientMdl (clientSelected)="clientSelected($event)"></app-client-search>

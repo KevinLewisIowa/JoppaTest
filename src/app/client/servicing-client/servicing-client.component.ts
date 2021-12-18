@@ -21,6 +21,8 @@ import { DatePipe } from '@angular/common';
 import { PrayerRequestAndNeed } from 'app/models/prayer-request';
 import { ConfirmDialogModel, CustomConfirmationDialogComponent } from 'app/custom-confirmation-dialog/custom-confirmation-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { DateSelectorComponent } from 'app/insert-modals/date-selector/date-selector.component';
 
 @Component({
   selector: 'app-servicing-client',
@@ -68,7 +70,7 @@ export class ServicingClientComponent implements OnInit {
 
   @ViewChild('clientInfo', {static: false}) clientInfo: ElementRef;
 
-  constructor(private service: ClientService, private mainService: MainService, private router: Router, public dialog: MatDialog) { }
+  constructor(private service: ClientService, private mainService: MainService, private modalService: NgbModal, private router: Router, public dialog: MatDialog) { }
 
   ngOnInit() {
     this.routeInstanceId = JSON.parse(localStorage.getItem('routeInstance'));
@@ -274,23 +276,32 @@ export class ServicingClientComponent implements OnInit {
   sendInteraction(interactionType: number) {
     const interaction: Appearance = new Appearance();
     interaction.client_id = this.client.id;
-    interaction.location_camp_id = this.locationCampId;
+    interaction.location_camp_id = this.locationCampId ? this.locationCampId : this.client.current_camp_id;
     if (interactionType === 1) {
       interaction.serviced = true;
       interaction.was_seen = true;
       interaction.still_lives_here = true;
+      interaction.at_homeless_resource_center = false;
     } else if (interactionType === 2) {
       interaction.serviced = true;
       interaction.still_lives_here = true;
       interaction.was_seen = false;
+      interaction.at_homeless_resource_center = false;
     } else if (interactionType === 3) {
       interaction.serviced = false;
       interaction.still_lives_here = false;
       interaction.was_seen = false;
+      interaction.at_homeless_resource_center = false;
     } else if (interactionType === 4) {
       interaction.serviced = false;
       interaction.still_lives_here = true;
       interaction.was_seen = false;
+      interaction.at_homeless_resource_center = false;
+    } else if(interactionType === 5) {
+      interaction.serviced = true;
+      interaction.was_seen = true;
+      interaction.still_lives_here = true;
+      interaction.at_homeless_resource_center = true;
     }
 
     let routeAttendanceList:Appearance[] = JSON.parse(window.localStorage.getItem('RouteAttendance'));
@@ -317,17 +328,31 @@ export class ServicingClientComponent implements OnInit {
 
   updateClientAndAttendanceListing(interaction: Appearance, routeAttendanceList: Appearance[]) {
     if (interaction.serviced) {
-      this.client.last_interaction_date = new Date();
+      if (this.isAdmin) {
+        // Allow them to select a Date
+        const modalRef: NgbModalRef = this.modalService.open(DateSelectorComponent, {
+          size: "lg",
+          backdrop: "static"
+        });
+        modalRef.componentInstance.dateSelected.subscribe((selected_date : Date) => {
+          console.log(selected_date);
+          this.client.last_interaction_date = selected_date;
+        });
+      } else {
+        this.client.last_interaction_date = new Date();
+      }
     }
     else if (interaction.still_lives_here == false) {
       this.client.previous_camp_id = interaction.location_camp_id;
       this.client.current_camp_id = null;
     }
     this.service.updateClient(this.client).subscribe(data => {
-      window.localStorage.setItem('RouteAttendance', JSON.stringify(routeAttendanceList));
-      console.log('Number of interactions in route attendance list: ' + routeAttendanceList.length);
-      console.log(JSON.stringify(routeAttendanceList));
-      this.router.navigate([`/locationCamp/${this.locationCampId}`]);
+      if (!this.isAdmin) {
+        window.localStorage.setItem('RouteAttendance', JSON.stringify(routeAttendanceList));
+        console.log('Number of interactions in route attendance list: ' + routeAttendanceList.length);
+        console.log(JSON.stringify(routeAttendanceList));
+        this.router.navigate([`/locationCamp/${this.locationCampId}`]);
+      }
     }, error => console.log(error));
   }
 
@@ -395,6 +420,10 @@ export class ServicingClientComponent implements OnInit {
     client.household_id = this.client.household_id;
     this.service.updateClient(client).subscribe(data => {
     }, error => console.log(error));
+  }
+
+  dateSelected(date_seen: Date) {
+
   }
 
   goToTop() {

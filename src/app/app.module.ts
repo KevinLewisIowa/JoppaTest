@@ -77,6 +77,7 @@ import { FirstTimeHomelessnessReportComponent } from './admin-reports/first-time
 import { CustomConfirmationDialogComponent } from './custom-confirmation-dialog/custom-confirmation-dialog.component';
 import { AdminCampListingComponent } from './admin-camp-listing/admin-camp-listing.component';
 import { AdminClientInactiveUpdaterComponent } from './admin-client-inactive-updater/admin-client-inactive-updater.component';
+import { DateSelectorComponent } from './insert-modals/date-selector/date-selector.component';
 
 const reducers = {
   user: MainReducer,
@@ -137,7 +138,8 @@ const reducers = {
     CustomConfirmationDialogComponent,
     AdminCampListingComponent,
     AdminClientInactiveUpdaterComponent,
-    TentComponent
+    TentComponent,
+    DateSelectorComponent
   ],
   imports: [
     BrowserModule,
@@ -160,6 +162,6 @@ const reducers = {
   ],
   providers: [MainService, ClientService],
   bootstrap: [AppComponent],
-  entryComponents: [CustomConfirmationDialogComponent]
+  entryComponents: [CustomConfirmationDialogComponent, DateSelectorComponent]
 })
 export class AppModule {}
