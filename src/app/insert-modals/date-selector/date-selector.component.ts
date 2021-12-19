@@ -1,5 +1,5 @@
 import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-date-selector',
@@ -9,22 +9,27 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 export class DateSelectorComponent implements OnInit {
   @ViewChild("dateSelectorMdl", {static: false}) dateSelectorMdl: ElementRef;
   @Output() dateSelected = new EventEmitter<Date>();
-  seen_date: Date = new Date();
+  date_seen: Date = new Date();
 
-  constructor(private modalService: NgbModal) { }
+  constructor(public activeModal: NgbActiveModal) { }
 
   ngOnInit(): void {
   }
 
-  showModal() {
-    this.modalService.open(this.dateSelectorMdl, {
-      size: "lg",
-      backdrop: "static"
-    });
-  }
+  // showModal() {
+  //   this.modalService.open(this.dateSelectorMdl, {
+  //     size: "lg",
+  //     backdrop: "static"
+  //   });
+  // }
 
   submitDate() {
-    this.dateSelected.emit(this.seen_date);
+    this.activeModal.close(this.date_seen);
   }
+
+  // close(): void {
+  //   const closeMessage = 'Modal closed';
+  //   this.modalService.close(closeMessage);
+  // }
 
 }

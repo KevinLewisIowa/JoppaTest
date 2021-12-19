@@ -1,20 +1,18 @@
-<ng-template #dateSelectorMdl let-c="close" let-d="dismiss">
-    <div class="modal-header">
-        <h4 class="modal-title">Date Seen</h4>
-        <button type="button" class="btn btn-primary" aria-label="Close" (click)="d('Cross click')">
-            <span aria-hidden="true">x</span>
-        </button>
-    </div>
-    <form>
-        <div class="modal-body">
-            <div class="form-group row">
-                <label for="selected-date" class="form-control-label">Date Seen</label>
-                <input id="selected-date" type="date" class="form-control" [(ngModel)]="date_seen" />
-            </div>
+<div class="modal-header">
+    <h4 class="modal-title">Date Seen</h4>
+    <button type="button" class="btn btn-primary" aria-label="Close" (click)="activeModal.close()">
+        <span aria-hidden="true">x</span>
+    </button>
+</div>
+<form>
+    <div class="modal-body">
+        <div class="form-group row">
+            <label for="selected-date" class="form-control-label">Date Seen</label>
+            <input id="selected-date" type="date" class="form-control" [(ngModel)]="date_seen" />
         </div>
-    </form>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-primary" (click)="submitDate(); c('')">Submit</button>
-        <button type="button" class="btn btn-outline-primary" (click)="c('Close click')">Close</button>
     </div>
-</ng-template>
+</form>
+<div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="submitDate()">Submit</button>
+    <button type="button" class="btn btn-outline-primary" (click)="activeModal.close()">Close</button>
+</div>

@@ -334,18 +334,29 @@ export class ServicingClientComponent implements OnInit {
           size: "lg",
           backdrop: "static"
         });
-        modalRef.componentInstance.dateSelected.subscribe((selected_date : Date) => {
+        modalRef.result.then((selected_date : Date) => {
           console.log(selected_date);
           this.client.last_interaction_date = selected_date;
+
+          this.updateClientAndListing(routeAttendanceList);
         });
       } else {
         this.client.last_interaction_date = new Date();
+        this.updateClientAndListing(routeAttendanceList);
       }
     }
     else if (interaction.still_lives_here == false) {
       this.client.previous_camp_id = interaction.location_camp_id;
       this.client.current_camp_id = null;
+
+      this.updateClientAndListing(routeAttendanceList);
     }
+    else {
+      this.updateClientAndListing(routeAttendanceList);
+    }
+  }
+
+  private updateClientAndListing(routeAttendanceList: Appearance[]) {
     this.service.updateClient(this.client).subscribe(data => {
       if (!this.isAdmin) {
         window.localStorage.setItem('RouteAttendance', JSON.stringify(routeAttendanceList));
