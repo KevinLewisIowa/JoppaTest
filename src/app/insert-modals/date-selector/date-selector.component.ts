@@ -9,11 +9,12 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 export class DateSelectorComponent implements OnInit {
   @ViewChild("dateSelectorMdl", {static: false}) dateSelectorMdl: ElementRef;
   @Output() dateSelected = new EventEmitter<Date>();
-  date_seen: Date = new Date();
+  date_seen: Date;
 
   constructor(public activeModal: NgbActiveModal) { }
 
   ngOnInit(): void {
+    this.date_seen = new Date();
   }
 
   // showModal() {

@@ -7,8 +7,8 @@
 <form>
     <div class="modal-body">
         <div class="form-group row">
-            <label for="selected-date" class="form-control-label">Date Seen</label>
-            <input id="selected-date" type="date" class="form-control" [(ngModel)]="date_seen" />
+            <label for="date_seen" class="form-control-label">Date Seen</label>
+            <input id="date_seen" name="date_seen" type="date" class="form-control" [ngModel]="date_seen | date:'yyyy-MM-dd'" />
         </div>
     </div>
 </form>
