@@ -319,6 +319,7 @@ export class ServicingClientComponent implements OnInit {
     else {
       this.service.insertClientAppearance(interaction).subscribe(data => {
         interaction.id = data.id;
+        this.clientInteractions.push(interaction);
         routeAttendanceList.push(interaction);
         
         this.updateClientAndAttendanceListing(interaction, routeAttendanceList);
