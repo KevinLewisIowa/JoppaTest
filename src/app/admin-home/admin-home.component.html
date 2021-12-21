@@ -27,8 +27,6 @@
     </table>
   </div>
   <div class="card-footer">
-    <button routerLink="/login" class="btn btn-primary" style="float: left">
-      <fa-icon [icon]="backIcon"></fa-icon> Back
-    </button>
+    <button type="button" (click)="signOut()" class="btn btn-primary" style="float:left"><fa-icon [icon]="signOutIcon"></fa-icon> Sign Out</button>
   </div>
 </div>

@@ -36,7 +36,11 @@ export class MainLoginComponent implements OnInit {
         if (data.admin) {
           this.service.showAdminHome.next(true);
         }
-        this.router.navigate(['login']);
+        if (data.admin) {
+          this.router.navigate(['adminHome']);
+        } else {
+          this.router.navigate(['login']);
+        }
       } else {
         this.invalidText = true;
       }

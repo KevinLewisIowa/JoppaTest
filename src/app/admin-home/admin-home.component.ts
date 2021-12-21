@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { Appearance } from "app/models/appearance";
-import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
+import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 import { MainService } from "app/services/main.service";
 
 @Component({
@@ -12,7 +12,7 @@ import { MainService } from "app/services/main.service";
 export class AdminHomeComponent implements OnInit {
   constructor(private mainService: MainService, private router: Router) {}
 
-  backIcon = faChevronLeft;
+  signOutIcon = faSignOutAlt;
   isAdmin: boolean;
   routeInstanceId: number;
 
@@ -23,6 +23,12 @@ export class AdminHomeComponent implements OnInit {
       window.localStorage.getItem("routeInstance")
     );
     this.mainService.showEndRoute.next(this.routeInstanceId != null);
+  }
+
+  signOut() {
+    window.localStorage.clear();
+    this.mainService.showAdminHome.next(false);
+    this.router.navigate(['/application-login']);
   }
 
   openAdminReports() {

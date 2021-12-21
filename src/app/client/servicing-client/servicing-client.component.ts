@@ -319,10 +319,9 @@ export class ServicingClientComponent implements OnInit {
     else {
       this.service.insertClientAppearance(interaction).subscribe(data => {
         interaction.id = data.id;
-        this.clientInteractions.push(interaction);
         routeAttendanceList.push(interaction);
         
-        this.updateClientAndAttendanceListing(interaction, routeAttendanceList);
+        this.updateClientAndAttendanceListing(data, routeAttendanceList);
       }, error => console.log(error));
     }
   }
@@ -339,25 +338,25 @@ export class ServicingClientComponent implements OnInit {
           console.log(selected_date);
           this.client.last_interaction_date = selected_date;
 
-          this.updateClientAndListing(routeAttendanceList);
+          this.updateClientAndListing(routeAttendanceList, interaction);
         });
       } else {
         this.client.last_interaction_date = new Date();
-        this.updateClientAndListing(routeAttendanceList);
+        this.updateClientAndListing(routeAttendanceList, interaction);
       }
     }
     else if (interaction.still_lives_here == false) {
       this.client.previous_camp_id = interaction.location_camp_id;
       this.client.current_camp_id = null;
 
-      this.updateClientAndListing(routeAttendanceList);
+      this.updateClientAndListing(routeAttendanceList, interaction);
     }
     else {
-      this.updateClientAndListing(routeAttendanceList);
+      this.updateClientAndListing(routeAttendanceList, interaction);
     }
   }
 
-  private updateClientAndListing(routeAttendanceList: Appearance[]) {
+  private updateClientAndListing(routeAttendanceList: Appearance[], interaction: Appearance) {
     this.service.updateClient(this.client).subscribe(data => {
       if (!this.isAdmin) {
         window.localStorage.setItem('RouteAttendance', JSON.stringify(routeAttendanceList));
@@ -365,6 +364,8 @@ export class ServicingClientComponent implements OnInit {
         console.log(JSON.stringify(routeAttendanceList));
         this.router.navigate([`/locationCamp/${this.locationCampId}`]);
       }
+
+      this.clientInteractions.push(interaction);
     }, error => console.log(error));
   }
 
