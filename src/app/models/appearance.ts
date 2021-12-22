@@ -6,4 +6,5 @@ export class Appearance {
   was_seen: boolean = undefined;
   still_lives_here: boolean = undefined;
   at_homeless_resource_center: boolean = undefined;
+  serviced_date: Date = undefined;
 }

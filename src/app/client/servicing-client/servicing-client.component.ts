@@ -304,29 +304,6 @@ export class ServicingClientComponent implements OnInit {
       interaction.at_homeless_resource_center = true;
     }
 
-    let routeAttendanceList:Appearance[] = JSON.parse(window.localStorage.getItem('RouteAttendance'));
-    let appearance:Appearance = routeAttendanceList.find(x => x.client_id == interaction.client_id);
-    
-    if (appearance) {
-      interaction.id = appearance.id;
-
-      this.service.updateClientAppearance(interaction).subscribe(data => {
-        routeAttendanceList[routeAttendanceList.indexOf(appearance)] = interaction;
-        
-        this.updateClientAndAttendanceListing(interaction, routeAttendanceList);
-      }, error => console.log(error));
-    }
-    else {
-      this.service.insertClientAppearance(interaction).subscribe(data => {
-        interaction.id = data.id;
-        routeAttendanceList.push(interaction);
-        
-        this.updateClientAndAttendanceListing(data, routeAttendanceList);
-      }, error => console.log(error));
-    }
-  }
-
-  updateClientAndAttendanceListing(interaction: Appearance, routeAttendanceList: Appearance[]) {
     if (interaction.serviced) {
       if (this.isAdmin) {
         // Allow them to select a Date
@@ -336,27 +313,43 @@ export class ServicingClientComponent implements OnInit {
         });
         modalRef.result.then((selected_date : Date) => {
           console.log(selected_date);
-          this.client.last_interaction_date = selected_date;
-
-          this.updateClientAndListing(routeAttendanceList, interaction);
+          if (selected_date.valueOf() > this.client.last_interaction_date.valueOf()) {
+            this.client.last_interaction_date = selected_date;
+          }
+          interaction.serviced_date = selected_date;
         });
       } else {
         this.client.last_interaction_date = new Date();
-        this.updateClientAndListing(routeAttendanceList, interaction);
+        interaction.serviced_date = new Date();
       }
     }
     else if (interaction.still_lives_here == false) {
       this.client.previous_camp_id = interaction.location_camp_id;
       this.client.current_camp_id = null;
+    }
 
-      this.updateClientAndListing(routeAttendanceList, interaction);
+    let routeAttendanceList:Appearance[] = JSON.parse(window.localStorage.getItem('RouteAttendance'));
+    let appearance:Appearance = routeAttendanceList.find(x => x.client_id == interaction.client_id);
+    
+    if (appearance) {
+      interaction.id = appearance.id;
+
+      this.service.updateClientAppearance(interaction).subscribe(data => {
+        routeAttendanceList[routeAttendanceList.indexOf(appearance)] = interaction;
+        this.updateClientAndListing(routeAttendanceList);
+      }, error => console.log(error));
     }
     else {
-      this.updateClientAndListing(routeAttendanceList, interaction);
+      this.service.insertClientAppearance(interaction).subscribe(data => {
+        interaction.id = data.id;
+        routeAttendanceList.push(interaction);
+        this.clientInteractions.push(data);
+        this.updateClientAndListing(routeAttendanceList);
+      }, error => console.log(error));
     }
   }
 
-  private updateClientAndListing(routeAttendanceList: Appearance[], interaction: Appearance) {
+  private updateClientAndListing(routeAttendanceList: Appearance[]) {
     this.service.updateClient(this.client).subscribe(data => {
       if (!this.isAdmin) {
         window.localStorage.setItem('RouteAttendance', JSON.stringify(routeAttendanceList));
@@ -364,8 +357,6 @@ export class ServicingClientComponent implements OnInit {
         console.log(JSON.stringify(routeAttendanceList));
         this.router.navigate([`/locationCamp/${this.locationCampId}`]);
       }
-
-      this.clientInteractions.push(interaction);
     }, error => console.log(error));
   }
 
