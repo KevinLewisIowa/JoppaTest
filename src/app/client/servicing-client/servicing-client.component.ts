@@ -68,7 +68,7 @@ export class ServicingClientComponent implements OnInit {
   routeInstanceId: number;
   pipe: DatePipe = new DatePipe('en-us');
 
-  @ViewChild('clientInfo', {static: false}) clientInfo: ElementRef;
+  @ViewChild('clientInfo', { static: false }) clientInfo: ElementRef;
 
   constructor(private service: ClientService, private mainService: MainService, private modalService: NgbModal, private router: Router, public dialog: MatDialog) { }
 
@@ -86,7 +86,7 @@ export class ServicingClientComponent implements OnInit {
     let attendFromDate: Date = new Date();
     attendFromDate.setMonth(attendFromDate.getMonth() - 1);
     this.attendanceFromDate = this.pipe.transform(attendFromDate, 'yyyy-MM-dd');
-    let routeAttendanceList:Appearance[] = JSON.parse(localStorage.getItem('RouteAttendance'));
+    let routeAttendanceList: Appearance[] = JSON.parse(localStorage.getItem('RouteAttendance'));
     if (routeAttendanceList.length != null) {
       this.appearance = routeAttendanceList.find(x => x.client_id == this.clientId);
     }
@@ -98,11 +98,11 @@ export class ServicingClientComponent implements OnInit {
     if (this.appearance) {
       this.sentInteraction = true;
     }
-    
+
     if (this.clientId !== null) {
       this.service.getClientById(this.clientId).subscribe((data: Client) => {
         this.client = data;
-        
+
         if (this.client.homeless_reason == '' || this.client.date_became_homeless == null) {
           alert('Please ask this client 1) If this is first time homeless? 2) Why they are homeless? and 3) When they became homeless? Please record this in the Client Details screen, where you will be directed now.');
           if (!this.isAdmin) {
@@ -119,7 +119,7 @@ export class ServicingClientComponent implements OnInit {
           this.notes = data;
         }, error => console.log(error));
       }
-      
+
       if (this.isAdmin) {
         this.service.getClientNotesForClient(this.clientId).subscribe((data: Note[]) => {
           this.notes = data;
@@ -130,10 +130,10 @@ export class ServicingClientComponent implements OnInit {
         this.service.getRequestedItems(this.clientId).subscribe((data: RequestedItem[]) => {
           this.requestedItems = data.filter(w => w.has_received != true);
         }, error => console.log(error));
-        this.service.getClientPets(this.clientId).subscribe((data : ClientPet[]) => {
+        this.service.getClientPets(this.clientId).subscribe((data: ClientPet[]) => {
           this.pets = data;
         }, error => console.log(error));
-        this.service.getTentsForClient(this.clientId).subscribe((data : Tent[]) => {
+        this.service.getTentsForClient(this.clientId).subscribe((data: Tent[]) => {
           this.tents = data;
         }, error => console.log(error));
         this.service.getGoalsAndNextSteps(this.clientId).subscribe((data: GoalsNextStep[]) => {
@@ -195,10 +195,10 @@ export class ServicingClientComponent implements OnInit {
         this.service.getRequestedItems(this.clientId).subscribe((data: RequestedItem[]) => {
           this.requestedItems = data.filter(w => w.has_received != true);
         });
-        this.service.getClientPets(this.clientId).subscribe((data : ClientPet[]) => {
+        this.service.getClientPets(this.clientId).subscribe((data: ClientPet[]) => {
           this.pets = data;
         });
-        this.service.getTentsForClient(this.clientId).subscribe((data : Tent[]) => {
+        this.service.getTentsForClient(this.clientId).subscribe((data: Tent[]) => {
           this.tents = data;
         });
         this.service.getGoalsAndNextSteps(this.clientId).subscribe((data: GoalsNextStep[]) => {
@@ -236,7 +236,7 @@ export class ServicingClientComponent implements OnInit {
   getHeaterStatuses(): void {
     this.mainService.getHeaterStatuses().subscribe(heaterStatuses => {
       this.heaterStatuses = heaterStatuses.filter((w: { id: number; }) => w.id !== 1);
-    }, err => {console.log(err)} );
+    }, err => { console.log(err) });
   }
 
   loaningHeater(heaterId: any) {
@@ -297,40 +297,63 @@ export class ServicingClientComponent implements OnInit {
       interaction.still_lives_here = true;
       interaction.was_seen = false;
       interaction.at_homeless_resource_center = false;
-    } else if(interactionType === 5) {
+    } else if (interactionType === 5) {
       interaction.serviced = true;
       interaction.was_seen = true;
       interaction.still_lives_here = true;
       interaction.at_homeless_resource_center = true;
     }
 
-    if (interaction.serviced) {
-      if (this.isAdmin) {
-        // Allow them to select a Date
-        const modalRef: NgbModalRef = this.modalService.open(DateSelectorComponent, {
-          size: "lg",
-          backdrop: "static"
-        });
-        modalRef.result.then((selected_date : Date) => {
-          console.log(selected_date);
-          if (selected_date.valueOf() > this.client.last_interaction_date.valueOf()) {
-            this.client.last_interaction_date = selected_date;
-          }
+    if (this.isAdmin) {
+      // Allow them to select a Date
+      const modalRef: NgbModalRef = this.modalService.open(DateSelectorComponent, {
+        size: "lg",
+        backdrop: "static"
+      });
+      modalRef.result.then((selected_date: Date) => {
+        if (!selected_date) {
+          return;
+        }
+        else {
           interaction.serviced_date = selected_date;
-        });
-      } else {
+          if (interaction.serviced) {
+            if (interaction.serviced_date.valueOf() > new Date(this.client.last_interaction_date).valueOf()) {
+              this.client.last_interaction_date = interaction.serviced_date;
+            }
+
+            this.createUpdateInteraction(interaction);
+          } else if (!interaction.still_lives_here) {
+            this.client.previous_camp_id = interaction.location_camp_id;
+            this.client.current_camp_id = null;
+
+            this.createUpdateInteraction(interaction);
+          } else {
+            this.createUpdateInteraction(interaction);
+          }
+        }
+      });
+    } else {
+      interaction.serviced_date = new Date();
+      if (interaction.serviced) {
         this.client.last_interaction_date = new Date();
-        interaction.serviced_date = new Date();
+        this.createUpdateInteraction(interaction);
+      }
+      else if (!interaction.still_lives_here) {
+        this.client.previous_camp_id = interaction.location_camp_id;
+        this.client.current_camp_id = null;
+
+        this.createUpdateInteraction(interaction);
+      }
+      else {
+        this.createUpdateInteraction(interaction);
       }
     }
-    else if (interaction.still_lives_here == false) {
-      this.client.previous_camp_id = interaction.location_camp_id;
-      this.client.current_camp_id = null;
-    }
+  }
 
-    let routeAttendanceList:Appearance[] = JSON.parse(window.localStorage.getItem('RouteAttendance'));
-    let appearance:Appearance = routeAttendanceList.find(x => x.client_id == interaction.client_id);
-    
+  private createUpdateInteraction(interaction: Appearance) {
+    let routeAttendanceList: Appearance[] = JSON.parse(window.localStorage.getItem('RouteAttendance'));
+    let appearance: Appearance = routeAttendanceList.find(x => x.client_id == interaction.client_id);
+
     if (appearance) {
       interaction.id = appearance.id;
 
@@ -340,6 +363,7 @@ export class ServicingClientComponent implements OnInit {
       }, error => console.log(error));
     }
     else {
+      console.log(`Appearance to add: ${JSON.stringify(interaction)}`);
       this.service.insertClientAppearance(interaction).subscribe(data => {
         interaction.id = data.id;
         routeAttendanceList.push(interaction);
@@ -420,7 +444,7 @@ export class ServicingClientComponent implements OnInit {
 
   clientSelected(client: Client) {
     this.householdClients.push(client);
-    
+
     client.household_id = this.client.household_id;
     this.service.updateClient(client).subscribe(data => {
     }, error => console.log(error));
@@ -441,14 +465,14 @@ export class ServicingClientComponent implements OnInit {
     let dismissText: string = 'No';
     let message: string;
 
-    if(this.isAdmin) {
+    if (this.isAdmin) {
       this.router.navigate(['/admin/clientListing']);
     }
     else {
       if (!this.sentInteraction) {
         message = 'Are you sure you want to close out of this client? You have not yet marked them as seen or serviced.';
         const dialogData = new ConfirmDialogModel(title, message, confirmText, dismissText);
-        const dialogRef = this.dialog.open(CustomConfirmationDialogComponent, {data: dialogData, maxWidth:'400px'});
+        const dialogRef = this.dialog.open(CustomConfirmationDialogComponent, { data: dialogData, maxWidth: '400px' });
 
         dialogRef.afterClosed().subscribe(result => {
           let canContinue: boolean = JSON.parse(result);
@@ -513,11 +537,11 @@ export class ServicingClientComponent implements OnInit {
 
   removeHouseholdClient(client: Client) {
     client.household_id = client.id;
-    
+
     if (this.client.id == client.household_id) {
       this.client.household_id = client.id;
     }
-    
+
     this.service.updateClient(client).subscribe(data => {
       this.service.getClientHousehold(this.clientId).subscribe((data: Client[]) => {
         this.householdClients = data;
@@ -549,11 +573,11 @@ export class ServicingClientComponent implements OnInit {
       newHeater.heater_status_id = 2;
       newHeater.is_active = true;
 
-      this.mainService.insertHeater(newHeater).subscribe((response:Heater) => {
+      this.mainService.insertHeater(newHeater).subscribe((response: Heater) => {
         this.updateHeaterEntry(response.id, 2);
         this.getHeaterStatuses();
       }, error => console.log(error));
-      
+
     }
   }
 

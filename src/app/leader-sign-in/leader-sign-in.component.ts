@@ -27,6 +27,7 @@ export class LeaderSignInComponent implements OnInit {
     if (adminSetting) {
       this.isAdmin = true;
       this.mainService.showAdminHome.next(adminSetting);
+      this.router.navigate(['adminHome']);
     }
     if (JSON.parse(window.localStorage.getItem('routeInstance')) !== null) {
       this.mainService.showEndRoute.next(true);
