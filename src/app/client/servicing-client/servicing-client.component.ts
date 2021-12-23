@@ -459,14 +459,18 @@ export class ServicingClientComponent implements OnInit {
     element.scrollIntoView();
   }
 
-  back() {
+  backToClientListing() {
+    this.router.navigate(['/admin/clientListing']);
+  }
+
+  backToCamp() {
     let title: string = 'Confirm Action';
     let confirmText: string = 'Yes';
     let dismissText: string = 'No';
     let message: string;
 
     if (this.isAdmin) {
-      this.router.navigate(['/admin/clientListing']);
+      this.router.navigate([`/locationCamp/${this.client.current_camp_id}`]);
     }
     else {
       if (!this.sentInteraction) {

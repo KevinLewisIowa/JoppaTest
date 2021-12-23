@@ -39,7 +39,7 @@ export class AdminClientListingComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.pastDate.setDate(this.pastDate.getDate() - 28);
+    this.pastDate.setDate(this.pastDate.getDate() - 60);
   }
 
   isOverMonthOld(date: string) {
