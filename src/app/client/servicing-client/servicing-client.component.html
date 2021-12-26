@@ -71,12 +71,14 @@
         </div>
         <div class="form-group">
           <label>Number Tanks: </label>
-          <input class="form-control" style="max-width:25%;" type="text" placeholder="0" (change)="updateNumberTanksHoses(client)" [(ngModel)]="client.number_tanks" />
+          <input class="form-control" style="max-width:25%;" type="text" placeholder="0"
+            (change)="updateNumberTanksHoses(client)" [(ngModel)]="client.number_tanks" />
           <span *ngIf="updateHoseTankMessageVisible" class="alert alert-success">Tank/Hose Updated</span>
         </div>
         <div class="form-group">
           <label>Number Hoses: </label>
-          <input type="text" class="form-control" style="max-width:25%;" placeholder="0" (change)="updateNumberTanksHoses(client)" [(ngModel)]="client.number_hoses" />
+          <input type="text" class="form-control" style="max-width:25%;" placeholder="0"
+            (change)="updateNumberTanksHoses(client)" [(ngModel)]="client.number_hoses" />
         </div>
       </div>
 
@@ -143,8 +145,8 @@
       <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
         <!-- removed !heatRoute from ngIf to pare down screen -->
         <div class="background-color">
-          <h4>Goals/Next Steps <button type="button" (click)="goToTop();goalMdl.showModal()"
-              class="btn btn-primary" style="float:right;">New Goal/Next Step</button></h4>
+          <h4>Goals/Next Steps <button type="button" (click)="goToTop();goalMdl.showModal()" class="btn btn-primary"
+              style="float:right;">New Goal/Next Step</button></h4>
           <table class="table" id="goals">
             <colgroup>
               <col span="1" style="width: 25%;">
@@ -257,8 +259,8 @@
       </div>
       <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
         <!-- removed !heatRoute from ngIf to pare down screen -->
-        <h4>Dislikes <button type="button" (click)="goToTop();dislikeMdl.showModal()"
-            class="btn btn-primary" style="float:right;">New Dislike</button></h4>
+        <h4>Dislikes <button type="button" (click)="goToTop();dislikeMdl.showModal()" class="btn btn-primary"
+            style="float:right;">New Dislike</button></h4>
         <table class="table" id="dislikes">
           <colgroup>
             <col span="1" style="width: 25%;">
@@ -291,8 +293,8 @@
       </div>
       <div class="col-lg-12 col-md-12">
         <div class="background-color">
-          <h4>Notes <button type="button" (click)="goToTop();notesMdl.showModal()"
-              class="btn btn-primary" style="float:right;">New
+          <h4>Notes <button type="button" (click)="goToTop();notesMdl.showModal()" class="btn btn-primary"
+              style="float:right;">New
               Note</button>
           </h4>
           <table class="table" id="notes">
@@ -323,125 +325,91 @@
         </div>
       </div>
       <div class="col-lg-12 col-md-12">
-          <h4>Tent <button type="button" (click)="goToTop();tentMdl.showModal()"
-              class="btn btn-primary" style="float:right;">New
-              Tent</button>
-          </h4>
-          <table class="table" id="tents">
-            <colgroup>
-              <col span="1" style="width: 14%;">
-              <col span="1" style="width: 14%;">
-              <col span="1" style="width: 14%;">
-              <col span="1" style="width: 14%;">
-              <col span="1" style="width: 14%;">
-              <col span="1" style="width: 14%;">
-              <col span="1" style="width: 14%;">
-            </colgroup>
-            <thead>
-              <tr>
-                <th>Date Added</th>
-                <th>Tent Type</th>
-                <th>Condition</th>
-                <th>Given by</th>
-                <th>Set up by</th>
-                <th>Rejected?</th>
-                <th>Notes</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              <tr *ngFor="let tent of tents; let rowIndex = index;">
-                <td>{{tent.date_given | date:'short'}}</td>
-                <td>{{tent.tent_type}}</td>
-                <td>{{tent.condition}}</td>
-                <td>{{tent.given_by}}</td>
-                <td>{{tent.setup_by}}</td>
-                <td>{{tent.rejected}}</td>
-                <td>{{tent.notes}}</td>
-              </tr>
-            </tbody>
-          </table>
-      </div>
-      <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
-        <!-- removed !heatRoute from ngIf to pare down screen -->
-        <div class="background-color">
-        <h4>Pets <button type="button" (click)="goToTop();petsMdl.showModal()" class="btn btn-primary" style="float:right;">New
-            Pet</button>
+        <h4>Tent <button type="button" (click)="goToTop();tentMdl.showModal()" class="btn btn-primary"
+            style="float:right;">New
+            Tent</button>
         </h4>
-        <table class="table" id="petList">
+        <table class="table" id="tents">
           <colgroup>
-            <col span="1" style="width: 20%;">
-            <col span="1" style="width: 20%;">
-            <col span="1" style="width: 20%;">
-            <col span="1" style="width: 20%;">
+            <col span="1" style="width: 14%;">
+            <col span="1" style="width: 14%;">
+            <col span="1" style="width: 14%;">
+            <col span="1" style="width: 14%;">
+            <col span="1" style="width: 14%;">
+            <col span="1" style="width: 14%;">
+            <col span="1" style="width: 14%;">
           </colgroup>
           <thead>
             <tr>
-              <th>Pet Type</th>
-              <th>Quantity</th>
-              <th>Food Requested</th>
-              <th></th>
+              <th>Date Added</th>
+              <th>Tent Type</th>
+              <th>Condition</th>
+              <th>Given by</th>
+              <th>Set up by</th>
+              <th>Rejected?</th>
+              <th>Notes</th>
             </tr>
           </thead>
+
           <tbody>
-            <tr *ngFor="let pet of pets">
-              <td>
-                {{pet.pet_type}}
-              </td>
-              <td>
-                {{pet.quantity}}
-              </td>
-              <td>
-                {{pet.food_requested}}
-              </td>
-              <td>
-                <button type="button" class="btn btn-primary" (click)="removePet(pet.id)">Remove</button>
-              </td>
+            <tr *ngFor="let tent of tents; let rowIndex = index;">
+              <td>{{tent.date_given | date:'short'}}</td>
+              <td>{{tent.tent_type}}</td>
+              <td>{{tent.condition}}</td>
+              <td>{{tent.given_by}}</td>
+              <td>{{tent.setup_by}}</td>
+              <td>{{tent.rejected}}</td>
+              <td>{{tent.notes}}</td>
             </tr>
           </tbody>
         </table>
-      </div>
       </div>
       <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
         <!-- removed !heatRoute from ngIf to pare down screen -->
-          <h4>Health Concerns <button type="button" (click)="goToTop();healthMdl.showModal()"
-              class="btn btn-primary" style="float:right;">New Health Concern</button></h4>
-          <table class="table" id="concerns">
+        <div class="background-color">
+          <h4>Pets <button type="button" (click)="goToTop();petsMdl.showModal()" class="btn btn-primary"
+              style="float:right;">New
+              Pet</button>
+          </h4>
+          <table class="table" id="petList">
             <colgroup>
-              <col span="1" style="width: 25%;">
-              <col span="1" style="width: 25%;">
-              <col span="1" style="width: 25%;">
-              <col span="1" style="width: 25%;">
+              <col span="1" style="width: 20%;">
+              <col span="1" style="width: 20%;">
+              <col span="1" style="width: 20%;">
+              <col span="1" style="width: 20%;">
             </colgroup>
             <thead>
               <tr>
-                <th>Description</th>
-                <th>Created At</th>
-                <th></th>
+                <th>Pet Type</th>
+                <th>Quantity</th>
+                <th>Food Requested</th>
                 <th></th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let concern of healthConcerns">
+              <tr *ngFor="let pet of pets">
                 <td>
-                  {{concern.description}}
+                  {{pet.pet_type}}
                 </td>
                 <td>
-                  {{concern.created_at | date:'shortDate'}}
+                  {{pet.quantity}}
                 </td>
                 <td>
-                  <button type="button" class="btn btn-primary"
-                    (click)="removeHealthConcern(concern.id)">Remove</button>
+                  {{pet.food_requested}}
+                </td>
+                <td>
+                  <button type="button" class="btn btn-primary" (click)="removePet(pet.id)">Remove</button>
                 </td>
               </tr>
             </tbody>
           </table>
+        </div>
       </div>
       <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
-        <div class="background-color">
-        <h4>Household <button type="button" (click)="goToTop();clientMdl.showModal()"
-            class="btn btn-primary" style="float:right;">New Household Member</button></h4>
-        <table class="table" id="household">
+        <!-- removed !heatRoute from ngIf to pare down screen -->
+        <h4>Health Concerns <button type="button" (click)="goToTop();healthMdl.showModal()" class="btn btn-primary"
+            style="float:right;">New Health Concern</button></h4>
+        <table class="table" id="concerns">
           <colgroup>
             <col span="1" style="width: 25%;">
             <col span="1" style="width: 25%;">
@@ -450,42 +418,32 @@
           </colgroup>
           <thead>
             <tr>
-              <th>Name</th>
-              <th></th>
+              <th>Description</th>
+              <th>Created At</th>
               <th></th>
               <th></th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let client of householdClients">
+            <tr *ngFor="let concern of healthConcerns">
               <td>
-                {{client.first_name}} <span
-                  *ngIf="client.preferred_name != '' && client.preferred_name != null">({{client.preferred_name}})</span>
-                {{client.last_name}}
-              </td>
-              <td></td>
-
-
-
-              <td>
-                <button type="button" class="btn btn-primary" (click)="removeHouseholdClient(client)"
-                  *ngIf="client.id != client.household_id">Remove</button>
+                {{concern.description}}
               </td>
               <td>
+                {{concern.created_at | date:'shortDate'}}
+              </td>
               <td>
+                <button type="button" class="btn btn-primary" (click)="removeHealthConcern(concern.id)">Remove</button>
+              </td>
             </tr>
           </tbody>
         </table>
       </div>
-      </div>
       <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
-          <h4>Weekly Attendance</h4>
-          <div>
-            From Date: <input type="date" name="attendanceFromDate" [(ngModel)]="attendanceFromDate" />
-            To Date: <input type="date" name="attendanceToDate" [(ngModel)]="attendanceToDate" />
-            <button type="button" class="btn btn-primary" style="margin-left: 5px;" (click)="searchWeeklyAttendance()">Search</button>
-          </div>
-          <table class="table" id="weeklyAttendance">
+        <div class="background-color">
+          <h4>Household <button type="button" (click)="goToTop();clientMdl.showModal()" class="btn btn-primary"
+              style="float:right;">New Household Member</button></h4>
+          <table class="table" id="household">
             <colgroup>
               <col span="1" style="width: 25%;">
               <col span="1" style="width: 25%;">
@@ -494,48 +452,113 @@
             </colgroup>
             <thead>
               <tr>
-                <th>Date</th>
-                <th>Seen</th>
-                <th>Serviced</th>
-                <th>Home Resource Center</th>
+                <th>Name</th>
+                <th></th>
+                <th></th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let interaction of clientInteractions">
+              <tr *ngFor="let client of householdClients">
                 <td>
-                  {{interaction.serviced_date | date:'short'}}
+                  {{client.first_name}} <span
+                    *ngIf="client.preferred_name != '' && client.preferred_name != null">({{client.preferred_name}})</span>
+                  {{client.last_name}}
+                </td>
+                <td></td>
+                <td>
+                  <button type="button" class="btn btn-primary" (click)="removeHouseholdClient(client)"
+                    *ngIf="client.id != client.household_id">Remove</button>
                 </td>
                 <td>
-                  {{interaction.was_seen}}
-                </td>
                 <td>
-                  {{interaction.serviced}}
-                </td>
-                <td>
-                  {{interaction.at_homeless_resource_center}}
-                </td>
               </tr>
             </tbody>
           </table>
+        </div>
+      </div>
+      <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
+        <h4>Weekly Attendance</h4>
+        <div>
+          From Date: <input type="date" name="attendanceFromDate" [(ngModel)]="attendanceFromDate" />
+          To Date: <input type="date" name="attendanceToDate" [(ngModel)]="attendanceToDate" />
+          <button type="button" class="btn btn-primary" style="margin-left: 5px;"
+            (click)="searchWeeklyAttendance()">Search</button>
+        </div>
+        <table class="table" id="weeklyAttendance">
+          <colgroup>
+            <col span="1" style="width: 25%;">
+            <col span="1" style="width: 25%;">
+            <col span="1" style="width: 25%;">
+            <col span="1" style="width: 25%;">
+          </colgroup>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Seen</th>
+              <th>Serviced</th>
+              <th>Home Resource Center</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let interaction of clientInteractions">
+              <td>
+                {{interaction.serviced_date | date:'short'}}
+              </td>
+              <td>
+                {{interaction.was_seen}}
+              </td>
+              <td>
+                {{interaction.serviced}}
+              </td>
+              <td>
+                {{interaction.at_homeless_resource_center}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
         <div class="col-lg-12 col-md-12">
           <h4>Admin Notes: </h4>
           <p><span style="background-color: yellow;">{{client.admin_notes}}</span></p>
         </div>
-        <div class="col-md-12 text-left">
-          <h4>Attendance</h4>
-          <button type="button" [className]="appearance && appearance.was_seen == true && appearance.serviced == true ? 'btn btn-success' : 'btn btn-primary'" (click)="sendInteraction(1)" style="margin-right:3px;"><fa-icon [icon]="seenAndServicedIcon"></fa-icon> Seen & Serviced</button>&nbsp;
-          <button type="button" [className]="appearance && appearance.was_seen == false && appearance.serviced == true ? 'btn btn-success' : 'btn btn-primary'" (click)="sendInteraction(2)" style="margin-right:3px;"><fa-icon [icon]="notSeenAndServicedIcon"></fa-icon> Serviced & Not Seen</button>&nbsp;
-          <button type="button" [className]="appearance && appearance.was_seen == false && appearance.serviced == false ? 'btn btn-success' : 'btn btn-primary'" (click)="sendInteraction(4)" style="margin-right:3px;"><fa-icon [icon]="notSeenIcon"></fa-icon> Not Seen</button>&nbsp;
-          <button type="button" *ngIf="isAdmin" [className]="appearance && appearance.was_seen == false && appearance.serviced == false && appearance.still_lives_here == false ? 'btn btn-success' : 'btn btn-primary'" (click)="sendInteraction(3)" style="margin-right:3px;">No longer lives here</button>&nbsp;
-          <button type="button" *ngIf="isAdmin" [className]="appearance && appearance.was_seen == false && appearance.serviced == false && appearance.at_homeless_resource_center == true ? 'btn btn-success' : 'btn btn-primary'" (click)="sendInteraction(5)">Homeless Resource Center</button>
-        </div>
+      </div>
+    </div>
+    <div class="col-lg-12 col-md-12">
+      <div class="col-md-12 text-left">
+        <h4>Attendance</h4>
+        <button type="button"
+          [className]="appearance && appearance.was_seen == true && appearance.serviced == true ? 'btn btn-success' : 'btn btn-primary'"
+          (click)="sendInteraction(1)" style="margin-right:3px;">
+          <fa-icon [icon]="seenAndServicedIcon"></fa-icon> Seen & Serviced
+        </button>&nbsp;
+        <button type="button"
+          [className]="appearance && appearance.was_seen == false && appearance.serviced == true ? 'btn btn-success' : 'btn btn-primary'"
+          (click)="sendInteraction(2)" style="margin-right:3px;">
+          <fa-icon [icon]="notSeenAndServicedIcon"></fa-icon> Serviced & Not Seen
+        </button>&nbsp;
+        <button type="button"
+          [className]="appearance && appearance.was_seen == false && appearance.serviced == false ? 'btn btn-success' : 'btn btn-primary'"
+          (click)="sendInteraction(4)" style="margin-right:3px;">
+          <fa-icon [icon]="notSeenIcon"></fa-icon> Not Seen
+        </button>&nbsp;
+        <button type="button" *ngIf="isAdmin"
+          [className]="appearance && appearance.was_seen == false && appearance.serviced == false && appearance.still_lives_here == false ? 'btn btn-success' : 'btn btn-primary'"
+          (click)="sendInteraction(3)" style="margin-right:3px;">No longer lives here</button>&nbsp;
+        <button type="button" *ngIf="isAdmin"
+          [className]="appearance && appearance.was_seen == false && appearance.serviced == false && appearance.at_homeless_resource_center == true ? 'btn btn-success' : 'btn btn-primary'"
+          (click)="sendInteraction(5)">Homeless Resource Center</button>
       </div>
     </div>
   </div>
   <div class="card-footer">
     <div>
-      <button type="button" class="btn btn-primary" style="float:left;" (click)="backToCamp()"><fa-icon [icon]="backIcon"></fa-icon> Back to Camp</button>
-      <button type="button" class="btn btn-primary" style="margin-left: 1%; float:left;" (click)="backToClientListing()" *ngIf="isAdmin"><fa-icon [icon]="backIcon"></fa-icon> Back to Client List</button>
+      <button type="button" class="btn btn-primary" style="float:left;" (click)="backToCamp()">
+        <fa-icon [icon]="backIcon"></fa-icon> Back to Camp
+      </button>
+      <button type="button" class="btn btn-primary" style="margin-left: 1%; float:left;" (click)="backToClientListing()"
+        *ngIf="isAdmin">
+        <fa-icon [icon]="backIcon"></fa-icon> Back to Client List
+      </button>
     </div>
   </div>
 
@@ -549,6 +572,7 @@
 <app-notes #notesMdl (noteAdded)="noteAdded($event)"></app-notes>
 <app-client-edit-modal #clientEditMdl (editedClient)="editedClient($event)"></app-client-edit-modal>
 <app-pets #petsMdl (petAdded)="petAdded($event)"></app-pets>
-<app-prayer-requests-and-needs #prayerRequestsNeedsMdl (prayerRequestNeedAdded)="prayerRequestNeedAdded($event)"></app-prayer-requests-and-needs>
+<app-prayer-requests-and-needs #prayerRequestsNeedsMdl (prayerRequestNeedAdded)="prayerRequestNeedAdded($event)">
+</app-prayer-requests-and-needs>
 <app-tents #tentMdl (tentAdded)="tentAdded($event)"></app-tents>
 <app-client-search #clientMdl (clientSelected)="clientSelected($event)"></app-client-search>
