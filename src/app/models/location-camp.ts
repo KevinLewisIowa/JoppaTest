@@ -12,4 +12,6 @@ export class LocationCamp {
     latitude: number = undefined;
     expected_arrival_time: string = undefined;
     admin_notes: string = undefined;
+    parking_longitude: number = undefined;
+    parking_latitude: number = undefined;
 }

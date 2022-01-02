@@ -33,7 +33,7 @@ export class RouteEditModalComponent implements OnInit {
   }
 
   submitRoute() {
-    console.log(this.routeForm.value);
+    console.log(JSON.stringify(this.routeForm.value));
     this.mainService.updateRoute(this.routeForm.value as Route).subscribe(data => {
       this.editedRoute.emit(this.routeForm.value as Route);
     }, error => console.log(error));

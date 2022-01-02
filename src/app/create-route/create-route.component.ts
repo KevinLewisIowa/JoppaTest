@@ -26,7 +26,8 @@ export class CreateRouteComponent implements OnInit {
     this.theRoute.is_active = true;
     this.routeForm = this.fb.group({
       region: '',
-      name: ''
+      name: '',
+      is_aftercare: false
     });
     this.routeForm.get('region').setValidators(Validators.required);
     this.routeForm.get('name').setValidators(Validators.required);
@@ -37,6 +38,7 @@ export class CreateRouteComponent implements OnInit {
   submitRoute() {
     this.theRoute.region = this.routeForm.get('region').value;
     this.theRoute.name = this.routeForm.get('name').value;
+    this.theRoute.is_aftercare = this.routeForm.get('is_aftercare').value;
 
     this.mainService.insertRoute(this.theRoute).subscribe(data => {
       this.router.navigate(['/routes']);
