@@ -58,36 +58,39 @@
           </div>
         </div>
         <div class="form-group row">
-          <label for="latitude" class="col-6 col-form-label">Latitude: </label>
+          <label for="camp-latitude" class="col-6 col-form-label"
+            >Camp Latitude:
+          </label>
           <div class="col-3">
             <button
               class="btn btn-primary"
               style="float: right"
               (click)="getCurrentLocation()"
             >
-              Get Current Location
+              Get Current Location for Camp
             </button>
           </div>
           <div class="col-3">
             <input
-              id="latitude"
+              id="camp-latitude"
               type="text"
               class="form-control"
-              placeholder="latitude"
+              placeholder="camp latitude"
               formControlName="latitude"
             />
           </div>
         </div>
         <div class="form-group row">
-          <label for="longitude" class="col-9 col-form-label"
-            >Longitude:
+          <label for="camp-longitude" class="col-9 col-form-label"
+            >Camp Longitude:
           </label>
           <div class="col-3">
             <input
+              id="camp-longitude"
               type="text"
               class="form-control"
               style="float: right"
-              placeholder="longitude"
+              placeholder="camp longitude"
               formControlName="longitude"
             />
           </div>
@@ -102,7 +105,7 @@
               style="float: right"
               (click)="getCurrentParkingLocation()"
             >
-              Get Current Location
+              Get Current Location for Parking
             </button>
           </div>
           <div class="col-3">
