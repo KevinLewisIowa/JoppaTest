@@ -1,79 +1,209 @@
 <ng-template #editModal let-c="close" let-d="dismiss">
   <div class="modal-header">
     <h4 class="modal-title">Camp Details</h4>
-    <button type="button" class="btn btn-primary" aria-label="Close" (click)="d('Cross click')"><span
-        aria-hidden="true">x</span></button>
+    <button
+      type="button"
+      class="btn btn-primary"
+      aria-label="Close"
+      (click)="d('Cross click')"
+    >
+      <span aria-hidden="true">x</span>
+    </button>
   </div>
   <div class="modal-body">
-    <form [formGroup]="campForm" style="opacity:0.93">
+    <form [formGroup]="campForm" style="opacity: 0.93">
       <div class="login-box">
         <div class="form-group row">
           <label for="camp-name" class="col-6 col-form-label">Camp Name:</label>
           <div class="col-6">
-            <input id="camp-name" type="text" class="form-control" style="float:right;" placeholder="name" formControlName="name" />
+            <input
+              id="camp-name"
+              type="text"
+              class="form-control"
+              style="float: right"
+              placeholder="name"
+              formControlName="name"
+            />
           </div>
         </div>
         <div class="form-group row" *ngIf="isAdmin">
           <label for="routes" class="col-6 col-form-label">Route:</label>
           <div class="col-6">
-            <select id="routes" class="form-control" style="float:right;" formControlName="route_id">
+            <select
+              id="routes"
+              class="form-control"
+              style="float: right"
+              formControlName="route_id"
+            >
               <option value="" disabled selected>Select a route</option>
-              <option *ngFor="let route of routes" [value]="route.id">{{route.name}}</option>
+              <option *ngFor="let route of routes" [value]="route.id">
+                {{ route.name }}
+              </option>
             </select>
           </div>
         </div>
         <div class="form-group row">
-          <label for="ex-time" class="col-6 col-form-label">Expected Arrival Time:</label>
+          <label for="ex-time" class="col-6 col-form-label"
+            >Expected Arrival Time:</label
+          >
           <div class="col-6">
-            <input id="ex-time" type="time" class="form-control" style="float:right;" placeholder="time" formControlName="expected_arrival_time" />
+            <input
+              id="ex-time"
+              type="time"
+              class="form-control"
+              style="float: right"
+              placeholder="time"
+              formControlName="expected_arrival_time"
+            />
           </div>
         </div>
         <div class="form-group row">
           <label for="latitude" class="col-6 col-form-label">Latitude: </label>
           <div class="col-3">
-            <button class="btn btn-primary" style="float:right;" (click)="getCurrentLocation();">Get Current Location</button>
+            <button
+              class="btn btn-primary"
+              style="float: right"
+              (click)="getCurrentLocation()"
+            >
+              Get Current Location
+            </button>
           </div>
           <div class="col-3">
-            <input id="latitude" type="text" class="form-control" placeholder="latitude" formControlName="latitude" />
+            <input
+              id="latitude"
+              type="text"
+              class="form-control"
+              placeholder="latitude"
+              formControlName="latitude"
+            />
           </div>
         </div>
         <div class="form-group row">
-          <label for="longitude" class="col-9 col-form-label">Longitude: </label>
+          <label for="longitude" class="col-9 col-form-label"
+            >Longitude:
+          </label>
           <div class="col-3">
-            <input type="text" class="form-control" style="float:right;" placeholder="longitude" formControlName="longitude" />
+            <input
+              type="text"
+              class="form-control"
+              style="float: right"
+              placeholder="longitude"
+              formControlName="longitude"
+            />
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="parking-latitude" class="col-6 col-form-label"
+            >Parking Latitude:
+          </label>
+          <div class="col-3">
+            <button
+              class="btn btn-primary"
+              style="float: right"
+              (click)="getCurrentParkingLocation()"
+            >
+              Get Current Location
+            </button>
+          </div>
+          <div class="col-3">
+            <input
+              id="parking-latitude"
+              type="text"
+              class="form-control"
+              placeholder="parking latitude"
+              formControlName="parking_latitude"
+            />
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="parking-longitude" class="col-9 col-form-label"
+            >Parking Longitude:
+          </label>
+          <div class="col-3">
+            <input
+              type="text"
+              class="form-control"
+              style="float: right"
+              placeholder="parking longitude"
+              formControlName="parking_longitude"
+            />
           </div>
         </div>
         <div class="form-group row" *ngIf="isAdmin">
           <label for="position" class="col-6 col-form-label">Position: </label>
           <div class="col-6">
-            <input id="position" type="number" class="form-control" style="float:right;" placeholder="position" formControlName="position" />
+            <input
+              id="position"
+              type="number"
+              class="form-control"
+              style="float: right"
+              placeholder="position"
+              formControlName="position"
+            />
           </div>
         </div>
         <div class="form-group row" *ngIf="isAdmin">
           <label for="active" class="col-6 col-form-label">Active</label>
           <div class="col-6">
-            <input id="active" type="checkbox" class="form-control-checkbox" style="float:right; width:5%; height:100%" formControlName="is_active" />
+            <input
+              id="active"
+              type="checkbox"
+              class="form-control-checkbox"
+              style="float: right; width: 5%; height: 100%"
+              formControlName="is_active"
+            />
           </div>
         </div>
         <div class="form-group row">
           <label for="notes" class="col-6 col-form-label">Notes: </label>
           <div class="col-6">
-            <textarea id="notes" type="text" class="form-control" style="float:right;" rows="3" cols="19" placeholder="notes" formControlName="notes"></textarea>
+            <textarea
+              id="notes"
+              type="text"
+              class="form-control"
+              style="float: right"
+              rows="3"
+              cols="19"
+              placeholder="notes"
+              formControlName="notes"
+            ></textarea>
           </div>
         </div>
         <div class="form-group row" *ngIf="isAdmin">
-          <label for="admin-notes" class="col-6 col-form-label">Admin Notes: </label>
+          <label for="admin-notes" class="col-6 col-form-label"
+            >Admin Notes:
+          </label>
           <div class="col-6">
-            <textarea id="admin-notes" type="text" class="form-control" style="float:right;" rows="3" cols="19" placeholder="Admin Notes"
-              formControlName="admin_notes"></textarea>
+            <textarea
+              id="admin-notes"
+              type="text"
+              class="form-control"
+              style="float: right"
+              rows="3"
+              cols="19"
+              placeholder="Admin Notes"
+              formControlName="admin_notes"
+            ></textarea>
           </div>
         </div>
       </div>
     </form>
   </div>
   <div class="modal-footer">
-    <button type="button" [disabled]="!campForm.valid" (click)="submitCamp(); c('');" class="btn btn-primary">Submit
-      Camp</button>
-    <button type="button" class="btn btn-outline-primary" (click)="c('Close click')">Close</button>
+    <button
+      type="button"
+      [disabled]="!campForm.valid"
+      (click)="submitCamp(); c('')"
+      class="btn btn-primary"
+    >
+      Submit Camp
+    </button>
+    <button
+      type="button"
+      class="btn btn-outline-primary"
+      (click)="c('Close click')"
+    >
+      Close
+    </button>
   </div>
 </ng-template>

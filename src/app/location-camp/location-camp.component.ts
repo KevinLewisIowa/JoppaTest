@@ -55,7 +55,7 @@ export class LocationCampComponent implements OnInit {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private renderer: Renderer2
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.isAdmin = JSON.parse(window.localStorage.getItem("isAdmin"));
@@ -67,64 +67,81 @@ export class LocationCampComponent implements OnInit {
     }
     this.activatedRoute.params.subscribe((params: Params) => {
       this.locationCampId = this.activatedRoute.snapshot.params["id"];
-      localStorage.setItem("locationCampId", JSON.stringify(this.locationCampId));
+      localStorage.setItem(
+        "locationCampId",
+        JSON.stringify(this.locationCampId)
+      );
       this.heatRoute = JSON.parse(window.localStorage.getItem("heatRoute"));
 
       let routeId: number = JSON.parse(window.localStorage.getItem("routeId"));
       if (routeId) {
-        this.mainService.getRoute(routeId).subscribe((route: Route) => {
-          this.route = route;
+        this.mainService.getRoute(routeId).subscribe(
+          (route: Route) => {
+            this.route = route;
 
-          this.mainService.getLocationCamp(this.locationCampId).subscribe(
-            (data) => {
-              this.locationCamp = data;
-              if (
-                this.locationCamp.expected_arrival_time &&
-                this.locationCamp.expected_arrival_time != ""
-              ) {
-                let timeArray: string[] = this.locationCamp.expected_arrival_time.split(
-                  ":"
-                );
-                this.expectedArrivalTime = new Date(
-                  null,
-                  null,
-                  null,
-                  parseInt(timeArray[0]),
-                  parseInt(timeArray[1])
-                );
-              }
-
-              this.mainService.getClientsForCamp(this.locationCampId).subscribe((data: Client[]) => {
-                if (this.heatRoute) {
-                  this.clients = data.filter((client) => client.dwelling !== "Vehicle" && client.dwelling !== "Under Bridge" && client.dwelling !== "Streets");
-                  this.numberTanksAtCamp = this.clients.reduce(function (prevValue, currClient) {
-                    return prevValue + currClient.number_tanks;
-                  }, 0);
-                  this.numPeopleWithTanksAtCamp = this.clients.filter(
-                    (client) => client.number_tanks > 0
-                  ).length;
-                } else {
-                  this.clients = data;
+            this.mainService.getLocationCamp(this.locationCampId).subscribe(
+              (data) => {
+                this.locationCamp = data;
+                if (
+                  this.locationCamp.expected_arrival_time &&
+                  this.locationCamp.expected_arrival_time != ""
+                ) {
+                  let timeArray: string[] =
+                    this.locationCamp.expected_arrival_time.split(":");
+                  this.expectedArrivalTime = new Date(
+                    null,
+                    null,
+                    null,
+                    parseInt(timeArray[0]),
+                    parseInt(timeArray[1])
+                  );
                 }
-              });
-            },
-            (error) => {
-              console.log(error);
-            }
-          );
-        },
+
+                this.mainService
+                  .getClientsForCamp(this.locationCampId)
+                  .subscribe((data: Client[]) => {
+                    if (this.heatRoute) {
+                      this.clients = data.filter(
+                        (client) =>
+                          client.dwelling !== "Vehicle" &&
+                          client.dwelling !== "Under Bridge" &&
+                          client.dwelling !== "Streets"
+                      );
+                      this.numberTanksAtCamp = this.clients.reduce(function (
+                        prevValue,
+                        currClient
+                      ) {
+                        return prevValue + currClient.number_tanks;
+                      },
+                      0);
+                      this.numPeopleWithTanksAtCamp = this.clients.filter(
+                        (client) => client.number_tanks > 0
+                      ).length;
+                    } else {
+                      this.clients = data;
+                    }
+                  });
+              },
+              (error) => {
+                console.log(error);
+              }
+            );
+          },
           (error) => {
             console.log(error);
           }
         );
       } else {
-        this.mainService.getLocationCamp(this.locationCampId).subscribe((data) => {
+        this.mainService.getLocationCamp(this.locationCampId).subscribe(
+          (data) => {
             this.locationCamp = data;
-            
-            if (this.locationCamp.expected_arrival_time && this.locationCamp.expected_arrival_time != "") {
-              let timeArray: string[] = this.locationCamp.expected_arrival_time.split(
-                ":"
-              );
+
+            if (
+              this.locationCamp.expected_arrival_time &&
+              this.locationCamp.expected_arrival_time != ""
+            ) {
+              let timeArray: string[] =
+                this.locationCamp.expected_arrival_time.split(":");
               this.expectedArrivalTime = new Date(
                 null,
                 null,
@@ -134,24 +151,41 @@ export class LocationCampComponent implements OnInit {
               );
             }
 
-            window.localStorage.setItem('routeId', JSON.stringify(this.locationCamp.route_id));
-            this.mainService.getRoute(this.locationCamp.route_id).subscribe((data: Route) => {
-              this.route = data;
-            }, error => console.log(error));
+            window.localStorage.setItem(
+              "routeId",
+              JSON.stringify(this.locationCamp.route_id)
+            );
+            this.mainService.getRoute(this.locationCamp.route_id).subscribe(
+              (data: Route) => {
+                this.route = data;
+              },
+              (error) => console.log(error)
+            );
 
-            this.mainService.getClientsForCamp(this.locationCampId).subscribe((data: Client[]) => {
-              if (this.heatRoute) {
-                this.clients = data.filter((client) => client.dwelling !== "Vehicle" && client.dwelling !== "Under Bridge" && client.dwelling !== "Streets");
-                this.numberTanksAtCamp = this.clients.reduce(function (prevValue, currClient) {
-                  return prevValue + currClient.number_tanks;
-                }, 0);
-                this.numPeopleWithTanksAtCamp = this.clients.filter(
-                  (client) => client.number_tanks > 0
-                ).length;
-              } else {
-                this.clients = data;
-              }
-            });
+            this.mainService
+              .getClientsForCamp(this.locationCampId)
+              .subscribe((data: Client[]) => {
+                if (this.heatRoute) {
+                  this.clients = data.filter(
+                    (client) =>
+                      client.dwelling !== "Vehicle" &&
+                      client.dwelling !== "Under Bridge" &&
+                      client.dwelling !== "Streets"
+                  );
+                  this.numberTanksAtCamp = this.clients.reduce(function (
+                    prevValue,
+                    currClient
+                  ) {
+                    return prevValue + currClient.number_tanks;
+                  },
+                  0);
+                  this.numPeopleWithTanksAtCamp = this.clients.filter(
+                    (client) => client.number_tanks > 0
+                  ).length;
+                } else {
+                  this.clients = data;
+                }
+              });
           },
           (error) => {
             console.log(error);
@@ -164,7 +198,7 @@ export class LocationCampComponent implements OnInit {
   editedCamp(theCamp: LocationCamp) {
     this.locationCamp = theCamp;
     let routeId: number = JSON.parse(window.localStorage.getItem("routeId"));
-    this.mainService.getRoute(routeId).subscribe(data => {
+    this.mainService.getRoute(routeId).subscribe((data) => {
       this.route = data;
     });
   }
@@ -220,6 +254,16 @@ export class LocationCampComponent implements OnInit {
     );
     window.open(
       `https://www.google.com/maps/dir/?api=1&destination=${this.locationCamp.latitude},${this.locationCamp.longitude}`,
+      "_blank"
+    );
+  }
+
+  showParkingMap() {
+    console.log(
+      `parking latitude: ${this.locationCamp.parking_latitude}, parking longitude: ${this.locationCamp.parking_longitude}`
+    );
+    window.open(
+      `https://www.google.com/maps/dir/?api=1&destination=${this.locationCamp.parking_latitude},${this.locationCamp.parking_longitude}`,
       "_blank"
     );
   }

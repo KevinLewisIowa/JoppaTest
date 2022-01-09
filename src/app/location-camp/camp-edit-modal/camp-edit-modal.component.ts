@@ -1,18 +1,25 @@
-import { Component, OnInit, ElementRef, EventEmitter, Output, ViewChild } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ElementRef,
+  EventEmitter,
+  Output,
+  ViewChild,
+} from "@angular/core";
 import { LocationCamp } from "app/models/location-camp";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { Router } from "@angular/router";
 import { MainService } from "app/services/main.service";
-import { Route } from 'app/models/route';
+import { Route } from "app/models/route";
 
 @Component({
-  selector: 'app-camp-edit-modal',
-  templateUrl: './camp-edit-modal.component.html',
-  styleUrls: ['./camp-edit-modal.component.css']
+  selector: "app-camp-edit-modal",
+  templateUrl: "./camp-edit-modal.component.html",
+  styleUrls: ["./camp-edit-modal.component.css"],
 })
 export class CampEditModalComponent implements OnInit {
-  @ViewChild('editModal', {static: false}) editModal: ElementRef;
+  @ViewChild("editModal", { static: false }) editModal: ElementRef;
   @Output() editedCamp = new EventEmitter<LocationCamp>();
   badDate = false;
   routes: Route[] = [];
@@ -21,15 +28,19 @@ export class CampEditModalComponent implements OnInit {
   editing = false;
   isAdmin: boolean;
 
-  constructor(private router: Router, private modalService: NgbModal, private mainService: MainService,
-    private fb: FormBuilder) { }
+  constructor(
+    private router: Router,
+    private modalService: NgbModal,
+    private mainService: MainService,
+    private fb: FormBuilder
+  ) {}
 
   ngOnInit() {
     this.theCamp = new LocationCamp();
     this.campForm = this.fb.group(this.theCamp);
-    this.isAdmin = JSON.parse(window.localStorage.getItem('isAdmin'));
+    this.isAdmin = JSON.parse(window.localStorage.getItem("isAdmin"));
 
-    this.mainService.getTheRoutes().subscribe(routes => {
+    this.mainService.getTheRoutes().subscribe((routes) => {
       this.routes = routes;
     });
   }
@@ -38,7 +49,7 @@ export class CampEditModalComponent implements OnInit {
     this.theCamp = camp;
     this.campForm = null;
     this.campForm = this.fb.group(this.theCamp);
-    this.modalService.open(this.editModal, { size: 'lg', backdrop: 'static' });
+    this.modalService.open(this.editModal, { size: "lg", backdrop: "static" });
   }
 
   toggleEditMode() {
@@ -47,19 +58,32 @@ export class CampEditModalComponent implements OnInit {
 
   submitCamp() {
     console.log(this.campForm.value);
-    this.mainService.updateLocationCamp(this.campForm.value as LocationCamp).subscribe(data => {
-      window.localStorage.setItem('routeId', JSON.stringify(data.route_id));
-      this.editedCamp.emit(this.campForm.value as LocationCamp);
-    }, error => console.log(error));
+    this.mainService
+      .updateLocationCamp(this.campForm.value as LocationCamp)
+      .subscribe(
+        (data) => {
+          window.localStorage.setItem("routeId", JSON.stringify(data.route_id));
+          this.editedCamp.emit(this.campForm.value as LocationCamp);
+        },
+        (error) => console.log(error)
+      );
   }
 
   getCurrentLocation() {
     navigator.geolocation.getCurrentPosition((position) => {
       this.campForm.patchValue({
         latitude: position.coords.latitude,
-        longitude: position.coords.longitude
+        longitude: position.coords.longitude,
       });
     });
   }
 
+  getCurrentParkingLocation() {
+    navigator.geolocation.getCurrentPosition((position) => {
+      this.campForm.patchValue({
+        parking_latitude: position.coords.latitude,
+        parking_longitude: position.coords.longitude,
+      });
+    });
+  }
 }
