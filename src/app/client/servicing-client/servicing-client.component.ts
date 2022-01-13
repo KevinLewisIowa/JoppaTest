@@ -495,48 +495,57 @@ export class ServicingClientComponent implements OnInit {
   }
 
   deleteRequest(id: number) {
-    this.service.deletedRequestedItem(id);
-    this.requestedItems = this.requestedItems.filter(w => w.id != id);
+    this.service.deletedRequestedItem(id).subscribe(res => {
+      this.requestedItems = this.requestedItems.filter(w => w.id != id);
+    });
   }
 
   removeLike(id: number) {
-    this.service.removeLike(id);
-    this.clientLikes = this.clientLikes.filter(w => w.id != id);
+    this.service.removeLike(id).subscribe(res => {
+      this.clientLikes = this.clientLikes.filter(w => w.id != id);
+    });
   }
 
   removeDislike(id: number) {
-    this.service.removeDislike(id);
-    this.clientDislikes = this.clientDislikes.filter(w => w.id != id);
+    this.service.removeDislike(id).subscribe(res => {
+      this.clientDislikes = this.clientDislikes.filter(w => w.id != id);
+    });
   }
 
   removeTent(tent: Tent) {
-    this.service.removeTent(tent.id);
-    this.tents = this.tents.filter(w => w.id != tent.id);
+    this.service.removeTent(tent.id).subscribe(res => {
+      this.tents = this.tents.filter(w => w.id != tent.id);
+    });
   }
 
   removeGoal(id: number) {
-    this.service.deleteGoalAndNextStep(id);
-    this.goalsAndSteps = this.goalsAndSteps.filter(w => w.id != id);
+    this.service.deleteGoalAndNextStep(id).subscribe(res => {
+      this.goalsAndSteps = this.goalsAndSteps.filter(w => w.id != id);
+    });
   }
 
   removePet(id: number) {
-    this.service.removePet(id);
-    this.pets = this.pets.filter(w => w.id != id);
+    this.service.removePet(id).subscribe(res => {
+      this.pets = this.pets.filter(w => w.id != id);
+    });
   }
 
   removeHealthConcern(id: number) {
-    this.service.removeHealthConcern(id);
-    this.healthConcerns = this.healthConcerns.filter(w => w.id != id);
+    this.service.removeHealthConcern(id).subscribe(res => {
+      this.healthConcerns = this.healthConcerns.filter(w => w.id != id);
+    });
   }
 
   removeNote(id: number) {
-    this.service.removeNote(id);
-    this.notes = this.notes.filter(w => w.id != id);
+    this.service.removeNote(id).subscribe(res => {
+      this.notes = this.notes.filter(w => w.id != id);
+    });
   }
 
   removePrayerRequestNeed(id: number) {
-    this.service.removePrayerRequestNeed(id);
-    this.prayerRequestsAndNeeds = this.prayerRequestsAndNeeds.filter(w => w.id != id);
+    this.service.removePrayerRequestNeed(id).subscribe(res => {
+      this.prayerRequestsAndNeeds = this.prayerRequestsAndNeeds.filter(w => w.id != id);
+    });
   }
 
   removeHouseholdClient(client: Client) {

@@ -490,7 +490,10 @@ export class ClientService {
       'Content-Type': 'application/json',
       'Authorization': window.localStorage.getItem('apiToken')
     });
-    return this.http.delete(this.baseUrl + `requested_items/${id}`, { headers: myHeader }), catchError(this.handleError);
+    return this.http.delete(this.baseUrl + `requested_items/${id}`, { headers: myHeader })
+    .pipe(map((res) => {
+      return true;
+    }), catchError(this.handleError));
   }
 
   removeLike(id: number) {
@@ -498,7 +501,10 @@ export class ClientService {
       'Content-Type': 'application/json',
       'Authorization': window.localStorage.getItem('apiToken')
     });
-    return this.http.delete(this.baseUrl + `client_likes/${id}`, { headers: myHeader }), catchError(this.handleError);
+    return this.http.delete(this.baseUrl + `client_likes/${id}`, { headers: myHeader })
+    .pipe(map((res) => {
+      return true;
+    }), catchError(this.handleError));
   }
 
   removeDislike(id: number) {
@@ -506,7 +512,10 @@ export class ClientService {
       'Content-Type': 'application/json',
       'Authorization': window.localStorage.getItem('apiToken')
     });
-    return this.http.delete(this.baseUrl + `client_dislikes/${id}`, { headers: myHeader }), catchError(this.handleError);
+    return this.http.delete(this.baseUrl + `client_dislikes/${id}`, { headers: myHeader })
+    .pipe(map((res) => {
+      return true;
+    }), catchError(this.handleError));
   }
 
   removeTent(id: number) {
@@ -514,7 +523,10 @@ export class ClientService {
       'Content-Type': 'application/json',
       'Authorization': window.localStorage.getItem('apiToken')
     });
-    return this.http.delete(this.baseUrl + `client_tents/${id}`, { headers: myHeader }), catchError(this.handleError);
+    return this.http.delete(this.baseUrl + `client_tents/${id}`, { headers: myHeader })
+    .pipe(map((res) => {
+      return true;
+    }), catchError(this.handleError));
   }
 
   removePet(id: number) {
@@ -522,7 +534,10 @@ export class ClientService {
       'Content-Type': 'application/json',
       'Authorization': window.localStorage.getItem('apiToken')
     });
-    return this.http.delete(this.baseUrl + `client_pets/${id}`, { headers: myHeader }), catchError(this.handleError);
+    return this.http.delete(this.baseUrl + `client_pets/${id}`, { headers: myHeader })
+    .pipe(map((res) => {
+      return true;
+    }), catchError(this.handleError));
   }
 
   removeHealthConcern(id: number) {
@@ -530,7 +545,10 @@ export class ClientService {
       'Content-Type': 'application/json',
       'Authorization': window.localStorage.getItem('apiToken')
     });
-    return this.http.delete(this.baseUrl + `health_concerns/${id}`, { headers: myHeader }), catchError(this.handleError);
+    return this.http.delete(this.baseUrl + `health_concerns/${id}`, { headers: myHeader })
+    .pipe(map((res) => {
+      return true;
+    }), catchError(this.handleError));
   }
 
   removeNote(id: number) {
@@ -538,7 +556,10 @@ export class ClientService {
       'Content-Type': 'application/json',
       'Authorization': window.localStorage.getItem('apiToken')
     });
-    return this.http.delete(this.baseUrl + `client_notes/${id}`, { headers: myHeader }), catchError(this.handleError);
+    return this.http.delete(this.baseUrl + `client_notes/${id}`, { headers: myHeader })
+    .pipe(map((res) => {
+      return true;
+    }), catchError(this.handleError));
   }
 
   removePrayerRequestNeed(id: number) {
@@ -546,7 +567,10 @@ export class ClientService {
       'Content-Type': 'application/json',
       'Authorization': window.localStorage.getItem('apiToken')
     });
-    return this.http.delete(this.baseUrl + `prayer_request_and_needs/${id}`, { headers: myHeader }), catchError(this.handleError);
+    return this.http.delete(this.baseUrl + `prayer_request_and_needs/${id}`, { headers: myHeader })
+    .pipe(map((res) => {
+      return true;
+    }), catchError(this.handleError));
   }
 
   completePrayerRequestNeed(thePrayerRequestNeed: PrayerRequestAndNeed) {
@@ -570,7 +594,10 @@ export class ClientService {
       'Content-Type': 'application/json',
       'Authorization': window.localStorage.getItem('apiToken')
     });
-    return this.http.delete(this.baseUrl + `goals_and_next_steps/${id}`, { headers: myHeader }), catchError(this.handleError);
+    return this.http.delete(this.baseUrl + `goals_and_next_steps/${id}`, { headers: myHeader })
+    .pipe(map((res) => {
+      return true;
+    }), catchError(this.handleError));
   }
 
   completeGoalAndNextStep(theGoal: GoalsNextStep) {
