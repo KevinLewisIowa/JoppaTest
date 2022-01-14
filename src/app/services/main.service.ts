@@ -749,12 +749,8 @@ export class MainService {
       Authorization: window.localStorage.getItem("apiToken"),
     });
     return this.http.delete(this.apiUrl + `route_instance_heater_interactions/${id}`, { headers: myHeader })
-    .pipe(map((res: any) => {
-      if (res.message === 'invalid-token') {
-        window.localStorage.removeItem('apiToken');
-        this.router.navigate(['/application-login']);
-      }
-      return res;
+    .pipe(map((res) => {
+      return true;
     }),
       catchError(this.handleError));
   }
