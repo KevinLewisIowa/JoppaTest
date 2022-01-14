@@ -38,9 +38,8 @@ export class ReferralsResourcesComponent implements OnInit {
     const referralResource = new ReferralsResources();
     const clientId = localStorage.getItem("selectedClient");
     if (this.type != null && !isNaN(Number(clientId))) {
-      referralResource.type = this.type;
+      referralResource.referral_type = this.type;
       referralResource.client_id = Number(clientId);
-      referralResource.date = new Date();
       referralResource.quantity = this.quantity;
       referralResource.notes = this.notes;
 

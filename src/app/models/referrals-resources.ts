@@ -1,8 +1,9 @@
 export class ReferralsResources {
   id: number = undefined;
-  date: Date = undefined;
   client_id: number = undefined;
-  type: string = undefined;
+  referral_type: string = undefined;
   quantity: number = undefined;
   notes: string = undefined;
+  created_at: Date = undefined;
+  updated_at: Date = undefined;
 }

@@ -643,6 +643,17 @@ export class ClientService {
       );
   }
 
+  removeReferralResource(id: number) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+    return this.http.delete(this.baseUrl + `client_referrals/${id}`, { headers: myHeader, })
+      .pipe(map((res) => {
+          return true;
+        }), catchError(this.handleError));
+  }
+
   deletedRequestedItem(id: number) {
     const myHeader = new HttpHeaders({
       "Content-Type": "application/json",
@@ -830,38 +841,12 @@ export class ClientService {
       );
   }
 
-  getReferralsAndResources(id: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
-    return this.http
-      .get(this.baseUrl + `referrals_and_resources?clientId=${id}`, {
-        headers: myHeader,
-      })
-      .pipe(
-        map((res: any) => {
-          if (res.message === "invalid-token") {
-            window.localStorage.removeItem("apiToken");
-            this.router.navigate(["/application-login"]);
-          }
-          return res;
-        }),
-        catchError(this.handleError)
-      );
-  }
-
   insertClientReferralResource(referralsResources: ReferralsResources) {
     const myHeader = new HttpHeaders({
       "Content-Type": "application/json",
       Authorization: window.localStorage.getItem("apiToken"),
     });
-    return this.http
-      .post(
-        this.baseUrl + `referrals_and_resources`,
-        { referrals_and_resources: referralsResources },
-        { headers: myHeader }
-      )
+    return this.http.post(this.baseUrl + `client_referrals`,{ client_referral: referralsResources }, { headers: myHeader })
       .pipe(
         map((res: any) => {
           if (res.message === "invalid-token") {
@@ -872,19 +857,6 @@ export class ClientService {
         }),
         catchError(this.handleError)
       );
-  }
-
-  removeReferralResource(id: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
-    return (
-      this.http.delete(this.baseUrl + `referrals_and_resources/${id}`, {
-        headers: myHeader,
-      }),
-      catchError(this.handleError)
-    );
   }
 
   getGoalsAndNextSteps(id: number) {
@@ -938,6 +910,27 @@ export class ClientService {
     });
     return this.http
       .get(this.baseUrl + `prayerRequestsForClient?clientId=${id}`, {
+        headers: myHeader,
+      })
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  getClientReferrals(client_id: number) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+    return this.http
+      .get(this.baseUrl + `getClientReferrals?clientId=${client_id}`, {
         headers: myHeader,
       })
       .pipe(

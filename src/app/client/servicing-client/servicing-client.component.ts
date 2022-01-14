@@ -187,7 +187,7 @@ export class ServicingClientComponent implements OnInit {
           },
           (error) => console.log(error)
         );
-        this.service.getReferralsAndResources(this.clientId).subscribe(
+        this.service.getClientReferrals(this.clientId).subscribe(
           (data: ReferralsResources[]) => {
             this.referralsResources = data;
           },
@@ -300,8 +300,7 @@ export class ServicingClientComponent implements OnInit {
           .subscribe((data: Tent[]) => {
             this.tents = data;
           });
-        this.service
-          .getReferralsAndResources(this.clientId)
+        this.service.getClientReferrals(this.clientId)
           .subscribe((data: ReferralsResources[]) => {
             this.referralsResources = data;
           });

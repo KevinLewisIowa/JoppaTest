@@ -635,8 +635,8 @@
 
           <tbody>
             <tr *ngFor="let r of referralsResources; let rowIndex = index">
-              <td>{{ r.date | date: "short" }}</td>
-              <td>{{ r.type }}</td>
+              <td>{{ r.created_at | date: "short" }}</td>
+              <td>{{ r.referral_type }}</td>
               <td>{{ r.quantity }}</td>
               <td>{{ r.notes }}</td>
             </tr>
