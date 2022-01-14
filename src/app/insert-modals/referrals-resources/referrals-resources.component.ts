@@ -18,7 +18,7 @@ import { ClientService } from "app/services/client.service";
 export class ReferralsResourcesComponent implements OnInit {
   @ViewChild("referralsResourcesMdl", { static: false })
   referralsResourcesMdl: ElementRef;
-  @Output() referralsResourcesAdded = new EventEmitter<ReferralsResources>();
+  @Output() referralResourceAdded = new EventEmitter<ReferralsResources>();
   type: string = "";
   quantity: number;
   notes: string = "";
@@ -43,14 +43,12 @@ export class ReferralsResourcesComponent implements OnInit {
       referralResource.quantity = this.quantity;
       referralResource.notes = this.notes;
 
-      console.log(
-        `referral/resource to insert ${JSON.stringify(referralResource)}`
-      );
+      console.log(`referral/resource to insert ${JSON.stringify(referralResource)}`);
 
       this.service.insertClientReferralResource(referralResource).subscribe(
         (data: ReferralsResources) => {
           if (data != null && data.id != null) {
-            this.referralsResourcesAdded.emit(data);
+            this.referralResourceAdded.emit(data);
           }
         },
         (error) => {

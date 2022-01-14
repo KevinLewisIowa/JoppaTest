@@ -685,6 +685,12 @@ export class ServicingClientComponent implements OnInit {
     });
   }
 
+  removeReferralResource(id: number) {
+    this.service.removeReferralResource(id).subscribe(res => {
+      this.referralsResources = this.referralsResources.filter(w => w.id != id);
+    })
+  }
+
   removeTent(tent: Tent) {
     this.service.removeTent(tent.id).subscribe(res => {
       this.tents = this.tents.filter(w => w.id != tent.id);
