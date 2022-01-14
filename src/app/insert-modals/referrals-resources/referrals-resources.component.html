@@ -1,0 +1,95 @@
+<ng-template #referralsResourcesMdl let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Create Referral / Resource</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="d('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <form>
+    <div class="modal-body">
+      <div class="form-group">
+        <div class="row">
+          <div class="col-sm-4">
+            <label for="type">Type</label>
+            <select
+              id="type"
+              class="form-control"
+              [(ngModel)]="type"
+              name="type"
+            >
+              <option value="PHC intake information">
+                PHC intake information
+              </option>
+              <option value="PHC homeless verification">
+                PHC homeless verification
+              </option>
+              <option value="Housing">Housing</option>
+              <option value="Pet help">Pet help</option>
+              <option value="Free laundry information">
+                Free laundry information
+              </option>
+              <option value="Cross Ministries">Cross Ministries</option>
+              <option value="Job Lead">Job Lead</option>
+              <option value="Dental">Dental</option>
+              <option value="Violence Center">Violence Center</option>
+              <option value="Counseling & Mental Health">
+                Counseling & Mental Health
+              </option>
+              <option value="Broadlawns ER">Broadlawns ER</option>
+              <option value="Social security replacement form">
+                Social security replacement form
+              </option>
+              <option value="SNAP Application">SNAP Application</option>
+              <option value="Bethel Mission">Bethel Mission</option>
+              <option value="Aging & Disabled Resource Center">
+                Aging & Disabled Resource Center
+              </option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="col-sm-4">
+            <label for="quantity">Quantity</label>
+            <input
+              type="number"
+              id="quantity"
+              class="form-control"
+              [(ngModel)]="quantity"
+              name="quantity"
+            />
+          </div>
+          <div class="col-sm-4">
+            <label for="notes">Notes</label>
+            <input
+              type="text"
+              id="notes"
+              class="form-control"
+              [(ngModel)]="notes"
+              name="notes"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="submitReferralsResources(); c('')"
+    >
+      Submit
+    </button>
+    <button
+      type="button"
+      class="btn btn-outline-primary"
+      (click)="c('Close click')"
+    >
+      Close
+    </button>
+  </div>
+</ng-template>

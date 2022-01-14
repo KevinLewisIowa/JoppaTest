@@ -1,18 +1,52 @@
-<div class="card text-left" style="opacity:0.93">
+<div class="card text-left" style="opacity: 0.93">
   <div class="card-header" id="topOfScreen">
-    <h2>{{client.first_name}} <span
-        *ngIf="client.preferred_name != '' && client.preferred_name != null">({{client.preferred_name}})</span>
-      {{client.last_name}}</h2> &nbsp; <button #clientInfo class="btn btn-primary" style="float:right;"
-      (click)="clientEditMdl.openModal(client)" type="button">Client Info <fa-icon [icon]="informationIcon"></fa-icon>
+    <h2>
+      {{ client.first_name }}
+      <span *ngIf="client.preferred_name != '' && client.preferred_name != null"
+        >({{ client.preferred_name }})</span
+      >
+      {{ client.last_name }}
+    </h2>
+    &nbsp;
+    <button
+      #clientInfo
+      class="btn btn-primary"
+      style="float: right"
+      (click)="clientEditMdl.openModal(client)"
+      type="button"
+    >
+      Client Info <fa-icon [icon]="informationIcon"></fa-icon>
     </button>
   </div>
   <div class="panel-body">
     <div class="row">
       <div class="col-lg-12 col-md-12" *ngIf="heatRoute || isAdmin">
-        <h4>Heating Equipment
-          <button type="button" (click)="loanHeater()" class="btn btn-primary" style="float:right;">New Heater</button>
-          <button type="button" (click)="loanTank()" class="btn btn-primary" hidden>Add Tank</button>
-          <button type="button" (click)="loanHose()" class="btn btn-primary" hidden>Add Hose</button>
+        <h4>
+          Heating Equipment
+          <button
+            type="button"
+            (click)="loanHeater()"
+            class="btn btn-primary"
+            style="float: right"
+          >
+            New Heater
+          </button>
+          <button
+            type="button"
+            (click)="loanTank()"
+            class="btn btn-primary"
+            hidden
+          >
+            Add Tank
+          </button>
+          <button
+            type="button"
+            (click)="loanHose()"
+            class="btn btn-primary"
+            hidden
+          >
+            Add Hose
+          </button>
         </h4>
         <table class="table" id="items">
           <thead>
@@ -26,19 +60,41 @@
           </thead>
           <tbody>
             <tr *ngFor="let heater of heaters">
-              <td>{{heater.type_description}}</td>
-              <td>{{heater.serial_number}}</td>
-              <td>{{heater.updated_at | date: 'shortDate'}}</td>
-              <td><select class="form-control" #heaterStatus (change)="heaterStatusChanged(heaterStatus.value)">
-                  <option *ngFor="let option of heaterStatuses" value="{{option.id}}">{{option.status_name}}</option>
-                </select></td>
-              <td><button type="button" (click)="submitHeaterStatus(heater.id, heaterStatus.value)"
-                  class="btn btn-primary" *ngIf="currentStatus != 2">Submit</button>
+              <td>{{ heater.type_description }}</td>
+              <td>{{ heater.serial_number }}</td>
+              <td>{{ heater.updated_at | date: "shortDate" }}</td>
+              <td>
+                <select
+                  class="form-control"
+                  #heaterStatus
+                  (change)="heaterStatusChanged(heaterStatus.value)"
+                >
+                  <option
+                    *ngFor="let option of heaterStatuses"
+                    value="{{ option.id }}"
+                  >
+                    {{ option.status_name }}
+                  </option>
+                </select>
+              </td>
+              <td>
+                <button
+                  type="button"
+                  (click)="submitHeaterStatus(heater.id, heaterStatus.value)"
+                  class="btn btn-primary"
+                  *ngIf="currentStatus != 2"
+                >
+                  Submit
+                </button>
+              </td>
             </tr>
           </tbody>
         </table>
       </div>
-      <div class="col-lg-12 col-md-12" *ngIf="(heatRoute || isAdmin) && heatEquipmentNotReturned.length > 0">
+      <div
+        class="col-lg-12 col-md-12"
+        *ngIf="(heatRoute || isAdmin) && heatEquipmentNotReturned.length > 0"
+      >
         <h4>Heat Equipment Not Returned</h4>
         <table class="table">
           <thead>
@@ -50,7 +106,7 @@
           </thead>
           <tbody>
             <tr *ngFor="let equipment of heatEquipmentNotReturned">
-              <td>{{equipment.Type}}</td>
+              <td>{{ equipment.Type }}</td>
               <td>
                 <span *ngIf="equipment.status_id == 4">Stolen</span>
                 <span *ngIf="equipment.status_id == 5">Lost</span>
@@ -58,40 +114,70 @@
                 <span *ngIf="equipment.status_id == 7">Broken</span>
                 <span *ngIf="equipment.status_id == 8">Evicted</span>
               </td>
-              <td>{{equipment.created_at | date: 'shortDate' }}</td>
+              <td>{{ equipment.created_at | date: "shortDate" }}</td>
             </tr>
           </tbody>
         </table>
       </div>
-      <div style="padding-bottom: 12px;" *ngIf="heatRoute || isAdmin">
+      <div style="padding-bottom: 12px" *ngIf="heatRoute || isAdmin">
         <div class="col-md-12">
-          <h5>Tanks/Hoses
-            <button class="btn btn-primary" (click)="updateNumberTanksHoses(client)" hidden>Update Tanks/Hoses</button>
+          <h5>
+            Tanks/Hoses
+            <button
+              class="btn btn-primary"
+              (click)="updateNumberTanksHoses(client)"
+              hidden
+            >
+              Update Tanks/Hoses
+            </button>
           </h5>
         </div>
         <div class="form-group">
           <label>Number Tanks: </label>
-          <input class="form-control" style="max-width:25%;" type="text" placeholder="0"
-            (change)="updateNumberTanksHoses(client)" [(ngModel)]="client.number_tanks" />
-          <span *ngIf="updateHoseTankMessageVisible" class="alert alert-success">Tank/Hose Updated</span>
+          <input
+            class="form-control"
+            style="max-width: 25%"
+            type="text"
+            placeholder="0"
+            (change)="updateNumberTanksHoses(client)"
+            [(ngModel)]="client.number_tanks"
+          />
+          <span *ngIf="updateHoseTankMessageVisible" class="alert alert-success"
+            >Tank/Hose Updated</span
+          >
         </div>
         <div class="form-group">
           <label>Number Hoses: </label>
-          <input type="text" class="form-control" style="max-width:25%;" placeholder="0"
-            (change)="updateNumberTanksHoses(client)" [(ngModel)]="client.number_hoses" />
+          <input
+            type="text"
+            class="form-control"
+            style="max-width: 25%"
+            placeholder="0"
+            (change)="updateNumberTanksHoses(client)"
+            [(ngModel)]="client.number_hoses"
+          />
         </div>
       </div>
 
       <div class="col-lg-12 col-md-12" *ngIf="!heatRoute">
         <div class="background-color">
-          <h4>Requested Items <button type="button" (click)="goToTop();requestItemMdl.showModal()"
-              class="btn btn-primary" style="float:right;">New Item</button></h4>
+          <h4>
+            Requested Items
+            <button
+              type="button"
+              (click)="goToTop(); requestItemMdl.showModal()"
+              class="btn btn-primary"
+              style="float: right"
+            >
+              New Item
+            </button>
+          </h4>
           <table class="table" id="items">
             <colgroup>
-              <col span="1" style="width: 25%;">
-              <col span="1" style="width: 25%;">
-              <col span="1" style="width: 25%;">
-              <col span="1" style="width: 25%;">
+              <col span="1" style="width: 25%" />
+              <col span="1" style="width: 25%" />
+              <col span="1" style="width: 25%" />
+              <col span="1" style="width: 25%" />
             </colgroup>
             <thead>
               <tr>
@@ -103,25 +189,43 @@
             </thead>
             <tbody>
               <tr *ngFor="let item of requestedItems">
-                <td>{{item.item_description}}</td>
-                <td>{{item.created_at | date: 'shortDate'}}</td>
-                <td><button type="button" class="btn btn-primary" (click)="receivedRequest(item.id)">Received</button>
+                <td>{{ item.item_description }}</td>
+                <td>{{ item.created_at | date: "shortDate" }}</td>
+                <td>
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    (click)="receivedRequest(item.id)"
+                  >
+                    Received
+                  </button>
                 </td>
-                <td><button type="button" class="btn btn-primary" (click)="deleteRequest(item.id)">Delete</button></td>
+                <td>
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    (click)="deleteRequest(item.id)"
+                  >
+                    Delete
+                  </button>
+                </td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
-      <div *ngIf="receivedItems.length > 0 && !heatRoute" class="col-lg-12 col-md-12">
+      <div
+        *ngIf="receivedItems.length > 0 && !heatRoute"
+        class="col-lg-12 col-md-12"
+      >
         <!-- added !heatRoute from ngIf to pare down heat screen -->
         <h4>Recently Received Items</h4>
         <table class="table" id="items">
           <colgroup>
-            <col span="1" style="width: 25%;">
-            <col span="1" style="width: 25%;">
-            <col span="1" style="width: 25%;">
-            <col span="1" style="width: 25%;">
+            <col span="1" style="width: 25%" />
+            <col span="1" style="width: 25%" />
+            <col span="1" style="width: 25%" />
+            <col span="1" style="width: 25%" />
           </colgroup>
           <thead>
             <tr>
@@ -133,9 +237,9 @@
           </thead>
           <tbody>
             <tr *ngFor="let item of receivedItems">
-              <td>{{item.item_description}}</td>
-              <td>{{item.created_at | date: 'shortDate'}}</td>
-              <td>{{item.updated_at | date: 'shortDate'}}</td>
+              <td>{{ item.item_description }}</td>
+              <td>{{ item.created_at | date: "shortDate" }}</td>
+              <td>{{ item.updated_at | date: "shortDate" }}</td>
               <td></td>
               <td></td>
             </tr>
@@ -145,14 +249,23 @@
       <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
         <!-- removed !heatRoute from ngIf to pare down screen -->
         <div class="background-color">
-          <h4>Goals/Next Steps <button type="button" (click)="goToTop();goalMdl.showModal()" class="btn btn-primary"
-              style="float:right;">New Goal/Next Step</button></h4>
+          <h4>
+            Goals/Next Steps
+            <button
+              type="button"
+              (click)="goToTop(); goalMdl.showModal()"
+              class="btn btn-primary"
+              style="float: right"
+            >
+              New Goal/Next Step
+            </button>
+          </h4>
           <table class="table" id="goals">
             <colgroup>
-              <col span="1" style="width: 25%;">
-              <col span="1" style="width: 25%;">
-              <col span="1" style="width: 25%;">
-              <col span="1" style="width: 25%;">
+              <col span="1" style="width: 25%" />
+              <col span="1" style="width: 25%" />
+              <col span="1" style="width: 25%" />
+              <col span="1" style="width: 25%" />
             </colgroup>
             <thead>
               <tr>
@@ -165,16 +278,28 @@
             <tbody>
               <tr *ngFor="let goal of goalsAndSteps">
                 <td>
-                  {{goal.description}}
+                  {{ goal.description }}
                 </td>
                 <td>
-                  {{goal.created_at | date:'shortDate'}}
+                  {{ goal.created_at | date: "shortDate" }}
                 </td>
                 <td>
-                  <button type="button" class="btn btn-primary" (click)="completedGoal(goal)">Completed</button>
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    (click)="completedGoal(goal)"
+                  >
+                    Completed
+                  </button>
                 </td>
                 <td>
-                  <button type="button" class="btn btn-primary" (click)="removeGoal(goal.id)">Remove</button>
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    (click)="removeGoal(goal.id)"
+                  >
+                    Remove
+                  </button>
                 </td>
               </tr>
             </tbody>
@@ -183,14 +308,23 @@
       </div>
       <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
         <!-- removed !heatRoute from ngIf to pare down screen -->
-        <h4>Prayer Requests/Needs <button type="button" (click)="goToTop();prayerRequestsNeedsMdl.showModal()"
-            class="btn btn-primary" style="float:right;">New Prayer Request/Need</button></h4>
+        <h4>
+          Prayer Requests/Needs
+          <button
+            type="button"
+            (click)="goToTop(); prayerRequestsNeedsMdl.showModal()"
+            class="btn btn-primary"
+            style="float: right"
+          >
+            New Prayer Request/Need
+          </button>
+        </h4>
         <table class="table" id="prayerRequestsNeeds">
           <colgroup>
-            <col span="1" style="width: 25%;">
-            <col span="1" style="width: 25%;">
-            <col span="1" style="width: 25%;">
-            <col span="1" style="width: 25%;">
+            <col span="1" style="width: 25%" />
+            <col span="1" style="width: 25%" />
+            <col span="1" style="width: 25%" />
+            <col span="1" style="width: 25%" />
           </colgroup>
           <thead>
             <tr>
@@ -203,17 +337,21 @@
           <tbody>
             <tr *ngFor="let request of prayerRequestsAndNeeds">
               <td>
-                {{request.detail}}
+                {{ request.detail }}
               </td>
               <td>
-                {{request.created_at | date:'shortDate'}}
+                {{ request.created_at | date: "shortDate" }}
               </td>
               <td>
-                <button type="button" class="btn btn-primary"
-                  (click)="removePrayerRequestNeed(request.id)">Remove</button>
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  (click)="removePrayerRequestNeed(request.id)"
+                >
+                  Remove
+                </button>
               </td>
-              <td>
-              </td>
+              <td></td>
             </tr>
           </tbody>
         </table>
@@ -221,16 +359,23 @@
       <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
         <!-- removed !heatRoute from ngIf to pare down screen -->
         <div class="background-color">
-          <h4>Likes <button type="button" class="btn btn-primary" style="float:right;"
-              (click)="goToTop();likeMdl.showModal()">New
-              Like</button>
+          <h4>
+            Likes
+            <button
+              type="button"
+              class="btn btn-primary"
+              style="float: right"
+              (click)="goToTop(); likeMdl.showModal()"
+            >
+              New Like
+            </button>
           </h4>
           <table class="table" id="likes">
             <colgroup>
-              <col span="1" style="width: 25%;">
-              <col span="1" style="width: 25%;">
-              <col span="1" style="width: 25%;">
-              <col span="1" style="width: 25%;">
+              <col span="1" style="width: 25%" />
+              <col span="1" style="width: 25%" />
+              <col span="1" style="width: 25%" />
+              <col span="1" style="width: 25%" />
             </colgroup>
             <thead>
               <tr>
@@ -243,15 +388,20 @@
             <tbody>
               <tr *ngFor="let like of clientLikes">
                 <td>
-                  {{like.description}}
+                  {{ like.description }}
                 </td>
                 <td>
-                  {{like.created_at | date:'shortDate'}}
+                  {{ like.created_at | date: "shortDate" }}
                 </td>
                 <td>
-                  <button type="button" class="btn btn-primary" (click)="removeLike(like.id)">Remove</button>
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    (click)="removeLike(like.id)"
+                  >
+                    Remove
+                  </button>
                 </td>
-
               </tr>
             </tbody>
           </table>
@@ -259,14 +409,23 @@
       </div>
       <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
         <!-- removed !heatRoute from ngIf to pare down screen -->
-        <h4>Dislikes <button type="button" (click)="goToTop();dislikeMdl.showModal()" class="btn btn-primary"
-            style="float:right;">New Dislike</button></h4>
+        <h4>
+          Dislikes
+          <button
+            type="button"
+            (click)="goToTop(); dislikeMdl.showModal()"
+            class="btn btn-primary"
+            style="float: right"
+          >
+            New Dislike
+          </button>
+        </h4>
         <table class="table" id="dislikes">
           <colgroup>
-            <col span="1" style="width: 25%;">
-            <col span="1" style="width: 25%;">
-            <col span="1" style="width: 25%;">
-            <col span="1" style="width: 25%;">
+            <col span="1" style="width: 25%" />
+            <col span="1" style="width: 25%" />
+            <col span="1" style="width: 25%" />
+            <col span="1" style="width: 25%" />
           </colgroup>
           <thead>
             <tr>
@@ -279,13 +438,19 @@
           <tbody>
             <tr *ngFor="let dislike of clientDislikes">
               <td>
-                {{dislike.description}}
+                {{ dislike.description }}
               </td>
               <td>
-                {{dislike.created_at | date:'shortDate'}}
+                {{ dislike.created_at | date: "shortDate" }}
               </td>
               <td>
-                <button type="button" class="btn btn-primary" (click)="removeDislike(dislike.id)">Remove</button>
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  (click)="removeDislike(dislike.id)"
+                >
+                  Remove
+                </button>
               </td>
             </tr>
           </tbody>
@@ -293,16 +458,23 @@
       </div>
       <div class="col-lg-12 col-md-12">
         <div class="background-color">
-          <h4>Notes <button type="button" (click)="goToTop();notesMdl.showModal()" class="btn btn-primary"
-              style="float:right;">New
-              Note</button>
+          <h4>
+            Notes
+            <button
+              type="button"
+              (click)="goToTop(); notesMdl.showModal()"
+              class="btn btn-primary"
+              style="float: right"
+            >
+              New Note
+            </button>
           </h4>
           <table class="table" id="notes">
             <colgroup>
-              <col span="1" style="width: 25%;">
-              <col span="1" style="width: 25%;">
-              <col span="1" style="width: 25%;">
-              <col span="1" style="width: 25%;">
+              <col span="1" style="width: 25%" />
+              <col span="1" style="width: 25%" />
+              <col span="1" style="width: 25%" />
+              <col span="1" style="width: 25%" />
             </colgroup>
             <thead>
               <tr>
@@ -315,9 +487,17 @@
 
             <tbody>
               <tr *ngFor="let note of notes">
-                <td>{{note.created_at | date:'short'}}</td>
-                <td>{{note.note}}</td>
-                <td><button type="button" class="btn btn-primary" (click)="removeNote(note.id)">Remove</button></td>
+                <td>{{ note.created_at | date: "short" }}</td>
+                <td>{{ note.note }}</td>
+                <td>
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    (click)="removeNote(note.id)"
+                  >
+                    Remove
+                  </button>
+                </td>
                 <td></td>
               </tr>
             </tbody>
@@ -325,19 +505,26 @@
         </div>
       </div>
       <div class="col-lg-12 col-md-12">
-        <h4>Tent <button type="button" (click)="goToTop();tentMdl.showModal()" class="btn btn-primary"
-            style="float:right;">New
-            Tent</button>
+        <h4>
+          Tent
+          <button
+            type="button"
+            (click)="goToTop(); tentMdl.showModal()"
+            class="btn btn-primary"
+            style="float: right"
+          >
+            New Tent
+          </button>
         </h4>
         <table class="table" id="tents">
           <colgroup>
-            <col span="1" style="width: 14%;">
-            <col span="1" style="width: 14%;">
-            <col span="1" style="width: 14%;">
-            <col span="1" style="width: 14%;">
-            <col span="1" style="width: 14%;">
-            <col span="1" style="width: 14%;">
-            <col span="1" style="width: 14%;">
+            <col span="1" style="width: 14%" />
+            <col span="1" style="width: 14%" />
+            <col span="1" style="width: 14%" />
+            <col span="1" style="width: 14%" />
+            <col span="1" style="width: 14%" />
+            <col span="1" style="width: 14%" />
+            <col span="1" style="width: 14%" />
           </colgroup>
           <thead>
             <tr>
@@ -352,14 +539,14 @@
           </thead>
 
           <tbody>
-            <tr *ngFor="let tent of tents; let rowIndex = index;">
-              <td>{{tent.date_given | date:'short'}}</td>
-              <td>{{tent.tent_type}}</td>
-              <td>{{tent.condition}}</td>
-              <td>{{tent.given_by}}</td>
-              <td>{{tent.setup_by}}</td>
-              <td>{{tent.rejected}}</td>
-              <td>{{tent.notes}}</td>
+            <tr *ngFor="let tent of tents; let rowIndex = index">
+              <td>{{ tent.date_given | date: "short" }}</td>
+              <td>{{ tent.tent_type }}</td>
+              <td>{{ tent.condition }}</td>
+              <td>{{ tent.given_by }}</td>
+              <td>{{ tent.setup_by }}</td>
+              <td>{{ tent.rejected }}</td>
+              <td>{{ tent.notes }}</td>
             </tr>
           </tbody>
         </table>
@@ -367,16 +554,23 @@
       <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
         <!-- removed !heatRoute from ngIf to pare down screen -->
         <div class="background-color">
-          <h4>Pets <button type="button" (click)="goToTop();petsMdl.showModal()" class="btn btn-primary"
-              style="float:right;">New
-              Pet</button>
+          <h4>
+            Pets
+            <button
+              type="button"
+              (click)="goToTop(); petsMdl.showModal()"
+              class="btn btn-primary"
+              style="float: right"
+            >
+              New Pet
+            </button>
           </h4>
           <table class="table" id="petList">
             <colgroup>
-              <col span="1" style="width: 20%;">
-              <col span="1" style="width: 20%;">
-              <col span="1" style="width: 20%;">
-              <col span="1" style="width: 20%;">
+              <col span="1" style="width: 20%" />
+              <col span="1" style="width: 20%" />
+              <col span="1" style="width: 20%" />
+              <col span="1" style="width: 20%" />
             </colgroup>
             <thead>
               <tr>
@@ -389,32 +583,85 @@
             <tbody>
               <tr *ngFor="let pet of pets">
                 <td>
-                  {{pet.pet_type}}
+                  {{ pet.pet_type }}
                 </td>
                 <td>
-                  {{pet.quantity}}
+                  {{ pet.quantity }}
                 </td>
                 <td>
-                  {{pet.food_requested}}
+                  {{ pet.food_requested }}
                 </td>
                 <td>
-                  <button type="button" class="btn btn-primary" (click)="removePet(pet.id)">Remove</button>
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    (click)="removePet(pet.id)"
+                  >
+                    Remove
+                  </button>
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
+      <div class="col-lg-12 col-md-12">
+        <h4>
+          Referrals/Resources
+          <button
+            type="button"
+            (click)="goToTop(); referralsResourcesMdl.showModal()"
+            class="btn btn-primary"
+            style="float: right"
+          >
+            New Referral/Resource
+          </button>
+        </h4>
+        <table class="table" id="referralsResources">
+          <colgroup>
+            <col span="1" style="width: 25%" />
+            <col span="1" style="width: 25%" />
+            <col span="1" style="width: 25%" />
+            <col span="1" style="width: 25%" />
+          </colgroup>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Type</th>
+              <th>Quantity</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let r of referralsResources; let rowIndex = index">
+              <td>{{ r.created_at | date: "short" }}</td>
+              <td>{{ r.referral_type }}</td>
+              <td>{{ r.quantity }}</td>
+              <td>{{ r.notes }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
       <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
         <!-- removed !heatRoute from ngIf to pare down screen -->
-        <h4>Health Concerns <button type="button" (click)="goToTop();healthMdl.showModal()" class="btn btn-primary"
-            style="float:right;">New Health Concern</button></h4>
+        <h4>
+          Health Concerns
+          <button
+            type="button"
+            (click)="goToTop(); healthMdl.showModal()"
+            class="btn btn-primary"
+            style="float: right"
+          >
+            New Health Concern
+          </button>
+        </h4>
         <table class="table" id="concerns">
           <colgroup>
-            <col span="1" style="width: 25%;">
-            <col span="1" style="width: 25%;">
-            <col span="1" style="width: 25%;">
-            <col span="1" style="width: 25%;">
+            <col span="1" style="width: 25%" />
+            <col span="1" style="width: 25%" />
+            <col span="1" style="width: 25%" />
+            <col span="1" style="width: 25%" />
           </colgroup>
           <thead>
             <tr>
@@ -427,13 +674,19 @@
           <tbody>
             <tr *ngFor="let concern of healthConcerns">
               <td>
-                {{concern.description}}
+                {{ concern.description }}
               </td>
               <td>
-                {{concern.created_at | date:'shortDate'}}
+                {{ concern.created_at | date: "shortDate" }}
               </td>
               <td>
-                <button type="button" class="btn btn-primary" (click)="removeHealthConcern(concern.id)">Remove</button>
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  (click)="removeHealthConcern(concern.id)"
+                >
+                  Remove
+                </button>
               </td>
             </tr>
           </tbody>
@@ -441,14 +694,23 @@
       </div>
       <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
         <div class="background-color">
-          <h4>Household <button type="button" (click)="goToTop();clientMdl.showModal()" class="btn btn-primary"
-              style="float:right;">New Household Member</button></h4>
+          <h4>
+            Household
+            <button
+              type="button"
+              (click)="goToTop(); clientMdl.showModal()"
+              class="btn btn-primary"
+              style="float: right"
+            >
+              New Household Member
+            </button>
+          </h4>
           <table class="table" id="household">
             <colgroup>
-              <col span="1" style="width: 25%;">
-              <col span="1" style="width: 25%;">
-              <col span="1" style="width: 25%;">
-              <col span="1" style="width: 25%;">
+              <col span="1" style="width: 25%" />
+              <col span="1" style="width: 25%" />
+              <col span="1" style="width: 25%" />
+              <col span="1" style="width: 25%" />
             </colgroup>
             <thead>
               <tr>
@@ -461,17 +723,29 @@
             <tbody>
               <tr *ngFor="let client of householdClients">
                 <td>
-                  {{client.first_name}} <span
-                    *ngIf="client.preferred_name != '' && client.preferred_name != null">({{client.preferred_name}})</span>
-                  {{client.last_name}}
+                  {{ client.first_name }}
+                  <span
+                    *ngIf="
+                      client.preferred_name != '' &&
+                      client.preferred_name != null
+                    "
+                    >({{ client.preferred_name }})</span
+                  >
+                  {{ client.last_name }}
                 </td>
                 <td></td>
                 <td>
-                  <button type="button" class="btn btn-primary" (click)="removeHouseholdClient(client)"
-                    *ngIf="client.id != client.household_id">Remove</button>
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    (click)="removeHouseholdClient(client)"
+                    *ngIf="client.id != client.household_id"
+                  >
+                    Remove
+                  </button>
                 </td>
-                <td>
-                <td>
+                <td></td>
+                <td></td>
               </tr>
             </tbody>
           </table>
@@ -480,17 +754,33 @@
       <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
         <h4>Weekly Attendance</h4>
         <div>
-          From Date: <input type="date" name="attendanceFromDate" [(ngModel)]="attendanceFromDate" />
-          To Date: <input type="date" name="attendanceToDate" [(ngModel)]="attendanceToDate" />
-          <button type="button" class="btn btn-primary" style="margin-left: 5px;"
-            (click)="searchWeeklyAttendance()">Search</button>
+          From Date:
+          <input
+            type="date"
+            name="attendanceFromDate"
+            [(ngModel)]="attendanceFromDate"
+          />
+          To Date:
+          <input
+            type="date"
+            name="attendanceToDate"
+            [(ngModel)]="attendanceToDate"
+          />
+          <button
+            type="button"
+            class="btn btn-primary"
+            style="margin-left: 5px"
+            (click)="searchWeeklyAttendance()"
+          >
+            Search
+          </button>
         </div>
         <table class="table" id="weeklyAttendance">
           <colgroup>
-            <col span="1" style="width: 25%;">
-            <col span="1" style="width: 25%;">
-            <col span="1" style="width: 25%;">
-            <col span="1" style="width: 25%;">
+            <col span="1" style="width: 25%" />
+            <col span="1" style="width: 25%" />
+            <col span="1" style="width: 25%" />
+            <col span="1" style="width: 25%" />
           </colgroup>
           <thead>
             <tr>
@@ -503,76 +793,164 @@
           <tbody>
             <tr *ngFor="let interaction of clientInteractions">
               <td>
-                {{interaction.serviced_date | date:'short'}}
+                {{ interaction.serviced_date | date: "short" }}
               </td>
               <td>
-                {{interaction.was_seen}}
+                {{ interaction.was_seen }}
               </td>
               <td>
-                {{interaction.serviced}}
+                {{ interaction.serviced }}
               </td>
               <td>
-                {{interaction.at_homeless_resource_center}}
+                {{ interaction.at_homeless_resource_center }}
               </td>
             </tr>
           </tbody>
         </table>
         <div class="col-lg-12 col-md-12">
-          <h4>Admin Notes: </h4>
-          <p><span style="background-color: yellow;">{{client.admin_notes}}</span></p>
+          <h4>Admin Notes:</h4>
+          <p>
+            <span style="background-color: yellow">{{
+              client.admin_notes
+            }}</span>
+          </p>
         </div>
       </div>
     </div>
     <div class="col-lg-12 col-md-12">
       <div class="col-md-12 text-left">
         <h4>Attendance</h4>
-        <button type="button"
-          [className]="appearance && appearance.was_seen == true && appearance.serviced == true ? 'btn btn-success' : 'btn btn-primary'"
-          (click)="sendInteraction(1)" style="margin-right:3px;">
-          <fa-icon [icon]="seenAndServicedIcon"></fa-icon> Seen & Serviced
-        </button>&nbsp;
-        <button type="button"
-          [className]="appearance && appearance.was_seen == false && appearance.serviced == true ? 'btn btn-success' : 'btn btn-primary'"
-          (click)="sendInteraction(2)" style="margin-right:3px;">
-          <fa-icon [icon]="notSeenAndServicedIcon"></fa-icon> Serviced & Not Seen
-        </button>&nbsp;
-        <button type="button"
-          [className]="appearance && appearance.was_seen == false && appearance.serviced == false ? 'btn btn-success' : 'btn btn-primary'"
-          (click)="sendInteraction(4)" style="margin-right:3px;">
-          <fa-icon [icon]="notSeenIcon"></fa-icon> Not Seen
-        </button>&nbsp;
-        <button type="button" *ngIf="isAdmin"
-          [className]="appearance && appearance.was_seen == false && appearance.serviced == false && appearance.still_lives_here == false ? 'btn btn-success' : 'btn btn-primary'"
-          (click)="sendInteraction(3)" style="margin-right:3px;">No longer lives here</button>&nbsp;
-        <button type="button" *ngIf="isAdmin"
-          [className]="appearance && appearance.was_seen == false && appearance.serviced == false && appearance.at_homeless_resource_center == true ? 'btn btn-success' : 'btn btn-primary'"
-          (click)="sendInteraction(5)">Homeless Resource Center</button>
+        <button
+          type="button"
+          [className]="
+            appearance &&
+            appearance.was_seen == true &&
+            appearance.serviced == true
+              ? 'btn btn-success'
+              : 'btn btn-primary'
+          "
+          (click)="sendInteraction(1)"
+          style="margin-right: 3px"
+        >
+          <fa-icon [icon]="seenAndServicedIcon"></fa-icon> Seen & Serviced</button
+        >&nbsp;
+        <button
+          type="button"
+          [className]="
+            appearance &&
+            appearance.was_seen == false &&
+            appearance.serviced == true
+              ? 'btn btn-success'
+              : 'btn btn-primary'
+          "
+          (click)="sendInteraction(2)"
+          style="margin-right: 3px"
+        >
+          <fa-icon [icon]="notSeenAndServicedIcon"></fa-icon> Serviced & Not
+          Seen</button
+        >&nbsp;
+        <button
+          type="button"
+          [className]="
+            appearance &&
+            appearance.was_seen == false &&
+            appearance.serviced == false
+              ? 'btn btn-success'
+              : 'btn btn-primary'
+          "
+          (click)="sendInteraction(4)"
+          style="margin-right: 3px"
+        >
+          <fa-icon [icon]="notSeenIcon"></fa-icon> Not Seen</button
+        >&nbsp;
+        <button
+          type="button"
+          *ngIf="isAdmin"
+          [className]="
+            appearance &&
+            appearance.was_seen == false &&
+            appearance.serviced == false &&
+            appearance.still_lives_here == false
+              ? 'btn btn-success'
+              : 'btn btn-primary'
+          "
+          (click)="sendInteraction(3)"
+          style="margin-right: 3px"
+        >
+          No longer lives here</button
+        >&nbsp;
+        <button
+          type="button"
+          *ngIf="isAdmin"
+          [className]="
+            appearance &&
+            appearance.was_seen == false &&
+            appearance.serviced == false &&
+            appearance.at_homeless_resource_center == true
+              ? 'btn btn-success'
+              : 'btn btn-primary'
+          "
+          (click)="sendInteraction(5)"
+        >
+          Homeless Resource Center
+        </button>
       </div>
     </div>
   </div>
   <div class="card-footer">
     <div>
-      <button type="button" class="btn btn-primary" style="float:left;" (click)="backToCamp()">
+      <button
+        type="button"
+        class="btn btn-primary"
+        style="float: left"
+        (click)="backToCamp()"
+      >
         <fa-icon [icon]="backIcon"></fa-icon> Back to Camp
       </button>
-      <button type="button" class="btn btn-primary" style="margin-left: 1%; float:left;" (click)="backToClientListing()"
-        *ngIf="isAdmin">
+      <button
+        type="button"
+        class="btn btn-primary"
+        style="margin-left: 1%; float: left"
+        (click)="backToClientListing()"
+        *ngIf="isAdmin"
+      >
         <fa-icon [icon]="backIcon"></fa-icon> Back to Client List
       </button>
     </div>
   </div>
-
 </div>
 <!--these are the modals for inserting new stuff-->
 <app-client-like #likeMdl (likeAdded)="likeAdded($event)"></app-client-like>
-<app-client-dislike #dislikeMdl (dislikeAdded)="dislikeAdded($event)"></app-client-dislike>
-<app-requested-item #requestItemMdl (requestedItemAdded)="requestedItemAdded($event)"></app-requested-item>
+<app-client-dislike
+  #dislikeMdl
+  (dislikeAdded)="dislikeAdded($event)"
+></app-client-dislike>
+<app-requested-item
+  #requestItemMdl
+  (requestedItemAdded)="requestedItemAdded($event)"
+></app-requested-item>
 <app-goals-steps #goalMdl (goalAdded)="goalAdded($event)"></app-goals-steps>
-<app-health-concern #healthMdl (healthConcernAdded)="healthConcernAdded($event)"></app-health-concern>
+<app-health-concern
+  #healthMdl
+  (healthConcernAdded)="healthConcernAdded($event)"
+></app-health-concern>
 <app-notes #notesMdl (noteAdded)="noteAdded($event)"></app-notes>
-<app-client-edit-modal #clientEditMdl (editedClient)="editedClient($event)"></app-client-edit-modal>
+<app-client-edit-modal
+  #clientEditMdl
+  (editedClient)="editedClient($event)"
+></app-client-edit-modal>
 <app-pets #petsMdl (petAdded)="petAdded($event)"></app-pets>
-<app-prayer-requests-and-needs #prayerRequestsNeedsMdl (prayerRequestNeedAdded)="prayerRequestNeedAdded($event)">
+<app-prayer-requests-and-needs
+  #prayerRequestsNeedsMdl
+  (prayerRequestNeedAdded)="prayerRequestNeedAdded($event)"
+>
 </app-prayer-requests-and-needs>
 <app-tents #tentMdl (tentAdded)="tentAdded($event)"></app-tents>
-<app-client-search #clientMdl (clientSelected)="clientSelected($event)"></app-client-search>
+<app-referrals-resources
+  #referralsResourcesMdl
+  (referralResourceAdded)="referralResourceAdded($event)"
+></app-referrals-resources>
+<app-client-search
+  #clientMdl
+  (clientSelected)="clientSelected($event)"
+></app-client-search>
