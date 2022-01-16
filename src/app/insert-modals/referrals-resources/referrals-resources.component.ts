@@ -49,6 +49,9 @@ export class ReferralsResourcesComponent implements OnInit {
         (data: ReferralsResources) => {
           if (data != null && data.id != null) {
             this.referralResourceAdded.emit(data);
+            this.type = "";
+            this.quantity = null;
+            this.notes = "";
           }
         },
         (error) => {
