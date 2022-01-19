@@ -92,9 +92,7 @@ export class ServicingClientComponent implements OnInit {
     console.log(this.routeInstanceId);
     this.heatRoute = JSON.parse(window.localStorage.getItem("heatRoute"));
     this.isAdmin = JSON.parse(window.localStorage.getItem("isAdmin"));
-    this.locationCampId = JSON.parse(
-      window.localStorage.getItem("locationCampId")
-    );
+    this.locationCampId = JSON.parse(window.localStorage.getItem("locationCampId"));
     this.clientId = localStorage.getItem("selectedClient");
 
     let attendToDate: Date = new Date();
@@ -125,7 +123,7 @@ export class ServicingClientComponent implements OnInit {
     if (this.clientId !== null) {
       this.service.getClientById(this.clientId).subscribe((data: Client) => {
         this.client = data;
-
+        
         if (
           this.client.homeless_reason == "" ||
           this.client.date_became_homeless == null
@@ -412,9 +410,7 @@ export class ServicingClientComponent implements OnInit {
   sendInteraction(interactionType: number) {
     const interaction: Appearance = new Appearance();
     interaction.client_id = this.client.id;
-    interaction.location_camp_id = this.locationCampId
-      ? this.locationCampId
-      : this.client.current_camp_id;
+    interaction.location_camp_id = this.locationCampId ? this.locationCampId : this.client.current_camp_id;
     if (interactionType === 1) {
       interaction.serviced = true;
       interaction.was_seen = true;
@@ -440,7 +436,14 @@ export class ServicingClientComponent implements OnInit {
       interaction.was_seen = true;
       interaction.still_lives_here = true;
       interaction.at_homeless_resource_center = true;
+      // if neither locationCampId nor current_camp_id have a value, set it to HRC camp
+      if (!interaction.location_camp_id) {
+        interaction.location_camp_id = 449;
+        this.client.current_camp_id = 449;
+      }
     }
+
+    console.log('camp id: ' + interaction.location_camp_id);
 
     if (this.isAdmin) {
       // Allow them to select a Date
@@ -707,6 +710,14 @@ export class ServicingClientComponent implements OnInit {
     this.service.removePet(id).subscribe(res => {
       this.pets = this.pets.filter(w => w.id != id);
     });
+  }
+
+  removeAppearance(id: number) {
+    if (confirm('Are you sure you want to remove this appearance?')) {
+      this.service.removeAppearance(id).subscribe(res => {
+        this.clientInteractions = this.clientInteractions.filter(w => w.id != id);
+      });
+    }
   }
 
   removeHealthConcern(id: number) {

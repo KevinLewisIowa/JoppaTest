@@ -676,6 +676,17 @@ export class ClientService {
     }), catchError(this.handleError));
   }
 
+  removeAppearance(id: number) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+    return this.http.delete(this.baseUrl + `client_interactions/${id}`, { headers: myHeader })
+    .pipe(map((res) => {
+      return true;
+    }), catchError(this.handleError));
+  }
+
   removeDislike(id: number) {
     const myHeader = new HttpHeaders({
       "Content-Type": "application/json",
