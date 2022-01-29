@@ -49,6 +49,8 @@ export class LeaderSignInComponent implements OnInit {
     this.routeInstanceForm = this.fb.group({
       leader_name: '',
       leader_phone: '',
+      scribe_name: '',
+      scribe_phone: '',
       route_id: '',
       heat_route: false
     });
@@ -58,6 +60,8 @@ export class LeaderSignInComponent implements OnInit {
     this.routeInstanceForm.get('leader_name').setValidators(Validators.required);
     this.routeInstanceForm.get('route_id').setValidators(Validators.required);
     this.routeInstanceForm.get('leader_phone').setValidators(Validators.compose([Validators.required, Validators.pattern(phoneRegEx)]));
+    this.routeInstanceForm.get('scribe_name').setValidators(Validators.required);
+    this.routeInstanceForm.get('scribe_phone').setValidators(Validators.compose([Validators.required, Validators.pattern(phoneRegEx)]));
 
     this.mainService.getTheRoutes().subscribe(routes => {
       this.routes = routes;
@@ -75,13 +79,14 @@ export class LeaderSignInComponent implements OnInit {
     this.routeInstance.heat_route = this.routeInstanceForm.get('heat_route').value;
     this.routeInstance.leader_name = this.routeInstanceForm.get('leader_name').value;
     this.routeInstance.leader_phone = this.routeInstanceForm.get('leader_phone').value;
+    this.routeInstance.scribe_name = this.routeInstanceForm.get('scribe_name').value;
+    this.routeInstance.scribe_phone = this.routeInstanceForm.get('scribe_phone').value;
     this.routeInstance.route_id = this.routeInstanceForm.get('route_id').value;
     this.routeInstance.start_time = new Date();
     this.mainService.insertRouteInstance(this.routeInstance).subscribe(data => {
       window.localStorage.setItem('routeInstance', data.id);
       window.localStorage.setItem('heatRoute', this.routeInstanceForm.get('heat_route').value);
       window.localStorage.setItem('routeId', this.routeInstanceForm.get('route_id').value);
-      window.localStorage.setItem('leaderName', this.routeInstanceForm.get('leader_name').value);
 
       if (this.routeInstanceForm.get('heat_route').value) {
         this.router.navigate(['checkoutHeaters']);
