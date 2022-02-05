@@ -13,11 +13,9 @@
   </div>
   <div class="panel-body">
     <div>
-      <mat-table #table [dataSource]="dataSource" matSort>
+      <mat-table #table [dataSource]="dataSource" matSort matSortActive="is_active" matSortDirection="desc">
         <ng-container matColumnDef="route_name">
-          <mat-header-cell *matHeaderCellDef mat-sort-header
-            >Route</mat-header-cell
-          >
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Route</mat-header-cell>
           <mat-cell *matCellDef="let camp">
             <select type="string" placeholder="route" style="max-width: 75%;" [(ngModel)]="camp.route_id">
               <option *ngFor="let route of routes" [value]="route.id">{{route.name}}</option>
@@ -26,50 +24,31 @@
         </ng-container>
 
         <ng-container matColumnDef="camp_name">
-          <mat-header-cell *matHeaderCellDef mat-sort-header
-            >Camp</mat-header-cell
-          >
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Camp</mat-header-cell>
           <mat-cell (click)="viewCamp(camp)" *matCellDef="let camp">{{ camp.camp_name }}</mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="position">
-          <mat-header-cell *matHeaderCellDef mat-sort-header
-            >Position</mat-header-cell
-          >
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Position</mat-header-cell>
           <mat-cell *matCellDef="let camp"><input type="number" placeholder="position" style="max-width: 75%;" [(ngModel)]="camp.position" /></mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="is_active">
-          <mat-header-cell *matHeaderCellDef mat-sort-header
-            >Is Active?</mat-header-cell
-          >
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Is Active?</mat-header-cell>
           <mat-cell (click)="viewCamp(camp)" *matCellDef="let camp">{{ camp.is_active }}</mat-cell>
         </ng-container>
 
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row
-          *matRowDef="let camp; columns: displayedColumns"
-        ></mat-row>
+        <mat-row *matRowDef="let camp; columns: displayedColumns"></mat-row>
       </mat-table>
 
       <mat-paginator [pageSizeOptions]="[50, 25, 75, 100]"></mat-paginator>
     </div>
   </div>
   <div class="card-footer">
-    <button
-      routerLink="/adminHome"
-      class="btn btn-primary"
-      style="float: left"
-      (click)="back()"
-    >
+    <button routerLink="/adminHome" class="btn btn-primary" style="float: left" (click)="back()">
       <fa-icon [icon]="backIcon"></fa-icon> Back
     </button>
-    <button
-      class="btn btn-primary"
-      style="float: right"
-      (click)="submitCamp()"
-    >
-    Save Camp Changes
-    </button>
+    <button class="btn btn-primary" style="float: right" (click)="submitCamp()">Save Camp Changes</button>
   </div>
 </div>
