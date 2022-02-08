@@ -243,6 +243,9 @@ export class ServicingClientComponent implements OnInit {
           .subscribe(
             (data: any[]) => {
               this.clientInteractions = data;
+              this.clientInteractions.sort(function(a, b) {
+                return new Date(b.serviced_date).valueOf() - new Date(a.serviced_date).valueOf();
+              });
             },
             (error) => console.log(error)
           );
