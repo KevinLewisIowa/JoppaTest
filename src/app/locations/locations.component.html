@@ -1,6 +1,7 @@
 <div class="card panel-info" style="opacity:0.92">
   <div class="card-header text-center" style="opacity:0.93">
     <h2 align="left">{{thisRoute.name}}</h2>
+    <h4 align="left">Number of Total Clients for Route: {{clientCountForRoute}}</h4>
     <div>
       <button (click)="showRouteLocations()" class="btn btn-primary" style="float:left;" type="button"><fa-icon [icon]="mapIcon"></fa-icon> Show Route Map</button>
       <button (click)="routeEditMdl.showModal(thisRoute)" class="btn btn-primary" style="float:right;" type="button" *ngIf="isAdmin">Route Info <fa-icon [icon]="informationIcon"></fa-icon></button>

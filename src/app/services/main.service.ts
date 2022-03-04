@@ -11,6 +11,7 @@ import { RouteInstanceTankHoseInteraction } from "app/models/route-instance-tank
 import { Inventory } from "app/admin-reports/inventory-report/inventory-report.component";
 import { environment } from "environments/environment";
 import { catchError, map } from "rxjs/operators";
+import { RequestedItem } from "app/models/requested-item";
 
 @Injectable()
 export class MainService {
@@ -277,6 +278,27 @@ export class MainService {
         catchError(this.handleError));
   }
 
+  updateRequestedItem(theItem: RequestedItem) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+    return this.http
+      .patch(
+        this.apiUrl + `requested_items/${theItem.id}`,
+        { requested_item: theItem },
+        { headers: myHeader }
+      )
+      .pipe(map((res: any) => {
+        if (res.message === 'invalid-token') {
+          window.localStorage.removeItem('apiToken');
+          this.router.navigate(['/application-login']);
+        }
+        return res;
+      }),
+        catchError(this.handleError));
+  }
+
   updateRoute(theRoute: Route) {
     const myHeader = new HttpHeaders({
       "Content-Type": "application/json",
@@ -439,12 +461,28 @@ export class MainService {
         catchError(this.handleError));
   }
 
-  getCampsForRoute(id) {
+  getCampsForRoute(id: number) {
     const myHeader = new HttpHeaders({
       "Content-Type": "application/json",
       Authorization: window.localStorage.getItem("apiToken"),
     });
     return this.http.get(this.apiUrl + `getCampsForRoute?routeId=${id}`, { headers: myHeader })
+      .pipe(map((res: any) => {
+        if (res.message === 'invalid-token') {
+          window.localStorage.removeItem('apiToken');
+          this.router.navigate(['/application-login']);
+        }
+        return res;
+      }),
+        catchError(this.handleError));
+  }
+
+  getClientCountForRoute(id : number) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+    return this.http.get(this.apiUrl + `getClientCountForRoute?routeId=${id}`, { headers: myHeader })
       .pipe(map((res: any) => {
         if (res.message === 'invalid-token') {
           window.localStorage.removeItem('apiToken');

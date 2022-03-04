@@ -6,6 +6,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Observable } from 'rxjs';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+import { RequestedItem } from 'app/models/requested-item';
 
 @Component({
   selector: 'app-admin-route-undelivered-items',
@@ -13,7 +14,7 @@ import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
   styleUrls: ['./admin-route-undelivered-items.component.css']
 })
 export class AdminRouteUndeliveredItemsComponent implements OnInit {
-  displayedColumns = ['preferred_name', 'name', 'item_description', 'date_requested']
+  displayedColumns = ['preferred_name', 'name', 'item_description', 'date_requested', 'fulfilled']
   undeliveredItems: any[] = [];
   dataSource: MatTableDataSource<any>;
 
@@ -42,6 +43,32 @@ export class AdminRouteUndeliveredItemsComponent implements OnInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+
+  submitItems() {
+    let count: number = 0;
+    this.undeliveredItems.forEach(item => {
+      console.log(JSON.stringify(item));
+      this.mainService.updateRequestedItem(item as RequestedItem).subscribe((data: RequestedItem) => {
+        console.log(JSON.stringify(data));
+        count++;
+
+        if (count >= this.undeliveredItems.length) {
+          console.log('Everything done updating');
+          window.location.reload();
+        }
+      },
+      (error) => {
+        console.log(error);
+        count++;
+
+        if (count >= this.undeliveredItems.length) {
+          console.log('Everything done updating');
+          window.location.reload();
+        }
+      }
+      );
+    });
   }
 
 }

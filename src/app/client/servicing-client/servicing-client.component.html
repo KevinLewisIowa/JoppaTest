@@ -106,6 +106,7 @@
               <tr>
                 <th>Description</th>
                 <th>Created At</th>
+                <th>Fulfilled</th>
                 <th></th>
                 <th></th>
               </tr>
@@ -114,6 +115,7 @@
               <tr *ngFor="let item of requestedItems">
                 <td>{{ item.item_description }}</td>
                 <td>{{ item.created_at | date: "shortDate" }}</td>
+                <td>{{ item.fulfilled}}</td>
                 <td>
                   <button type="button" class="btn btn-primary" (click)="receivedRequest(item.id)">Received</button>
                 </td>

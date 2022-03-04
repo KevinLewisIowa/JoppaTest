@@ -6,4 +6,5 @@ export class RequestedItem {
   has_received: boolean = undefined;
   created_at: Date = undefined;
   updated_at: Date = undefined;
+  fulfilled: boolean = undefined;
 }
