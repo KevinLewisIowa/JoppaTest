@@ -39,7 +39,7 @@
             <mat-paginator [pageSizeOptions]="[25, 10, 50, 100]"></mat-paginator>
           </div>
         </div>
-        <button routerLink="/admin/reports" style="float: left" class="btn btn-primary" type="button">Back</button>
+        <button routerLink="/admin/reports" style="float: left" class="btn btn-primary" type="button"><fa-icon [icon]="backIcon"></fa-icon> Back</button>
         <button class="btn btn-primary" style="float: right" (click)="submitItems()">Save Item Changes</button>
     </div>
   </div>

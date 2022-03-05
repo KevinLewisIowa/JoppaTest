@@ -9,19 +9,9 @@ import { Appearance } from "app/models/appearance";
 import { ClientService } from "app/services/client.service";
 import {
   faQuestionCircle as farQuestionCircle,
-  faCheckCircle as farCheckCircle,
+  faCheckCircle as farCheckCircle
 } from "@fortawesome/free-regular-svg-icons";
-import {
-  faSearch,
-  faPlus,
-  faCheckCircle,
-  faTimesCircle,
-  faChevronLeft,
-  faChevronRight,
-  IconDefinition,
-  faMap,
-  faInfoCircle,
-} from "@fortawesome/free-solid-svg-icons";
+import { faStar, faSearch, faPlus, faCheckCircle, faTimesCircle, faChevronLeft, faChevronRight, IconDefinition, faMap, faInfoCircle} from "@fortawesome/free-solid-svg-icons";
 
 @Component({
   selector: "app-location-camp",
@@ -46,6 +36,7 @@ export class LocationCampComponent implements OnInit {
   checkCircleIcon = faCheckCircle;
   timesCircleIcon = faTimesCircle;
   mapIcon = faMap;
+  starIcon = faStar;
   informationIcon = faInfoCircle;
   isAdmin: boolean = false;
 
@@ -97,9 +88,7 @@ export class LocationCampComponent implements OnInit {
                   );
                 }
 
-                this.mainService
-                  .getClientsForCamp(this.locationCampId)
-                  .subscribe((data: Client[]) => {
+                this.mainService.getClientsForCamp(this.locationCampId).subscribe((data: Client[]) => {
                     if (this.heatRoute) {
                       this.clients = data.filter(
                         (client) =>
@@ -107,16 +96,10 @@ export class LocationCampComponent implements OnInit {
                           client.dwelling !== "Under Bridge" &&
                           client.dwelling !== "Streets"
                       );
-                      this.numberTanksAtCamp = this.clients.reduce(function (
-                        prevValue,
-                        currClient
-                      ) {
+                      this.numberTanksAtCamp = this.clients.reduce(function (prevValue, currClient) {
                         return prevValue + currClient.number_tanks;
-                      },
-                      0);
-                      this.numPeopleWithTanksAtCamp = this.clients.filter(
-                        (client) => client.number_tanks > 0
-                      ).length;
+                      },0);
+                      this.numPeopleWithTanksAtCamp = this.clients.filter((client) => client.number_tanks > 0).length;
                     } else {
                       this.clients = data;
                     }
@@ -162,9 +145,7 @@ export class LocationCampComponent implements OnInit {
               (error) => console.log(error)
             );
 
-            this.mainService
-              .getClientsForCamp(this.locationCampId)
-              .subscribe((data: Client[]) => {
+            this.mainService.getClientsForCamp(this.locationCampId).subscribe((data: Client[]) => {
                 if (this.heatRoute) {
                   this.clients = data.filter(
                     (client) =>
@@ -331,6 +312,22 @@ export class LocationCampComponent implements OnInit {
   viewClient(theClient: Client) {
     localStorage.setItem("selectedClient", theClient.id.toString());
     this.router.navigate(["/serviceClient"]);
+  }
+
+  clientHasFulfilledItems(id: number) : boolean
+  {
+    this.mainService.getClientHasFulfilledItems(id).subscribe((count : number) => {
+      if (count > 0) {
+        return true;
+      } else {
+        return false;
+      }
+    }, (error) => {
+      console.log(error);
+      return false;
+    });
+
+    return false;
   }
 
   back() {

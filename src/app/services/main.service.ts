@@ -279,16 +279,12 @@ export class MainService {
   }
 
   updateRequestedItem(theItem: RequestedItem) {
+    console.log('requestedItem to update: ' + JSON.stringify(theItem));
     const myHeader = new HttpHeaders({
       "Content-Type": "application/json",
       Authorization: window.localStorage.getItem("apiToken"),
     });
-    return this.http
-      .patch(
-        this.apiUrl + `requested_items/${theItem.id}`,
-        { requested_item: theItem },
-        { headers: myHeader }
-      )
+    return this.http.patch(this.apiUrl + `requested_items/${theItem.id}`,{ requested_item: theItem }, { headers: myHeader })
       .pipe(map((res: any) => {
         if (res.message === 'invalid-token') {
           window.localStorage.removeItem('apiToken');
@@ -386,6 +382,23 @@ export class MainService {
         (response) => { },
         (error) => console.log(error)
       );
+  }
+
+  getClientHasFulfilledItems(clientId: number) {
+    
+      const myHeader = new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: window.localStorage.getItem("apiToken"),
+      });
+      return this.http.get(this.apiUrl + `getClientHasFulfilledItems?clientId=${clientId}`, { headers: myHeader })
+        .pipe(map((res: any) => {
+          if (res.message === 'invalid-token') {
+            window.localStorage.removeItem('apiToken');
+            this.router.navigate(['/application-login']);
+          }
+          return res;
+        }),
+          catchError(this.handleError));
   }
 
   isHeaterCheckedOutOnOtherRoute(heaterId: number) {

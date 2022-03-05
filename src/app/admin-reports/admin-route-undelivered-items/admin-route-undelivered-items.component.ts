@@ -17,6 +17,7 @@ export class AdminRouteUndeliveredItemsComponent implements OnInit {
   displayedColumns = ['preferred_name', 'name', 'item_description', 'date_requested', 'fulfilled']
   undeliveredItems: any[] = [];
   dataSource: MatTableDataSource<any>;
+  backIcon = faChevronLeft;
 
   @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: false}) sort: MatSort;
@@ -29,9 +30,6 @@ export class AdminRouteUndeliveredItemsComponent implements OnInit {
       this.dataSource.paginator = this.paginator;
       }, error => console.log(error));
     }
-  
-
-  backIcon = faChevronLeft;
 
   ngOnInit() {
 
@@ -48,9 +46,14 @@ export class AdminRouteUndeliveredItemsComponent implements OnInit {
   submitItems() {
     let count: number = 0;
     this.undeliveredItems.forEach(item => {
-      console.log(JSON.stringify(item));
-      this.mainService.updateRequestedItem(item as RequestedItem).subscribe((data: RequestedItem) => {
-        console.log(JSON.stringify(data));
+      let itemToUpdate: RequestedItem = new RequestedItem();
+      itemToUpdate.id = item.id;
+      itemToUpdate.client_id = item.client_id;
+      itemToUpdate.date_requested = item.date_requested;
+      itemToUpdate.fulfilled = item.fulfilled;
+      itemToUpdate.has_received = item.has_received;
+      itemToUpdate.item_description = item.item_description;
+      this.mainService.updateRequestedItem(itemToUpdate).subscribe((data: RequestedItem) => {
         count++;
 
         if (count >= this.undeliveredItems.length) {
