@@ -39,6 +39,7 @@ export class LocationCampComponent implements OnInit {
   starIcon = faStar;
   informationIcon = faInfoCircle;
   isAdmin: boolean = false;
+  clientsWithFulfilledItems : number[] = [];
 
   constructor(
     private mainService: MainService,
@@ -100,8 +101,12 @@ export class LocationCampComponent implements OnInit {
                         return prevValue + currClient.number_tanks;
                       },0);
                       this.numPeopleWithTanksAtCamp = this.clients.filter((client) => client.number_tanks > 0).length;
+
+                      this.checkClientHasFulfilledItems();
                     } else {
                       this.clients = data;
+
+                      this.checkClientHasFulfilledItems();
                     }
                   });
               },
@@ -163,8 +168,12 @@ export class LocationCampComponent implements OnInit {
                   this.numPeopleWithTanksAtCamp = this.clients.filter(
                     (client) => client.number_tanks > 0
                   ).length;
+
+                  this.checkClientHasFulfilledItems();
                 } else {
                   this.clients = data;
+
+                  this.checkClientHasFulfilledItems();
                 }
               });
           },
@@ -314,20 +323,23 @@ export class LocationCampComponent implements OnInit {
     this.router.navigate(["/serviceClient"]);
   }
 
-  clientHasFulfilledItems(id: number) : boolean
-  {
-    this.mainService.getClientHasFulfilledItems(id).subscribe((count : number) => {
-      if (count > 0) {
-        return true;
-      } else {
-        return false;
-      }
-    }, (error) => {
-      console.log(error);
-      return false;
-    });
-
+  clientHasFulfilledItems(id: number) : boolean {
+    if (this.clientsWithFulfilledItems.find(c => c == id) >= 0) {
+      return true;
+    }
+    
     return false;
+  }
+
+  checkClientHasFulfilledItems()
+  {
+    this.clients.forEach(client => {
+      this.mainService.getClientHasFulfilledItems(client.id).subscribe((count : number) => {
+        if (count > 0) {
+          this.clientsWithFulfilledItems.push(client.id);
+        }
+      }, (error) => console.log(error));
+    });
   }
 
   back() {
