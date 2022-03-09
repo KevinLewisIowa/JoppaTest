@@ -1,45 +1,54 @@
 <div class="card" style="opacity:0.93">
-    <div class="card-header">
-      <h2>Undelivered Items</h2>
-    </div>
-    <div class="panel-body">
-        <div class="panel-body">
-          <div>
-            <mat-table #table [dataSource]="dataSource" matSort>
+  <div class="card-header">
+    <h2>Undelivered Items</h2>
+  </div>
+  <div class="panel-body">
+    <mat-form-field>
+      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+    </mat-form-field>
+  </div>
+  <div class="panel-body">
+    <div>
+      <mat-table #table [dataSource]="dataSource" matSort>
 
-              <ng-container matColumnDef="name">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>Route</mat-header-cell>
-                <mat-cell *matCellDef="let row">{{row.name}}</mat-cell>
-              </ng-container>
+        <ng-container matColumnDef="name">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Route</mat-header-cell>
+          <mat-cell *matCellDef="let row">{{row.name}}</mat-cell>
+        </ng-container>
 
-              <ng-container matColumnDef="preferred_name">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>Client Name</mat-header-cell>
-                <mat-cell *matCellDef="let row">{{row.first_name}} <span *ngIf="row.preferred_name != '' && row.preferred_name != null">({{row.preferred_name}})</span> {{row.last_name}}</mat-cell>
-              </ng-container>
+        <ng-container matColumnDef="preferred_name">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Client Name</mat-header-cell>
+          <mat-cell *matCellDef="let row">{{row.first_name}} <span
+              *ngIf="row.preferred_name != '' && row.preferred_name != null">({{row.preferred_name}})</span>
+            {{row.last_name}}</mat-cell>
+        </ng-container>
 
-              <ng-container matColumnDef="item_description">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>Item</mat-header-cell>
-                <mat-cell *matCellDef="let row">{{row.item_description}}</mat-cell>
-              </ng-container>
+        <ng-container matColumnDef="item_description">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Item</mat-header-cell>
+          <mat-cell *matCellDef="let row">{{row.item_description}}</mat-cell>
+        </ng-container>
 
-              <ng-container matColumnDef="date_requested">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>Date Requested</mat-header-cell>
-                <mat-cell *matCellDef="let row">{{row.created_at | date:'shortDate'}}</mat-cell>
-              </ng-container>
+        <ng-container matColumnDef="date_requested">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Date Requested</mat-header-cell>
+          <mat-cell *matCellDef="let row">{{row.created_at | date:'shortDate'}}</mat-cell>
+        </ng-container>
 
-              <ng-container matColumnDef="fulfilled">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>Fulfilled</mat-header-cell>
-                <mat-cell *matCellDef="let row"><input type="checkbox" [(ngModel)]="row.fulfilled" /></mat-cell>
-              </ng-container>
+        <ng-container matColumnDef="fulfilled">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Fulfilled</mat-header-cell>
+          <mat-cell *matCellDef="let row"><input type="checkbox" [(ngModel)]="row.fulfilled" /></mat-cell>
+        </ng-container>
 
-              <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-              <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-            </mat-table>
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      </mat-table>
 
-            <mat-paginator [pageSizeOptions]="[25, 10, 50, 100]"></mat-paginator>
-          </div>
-        </div>
-        <button routerLink="/admin/reports" style="float: left" class="btn btn-primary" type="button"><fa-icon [icon]="backIcon"></fa-icon> Back</button>
-        <button class="btn btn-primary" style="float: right" (click)="submitItems()">Save Item Changes</button>
+      <mat-paginator [pageSizeOptions]="[25, 10, 50, 100]"></mat-paginator>
     </div>
   </div>
+  <div class="card-footer">
+    <button routerLink="/admin/reports" style="float: left" class="btn btn-primary" type="button">
+      <fa-icon [icon]="backIcon"></fa-icon> Back
+    </button>
+    <button class="btn btn-primary" style="float: right" (click)="submitItems()">Save Item Changes</button>
+  </div>
+</div>

@@ -75,7 +75,7 @@
         </thead>
         <tbody>
           <tr *ngFor="let client of clients" (click)="viewClient(client)" class="client-row">
-            <td class="text-left">{{ client.first_name }} <span *ngIf="client.preferred_name != '' && client.preferred_name != null">({{ client.preferred_name }})</span> {{ client.last_name }} <fa-icon id="star" style="color:#0d6efd" [icon]="starIcon"></fa-icon></td>
+            <td class="text-left">{{ client.first_name }} <span *ngIf="client.preferred_name != '' && client.preferred_name != null">({{ client.preferred_name }})</span> {{ client.last_name }} <fa-icon id="star" style="color:#0d6efd" [icon]="starIcon" *ngIf="clientHasFulfilledItems(client.id)"></fa-icon></td>
             <td class="text-left">{{ client.joppa_apartment_number }}</td>
             <td class="text-left">{{ client.phone }}</td>
             <td class="text-left">{{ client.admin_notes }}</td>
