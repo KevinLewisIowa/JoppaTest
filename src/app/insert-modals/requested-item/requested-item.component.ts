@@ -51,7 +51,11 @@ export class RequestedItemComponent implements OnInit {
         this.placeholderText = "Size";
         this.extraInfoNeeded = true;
         break;
-      case selectedItem.includes("Jackets"):
+      case selectedItem.includes("Jacket"):
+        this.placeholderText = "Size";
+        this.extraInfoNeeded = true;
+        break;
+      case selectedItem.includes("Winter Coat"):
         this.placeholderText = "Size";
         this.extraInfoNeeded = true;
         break;
@@ -68,27 +72,16 @@ export class RequestedItemComponent implements OnInit {
   submitItem() {
     const item = new RequestedItem();
     const clientId = localStorage.getItem("selectedClient");
-    if (
-      this.description != null &&
-      this.description !== "" &&
-      !isNaN(Number(clientId))
-    ) {
-      if (
-        this.extraInfoNeeded &&
-        (this.extraInfo === null || this.extraInfo === "")
-      ) {
+    if (this.description != null && this.description !== "" && !isNaN(Number(clientId))) {
+      if (this.extraInfoNeeded && (this.extraInfo === null || this.extraInfo === "")) {
         alert("Need to enter additional info for this item");
       } else {
         let itemDescription: string;
-        if (
-          this.extraInfo != null &&
-          this.description !== "Other" &&
-          this.description !== "Socks"
-        ) {
+        if (this.extraInfo != null && this.description !== "Other" && this.description !== "Socks") {
           itemDescription = this.extraInfo + " " + this.description;
         } else if (this.extraInfo != null && this.description === "Other") {
           itemDescription = this.extraInfo;
-        } else if (this.extraInfo != null && this.description === "Socks") {
+        } else if (this.extraInfo != null && (this.description === "Socks" || this.description === "Jacket" || this.description === "Winter Coat")) {
           itemDescription = "Size " + this.extraInfo + " " + this.description;
         } else {
           itemDescription = this.description;
