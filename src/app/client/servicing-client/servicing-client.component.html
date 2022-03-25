@@ -551,11 +551,12 @@
               <td>{{ tent.setup_by }}</td>
               <td>{{ tent.rejected }}</td>
               <td>{{ tent.notes }}</td>
-              <td *ngIf="isAdmin">
+              <td>
                 <button
                   type="button"
                   class="btn btn-primary"
                   (click)="removeTent(tent.id)"
+                  *ngIf="isAdmin"
                 >
                   Remove
                 </button>
