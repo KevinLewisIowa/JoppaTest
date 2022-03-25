@@ -1,29 +1,71 @@
-<div class="card panel-info" style="opacity:0.92">
-  <div class="card-header text-center" style="opacity:0.93">
-    <h2 align="left">{{thisRoute.name}}</h2>
-    <h4 align="left">Number of Total Clients for Route: {{clientCountForRoute}}</h4>
+<div class="card panel-info" style="opacity: 0.92">
+  <div class="card-header text-center" style="opacity: 0.93">
+    <h2 align="left">{{ thisRoute.name }}</h2>
+    <h4 align="left">
+      Number of Total Clients for Route: {{ clientCountForRoute }}
+    </h4>
     <div>
-      <button (click)="showRouteLocations()" class="btn btn-primary" style="float:left;" type="button"><fa-icon [icon]="mapIcon"></fa-icon> Show Route Map</button>
-      <button (click)="routeEditMdl.showModal(thisRoute)" class="btn btn-primary" style="float:right;" type="button" *ngIf="isAdmin">Route Info <fa-icon [icon]="informationIcon"></fa-icon></button>
+      <button
+        (click)="showRouteLocations()"
+        class="btn btn-primary"
+        style="float: left"
+        type="button"
+      >
+        <fa-icon [icon]="mapIcon"></fa-icon> Show Route Map
+      </button>
+      <button
+        (click)="routeEditMdl.showModal(thisRoute)"
+        class="btn btn-primary"
+        style="float: right"
+        type="button"
+        *ngIf="isAdmin"
+      >
+        Route Info <fa-icon [icon]="informationIcon"></fa-icon>
+      </button>
     </div>
   </div>
   <div class="panel-body">
     <div class="card">
       <h3 align="left">Camps</h3>
       <div>
-        <button (click)="newLocationCamp()" class="btn btn-primary" style="float:right;" type="button" *ngIf="isAdmin"><fa-icon [icon]="createIcon"></fa-icon> Create Camp</button>
+        <button
+          (click)="newLocationCamp()"
+          class="btn btn-primary"
+          style="float: right"
+          type="button"
+          *ngIf="isAdmin"
+        >
+          <fa-icon [icon]="createIcon"></fa-icon> Create Camp
+        </button>
       </div>
     </div>
     <table class="table">
       <tbody>
-        <tr *ngFor="let locationCamp of locationCamps" style="height:75px" (click)="openLocation(locationCamp)">
-          <td class="text-left"><b>{{locationCamp.name}}</b></td>
+        <tr
+          *ngFor="let locationCamp of locationCamps"
+          style="height: 75px"
+          (click)="openLocation(locationCamp)"
+        >
+          <td class="text-left">
+            <b>{{ locationCamp.name }}</b>
+            <span *ngIf="testBlock">test</span>
+          </td>
         </tr>
       </tbody>
     </table>
   </div>
   <div class="card-footer">
-    <button type="button" class="pull-left btn btn-primary" (click)="back()" *ngIf="isAdmin"><fa-icon [icon]="backIcon"></fa-icon> Back to Routes</button>
+    <button
+      type="button"
+      class="pull-left btn btn-primary"
+      (click)="back()"
+      *ngIf="isAdmin"
+    >
+      <fa-icon [icon]="backIcon"></fa-icon> Back to Routes
+    </button>
   </div>
 </div>
-<app-route-edit-modal #routeEditMdl (editedRoute)="editedRoute($event)"></app-route-edit-modal>
+<app-route-edit-modal
+  #routeEditMdl
+  (editedRoute)="editedRoute($event)"
+></app-route-edit-modal>
