@@ -92,7 +92,9 @@ export class ServicingClientComponent implements OnInit {
     console.log(this.routeInstanceId);
     this.heatRoute = JSON.parse(window.localStorage.getItem("heatRoute"));
     this.isAdmin = JSON.parse(window.localStorage.getItem("isAdmin"));
-    this.locationCampId = JSON.parse(window.localStorage.getItem("locationCampId"));
+    this.locationCampId = JSON.parse(
+      window.localStorage.getItem("locationCampId")
+    );
     this.clientId = localStorage.getItem("selectedClient");
 
     let attendToDate: Date = new Date();
@@ -123,15 +125,22 @@ export class ServicingClientComponent implements OnInit {
     if (this.clientId !== null) {
       this.service.getClientById(this.clientId).subscribe((data: Client) => {
         this.client = data;
-        
-        if ((this.client.homeless_reason == "" || this.client.date_became_homeless == null) && !this.client.is_aftercare) {
-          alert("Please ask this client 1) If this is first time homeless? 2) Why they are homeless? and 3) When they became homeless? Please record this in the Client Details screen, where you will be directed now.");
+
+        if (
+          (this.client.homeless_reason == "" ||
+            this.client.date_became_homeless == null) &&
+          !this.client.is_aftercare
+        ) {
+          alert(
+            "Please ask this client 1) If this is first time homeless? 2) Why they are homeless? and 3) When they became homeless? Please record this in the Client Details screen, where you will be directed now."
+          );
           if (!this.isAdmin) {
             this.clientInfo.nativeElement.click();
           }
         }
 
-        this.service.getClientHousehold(this.client.household_id).subscribe((data: Client[]) => {
+        this.service.getClientHousehold(this.client.household_id).subscribe(
+          (data: Client[]) => {
             this.householdClients = data;
           },
           (error) => console.log(error)
@@ -139,7 +148,9 @@ export class ServicingClientComponent implements OnInit {
       });
       if (this.routeInstanceId != null) {
         this.service
-          .getClientNotesForRoute(this.clientId, this.routeInstanceId).subscribe((data: Note[]) => {
+          .getClientNotesForRoute(this.clientId, this.routeInstanceId)
+          .subscribe(
+            (data: Note[]) => {
               this.notes = data;
             },
             (error) => console.log(error)
@@ -243,8 +254,11 @@ export class ServicingClientComponent implements OnInit {
           .subscribe(
             (data: any[]) => {
               this.clientInteractions = data;
-              this.clientInteractions.sort(function(a, b) {
-                return new Date(b.serviced_date).valueOf() - new Date(a.serviced_date).valueOf();
+              this.clientInteractions.sort(function (a, b) {
+                return (
+                  new Date(b.serviced_date).valueOf() -
+                  new Date(a.serviced_date).valueOf()
+                );
               });
             },
             (error) => console.log(error)
@@ -293,7 +307,8 @@ export class ServicingClientComponent implements OnInit {
           .subscribe((data: Tent[]) => {
             this.tents = data;
           });
-        this.service.getClientReferrals(this.clientId)
+        this.service
+          .getClientReferrals(this.clientId)
           .subscribe((data: ReferralsResources[]) => {
             this.referralsResources = data;
           });
@@ -333,8 +348,11 @@ export class ServicingClientComponent implements OnInit {
       .subscribe(
         (data: any[]) => {
           this.clientInteractions = data;
-          this.clientInteractions.sort(function(a, b) {
-            return new Date(b.serviced_date).valueOf() - new Date(a.serviced_date).valueOf();
+          this.clientInteractions.sort(function (a, b) {
+            return (
+              new Date(b.serviced_date).valueOf() -
+              new Date(a.serviced_date).valueOf()
+            );
           });
         },
         (error) => console.log(error)
@@ -408,7 +426,9 @@ export class ServicingClientComponent implements OnInit {
   sendInteraction(interactionType: number) {
     const interaction: Appearance = new Appearance();
     interaction.client_id = this.client.id;
-    interaction.location_camp_id = this.locationCampId ? this.locationCampId : this.client.current_camp_id;
+    interaction.location_camp_id = this.locationCampId
+      ? this.locationCampId
+      : this.client.current_camp_id;
     if (interactionType === 1) {
       interaction.serviced = true;
       interaction.was_seen = true;
@@ -441,7 +461,7 @@ export class ServicingClientComponent implements OnInit {
       }
     }
 
-    console.log('camp id: ' + interaction.location_camp_id);
+    console.log("camp id: " + interaction.location_camp_id);
 
     if (this.isAdmin) {
       // Allow them to select a Date
@@ -669,70 +689,76 @@ export class ServicingClientComponent implements OnInit {
   }
 
   deleteRequest(id: number) {
-    this.service.deletedRequestedItem(id).subscribe(res => {
-      this.requestedItems = this.requestedItems.filter(w => w.id != id);
+    this.service.deletedRequestedItem(id).subscribe((res) => {
+      this.requestedItems = this.requestedItems.filter((w) => w.id != id);
     });
   }
 
   removeLike(id: number) {
-    this.service.removeLike(id).subscribe(res => {
-      this.clientLikes = this.clientLikes.filter(w => w.id != id);
+    this.service.removeLike(id).subscribe((res) => {
+      this.clientLikes = this.clientLikes.filter((w) => w.id != id);
     });
   }
 
   removeDislike(id: number) {
-    this.service.removeDislike(id).subscribe(res => {
-      this.clientDislikes = this.clientDislikes.filter(w => w.id != id);
+    this.service.removeDislike(id).subscribe((res) => {
+      this.clientDislikes = this.clientDislikes.filter((w) => w.id != id);
     });
   }
 
   removeReferralResource(id: number) {
-    this.service.removeReferralResource(id).subscribe(res => {
-      this.referralsResources = this.referralsResources.filter(w => w.id != id);
-    })
+    this.service.removeReferralResource(id).subscribe((res) => {
+      this.referralsResources = this.referralsResources.filter(
+        (w) => w.id != id
+      );
+    });
   }
 
-  removeTent(tent: Tent) {
-    this.service.removeTent(tent.id).subscribe(res => {
-      this.tents = this.tents.filter(w => w.id != tent.id);
+  removeTent(id: number) {
+    this.service.removeTent(id).subscribe((res) => {
+      this.tents = this.tents.filter((w) => w.id != id);
     });
   }
 
   removeGoal(id: number) {
-    this.service.deleteGoalAndNextStep(id).subscribe(res => {
-      this.goalsAndSteps = this.goalsAndSteps.filter(w => w.id != id);
+    this.service.deleteGoalAndNextStep(id).subscribe((res) => {
+      this.goalsAndSteps = this.goalsAndSteps.filter((w) => w.id != id);
     });
   }
 
   removePet(id: number) {
-    this.service.removePet(id).subscribe(res => {
-      this.pets = this.pets.filter(w => w.id != id);
+    this.service.removePet(id).subscribe((res) => {
+      this.pets = this.pets.filter((w) => w.id != id);
     });
   }
 
   removeAppearance(id: number) {
-    if (confirm('Are you sure you want to remove this appearance?')) {
-      this.service.removeAppearance(id).subscribe(res => {
-        this.clientInteractions = this.clientInteractions.filter(w => w.id != id);
+    if (confirm("Are you sure you want to remove this appearance?")) {
+      this.service.removeAppearance(id).subscribe((res) => {
+        this.clientInteractions = this.clientInteractions.filter(
+          (w) => w.id != id
+        );
       });
     }
   }
 
   removeHealthConcern(id: number) {
-    this.service.removeHealthConcern(id).subscribe(res => {
-      this.healthConcerns = this.healthConcerns.filter(w => w.id != id);
+    this.service.removeHealthConcern(id).subscribe((res) => {
+      this.healthConcerns = this.healthConcerns.filter((w) => w.id != id);
     });
   }
 
   removeNote(id: number) {
-    this.service.removeNote(id).subscribe(res => {
-      this.notes = this.notes.filter(w => w.id != id);
+    this.service.removeNote(id).subscribe((res) => {
+      this.notes = this.notes.filter((w) => w.id != id);
     });
   }
 
   removePrayerRequestNeed(id: number) {
-    this.service.removePrayerRequestNeed(id).subscribe(res => {
-      this.prayerRequestsAndNeeds = this.prayerRequestsAndNeeds.filter(w => w.id != id);
+    this.service.removePrayerRequestNeed(id).subscribe((res) => {
+      this.prayerRequestsAndNeeds = this.prayerRequestsAndNeeds.filter(
+        (w) => w.id != id
+      );
     });
   }
 
