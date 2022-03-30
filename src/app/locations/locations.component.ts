@@ -12,6 +12,7 @@ import {
   faPlus,
   faMap,
   faInfoCircle,
+  faCheckCircle,
 } from "@fortawesome/free-solid-svg-icons";
 
 @Component({
@@ -28,9 +29,11 @@ export class LocationsComponent implements OnInit {
   heatRoute: boolean;
   backIcon = faChevronLeft;
   createIcon = faPlus;
+  allSeenIcon = faCheckCircle;
   mapIcon = faMap;
   informationIcon = faInfoCircle;
   clientCountForRoute: number;
+  routeAttendanceList: Appearance[];
 
   constructor(
     private route: ActivatedRoute,
@@ -43,6 +46,9 @@ export class LocationsComponent implements OnInit {
     this.routeId = this.route.snapshot.params["id"];
     this.heatRoute = JSON.parse(window.localStorage.getItem("heatRoute"));
     window.localStorage.setItem("routeId", this.routeId.toString());
+    this.routeAttendanceList = JSON.parse(
+      localStorage.getItem("RouteAttendance")
+    );
     this.mainService.getRoute(this.routeId).subscribe((route: Route) => {
       if (route == undefined) {
         this.thisRoute = new Route();
@@ -80,6 +86,7 @@ export class LocationsComponent implements OnInit {
                   });
 
                   sortedlocations.forEach((location: LocationCamp) => {
+                    location.all_seen = false;
                     this.mainService
                       .getClientsForCamp(location.id)
                       .subscribe((data: any[]) => {
@@ -133,21 +140,28 @@ export class LocationsComponent implements OnInit {
                           }
                         }
                       });
-                    // this.clients.forEach((client: Client) => {
-                    //   console.log(
-                    //     "logging client before client service stuff",
-                    //     client
-                    //   );
-                    //   this.clientService
-                    //     .getClientById(client.id)
-                    //     .subscribe((data: Client) => {
-                    //       client = data;
-                    //       console.log(
-                    //         "client with data by id assigned",
-                    //         client
-                    //       );
-                    //     });
-                    // });
+                    let campClients = [];
+                    this.mainService
+                      .getClientsForCamp(location.id)
+                      .subscribe((data: Client[]) => {
+                        if (this.heatRoute) {
+                          campClients = data.filter(
+                            (client) =>
+                              client.dwelling !== "Vehicle" &&
+                              client.dwelling !== "Under Bridge" &&
+                              client.dwelling !== "Streets"
+                          );
+                        } else {
+                          campClients = data;
+                        }
+                        const clientsToCheck = this.routeAttendanceList.filter(
+                          (client) =>
+                            Number(client.location_camp_id) === location.id
+                        );
+                        location.all_seen =
+                          clientsToCheck.length === campClients.length &&
+                          campClients.length > 0;
+                      });
                   });
                 }
               });
@@ -158,34 +172,6 @@ export class LocationsComponent implements OnInit {
 
   ngOnInit() {
     this.isAdmin = JSON.parse(window.localStorage.getItem("isAdmin"));
-    let routeAttendanceList: Appearance[] = JSON.parse(
-      localStorage.getItem("RouteAttendance")
-    );
-    console.log("route attendance", routeAttendanceList);
-    // the routeAttendanceList stuff is working.
-    // Current plan of action is to iterate through each locationCamp below.
-    // within each camp loop, filter a list of attendance clients whose camp
-    // ID matches the current camp. Then, in filtered client list per camp, check if .every(client => .seen_and_serviced === true)
-    // (just pseudocode, need to dig into actual values etc)
-    // if true, then render the green checkbox
-    this.locationCamps.forEach((location: LocationCamp) => {
-      console.log("one location", location);
-      this.mainService
-        .getClientsForCamp(location.id)
-        .subscribe((data: Client[]) => {
-          console.log("raw data", data, "for camp", location);
-          if (this.heatRoute) {
-            this.clients = data.filter(
-              (client) =>
-                client.dwelling !== "Vehicle" &&
-                client.dwelling !== "Under Bridge" &&
-                client.dwelling !== "Streets"
-            );
-          } else {
-            this.clients = data;
-          }
-        });
-    });
   }
 
   editedRoute(theRoute: Route) {

@@ -47,8 +47,12 @@
           (click)="openLocation(locationCamp)"
         >
           <td class="text-left">
-            <b>{{ locationCamp.name }}</b>
-            <span *ngIf="testBlock">test</span>
+            <b>{{ locationCamp.name }}</b> &nbsp;
+            <fa-icon
+              [icon]="allSeenIcon"
+              style="color: green"
+              *ngIf="locationCamp.all_seen"
+            ></fa-icon>
           </td>
         </tr>
       </tbody>
