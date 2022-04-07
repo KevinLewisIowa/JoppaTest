@@ -575,6 +575,7 @@
               (click)="goToTop(); petsMdl.showModal()"
               class="btn btn-primary"
               style="float: right"
+              *ngIf="isAdmin"
             >
               New Pet
             </button>
@@ -678,6 +679,7 @@
             (click)="goToTop(); healthMdl.showModal()"
             class="btn btn-primary"
             style="float: right"
+            *ngIf="isAdmin"
           >
             New Health Concern
           </button>
