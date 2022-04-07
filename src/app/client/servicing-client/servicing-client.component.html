@@ -611,6 +611,7 @@
                     type="button"
                     class="btn btn-primary"
                     (click)="removePet(pet.id)"
+                    *ngIf="isAdmin"
                   >
                     Remove
                   </button>
@@ -712,6 +713,7 @@
                   type="button"
                   class="btn btn-primary"
                   (click)="removeHealthConcern(concern.i)"
+                  *ngIf="isAdmin"
                 >
                   Remove
                 </button>
