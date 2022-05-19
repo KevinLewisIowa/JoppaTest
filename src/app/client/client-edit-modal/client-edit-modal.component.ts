@@ -24,7 +24,7 @@ export class ClientEditModalComponent implements OnInit {
   isAdmin: boolean;
   extraInfo: string = '';
   extraInfoNeeded: boolean = false;
-  homelessReasonOptions: string[] = ['Eviction', 'Job Loss', 'Family Dispute', 'Legal Issues', 'Health Issues', 'Addictions', 'Mental Health Issues', 'Other'];
+  homelessReasonOptions: string[] = ['Eviction', 'Job Loss', 'Family Dispute', 'Legal Issues', 'Health Issues', 'Addictions', 'Mental Health', 'Other'];
 
   constructor(private router: Router, private modalService: NgbModal, private clientService: ClientService,
               private fb: FormBuilder) { }
