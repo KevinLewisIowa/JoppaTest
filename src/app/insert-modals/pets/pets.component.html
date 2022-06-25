@@ -1,28 +1,36 @@
-<ng-template #petsMdl let-c="close" let-d="dismiss"> 
+<ng-template #petsMdl let-c="close" let-d="dismiss">
   <div class="modal-header">
     <h4 class="modal-title">Add Pet</h4>
-      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')"><span aria-hidden="true">&times;</span></button>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')"><span
+        aria-hidden="true">&times;</span></button>
   </div>
   <form>
     <div class="modal-body">
       <div class="form-group">
         <div class="row">
           <div class="col-sm-3">
-              <select class="form-control" name="pet_type" [(ngModel)]="pet_type" (change)="onChange()">
-                  <option value="Dog">Dog</option>
-                  <option value="Cat">Cat</option>
-                  <option value="Other">Other</option>
-                </select>
+            <select class="form-control" name="pet_type" [(ngModel)]="pet_type" (change)="onChange()">
+              <option value="Dog">Dog</option>
+              <option value="Cat">Cat</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="col-sm-2">
+            <input class="form-control" type="text" [(ngModel)]="extraInfo" name="extraInfo" *ngIf="extraInfoNeeded"
+              placeholder="Species" required />
           </div>
           <div class="col-sm-3">
-            <input class="form-control" type="text" [(ngModel)]="extraInfo" name="extraInfo" *ngIf="extraInfoNeeded" placeholder="Species" required/>
-         </div>
-          <div class="col-sm-3">
-            <input class="form-control" type="text" [(ngModel)]="quantity" placeholder="Quantity" name="quantity"/>
+            <label for="pet_name">Pet Name</label>
+            <input id="pet_name" class="form-control" type="text" [(ngModel)]="pet_name" name="pet_name" placeholder="Pet Name" required />
           </div>
-          <div class="col-sm-3">
+          <div class="col-sm-2">
+            <label for="age">Age</label>
+            <input id="age" class="form-control" type="text" [(ngModel)]="age" placeholder="Age" name="age" required />
+          </div>
+          <div class="col-sm-2">
             <label for="request_food">Food Requested</label>
-            <input id="request_food" class="form-control-checkbox" type="checkbox" style="width:15%; height:46%;" [(ngModel)]="food_requested" name="food_requested"/>
+            <input id="request_food" class="form-control-checkbox" type="checkbox" style="width:15%; height:46%;"
+              [(ngModel)]="food_requested" name="food_requested" />
           </div>
         </div>
       </div>

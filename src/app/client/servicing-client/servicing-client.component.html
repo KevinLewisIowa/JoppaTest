@@ -549,7 +549,7 @@
               <td>{{ tent.condition }}</td>
               <td>{{ tent.given_by }}</td>
               <td>{{ tent.setup_by }}</td>
-              <td>{{ tent.rejected }}</td>
+              <td>{{ tent.rejected ? 'Yes' : 'No' }}</td>
               <td>{{ tent.notes }}</td>
               <td>
                 <button
@@ -586,11 +586,13 @@
               <col span="1" style="width: 20%" />
               <col span="1" style="width: 20%" />
               <col span="1" style="width: 20%" />
+              <col span="1" style="width: 20%" />
             </colgroup>
             <thead>
               <tr>
                 <th>Pet Type</th>
-                <th>Quantity</th>
+                <th>Name</th>
+                <th>Age</th>
                 <th>Food Requested</th>
                 <th></th>
               </tr>
@@ -601,10 +603,13 @@
                   {{ pet.pet_type }}
                 </td>
                 <td>
-                  {{ pet.quantity }}
+                  {{ pet.pet_name }}
                 </td>
                 <td>
-                  {{ pet.food_requested }}
+                  {{ pet.age }}
+                </td>
+                <td>
+                  {{ pet.food_requested ? 'Yes' : 'No' }}
                 </td>
                 <td>
                   <button
@@ -827,13 +832,13 @@
                 {{ interaction.serviced_date | date: "short" }}
               </td>
               <td>
-                {{ interaction.was_seen }}
+                {{ interaction.was_seen ? 'Yes' : 'No' }}
               </td>
               <td>
-                {{ interaction.serviced }}
+                {{ interaction.serviced ? 'Yes' : 'No' }}
               </td>
               <td>
-                {{ interaction.at_homeless_resource_center }}
+                {{ interaction.at_homeless_resource_center ? 'Yes' : 'No' }}
               </td>
               <td>
                 <button

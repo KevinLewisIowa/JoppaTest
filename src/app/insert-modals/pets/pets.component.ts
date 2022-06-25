@@ -13,7 +13,8 @@ export class PetsComponent implements OnInit {
   @ViewChild('petsMdl', {static: false}) petsMdl: ElementRef
   @Output() petAdded = new EventEmitter<ClientPet>();
   pet_type: string = '';
-  quantity: number;
+  age: number;
+  pet_name: string;
   extraInfo: string;
   placeholderText: string = '';
   food_requested: boolean = true;
@@ -41,7 +42,7 @@ export class PetsComponent implements OnInit {
   submitPet() {
     const pet = new ClientPet();
     const clientId = JSON.parse(localStorage.getItem('selectedClient'));
-    if (this.pet_type != null && !isNaN(clientId) && !isNaN(this.quantity) && this.quantity > 0) {
+    if (this.pet_type != null && !isNaN(clientId) && !isNaN(this.age)) {
       if (this.extraInfoNeeded && (this.extraInfo === '' || this.extraInfo === null)){ 
           alert('Need to enter species of pet');
         } else if (this.extraInfoNeeded) {
@@ -51,7 +52,8 @@ export class PetsComponent implements OnInit {
       
       pet.pet_type = this.pet_type;
       pet.client_id = clientId;
-      pet.quantity = this.quantity;
+      pet.pet_name = this.pet_name;
+      pet.age = this.age;
       pet.food_requested = this.food_requested;
 
       console.log(JSON.stringify(pet));
