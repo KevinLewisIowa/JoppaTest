@@ -418,6 +418,13 @@ export class ServicingClientComponent implements OnInit {
     );
   }
 
+  updateNeedPetFood(pet: ClientPet) {
+    pet.food_requested = !pet.food_requested;
+    this.service.updatePet(pet).subscribe((data) => {
+      console.log(JSON.stringify(data));
+    });
+  }
+
   hideConfirmationMessage(): any {
     this.updateHoseTankMessageVisible = false;
     this.updateTimerSubscription.unsubscribe();

@@ -9,6 +9,8 @@ import { ClientService } from 'app/services/client.service';
 import { Client } from 'app/models/client';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogModel, CustomConfirmationDialogComponent } from 'app/custom-confirmation-dialog/custom-confirmation-dialog.component';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { DateSelectorComponent } from 'app/insert-modals/date-selector/date-selector.component';
 
 @Component({
   selector: 'app-footer',
@@ -21,7 +23,7 @@ export class FooterComponent implements OnInit {
   isAdmin: boolean;
   showEndRoute: boolean = true;
 
-  constructor(private mainService: MainService, private clientService:ClientService, private router: Router, public dialog: MatDialog) {
+  constructor(private mainService: MainService, private clientService:ClientService, private modalService: NgbModal, private router: Router, public dialog: MatDialog) {
     
   }
 
@@ -101,16 +103,42 @@ export class FooterComponent implements OnInit {
     else {
       this.mainService.getRouteInstance(routeInstanceId).subscribe(data => {
         this.routeInstance = data;
-        this.routeInstance.end_time = new Date();
 
-        this.mainService.updateRouteInstance(this.routeInstance);
+        if (new Date(this.routeInstance.start_time).getDate() < new Date().getDate()) {
+          const modalRef: NgbModalRef = this.modalService.open(
+            DateSelectorComponent,
+            {
+              size: "lg",
+              backdrop: "static",
+            }
+          );
+          modalRef.result.then((selected_date: Date) => {
+            this.routeInstance.end_time = selected_date;
+            this.routeInstance.end_time.setHours(23); this.routeInstance.end_time.setMinutes(59); this.routeInstance.end_time.setSeconds(59);
+            
+            this.mainService.updateRouteInstance(this.routeInstance).subscribe((data) => {
+              let apiKey: string = window.localStorage.getItem('apiToken');
+              window.localStorage.clear();
+              window.localStorage.setItem('apiToken', apiKey);
+              window.localStorage.setItem('isAdmin', JSON.stringify(this.isAdmin));
+    
+              this.router.navigate(['login']);
+            }, error => console.log(error));
+          });
+        }
+        else {
+          this.routeInstance.end_time = new Date();
+
+          this.mainService.updateRouteInstance(this.routeInstance).subscribe((data) => {
+            let apiKey: string = window.localStorage.getItem('apiToken');
+            window.localStorage.clear();
+            window.localStorage.setItem('apiToken', apiKey);
+            window.localStorage.setItem('isAdmin', JSON.stringify(this.isAdmin));
+  
+            this.router.navigate(['login']);
+          }, error => console.log(error));
+        }
       }, error => console.log(error));
-      let apiKey: string = window.localStorage.getItem('apiToken');
-      window.localStorage.clear();
-      window.localStorage.setItem('apiToken', apiKey);
-      window.localStorage.setItem('isAdmin', JSON.stringify(this.isAdmin));
-
-      this.router.navigate(['login']);
     }
   }
 

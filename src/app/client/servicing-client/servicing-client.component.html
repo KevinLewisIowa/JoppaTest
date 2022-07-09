@@ -609,7 +609,7 @@
                   {{ pet.age }}
                 </td>
                 <td>
-                  {{ pet.food_requested ? 'Yes' : 'No' }}
+                  <button type="button" class="btn btn-outline-primary" (click)="updateNeedPetFood(pet)">{{ pet.food_requested ? 'Yes' : 'No' }}</button>
                 </td>
                 <td>
                   <button

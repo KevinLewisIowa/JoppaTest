@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, LOCALE_ID, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from "@angular/router";
 import { ClientService } from "app/services/client.service";
 import { Client } from "app/models/client";
 import { Appearance } from 'app/models/appearance';
+import { DatePipe, formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-client-edit',
@@ -21,8 +22,7 @@ export class ClientEditComponent implements OnInit {
   extraInfoNeeded: boolean = false;
   locationCampId: number;
 
-  constructor(private router: Router, private clientService: ClientService,
-    private fb: FormBuilder) { }
+  constructor(private router: Router, private clientService: ClientService, private fb: FormBuilder, @Inject(LOCALE_ID) private locale: string) { }
 
   ngOnInit() {
     this.isAdmin = JSON.parse(window.localStorage.getItem('isAdmin'));
@@ -124,6 +124,10 @@ export class ClientEditComponent implements OnInit {
     let now: Date = new Date();
     let birthday: Date = new Date(this.theClient.birth_date);
     let pastDate: Date = new Date(now.getFullYear() - 100, now.getMonth(), now.getDate());
+    if (!this.regExpDate.test(formatDate(birthday, 'MM/dd/yyyy', 'en'))) {
+      alert('Birth date must be entered in format mm/dd/yyyy');
+      return;
+    }
     if (birthday.getTime() > now.getTime()) {
       alert('You cannot select a birth date that is in the future');
       return;

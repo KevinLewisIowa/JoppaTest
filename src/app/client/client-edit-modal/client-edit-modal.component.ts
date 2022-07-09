@@ -1,9 +1,10 @@
-import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter, Inject, LOCALE_ID } from '@angular/core';
 import { FormGroup, FormBuilder } from "@angular/forms";
 import { Client } from "app/models/client";
 import { ClientService } from "app/services/client.service";
 import { Router } from "@angular/router";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { DatePipe, formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-client-edit-modal',
@@ -26,8 +27,7 @@ export class ClientEditModalComponent implements OnInit {
   extraInfoNeeded: boolean = false;
   homelessReasonOptions: string[] = ['Eviction', 'Job Loss', 'Family Dispute', 'Legal Issues', 'Health Issues', 'Addictions', 'Mental Health', 'Other'];
 
-  constructor(private router: Router, private modalService: NgbModal, private clientService: ClientService,
-              private fb: FormBuilder) { }
+  constructor(private router: Router, private modalService: NgbModal, private clientService: ClientService, private fb: FormBuilder, @Inject(LOCALE_ID) private locale: string) { }
 
   ngOnInit() {
     this.theClient = new Client();
@@ -90,6 +90,7 @@ export class ClientEditModalComponent implements OnInit {
 
     this.clientForm = null;
     this.clientForm = this.fb.group(this.theClient);
+    this.clientForm.patchValue({birth_date: formatDate(this.clientForm.get('birth_date').value, 'MM/dd/yyyy', 'en')})
     this.modalService.open(this.editModal, { size: 'lg', backdrop: 'static'});
   }
 
@@ -103,6 +104,11 @@ export class ClientEditModalComponent implements OnInit {
     let now: Date = new Date();
     let birthday: Date = new Date(updatedClient.birth_date);
     let pastDate: Date = new Date(now.getFullYear() - 100, now.getMonth(), now.getDate());
+    if (!this.regExpDate.test(formatDate(birthday, 'MM/dd/yyyy', this.locale)))
+    {
+      alert('Birthday not entered in mm/dd/yyyy format');
+      return;
+    }
     if (birthday.getTime() > now.getTime()) {
       alert('You cannot select a birth date that is in the future');
       return;
