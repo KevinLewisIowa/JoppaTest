@@ -18,7 +18,7 @@ export class ClientEditComponent implements OnInit {
   theClient: Client;
   isAdmin: boolean;
   otherHomelessReason: string;
-  homelessReasonOptions: string[] = ['Eviction', 'Job Loss', 'Family Dispute', 'Legal Issues', 'Health Issues', 'Addictions', 'Mental Health', 'Other'];
+  homelessReasonOptions: string[] = ['Eviction', 'Job Loss', 'Family Dispute', 'Family Loss', 'Legal Issues', 'Health Issues', 'Addictions', 'Mental Health', 'Other'];
   extraInfoNeeded: boolean = false;
   locationCampId: number;
 

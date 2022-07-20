@@ -105,16 +105,8 @@ export class FooterComponent implements OnInit {
         this.routeInstance = data;
 
         if (new Date(this.routeInstance.start_time).getDate() < new Date().getDate()) {
-          const modalRef: NgbModalRef = this.modalService.open(
-            DateSelectorComponent,
-            {
-              size: "lg",
-              backdrop: "static",
-            }
-          );
-          modalRef.result.then((selected_date: Date) => {
-            this.routeInstance.end_time = selected_date;
-            this.routeInstance.end_time.setHours(23); this.routeInstance.end_time.setMinutes(59); this.routeInstance.end_time.setSeconds(59);
+          this.routeInstance.end_time = new Date(this.routeInstance.start_time);
+          this.routeInstance.end_time.setHours(this.routeInstance.end_time.getHours() + 5);
             
             this.mainService.updateRouteInstance(this.routeInstance).subscribe((data) => {
               let apiKey: string = window.localStorage.getItem('apiToken');
@@ -124,7 +116,6 @@ export class FooterComponent implements OnInit {
     
               this.router.navigate(['login']);
             }, error => console.log(error));
-          });
         }
         else {
           this.routeInstance.end_time = new Date();
