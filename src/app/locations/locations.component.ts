@@ -154,6 +154,9 @@ export class LocationsComponent implements OnInit {
                         } else {
                           campClients = data;
                         }
+
+                        location.number_clients_at_camp = campClients.length;
+
                         const clientsToCheck = this.routeAttendanceList.filter(
                           (client) =>
                             Number(client.location_camp_id) === location.id

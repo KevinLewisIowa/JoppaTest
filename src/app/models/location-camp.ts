@@ -15,4 +15,5 @@ export class LocationCamp {
   expected_arrival_time: string = undefined;
   admin_notes: string = undefined;
   all_seen: boolean = undefined;
+  number_clients_at_camp: number = undefined;
 }
