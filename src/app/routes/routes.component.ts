@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { RouteInstance } from '../models/route-instance';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+import { LocationCamp } from 'app/models/location-camp';
 
 
 @Component({
@@ -23,6 +24,16 @@ export class RoutesComponent implements OnInit {
   constructor(private mainService: MainService, private router: Router) {
     this.mainService.getTheRoutes().subscribe(theRoutes => {
       this.routes = theRoutes;
+
+      this.routes.forEach((route: Route) => {
+        this.mainService.getClientCountForRoute(route.id).subscribe((client_count: number) => {
+          route.number_clients = client_count;
+
+          this.mainService.getCampsForRoute(route.id).subscribe((locations: LocationCamp[]) => {
+            route.number_stops = locations.length;
+          });
+        });
+      });
     });
   }
 

@@ -5,7 +5,8 @@
   </div>
   <div class="panel-body text-center" style="opacity:0.93">
     <div *ngFor="let route of routes" class="route-div well" (click)="openRoute(route.id)">
-      <h4 align="left">{{route.name}}</h4>
+      <h4 align="left" style="margin-bottom:0.1em;">{{route.name}}</h4>
+      <h6 align="left">Clients - {{route.number_clients}}, Stops - {{route.number_stops}}</h6>
     </div>
   </div>
   <div class="card-footer">
