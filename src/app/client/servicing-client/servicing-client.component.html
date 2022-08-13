@@ -603,10 +603,12 @@
                   {{ pet.pet_type }}
                 </td>
                 <td>
-                  {{ pet.pet_name }}
+                  <input type="text" class="form-control" style="max-width: 75%" (change)="updatePetName(pet)" [(ngModel)]="pet.pet_name"/>
+                  <!-- {{ pet.pet_name }} -->
                 </td>
                 <td>
-                  {{ pet.age }}
+                  <input type="text" class="form-control" style="max-width: 75%" (change)="updatePetAge(pet)" [(ngModel)]="pet.age"/>
+                  <!-- {{ pet.age }} -->
                 </td>
                 <td>
                   <button type="button" class="btn btn-outline-primary" (click)="updateNeedPetFood(pet)">{{ pet.food_requested ? 'Yes' : 'No' }}</button>
