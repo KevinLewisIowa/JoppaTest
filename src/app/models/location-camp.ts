@@ -16,4 +16,5 @@ export class LocationCamp {
   admin_notes: string = undefined;
   all_seen: boolean = undefined;
   number_clients_at_camp: number = undefined;
+  remain_on_route: boolean = undefined;
 }

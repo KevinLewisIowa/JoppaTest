@@ -15,7 +15,7 @@ import { MainService } from "app/services/main.service";
   styleUrls: ["./admin-camp-listing.component.css"],
 })
 export class AdminCampListingComponent implements OnInit {
-  displayedColumns = ["camp_name", "route_name", "position", "is_active"];
+  displayedColumns = ["camp_name", "route_name", "position", "is_active", "remain_on_route"];
   camps: any[] = [];
   routes: Route[] = [];
   camp: LocationCamp;

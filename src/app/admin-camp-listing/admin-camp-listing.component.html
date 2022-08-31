@@ -38,6 +38,13 @@
           <mat-cell (click)="viewCamp(camp)" *matCellDef="let camp">{{ camp.is_active }}</mat-cell>
         </ng-container>
 
+        <ng-container matColumnDef="remain_on_route">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Remain On Route?</mat-header-cell>
+          <mat-cell *matCellDef="let camp">
+            <input type="checkbox" [(ngModel)]="camp.remain_on_route" />
+          </mat-cell>
+        </ng-container>
+
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
         <mat-row *matRowDef="let camp; columns: displayedColumns"></mat-row>
       </mat-table>

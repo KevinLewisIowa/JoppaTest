@@ -36,8 +36,10 @@ export class CreateLocationCampComponent implements OnInit {
       name: '',
       notes: '',
       position: '',
-      expected_arrival_time: ''
+      expected_arrival_time: '',
+      remain_on_route: false
     });
+    
     this.locationCampForm.get('name').setValidators(Validators.required);
     this.locationCampForm.get('position').setValidators(Validators.required);
   }
@@ -59,6 +61,7 @@ export class CreateLocationCampComponent implements OnInit {
     this.theLocationCamp.position = this.locationCampForm.get('position').value;
     this.theLocationCamp.expected_arrival_time = this.locationCampForm.get('expected_arrival_time').value;
     this.mainService.insertLocationCamp(this.theLocationCamp).subscribe(data => {
+      console.log(data);
       this.router.navigate([`route/${routeId}`]);
     }, error => {console.log(error)});
   }
