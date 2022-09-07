@@ -24,6 +24,7 @@ export class CreateLocationCampComponent implements OnInit {
     let routeId: number = JSON.parse(window.localStorage.getItem('routeId'));
     this.isAdmin = JSON.parse(window.localStorage.getItem('isAdmin'));
     this.mainService.getRoute(routeId).subscribe((route: Route) => {
+      console.log(route);
       this.theRoute = route;
     }, error => console.log(error));
 
