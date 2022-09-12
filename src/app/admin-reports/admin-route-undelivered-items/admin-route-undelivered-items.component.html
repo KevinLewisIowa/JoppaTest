@@ -35,7 +35,7 @@
 
         <ng-container matColumnDef="fulfilled">
           <mat-header-cell *matHeaderCellDef mat-sort-header>On Cart</mat-header-cell>
-          <mat-cell *matCellDef="let row"><input type="checkbox" [(ngModel)]="row.fulfilled" /></mat-cell>
+          <mat-cell *matCellDef="let row"><input *ngIf="isAdmin" type="checkbox" [(ngModel)]="row.fulfilled" /><span *ngIf="!isAdmin">{{row.fulfilled ? 'Yes' : 'No'}}</span></mat-cell>
         </ng-container>
 
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
@@ -49,6 +49,6 @@
     <button routerLink="/admin/reports" style="float: left" class="btn btn-primary" type="button">
       <fa-icon [icon]="backIcon"></fa-icon> Back
     </button>
-    <button class="btn btn-primary" style="float: right" (click)="submitItems()">Save Item Changes</button>
+    <button *ngIf="isAdmin" class="btn btn-primary" style="float: right" (click)="submitItems()">Save Item Changes</button>
   </div>
 </div>

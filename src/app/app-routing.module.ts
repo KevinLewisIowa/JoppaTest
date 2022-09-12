@@ -95,7 +95,7 @@ const routes: Routes = [
   },
   {
     path: "admin/reports/routeUndeliveredItems",
-    canActivate: [IsLoggedInGuard, IsAdminGuard],
+    canActivate: [IsLoggedInGuard],
     component: AdminRouteUndeliveredItemsComponent,
   },
   {

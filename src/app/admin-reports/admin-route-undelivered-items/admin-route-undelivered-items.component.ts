@@ -14,10 +14,12 @@ import { RequestedItem } from 'app/models/requested-item';
   styleUrls: ['./admin-route-undelivered-items.component.css']
 })
 export class AdminRouteUndeliveredItemsComponent implements OnInit {
-  displayedColumns = ['preferred_name', 'name', 'item_description', 'date_requested', 'fulfilled']
+  displayedColumns = ['preferred_name', 'name', 'item_description', 'date_requested', 'fulfilled'];
+  volunteerColumns = ['preferred_name', 'name', 'item_description', 'date_requested'];
   undeliveredItems: any[] = [];
   dataSource: MatTableDataSource<any>;
   backIcon = faChevronLeft;
+  isAdmin: boolean = false;
 
   @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: false}) sort: MatSort;
@@ -28,8 +30,10 @@ export class AdminRouteUndeliveredItemsComponent implements OnInit {
       this.dataSource = new MatTableDataSource(this.undeliveredItems);
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
-      }, error => console.log(error));
-    }
+    }, error => console.log(error));
+
+    this.isAdmin = JSON.parse(window.localStorage.getItem('isAdmin'));
+  }
 
   ngOnInit() {
 
