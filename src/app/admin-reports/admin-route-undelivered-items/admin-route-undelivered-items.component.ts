@@ -25,14 +25,19 @@ export class AdminRouteUndeliveredItemsComponent implements OnInit {
   @ViewChild(MatSort, {static: false}) sort: MatSort;
 
   constructor(private mainService: MainService, private router: Router) { 
+    this.isAdmin = JSON.parse(window.localStorage.getItem('isAdmin'));
+
     this.mainService.getAdminRouteUndeliveredItems().subscribe(data => {
-      this.undeliveredItems = data;
+      if (!this.isAdmin) {
+        this.displayedColumns = this.volunteerColumns;
+        this.undeliveredItems = data.filter((w) => !w.fulfilled);
+      } else {
+        this.undeliveredItems = data;
+      }
       this.dataSource = new MatTableDataSource(this.undeliveredItems);
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
     }, error => console.log(error));
-
-    this.isAdmin = JSON.parse(window.localStorage.getItem('isAdmin'));
   }
 
   ngOnInit() {
@@ -44,6 +49,15 @@ export class AdminRouteUndeliveredItemsComponent implements OnInit {
 
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
+    }
+  }
+
+  back() {
+    if (this.isAdmin) {
+      this.router.navigate(["/admin/reports"]);
+    } else {
+      window.localStorage.clear();
+      this.router.navigate(['/application-login']);
     }
   }
 
