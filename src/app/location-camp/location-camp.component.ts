@@ -1,17 +1,33 @@
-import { Component, OnInit, Renderer2 } from "@angular/core";
+import { throwError as observableThrowError } from "rxjs";
+import { Component, Injectable, OnInit, Renderer2 } from "@angular/core";
+import { HttpHeaders, HttpClient } from "@angular/common/http";
 import { Route } from "../models/route";
 import { ActivatedRoute, Params } from "@angular/router";
 import { MainService } from "../services/main.service";
 import { Router } from "@angular/router";
 import { Client } from "../models/client";
 import { LocationCamp } from "app/models/location-camp";
+import { CampNote } from "app/models/camp-note";
 import { Appearance } from "app/models/appearance";
 import { ClientService } from "app/services/client.service";
+import { environment } from "environments/environment";
 import {
   faQuestionCircle as farQuestionCircle,
-  faCheckCircle as farCheckCircle
+  faCheckCircle as farCheckCircle,
 } from "@fortawesome/free-regular-svg-icons";
-import { faStar, faSearch, faPlus, faCheckCircle, faTimesCircle, faChevronLeft, faChevronRight, IconDefinition, faMap, faInfoCircle} from "@fortawesome/free-solid-svg-icons";
+import {
+  faStar,
+  faSearch,
+  faPlus,
+  faCheckCircle,
+  faTimesCircle,
+  faChevronLeft,
+  faChevronRight,
+  IconDefinition,
+  faMap,
+  faInfoCircle,
+} from "@fortawesome/free-solid-svg-icons";
+import { map, catchError } from "rxjs/operators";
 
 @Component({
   selector: "app-location-camp",
@@ -21,6 +37,7 @@ import { faStar, faSearch, faPlus, faCheckCircle, faTimesCircle, faChevronLeft, 
 export class LocationCampComponent implements OnInit {
   route: Route = new Route();
   clients: Client[] = [];
+  campNotes: CampNote[] = [];
   locationCamp: LocationCamp = new LocationCamp();
   expectedArrivalTime: Date;
   heatRoute: boolean = false;
@@ -39,9 +56,11 @@ export class LocationCampComponent implements OnInit {
   starIcon = faStar;
   informationIcon = faInfoCircle;
   isAdmin: boolean = false;
-  clientsWithFulfilledItems : number[] = [];
+  clientsWithFulfilledItems: number[] = [];
+  private baseUrl = environment.api_url;
 
   constructor(
+    private http: HttpClient,
     private mainService: MainService,
     private clientService: ClientService,
     private router: Router,
@@ -89,7 +108,9 @@ export class LocationCampComponent implements OnInit {
                   );
                 }
 
-                this.mainService.getClientsForCamp(this.locationCampId).subscribe((data: Client[]) => {
+                this.mainService
+                  .getClientsForCamp(this.locationCampId)
+                  .subscribe((data: Client[]) => {
                     if (this.heatRoute) {
                       this.clients = data.filter(
                         (client) =>
@@ -97,10 +118,16 @@ export class LocationCampComponent implements OnInit {
                           client.dwelling !== "Under Bridge" &&
                           client.dwelling !== "Streets"
                       );
-                      this.numberTanksAtCamp = this.clients.reduce(function (prevValue, currClient) {
+                      this.numberTanksAtCamp = this.clients.reduce(function (
+                        prevValue,
+                        currClient
+                      ) {
                         return prevValue + currClient.number_tanks;
-                      },0);
-                      this.numPeopleWithTanksAtCamp = this.clients.filter((client) => client.number_tanks > 0).length;
+                      },
+                      0);
+                      this.numPeopleWithTanksAtCamp = this.clients.filter(
+                        (client) => client.number_tanks > 0
+                      ).length;
 
                       this.checkClientHasFulfilledItems();
                     } else {
@@ -109,6 +136,12 @@ export class LocationCampComponent implements OnInit {
                       this.checkClientHasFulfilledItems();
                     }
                   });
+                this.mainService.getCampNotes(this.locationCampId).subscribe(
+                  (data: CampNote[]) => {
+                    this.campNotes = data;
+                  },
+                  (error) => console.log(error)
+                );
               },
               (error) => {
                 console.log(error);
@@ -150,7 +183,9 @@ export class LocationCampComponent implements OnInit {
               (error) => console.log(error)
             );
 
-            this.mainService.getClientsForCamp(this.locationCampId).subscribe((data: Client[]) => {
+            this.mainService
+              .getClientsForCamp(this.locationCampId)
+              .subscribe((data: Client[]) => {
                 if (this.heatRoute) {
                   this.clients = data.filter(
                     (client) =>
@@ -176,6 +211,12 @@ export class LocationCampComponent implements OnInit {
                   this.checkClientHasFulfilledItems();
                 }
               });
+            this.mainService.getCampNotes(this.locationCampId).subscribe(
+              (data: CampNote[]) => {
+                this.campNotes = data;
+              },
+              (error) => console.log(error)
+            );
           },
           (error) => {
             console.log(error);
@@ -236,6 +277,41 @@ export class LocationCampComponent implements OnInit {
 
   createClient() {
     this.router.navigate(["/createClient"]);
+  }
+
+  campNoteAdded(note: CampNote) {
+    this.campNotes.push(note);
+    const element = document.querySelector("#camp-notes");
+    element.scrollIntoView();
+  }
+
+  // insertCampNote(note: CampNote) {
+  //   const myHeader = new HttpHeaders({
+  //     "Content-Type": "application/json",
+  //     Authorization: window.localStorage.getItem("apiToken"),
+  //   });
+  //   return this.http
+  //     .post(
+  //       this.baseUrl + `camp_notes/${note.id}`,
+  //       { camp_note: note },
+  //       { headers: myHeader }
+  //     )
+  //     .pipe(
+  //       map((res: any) => {
+  //         if (res.message === "invalid-token") {
+  //           window.localStorage.removeItem("apiToken");
+  //           this.router.navigate(["/application-login"]);
+  //         }
+  //         return res;
+  //       }),
+  //       catchError(this.handleError)
+  //     );
+  // }
+
+  removeCampNote(id: number) {
+    this.mainService.removeCampNote(id).subscribe((res) => {
+      this.campNotes = this.campNotes.filter((w) => w.id != id);
+    });
   }
 
   showMap() {
@@ -323,22 +399,24 @@ export class LocationCampComponent implements OnInit {
     this.router.navigate(["/serviceClient"]);
   }
 
-  clientHasFulfilledItems(id: number) : boolean {
-    if (this.clientsWithFulfilledItems.find(c => c == id) >= 0) {
+  clientHasFulfilledItems(id: number): boolean {
+    if (this.clientsWithFulfilledItems.find((c) => c == id) >= 0) {
       return true;
     }
-    
+
     return false;
   }
 
-  checkClientHasFulfilledItems()
-  {
-    this.clients.forEach(client => {
-      this.mainService.getClientHasFulfilledItems(client.id).subscribe((count : number) => {
-        if (count > 0) {
-          this.clientsWithFulfilledItems.push(client.id);
-        }
-      }, (error) => console.log(error));
+  checkClientHasFulfilledItems() {
+    this.clients.forEach((client) => {
+      this.mainService.getClientHasFulfilledItems(client.id).subscribe(
+        (count: number) => {
+          if (count > 0) {
+            this.clientsWithFulfilledItems.push(client.id);
+          }
+        },
+        (error) => console.log(error)
+      );
     });
   }
 
@@ -348,5 +426,18 @@ export class LocationCampComponent implements OnInit {
 
   backToCampListing() {
     this.router.navigate(["/admin/campListing"]);
+  }
+
+  private handleError(error: Response | any) {
+    let errMsg: string;
+    if (error instanceof Response) {
+      const body = error.json() || "";
+      const err = JSON.stringify(body);
+      errMsg = `${error.status} - ${error.statusText || ""} ${err}`;
+    } else {
+      errMsg = error.message ? error.message : error.toString();
+    }
+    console.log(errMsg);
+    return observableThrowError(errMsg);
   }
 }

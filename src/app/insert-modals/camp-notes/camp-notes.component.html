@@ -1,0 +1,43 @@
+<ng-template #campNotesMdl let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Create Note</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="d('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <form>
+    <div class="modal-body">
+      <div class="form-group">
+        <div class="row">
+          <div class="col-md-8">
+            <textarea
+              id="focusMe"
+              class="form-control"
+              rows="4"
+              [(ngModel)]="note"
+              placeholder="Note"
+              name="note"
+            ></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="submitNote(); c('')">
+      Submit
+    </button>
+    <button
+      type="button"
+      class="btn btn-outline-primary"
+      (click)="c('Close click')"
+    >
+      Close
+    </button>
+  </div>
+</ng-template>
