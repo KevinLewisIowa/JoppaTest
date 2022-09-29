@@ -16,7 +16,7 @@ export class ClientEditModalComponent implements OnInit {
   @Output() editedClient = new EventEmitter<Client>();
   badDate = false;
   clientForm: FormGroup;
-  regExpDate = /^\d{2}\/\d{2}\/\d{4}$/
+  regExpDate = /^\d{1,2}\/\d{1,2}\/\d{4}$/
   theClient: Client;
   firstTimeHomeless: string = 'Unknown';
   dueToCovid: string = 'Unknown';

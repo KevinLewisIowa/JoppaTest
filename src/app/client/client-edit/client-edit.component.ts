@@ -14,7 +14,7 @@ import { DatePipe, formatDate } from '@angular/common';
 export class ClientEditComponent implements OnInit {
   badDate = false;
   clientForm: FormGroup;
-  regExpDate = /^\d{2}\/\d{2}\/\d{4}$/
+  regExpDate = /^\d{1,2}\/\d{1,2}\/\d{4}$/
   theClient: Client;
   isAdmin: boolean;
   otherHomelessReason: string;
