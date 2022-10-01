@@ -39,7 +39,7 @@ export class CampNotesComponent implements OnInit {
     });
   }
 
-  submitNote() {
+  submitCampNote() {
     const note = new CampNote();
     const location: number = JSON.parse(localStorage.getItem("locationCampId"));
     const isAdmin: boolean = JSON.parse(localStorage.getItem("isAdmin"));
@@ -48,8 +48,7 @@ export class CampNotesComponent implements OnInit {
       : JSON.parse(localStorage.getItem("routeId"));
     if (this.note != null && !isNaN(location) && !isNaN(routeId)) {
       note.note = this.note;
-      note.location_id = location;
-      note.route_id = routeId;
+      note.location_camp_id = location;
 
       console.log(JSON.stringify(note));
       this.mainService.insertCampNote(note).subscribe(

@@ -285,29 +285,6 @@ export class LocationCampComponent implements OnInit {
     element.scrollIntoView();
   }
 
-  // insertCampNote(note: CampNote) {
-  //   const myHeader = new HttpHeaders({
-  //     "Content-Type": "application/json",
-  //     Authorization: window.localStorage.getItem("apiToken"),
-  //   });
-  //   return this.http
-  //     .post(
-  //       this.baseUrl + `camp_notes/${note.id}`,
-  //       { camp_note: note },
-  //       { headers: myHeader }
-  //     )
-  //     .pipe(
-  //       map((res: any) => {
-  //         if (res.message === "invalid-token") {
-  //           window.localStorage.removeItem("apiToken");
-  //           this.router.navigate(["/application-login"]);
-  //         }
-  //         return res;
-  //       }),
-  //       catchError(this.handleError)
-  //     );
-  // }
-
   removeCampNote(id: number) {
     this.mainService.removeCampNote(id).subscribe((res) => {
       this.campNotes = this.campNotes.filter((w) => w.id != id);

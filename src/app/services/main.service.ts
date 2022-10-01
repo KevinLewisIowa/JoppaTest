@@ -206,8 +206,31 @@ export class MainService {
     });
     return this.http
       .post(
-        this.apiUrl + `camp_notes`,
+        this.apiUrl + `location_camp_notes`,
         { camp_note: note },
+        { headers: myHeader }
+      )
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  updateCampNote(note: CampNote) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+    return this.http
+      .patch(
+        this.apiUrl + `location_camp_notes/${note.id}`,
+        { note: note },
         { headers: myHeader }
       )
       .pipe(
@@ -249,7 +272,7 @@ export class MainService {
       Authorization: window.localStorage.getItem("apiToken"),
     });
     return this.http
-      .delete(this.apiUrl + `camp_notes/${id}`, { headers: myHeader })
+      .delete(this.apiUrl + `location_camp_notes/${id}`, { headers: myHeader })
       .pipe(
         map((res) => {
           return true;
