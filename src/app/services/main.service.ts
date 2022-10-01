@@ -199,7 +199,7 @@ export class MainService {
       );
   }
 
-  insertCampNote(note: CampNote) {
+  insertCampNote(theNote: CampNote) {
     const myHeader = new HttpHeaders({
       "Content-Type": "application/json",
       Authorization: window.localStorage.getItem("apiToken"),
@@ -207,7 +207,7 @@ export class MainService {
     return this.http
       .post(
         this.apiUrl + `location_camp_notes`,
-        { camp_note: note },
+        { note: theNote },
         { headers: myHeader }
       )
       .pipe(

@@ -50,7 +50,6 @@ export class CampNotesComponent implements OnInit {
       note.note = this.note;
       note.location_camp_id = location;
 
-      console.log(JSON.stringify(note));
       this.mainService.insertCampNote(note).subscribe(
         (data: CampNote) => {
           if (data != null && data.id != null) {
