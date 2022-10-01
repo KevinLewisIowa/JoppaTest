@@ -207,7 +207,7 @@ export class MainService {
     return this.http
       .post(
         this.apiUrl + `location_camp_notes`,
-        { note: theNote },
+        { location_camp_note: theNote },
         { headers: myHeader }
       )
       .pipe(

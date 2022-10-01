@@ -40,28 +40,23 @@ export class CampNotesComponent implements OnInit {
   }
 
   submitCampNote() {
-    const note = new CampNote();
+    const camp_note = new CampNote();
     const location: number = JSON.parse(localStorage.getItem("locationCampId"));
-    const isAdmin: boolean = JSON.parse(localStorage.getItem("isAdmin"));
-    const routeId: number = isAdmin
-      ? -1
-      : JSON.parse(localStorage.getItem("routeId"));
-    if (this.note != null && !isNaN(location) && !isNaN(routeId)) {
-      note.note = this.note;
-      note.location_camp_id = location;
+    
+    if (this.note != null && !isNaN(location)) {
+      camp_note.note = this.note;
+      camp_note.location_camp_id = location;
 
-      this.mainService.insertCampNote(note).subscribe(
-        (data: CampNote) => {
-          if (data != null && data.id != null) {
-            this.campNoteAdded.emit(data);
-          }
+      this.mainService.insertCampNote(camp_note).subscribe((data: CampNote) => {
+        if (data != null && data.id != null) {
+          this.note = "";
+          this.campNoteAdded.emit(data);
+        }
         },
         (error) => {
           console.log(error);
         }
       );
     }
-
-    this.note = "";
   }
 }

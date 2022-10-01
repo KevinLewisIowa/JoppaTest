@@ -64,8 +64,7 @@ export class LocationCampComponent implements OnInit {
     private mainService: MainService,
     private clientService: ClientService,
     private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private renderer: Renderer2
+    private activatedRoute: ActivatedRoute
   ) {}
 
   ngOnInit() {
@@ -76,6 +75,7 @@ export class LocationCampComponent implements OnInit {
     if (routeInstanceId > 0) {
       this.mainService.showEndRoute.next(true);
     }
+
     this.activatedRoute.params.subscribe((params: Params) => {
       this.locationCampId = this.activatedRoute.snapshot.params["id"];
       localStorage.setItem(
@@ -184,8 +184,7 @@ export class LocationCampComponent implements OnInit {
             );
 
             this.mainService
-              .getClientsForCamp(this.locationCampId)
-              .subscribe((data: Client[]) => {
+              .getClientsForCamp(this.locationCampId).subscribe((data: Client[]) => {
                 if (this.heatRoute) {
                   this.clients = data.filter(
                     (client) =>
@@ -211,12 +210,6 @@ export class LocationCampComponent implements OnInit {
                   this.checkClientHasFulfilledItems();
                 }
               });
-            this.mainService.getCampNotes(this.locationCampId).subscribe(
-              (data: CampNote[]) => {
-                this.campNotes = data;
-              },
-              (error) => console.log(error)
-            );
           },
           (error) => {
             console.log(error);
@@ -224,6 +217,13 @@ export class LocationCampComponent implements OnInit {
         );
       }
     });
+
+    this.mainService.getCampNotes(this.locationCampId).subscribe(
+      (data: CampNote[]) => {
+        this.campNotes = data;
+      },
+      (error) => console.log(error)
+    );
   }
 
   editedCamp(theCamp: LocationCamp) {
