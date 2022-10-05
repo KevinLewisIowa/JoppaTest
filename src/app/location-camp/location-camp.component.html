@@ -74,16 +74,89 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let client of clients" (click)="viewClient(client)" class="client-row">
-            <td class="text-left">{{ client.first_name }} <span *ngIf="client.preferred_name != '' && client.preferred_name != null">({{ client.preferred_name }})</span> {{ client.last_name }} <fa-icon id="star" style="color:#0d6efd" [icon]="starIcon" *ngIf="clientHasFulfilledItems(client.id)"></fa-icon></td>
+          <tr
+            *ngFor="let client of clients"
+            (click)="viewClient(client)"
+            class="client-row"
+          >
+            <td class="text-left">
+              {{ client.first_name }}
+              <span
+                *ngIf="
+                  client.preferred_name != '' && client.preferred_name != null
+                "
+                >({{ client.preferred_name }})</span
+              >
+              {{ client.last_name }}
+              <fa-icon
+                id="star"
+                style="color: #0d6efd"
+                [icon]="starIcon"
+                *ngIf="clientHasFulfilledItems(client.id)"
+              ></fa-icon>
+            </td>
             <td class="text-left">{{ client.joppa_apartment_number }}</td>
             <td class="text-left">{{ client.phone }}</td>
             <td class="text-left">{{ client.admin_notes }}</td>
-            <td class="text-left"><fa-icon id="attendanceIcon" [style.color]="getAttendanceColor(client)" [icon]="getAttendanceIcon(client)"></fa-icon> {{ client.last_interaction_date }}</td>
+            <td class="text-left">
+              <fa-icon
+                id="attendanceIcon"
+                [style.color]="getAttendanceColor(client)"
+                [icon]="getAttendanceIcon(client)"
+              ></fa-icon>
+              {{ client.last_interaction_date }}
+            </td>
           </tr>
         </tbody>
       </table>
     </div>
+    <div class="card">
+      <h3 align="left">Notes</h3>
+      <div>
+        <button
+          type="button"
+          (click)="campNotesMdl.showModal()"
+          class="btn btn-primary"
+          style="float: right"
+        >
+          New Note
+        </button>
+        &nbsp;
+      </div>
+    </div>
+    <table class="table" id="camp-notes">
+      <colgroup>
+        <col span="1" style="width: 25%" />
+        <col span="1" style="width: 25%" />
+        <col span="1" style="width: 25%" />
+        <col span="1" style="width: 25%" />
+      </colgroup>
+      <thead>
+        <tr>
+          <th>Date Added</th>
+          <th>Note</th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let note of campNotes">
+          <td>{{ note.created_at | date: "short" }}</td>
+          <td>{{ note.note }}</td>
+          <td *ngIf="isAdmin">
+            <button
+              type="button"
+              class="btn btn-primary"
+              (click)="removeCampNote(note.id)"
+            >
+              Remove
+            </button>
+          </td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
   </div>
   <div class="card-footer">
     <div>
@@ -123,3 +196,4 @@
   #campEditMdl
   (editedCamp)="editedCamp($event)"
 ></app-camp-edit-modal>
+<camp-notes #campNotesMdl (campNoteAdded)="campNoteAdded($event)"></camp-notes>
