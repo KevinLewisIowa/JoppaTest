@@ -400,6 +400,22 @@ export class MainService {
       );
   }
 
+  updateCampRoutePosition(campId: number, routeId: number, position: number) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+    return this.http.get(this.apiUrl + `updateCampRoutePosition?campId=${campId}&routeId=${routeId}&position=${position}`, { headers: myHeader }).pipe(map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
   updateLocationCamp(theLocationCamp: LocationCamp) {
     const myHeader = new HttpHeaders({
       "Content-Type": "application/json",
