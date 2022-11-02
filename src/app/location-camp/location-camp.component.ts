@@ -245,6 +245,7 @@ export class LocationCampComponent implements OnInit {
     clientInteraction.still_lives_here = true;
     clientInteraction.was_seen = true;
     clientInteraction.serviced = true;
+    clientInteraction.serviced_date = new Date();
     this.clientService
       .insertClientAppearance(clientInteraction)
       .subscribe((data: Appearance) => {

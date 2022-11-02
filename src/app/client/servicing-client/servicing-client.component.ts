@@ -152,6 +152,7 @@ export class ServicingClientComponent implements OnInit {
           .subscribe(
             (data: Note[]) => {
               this.notes = data;
+              this.goToTop();
             },
             (error) => console.log(error)
           );
@@ -260,6 +261,7 @@ export class ServicingClientComponent implements OnInit {
                   new Date(a.serviced_date).valueOf()
                 );
               });
+              this.goToTop();
             },
             (error) => console.log(error)
           );
@@ -284,6 +286,7 @@ export class ServicingClientComponent implements OnInit {
           .getHeatEquipmentNotReturned(this.clientId)
           .subscribe((data: any[]) => {
             this.heatEquipmentNotReturned = data;
+            this.goToTop();
           });
         this.getHeaterStatuses();
       } else {
@@ -331,6 +334,7 @@ export class ServicingClientComponent implements OnInit {
           .getHealthConcerns(this.clientId)
           .subscribe((data: HealthConcern[]) => {
             this.healthConcerns = data;
+            this.goToTop();
           });
       }
     } else {
@@ -667,6 +671,12 @@ export class ServicingClientComponent implements OnInit {
 
   backToClientListing() {
     this.router.navigate(["/admin/clientListing"]);
+  }
+
+  viewClient(theClient) {
+    localStorage.setItem('selectedClient', JSON.stringify(theClient.id));
+    this.router.navigate(['/serviceClient']);
+    window.location.reload();
   }
 
   backToCamp() {
