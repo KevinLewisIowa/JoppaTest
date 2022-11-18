@@ -482,8 +482,8 @@
             <thead>
               <tr>
                 <th>Date Added</th>
+                <th>Source</th>
                 <th>Note</th>
-                <th></th>
                 <th></th>
               </tr>
             </thead>
@@ -491,6 +491,7 @@
             <tbody>
               <tr *ngFor="let note of notes">
                 <td>{{ note.created_at | date: "short" }}</td>
+                <td>{{ note.source }}</td>
                 <td>{{ note.note }}</td>
                 <td *ngIf="isAdmin">
                   <button
@@ -501,7 +502,6 @@
                     Remove
                   </button>
                 </td>
-                <td></td>
               </tr>
             </tbody>
           </table>

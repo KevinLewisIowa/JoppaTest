@@ -12,10 +12,18 @@ export class NotesComponent implements OnInit {
   @ViewChild('notesMdl', {static: false}) notesMdl: ElementRef;
   @Output() noteAdded = new EventEmitter<Note>();
   note: string = '';
+  isAdmin: boolean = false;
+  source: string = '';
 
   constructor(private modalService: NgbModal, private clientService: ClientService) { }
 
   ngOnInit() {
+    this.isAdmin = JSON.parse(localStorage.getItem('isAdmin'));
+    if (this.isAdmin) {
+      this.source = 'Resource Center';
+    } else {
+      this.source = 'Outreach';
+    }
   }
 
   showModal() {
@@ -25,12 +33,13 @@ export class NotesComponent implements OnInit {
   submitNote() {
     const note = new Note();
     const clientId: number = JSON.parse(localStorage.getItem('selectedClient'));
-    const isAdmin: boolean = JSON.parse(localStorage.getItem('isAdmin'));
-    const routeInstanceId: number = isAdmin ? -1 : JSON.parse(localStorage.getItem('routeInstance'));
+    const routeInstanceId: number = this.isAdmin ? -1 : JSON.parse(localStorage.getItem('routeInstance'));
+    
     if (this.note != null && !isNaN(clientId) && !isNaN(routeInstanceId)) {
       note.note = this.note;
       note.client_id = clientId;
       note.route_instance_id = routeInstanceId;
+      note.source = this.source;
       
       console.log(JSON.stringify(note));
       this.clientService.insertNote(note).subscribe((data: Note) => {
