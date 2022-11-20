@@ -14,6 +14,7 @@ import { Heater } from "app/models/heater";
 import { Note } from "app/models/note";
 import { ClientPet } from "app/models/client-pet";
 import { Tent } from "app/models/tent";
+import { ClientDwelling } from "app/models/client-dwelling";
 import { ReferralsResources } from "app/models/referrals-resources";
 import { faCheckCircle as farCheckCircle } from "@fortawesome/free-regular-svg-icons";
 import {
@@ -52,6 +53,7 @@ export class ServicingClientComponent implements OnInit {
   notes: Note[] = [];
   pets: ClientPet[] = [];
   tents: Tent[] = [];
+  dwellings: ClientDwelling[] = [];
   referralsResources: ReferralsResources[] = [];
   sentInteraction = false;
   receivedItems: RequestedItem[] = [];
@@ -189,6 +191,12 @@ export class ServicingClientComponent implements OnInit {
           },
           (error) => console.log(error)
         );
+        this.service.getClientDwelling(this.clientId).subscribe(
+          (data: ClientDwelling[]) => {
+            this.dwellings = data;
+          },
+          (error) => console.log(error)
+        );
         this.service.getClientReferrals(this.clientId).subscribe(
           (data: ReferralsResources[]) => {
             this.referralsResources = data;
@@ -309,6 +317,11 @@ export class ServicingClientComponent implements OnInit {
           .getTentsForClient(this.clientId)
           .subscribe((data: Tent[]) => {
             this.tents = data;
+          });
+        this.service
+          .getClientDwelling(this.clientId)
+          .subscribe((data: ClientDwelling[]) => {
+              this.dwellings = data;
           });
         this.service
           .getClientReferrals(this.clientId)
@@ -606,6 +619,12 @@ export class ServicingClientComponent implements OnInit {
     element.scrollIntoView();
   }
 
+  clientDwellingAdded(dwelling: ClientDwelling) {
+    this.dwellings.push(dwelling);
+    const element = document.querySelector("#dwellings");
+    element.scrollIntoView();
+  }
+
   referralResourceAdded(referralResource: ReferralsResources) {
     this.referralsResources.push(referralResource);
     const element = document.querySelector("#referralsResources");
@@ -746,6 +765,12 @@ export class ServicingClientComponent implements OnInit {
   removeTent(id: number) {
     this.service.removeTent(id).subscribe((res) => {
       this.tents = this.tents.filter((w) => w.id != id);
+    });
+  }
+
+  removeClientDwelling(id: number) {
+    this.service.removeClientDwelling(id).subscribe((res) => {
+      this.dwellings = this.dwellings.filter((w) => w.id != id);
     });
   }
 

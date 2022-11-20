@@ -1,0 +1,59 @@
+<ng-template #clientDwellingMdl let-c="close" let-d="dismiss">
+    <div class="modal-header">
+      <h4 class="modal-title">Create Client Dwelling</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')"><span aria-hidden="true">&times;</span></button>
+    </div>
+    <form>
+      <div class="modal-body">
+        <div class="form-group">
+          <div class="row">
+            <div class="col-md-6">
+              <label for="date-became-homeless">Date Became Homeless (Date must be MM/DD/YYYY)</label>
+              <input id="date-became-homeless" type="text" class="form-control" placeholder="mm/dd/yyyy" [(ngModel)]="date_became_homeless" style="float:left;"/>
+            </div>
+            <div class="col-md-6">
+              <label for="dwelling-location">Dwelling Location</label>
+              <select id="source" class= "form-control" [(ngModel)]="dwelling" style="float:right;">
+                <option value="Abandoned Structure">Abandoned Structure</option>
+                <option value="Apartment">Apartment</option>
+                <option value="Camper">Camper</option>
+                <option value="Couch Surfing">Couch Surfing</option>
+                <option value="Garage">Garage</option>
+                <option value="House">House</option>
+                <option value="Mobile Home">Mobile Home</option>
+                <option value="Motel">Motel</option>
+                <option value="Shack">Shack</option>
+                <option value="Shelter">Shelter</option>
+                <option value="Tent">Tent</option>
+                <option value="Streets">Streets</option>            
+                <option value="Under Bridge">Under Bridge</option>
+                <option value="Vehicle">Vehicle</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label for="homeless-reason">Reason for Homelessness</label>
+                <select id="source" class= "form-control" [(ngModel)]="homeless_reason" style="float:left;">
+                  <option value="Eviction">Eviction</option>
+                  <option value="Job Loss">Job Loss</option>
+                  <option value="Family Dispute">Family Dispute</option>
+                  <option value="Family Loss">Family Loss</option>
+                  <option value="Legal Issues">Legal Issues</option>
+                  <option value="Health Issues">Health Issues</option>
+                  <option value="Addictions">Addictions</option>
+                  <option value="Mental Health">Mental Health</option>
+                  <option value="Other">Other</option>
+                </select>
+            </div>
+            <div class="col-md-6">
+              <textarea id="focusMe" class="form-control" rows="4" [(ngModel)]="notes" placeholder="Notes"
+                name="notes"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary" (click)="submitClientDwelling();c('')">Submit</button>
+      <button type="button" class="btn btn-outline-primary" (click)="c('Close click')">Close</button>
+    </div>
+  </ng-template>

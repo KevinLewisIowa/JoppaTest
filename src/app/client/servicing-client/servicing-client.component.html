@@ -163,6 +163,56 @@
       <div class="col-lg-12 col-md-12" *ngIf="!heatRoute">
         <div class="background-color">
           <h4>
+            Dwelling History
+            <button
+              type="button"
+              (click)="goToTop(); clientDwellingMdl.showModal()"
+              class="btn btn-primary"
+              style="float: right"
+            >
+              New Dwelling
+            </button>
+          </h4>
+          <table class="table" id="items">
+            <colgroup>
+              <col span="1" style="width: 25%" />
+              <col span="1" style="width: 25%" />
+              <col span="1" style="width: 25%" />
+              <col span="1" style="width: 25%" />
+            </colgroup>
+            <thead>
+              <tr>
+                <th>Date Became Homeless</th>
+                <th>Dwelling Location</th>
+                <th>Reason for Homelessness</th>
+                <th>Notes</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of dwellings">
+                <td>{{ item.date_became_homeless }}</td>
+                <td>{{ item.dwelling }}</td>
+                <td>{{ item.homeless_reason }}</td>
+                <td>{{ item.notes }}</td>
+                <td>
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    (click)="removeClientDwelling(item.id)"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="col-lg-12 col-md-12" *ngIf="!heatRoute">
+        <div class="background-color">
+          <h4>
             Requested Items
             <button
               type="button"
@@ -984,6 +1034,10 @@
 >
 </app-prayer-requests-and-needs>
 <app-tents #tentMdl (tentAdded)="tentAdded($event)"></app-tents>
+<app-client-dwellings
+  #clientDwellingMdl
+  (clientDwellingAdded)="clientDwellingAdded($event)">
+</app-client-dwellings>
 <app-referrals-resources
   #referralsResourcesMdl
   (referralResourceAdded)="referralResourceAdded($event)"
