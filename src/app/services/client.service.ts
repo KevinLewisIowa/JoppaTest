@@ -269,7 +269,7 @@ export class ClientService {
     });
     return this.http
       .post(
-        this.baseUrl + `client_dwelling`,
+        this.baseUrl + `client_dwellings`,
         { client_dwelling: theDwelling },
         { headers: myHeader }
       )
@@ -285,14 +285,14 @@ export class ClientService {
       );
   }
 
-  getClientDwelling(id) {
+  getClientDwellings(id) {
     const myHeader = new HttpHeaders({
       "Content-Type": "application/json",
       Authorization: window.localStorage.getItem("apiToken"),
     });
 
     return this.http
-      .get(this.baseUrl + `getClientDwellingForClient?clientId=${id}`, { headers: myHeader })
+      .get(this.baseUrl + `getDwellingsForClient?clientId=${id}`, { headers: myHeader })
       .pipe(
         map((res: any) => {
           if (res.message === "invalid-token") {
@@ -312,7 +312,7 @@ export class ClientService {
     });
     return this.http
       .patch(
-        this.baseUrl + `client_dwelling/${theDwelling.id}`,
+        this.baseUrl + `client_dwellings/${theDwelling.id}`,
         { client_dwelling: theDwelling },
         { headers: myHeader }
       )
@@ -333,7 +333,7 @@ export class ClientService {
       "Content-Type": "application/json",
       Authorization: window.localStorage.getItem("apiToken"),
     });
-    return this.http.delete(this.baseUrl + `client_dwelling/${id}`, { headers: myHeader })
+    return this.http.delete(this.baseUrl + `client_dwellings/${id}`, { headers: myHeader })
     .pipe(map((res) => {
       return true;
     }), catchError(this.handleError));

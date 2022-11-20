@@ -57,36 +57,6 @@
         </div>
       </div>
       <div class="form-group row">
-        <label for="dbh" class="col-6 col-form-label"><span style="background-color: yellow;">Date Became Homeless (Date must be MM/DD/YYYY):</span> </label>
-        <div class="col-6">
-          <input id="dbh" type="date" class="form-control" placeholder="mm/dd/yyyy" formControlName="date_became_homeless" style="float:right;"/>
-        </div>
-      </div>
-      <div class="form-group row">
-        <label for="rfh" class="col-6 col-form-label"><span style="background-color: yellow;">Reason for Homelessness:</span> </label>
-        <div class="col-6">
-          <select id="rfh" class="form-control" #item formControlName="homeless_reason" (change)="onChange(item.value)">
-            <option *ngFor="let option of homelessReasonOptions" [value]="option">{{option}}</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-group row">
-        <label class="col-6"></label>
-        <div class="col-6">
-          <input type="text" class="form-control" placeholder="Reason" [(ngModel)]="otherHomelessReason" [ngModelOptions]="{standalone: true}" *ngIf="extraInfoNeeded" />
-        </div>
-      </div>
-      <div class="form-group row">
-        <label for="dtc" class="col-6 col-form-label"><span style="background-color: yellow;">Due to Covid:</span><font color="red" *ngIf="!isAdmin">*</font> </label>
-        <div class="col-6">
-          <select id="dtc" class="form-control" style="float:right;" #dtcitem [(ngModel)]="dueToCovid" [ngModelOptions]="{standalone: true}" (change)="onDTCChange(dtcitem.value)">
-            <option value='Unknown'>Unknown</option>
-            <option value='Yes'>Yes</option>
-            <option value='No'>No</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-group row">
         <label for="veteran" class="col-6 col-form-label">Is Veteran:</label>
         <div class="col-6">
           <input id="veteran" class="form-control-checkbox" type="checkbox" style="float:right; width:5%; height:100%;" formControlName="is_veteran" />
@@ -102,27 +72,6 @@
         <label for="mailbox" class="col-6 col-form-label">Mailbox: </label>
         <div class="col-6">
           <input id="mailbox" type="text" class="form-control" style="float:right;" placeholder="Joppa Mailbox Number" formControlName="joppa_apartment_number" />
-        </div>
-      </div>
-      <div class="form-group row">
-        <label for="dwelling" class="col-6 col-form-label">Dwelling: </label>
-        <div class="col-6">
-          <select id="dwelling" class="form-control" style="float:right;" formControlName="dwelling">
-            <option value="Abandoned Structure">Abandoned Structure</option>
-            <option value="Apartment">Apartment</option>
-            <option value="Camper">Camper</option>
-            <option value="Couch Surfing">Couch Surfing</option>
-            <option value="Garage">Garage</option>
-            <option value="House">House</option>
-            <option value="Mobile Home">Mobile Home</option>
-            <option value="Motel">Motel</option>
-            <option value="Shack">Shack</option>
-            <option value="Shelter">Shelter</option>
-            <option value="Tent">Tent</option>
-            <option value="Streets">Streets</option>            
-            <option value="Under Bridge">Under Bridge</option>
-            <option value="Vehicle">Vehicle</option>
-          </select>
         </div>
       </div>
       <div class="form-group row">

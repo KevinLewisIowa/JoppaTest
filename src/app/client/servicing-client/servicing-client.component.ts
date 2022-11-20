@@ -128,18 +128,13 @@ export class ServicingClientComponent implements OnInit {
       this.service.getClientById(this.clientId).subscribe((data: Client) => {
         this.client = data;
 
-        if (
-          (this.client.homeless_reason == "" ||
-            this.client.date_became_homeless == null) &&
-          !this.client.is_aftercare
-        ) {
-          alert(
-            "Please ask this client 1) If this is first time homeless? 2) Why they are homeless? and 3) When they became homeless? Please record this in the Client Details screen, where you will be directed now."
-          );
-          if (!this.isAdmin) {
-            this.clientInfo.nativeElement.click();
+        this.service.getClientDwellings(this.clientId).subscribe((data: ClientDwelling[]) => {
+          if (data.length === 0) {
+            alert(
+              "Please ask this client 1) Why they are homeless? 2) When they became homeless? and 3) If this is first time homeless? Add a 'New Dwelling' for answers #1 & #2. Visit 'Client Info' at the top of the page to answer #3."
+            );
           }
-        }
+        })
 
         this.service.getClientHousehold(this.client.household_id).subscribe(
           (data: Client[]) => {
@@ -191,7 +186,7 @@ export class ServicingClientComponent implements OnInit {
           },
           (error) => console.log(error)
         );
-        this.service.getClientDwelling(this.clientId).subscribe(
+        this.service.getClientDwellings(this.clientId).subscribe(
           (data: ClientDwelling[]) => {
             this.dwellings = data;
           },
@@ -319,7 +314,7 @@ export class ServicingClientComponent implements OnInit {
             this.tents = data;
           });
         this.service
-          .getClientDwelling(this.clientId)
+          .getClientDwellings(this.clientId)
           .subscribe((data: ClientDwelling[]) => {
               this.dwellings = data;
           });
