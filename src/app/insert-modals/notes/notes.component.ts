@@ -13,16 +13,22 @@ export class NotesComponent implements OnInit {
   @Output() noteAdded = new EventEmitter<Note>();
   note: string = '';
   isAdmin: boolean = false;
+  heatRoute: boolean = false;
   source: string = '';
 
   constructor(private modalService: NgbModal, private clientService: ClientService) { }
 
   ngOnInit() {
     this.isAdmin = JSON.parse(localStorage.getItem('isAdmin'));
+    this.heatRoute = JSON.parse(localStorage.getItem('heatRoute'));
     if (this.isAdmin) {
       this.source = 'Resource Center';
     } else {
-      this.source = 'Outreach';
+      if (this.heatRoute) {
+        this.source = 'Heat';
+      } else {
+        this.source = 'Outreach';
+      }
     }
   }
 

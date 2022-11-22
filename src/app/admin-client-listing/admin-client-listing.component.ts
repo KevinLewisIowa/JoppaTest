@@ -24,6 +24,10 @@ export class AdminClientListingComponent implements OnInit {
   constructor(private clientService: ClientService, private router: Router) {
     window.localStorage.removeItem('routeId');
 
+    // this.clientService.seenAndServicedReport().subscribe(data => {
+    //   console.log('seenAndServiced ' + JSON.stringify(data));
+    // });
+
     this.clientService.getClientsByName('').subscribe(data => {
       this.clients = data;
       this.dataSource = new MatTableDataSource(this.clients);

@@ -89,6 +89,27 @@ export class ClientService {
       );
   }
 
+  seenAndServicedReport() {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+    return this.http
+      .get(this.baseUrl + `seen_and_serviced_report?fromDate=2022-11-01&toDate=2022-11-20`, {
+        headers: myHeader,
+      })
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
   getBirthdaysByMonth(monthInt: number) {
     const myHeader = new HttpHeaders({
       "Content-Type": "application/json",
