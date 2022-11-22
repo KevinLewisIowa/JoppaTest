@@ -66,6 +66,7 @@
       <table class="table">
         <thead>
           <tr>
+            <th class="text-left">Dwelling</th>
             <th class="text-left">Name</th>
             <th class="text-left">Mailbox</th>
             <th class="text-left">Phone</th>
@@ -79,6 +80,7 @@
             (click)="viewClient(client)"
             class="client-row"
           >
+            <td class="text-left">{{ client.dwelling }}</td>
             <td class="text-left">
               {{ client.first_name }}
               <span

@@ -8,6 +8,12 @@
         <div class="form-group">
           <div class="row">
             <div class="col-md-6">
+              <label for="first-time-homeless">First Time Homeless? &nbsp; </label>
+              <input id="first-time-homeless" type="checkbox" class="form-control-checkbox" [(ngModel)]="first_time_homeless" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
               <label for="date-became-homeless">Date Became Homeless (Date must be MM/DD/YYYY)</label>
               <input id="date-became-homeless" type="text" class="form-control" placeholder="mm/dd/yyyy" [(ngModel)]="date_became_homeless" style="float:left;"/>
             </div>

@@ -131,7 +131,7 @@ export class ServicingClientComponent implements OnInit {
         this.service.getClientDwellings(this.clientId).subscribe((data: ClientDwelling[]) => {
           if (data.length === 0) {
             alert(
-              "Please ask this client 1) Why they are homeless? 2) When they became homeless? and 3) If this is first time homeless? Add a 'New Dwelling' for answers #1 & #2. Visit 'Client Info' at the top of the page to answer #3."
+              "Please ask this client 1) If this is first time homeless? 2) Why they are homeless? and 3) When they became homeless? Please record this under a new 'Dwelling History' entry."
             );
           }
         })

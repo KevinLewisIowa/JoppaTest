@@ -175,23 +175,25 @@
           </h4>
           <table class="table" id="items">
             <colgroup>
-              <col span="1" style="width: 25%" />
-              <col span="1" style="width: 25%" />
-              <col span="1" style="width: 25%" />
-              <col span="1" style="width: 25%" />
+              <col span="1" style="width: 20%" />
+              <col span="1" style="width: 20%" />
+              <col span="1" style="width: 20%" />
+              <col span="1" style="width: 20%" />
+              <col span="1" style="width: 20%" />
             </colgroup>
             <thead>
               <tr>
+                <th>First Time Homeless?</th>
                 <th>Date Became Homeless</th>
                 <th>Dwelling Location</th>
                 <th>Reason for Homelessness</th>
                 <th>Notes</th>
-                <th></th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let item of dwellings">
-                <td>{{ item.date_became_homeless }}</td>
+                <td>{{ item.first_time_homeless ? 'Yes' : 'No' }}</td>
+                <td>{{ item.date_became_homeless | date: "shortDate" }}</td>
                 <td>{{ item.dwelling }}</td>
                 <td>{{ item.homeless_reason }}</td>
                 <td>{{ item.notes }}</td>

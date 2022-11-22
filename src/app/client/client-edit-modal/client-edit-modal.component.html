@@ -47,16 +47,6 @@
         </div>
       </div>
       <div class="form-group row">
-        <label for="fth" class="col-6 col-form-label"><span style="background-color: yellow;">First Time Homeless:</span><font color="red" *ngIf="!isAdmin">*</font> </label>
-        <div class="col-6">
-          <select id="fth" class="form-control" #fthitem style="float:right;" [(ngModel)]="firstTimeHomeless" [ngModelOptions]="{standalone: true}" (change)="onFTHChange(fthitem.value)">
-            <option value='Unknown'>Unknown</option>
-            <option value='Yes'>Yes</option>
-            <option value='No'>No</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-group row">
         <label for="veteran" class="col-6 col-form-label">Is Veteran:</label>
         <div class="col-6">
           <input id="veteran" class="form-control-checkbox" type="checkbox" style="float:right; width:5%; height:100%;" formControlName="is_veteran" />

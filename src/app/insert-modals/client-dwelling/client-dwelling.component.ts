@@ -12,6 +12,7 @@ export class ClientDwellingComponent implements OnInit {
   @ViewChild('clientDwellingMdl', {static: false}) clientDwellingMdl: ElementRef;
   @Output() clientDwellingAdded = new EventEmitter<ClientDwelling>();
   isAdmin: boolean = false;
+  first_time_homeless: boolean = false;
   date_became_homeless: Date;
   dwelling: string = '';
   homeless_reason: string = '';
@@ -35,6 +36,7 @@ export class ClientDwellingComponent implements OnInit {
     const routeInstanceId: number = this.isAdmin ? -1 : JSON.parse(localStorage.getItem('routeInstance'));
     
     if (this.dwelling != null && !isNaN(clientId) && !isNaN(routeInstanceId)) {
+      clientDwelling.first_time_homeless = this.first_time_homeless;
       clientDwelling.date_became_homeless = this.date_became_homeless;
       clientDwelling.dwelling = this.dwelling;
       clientDwelling.homeless_reason = this.homeless_reason;
@@ -50,6 +52,7 @@ export class ClientDwellingComponent implements OnInit {
     }
 
     this.dwelling = '';
+    this.first_time_homeless = false;
     this.homeless_reason = '';
     this.notes = '';
   }
