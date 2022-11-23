@@ -65,7 +65,7 @@ export class LocationCampComponent implements OnInit {
     private clientService: ClientService,
     private router: Router,
     private activatedRoute: ActivatedRoute
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.isAdmin = JSON.parse(window.localStorage.getItem("isAdmin"));
@@ -114,9 +114,10 @@ export class LocationCampComponent implements OnInit {
                     if (this.heatRoute) {
                       this.clients = data.filter(
                         (client) =>
-                          client.dwelling !== "Vehicle" &&
-                          client.dwelling !== "Under Bridge" &&
-                          client.dwelling !== "Streets"
+                          client.dwelling == "Tent" ||
+                          client.dwelling == "Garage" ||
+                          client.dwelling == "Shack" ||
+                          client.dwelling == "Camper"
                       );
                       this.numberTanksAtCamp = this.clients.reduce(function (
                         prevValue,
@@ -124,7 +125,7 @@ export class LocationCampComponent implements OnInit {
                       ) {
                         return prevValue + currClient.number_tanks;
                       },
-                      0);
+                        0);
                       this.numPeopleWithTanksAtCamp = this.clients.filter(
                         (client) => client.number_tanks > 0
                       ).length;
@@ -188,9 +189,10 @@ export class LocationCampComponent implements OnInit {
                 if (this.heatRoute) {
                   this.clients = data.filter(
                     (client) =>
-                      client.dwelling !== "Vehicle" &&
-                      client.dwelling !== "Under Bridge" &&
-                      client.dwelling !== "Streets"
+                      client.dwelling == "Tent" ||
+                      client.dwelling == "Garage" ||
+                      client.dwelling == "Shack" ||
+                      client.dwelling == "Camper"
                   );
                   this.numberTanksAtCamp = this.clients.reduce(function (
                     prevValue,
@@ -198,7 +200,7 @@ export class LocationCampComponent implements OnInit {
                   ) {
                     return prevValue + currClient.number_tanks;
                   },
-                  0);
+                    0);
                   this.numPeopleWithTanksAtCamp = this.clients.filter(
                     (client) => client.number_tanks > 0
                   ).length;
