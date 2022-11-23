@@ -37,7 +37,7 @@ export class ClientDwellingComponent implements OnInit {
     
     if (this.dwelling != null && !isNaN(clientId) && !isNaN(routeInstanceId)) {
       clientDwelling.first_time_homeless = this.first_time_homeless;
-      clientDwelling.date_became_homeless = this.date_became_homeless;
+      clientDwelling.date_became_homeless = new Date(this.date_became_homeless);
       clientDwelling.dwelling = this.dwelling;
       clientDwelling.homeless_reason = this.homeless_reason;
       clientDwelling.notes = this.notes;
