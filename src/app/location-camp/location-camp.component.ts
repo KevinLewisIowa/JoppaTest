@@ -28,6 +28,7 @@ import {
   faInfoCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { map, catchError } from "rxjs/operators";
+import { ClientDwelling } from "app/models/client-dwelling";
 
 @Component({
   selector: "app-location-camp",
@@ -112,8 +113,14 @@ export class LocationCampComponent implements OnInit {
                   .getClientsForCamp(this.locationCampId)
                   .subscribe((data: Client[]) => {
                     if (this.heatRoute) {
+                      data.forEach(client => {
+                        this.clientService.getClientDwellings(client.id).subscribe((data: ClientDwelling[]) => {
+                          let dwellingDates = data.map(dwelling => dwelling.created_at);
+                          client.dwelling = data.filter(dwelling => dwelling.created_at === dwellingDates.reduce((a, b) => a > b ? a : b))[0].dwelling;
+                        }, (error) => console.log(error))
+                      });
                       this.clients = data.filter(
-                        (client) =>
+                        (client) => 
                           client.dwelling !== "Vehicle" &&
                           client.dwelling !== "Under Bridge" &&
                           client.dwelling !== "Streets"
@@ -186,6 +193,12 @@ export class LocationCampComponent implements OnInit {
             this.mainService
               .getClientsForCamp(this.locationCampId).subscribe((data: Client[]) => {
                 if (this.heatRoute) {
+                  data.forEach(client => {
+                    this.clientService.getClientDwellings(client.id).subscribe((data: ClientDwelling[]) => {
+                      let dwellingDates = data.map(dwelling => dwelling.created_at);
+                      client.dwelling = data.filter(dwelling => dwelling.created_at === dwellingDates.reduce((a, b) => a > b ? a : b))[0].dwelling;
+                    }, (error) => console.log(error))
+                  });
                   this.clients = data.filter(
                     (client) =>
                       client.dwelling !== "Vehicle" &&

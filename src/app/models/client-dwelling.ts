@@ -1,5 +1,6 @@
 export class ClientDwelling {
   id: number = undefined;
+  created_at: Date = undefined;
   first_time_homeless: boolean = undefined;
   date_became_homeless: Date = undefined;
   dwelling: string = undefined;
