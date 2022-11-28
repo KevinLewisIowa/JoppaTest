@@ -4,7 +4,7 @@ import { Router } from "@angular/router";
 import { ClientService } from "app/services/client.service";
 import { Client } from "app/models/client";
 import { Appearance } from 'app/models/appearance';
-import { DatePipe, formatDate } from '@angular/common';
+import { formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-client-edit',
@@ -17,9 +17,6 @@ export class ClientEditComponent implements OnInit {
   regExpDate = /^\d{1,2}\/\d{1,2}\/\d{4}$/
   theClient: Client;
   isAdmin: boolean;
-  otherHomelessReason: string;
-  homelessReasonOptions: string[] = ['Eviction', 'Job Loss', 'Family Dispute', 'Family Loss', 'Legal Issues', 'Health Issues', 'Addictions', 'Mental Health', 'Other'];
-  extraInfoNeeded: boolean = false;
   locationCampId: number;
 
   constructor(private router: Router, private clientService: ClientService, private fb: FormBuilder, @Inject(LOCALE_ID) private locale: string) { }
@@ -43,48 +40,12 @@ export class ClientEditComponent implements OnInit {
       status: 'Active',
       phone: '',
       joppa_apartment_number: '',
-      dwelling: 'Tent',
       gender: '',
       admin_notes: '',
-      homeless_reason: '',
-      first_time_homeless: null,
-      date_became_homeless: '',
-      due_to_covid: null
     });
     this.clientForm.get('first_name').setValidators(Validators.required);
     this.clientForm.get('last_name').setValidators(Validators.required);
     this.clientForm.get('gender').setValidators(Validators.required);
-    this.clientForm.get('dwelling').setValidators(Validators.required);
-  }
-
-  onChange(value: string) {
-    if (value == 'Other') {
-      this.extraInfoNeeded = true;
-    }
-  }
-
-  onFTHChange(value: string) {
-    if (value == 'Unknown') {
-      this.clientForm.patchValue({ first_time_homeless: null });
-    }
-    else if (value == 'Yes') {
-      this.clientForm.patchValue({ first_time_homeless: true });
-    }
-    else {
-      this.clientForm.patchValue({ first_time_homeless: false });
-    }
-  }
-
-  onDTCChange(value: string) {
-    if (value == 'Unknown') {
-      this.clientForm.patchValue({ due_to_covid: null });
-    }
-    else if (value == 'Yes') {
-      this.clientForm.patchValue({ due_to_covid: true });
-    }
-    else {
-      this.clientForm.patchValue({ due_to_covid: false });
-    }
   }
 
   submitClient() {
@@ -101,23 +62,8 @@ export class ClientEditComponent implements OnInit {
     this.theClient.number_meals = this.clientForm.get('number_meals').value as number;
     this.theClient.phone = String(this.clientForm.get('phone').value).trim();
     this.theClient.joppa_apartment_number = String(this.clientForm.get('joppa_apartment_number').value).trim();
-    this.theClient.dwelling = this.clientForm.get('dwelling').value;
     this.theClient.gender = this.clientForm.get('gender').value;
     this.theClient.admin_notes = String(this.clientForm.get('admin_notes').value).trim();
-    this.theClient.first_time_homeless = this.clientForm.get('first_time_homeless').value;
-    this.theClient.date_became_homeless = new Date(Date.parse(this.clientForm.get('date_became_homeless').value));
-    
-    let homelessReason = String(this.clientForm.get('homeless_reason').value.trim());
-    if (homelessReason == 'Other' && this.otherHomelessReason != '') {
-      homelessReason = this.otherHomelessReason;
-    }
-    else if (homelessReason == 'Other' && this.otherHomelessReason == '') {
-      alert('If you select Other as Homeless Reason, need to indicate reason.');
-      return;
-    }
-
-    this.theClient.homeless_reason = homelessReason;
-    this.theClient.due_to_covid = this.clientForm.get('due_to_covid').value;
     this.theClient.last_interaction_date = new Date();
 
     // validate that client birth date is not unreasonable

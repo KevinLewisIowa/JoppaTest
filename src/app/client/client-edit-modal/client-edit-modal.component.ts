@@ -4,7 +4,7 @@ import { Client } from "app/models/client";
 import { ClientService } from "app/services/client.service";
 import { Router } from "@angular/router";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { DatePipe, formatDate } from '@angular/common';
+import { formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-client-edit-modal',
@@ -19,13 +19,8 @@ export class ClientEditModalComponent implements OnInit {
   regExpDate = /^\d{1,2}\/\d{1,2}\/\d{4}$/
   theClient: Client;
   firstTimeHomeless: string = 'Unknown';
-  dueToCovid: string = 'Unknown';
-  otherHomelessReason: string;
   editing = false;
   isAdmin: boolean;
-  extraInfo: string = '';
-  extraInfoNeeded: boolean = false;
-  homelessReasonOptions: string[] = ['Eviction', 'Job Loss', 'Family Dispute', 'Family Loss', 'Legal Issues', 'Health Issues', 'Addictions', 'Mental Health', 'Other'];
 
   constructor(private router: Router, private modalService: NgbModal, private clientService: ClientService, private fb: FormBuilder, @Inject(LOCALE_ID) private locale: string) { }
 
@@ -33,12 +28,6 @@ export class ClientEditModalComponent implements OnInit {
     this.theClient = new Client();
     this.clientForm = this.fb.group(this.theClient);
     this.isAdmin = JSON.parse(window.localStorage.getItem('isAdmin'));
-  }
-
-  onChange(value: string) {
-    if (value == 'Other') {
-      this.extraInfoNeeded = true;
-    }
   }
 
   onFTHChange(value: string) {
@@ -54,38 +43,15 @@ export class ClientEditModalComponent implements OnInit {
     }
   }
 
-  onDTCChange(value: string) {
-    this.dueToCovid = value;
-    if (value == 'Unknown') {
-      this.clientForm.patchValue({due_to_covid: null});
-    }
-    else if (value == 'Yes') {
-      this.clientForm.patchValue({due_to_covid: true});
-    }
-    else {
-      this.clientForm.patchValue({due_to_covid: false});
-    }
-  }
-
   openModal(client: Client) {
     this.theClient = client;
     console.log(JSON.stringify(this.theClient));
-    if (!this.homelessReasonOptions.includes(client.homeless_reason)) {
-      this.homelessReasonOptions.push(client.homeless_reason);
-    }
 
     if (this.theClient.first_time_homeless) {
       this.firstTimeHomeless = 'Yes';
     }
     else if (!this.theClient.first_time_homeless && this.theClient.first_time_homeless != null) {
       this.firstTimeHomeless = 'No';
-    }
-
-    if (this.theClient.due_to_covid) {
-      this.dueToCovid = 'Yes';
-    }
-    else if (!this.theClient.due_to_covid && this.theClient.due_to_covid != null) {
-      this.dueToCovid = 'No';
     }
 
     this.clientForm = null;
@@ -121,13 +87,6 @@ export class ClientEditModalComponent implements OnInit {
     if (updatedClient.status == 'Inactive') {
       updatedClient.previous_camp_id = updatedClient.current_camp_id;
       updatedClient.current_camp_id = 0;
-    }
-    if (updatedClient.homeless_reason == 'Other' && this.otherHomelessReason != '') {
-      updatedClient.homeless_reason = this.otherHomelessReason;
-    }
-    else if (updatedClient.homeless_reason == 'Other' && this.otherHomelessReason == '') {
-      alert('If you select Other as Homeless Reason, need to indicate reason.');
-      return;
     }
 
     this.clientService.updateClient(updatedClient).subscribe(data => {

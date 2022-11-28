@@ -15,6 +15,7 @@ import { Note } from "app/models/note";
 import { ClientPet } from "app/models/client-pet";
 import { Tent } from "app/models/tent";
 import { ReferralsResources } from "app/models/referrals-resources";
+import { ClientDwelling } from "app/models/client-dwelling";
 import { environment } from "environments/environment";
 import { map, catchError } from "rxjs/operators";
 
@@ -280,6 +281,83 @@ export class ClientService {
         }),
         catchError(this.handleError)
       );
+  }
+
+  insertClientDwelling(theDwelling: ClientDwelling) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+    return this.http
+      .post(
+        this.baseUrl + `client_dwellings`,
+        { client_dwelling: theDwelling },
+        { headers: myHeader }
+      )
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  getClientDwellings(id) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+
+    return this.http
+      .get(this.baseUrl + `getDwellingsForClient?clientId=${id}`, { headers: myHeader })
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  updateClientDwelling(theDwelling: ClientDwelling) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+    return this.http
+      .patch(
+        this.baseUrl + `client_dwellings/${theDwelling.id}`,
+        { client_dwelling: theDwelling },
+        { headers: myHeader }
+      )
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  removeClientDwelling(id: number) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+    return this.http.delete(this.baseUrl + `client_dwellings/${id}`, { headers: myHeader })
+    .pipe(map((res) => {
+      return true;
+    }), catchError(this.handleError));
   }
 
   getTentsForClient(client_id: number) {

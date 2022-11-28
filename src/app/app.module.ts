@@ -83,6 +83,7 @@ import { CustomConfirmationDialogComponent } from "./custom-confirmation-dialog/
 import { AdminCampListingComponent } from "./admin-camp-listing/admin-camp-listing.component";
 import { AdminClientInactiveUpdaterComponent } from "./admin-client-inactive-updater/admin-client-inactive-updater.component";
 import { DateSelectorComponent } from "./insert-modals/date-selector/date-selector.component";
+import { ClientDwellingComponent } from "./insert-modals/client-dwelling/client-dwelling.component";
 
 const reducers = {
   user: MainReducer,
@@ -104,6 +105,7 @@ const reducers = {
     LocationCampComponent,
     CreateLocationCampComponent,
     CampNotesComponent,
+    ClientDwellingComponent,
     ServicingClientComponent,
     RequestedItemComponent,
     HealthConcernComponent,
