@@ -70,175 +70,125 @@ export class LocationCampComponent implements OnInit {
 
   ngOnInit() {
     this.isAdmin = JSON.parse(window.localStorage.getItem("isAdmin"));
-    let routeInstanceId: number = JSON.parse(
-      window.localStorage.getItem("routeInstance")
-    );
+    let routeInstanceId: number = JSON.parse(window.localStorage.getItem("routeInstance"));
     if (routeInstanceId > 0) {
       this.mainService.showEndRoute.next(true);
     }
 
     this.activatedRoute.params.subscribe((params: Params) => {
       this.locationCampId = this.activatedRoute.snapshot.params["id"];
-      localStorage.setItem(
-        "locationCampId",
-        JSON.stringify(this.locationCampId)
-      );
+      localStorage.setItem("locationCampId", JSON.stringify(this.locationCampId));
       this.heatRoute = JSON.parse(window.localStorage.getItem("heatRoute"));
 
       let routeId: number = JSON.parse(window.localStorage.getItem("routeId"));
       if (routeId) {
-        this.mainService.getRoute(routeId).subscribe(
-          (route: Route) => {
-            this.route = route;
+        this.mainService.getRoute(routeId).subscribe((route: Route) => {
+          this.route = route;
 
-            this.mainService.getLocationCamp(this.locationCampId).subscribe(
-              (data) => {
-                this.locationCamp = data;
-                if (
-                  this.locationCamp.expected_arrival_time &&
-                  this.locationCamp.expected_arrival_time != ""
-                ) {
-                  let timeArray: string[] =
-                    this.locationCamp.expected_arrival_time.split(":");
-                  this.expectedArrivalTime = new Date(
-                    null,
-                    null,
-                    null,
-                    parseInt(timeArray[0]),
-                    parseInt(timeArray[1])
-                  );
-                }
-
-                this.mainService
-                  .getClientsForCamp(this.locationCampId)
-                  .subscribe((data: Client[]) => {
-                    if (this.heatRoute) {
-                      data.forEach(client => {
-                        this.clientService.getClientDwellings(client.id).subscribe((data: ClientDwelling[]) => {
-                          let dwellingDates = data.map(dwelling => dwelling.created_at);
-                          client.dwelling = data.filter(dwelling => dwelling.created_at === dwellingDates.reduce((a, b) => a > b ? a : b))[0].dwelling;
-                        }, (error) => console.log(error))
-                      });
-                      this.clients = data.filter(
-                        (client) =>
-                          client.dwelling == "Tent" ||
-                          client.dwelling == "Garage" ||
-                          client.dwelling == "Shack" ||
-                          client.dwelling == "Camper"
-                      );
-                      this.numberTanksAtCamp = this.clients.reduce(function (
-                        prevValue,
-                        currClient
-                      ) {
-                        return prevValue + currClient.number_tanks;
-                      },
-                        0);
-                      this.numPeopleWithTanksAtCamp = this.clients.filter(
-                        (client) => client.number_tanks > 0
-                      ).length;
-
-                      this.checkClientHasFulfilledItems();
-                    } else {
-                      this.clients = data;
-
-                      this.checkClientHasFulfilledItems();
-                    }
-                  });
-                this.mainService.getCampNotes(this.locationCampId).subscribe(
-                  (data: CampNote[]) => {
-                    this.campNotes = data;
-                  },
-                  (error) => console.log(error)
-                );
-              },
-              (error) => {
-                console.log(error);
-              }
-            );
-          },
-          (error) => {
-            console.log(error);
-          }
-        );
-      } else {
-        this.mainService.getLocationCamp(this.locationCampId).subscribe(
-          (data) => {
+          this.mainService.getLocationCamp(this.locationCampId).subscribe((data) => {
             this.locationCamp = data;
-
-            if (
-              this.locationCamp.expected_arrival_time &&
-              this.locationCamp.expected_arrival_time != ""
-            ) {
-              let timeArray: string[] =
-                this.locationCamp.expected_arrival_time.split(":");
-              this.expectedArrivalTime = new Date(
-                null,
-                null,
-                null,
-                parseInt(timeArray[0]),
-                parseInt(timeArray[1])
-              );
+            if (this.locationCamp.expected_arrival_time && this.locationCamp.expected_arrival_time != "") {
+              let timeArray: string[] = this.locationCamp.expected_arrival_time.split(":");
+              this.expectedArrivalTime = new Date(null, null, null, parseInt(timeArray[0]), parseInt(timeArray[1]));
             }
 
-            window.localStorage.setItem(
-              "routeId",
-              JSON.stringify(this.locationCamp.route_id)
-            );
-            this.mainService.getRoute(this.locationCamp.route_id).subscribe(
-              (data: Route) => {
-                this.route = data;
-              },
-              (error) => console.log(error)
-            );
+            this.mainService.getClientsForCamp(this.locationCampId).subscribe((data: Client[]) => {
+              data.forEach(client => {
+                this.clientService.getClientDwellings(client.id).subscribe((data: ClientDwelling[]) => {
+                  let dwellingDates = data.map(dwelling => dwelling.date_became_homeless);
+                  client.dwelling = data.filter(dwelling => dwelling.date_became_homeless === dwellingDates.reduce((a, b) => a > b ? a : b))[0].dwelling;
 
-            this.mainService
-              .getClientsForCamp(this.locationCampId).subscribe((data: Client[]) => {
-                if (this.heatRoute) {
-                  data.forEach(client => {
-                    this.clientService.getClientDwellings(client.id).subscribe((data: ClientDwelling[]) => {
-                      let dwellingDates = data.map(dwelling => dwelling.created_at);
-                      client.dwelling = data.filter(dwelling => dwelling.created_at === dwellingDates.reduce((a, b) => a > b ? a : b))[0].dwelling;
-                    }, (error) => console.log(error))
-                  });
-                  this.clients = data.filter(
-                    (client) =>
-                      client.dwelling == "Tent" ||
-                      client.dwelling == "Garage" ||
-                      client.dwelling == "Shack" ||
-                      client.dwelling == "Camper"
-                  );
-                  this.numberTanksAtCamp = this.clients.reduce(function (
-                    prevValue,
-                    currClient
-                  ) {
-                    return prevValue + currClient.number_tanks;
-                  },
-                    0);
-                  this.numPeopleWithTanksAtCamp = this.clients.filter(
-                    (client) => client.number_tanks > 0
-                  ).length;
+                  if (this.heatRoute) {
+                    if (client.dwelling == "Tent" || client.dwelling == "Garage" || client.dwelling == "Shack" || client.dwelling == "Camper") {
+                      this.clients.push(client);
+                    }
+                    this.numberTanksAtCamp += client.number_tanks;
+                    if (client.number_tanks > 1) this.numPeopleWithTanksAtCamp += 1;
+                  }
+                  else {
+                    this.clients.push(client);
+                  }
 
-                  this.checkClientHasFulfilledItems();
-                } else {
-                  this.clients = data;
-
-                  this.checkClientHasFulfilledItems();
-                }
+                  this.mainService.getClientHasFulfilledItems(client.id).subscribe((count: number) => {
+                    if (count > 0) {
+                      this.clientsWithFulfilledItems.push(client.id);
+                    }
+                  }, (error) => console.log(error));
+                }, (error) => console.log(error));
               });
-          },
-          (error) => {
-            console.log(error);
-          }
-        );
-      }
-    });
 
-    this.mainService.getCampNotes(this.locationCampId).subscribe(
-      (data: CampNote[]) => {
-        this.campNotes = data;
-      },
-      (error) => console.log(error)
-    );
+              this.mainService.getCampNotes(this.locationCampId).subscribe((data: CampNote[]) => {
+                this.campNotes = data;
+              }, (error) => console.log(error));
+            }, (error) => console.log(error));
+          }, (error) => console.log(error));
+        }, (error) => console.log(error));
+      }
+      else {
+        this.mainService.getLocationCamp(this.locationCampId).subscribe((data) => {
+          this.locationCamp = data;
+
+          if (this.locationCamp.expected_arrival_time && this.locationCamp.expected_arrival_time != "") {
+            let timeArray: string[] = this.locationCamp.expected_arrival_time.split(":");
+            this.expectedArrivalTime = new Date(null, null, null, parseInt(timeArray[0]), parseInt(timeArray[1]));
+          }
+
+          window.localStorage.setItem("routeId", JSON.stringify(this.locationCamp.route_id));
+          this.mainService.getRoute(this.locationCamp.route_id).subscribe((data: Route) => {
+            this.route = data;
+            this.mainService.getClientsForCamp(this.locationCampId).subscribe((data: Client[]) => {
+              data.forEach(client => {
+                this.clientService.getClientDwellings(client.id).subscribe((data: ClientDwelling[]) => {
+                  let dwellingDates = data.map(dwelling => dwelling.date_became_homeless);
+                  client.dwelling = data.filter(dwelling => dwelling.date_became_homeless === dwellingDates.reduce((a, b) => a > b ? a : b))[0].dwelling;
+
+                  if (this.heatRoute) {
+                    if (client.dwelling == "Tent" || client.dwelling == "Garage" || client.dwelling == "Shack" || client.dwelling == "Camper") {
+                      console.log(JSON.stringify(client));
+                      this.clients.push(client);
+                    }
+                    this.numberTanksAtCamp += client.number_tanks;
+                    if (client.number_tanks > 0) this.numPeopleWithTanksAtCamp += 1;
+                  }
+                  else {
+                    this.clients.push(client);
+                  }
+
+                  this.mainService.getClientHasFulfilledItems(client.id).subscribe((count: number) => {
+                    if (count > 0) {
+                      this.clientsWithFulfilledItems.push(client.id);
+                    }
+                  }, (error) => console.log(error));
+                }, (error) => console.log(error));
+              });
+
+              this.mainService.getCampNotes(this.locationCampId).subscribe((data: CampNote[]) => {
+                this.campNotes = data;
+              }, (error) => console.log(error));
+
+              //   if (this.heatRoute) {
+              //     this.clients = data.filter((client) => client.dwelling == "Tent" || client.dwelling == "Garage" || client.dwelling == "Shack" || client.dwelling == "Camper");
+              //     this.numberTanksAtCamp = this.clients.reduce(function (prevValue, currClient) {
+              //       return prevValue + currClient.number_tanks;
+              //     }, 0);
+              //     this.numPeopleWithTanksAtCamp = this.clients.filter(
+              //       (client) => client.number_tanks > 0
+              //     ).length;
+
+              //     this.checkClientHasFulfilledItems();
+              //   }
+              //   else {
+              //     this.clients = data;
+
+              //     this.checkClientHasFulfilledItems();
+              //   }
+              // });
+
+            }, (error) => console.log(error));
+          }, (error) => console.log(error));
+        }, (error) => console.log(error));
+      }
+    }, (error) => console.log(error));
   }
 
   editedCamp(theCamp: LocationCamp) {

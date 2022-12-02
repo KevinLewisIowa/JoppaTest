@@ -87,7 +87,7 @@ export class ServicingClientComponent implements OnInit {
     private modalService: NgbModal,
     private router: Router,
     public dialog: MatDialog
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.routeInstanceId = JSON.parse(localStorage.getItem("routeInstance"));
@@ -144,15 +144,10 @@ export class ServicingClientComponent implements OnInit {
         );
       });
       if (this.routeInstanceId != null) {
-        this.service
-          .getClientNotesForRoute(this.clientId, this.routeInstanceId)
-          .subscribe(
-            (data: Note[]) => {
-              this.notes = data;
-              this.goToTop();
-            },
-            (error) => console.log(error)
-          );
+        this.service.getClientNotesForRoute(this.clientId, this.routeInstanceId).subscribe((data: Note[]) => {
+          this.notes = data;
+          this.goToTop();
+        }, (error) => console.log(error));
       }
 
       if (this.isAdmin) {
@@ -316,7 +311,7 @@ export class ServicingClientComponent implements OnInit {
         this.service
           .getClientDwellings(this.clientId)
           .subscribe((data: ClientDwelling[]) => {
-              this.dwellings = data;
+            this.dwellings = data;
           });
         this.service
           .getClientReferrals(this.clientId)
@@ -586,7 +581,7 @@ export class ServicingClientComponent implements OnInit {
           );
           console.log(
             "Number of interactions in route attendance list: " +
-              routeAttendanceList.length
+            routeAttendanceList.length
           );
           console.log(JSON.stringify(routeAttendanceList));
           this.router.navigate([`/locationCamp/${this.locationCampId}`]);
@@ -671,12 +666,12 @@ export class ServicingClientComponent implements OnInit {
 
     client.household_id = this.client.household_id;
     this.service.updateClient(client).subscribe(
-      (data) => {},
+      (data) => { },
       (error) => console.log(error)
     );
   }
 
-  dateSelected(date_seen: Date) {}
+  dateSelected(date_seen: Date) { }
 
   goToTop() {
     const element = document.querySelector("#topOfScreen");
