@@ -99,7 +99,7 @@ export class LocationCampComponent implements OnInit {
                   client.dwelling = data.filter(dwelling => dwelling.date_became_homeless === dwellingDates.reduce((a, b) => a > b ? a : b))[0].dwelling;
 
                   if (this.heatRoute) {
-                    if (client.dwelling == "Tent" || client.dwelling == "Garage" || client.dwelling == "Shack" || client.dwelling == "Camper") {
+                    if (client.dwelling == "Tent" || client.dwelling == "Garage" || client.dwelling == "Shack" || client.dwelling == "Camper" || client.dwelling == "Broken Down Van") {
                       this.clients.push(client);
                     }
                     this.numberTanksAtCamp += client.number_tanks;
@@ -143,7 +143,7 @@ export class LocationCampComponent implements OnInit {
                   client.dwelling = data.filter(dwelling => dwelling.date_became_homeless === dwellingDates.reduce((a, b) => a > b ? a : b))[0].dwelling;
 
                   if (this.heatRoute) {
-                    if (client.dwelling == "Tent" || client.dwelling == "Garage" || client.dwelling == "Shack" || client.dwelling == "Camper") {
+                    if (client.dwelling == "Tent" || client.dwelling == "Garage" || client.dwelling == "Shack" || client.dwelling == "Camper" || client.dwelling == "Broken Down Van") {
                       console.log(JSON.stringify(client));
                       this.clients.push(client);
                     }
