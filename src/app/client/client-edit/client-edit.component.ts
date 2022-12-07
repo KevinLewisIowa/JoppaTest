@@ -5,6 +5,7 @@ import { ClientService } from "app/services/client.service";
 import { Client } from "app/models/client";
 import { Appearance } from 'app/models/appearance';
 import { formatDate } from '@angular/common';
+import { ClientDwelling } from 'app/models/client-dwelling';
 
 @Component({
   selector: 'app-client-edit',
@@ -18,6 +19,9 @@ export class ClientEditComponent implements OnInit {
   theClient: Client;
   isAdmin: boolean;
   locationCampId: number;
+  otherHomelessReason: string;
+  extraInfoNeeded: boolean = false;
+  homelessReasonOptions: string[] = ['Eviction', 'Job Loss', 'Family Dispute', 'Family Loss', 'Legal Issues', 'Health Issues', 'Addictions', 'Mental Health', 'Other'];
 
   constructor(private router: Router, private clientService: ClientService, private fb: FormBuilder, @Inject(LOCALE_ID) private locale: string) { }
 
@@ -42,17 +46,40 @@ export class ClientEditComponent implements OnInit {
       joppa_apartment_number: '',
       gender: '',
       admin_notes: '',
+      homeless_reason: '',
+      first_time_homeless: null,
+      date_became_homeless: '',
+      dwelling: 'Tent'
     });
     this.clientForm.get('first_name').setValidators(Validators.required);
     this.clientForm.get('last_name').setValidators(Validators.required);
     this.clientForm.get('gender').setValidators(Validators.required);
+    this.clientForm.get('dwelling').setValidators(Validators.required);
+  }
+
+  onChange(value: string) {
+    if (value == 'Other') {
+      this.extraInfoNeeded = true;
+    }
+  }
+
+  onFTHChange(value: string) {
+    if (value == 'Unknown') {
+      this.clientForm.patchValue({ first_time_homeless: null });
+    }
+    else if (value == 'Yes') {
+      this.clientForm.patchValue({ first_time_homeless: true });
+    }
+    else {
+      this.clientForm.patchValue({ first_time_homeless: false });
+    }
   }
 
   submitClient() {
     this.theClient.first_name = String(this.clientForm.get('first_name').value).trim();
     this.theClient.last_name = String(this.clientForm.get('last_name').value).trim();
     this.theClient.preferred_name = String(this.clientForm.get('preferred_name').value).trim();
-    this.theClient.birth_date = new Date(Date.parse(this.clientForm.get('birth_date').value));
+    this.theClient.birth_date = (this.clientForm.get('birth_date').value === "") ? undefined : new Date(Date.parse(this.clientForm.get('birth_date').value));
     this.theClient.is_aftercare = this.clientForm.get('is_aftercare').value;
     this.theClient.is_veteran = this.clientForm.get('is_veteran').value;
     this.theClient.current_camp_id = this.locationCampId;
@@ -67,20 +94,22 @@ export class ClientEditComponent implements OnInit {
     this.theClient.last_interaction_date = new Date();
 
     // validate that client birth date is not unreasonable
-    let now: Date = new Date();
-    let birthday: Date = new Date(this.theClient.birth_date);
-    let pastDate: Date = new Date(now.getFullYear() - 100, now.getMonth(), now.getDate());
-    if (!this.regExpDate.test(formatDate(birthday, 'MM/dd/yyyy', 'en'))) {
-      alert('Birth date must be entered in format mm/dd/yyyy');
-      return;
-    }
-    if (birthday.getTime() > now.getTime()) {
-      alert('You cannot select a birth date that is in the future');
-      return;
-    }
-    else if (birthday.getTime() < pastDate.getTime()) {
-      alert('You cannot set a birth date this far back in the past');
-      return;
+    if (this.theClient.birth_date) {
+      let now: Date = new Date();
+      let birthday: Date = new Date(this.theClient.birth_date);
+      let pastDate: Date = new Date(now.getFullYear() - 100, now.getMonth(), now.getDate());
+      if (!this.regExpDate.test(formatDate(birthday, 'MM/dd/yyyy', 'en'))) {
+        alert('Birth date must be entered in format mm/dd/yyyy');
+        return;
+      }
+      if (birthday.getTime() > now.getTime()) {
+        alert('You cannot select a birth date that is in the future');
+        return;
+      }
+      else if (birthday.getTime() < pastDate.getTime()) {
+        alert('You cannot set a birth date this far back in the past');
+        return;
+      }
     }
 
     this.clientService.insertClient(this.theClient).subscribe((insertedClient: Client) => {
@@ -101,11 +130,29 @@ export class ClientEditComponent implements OnInit {
           window.localStorage.setItem('RouteAttendance', JSON.stringify(routeAttendanceList));
         }
 
-        insertedClient.household_id = insertedClient.id;
-        this.clientService.updateClient(insertedClient).subscribe(updatedClient => {
-          console.log(JSON.stringify(updatedClient));
-          this.router.navigate([`/locationCamp/${this.locationCampId}`]);
-        }, error => console.log(error));
+        let homelessReason = String(this.clientForm.get('homeless_reason').value.trim());
+        if (homelessReason == 'Other' && this.otherHomelessReason != '') {
+          homelessReason = this.otherHomelessReason;
+        }
+        else if (homelessReason == 'Other' && this.otherHomelessReason == '') {
+          alert('If you select Other as Homeless Reason, need to indicate reason.');
+          return;
+        }
+
+        const theDwelling: ClientDwelling = new ClientDwelling();
+        theDwelling.client_id = insertedClient.id;
+        theDwelling.dwelling = String(this.clientForm.get('dwelling').value).trim();
+        theDwelling.homeless_reason = homelessReason;
+        theDwelling.date_became_homeless = new Date(Date.parse(this.clientForm.get('date_became_homeless').value));
+        theDwelling.first_time_homeless = this.clientForm.get('first_time_homeless').value;
+        this.clientService.insertClientDwelling(theDwelling).subscribe((data: ClientDwelling) => {
+          console.log('inserted dwelling: ' + data);
+          insertedClient.household_id = insertedClient.id;
+          this.clientService.updateClient(insertedClient).subscribe(updatedClient => {
+            console.log(JSON.stringify(updatedClient));
+            this.router.navigate([`/locationCamp/${this.locationCampId}`]);
+          }, error => console.log(error));
+        });
       }, error => console.log(error));
     }, error => {
       console.log(error);

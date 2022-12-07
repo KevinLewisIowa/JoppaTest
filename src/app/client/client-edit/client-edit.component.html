@@ -1,7 +1,9 @@
 <div class="card panel-info" style="opacity:0.93">
   <div class="card-header text-left">
     <h2>Create Client</h2>
-    <h6><label><font color="red">*</font></label>Indicates Required Field</h6>
+    <h6><label>
+        <font color="red">*</font>
+      </label>Indicates Required Field</h6>
   </div>
   <div class="panel-body" style="opacity:0.93">
     <form [formGroup]="clientForm" style="opacity:0.93">
@@ -9,25 +11,28 @@
         <div class="form-group row">
           <label for="first-name" class="col-6 col-form-label">First Name:<font color="red">*</font> </label>
           <div class="col-6">
-            <input id="first-name" type="text" class="form-control" style="float:right;" placeholder="First Name" formControlName="first_name" />
+            <input id="first-name" type="text" class="form-control" style="float:right;" placeholder="First Name"
+              formControlName="first_name" />
           </div>
         </div>
         <div class="form-group row">
           <label for="last-name" class="col-6 col-form-label">Last Name:<font color="red">*</font> </label>
           <div class="col-6">
-            <input id="last-name" type="text" class="form-control" style="float:right;" placeholder="Last Name" formControlName="last_name" />
+            <input id="last-name" type="text" class="form-control" style="float:right;" placeholder="Last Name"
+              formControlName="last_name" />
           </div>
         </div>
         <div class="form-group row">
           <label for="preferred-name" class="col-6 col-form-label">Preferred Name: </label>
           <div class="col-6">
-            <input id="preferred-name" type="text" class="form-control" style="float:right;" placeholder="Preferred Name" formControlName="preferred_name" />
+            <input id="preferred-name" type="text" class="form-control" style="float:right;"
+              placeholder="Preferred Name" formControlName="preferred_name" />
           </div>
         </div>
         <div class="form-group row">
           <label for="gender" class="col-6 col-form-label">Gender:<font color="red">*</font> </label>
           <div class="col-6">
-            <select id="gender" class= "form-control" formControlName="gender" style="float:right;">
+            <select id="gender" class="form-control" formControlName="gender" style="float:right;">
               <option value="Male">Male</option>
               <option value="Female">Female</option>
               <option value="Other">Other</option>
@@ -37,31 +42,88 @@
         <div class="form-group row">
           <label for="birth-date" class="col-6 col-form-label">Birth Date (Date must be MM/DD/YYYY): </label>
           <div class="col-6">
-            <input id="birth-date" type="text" class="form-control" placeholder="mm/dd/yyyy" formControlName="birth_date" style="float:right;"/>
+            <input id="birth-date" type="text" class="form-control" placeholder="mm/dd/yyyy" formControlName="birth_date" style="float:right;" />
           </div>
         </div>
         <div class="form-group row">
           <label for="phone" class="col-6 col-form-label">Phone: </label>
           <div class="col-6">
-            <input id="phone" type="text" class="form-control" style="float:right;" placeholder="phone" formControlName="phone" />
+            <input id="phone" type="text" class="form-control" style="float:right;" placeholder="phone"
+              formControlName="phone" />
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="fth" class="col-6 col-form-label"><span style="background-color: yellow;">First Time Homeless:</span><font color="red" *ngIf="!isAdmin">*</font></label>
+          <div class="col-6">
+            <select id="fth" class="form-control" #fthitem style="float:right;" (change)="onFTHChange(fthitem.value)">
+              <option value='Unknown'>Unknown</option>
+              <option value='Yes'>Yes</option>
+              <option value='No'>No</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="dbh" class="col-6 col-form-label"><span style="background-color: yellow;">Date Became Homeless (Date must be MM/DD/YYYY):</span> </label>
+          <div class="col-6">
+            <input id="dbh" type="text" class="form-control" placeholder="mm/dd/yyyy" formControlName="date_became_homeless" style="float:right;" />
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="rfh" class="col-6 col-form-label"><span style="background-color: yellow;">Reason for Homelessness:</span> </label>
+          <div class="col-6">
+            <select id="rfh" class="form-control" #item formControlName="homeless_reason"
+              (change)="onChange(item.value)">
+              <option *ngFor="let option of homelessReasonOptions" [value]="option">{{option}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-6"></label>
+          <div class="col-6">
+            <input type="text" class="form-control" placeholder="Reason" *ngIf="extraInfoNeeded" />
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="dwelling" class="col-6 col-form-label">Dwelling:<font color="red">*</font> </label>
+          <div class="col-6">
+            <select id="dwelling" class="form-control" style="float:right;" formControlName="dwelling">
+              <option value="Abandoned Structure">Abandoned Structure</option>
+              <option value="Apartment">Apartment</option>
+              <option value="Broken Down Van">Broken Down Van</option>
+              <option value="Camper">Camper</option>
+              <option value="Couch Surfing">Couch Surfing</option>
+              <option value="Garage">Garage</option>
+              <option value="House">House</option>
+              <option value="Mobile Home">Mobile Home</option>
+              <option value="Motel">Motel</option>
+              <option value="Shack">Shack</option>
+              <option value="Shelter">Shelter</option>
+              <option value="Tent">Tent</option>
+              <option value="Streets">Streets</option>
+              <option value="Under Bridge">Under Bridge</option>
+              <option value="Vehicle">Vehicle</option>
+            </select>
           </div>
         </div>
         <div class="form-group row">
           <label for="veteran" class="col-6 col-form-label">Is Veteran:</label>
           <div class="col-6">
-            <input id="veteran" class="form-control-checkbox" type="checkbox" style="float:right; width:5%; height:100%;" formControlName="is_veteran" />
+            <input id="veteran" class="form-control-checkbox" type="checkbox"
+              style="float:right; width:5%; height:100%;" formControlName="is_veteran" />
           </div>
         </div>
         <div class="form-group row">
           <label for="aftercare" class="col-6 col-form-label">Is After Care:</label>
           <div class="col-6">
-            <input id="aftercare" type="checkbox" class="form-control-checkbox" style="float:right; width:5%; height:100%;" formControlName="is_aftercare" />
+            <input id="aftercare" type="checkbox" class="form-control-checkbox"
+              style="float:right; width:5%; height:100%;" formControlName="is_aftercare" />
           </div>
         </div>
         <div class="form-group row">
           <label for="mailbox" class="col-6 col-form-label">Mailbox: </label>
           <div class="col-6">
-            <input id="mailbox" type="text" class="form-control" style="float:right;" placeholder="Joppa Mailbox Number" formControlName="joppa_apartment_number" />
+            <input id="mailbox" type="text" class="form-control" style="float:right;" placeholder="Joppa Mailbox Number"
+              formControlName="joppa_apartment_number" />
           </div>
         </div>
         <div class="form-group row">
@@ -78,7 +140,8 @@
         <div class="form-group row" *ngIf="isAdmin">
           <label for="admin-notes" class="col-6 col-form-label">Admin Notes: </label>
           <div class="col-6">
-            <textarea id="admin-notes" type="text" class="form-control" rows="3" placeholder="admin notes" style="float:right;" formControlName="admin_notes"></textarea>
+            <textarea id="admin-notes" type="text" class="form-control" rows="3" placeholder="admin notes"
+              style="float:right;" formControlName="admin_notes"></textarea>
           </div>
         </div>
       </div>
@@ -86,6 +149,7 @@
   </div>
   <div class="card-footer text-right">
     <button type="button" class="btn btn-outline-primary" style="float:left;" (click)="close()">Close</button>
-    <button class="btn btn-primary" type="button" style="float:right;" [disabled]="!clientForm.valid" (click)="submitClient()">Save Client</button>
+    <button class="btn btn-primary" type="button" style="float:right;" [disabled]="!clientForm.valid"
+      (click)="submitClient()">Save Client</button>
   </div>
 </div>
