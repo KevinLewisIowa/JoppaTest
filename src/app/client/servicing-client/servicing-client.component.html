@@ -806,17 +806,17 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let client of householdClients">
+              <tr *ngFor="let houseclient of householdClients">
                 <td>
-                  {{ client.first_name }} <span *ngIf="client.preferred_name != '' && client.preferred_name != null">({{ client.preferred_name }})</span> {{ client.last_name }}
+                  {{ houseclient.first_name }} <span *ngIf="houseclient.preferred_name != '' && houseclient.preferred_name != null">({{ houseclient.preferred_name }})</span> {{ houseclient.last_name }}
                 </td>
-                <td><button type="button" class="btn btn-primary" (click)="viewClient(client)" *ngIf="isAdmin && client.id != client.household_id">Go To Client</button></td>
+                <td><button type="button" class="btn btn-primary" (click)="viewClient(houseclient)" *ngIf="isAdmin && houseclient.id != client.id">Go To Client</button></td>
                 <td>
                   <button
                     type="button"
                     class="btn btn-primary"
-                    (click)="removeHouseholdClient(client)"
-                    *ngIf="client.id != client.household_id"
+                    (click)="removeHouseholdClient(houseclient)"
+                    *ngIf="houseclient.id != houseclient.household_id"
                   >
                     Remove
                   </button>
