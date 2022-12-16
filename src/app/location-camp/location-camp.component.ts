@@ -66,7 +66,9 @@ export class LocationCampComponent implements OnInit {
     private clientService: ClientService,
     private router: Router,
     private activatedRoute: ActivatedRoute
-  ) { }
+  ) {
+    
+  }
 
   ngOnInit() {
     this.isAdmin = JSON.parse(window.localStorage.getItem("isAdmin"));
@@ -289,6 +291,7 @@ export class LocationCampComponent implements OnInit {
       alert("You are at the end of route");
     } else {
       let nextCampId: number = locationCampList[indexCurrCamp + 1];
+      this.clients = [];
       this.router.navigate([`locationCamp/${nextCampId}`]);
     }
   }

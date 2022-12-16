@@ -71,6 +71,7 @@ export class ServicingClientComponent implements OnInit {
   attendanceToDate: string;
   updateTimerSubscription: Subscription;
   updateHoseTankMessageVisible: boolean = false;
+  campId: number;
   backIcon = faChevronLeft;
   informationIcon = faInfoCircle;
   seenAndServicedIcon = faCheckCircle;
@@ -127,6 +128,7 @@ export class ServicingClientComponent implements OnInit {
     if (this.clientId !== null) {
       this.service.getClientById(this.clientId).subscribe((data: Client) => {
         this.client = data;
+        this.campId = this.client.current_camp_id;
 
         this.service.getClientDwellings(this.clientId).subscribe((data: ClientDwelling[]) => {
           if (data.length === 0) {
@@ -695,7 +697,7 @@ export class ServicingClientComponent implements OnInit {
     let message: string;
 
     if (this.isAdmin) {
-      this.router.navigate([`/locationCamp/${this.client.current_camp_id}`]);
+      this.router.navigate([`/locationCamp/${this.campId}`]);
     } else {
       if (!this.sentInteraction) {
         message =
