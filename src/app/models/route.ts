@@ -8,4 +8,5 @@ export class Route {
   is_aftercare: boolean = undefined;
   number_stops: number = undefined;
   number_clients: number = undefined;
+  admin_notes: string = undefined;
 }

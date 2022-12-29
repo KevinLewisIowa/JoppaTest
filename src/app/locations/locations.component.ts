@@ -55,9 +55,8 @@ export class LocationsComponent implements OnInit {
         this.thisRoute = new Route();
       } else {
         this.thisRoute = route;
-        this.mainService
-          .getClientCountForRoute(this.thisRoute.id)
-          .subscribe((data: number) => {
+        console.log(JSON.stringify(route));
+        this.mainService.getClientCountForRoute(this.thisRoute.id).subscribe((data: number) => {
             this.clientCountForRoute = data;
 
             this.mainService.getCampsForRoute(this.routeId).subscribe((locations: LocationCamp[]) => {

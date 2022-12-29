@@ -26,6 +26,7 @@ export class RouteEditModalComponent implements OnInit {
   }
 
   showModal(route: Route) {
+    console.log(JSON.stringify(route));
     this.theRoute = route;
     this.routeForm = null;
     this.routeForm = this.fb.group(this.theRoute);

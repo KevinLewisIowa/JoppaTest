@@ -27,7 +27,8 @@ export class CreateRouteComponent implements OnInit {
     this.routeForm = this.fb.group({
       region: '',
       name: '',
-      is_aftercare: false
+      is_aftercare: false,
+      admin_notes: ''
     });
     this.routeForm.get('region').setValidators(Validators.required);
     this.routeForm.get('name').setValidators(Validators.required);

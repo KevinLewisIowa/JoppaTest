@@ -4,6 +4,8 @@
     <h4 align="left">
       Number of Total Clients for Route: {{ clientCountForRoute }}
     </h4>
+    <h4 align="left"><span style="background-color: yellow">{{ thisRoute.admin_notes }}</span></h4>
+
     <div>
       <button
         (click)="showRouteLocations()"
@@ -13,13 +15,7 @@
       >
         <fa-icon [icon]="mapIcon"></fa-icon> Show Route Map
       </button>
-      <button
-        (click)="routeEditMdl.showModal(thisRoute)"
-        class="btn btn-primary"
-        style="float: right"
-        type="button"
-        *ngIf="isAdmin"
-      >
+      <button (click)="routeEditMdl.showModal(thisRoute)" class="btn btn-primary" style="float: right" type="button" *ngIf="isAdmin">
         Route Info <fa-icon [icon]="informationIcon"></fa-icon>
       </button>
     </div>
