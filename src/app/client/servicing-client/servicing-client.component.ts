@@ -932,12 +932,18 @@ export class ServicingClientComponent implements OnInit {
             .subscribe((response: any[]) => {
               this.heaters = response;
             });
-          this.service
-            .getHeatEquipmentNotReturned(this.clientId)
-            .subscribe((data1: any[]) => {
+          this.service.getHeatEquipmentNotReturned(this.clientId).subscribe((data1: any[]) => {
               this.heatEquipmentNotReturned = data1;
             });
         });
     }
+  }
+
+  onHouseholdRelationshipTypeChange(householdClient: Client) {
+    this.service.updateClient(householdClient).subscribe((data) => {
+        // household client was updated
+      },
+      (error) => console.log(error)
+    );
   }
 }

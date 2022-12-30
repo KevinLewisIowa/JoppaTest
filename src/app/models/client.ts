@@ -28,4 +28,5 @@ export class Client {
     date_became_homeless: Date = undefined;
     homeless_reason: string = undefined;
     due_to_covid: boolean = false;
+    household_relationship_type: string = undefined;
 }
