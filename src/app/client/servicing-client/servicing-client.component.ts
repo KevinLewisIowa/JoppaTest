@@ -942,6 +942,7 @@ export class ServicingClientComponent implements OnInit {
   onHouseholdRelationshipTypeChange(householdClient: Client) {
     this.service.updateClient(householdClient).subscribe((data) => {
         // household client was updated
+        // testing out if push from UI will fix CORS
       },
       (error) => console.log(error)
     );
