@@ -148,6 +148,7 @@ export class ServicingClientComponent implements OnInit {
       if (this.routeInstanceId != null) {
         this.service.getClientNotesForRoute(this.clientId, this.routeInstanceId).subscribe((data: Note[]) => {
           this.notes = data;
+          this.notes.sort((a,b) => (a.created_at > b.created_at) ? 1 : -1);
           this.goToTop();
         }, (error) => console.log(error));
       }
@@ -156,6 +157,7 @@ export class ServicingClientComponent implements OnInit {
         this.service.getClientNotesForClient(this.clientId).subscribe(
           (data: Note[]) => {
             this.notes = data;
+            this.notes.sort((a,b) => (a.created_at > b.created_at) ? 1 : -1);
           },
           (error) => console.log(error)
         );
