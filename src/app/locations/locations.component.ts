@@ -89,8 +89,8 @@ export class LocationsComponent implements OnInit {
 
                       data.forEach(client => {
                         this.clientService.getClientDwellings(client.id).subscribe((dwellings: ClientDwelling[]) => {
-                          let dwellingDates = dwellings.map(dwelling => dwelling.date_became_homeless);
-                          client.dwelling = dwellings.filter(dwelling => dwelling.date_became_homeless === dwellingDates.reduce((a, b) => a > b ? a : b))[0].dwelling;
+                          let dwellingDates = dwellings.map(dwelling => dwelling.created_at);
+                          client.dwelling = dwellings.filter(dwelling => dwelling.created_at === dwellingDates.reduce((a, b) => a > b ? a : b))[0].dwelling;
 
                           // If heat route, then filter down client list to only those that would show up
                           if (this.heatRoute) {

@@ -97,8 +97,8 @@ export class LocationCampComponent implements OnInit {
             this.mainService.getClientsForCamp(this.locationCampId).subscribe((data: Client[]) => {
               data.forEach(client => {
                 this.clientService.getClientDwellings(client.id).subscribe((data: ClientDwelling[]) => {
-                  let dwellingDates = data.map(dwelling => dwelling.date_became_homeless);
-                  client.dwelling = data.filter(dwelling => dwelling.date_became_homeless === dwellingDates.reduce((a, b) => a > b ? a : b))[0].dwelling;
+                  let dwellingDates = data.map(dwelling => dwelling.created_at);
+                  client.dwelling = data.filter(dwelling => dwelling.created_at === dwellingDates.reduce((a, b) => a > b ? a : b))[0].dwelling;
 
                   if (this.heatRoute) {
                     if (client.dwelling == "Tent" || client.dwelling == "Garage" || client.dwelling == "Shack" || client.dwelling == "Camper" || client.dwelling == "Broken Down Van") {
@@ -141,8 +141,8 @@ export class LocationCampComponent implements OnInit {
             this.mainService.getClientsForCamp(this.locationCampId).subscribe((data: Client[]) => {
               data.forEach(client => {
                 this.clientService.getClientDwellings(client.id).subscribe((data: ClientDwelling[]) => {
-                  let dwellingDates = data.map(dwelling => dwelling.date_became_homeless);
-                  client.dwelling = data.filter(dwelling => dwelling.date_became_homeless === dwellingDates.reduce((a, b) => a > b ? a : b))[0].dwelling;
+                  let dwellingDates = data.map(dwelling => dwelling.created_at);
+                  client.dwelling = data.filter(dwelling => dwelling.created_at === dwellingDates.reduce((a, b) => a > b ? a : b))[0].dwelling;
 
                   if (this.heatRoute) {
                     if (client.dwelling == "Tent" || client.dwelling == "Garage" || client.dwelling == "Shack" || client.dwelling == "Camper" || client.dwelling == "Broken Down Van") {
