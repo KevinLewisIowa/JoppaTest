@@ -269,9 +269,6 @@ export class LocationCampComponent implements OnInit {
   }
 
   parkingLotIsInRange(theCamp, campToCompare) {
-    if (campToCompare.camp_name === '315 SW 14th St (Capstone Granite)') {
-      console.log("theCamp", theCamp, "campToCompare", campToCompare);
-    }
     if (Number(theCamp.parking_latitude) + 0.00005 < Number(campToCompare.parking_latitude)) {
       return false;
     }
