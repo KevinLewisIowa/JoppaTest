@@ -269,19 +269,22 @@ export class LocationCampComponent implements OnInit {
   }
 
   parkingLotIsInRange(theCamp, campToCompare) {
-    if (Number(theCamp.parking_latitude) + 0.00005 < Number(campToCompare.parking_latitude)) {
-      return false;
+    if (Number(theCamp.parking_latitude) && Number(theCamp.parking_longitude) && Number(campToCompare.parking_latitude) && Number(campToCompare.parking_longitude)) {
+      if (Number(theCamp.parking_latitude) + 0.00005 < Number(campToCompare.parking_latitude)) {
+        return false;
+      }
+      if (Number(theCamp.parking_latitude) - 0.00005 > Number(campToCompare.parking_latitude)) {
+        return false;
+      }
+      if (Number(theCamp.parking_longitude) + 0.00005 < Number(campToCompare.parking_longitude)) {
+        return false;
+      }
+      if (Number(theCamp.parking_longitude) - 0.00005 > Number(campToCompare.parking_longitude)) {
+        return false;
+      }
+      return true;
     }
-    if (Number(theCamp.parking_latitude) - 0.00005 > Number(campToCompare.parking_latitude)) {
-      return false;
-    }
-    if (Number(theCamp.parking_longitude) + 0.00005 < Number(campToCompare.parking_longitude)) {
-      return false;
-    }
-    if (Number(theCamp.parking_longitude) - 0.00005 > Number(campToCompare.parking_longitude)) {
-      return false;
-    }
-    return true;
+    return false;
   }
 
   showParkingMap() {
