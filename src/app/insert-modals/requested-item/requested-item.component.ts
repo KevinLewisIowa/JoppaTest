@@ -63,6 +63,10 @@ export class RequestedItemComponent implements OnInit {
         this.placeholderText = "Description";
         this.extraInfoNeeded = true;
         break;
+      case selectedItem === "Mail":
+        this.placeholderText = "Number"
+        this.extraInfoNeeded = true;
+        break;
       default:
         this.extraInfoNeeded = false;
         break;
@@ -77,12 +81,12 @@ export class RequestedItemComponent implements OnInit {
         alert("Need to enter additional info for this item");
       } else {
         let itemDescription: string;
-        if (this.extraInfo != null && this.description !== "Other" && this.description !== "Socks") {
+        if (this.extraInfo != null && (this.description === "Socks" || this.description === "Jacket" || this.description === "Winter Coat")) {
+          itemDescription = "Size " + this.extraInfo + " " + this.description;
+        } else if (this.extraInfo != null && this.description !== "Other" && this.description !== "Socks") {
           itemDescription = this.extraInfo + " " + this.description;
         } else if (this.extraInfo != null && this.description === "Other") {
           itemDescription = this.extraInfo;
-        } else if (this.extraInfo != null && (this.description === "Socks" || this.description === "Jacket" || this.description === "Winter Coat")) {
-          itemDescription = "Size " + this.extraInfo + " " + this.description;
         } else {
           itemDescription = this.description;
         }
