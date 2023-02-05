@@ -302,7 +302,7 @@ export class LocationCampComponent implements OnInit {
           `parking latitude: ${this.locationCamp.parking_latitude}, parking longitude: ${this.locationCamp.parking_longitude}`
         );
         window.open(
-          `${routeUrl}${this.locationCamp.latitude},${this.locationCamp.longitude}${otherCampCoords}`,
+          `${routeUrl}${this.locationCamp.parking_latitude},${this.locationCamp.parking_longitude}/${this.locationCamp.latitude},${this.locationCamp.longitude}${otherCampCoords}`,
           "_blank"
         );
       },
