@@ -27,7 +27,6 @@ import {
   faMap,
   faInfoCircle,
 } from "@fortawesome/free-solid-svg-icons";
-import { map, catchError } from "rxjs/operators";
 import { ClientDwelling } from "app/models/client-dwelling";
 
 @Component({
@@ -269,14 +268,46 @@ export class LocationCampComponent implements OnInit {
     );
   }
 
+  parkingLotIsInRange(theCamp, campToCompare) {
+    if (Number(theCamp.parking_latitude) && Number(theCamp.parking_longitude) && Number(campToCompare.parking_latitude) && Number(campToCompare.parking_longitude)) {
+      if (Number(theCamp.parking_latitude) + 0.00005 < Number(campToCompare.parking_latitude)) {
+        return false;
+      }
+      if (Number(theCamp.parking_latitude) - 0.00005 > Number(campToCompare.parking_latitude)) {
+        return false;
+      }
+      if (Number(theCamp.parking_longitude) + 0.00005 < Number(campToCompare.parking_longitude)) {
+        return false;
+      }
+      if (Number(theCamp.parking_longitude) - 0.00005 > Number(campToCompare.parking_longitude)) {
+        return false;
+      }
+      return true;
+    }
+    return false;
+  }
+
   showParkingMap() {
-    console.log(
-      `parking latitude: ${this.locationCamp.parking_latitude}, parking longitude: ${this.locationCamp.parking_longitude}`
-    );
-    window.open(
-      `https://www.google.com/maps/dir/?api=1&destination=${this.locationCamp.parking_latitude},${this.locationCamp.parking_longitude}`,
-      "_blank"
-    );
+    let routeUrl: string = `https://www.google.com/maps/dir/`;
+    let otherCampCoords = "";
+    this.mainService.getCampListing().subscribe(
+      (data) => {
+        let campsWithSameParkingCoords = data.filter(camp => camp.id !== this.locationCamp.id && this.parkingLotIsInRange(this.locationCamp, camp))
+        campsWithSameParkingCoords.forEach(camp => {
+          if (camp.longitude != null && camp.latitude != null) {
+            otherCampCoords += (`/${camp.latitude},${camp.longitude}`);
+          }
+        })
+        console.log(
+          `parking latitude: ${this.locationCamp.parking_latitude}, parking longitude: ${this.locationCamp.parking_longitude}`
+        );
+        window.open(
+          `${routeUrl}${this.locationCamp.parking_latitude},${this.locationCamp.parking_longitude}/${this.locationCamp.latitude},${this.locationCamp.longitude}${otherCampCoords}`,
+          "_blank"
+        );
+      },
+      (error) => console.log(error)
+    );    
   }
 
   nextStop() {
