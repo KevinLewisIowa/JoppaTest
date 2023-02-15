@@ -83,6 +83,7 @@ export class ClientEditModalComponent implements OnInit {
       alert('You cannot set a birth date this far back in the past');
       return;
     }
+    updatedClient.birth_date = birthday;
 
     if (updatedClient.status == 'Inactive') {
       updatedClient.previous_camp_id = updatedClient.current_camp_id;
