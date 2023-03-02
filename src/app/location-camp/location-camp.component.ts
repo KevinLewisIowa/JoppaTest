@@ -401,6 +401,14 @@ export class LocationCampComponent implements OnInit {
     this.router.navigate(["/route", this.route.id]);
   }
 
+  goToAdminHome() {
+    let apiKey: string = window.localStorage.getItem('apiToken');
+    window.localStorage.clear();
+    window.localStorage.setItem('apiToken', apiKey);
+    window.localStorage.setItem('isAdmin', JSON.stringify(true));
+    this.router.navigate(['adminHome']);
+  }
+
   backToCampListing() {
     this.router.navigate(["/admin/campListing"]);
   }

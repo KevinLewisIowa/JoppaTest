@@ -29,8 +29,9 @@ export class PetsComponent implements OnInit {
   }
 
   onChange() {
-    if (this.pet_type == 'Other') {
+    if (this.pet_type == 'Other' || this.pet_type == 'Dog') {
       this.extraInfoNeeded = true;
+      this.placeholderText = (this.pet_type == 'Other') ? 'Species' : 'Breed';
     }
     else {
       this.extraInfoNeeded = false;
@@ -46,7 +47,11 @@ export class PetsComponent implements OnInit {
       if (this.extraInfoNeeded && (this.extraInfo === '' || this.extraInfo === null)){ 
           alert('Need to enter species of pet');
         } else if (this.extraInfoNeeded) {
-          this.pet_type = this.extraInfo;
+          if (this.pet_type == 'Dog') {
+            this.pet_type = `${this.pet_type} - ${this.extraInfo}`;
+          } else {
+            this.pet_type = this.extraInfo;
+          }
         }
       }
       
