@@ -493,16 +493,18 @@
           </h4>
           <table class="table" id="petList">
             <colgroup>
-              <col span="1" style="width: 20%" />
-              <col span="1" style="width: 20%" />
-              <col span="1" style="width: 20%" />
-              <col span="1" style="width: 20%" />
-              <col span="1" style="width: 20%" />
+              <col span="1" style="width: 16%" />
+              <col span="1" style="width: 16%" />
+              <col span="1" style="width: 16%" />
+              <col span="1" style="width: 16%" />
+              <col span="1" style="width: 16%" />
+              <col span="1" style="width: 16%" />
             </colgroup>
             <thead>
               <tr>
                 <th>Pet Type</th>
                 <th>Name</th>
+                <th>Breed</th>
                 <th>Age</th>
                 <th>Food Requested</th>
                 <th></th>
@@ -514,11 +516,15 @@
                   {{ pet.pet_type }}
                 </td>
                 <td>
-                  <input type="text" class="form-control" style="max-width: 75%" (change)="updatePetName(pet)"
+                  <input type="text" class="form-control" style="max-width: 75%" (change)="updatePetInfo(pet)"
                     [(ngModel)]="pet.pet_name" />
                 </td>
                 <td>
-                  <input type="text" class="form-control" style="max-width: 75%" (change)="updatePetAge(pet)"
+                  <input type="text" class="form-control" style="max-width: 75%" (change)="updatePetInfo(pet)"
+                    [(ngModel)]="pet.breed" />
+                </td>
+                <td>
+                  <input type="text" class="form-control" style="max-width: 75%" (change)="updatePetInfo(pet)"
                     [(ngModel)]="pet.age" />
                 </td>
                 <td>

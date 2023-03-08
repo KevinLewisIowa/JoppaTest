@@ -10,12 +10,13 @@ import { ClientService } from 'app/services/client.service';
 })
 export class PetsComponent implements OnInit {
 
-  @ViewChild('petsMdl', {static: false}) petsMdl: ElementRef
+  @ViewChild('petsMdl', { static: false }) petsMdl: ElementRef
   @Output() petAdded = new EventEmitter<ClientPet>();
   pet_type: string = '';
   age: number;
   pet_name: string;
   extraInfo: string;
+  breed: string;
   placeholderText: string = '';
   food_requested: boolean = true;
   extraInfoNeeded: boolean = false;
@@ -25,18 +26,18 @@ export class PetsComponent implements OnInit {
   }
 
   showModal() {
-    this.modalService.open(this.petsMdl, {size: 'lg', backdrop: 'static'});
+    this.modalService.open(this.petsMdl, { size: 'lg', backdrop: 'static' });
   }
 
   onChange() {
-    if (this.pet_type == 'Other' || this.pet_type == 'Dog') {
+    if (this.pet_type == 'Other') {
       this.extraInfoNeeded = true;
-      this.placeholderText = (this.pet_type == 'Other') ? 'Species' : 'Breed';
+      this.placeholderText = 'Species';
     }
     else {
       this.extraInfoNeeded = false;
     }
-    
+
     console.log(this.pet_type);
   }
 
@@ -44,28 +45,25 @@ export class PetsComponent implements OnInit {
     const pet = new ClientPet();
     const clientId = JSON.parse(localStorage.getItem('selectedClient'));
     if (this.pet_type != null && !isNaN(clientId) && !isNaN(this.age)) {
-      if (this.extraInfoNeeded && (this.extraInfo === '' || this.extraInfo === null)){ 
-          alert('Need to enter species of pet');
-        } else if (this.extraInfoNeeded) {
-          if (this.pet_type == 'Dog') {
-            this.pet_type = `${this.pet_type} - ${this.extraInfo}`;
-          } else {
-            this.pet_type = this.extraInfo;
-          }
-        }
+      if (this.extraInfoNeeded && (this.extraInfo === '' || this.extraInfo === null)) {
+        alert('Need to enter species of pet');
+      } else if (this.extraInfoNeeded) {
+        this.pet_type = this.extraInfo;
       }
-      
-      pet.pet_type = this.pet_type;
-      pet.client_id = clientId;
-      pet.pet_name = this.pet_name;
-      pet.age = this.age;
-      pet.food_requested = this.food_requested;
-
-      console.log(JSON.stringify(pet));
-      this.service.insertPet(pet).subscribe((data: ClientPet) => {
-        if (data != null && data.id != null) {
-          this.petAdded.emit(data);
-        }
-      }, error => console.log(error));
     }
+
+    pet.pet_type = this.pet_type;
+    pet.client_id = clientId;
+    pet.pet_name = this.pet_name;
+    pet.age = this.age;
+    pet.breed = this.breed;
+    pet.food_requested = this.food_requested;
+
+    console.log(JSON.stringify(pet));
+    this.service.insertPet(pet).subscribe((data: ClientPet) => {
+      if (data != null && data.id != null) {
+        this.petAdded.emit(data);
+      }
+    }, error => console.log(error));
   }
+}

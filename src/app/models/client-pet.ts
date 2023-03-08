@@ -7,4 +7,5 @@ export class ClientPet {
     food_requested: boolean = undefined;
     created_at: Date = undefined;
     updated_at: Date = undefined;
+    breed: string = undefined;
   }

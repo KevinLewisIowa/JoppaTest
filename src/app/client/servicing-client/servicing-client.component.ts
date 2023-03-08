@@ -436,13 +436,7 @@ export class ServicingClientComponent implements OnInit {
     });
   }
 
-  updatePetName(pet: ClientPet) {
-    this.service.updatePet(pet).subscribe((data) => {
-      console.log(JSON.stringify(data));
-    });
-  }
-
-  updatePetAge(pet: ClientPet) {
+  updatePetInfo(pet: ClientPet) {
     this.service.updatePet(pet).subscribe((data) => {
       console.log(JSON.stringify(data));
     });

@@ -113,7 +113,7 @@
         </tbody>
       </table>
     </div>
-    <div class="card">
+    <div class="card" *ngIf="!route.is_aftercare">
       <h3 align="left">Notes</h3>
       <div>
         <button
@@ -127,7 +127,7 @@
         &nbsp;
       </div>
     </div>
-    <table class="table" id="camp-notes">
+    <table class="table" id="camp-notes" *ngIf="!route.is_aftercare">
       <colgroup>
         <col span="1" style="width: 25%" />
         <col span="1" style="width: 25%" />
