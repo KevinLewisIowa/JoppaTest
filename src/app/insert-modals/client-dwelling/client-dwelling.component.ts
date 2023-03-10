@@ -16,7 +16,9 @@ export class ClientDwellingComponent implements OnInit {
   date_became_homeless: Date;
   dwelling: string = '';
   homeless_reason: string = '';
+  other_homeless_reason: string = '';
   notes: string = '';
+  extraInfoNeeded: boolean = false;
   client_id: number;
 
   constructor(private modalService: NgbModal, private clientService: ClientService) { }
@@ -29,8 +31,16 @@ export class ClientDwellingComponent implements OnInit {
     this.modalService.open(this.clientDwellingMdl, {size: 'lg', backdrop: 'static'});
   }
 
+  onChange(value) {
+    if (value == 'Other') {
+      this.extraInfoNeeded = true;
+    } else {
+      this.extraInfoNeeded = false;
+      this.other_homeless_reason = '';
+    }
+  }
+
   submitClientDwelling() {
-    console.log('firing');
     const clientDwelling = new ClientDwelling();
     const clientId: number = JSON.parse(localStorage.getItem('selectedClient'));
     const routeInstanceId: number = this.isAdmin ? -1 : JSON.parse(localStorage.getItem('routeInstance'));
@@ -39,7 +49,7 @@ export class ClientDwellingComponent implements OnInit {
       clientDwelling.first_time_homeless = this.first_time_homeless;
       clientDwelling.date_became_homeless = new Date(this.date_became_homeless);
       clientDwelling.dwelling = this.dwelling;
-      clientDwelling.homeless_reason = this.homeless_reason;
+      clientDwelling.homeless_reason = (this.homeless_reason == 'Other') ? this.other_homeless_reason : this.homeless_reason;
       clientDwelling.notes = this.notes;
       clientDwelling.client_id = clientId;
       

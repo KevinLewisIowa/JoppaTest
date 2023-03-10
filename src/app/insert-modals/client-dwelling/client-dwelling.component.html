@@ -39,7 +39,7 @@
             </div>
             <div class="col-md-6">
               <label for="homeless-reason">Reason for Homelessness</label>
-                <select id="source" class= "form-control" [(ngModel)]="homeless_reason" style="float:left;">
+                <select id="source" class= "form-control" [(ngModel)]="homeless_reason" (change)="onChange(homeless_reason)" style="float:left;">
                   <option value="Eviction">Eviction</option>
                   <option value="Job Loss">Job Loss</option>
                   <option value="Family Dispute">Family Dispute</option>
@@ -50,6 +50,9 @@
                   <option value="Mental Health">Mental Health</option>
                   <option value="Other">Other</option>
                 </select>
+            </div>
+            <div class="col-md-6" *ngIf="extraInfoNeeded">
+              <input id="extraInfo" type="text" class="form-control" placeholder="Other Reason" [(ngModel)]="other_homeless_reason" style="float:left;"/>
             </div>
             <div class="col-md-6">
               <textarea id="focusMe" class="form-control" rows="4" [(ngModel)]="notes" placeholder="Notes"
