@@ -97,8 +97,9 @@ export class LocationCampComponent implements OnInit {
               data.forEach(client => {
                 this.clientService.getClientDwellings(client.id).subscribe((data: ClientDwelling[]) => {
                   let dwellingDates = data.map(dwelling => dwelling.created_at);
+                  let dwelling: string = data.filter(dwelling => dwelling.created_at === dwellingDates.reduce((a, b) => a > b ? a : b))[0].dwelling;
+                  console.log(`Client: ${client.first_name} ${client.last_name}; Dwelling: ${dwelling}`);
                   client.dwelling = data.filter(dwelling => dwelling.created_at === dwellingDates.reduce((a, b) => a > b ? a : b))[0].dwelling;
-                  console.log(`Client: ${client.first_name} ${client.last_name}; Dwelling: ${client.dwelling}`);
 
                   if (this.heatRoute) {
                     if (client.dwelling == "Tent" || client.dwelling == "Garage" || client.dwelling == "Shack" || client.dwelling == "Camper" || client.dwelling == "Broken Down Van") {
