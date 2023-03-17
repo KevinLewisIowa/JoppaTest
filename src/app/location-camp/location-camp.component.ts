@@ -96,6 +96,7 @@ export class LocationCampComponent implements OnInit {
             this.mainService.getClientsForCamp(this.locationCampId).subscribe((data: Client[]) => {
               data.forEach(client => {
                 this.clientService.getClientDwellings(client.id).subscribe((data: ClientDwelling[]) => {
+                  console.log(`${client.first_name} ${client.last_name}`);
                   let dwellingDates = data.map(dwelling => dwelling.created_at);
                   let dwelling: string = data.filter(dwelling => dwelling.created_at === dwellingDates.reduce((a, b) => a > b ? a : b))[0].dwelling;
                   console.log(`Client: ${client.first_name} ${client.last_name}; Dwelling: ${dwelling}`);
