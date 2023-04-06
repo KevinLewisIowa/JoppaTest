@@ -123,6 +123,7 @@ export class LocationCampComponent implements OnInit {
 
               this.mainService.getCampNotes(this.locationCampId).subscribe((data: CampNote[]) => {
                 this.campNotes = data;
+                this.campNotes.sort((a,b) => (a.created_at > b.created_at) ? 1 : -1);
               }, (error) => console.log(error));
             }, (error) => console.log(error));
           }, (error) => console.log(error));

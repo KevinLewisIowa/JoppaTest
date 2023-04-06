@@ -45,22 +45,12 @@
     <div class="card">
       <h3 align="left">Clients</h3>
       <div>
-        <button
-          type="button"
-          (click)="clientMdl.showModal()"
-          class="btn btn-primary"
-          style="float: left"
-        >
+        <button type="button" (click)="clientMdl.showModal()" class="btn btn-primary" style="float: left" *ngIf="!route.is_aftercare || isAdmin">
           <fa-icon [icon]="searchIcon"></fa-icon> Search Clients
         </button>
-        <button
-          type="button"
-          (click)="createClient()"
-          class="btn btn-primary"
-          style="float: right"
-        >
-          <fa-icon [icon]="createIcon"></fa-icon> Create Client</button
-        >&nbsp;
+        <button type="button" (click)="createClient()" class="btn btn-primary" style="float: right" *ngIf="!route.is_aftercare || isAdmin">
+          <fa-icon [icon]="createIcon"></fa-icon> Create Client
+          </button>&nbsp;
       </div>
     </div>
     <div>
