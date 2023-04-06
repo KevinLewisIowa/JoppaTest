@@ -750,6 +750,12 @@ export class ServicingClientComponent implements OnInit {
     });
   }
 
+  removeReceivedItem(id: number) {
+    this.service.deletedRequestedItem(id).subscribe((res) => {
+      this.receivedItems = this.receivedItems.filter((w) => w.id != id);
+    });
+  }
+
   removeTent(id: number) {
     this.service.removeTent(id).subscribe((res) => {
       this.tents = this.tents.filter((w) => w.id != id);

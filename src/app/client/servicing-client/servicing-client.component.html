@@ -216,7 +216,11 @@
               <td>{{ item.created_at | date: "shortDate" }}</td>
               <td>{{ item.updated_at | date: "shortDate" }}</td>
               <td></td>
-              <td></td>
+              <td>
+                <button type="button" class="btn btn-primary" (click)="removeReceivedItem(item.id)" *ngIf="isAdmin">
+                  Remove
+                </button>
+              </td>
             </tr>
           </tbody>
         </table>
