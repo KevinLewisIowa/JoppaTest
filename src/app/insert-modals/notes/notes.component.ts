@@ -11,6 +11,7 @@ import { Note } from 'app/models/note';
 export class NotesComponent implements OnInit {
   @ViewChild('notesMdl', {static: false}) notesMdl: ElementRef;
   @Output() noteAdded = new EventEmitter<Note>();
+  isAftercare: boolean = false;
   note: string = '';
   isAdmin: boolean = false;
   heatRoute: boolean = false;
@@ -21,13 +22,18 @@ export class NotesComponent implements OnInit {
   ngOnInit() {
     this.isAdmin = JSON.parse(localStorage.getItem('isAdmin'));
     this.heatRoute = JSON.parse(localStorage.getItem('heatRoute'));
+    this.isAftercare = JSON.parse(localStorage.getItem('isAftercare'));
     if (this.isAdmin) {
       this.source = 'Resource Center';
     } else {
       if (this.heatRoute) {
         this.source = 'Heat';
       } else {
-        this.source = 'Outreach';
+        if (this.isAftercare) {
+          this.source = 'Aftercare';
+        } else {
+          this.source = 'Outreach';
+        }
       }
     }
   }

@@ -46,6 +46,7 @@ export class LocationsComponent implements OnInit {
     this.locationCamps = [];
     this.routeId = this.route.snapshot.params["id"];
     this.heatRoute = JSON.parse(window.localStorage.getItem("heatRoute"));
+    this.isAdmin = JSON.parse(window.localStorage.getItem("isAdmin"));
     window.localStorage.setItem("routeId", this.routeId.toString());
     this.routeAttendanceList = JSON.parse(
       localStorage.getItem("RouteAttendance")
@@ -55,6 +56,7 @@ export class LocationsComponent implements OnInit {
         this.thisRoute = new Route();
       } else {
         this.thisRoute = route;
+        localStorage.setItem('isAftercare', JSON.stringify(route.is_aftercare));
         console.log(JSON.stringify(route));
         this.mainService.getClientCountForRoute(this.thisRoute.id).subscribe((data: number) => {
             this.clientCountForRoute = data;
@@ -192,7 +194,6 @@ export class LocationsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.isAdmin = JSON.parse(window.localStorage.getItem("isAdmin"));
   }
 
   editedRoute(theRoute: Route) {
