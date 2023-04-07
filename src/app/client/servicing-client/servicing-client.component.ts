@@ -148,7 +148,7 @@ export class ServicingClientComponent implements OnInit {
       if (this.routeInstanceId != null) {
         this.service.getClientNotesForRoute(this.clientId, this.routeInstanceId).subscribe((data: Note[]) => {
           this.notes = data;
-          this.notes.sort((a,b) => (a.created_at > b.created_at) ? 1 : -1);
+          this.notes.sort((a, b) => (a.created_at > b.created_at) ? 1 : -1);
           this.goToTop();
         }, (error) => console.log(error));
       }
@@ -157,7 +157,7 @@ export class ServicingClientComponent implements OnInit {
         this.service.getClientNotesForClient(this.clientId).subscribe(
           (data: Note[]) => {
             this.notes = data;
-            this.notes.sort((a,b) => (a.created_at > b.created_at) ? 1 : -1);
+            this.notes.sort((a, b) => (a.created_at > b.created_at) ? 1 : -1);
           },
           (error) => console.log(error)
         );
@@ -589,10 +589,12 @@ export class ServicingClientComponent implements OnInit {
     );
   }
 
-  requestedItemAdded(item: RequestedItem) {
-    this.requestedItems.push(item);
-    const element = document.querySelector("#items");
-    element.scrollIntoView();
+  requestedItemAdded(items: RequestedItem[]) {
+    items.forEach(i => {
+      this.requestedItems.push(i);
+      const element = document.querySelector("#items");
+      element.scrollIntoView();
+    });
   }
 
   likeAdded(like: ClientLike) {
@@ -935,17 +937,17 @@ export class ServicingClientComponent implements OnInit {
               this.heaters = response;
             });
           this.service.getHeatEquipmentNotReturned(this.clientId).subscribe((data1: any[]) => {
-              this.heatEquipmentNotReturned = data1;
-            });
+            this.heatEquipmentNotReturned = data1;
+          });
         });
     }
   }
 
   onHouseholdRelationshipTypeChange(householdClient: Client) {
     this.service.updateClient(householdClient).subscribe((data) => {
-        // household client was updated
-        // testing out if push from UI will fix CORS
-      },
+      // household client was updated
+      // testing out if push from UI will fix CORS
+    },
       (error) => console.log(error)
     );
   }

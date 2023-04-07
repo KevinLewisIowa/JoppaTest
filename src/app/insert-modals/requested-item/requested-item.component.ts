@@ -16,8 +16,8 @@ import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
   styleUrls: ["./requested-item.component.css"],
 })
 export class RequestedItemComponent implements OnInit {
-  @ViewChild("requestedItemMdl", {static: false}) requestedItemMdl: ElementRef;
-  @Output() requestedItemAdded = new EventEmitter<RequestedItem>();
+  @ViewChild("requestedItemMdl", { static: false }) requestedItemMdl: ElementRef;
+  @Output() requestedItemAdded = new EventEmitter<RequestedItem[]>();
   description: string = "";
   placeholderText: string = "Test";
   extraInfo: string = "";
@@ -74,6 +74,9 @@ export class RequestedItemComponent implements OnInit {
   }
 
   submitItem() {
+    const addedItems: RequestedItem[] = [];
+    let countItemsToAdd: number = 1;
+    let itemsAdded: number = 0;
     const item = new RequestedItem();
     const clientId = localStorage.getItem("selectedClient");
     if (this.description != null && this.description !== "" && !isNaN(Number(clientId))) {
@@ -83,6 +86,10 @@ export class RequestedItemComponent implements OnInit {
         let itemDescription: string;
         if (this.extraInfo != null && (this.description === "Socks" || this.description === "Jacket" || this.description === "Winter Coat")) {
           itemDescription = "Size " + this.extraInfo + " " + this.description;
+        } else if (this.extraInfo != null && this.description === "Mail") {
+          itemDescription = "Mail";
+          let numberMails: number = +this.extraInfo;
+          countItemsToAdd = numberMails;
         } else if (this.extraInfo != null && this.description !== "Other" && this.description !== "Socks") {
           itemDescription = this.extraInfo + " " + this.description;
         } else if (this.extraInfo != null && this.description === "Other") {
@@ -91,15 +98,36 @@ export class RequestedItemComponent implements OnInit {
           itemDescription = this.description;
         }
 
-        item.item_description = itemDescription;
-        item.client_id = Number(clientId);
-        item.date_requested = new Date();
-        item.fulfilled = false;
-        this.service.insertRequestedItem(item).subscribe((data: RequestedItem) => {
+        if (itemDescription === "Mail") {
+          for (let i = 0; i < countItemsToAdd; i++) {
+            item.item_description = itemDescription;
+            item.client_id = Number(clientId);
+            item.date_requested = new Date();
+            item.fulfilled = false;
+            this.service.insertRequestedItem(item).subscribe((data: RequestedItem) => {
+              if (data != null && data.id != null) {
+                addedItems.push(data);
+                itemsAdded = itemsAdded + 1;
+
+                if (itemsAdded == countItemsToAdd) {
+                  this.requestedItemAdded.emit(addedItems);
+                }
+              }
+            });
+          }
+        } else {
+          item.item_description = itemDescription;
+          item.client_id = Number(clientId);
+          item.date_requested = new Date();
+          item.fulfilled = false;
+          this.service.insertRequestedItem(item).subscribe((data: RequestedItem) => {
             if (data != null && data.id != null) {
-              this.requestedItemAdded.emit(data);
+              addedItems.push(data);
+
+              this.requestedItemAdded.emit(addedItems);
             }
           });
+        }
       }
     } else {
       alert("You need to enter an item");
