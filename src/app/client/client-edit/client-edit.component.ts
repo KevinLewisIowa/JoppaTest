@@ -120,6 +120,14 @@ export class ClientEditComponent implements OnInit {
       }
     }
 
+    // validate that date became homeless is not unreasonable
+    if (this.clientForm.get('date_became_homeless').value !== "") {
+      if (!this.regExpDate.test(this.clientForm.get('date_became_homeless').value)) {
+        alert('Date Became Homeless must be entered in format mm/dd/yyyy');
+        return;
+      }
+    }
+
     this.clientService.insertClient(this.theClient).subscribe((insertedClient: Client) => {
       // create appearance of client as they were seen and serviced
       const clientInteraction: Appearance = new Appearance();
