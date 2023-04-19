@@ -99,12 +99,16 @@ export class ClientEditComponent implements OnInit {
 
     // validate that client birth date is not unreasonable
     if (this.theClient.birth_date) {
+      if (!this.regExpDate.test(this.clientForm.get('birth_date').value)) {
+        alert('Birth date must be entered in format mm/dd/yyyy');
+        return;
+      }
+
       let now: Date = new Date();
       let birthday: Date = new Date(this.theClient.birth_date);
       let pastDate: Date = new Date(now.getFullYear() - 100, now.getMonth(), now.getDate());
       if (!this.regExpDate.test(formatDate(birthday, 'MM/dd/yyyy', 'en'))) {
-        alert('Birth date must be entered in format mm/dd/yyyy');
-        return;
+        
       }
       if (birthday.getTime() > now.getTime()) {
         alert('You cannot select a birth date that is in the future');
