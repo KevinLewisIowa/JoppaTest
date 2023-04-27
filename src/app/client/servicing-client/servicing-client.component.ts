@@ -158,6 +158,8 @@ export class ServicingClientComponent implements OnInit {
           (data: Note[]) => {
             this.notes = data;
             this.notes.sort((a, b) => (a.created_at > b.created_at) ? 1 : -1);
+            let warningNotes: Note[] = data.filter(n => n.source === "WARNING")
+            alert(warningNotes[warningNotes.length - 1].note);
           },
           (error) => console.log(error)
         );
