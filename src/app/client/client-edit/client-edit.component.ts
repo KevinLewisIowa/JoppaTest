@@ -17,6 +17,8 @@ export class ClientEditComponent implements OnInit {
   clientForm: FormGroup;
   regExpDate = /^\d{1,2}\/\d{1,2}\/\d{4}$/
   theClient: Client;
+  url: any;
+  byteArray: any;
   isAdmin: boolean;
   locationCampId: number;
   //otherHomelessReason: string = '';
@@ -50,7 +52,8 @@ export class ClientEditComponent implements OnInit {
       otherHomelessReason: '',
       first_time_homeless: null,
       date_became_homeless: '',
-      dwelling: 'Tent'
+      dwelling: 'Tent',
+      client_picture: ''
     });
     this.clientForm.get('first_name').setValidators(Validators.required);
     this.clientForm.get('last_name').setValidators(Validators.required);
@@ -67,6 +70,20 @@ export class ClientEditComponent implements OnInit {
     }
   }
 
+  onAdd(event: any) {
+    console.log(event);
+    if (event.target.files && event.target.files[0]) {
+      var reader = new FileReader();
+      reader.onload = (event: any) => {
+        this.url = event.target.result;
+        this.byteArray = event.target.result.split('base64,')[1];
+      }
+      reader.readAsDataURL(event.target.files[0]);
+    } else {
+      this.url = null;
+    }
+  }
+
   onFTHChange(value: string) {
     if (value == 'Unknown') {
       this.clientForm.patchValue({ first_time_homeless: null });
@@ -77,6 +94,19 @@ export class ClientEditComponent implements OnInit {
     else {
       this.clientForm.patchValue({ first_time_homeless: false });
     }
+  }
+
+  convertDataURIToBinary(dataURI) {
+    var base64Index = dataURI.indexOf(';base64,') + ';base64,'.length;
+    var base64 = dataURI.substring(base64Index);
+    var raw = window.atob(base64);
+    var rawLength = raw.length;
+    var array = new Uint8Array(new ArrayBuffer(rawLength));
+  
+    for(let i = 0; i < rawLength; i++) {
+      array[i] = raw.charCodeAt(i);
+    }
+    return array;
   }
 
   submitClient() {
@@ -96,6 +126,7 @@ export class ClientEditComponent implements OnInit {
     this.theClient.gender = this.clientForm.get('gender').value;
     this.theClient.admin_notes = String(this.clientForm.get('admin_notes').value).trim();
     this.theClient.last_interaction_date = new Date();
+    this.theClient.client_picture = this.byteArray;
 
     // validate that client birth date is not unreasonable
     if (this.theClient.birth_date) {

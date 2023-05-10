@@ -72,6 +72,7 @@ export class ServicingClientComponent implements OnInit {
   updateTimerSubscription: Subscription;
   updateHoseTankMessageVisible: boolean = false;
   campId: number;
+  url: any;
   backIcon = faChevronLeft;
   informationIcon = faInfoCircle;
   seenAndServicedIcon = faCheckCircle;
@@ -128,6 +129,7 @@ export class ServicingClientComponent implements OnInit {
     if (this.clientId !== null) {
       this.service.getClientById(this.clientId).subscribe((data: Client) => {
         this.client = data;
+        this.url = 'data:image/png;base64,' + this.client.client_picture;
         this.campId = this.client.current_camp_id;
 
         this.service.getClientDwellings(this.clientId).subscribe((data: ClientDwelling[]) => {
@@ -631,6 +633,7 @@ export class ServicingClientComponent implements OnInit {
 
   editedClient(theClient: Client) {
     this.client = theClient;
+    this.url = 'data:image/png;base64,' + this.client.client_picture;
   }
 
   healthConcernAdded(concern: HealthConcern) {

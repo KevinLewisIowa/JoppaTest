@@ -6,6 +6,7 @@
       {{ client.last_name }}
     </h2>
     &nbsp;
+    <img [src]="url" width="25%" height="25%" *ngIf="url">
     <button #clientInfo class="btn btn-primary" style="float: right" (click)="clientEditMdl.openModal(client)"
       type="button">
       Client Info <fa-icon [icon]="informationIcon"></fa-icon>

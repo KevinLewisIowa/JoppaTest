@@ -81,6 +81,13 @@
           <textarea id="admin-notes" type="text" class="form-control" rows="3" placeholder="admin notes" style="float:right;" formControlName="admin_notes"></textarea>
         </div>
       </div>
+      <div class="form-group row">
+        <img [src]="url" *ngIf="url">
+        <label for="client-picture" class="col-6 col-form-label">Image:</label>
+        <div class="col-6">
+          <input id="client-picture" type="file" accept="image/*" width="300" height="300" (change)="onAdd($event)" class="form-control" style="float:right;" />
+        </div>
+      </div>
     </form>
   </div>
   <div class="modal-footer">

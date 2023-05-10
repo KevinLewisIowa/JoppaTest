@@ -21,12 +21,15 @@ export class ClientEditModalComponent implements OnInit {
   firstTimeHomeless: string = 'Unknown';
   editing = false;
   isAdmin: boolean;
+  url: any;
+  byteArray: any;
 
   constructor(private router: Router, private modalService: NgbModal, private clientService: ClientService, private fb: FormBuilder, @Inject(LOCALE_ID) private locale: string) { }
 
   ngOnInit() {
     this.theClient = new Client();
     this.clientForm = this.fb.group(this.theClient);
+    
     this.isAdmin = JSON.parse(window.localStorage.getItem('isAdmin'));
   }
 
@@ -45,8 +48,9 @@ export class ClientEditModalComponent implements OnInit {
 
   openModal(client: Client) {
     this.theClient = client;
-    console.log(JSON.stringify(this.theClient));
 
+    this.url = 'data:image/png;base64,' + this.theClient.client_picture;
+    
     if (this.theClient.first_time_homeless) {
       this.firstTimeHomeless = 'Yes';
     }
@@ -64,8 +68,24 @@ export class ClientEditModalComponent implements OnInit {
     this.editing = !this.editing;
   }
 
+  onAdd(event: any) {
+    console.log(event);
+    if (event.target.files && event.target.files[0]) {
+      var reader = new FileReader();
+      reader.onload = (event: any) => {
+        console.log(JSON.stringify(event.target.result));
+        this.url = event.target.result;
+        this.byteArray = event.target.result.split('base64,')[1];
+      }
+      reader.readAsDataURL(event.target.files[0]);
+    } else {
+      this.url = null;
+    }
+  }
+
   submitClient() {
     let updatedClient: Client = this.clientForm.value;
+    updatedClient.client_picture = this.byteArray;
 
     let now: Date = new Date();
     let birthday: Date = new Date(updatedClient.birth_date);
