@@ -84,6 +84,7 @@ import { AdminCampListingComponent } from "./admin-camp-listing/admin-camp-listi
 import { AdminClientInactiveUpdaterComponent } from "./admin-client-inactive-updater/admin-client-inactive-updater.component";
 import { DateSelectorComponent } from "./insert-modals/date-selector/date-selector.component";
 import { ClientDwellingComponent } from "./insert-modals/client-dwelling/client-dwelling.component";
+import { AdminAddPetFoodUtilityComponent } from './admin-add-pet-food-utility/admin-add-pet-food-utility.component';
 
 const reducers = {
   user: MainReducer,
@@ -149,6 +150,7 @@ const reducers = {
     AdminClientInactiveUpdaterComponent,
     TentComponent,
     DateSelectorComponent,
+    AdminAddPetFoodUtilityComponent,
   ],
   imports: [
     BrowserModule,

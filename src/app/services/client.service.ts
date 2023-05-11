@@ -743,6 +743,26 @@ export class ClientService {
       );
   }
 
+  getAllClientPets() {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+
+    return this.http
+      .get(this.baseUrl + `client_pets`, { headers: myHeader })
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
   getClientHousehold(household_id) {
     const myHeader = new HttpHeaders({
       "Content-Type": "application/json",

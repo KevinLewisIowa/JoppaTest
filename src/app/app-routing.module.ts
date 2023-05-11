@@ -36,6 +36,7 @@ import { InventoryReportComponent } from "./admin-reports/inventory-report/inven
 import { FirstTimeHomelessnessReportComponent } from "./admin-reports/first-time-homelessness-report/first-time-homelessness-report.component";
 import { AdminCampListingComponent } from "./admin-camp-listing/admin-camp-listing.component";
 import { AdminClientInactiveUpdaterComponent } from "./admin-client-inactive-updater/admin-client-inactive-updater.component";
+import { AdminAddPetFoodUtilityComponent } from "./admin-add-pet-food-utility/admin-add-pet-food-utility.component";
 
 const routes: Routes = [
   {
@@ -162,6 +163,11 @@ const routes: Routes = [
     path: "admin/inactiveUpdater",
     canActivate: [IsLoggedInGuard, IsAdminGuard],
     component: AdminClientInactiveUpdaterComponent,
+  },
+  {
+    path: "admin/petFoodAdder",
+    canActivate: [IsLoggedInGuard, IsAdminGuard],
+    component: AdminAddPetFoodUtilityComponent,
   },
   {
     path: "admin/campListing",

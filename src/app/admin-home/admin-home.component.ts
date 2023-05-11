@@ -35,6 +35,10 @@ export class AdminHomeComponent implements OnInit {
     this.router.navigate(["/admin/reports"]);
   }
 
+  openPetFoodAdder() {
+    this.router.navigate(["/admin/petFoodAdder"]);
+  }
+
   goToRoutes() {
     this.router.navigate(["routes"]);
   }
