@@ -4,6 +4,7 @@ import { ClientService } from 'app/services/client.service';
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { ClientPet } from 'app/models/client-pet';
 import { RequestedItem } from 'app/models/requested-item';
+import { Client } from 'app/models/client';
 
 @Component({
   selector: 'app-admin-add-pet-food-utility',
@@ -35,28 +36,39 @@ export class AdminAddPetFoodUtilityComponent implements OnInit {
         this.processComplete = true;
       } else {
         this.clientsPets.forEach((clientPet: ClientPet) => {
-          i++;        
-          
-          // Create new item request
-          let newItem: RequestedItem = new RequestedItem();
-          newItem.client_id = clientPet.client_id;
-          newItem.date_requested = new Date();
-          newItem.fulfilled = false;
-          newItem.has_received = false;
-          newItem.item_description = clientPet.pet_type + " Food";
-  
-          this.clientService.insertRequestedItem(newItem).subscribe((data: RequestedItem) => {
-            if (data != null && data.id != null) {
-              this.countItemsAdded = this.countItemsAdded + 1;
-  
-              console.log(`Number items added: ${this.countItemsAdded}`);
-  
+          i++;
+
+          this.clientService.getClientById(clientPet.client_id).subscribe((client: Client) => {
+            if (client.status == "Active") {
+              // Create new item request
+              let newItem: RequestedItem = new RequestedItem();
+              newItem.client_id = clientPet.client_id;
+              newItem.date_requested = new Date();
+              newItem.fulfilled = false;
+              newItem.has_received = false;
+              newItem.item_description = clientPet.pet_type + " Food";
+
+              this.clientService.insertRequestedItem(newItem).subscribe((data: RequestedItem) => {
+                if (data != null && data.id != null) {
+                  this.countItemsAdded = this.countItemsAdded + 1;
+
+                  console.log(`Client Active. Number items added: ${this.countItemsAdded}`);
+
+                  if (i == numClients) {
+                    this.petFoodAdderRunning = false;
+                    this.processComplete = true;
+                  }
+                }
+              });
+            } else {
+              console.log(`Client not active. Number items added: ${this.countItemsAdded}`);
+
               if (i == numClients) {
                 this.petFoodAdderRunning = false;
                 this.processComplete = true;
               }
             }
-          });
+          })
         });
       }
     });
