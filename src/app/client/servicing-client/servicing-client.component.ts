@@ -130,6 +130,7 @@ export class ServicingClientComponent implements OnInit {
       this.service.getClientById(this.clientId).subscribe((data: Client) => {
         this.client = data;
         this.url = 'data:image/png;base64,' + this.client.client_picture;
+        console.log(this.url);
         this.campId = this.client.current_camp_id;
 
         this.service.getClientDwellings(this.clientId).subscribe((data: ClientDwelling[]) => {
