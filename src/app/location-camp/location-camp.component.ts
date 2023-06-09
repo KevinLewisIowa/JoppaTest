@@ -47,6 +47,7 @@ export class LocationCampComponent implements OnInit {
   searchIcon = faSearch;
   createIcon = faPlus;
   backIcon = faChevronLeft;
+  erroredClients = '';
   forwardIcon = faChevronRight;
   questionCircleIcon = farQuestionCircle;
   regularCheckCircleIcon = farCheckCircle;
@@ -97,20 +98,30 @@ export class LocationCampComponent implements OnInit {
               data.forEach(client => {
                 this.clientService.getClientDwellings(client.id).subscribe((data: ClientDwelling[]) => {
                   console.log(`${client.first_name} ${client.last_name}`);
-                  let dwellingDates = data.map(dwelling => dwelling.created_at);
-                  let dwelling: string = data.filter(dwelling => dwelling.created_at === dwellingDates.reduce((a, b) => a > b ? a : b))[0].dwelling;
-                  console.log(`Client: ${client.first_name} ${client.last_name}; Dwelling: ${dwelling}`);
-                  client.dwelling = data.filter(dwelling => dwelling.created_at === dwellingDates.reduce((a, b) => a > b ? a : b))[0].dwelling;
-
+                  let pushClient: boolean = true;
+                  try {
+                    let dwellingDates = data.map(dwelling => dwelling.created_at);
+                    let dwelling: string = data.filter(dwelling => dwelling.created_at === dwellingDates.reduce((a, b) => a > b ? a : b))[0].dwelling;
+                    console.log(`Client: ${client.first_name} ${client.last_name}; Dwelling: ${dwelling}`);
+                    client.dwelling = data.filter(dwelling => dwelling.created_at === dwellingDates.reduce((a, b) => a > b ? a : b))[0].dwelling;
+                  } catch(e) {
+                    if (this.erroredClients == '') {
+                      this.erroredClients = `${client.first_name} ${client.last_name}`;
+                    } else {
+                      this.erroredClients += `,${client.first_name} ${client.last_name}`;
+                    }
+                    pushClient = false;
+                  }
+                  
                   if (this.heatRoute) {
-                    if (client.dwelling == "Tent" || client.dwelling == "Garage" || client.dwelling == "Shack" || client.dwelling == "Camper" || client.dwelling == "Broken Down Van") {
+                    if (client.dwelling == "Tent" || client.dwelling == "Garage" || client.dwelling == "Shack" || client.dwelling == "Camper" || client.dwelling == "Broken Down Van" && pushClient) {
                       this.clients.push(client);
                     }
                     this.numberTanksAtCamp += client.number_tanks;
                     if (client.number_tanks > 1) this.numPeopleWithTanksAtCamp += 1;
                   }
                   else {
-                    this.clients.push(client);
+                    if (pushClient) this.clients.push(client);
                   }
 
                   this.mainService.getClientHasFulfilledItems(client.id).subscribe((count: number) => {
