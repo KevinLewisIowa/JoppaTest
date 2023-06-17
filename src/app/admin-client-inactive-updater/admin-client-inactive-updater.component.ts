@@ -13,7 +13,7 @@ import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 })
 export class AdminClientInactiveUpdaterComponent implements OnInit {
   clients: any[] = [];
-  inactivityLimit = 60;
+  inactivityLimit = 90;
   countInactivated = 0;
   inactiveUpdaterRunning: boolean = false;
   processComplete: boolean = false;
