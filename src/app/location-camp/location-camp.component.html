@@ -9,6 +9,9 @@
     </h5>
     <h5 align="left" *ngIf="erroredClients !== ''"><span style="background-color: lightsalmon">Clients Needing Dwelling: {{ erroredClients }}</span></h5>
     <h5 align="left">
+      Stop {{ currentStopNumber }}/{{ totalStopsAmount }}
+    </h5>
+    <h5 align="left">
       Expected arrival time: {{ expectedArrivalTime | date: "shortTime" }}
     </h5>
     <p align="left" *ngIf="heatRoute">

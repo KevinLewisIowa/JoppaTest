@@ -58,6 +58,8 @@ export class LocationCampComponent implements OnInit {
   informationIcon = faInfoCircle;
   isAdmin: boolean = false;
   clientsWithFulfilledItems: number[] = [];
+  currentStopNumber: number;
+  totalStopsAmount: number;
   private baseUrl = environment.api_url;
 
   constructor(
@@ -86,6 +88,14 @@ export class LocationCampComponent implements OnInit {
       if (routeId) {
         this.mainService.getRoute(routeId).subscribe((route: Route) => {
           this.route = route;
+          let locationCampList: number[] = JSON.parse(
+            window.localStorage.getItem("LocationCampIdList")
+          );
+          let indexCurrCamp: number = locationCampList.findIndex(
+            (campId) => campId == this.locationCampId
+          );
+          this.currentStopNumber = indexCurrCamp + 1;
+          this.totalStopsAmount = locationCampList.length;
 
           this.mainService.getLocationCamp(this.locationCampId).subscribe((data) => {
             this.locationCamp = data;
@@ -143,6 +153,15 @@ export class LocationCampComponent implements OnInit {
       else {
         this.mainService.getLocationCamp(this.locationCampId).subscribe((data) => {
           this.locationCamp = data;
+
+          let locationCampList: number[] = JSON.parse(
+            window.localStorage.getItem("LocationCampIdList")
+          );
+          let indexCurrCamp: number = locationCampList.findIndex(
+            (campId) => campId == this.locationCampId
+          );
+          this.currentStopNumber = indexCurrCamp + 1;
+          this.totalStopsAmount = locationCampList.length;
 
           if (this.locationCamp.expected_arrival_time && this.locationCamp.expected_arrival_time != "") {
             let timeArray: string[] = this.locationCamp.expected_arrival_time.split(":");
