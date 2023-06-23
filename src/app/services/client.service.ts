@@ -753,8 +753,6 @@ export class ClientService {
       Authorization: window.localStorage.getItem("apiToken"),
     });
 
-    console.log('hello this is friend', friend);
-
     return this.http
       .post(
         this.baseUrl + `client_circle_of_friends`,

@@ -21,7 +21,6 @@ export class ClientCircleOfFriendsComponent implements OnInit {
 
   ngOnInit() {
     this.isAdmin = JSON.parse(localStorage.getItem('isAdmin'));
-    console.log('I am firing');
   }
 
   showModal() {
