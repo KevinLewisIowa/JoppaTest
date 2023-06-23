@@ -39,7 +39,7 @@ export class AdminAddPetFoodUtilityComponent implements OnInit {
           i++;
 
           this.clientService.getClientById(clientPet.client_id).subscribe((client: Client) => {
-            if (client.status == "Active" && client.current_camp_id != null && client.current_camp_id != 449) {
+            if (client.status == "Active" && client.current_camp_id != null && client.current_camp_id > 0) {
               // Create new item request
               let newItem: RequestedItem = new RequestedItem();
               newItem.client_id = clientPet.client_id;
