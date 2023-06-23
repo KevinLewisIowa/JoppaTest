@@ -72,6 +72,7 @@ import { HeatEquipmentPerRouteReportComponent } from "./heat-equipment-per-route
 import { AdminClientListingComponent } from "./admin-client-listing/admin-client-listing.component";
 import { PetsComponent } from "./insert-modals/pets/pets.component";
 import { TentComponent } from "./insert-modals/tents/tent.component";
+import { ClientCircleOfFriendsComponent } from "./insert-modals/client-circle-of-friends/client-circle-of-friends.component";
 import { CampNotesComponent } from "./insert-modals/camp-notes/camp-notes.component";
 import { ReferralsResourcesComponent } from "./insert-modals/referrals-resources/referrals-resources.component";
 import { BirthdayMonthsReportComponent } from "./admin-reports/birthday-months-report/birthday-months-report.component";
@@ -139,6 +140,7 @@ const reducers = {
     HeatEquipmentPerRouteReportComponent,
     AdminClientListingComponent,
     PetsComponent,
+    ClientCircleOfFriendsComponent,
     ReferralsResourcesComponent,
     BirthdayMonthsReportComponent,
     AdminOverallAttendanceComponent,

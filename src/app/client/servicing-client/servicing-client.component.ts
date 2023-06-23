@@ -15,6 +15,7 @@ import { Note } from "app/models/note";
 import { ClientPet } from "app/models/client-pet";
 import { Tent } from "app/models/tent";
 import { ClientDwelling } from "app/models/client-dwelling";
+import { ClientCircleOfFriends } from "app/models/client-circle-of-friends";
 import { ReferralsResources } from "app/models/referrals-resources";
 import { faCheckCircle as farCheckCircle } from "@fortawesome/free-regular-svg-icons";
 import {
@@ -54,6 +55,7 @@ export class ServicingClientComponent implements OnInit {
   pets: ClientPet[] = [];
   tents: Tent[] = [];
   dwellings: ClientDwelling[] = [];
+  circleOfFriends: ClientCircleOfFriends[] = [];
   referralsResources: ReferralsResources[] = [];
   sentInteraction = false;
   receivedItems: RequestedItem[] = [];
@@ -181,6 +183,12 @@ export class ServicingClientComponent implements OnInit {
         this.service.getClientPets(this.clientId).subscribe(
           (data: ClientPet[]) => {
             this.pets = data;
+          },
+          (error) => console.log(error)
+        );
+        this.service.getClientCircleOfFriends(this.clientId).subscribe(
+          (data: ClientCircleOfFriends[]) => {
+            this.circleOfFriends = data;
           },
           (error) => console.log(error)
         );
@@ -313,6 +321,11 @@ export class ServicingClientComponent implements OnInit {
             this.pets = data;
           });
         this.service
+          .getClientCircleOfFriends(this.clientId)
+          .subscribe((data: ClientCircleOfFriends[]) => {
+            this.circleOfFriends = data;
+          });
+        this.service
           .getTentsForClient(this.clientId)
           .subscribe((data: Tent[]) => {
             this.tents = data;
@@ -443,6 +456,12 @@ export class ServicingClientComponent implements OnInit {
 
   updatePetInfo(pet: ClientPet) {
     this.service.updatePet(pet).subscribe((data) => {
+      console.log(JSON.stringify(data));
+    });
+  }
+
+  updateClientCircleOfFriends(friend: ClientCircleOfFriends) {
+    this.service.updateCircleOfFriends(friend).subscribe((data) => {
       console.log(JSON.stringify(data));
     });
   }
@@ -664,6 +683,12 @@ export class ServicingClientComponent implements OnInit {
   petAdded(pet: ClientPet) {
     this.pets.push(pet);
     const element = document.querySelector("#petList");
+    element.scrollIntoView();
+  }
+
+  friendAdded(friend: ClientCircleOfFriends) {
+    this.circleOfFriends.push(friend);
+    const element = document.querySelector("#circle-of-friends");
     element.scrollIntoView();
   }
 
