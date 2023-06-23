@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource, MatTable } from '@angular/material/table';
-import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-admin-client-listing',
@@ -17,6 +17,7 @@ export class AdminClientListingComponent implements OnInit {
   dataSource: MatTableDataSource<any>;
   backIcon = faChevronLeft;
   pastDate: Date = new Date();
+  createIcon = faPlus;
 
   @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: false}) sort: MatSort;
@@ -59,6 +60,11 @@ export class AdminClientListingComponent implements OnInit {
     filterValue = filterValue.trim();
     filterValue = filterValue.toLowerCase();
     this.dataSource.filter = filterValue;
+  }
+
+  createClient() {
+    localStorage.setItem('locationCampId', '0');
+    this.router.navigate(["/createClient"]);
   }
 
   back() {
