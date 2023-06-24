@@ -16,6 +16,7 @@ import { ClientPet } from "app/models/client-pet";
 import { Tent } from "app/models/tent";
 import { ReferralsResources } from "app/models/referrals-resources";
 import { ClientDwelling } from "app/models/client-dwelling";
+import { ClientCircleOfFriends } from "app/models/client-circle-of-friends";
 import { environment } from "environments/environment";
 import { map, catchError } from "rxjs/operators";
 
@@ -609,6 +610,29 @@ export class ClientService {
         catchError(this.handleError)
       );
   }
+  
+  updateCircleOfFriends(theFriend: ClientCircleOfFriends) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+    return this.http
+      .patch(
+        this.baseUrl + `client_circle_of_friends/${theFriend.id}`,
+        { client_circle_of_friend: theFriend },
+        { headers: myHeader }
+      )
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
 
   insertHealthConcern(concern: HealthConcern) {
     const myHeader = new HttpHeaders({
@@ -723,6 +747,30 @@ export class ClientService {
       );
   }
 
+  insertFriend(friend: ClientCircleOfFriends) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+
+    return this.http
+      .post(
+        this.baseUrl + `client_circle_of_friends`,
+        { client_circle_of_friend: friend },
+        { headers: myHeader }
+      )
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
   getClientPets(id) {
     const myHeader = new HttpHeaders({
       "Content-Type": "application/json",
@@ -731,6 +779,26 @@ export class ClientService {
 
     return this.http
       .get(this.baseUrl + `getClientPets?clientId=${id}`, { headers: myHeader })
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  getClientCircleOfFriends(id) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+
+    return this.http
+      .get(this.baseUrl + `getFriendsForClient?clientId=${id}`, { headers: myHeader })
       .pipe(
         map((res: any) => {
           if (res.message === "invalid-token") {
@@ -791,6 +859,17 @@ export class ClientService {
       Authorization: window.localStorage.getItem("apiToken"),
     });
     return this.http.delete(this.baseUrl + `client_referrals/${id}`, { headers: myHeader, })
+      .pipe(map((res) => {
+          return true;
+        }), catchError(this.handleError));
+  }
+
+  removeClientFriend(id: number) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+    return this.http.delete(this.baseUrl + `client_circle_of_friends/${id}`, { headers: myHeader, })
       .pipe(map((res) => {
           return true;
         }), catchError(this.handleError));
