@@ -31,12 +31,14 @@ export class ClientCircleOfFriendsComponent implements OnInit {
   submitFriend() {
     const clientFriend = new ClientCircleOfFriends();
     const routeInstanceId: number = this.isAdmin ? -1 : JSON.parse(localStorage.getItem('routeInstance'));
+    const clientId: number = JSON.parse(localStorage.getItem('selectedClient'));
     
-    if (this.volunteer_name != null && this.volunteer_name != null && this.phone_number != null && !isNaN(routeInstanceId)) {
+    if (this.volunteer_name != null && this.email != null && this.phone_number != null && !isNaN(routeInstanceId)) {
       clientFriend.volunteer_name = this.volunteer_name;
       clientFriend.email = this.email;
       clientFriend.phone_number = this.phone_number;
       clientFriend.notes = this.notes;
+      clientFriend.client_id = clientId;
       
       console.log(JSON.stringify(clientFriend));
       this.clientService.insertFriend(clientFriend).subscribe((data: ClientCircleOfFriends) => {

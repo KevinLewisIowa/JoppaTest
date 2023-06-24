@@ -119,7 +119,8 @@
             <col span="1" style="width: 20%" />
             <col span="1" style="width: 20%" />
             <col span="1" style="width: 20%" />
-            <col span="1" style="width: 40%" />
+            <col span="1" style="width: 20%" />
+            <col span="1" style="width: 20%" />
           </colgroup>
           <thead>
             <tr>
@@ -127,6 +128,7 @@
               <th>Phone Number</th>
               <th>Email</th>
               <th>Notes</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -135,6 +137,11 @@
               <td>{{ friend.phone_number }}</td>
               <td>{{ friend.email }}</td>
               <td>{{ friend.notes }}</td>
+              <td>
+                <button type="button" class="btn btn-primary" *ngIf="isAdmin" (click)="removeClientFriend(friend.id)">
+                  Delete
+                </button>
+              </td>
             </tr>
           </tbody>
         </table>

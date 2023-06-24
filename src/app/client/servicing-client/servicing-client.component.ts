@@ -769,6 +769,12 @@ export class ServicingClientComponent implements OnInit {
     });
   }
 
+  removeClientFriend(id: number) {
+    this.service.removeClientFriend(id).subscribe((res) => {
+      this.circleOfFriends = this.circleOfFriends.filter((w) => w.id != id);
+    })
+  }
+
   removeDislike(id: number) {
     this.service.removeDislike(id).subscribe((res) => {
       this.clientDislikes = this.clientDislikes.filter((w) => w.id != id);

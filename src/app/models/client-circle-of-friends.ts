@@ -4,6 +4,7 @@ export class ClientCircleOfFriends {
     phone_number: string = undefined;
     email: string = undefined;
     notes: string = undefined;
+    client_id: number = undefined;
     created_at: Date = undefined;
     updated_at: Date = undefined;
   }
