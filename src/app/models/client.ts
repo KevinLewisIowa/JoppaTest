@@ -18,6 +18,8 @@ export class Client {
     updated_at: Date = undefined;
     last_interaction_date: Date = undefined;
     gender: string = undefined;
+    race: string = undefined;
+    ethnicity: string = undefined;
     admin_notes: string = undefined;
     current_camp_id: number = undefined;
     previous_camp_id: number = undefined;
