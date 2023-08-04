@@ -1,12 +1,7 @@
 <ng-template #referralsResourcesMdl let-c="close" let-d="dismiss">
   <div class="modal-header">
     <h4 class="modal-title">Create Referral / Resource</h4>
-    <button
-      type="button"
-      class="close"
-      aria-label="Close"
-      (click)="d('Cross click')"
-    >
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
@@ -16,14 +11,8 @@
         <div class="row">
           <div class="col-sm-4">
             <label for="type">Type</label>
-            <select
-              id="type"
-              class="form-control"
-              [(ngModel)]="type"
-              name="type"
-            >
-              <option value="PHC intake information">PHC intake information</option>
-              <option value="PHC verification">PHC verification</option>
+            <select id="type" class="form-control" [(ngModel)]="type" name="type">
+              <option value="Aging Resources">Aging Resources</option>
               <option value="Case Management List">Case Management List</option>
               <option value="Cell Phone List">Cell Phone List</option>
               <option value="Clothing List">Clothing List</option>
@@ -43,6 +32,8 @@
               <option value="Medical & Dental List">Medical & Dental List</option>
               <option value="Mental Health & Substance Abuse List">Mental Health & Substance Abuse List</option>
               <option value="Pet Food Pantry List">Pet Food Pantry List</option>
+              <option value="PHC intake information">PHC intake information</option>
+              <option value="PHC verification">PHC verification</option>
               <option value="Pregnancy List">Pregnancy List</option>
               <option value="Rent & Utilities Assistance List">Rent & Utilities Assistance List</option>
               <option value="SNAP Application">SNAP Application</option>
@@ -54,41 +45,21 @@
           </div>
           <div class="col-sm-4">
             <label for="quantity">Quantity</label>
-            <input
-              type="number"
-              id="quantity"
-              class="form-control"
-              [(ngModel)]="quantity"
-              name="quantity"
-            />
+            <input type="number" id="quantity" class="form-control" [(ngModel)]="quantity" name="quantity" />
           </div>
           <div class="col-sm-4">
             <label for="notes">Notes</label>
-            <input
-              type="text"
-              id="notes"
-              class="form-control"
-              [(ngModel)]="notes"
-              name="notes"
-            />
+            <input type="text" id="notes" class="form-control" [(ngModel)]="notes" name="notes" />
           </div>
         </div>
       </div>
     </div>
   </form>
   <div class="modal-footer">
-    <button
-      type="button"
-      class="btn btn-primary"
-      (click)="submitReferralsResources(); c('')"
-    >
+    <button type="button" class="btn btn-primary" (click)="submitReferralsResources(); c('')">
       Submit
     </button>
-    <button
-      type="button"
-      class="btn btn-outline-primary"
-      (click)="c('Close click')"
-    >
+    <button type="button" class="btn btn-outline-primary" (click)="c('Close click')">
       Close
     </button>
   </div>
