@@ -302,6 +302,7 @@ export class ServicingClientComponent implements OnInit {
           .subscribe((data: any[]) => {
             this.heatEquipmentNotReturned = data;
             this.goToTop();
+            alert('Please ask if the client has any pets and get the type (dog or cat), name, breed, age, and if they want monthly pet food in the Pets section.');
           });
         this.getHeaterStatuses();
       } else {
@@ -360,6 +361,7 @@ export class ServicingClientComponent implements OnInit {
           .subscribe((data: HealthConcern[]) => {
             this.healthConcerns = data;
             this.goToTop();
+            alert('Please ask if the client has any pets and get the type (dog or cat), name, breed, age, and if they want monthly pet food in the Pets section.');
           });
       }
     } else {
