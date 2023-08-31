@@ -47,6 +47,8 @@ export class ClientEditComponent implements OnInit {
       phone: '',
       joppa_apartment_number: '',
       gender: '',
+      race: '',
+      ethnicity: '',
       admin_notes: '',
       homeless_reason: '',
       otherHomelessReason: '',
@@ -124,6 +126,8 @@ export class ClientEditComponent implements OnInit {
     this.theClient.phone = String(this.clientForm.get('phone').value).trim();
     this.theClient.joppa_apartment_number = String(this.clientForm.get('joppa_apartment_number').value).trim();
     this.theClient.gender = this.clientForm.get('gender').value;
+    this.theClient.race = this.clientForm.get('race').value;
+    this.theClient.ethnicity = this.clientForm.get('ethnicity').value;
     this.theClient.admin_notes = String(this.clientForm.get('admin_notes').value).trim();
     this.theClient.last_interaction_date = new Date();
     this.theClient.client_picture = this.byteArray;

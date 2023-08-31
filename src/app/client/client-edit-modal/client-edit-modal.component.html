@@ -35,6 +35,33 @@
         </div>
       </div>
       <div class="form-group row">
+        <label for="race" class="col-6 col-form-label">Race: </label>
+        <div class="col-6">
+          <select id="race" class="form-control" formControlName="race" style="float:right;">
+            <option value="American Indian, Alaska Native, or Indigenous">American Indian, Alaska Native, or Indigenous</option>
+            <option value="Asian or Asian American">Asian or Asian American</option>
+            <option value="Black, African American, or African">Black, African American, or African</option>
+            <option value="Native Hawaiian or Pacific Islander">Native Hawaiian or Pacific Islander</option>
+            <option value="White">White</option>
+            <option value="Client doesn't know">Client doesn't know</option>
+            <option value="Client refused">Client refused</option>
+            <option value="Data not collected">Data not collected</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="ethnicity" class="col-6 col-form-label">Ethnicity: </label>
+        <div class="col-6">
+          <select id="ethnicity" class="form-control" formControlName="ethnicity" style="float:right;">
+            <option value="Non-Hispanic/Non-Latin(a)(o)(x)">Non-Hispanic/Non-Latin(a)(o)(x)</option>
+            <option value="Hispanic/Latin(a)(o)(x)">Hispanic/Latin(a)(o)(x)</option>
+            <option value="Client doesn't know">Client doesn't know</option>
+            <option value="Client refused">Client refused</option>
+            <option value="Data not collected">Data not collected</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group row">
         <label for="birth-date" class="col-6 col-form-label">Birth Date (Date must be MM/DD/YYYY): </label>
         <div class="col-6">
           <input id="birth-date" type="text" class="form-control" placeholder="mm\/dd\/yyyy" formControlName="birth_date" style="float:right;"/>
