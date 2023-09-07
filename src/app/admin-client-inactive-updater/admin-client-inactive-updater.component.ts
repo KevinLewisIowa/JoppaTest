@@ -35,8 +35,9 @@ export class AdminClientInactiveUpdaterComponent implements OnInit {
         i++;        
         var difference = today.getTime() - new Date(client.last_interaction_date).getTime();
         difference = Math.ceil(difference / (1000 * 3600 * 24));
+        console.log(`${client.first_name} ${client.last_name} difference: ${difference}; inactivity limit: ${this.inactivityLimit}`);
         
-        if (difference > this.inactivityLimit && (client.status == "Active")) {
+        if ((difference > this.inactivityLimit) && (client.status == "Active")) {
           console.log(client.first_name + client.preferred_name + client.last_name);
           client.status = "Inactive";
           client.current_camp_id = 0;
