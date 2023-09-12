@@ -305,17 +305,17 @@ export class LocationCampComponent implements OnInit {
             routeAttendanceList.push(clientInteraction);
             this.clientService.updateClient(client).subscribe(
               (data) => {
-                if (!this.isAdmin) {
-                  window.localStorage.setItem(
-                    "RouteAttendance",
-                    JSON.stringify(routeAttendanceList)
-                  );
-                  console.log(
-                    "Number of interactions in route attendance list: " +
-                    routeAttendanceList.length
-                  );
-                  console.log(JSON.stringify(routeAttendanceList));
-                }
+                window.localStorage.setItem(
+                  "RouteAttendance",
+                  JSON.stringify(routeAttendanceList)
+                );
+                console.log("Updated client");
+                console.log(data);
+                console.log(
+                  "Number of interactions in route attendance list: " +
+                  routeAttendanceList.length
+                );
+                console.log(JSON.stringify(routeAttendanceList));
               },
               (error) => console.log(error)
             );
