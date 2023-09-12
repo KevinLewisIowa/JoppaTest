@@ -26,6 +26,7 @@ import {
   IconDefinition,
   faMap,
   faInfoCircle,
+  faUserMinus
 } from "@fortawesome/free-solid-svg-icons";
 import { ClientDwelling } from "app/models/client-dwelling";
 
@@ -53,6 +54,7 @@ export class LocationCampComponent implements OnInit {
   regularCheckCircleIcon = farCheckCircle;
   checkCircleIcon = faCheckCircle;
   timesCircleIcon = faTimesCircle;
+  userMinus = faUserMinus;
   mapIcon = faMap;
   starIcon = faStar;
   informationIcon = faInfoCircle;
@@ -276,6 +278,54 @@ export class LocationCampComponent implements OnInit {
       });
   }
 
+  markRemainingNotSeenNotServiced() {
+    // build list of client ids from routeAttendance
+    let routeAttendanceList: Appearance[] = JSON.parse(
+      window.localStorage.getItem("RouteAttendance")
+    );
+    let attendanceIds: number[] = routeAttendanceList.map(interaction => interaction.client_id);
+    this.clients.forEach(client => {
+      if (!attendanceIds.includes(client.id)) {
+        let clientInteraction: Appearance = new Appearance();
+        clientInteraction.client_id = client.id;
+        clientInteraction.location_camp_id = JSON.parse(
+          this.activatedRoute.snapshot.params["id"]
+        );
+        clientInteraction.serviced = false;
+        clientInteraction.still_lives_here = true;
+        clientInteraction.was_seen = false;
+        clientInteraction.at_homeless_resource_center = false;
+        clientInteraction.serviced_date = new Date();
+        if (!clientInteraction.location_camp_id) {
+          clientInteraction.location_camp_id = 449;
+        }
+        this.clientService.insertClientAppearance(clientInteraction).subscribe(
+          (data) => {
+            clientInteraction.id = data.id;
+            routeAttendanceList.push(clientInteraction);
+            this.clientService.updateClient(client).subscribe(
+              (data) => {
+                if (!this.isAdmin) {
+                  window.localStorage.setItem(
+                    "RouteAttendance",
+                    JSON.stringify(routeAttendanceList)
+                  );
+                  console.log(
+                    "Number of interactions in route attendance list: " +
+                    routeAttendanceList.length
+                  );
+                  console.log(JSON.stringify(routeAttendanceList));
+                }
+              },
+              (error) => console.log(error)
+            );
+          },
+          (error) => console.log(error)
+        );
+      }
+    });
+  }
+
   createClient() {
     this.router.navigate(["/createClient"]);
   }
@@ -291,6 +341,7 @@ export class LocationCampComponent implements OnInit {
       this.campNotes = this.campNotes.filter((w) => w.id != id);
     });
   }
+
 
   showMap() {
     console.log(

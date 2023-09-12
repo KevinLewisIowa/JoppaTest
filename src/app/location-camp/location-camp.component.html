@@ -182,6 +182,14 @@
       >
         Next Stop <fa-icon [icon]="forwardIcon"></fa-icon>
       </button>
+      <button
+        (click)="markRemainingNotSeenNotServiced()"
+        type="button"
+        class="btn btn-primary"
+        style="margin-left: 1%; float: left"
+      >
+      <fa-icon [icon]="userMinus"></fa-icon> Mark remaining clients not seen / serviced
+      </button>
     </div>
   </div>
 </div>
