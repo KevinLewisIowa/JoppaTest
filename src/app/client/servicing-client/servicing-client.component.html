@@ -181,7 +181,7 @@
                 <td>{{ item.homeless_reason }}</td>
                 <td>{{ item.notes }}</td>
                 <td>
-                  <button type="button" class="btn btn-primary" (click)="removeClientDwelling(item.id)">
+                  <button type="button" class="btn btn-primary" (click)="removeClientDwelling(item.id)" *ngIf="isAdmin">
                     Delete
                   </button>
                 </td>
