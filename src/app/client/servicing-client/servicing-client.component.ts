@@ -81,6 +81,7 @@ export class ServicingClientComponent implements OnInit {
   notSeenAndServicedIcon = farCheckCircle;
   notSeenIcon = faTimesCircle;
   routeInstanceId: number;
+  pinnedNoteString: string = '';
   pipe: DatePipe = new DatePipe("en-us");
 
   @ViewChild("clientInfo", { static: false }) clientInfo: ElementRef;
@@ -163,8 +164,19 @@ export class ServicingClientComponent implements OnInit {
           (data: Note[]) => {
             this.notes = data;
             this.notes.sort((a, b) => (a.created_at > b.created_at) ? 1 : -1);
-            let warningNotes: Note[] = data.filter(n => n.source === "WARNING")
+            let warningNotes: Note[] = data.filter(n => n.source === "WARNING");
             alert(warningNotes[warningNotes.length - 1].note);
+            console.log(JSON.stringify(data));
+            let pinnedNotes: Note[] = data.filter(n => n.source == "PINNED NOTE");
+            console.log(JSON.stringify(pinnedNotes))
+            pinnedNotes.forEach(n => {
+              if (this.pinnedNoteString === "") {
+                this.pinnedNoteString = n.note;
+              } else {
+                this.pinnedNoteString += '\r\n' + n.note;
+              }
+              console.log(this.pinnedNoteString);
+            });
           },
           (error) => console.log(error)
         );
@@ -280,6 +292,23 @@ export class ServicingClientComponent implements OnInit {
             },
             (error) => console.log(error)
           );
+      } else {
+        this.service.getClientNotesForClient(this.clientId).subscribe(
+          (data: Note[]) => {
+            let warningNotes: Note[] = data.filter(n => n.source === "WARNING");
+            alert(warningNotes[warningNotes.length - 1].note);
+            let pinnedNotes: Note[] = data.filter(n => n.source === "PINNED NOTE");
+            pinnedNotes.forEach(n => {
+              if (this.pinnedNoteString === '') {
+                this.pinnedNoteString = n.note;
+              } else {
+                this.pinnedNoteString += '\r\n' + n.note;
+              }
+              console.log(this.pinnedNoteString);
+            });
+          },
+          (error) => console.log(error)
+        );
       }
 
       if (this.heatRoute) {
@@ -686,6 +715,13 @@ export class ServicingClientComponent implements OnInit {
 
   noteAdded(note: Note) {
     this.notes.push(note);
+    if (note.source === "PINNED NOTE") {
+      if (this.pinnedNoteString === "") {
+        this.pinnedNoteString = note.note;
+      } else {
+        this.pinnedNoteString += '\r\n' + note.note;
+      }
+    }
     const element = document.querySelector("#notes");
     element.scrollIntoView();
   }
@@ -848,6 +884,16 @@ export class ServicingClientComponent implements OnInit {
   removeNote(id: number) {
     this.service.removeNote(id).subscribe((res) => {
       this.notes = this.notes.filter((w) => w.id != id);
+      this.pinnedNoteString = '';
+      let pinnedNotes: Note[] = this.notes.filter(n => n.source === "PINNED NOTE");
+            pinnedNotes.forEach(n => {
+              if (this.pinnedNoteString === '') {
+                this.pinnedNoteString = n.note;
+              } else {
+                this.pinnedNoteString += '\r\n' + n.note;
+              }
+              console.log(this.pinnedNoteString);
+            });
     });
   }
 
@@ -994,6 +1040,23 @@ export class ServicingClientComponent implements OnInit {
     this.service.updateClient(householdClient).subscribe((data) => {
       // household client was updated
       // testing out if push from UI will fix CORS
+    },
+      (error) => console.log(error)
+    );
+  }
+
+  onNoteTypeChange(note: Note) {
+    this.service.updateClientNote(note).subscribe((data) => {
+      this.pinnedNoteString = '';
+      let pinnedNotes: Note[] = this.notes.filter(n => n.source === "PINNED NOTE");
+            pinnedNotes.forEach(n => {
+              if (this.pinnedNoteString === '') {
+                this.pinnedNoteString = n.note;
+              } else {
+                this.pinnedNoteString += '\r\n' + n.note;
+              }
+              console.log(this.pinnedNoteString);
+            });
     },
       (error) => console.log(error)
     );

@@ -350,6 +350,29 @@ export class ClientService {
       );
   }
 
+  updateClientNote(theNote: Note) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+    return this.http
+      .patch(
+        this.baseUrl + `client_notes/${theNote.id}`,
+        { client_note: theNote },
+        { headers: myHeader }
+      )
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
   removeClientDwelling(id: number) {
     const myHeader = new HttpHeaders({
       "Content-Type": "application/json",

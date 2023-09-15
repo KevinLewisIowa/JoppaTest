@@ -466,7 +466,18 @@
             <tbody>
               <tr *ngFor="let note of notes">
                 <td>{{ note.created_at | date: "short" }}</td>
-                <td>{{ note.source }}</td>
+                <td><select id="note_type" class="form-control" style="float: left" #hrt [(ngModel)]="note.source" name="note_type" (change)="onNoteTypeChange(note)">
+                  <option value="Resource Center" *ngIf="isAdmin">Resource Center</option>
+                  <option value="Phone" *ngIf="isAdmin">Phone</option>
+                  <option value="Email" *ngIf="isAdmin">Email</option>
+                  <option value="Circle of Friends" *ngIf="isAdmin">Circle of Friends</option>
+                  <option value="Outreach">Outreach</option>
+                  <option value="Aftercare">Aftercare</option>
+                  <option value="Meeting" *ngIf="isAdmin">Meeting</option>
+                  <option value="Heat">Heat</option>
+                  <option value="WARNING" *ngIf="isAdmin">WARNING</option>
+                  <option value="PINNED NOTE" *ngIf="isAdmin">PINNED NOTE</option>
+                </select></td>
                 <td>{{ note.note }}</td>
                 <td *ngIf="isAdmin">
                   <button type="button" class="btn btn-primary" (click)="removeNote(note.id)">
@@ -526,13 +537,11 @@
           </tbody>
         </table>
       </div>
-      <div class="col-lg-12 col-md-12">
-        <!-- removed !heatRoute from ngIf to pare down screen -->
+      <div class="col-lg-12 col-md-12" *ngIf="!heatRoute">
         <div class="background-color">
           <h4>
             Pets
-            <button type="button" (click)="goToTop(); petsMdl.showModal()" class="btn btn-primary" style="float: right"
-              *ngIf="isAdmin">
+            <button type="button" (click)="goToTop(); petsMdl.showModal()" class="btn btn-primary" style="float: right">
               New Pet
             </button>
           </h4>
@@ -778,6 +787,10 @@
               {{ client.admin_notes }}
             </span>
           </p>
+        </div>
+        <div class="col-lg-12 col-md-12">
+          <h4>Pinned Notes:</h4>
+          <p [innerText]="pinnedNoteString"></p>
         </div>
       </div>
     </div>
