@@ -174,7 +174,6 @@ export class ClientEditComponent implements OnInit {
           alert('If you select Other as Homeless Reason, need to indicate reason.');
           return;
         }
-        //
         
         const theDwelling: ClientDwelling = new ClientDwelling();
         theDwelling.client_id = insertedClient.id;
