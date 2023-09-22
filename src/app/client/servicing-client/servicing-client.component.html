@@ -21,7 +21,7 @@
     </div>
     &nbsp;
     <div>
-      <img [src]="url" width="20%" height="20%" *ngIf="url !== 'data:image/png;base64,null'">
+      <img [src]="url" width="20%" height="20%" *ngIf="url !== 'data:image/png;base64,null' && url != '' && url != null">
       <button #clientInfo class="btn btn-primary" style="float: right" (click)="clientEditMdl.openModal(client)"type="button">
         Client Info <fa-icon [icon]="informationIcon"></fa-icon>
       </button>

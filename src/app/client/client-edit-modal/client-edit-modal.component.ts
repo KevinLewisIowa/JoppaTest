@@ -49,7 +49,9 @@ export class ClientEditModalComponent implements OnInit {
   openModal(client: Client) {
     this.theClient = client;
 
-    this.url = 'data:image/png;base64,' + this.theClient.client_picture;
+    if (this.theClient.client_picture != '' && this.theClient.client_picture != null) {
+      this.url = 'data:image/png;base64,' + this.theClient.client_picture;
+    }
     
     if (this.theClient.first_time_homeless) {
       this.firstTimeHomeless = 'Yes';
@@ -81,6 +83,11 @@ export class ClientEditModalComponent implements OnInit {
     } else {
       this.url = null;
     }
+  }
+
+  clearPicture() {
+    this.byteArray = "";
+    this.url = null;
   }
 
   submitClient() {

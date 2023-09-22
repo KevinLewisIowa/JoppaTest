@@ -132,7 +132,9 @@ export class ServicingClientComponent implements OnInit {
     if (this.clientId !== null) {
       this.service.getClientById(this.clientId).subscribe((data: Client) => {
         this.client = data;
-        this.url = 'data:image/png;base64,' + this.client.client_picture;
+        if (this.client.client_picture != null && this.client.client_picture != '') {
+          this.url = 'data:image/png;base64,' + this.client.client_picture;
+        }
         console.log(this.url);
         this.campId = this.client.current_camp_id;
 
@@ -692,7 +694,9 @@ export class ServicingClientComponent implements OnInit {
 
   editedClient(theClient: Client) {
     this.client = theClient;
-    this.url = 'data:image/png;base64,' + this.client.client_picture;
+    if (this.client.client_picture != null && this.client.client_picture != '') {
+      this.url = 'data:image/png;base64,' + this.client.client_picture;
+    }
   }
 
   healthConcernAdded(concern: HealthConcern) {

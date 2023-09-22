@@ -86,6 +86,11 @@ export class ClientEditComponent implements OnInit {
     }
   }
 
+  clearPicture() {
+    this.byteArray = "";
+    this.url = null;
+  }
+
   onFTHChange(value: string) {
     if (value == 'Unknown') {
       this.clientForm.patchValue({ first_time_homeless: null });
