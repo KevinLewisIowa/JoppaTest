@@ -515,9 +515,7 @@ export class ServicingClientComponent implements OnInit {
   sendInteraction(interactionType: number) {
     const interaction: Appearance = new Appearance();
     interaction.client_id = this.client.id;
-    interaction.location_camp_id = this.locationCampId
-      ? this.locationCampId
-      : this.client.current_camp_id;
+    interaction.location_camp_id = this.locationCampId ? this.locationCampId : this.client.current_camp_id;
     if (interactionType === 1) {
       interaction.serviced = true;
       interaction.was_seen = true;
@@ -544,15 +542,17 @@ export class ServicingClientComponent implements OnInit {
       interaction.still_lives_here = true;
       interaction.at_homeless_resource_center = true;
       // if neither locationCampId nor current_camp_id have a value, set it to HRC camp
-      if (!interaction.location_camp_id) {
+      if (!interaction.location_camp_id || interaction.location_camp_id == 0) {
         interaction.location_camp_id = 449;
         this.client.current_camp_id = 449;
       }
     }
 
-    console.log("camp id: " + interaction.location_camp_id);
-
     if (this.isAdmin) {
+      if (interaction.location_camp_id == 0) {
+        interaction.location_camp_id = 449;
+      }
+
       // Allow them to select a Date
       const modalRef: NgbModalRef = this.modalService.open(
         DateSelectorComponent,
@@ -599,6 +599,8 @@ export class ServicingClientComponent implements OnInit {
         this.createUpdateInteraction(interaction);
       }
     }
+
+    console.log("camp id: " + interaction.location_camp_id);
   }
 
   private createUpdateInteraction(interaction: Appearance) {
@@ -608,6 +610,11 @@ export class ServicingClientComponent implements OnInit {
     let appearance: Appearance = routeAttendanceList.find(
       (x) => x.client_id == interaction.client_id
     );
+
+    console.log(this.client.status);
+    if (interaction.serviced && this.client.status === "Inactive") {
+      this.client.status = "Active";
+    }
 
     if (appearance) {
       interaction.id = appearance.id;
@@ -637,6 +644,7 @@ export class ServicingClientComponent implements OnInit {
   private updateClientAndListing(routeAttendanceList: Appearance[]) {
     this.service.updateClient(this.client).subscribe(
       (data) => {
+        console.log(data.status);
         if (!this.isAdmin) {
           window.localStorage.setItem(
             "RouteAttendance",
