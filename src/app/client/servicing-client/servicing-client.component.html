@@ -825,15 +825,7 @@
               : 'btn btn-primary'
           " (click)="sendInteraction(4)" style="margin-right: 3px">
           <fa-icon [icon]="notSeenIcon"></fa-icon> Not Seen</button>&nbsp;
-        <button type="button" *ngIf="isAdmin" [className]="
-            appearance &&
-            appearance.was_seen == false &&
-            appearance.serviced == false &&
-            appearance.still_lives_here == false
-              ? 'btn btn-success'
-              : 'btn btn-primary'
-          " (click)="sendInteraction(3)" style="margin-right: 3px">
-          No longer lives here</button>&nbsp;
+        <button type="button" [className]="appearance && appearance.was_seen == false && appearance.serviced == false && appearance.still_lives_here == false ? 'btn btn-success' : 'btn btn-primary'" (click)="sendInteraction(3)" style="margin-right: 3px">No longer lives here</button>&nbsp;
         <button type="button" *ngIf="isAdmin" [className]="
             appearance &&
             appearance.was_seen == false &&
