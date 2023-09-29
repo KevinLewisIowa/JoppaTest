@@ -621,8 +621,13 @@ export class ServicingClientComponent implements OnInit {
 
       this.service.updateClientAppearance(interaction).subscribe(
         (data) => {
-          routeAttendanceList[routeAttendanceList.indexOf(appearance)] =
-            interaction;
+          routeAttendanceList[routeAttendanceList.indexOf(appearance)] = interaction;
+
+          if (!interaction.still_lives_here) {
+            alert('Please add a new dwelling to indicate where they went and any other applicable notes');
+            document.getElementById("newDwellingButton").click();
+          }
+
           this.updateClientAndListing(routeAttendanceList);
         },
         (error) => console.log(error)
@@ -634,6 +639,12 @@ export class ServicingClientComponent implements OnInit {
           interaction.id = data.id;
           routeAttendanceList.push(interaction);
           this.clientInteractions.push(data);
+
+          if (!interaction.still_lives_here) {
+            alert('Please add a new dwelling to indicate where they went and any other applicable notes');
+            document.getElementById("newDwellingButton").click();
+          }
+
           this.updateClientAndListing(routeAttendanceList);
         },
         (error) => console.log(error)
