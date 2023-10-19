@@ -165,9 +165,6 @@ export class ServicingClientComponent implements OnInit {
         this.service.getClientNotesForClient(this.clientId).subscribe(
           (data: Note[]) => {
             this.notes = data;
-            this.notes.sort((a, b) => (a.created_at > b.created_at) ? 1 : -1);
-            let warningNotes: Note[] = data.filter(n => n.source === "WARNING");
-            alert(warningNotes[warningNotes.length - 1].note);
             console.log(JSON.stringify(data));
             let pinnedNotes: Note[] = data.filter(n => n.source == "PINNED NOTE");
             console.log(JSON.stringify(pinnedNotes))
@@ -179,6 +176,12 @@ export class ServicingClientComponent implements OnInit {
               }
               console.log(this.pinnedNoteString);
             });
+
+            this.notes.sort((a, b) => (a.created_at > b.created_at) ? 1 : -1);
+            let warningNotes: Note[] = data.filter(n => n.source === "WARNING");
+            if (warningNotes.length > 0) {
+              alert(warningNotes[warningNotes.length - 1].note);
+            }
           },
           (error) => console.log(error)
         );
@@ -297,8 +300,6 @@ export class ServicingClientComponent implements OnInit {
       } else {
         this.service.getClientNotesForClient(this.clientId).subscribe(
           (data: Note[]) => {
-            let warningNotes: Note[] = data.filter(n => n.source === "WARNING");
-            alert(warningNotes[warningNotes.length - 1].note);
             let pinnedNotes: Note[] = data.filter(n => n.source === "PINNED NOTE");
             pinnedNotes.forEach(n => {
               if (this.pinnedNoteString === '') {
@@ -308,6 +309,10 @@ export class ServicingClientComponent implements OnInit {
               }
               console.log(this.pinnedNoteString);
             });
+            let warningNotes: Note[] = data.filter(n => n.source === "WARNING");
+            if (warningNotes.length > 0) {
+              alert(warningNotes[warningNotes.length - 1].note);
+            }
           },
           (error) => console.log(error)
         );
