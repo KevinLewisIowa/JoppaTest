@@ -633,6 +633,18 @@ export class ServicingClientComponent implements OnInit {
             document.getElementById("newDwellingButton").click();
           }
 
+          let dwellingDates = this.dwellings.map(dwelling => dwelling.created_at);
+          let clientDwelling : ClientDwelling = this.dwellings.filter(dwelling => dwelling.created_at === dwellingDates.reduce((a, b) => a > b ? a : b))[0];
+
+          var difference = new Date().getTime() - new Date(clientDwelling.created_at).getTime();
+          difference = Math.ceil(difference / (1000 * 3600 * 24));
+          if (interaction.serviced && (clientDwelling.dwelling == "House" || clientDwelling.dwelling == "Apartment" || clientDwelling.dwelling == "Shelter" || clientDwelling.dwelling == "Motel" || clientDwelling.dwelling == "Motel") && difference > 90) {
+            clientDwelling.first_time_homeless = false;
+            this.service.updateClientDwelling(clientDwelling).subscribe(data => {
+
+            }, error => console.log(error));
+          }
+
           this.updateClientAndListing(routeAttendanceList);
         },
         (error) => console.log(error)
@@ -648,6 +660,18 @@ export class ServicingClientComponent implements OnInit {
           if (!interaction.still_lives_here) {
             alert('Please add a new dwelling to indicate where they went and any other applicable notes');
             document.getElementById("newDwellingButton").click();
+          }
+
+          let dwellingDates = this.dwellings.map(dwelling => dwelling.created_at);
+          let clientDwelling : ClientDwelling = this.dwellings.filter(dwelling => dwelling.created_at === dwellingDates.reduce((a, b) => a > b ? a : b))[0];
+
+          var difference = new Date().getTime() - new Date(clientDwelling.created_at).getTime();
+          difference = Math.ceil(difference / (1000 * 3600 * 24));
+          if (interaction.serviced && (clientDwelling.dwelling == "House" || clientDwelling.dwelling == "Apartment" || clientDwelling.dwelling == "Shelter" || clientDwelling.dwelling == "Motel" || clientDwelling.dwelling == "Camper") && difference > 90) {
+            clientDwelling.first_time_homeless = false;
+            this.service.updateClientDwelling(clientDwelling).subscribe(data => {
+
+            }, error => console.log(error));
           }
 
           this.updateClientAndListing(routeAttendanceList);
