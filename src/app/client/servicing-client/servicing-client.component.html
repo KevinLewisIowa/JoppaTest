@@ -35,10 +35,10 @@
           <button type="button" (click)="loanHeater()" class="btn btn-primary" style="float: right">
             New Heater
           </button>
-          <button type="button" (click)="loanTank()" class="btn btn-primary" hidden>
+          <button type="button" (click)="loanTank()" class="btn btn-primary" style="float: right">
             Add Tank
           </button>
-          <button type="button" (click)="loanHose()" class="btn btn-primary" hidden>
+          <button type="button" (click)="loanHose()" class="btn btn-primary" style="float: right">
             Add Hose
           </button>
         </h4>
@@ -71,6 +71,28 @@
                 </button>
               </td>
             </tr>
+            <tr *ngFor="let tank of tankInteractions">
+              <td>Tank</td>
+              <td>N/A</td>
+              <td>{{tank.updated_at | date: 'shortDate'}}</td>
+              <td><select class="form-control" #tankStatus>
+                  <option *ngFor="let option of heaterStatuses" value="{{option.id}}">{{option.status_name}}</option>
+                </select></td>
+              <td><button type="button" (click)="submitTankStatus(tank.id, tankStatus.value)" class="btn btn-primary">Submit</button></td>
+            </tr>
+            <tr *ngFor="let hose of hoseInteractions">
+              <td>Hose</td>
+              <td>N/A</td>
+              <td>{{hose.updated_at | date: 'shortDate'}}</td>
+              <td>
+                <select class="form-control" #hoseStatus>
+                  <option *ngFor="let option of heaterStatuses" value="{{option.id}}">{{option.status_name}}</option>
+                </select>
+              </td>
+              <td>
+                <button type="button" (click)="submitHoseStatus(hose.id, hoseStatus.value)" class="btn btn-primary">Submit</button>
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -99,7 +121,7 @@
           </tbody>
         </table>
       </div>
-      <div style="padding-bottom: 12px" *ngIf="heatRoute || isAdmin">
+      <div style="padding-bottom: 12px" *ngIf="heatRoute || isAdmin" hidden>
         <div class="col-md-12">
           <h5>
             Tanks/Hoses

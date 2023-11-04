@@ -263,14 +263,14 @@ export class ServicingClientComponent implements OnInit {
           },
           (error) => console.log(error)
         );
-        // this.service.getClientLoanedTanks(this.clientId).subscribe((tankInteractions: any[]) => {
-        //   // now get the tank info
-        //   this.tankInteractions = tankInteractions;
-        // });
-        // this.service.getClientLoanedHoses(this.clientId).subscribe((hoseInteractions: any[]) => {
-        //   // now get the Hose info
-        //   this.hoseInteractions = hoseInteractions;
-        // });
+        this.service.getClientLoanedTanks(this.clientId).subscribe((tankInteractions: any[]) => {
+          // now get the tank info
+          this.tankInteractions = tankInteractions;
+        });
+        this.service.getClientLoanedHoses(this.clientId).subscribe((hoseInteractions: any[]) => {
+          // now get the Hose info
+          this.hoseInteractions = hoseInteractions;
+        });
         this.service.getHeatEquipmentNotReturned(this.clientId).subscribe(
           (data: any[]) => {
             this.heatEquipmentNotReturned = data;
