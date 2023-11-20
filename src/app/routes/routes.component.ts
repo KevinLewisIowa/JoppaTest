@@ -24,6 +24,7 @@ export class RoutesComponent implements OnInit {
   constructor(private mainService: MainService, private router: Router) {
     this.mainService.getTheRoutes().subscribe(theRoutes => {
       this.routes = theRoutes;
+      this.routes.sort((a, b) => (a.name > b.name) ? 1 : -1);
 
       this.routes.forEach((route: Route) => {
         this.mainService.getClientCountForRoute(route.id).subscribe((client_count: number) => {
