@@ -1018,6 +1018,7 @@ export class ServicingClientComponent implements OnInit {
         (response: Heater) => {
           this.updateHeaterEntry(response.id, 2);
           this.getHeaterStatuses();
+          if (!this.isAdmin) { this.sendInteraction(1); }
         },
         (error) => console.log(error)
       );
@@ -1031,6 +1032,7 @@ export class ServicingClientComponent implements OnInit {
           .getClientLoanedTanks(this.clientId)
           .subscribe((data: any) => {
             this.tankInteractions = data;
+            if (!this.isAdmin) { this.sendInteraction(1); }
           });
       });
     }
@@ -1043,6 +1045,7 @@ export class ServicingClientComponent implements OnInit {
           .getClientLoanedHoses(this.clientId)
           .subscribe((data: any) => {
             this.hoseInteractions = data;
+            if (!this.isAdmin) { this.sendInteraction(1); }
           });
       });
     }
