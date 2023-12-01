@@ -12,7 +12,7 @@ import { formatDate } from '@angular/common';
   styleUrls: ['./client-edit-modal.component.css']
 })
 export class ClientEditModalComponent implements OnInit {
-  @ViewChild('editModal', {static: false}) editModal: ElementRef;
+  @ViewChild('editModal', { static: false }) editModal: ElementRef;
   @Output() editedClient = new EventEmitter<Client>();
   badDate = false;
   clientForm: FormGroup;
@@ -29,20 +29,20 @@ export class ClientEditModalComponent implements OnInit {
   ngOnInit() {
     this.theClient = new Client();
     this.clientForm = this.fb.group(this.theClient);
-    
+
     this.isAdmin = JSON.parse(window.localStorage.getItem('isAdmin'));
   }
 
   onFTHChange(value: string) {
     this.firstTimeHomeless = value;
     if (value == 'Unknown') {
-      this.clientForm.patchValue({first_time_homeless: null});
+      this.clientForm.patchValue({ first_time_homeless: null });
     }
     else if (value == 'Yes') {
-      this.clientForm.patchValue({first_time_homeless: true});
+      this.clientForm.patchValue({ first_time_homeless: true });
     }
     else {
-      this.clientForm.patchValue({first_time_homeless: false});
+      this.clientForm.patchValue({ first_time_homeless: false });
     }
   }
 
@@ -52,7 +52,7 @@ export class ClientEditModalComponent implements OnInit {
     if (this.theClient.client_picture != '' && this.theClient.client_picture != null) {
       this.url = 'data:image/png;base64,' + this.theClient.client_picture;
     }
-    
+
     if (this.theClient.first_time_homeless) {
       this.firstTimeHomeless = 'Yes';
     }
@@ -62,12 +62,21 @@ export class ClientEditModalComponent implements OnInit {
 
     this.clientForm = null;
     this.clientForm = this.fb.group(this.theClient);
-    this.clientForm.patchValue({birth_date: formatDate(this.clientForm.get('birth_date').value, 'MM/dd/yyyy', 'en')})
-    this.modalService.open(this.editModal, { size: 'lg', backdrop: 'static'});
+    this.clientForm.patchValue({ birth_date: formatDate(this.clientForm.get('birth_date').value, 'MM/dd/yyyy', 'en') })
+    this.modalService.open(this.editModal, { size: 'lg', backdrop: 'static' });
   }
 
   toggleEditMode() {
     this.editing = !this.editing;
+  }
+
+  getCurrentLocation() {
+    navigator.geolocation.getCurrentPosition((position) => {
+      this.clientForm.patchValue({
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+      });
+    });
   }
 
   onAdd(event: any) {
@@ -97,8 +106,7 @@ export class ClientEditModalComponent implements OnInit {
     let now: Date = new Date();
     let birthday: Date = new Date(updatedClient.birth_date);
     let pastDate: Date = new Date(now.getFullYear() - 100, now.getMonth(), now.getDate());
-    if (!this.regExpDate.test(formatDate(birthday, 'MM/dd/yyyy', this.locale)))
-    {
+    if (!this.regExpDate.test(formatDate(birthday, 'MM/dd/yyyy', this.locale))) {
       alert('Birthday not entered in mm/dd/yyyy format');
       return;
     }

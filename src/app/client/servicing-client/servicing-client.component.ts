@@ -23,6 +23,7 @@ import {
   faInfoCircle,
   faCheckCircle,
   faTimesCircle,
+  faMap,
 } from "@fortawesome/free-solid-svg-icons";
 import { Subscription, timer } from "rxjs";
 import { DatePipe } from "@angular/common";
@@ -80,6 +81,7 @@ export class ServicingClientComponent implements OnInit {
   seenAndServicedIcon = faCheckCircle;
   notSeenAndServicedIcon = farCheckCircle;
   notSeenIcon = faTimesCircle;
+  mapIcon = faMap;
   routeInstanceId: number;
   pinnedNoteString: string = '';
   pipe: DatePipe = new DatePipe("en-us");
@@ -462,6 +464,15 @@ export class ServicingClientComponent implements OnInit {
     this.currentStatus = status_id;
   }
 
+  showMap() {
+    if (this.client.latitude !== null && this.client.longitude !== null) {
+      console.log(
+        `latitude: ${this.client.latitude}, longitude: ${this.client.longitude}`
+      );
+      window.open(`https://www.google.com/maps/dir/${this.client.latitude},${this.client.longitude}/@//`,"_blank");
+    }
+  }
+
   updateHeaterEntry(heaterId: number, statusId: number) {
     this.service
       .updateHeaterClient(this.client.id, heaterId, statusId)
@@ -634,7 +645,7 @@ export class ServicingClientComponent implements OnInit {
           }
 
           let dwellingDates = this.dwellings.map(dwelling => dwelling.created_at);
-          let clientDwelling : ClientDwelling = this.dwellings.filter(dwelling => dwelling.created_at === dwellingDates.reduce((a, b) => a > b ? a : b))[0];
+          let clientDwelling: ClientDwelling = this.dwellings.filter(dwelling => dwelling.created_at === dwellingDates.reduce((a, b) => a > b ? a : b))[0];
 
           console.log(JSON.stringify(clientDwelling));
           var difference = new Date().getTime() - new Date(clientDwelling.created_at).getTime();
@@ -665,9 +676,9 @@ export class ServicingClientComponent implements OnInit {
           }
 
           let dwellingDates = this.dwellings.map(dwelling => dwelling.created_at);
-          let clientDwelling : ClientDwelling = this.dwellings.filter(dwelling => dwelling.created_at === dwellingDates.reduce((a, b) => a > b ? a : b))[0];
+          let clientDwelling: ClientDwelling = this.dwellings.filter(dwelling => dwelling.created_at === dwellingDates.reduce((a, b) => a > b ? a : b))[0];
           console.log(JSON.stringify(clientDwelling));
-          
+
           var difference = new Date().getTime() - new Date(clientDwelling.created_at).getTime();
           difference = Math.ceil(difference / (1000 * 3600 * 24));
           console.log('Difference: ' + difference)
@@ -942,14 +953,14 @@ export class ServicingClientComponent implements OnInit {
       this.notes = this.notes.filter((w) => w.id != id);
       this.pinnedNoteString = '';
       let pinnedNotes: Note[] = this.notes.filter(n => n.source === "PINNED NOTE");
-            pinnedNotes.forEach(n => {
-              if (this.pinnedNoteString === '') {
-                this.pinnedNoteString = n.note;
-              } else {
-                this.pinnedNoteString += '\r\n' + n.note;
-              }
-              console.log(this.pinnedNoteString);
-            });
+      pinnedNotes.forEach(n => {
+        if (this.pinnedNoteString === '') {
+          this.pinnedNoteString = n.note;
+        } else {
+          this.pinnedNoteString += '\r\n' + n.note;
+        }
+        console.log(this.pinnedNoteString);
+      });
     });
   }
 
@@ -1105,14 +1116,14 @@ export class ServicingClientComponent implements OnInit {
     this.service.updateClientNote(note).subscribe((data) => {
       this.pinnedNoteString = '';
       let pinnedNotes: Note[] = this.notes.filter(n => n.source === "PINNED NOTE");
-            pinnedNotes.forEach(n => {
-              if (this.pinnedNoteString === '') {
-                this.pinnedNoteString = n.note;
-              } else {
-                this.pinnedNoteString += '\r\n' + n.note;
-              }
-              console.log(this.pinnedNoteString);
-            });
+      pinnedNotes.forEach(n => {
+        if (this.pinnedNoteString === '') {
+          this.pinnedNoteString = n.note;
+        } else {
+          this.pinnedNoteString += '\r\n' + n.note;
+        }
+        console.log(this.pinnedNoteString);
+      });
     },
       (error) => console.log(error)
     );

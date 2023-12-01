@@ -25,6 +25,9 @@
       <button #clientInfo class="btn btn-primary" style="float: right" (click)="clientEditMdl.openModal(client)"type="button">
         Client Info <fa-icon [icon]="informationIcon"></fa-icon>
       </button>
+      <button (click)="showMap()" type="button" style="float: left" class="btn btn-primary" *ngIf="client.latitude != null && client.longitude != null">
+        <fa-icon [icon]="mapIcon"></fa-icon> Show Directions
+      </button>
     </div>
   </div>
   <div class="panel-body">
