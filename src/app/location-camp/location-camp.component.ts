@@ -136,6 +136,8 @@ export class LocationCampComponent implements OnInit {
                     if (pushClient) this.clients.push(client);
                   }
 
+                  this.clients.sort((a,b) => (a.first_name > b.first_name) ? 1 : -1)
+
                   this.mainService.getClientHasFulfilledItems(client.id).subscribe((count: number) => {
                     if (count > 0) {
                       this.clientsWithFulfilledItems.push(client.id);
