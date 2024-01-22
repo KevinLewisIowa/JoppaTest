@@ -124,6 +124,8 @@ export class LocationCampComponent implements OnInit {
                     }
                     pushClient = false;
                   }
+
+                  if (client.longitude != null && client.latitude != null) client.has_location = true;
                   
                   if (this.heatRoute) {
                     if (client.dwelling == "Tent" || client.dwelling == "Garage" || client.dwelling == "Shack" || client.dwelling == "Camper" || client.dwelling == "Broken Down Van" && pushClient) {

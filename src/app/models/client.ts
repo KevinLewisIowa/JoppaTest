@@ -34,4 +34,5 @@ export class Client {
     client_picture: any = undefined;
     latitude:number = undefined;
     longitude:number = undefined;
+    has_location:boolean = undefined;
 }

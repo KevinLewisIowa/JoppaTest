@@ -60,6 +60,7 @@
         <tbody>
           <tr *ngFor="let client of clients" (click)="viewClient(client)" class="client-row">
             <td class="text-left">
+              <fa-icon style="color: #0d6efd" [icon]="mapIcon" *ngIf="client.has_location"></fa-icon>
               {{ client.first_name }}
               <span *ngIf="
                   client.preferred_name != '' && client.preferred_name != null
