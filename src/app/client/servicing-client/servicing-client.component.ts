@@ -529,7 +529,10 @@ export class ServicingClientComponent implements OnInit {
   }
 
   sendInteraction(interactionType: number) {
-    alert('Attendance recorded');
+    if (!this.isAdmin) {
+      alert('Attendance recorded');
+    }
+    
     const interaction: Appearance = new Appearance();
     interaction.client_id = this.client.id;
     interaction.location_camp_id = this.locationCampId ? this.locationCampId : this.client.current_camp_id;
