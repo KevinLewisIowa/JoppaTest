@@ -98,6 +98,28 @@ export class MainService {
       );
   }
 
+  getActiveRouteInstanceForRoute(routeId: number, heatRoute: boolean) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+
+    return this.http
+      .get(
+        this.apiUrl + `getActiveRouteInstanceForRoute?routeId=${routeId}&heatRoute=${heatRoute}`
+      )
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res as RouteInstance;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
   getLatestRouteInstanceInfoForRoute(routeInstanceId: number) {
     const myHeader = new HttpHeaders({
       "Content-Type": "application/json",

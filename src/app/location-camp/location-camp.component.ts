@@ -43,6 +43,7 @@ export class LocationCampComponent implements OnInit {
   expectedArrivalTime: Date;
   heatRoute: boolean = false;
   locationCampId: number;
+  routeId: number;
   numPeopleWithTanksAtCamp: number;
   numberTanksAtCamp: number;
   searchIcon = faSearch;
@@ -62,6 +63,7 @@ export class LocationCampComponent implements OnInit {
   clientsWithFulfilledItems: number[] = [];
   currentStopNumber: number;
   totalStopsAmount: number;
+  routeAttendanceList: Appearance[] = [];
   private baseUrl = environment.api_url;
 
   constructor(
@@ -71,7 +73,7 @@ export class LocationCampComponent implements OnInit {
     private router: Router,
     private activatedRoute: ActivatedRoute
   ) {
-    
+
   }
 
   ngOnInit() {
@@ -86,9 +88,15 @@ export class LocationCampComponent implements OnInit {
       localStorage.setItem("locationCampId", JSON.stringify(this.locationCampId));
       this.heatRoute = JSON.parse(window.localStorage.getItem("heatRoute"));
 
-      let routeId: number = JSON.parse(window.localStorage.getItem("routeId"));
-      if (routeId) {
-        this.mainService.getRoute(routeId).subscribe((route: Route) => {
+      this.routeId = JSON.parse(window.localStorage.getItem("routeId"));
+      if (this.routeId) {
+        this.clientService.getClientAttendanceForRoute(this.routeId).subscribe((attendanceInfo: Appearance[]) => {
+          window.localStorage.setItem('RouteAttendance', JSON.stringify(attendanceInfo));
+          this.routeAttendanceList = attendanceInfo;
+          console.log(`Attendance: ${JSON.stringify(attendanceInfo)}`);
+        });
+
+        this.mainService.getRoute(this.routeId).subscribe((route: Route) => {
           this.route = route;
           let locationCampList: number[] = JSON.parse(
             window.localStorage.getItem("LocationCampIdList")
@@ -116,7 +124,7 @@ export class LocationCampComponent implements OnInit {
                     let dwelling: string = data.filter(dwelling => dwelling.created_at === dwellingDates.reduce((a, b) => a > b ? a : b))[0].dwelling;
                     console.log(`Client: ${client.first_name} ${client.last_name}; Dwelling: ${dwelling}`);
                     client.dwelling = data.filter(dwelling => dwelling.created_at === dwellingDates.reduce((a, b) => a > b ? a : b))[0].dwelling;
-                  } catch(e) {
+                  } catch (e) {
                     if (this.erroredClients == '') {
                       this.erroredClients = `${client.first_name} ${client.last_name}`;
                     } else {
@@ -126,7 +134,7 @@ export class LocationCampComponent implements OnInit {
                   }
 
                   if (client.longitude != null && client.latitude != null) client.has_location = true;
-                  
+
                   if (this.heatRoute) {
                     if (client.dwelling == "Tent" || client.dwelling == "Garage" || client.dwelling == "Shack" || client.dwelling == "Camper" || client.dwelling == "Broken Down Van" && pushClient) {
                       this.clients.push(client);
@@ -138,7 +146,7 @@ export class LocationCampComponent implements OnInit {
                     if (pushClient) this.clients.push(client);
                   }
 
-                  this.clients.sort((a,b) => (a.first_name > b.first_name) ? 1 : -1)
+                  this.clients.sort((a, b) => (a.first_name > b.first_name) ? 1 : -1)
 
                   this.mainService.getClientHasFulfilledItems(client.id).subscribe((count: number) => {
                     if (count > 0) {
@@ -150,7 +158,7 @@ export class LocationCampComponent implements OnInit {
 
               this.mainService.getCampNotes(this.locationCampId).subscribe((data: CampNote[]) => {
                 this.campNotes = data;
-                this.campNotes.sort((a,b) => (a.created_at > b.created_at) ? 1 : -1);
+                this.campNotes.sort((a, b) => (a.created_at > b.created_at) ? 1 : -1);
               }, (error) => console.log(error));
             }, (error) => console.log(error));
           }, (error) => console.log(error));
@@ -195,8 +203,8 @@ export class LocationCampComponent implements OnInit {
                     this.clients.push(client);
                   }
 
-                  this.clients = this.clients.sort((a,b) => (a.first_name > b.first_name) ? 1 : -1);
-                  this.campNotes.sort((a,b) => (a.created_at > b.created_at) ? 1 : -1);
+                  this.clients = this.clients.sort((a, b) => (a.first_name > b.first_name) ? 1 : -1);
+                  this.campNotes.sort((a, b) => (a.created_at > b.created_at) ? 1 : -1);
 
                   this.mainService.getClientHasFulfilledItems(client.id).subscribe((count: number) => {
                     if (count > 0) {
@@ -255,81 +263,91 @@ export class LocationCampComponent implements OnInit {
     clientInteraction.was_seen = true;
     clientInteraction.serviced = true;
     clientInteraction.serviced_date = new Date();
-    this.clientService
-      .insertClientAppearance(clientInteraction)
-      .subscribe((data: Appearance) => {
-        if (!this.isAdmin) {
-          let routeAttendanceList: Appearance[] = JSON.parse(
-            window.localStorage.getItem("RouteAttendance")
-          );
-          clientInteraction.id = data.id;
-          routeAttendanceList.push(clientInteraction);
-          window.localStorage.setItem(
-            "RouteAttendance",
-            JSON.stringify(routeAttendanceList)
-          );
-        }
-
-        client.previous_camp_id = client.current_camp_id;
-        client.current_camp_id = JSON.parse(
-          window.localStorage.getItem("locationCampId")
-        );
-        client.status = "Active";
-        client.last_interaction_date = new Date();
-        console.log("yooooooo : " + client.last_interaction_date);
-
-        this.clientService.updateClient(client).subscribe((data) => {
-          console.log("updated client");
-          console.log(data);
+    this.clientService.insertClientAppearance(clientInteraction).subscribe((data: Appearance) => {
+      if (!this.isAdmin) {
+        clientInteraction.id = data.id;
+        // routeAttendanceList.push(clientInteraction);
+        // window.localStorage.setItem(
+        //   "RouteAttendance",
+        //   JSON.stringify(routeAttendanceList)
+        // );
+        this.clientService.getClientAttendanceForRoute(this.routeId).subscribe((attendanceInfo: Appearance[]) => {
+          window.localStorage.setItem('RouteAttendance', JSON.stringify(attendanceInfo));
+          this.routeAttendanceList = attendanceInfo;
+          console.log(`Attendance: ${JSON.stringify(attendanceInfo)}`);
         });
+      }
+
+      client.previous_camp_id = client.current_camp_id;
+      client.current_camp_id = JSON.parse(
+        window.localStorage.getItem("locationCampId")
+      );
+      client.status = "Active";
+      client.last_interaction_date = new Date();
+      console.log("yooooooo : " + client.last_interaction_date);
+
+      this.clientService.updateClient(client).subscribe((data) => {
+        console.log("updated client");
+        console.log(data);
       });
+    });
   }
 
   markRemainingNotSeenNotServiced() {
     // build list of client ids from routeAttendance
-    let routeAttendanceList: Appearance[] = JSON.parse(
-      window.localStorage.getItem("RouteAttendance")
-    );
-    let attendanceIds: number[] = routeAttendanceList.map(interaction => interaction.client_id);
-    this.clients.forEach(client => {
-      if (!attendanceIds.includes(client.id)) {
-        let clientInteraction: Appearance = new Appearance();
-        clientInteraction.client_id = client.id;
-        clientInteraction.location_camp_id = JSON.parse(
-          this.activatedRoute.snapshot.params["id"]
-        );
-        clientInteraction.serviced = false;
-        clientInteraction.still_lives_here = true;
-        clientInteraction.was_seen = false;
-        clientInteraction.at_homeless_resource_center = false;
-        clientInteraction.serviced_date = new Date();
-        if (!clientInteraction.location_camp_id) {
-          clientInteraction.location_camp_id = 449;
+    // let routeAttendanceList: Appearance[] = JSON.parse(
+    //   window.localStorage.getItem("RouteAttendance")
+    // );
+    this.clientService.getClientAttendanceForRoute(this.routeId).subscribe((attendanceInfo: Appearance[]) => {
+      this.routeAttendanceList = attendanceInfo;
+      console.log(`Attendance: ${JSON.stringify(attendanceInfo)}`);
+
+      let attendanceIds: number[] = this.routeAttendanceList.map(interaction => interaction.client_id);
+      this.clients.forEach(client => {
+        if (!attendanceIds.includes(client.id)) {
+          let clientInteraction: Appearance = new Appearance();
+          clientInteraction.client_id = client.id;
+          clientInteraction.location_camp_id = JSON.parse(
+            this.activatedRoute.snapshot.params["id"]
+          );
+          clientInteraction.serviced = false;
+          clientInteraction.still_lives_here = true;
+          clientInteraction.was_seen = false;
+          clientInteraction.at_homeless_resource_center = false;
+          clientInteraction.serviced_date = new Date();
+          if (!clientInteraction.location_camp_id) {
+            clientInteraction.location_camp_id = 449;
+          }
+          this.clientService.insertClientAppearance(clientInteraction).subscribe(
+            (data) => {
+              clientInteraction.id = data.id;
+              //routeAttendanceList.push(clientInteraction);
+              this.clientService.updateClient(client).subscribe(
+                (data) => {
+                  // window.localStorage.setItem(
+                  //   "RouteAttendance",
+                  //   JSON.stringify(routeAttendanceList)
+                  // );
+                  console.log("Updated client");
+                  console.log(data);
+                  // console.log(
+                  //   "Number of interactions in route attendance list: " +
+                  //   routeAttendanceList.length
+                  // );
+                  // console.log(JSON.stringify(routeAttendanceList));
+                  this.clientService.getClientAttendanceForRoute(this.routeId).subscribe((attendanceInfo: Appearance[]) => {
+                    window.localStorage.setItem('RouteAttendance', JSON.stringify(attendanceInfo));
+                    this.routeAttendanceList = attendanceInfo;
+                    console.log(`Attendance: ${JSON.stringify(attendanceInfo)}`);
+                  });
+                },
+                (error) => console.log(error)
+              );
+            },
+            (error) => console.log(error)
+          );
         }
-        this.clientService.insertClientAppearance(clientInteraction).subscribe(
-          (data) => {
-            clientInteraction.id = data.id;
-            routeAttendanceList.push(clientInteraction);
-            this.clientService.updateClient(client).subscribe(
-              (data) => {
-                window.localStorage.setItem(
-                  "RouteAttendance",
-                  JSON.stringify(routeAttendanceList)
-                );
-                console.log("Updated client");
-                console.log(data);
-                console.log(
-                  "Number of interactions in route attendance list: " +
-                  routeAttendanceList.length
-                );
-                console.log(JSON.stringify(routeAttendanceList));
-              },
-              (error) => console.log(error)
-            );
-          },
-          (error) => console.log(error)
-        );
-      }
+      });
     });
   }
 
@@ -399,7 +417,7 @@ export class LocationCampComponent implements OnInit {
         );
       },
       (error) => console.log(error)
-    );    
+    );
   }
 
   nextStop() {
@@ -420,10 +438,11 @@ export class LocationCampComponent implements OnInit {
   }
 
   getAttendanceColor(client: Client): string {
-    let routeAttendanceList: Appearance[] = JSON.parse(
-      window.localStorage.getItem("RouteAttendance")
-    );
-    let appearance: Appearance = routeAttendanceList.find(
+    // let routeAttendanceList: Appearance[] = JSON.parse(
+    //   window.localStorage.getItem("RouteAttendance")
+    // );
+
+    let appearance: Appearance = this.routeAttendanceList.find(
       (x) => x.client_id == client.id
     );
 
@@ -439,11 +458,8 @@ export class LocationCampComponent implements OnInit {
   }
 
   getAttendanceIcon(client: Client): IconDefinition {
-    let routeAttendanceList: Appearance[] = JSON.parse(
-      window.localStorage.getItem("RouteAttendance")
-    );
-    if (routeAttendanceList.length > 0) {
-      let appearance: Appearance = routeAttendanceList.find(
+    if (this.routeAttendanceList.length > 0) {
+      let appearance: Appearance = this.routeAttendanceList.find(
         (x) => x.client_id == client.id
       );
 
