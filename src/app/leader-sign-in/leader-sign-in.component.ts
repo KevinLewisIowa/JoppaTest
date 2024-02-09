@@ -75,7 +75,7 @@ export class LeaderSignInComponent implements OnInit {
   }
 
   insertRouteInstance() {
-    this.mainService.getActiveRouteInstanceForRoute(this.routeInstanceForm.get('route_id').value).subscribe(data => {
+    this.mainService.getActiveRouteInstanceForRoute(this.routeInstanceForm.get('route_id').value, this.routeInstanceForm.get('heat_route').value).subscribe(data => {
       console.log(JSON.stringify(data));
       if (data.length > 0) {
         window.localStorage.setItem('routeInstance', data[0].id);
