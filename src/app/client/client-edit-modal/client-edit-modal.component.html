@@ -9,25 +9,28 @@
       <div class="form-group row">
         <label for="first-name" class="col-6 col-form-label">First Name: </label>
         <div class="col-6">
-          <input id="first-name" type="text" class="form-control" style="float:right;" placeholder="First Name" formControlName="first_name" />
+          <input id="first-name" type="text" class="form-control" style="float:right;" placeholder="First Name"
+            formControlName="first_name" />
         </div>
       </div>
       <div class="form-group row">
         <label for="last-name" class="col-6 col-form-label">Last Name: </label>
         <div class="col-6">
-          <input id="last-name" type="text" class="form-control" style="float:right;" placeholder="Last Name" formControlName="last_name" />
+          <input id="last-name" type="text" class="form-control" style="float:right;" placeholder="Last Name"
+            formControlName="last_name" />
         </div>
       </div>
       <div class="form-group row">
         <label for="preferred-name" class="col-6 col-form-label">Preferred Name: </label>
         <div class="col-6">
-          <input id="preferred-name" type="text" class="form-control" style="float:right;" placeholder="Preferred Name" formControlName="preferred_name" />
+          <input id="preferred-name" type="text" class="form-control" style="float:right;" placeholder="Preferred Name"
+            formControlName="preferred_name" />
         </div>
       </div>
       <div class="form-group row">
         <label for="gender" class="col-6 col-form-label">Gender: </label>
         <div class="col-6">
-          <select id="gender" class= "form-control" formControlName="gender" style="float:right;">
+          <select id="gender" class="form-control" formControlName="gender" style="float:right;">
             <option value="Male">Male</option>
             <option value="Female">Female</option>
             <option value="Other">Other</option>
@@ -38,7 +41,8 @@
         <label for="race" class="col-6 col-form-label">Race: </label>
         <div class="col-6">
           <select id="race" class="form-control" formControlName="race" style="float:right;">
-            <option value="American Indian, Alaska Native, or Indigenous">American Indian, Alaska Native, or Indigenous</option>
+            <option value="American Indian, Alaska Native, or Indigenous">American Indian, Alaska Native, or Indigenous
+            </option>
             <option value="Asian or Asian American">Asian or Asian American</option>
             <option value="Black, African American, or African">Black, African American, or African</option>
             <option value="Native Hawaiian or Pacific Islander">Native Hawaiian or Pacific Islander</option>
@@ -64,31 +68,58 @@
       <div class="form-group row">
         <label for="birth-date" class="col-6 col-form-label">Birth Date (Date must be MM/DD/YYYY): </label>
         <div class="col-6">
-          <input id="birth-date" type="text" class="form-control" placeholder="mm\/dd\/yyyy" formControlName="birth_date" style="float:right;"/>
+          <input id="birth-date" type="text" class="form-control" placeholder="mm\/dd\/yyyy"
+            formControlName="birth_date" style="float:right;" />
         </div>
       </div>
       <div class="form-group row">
         <label for="phone" class="col-6 col-form-label">Phone: </label>
         <div class="col-6">
-          <input id="phone" type="text" class="form-control" style="float:right;" placeholder="phone" formControlName="phone" />
+          <input id="phone" type="text" class="form-control" style="float:right;" placeholder="phone"
+            formControlName="phone" />
         </div>
       </div>
       <div class="form-group row">
         <label for="veteran" class="col-6 col-form-label">Is Veteran:</label>
         <div class="col-6">
-          <input id="veteran" class="form-control-checkbox" type="checkbox" style="float:right; width:5%; height:100%;" formControlName="is_veteran" />
+          <input id="veteran" class="form-control-checkbox" type="checkbox" style="float:right; width:5%; height:100%;"
+            formControlName="is_veteran" />
         </div>
       </div>
       <div class="form-group row">
         <label for="aftercare" class="col-6 col-form-label">Is After Care:</label>
         <div class="col-6">
-          <input id="aftercare" type="checkbox" class="form-control-checkbox" style="float:right; width:5%; height:100%;" formControlName="is_aftercare" />
+          <input id="aftercare" type="checkbox" class="form-control-checkbox"
+            style="float:right; width:5%; height:100%;" formControlName="is_aftercare" />
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="camp-latitude" class="col-6 col-form-label">
+          Camp Latitude:
+        </label>
+        <div class="col-3">
+          <button class="btn btn-primary" style="float: right" (click)="getCurrentLocation()">
+            Get Current Location for Camp
+          </button>
+        </div>
+        <div class="col-3">
+          <input id="camp-latitude" type="text" class="form-control" placeholder="camp latitude"
+            formControlName="latitude" />
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="camp-longitude" class="col-9 col-form-label">Camp Longitude:
+        </label>
+        <div class="col-3">
+          <input id="camp-longitude" type="text" class="form-control" style="float: right" placeholder="Camp Longitude"
+            formControlName="longitude" />
         </div>
       </div>
       <div class="form-group row">
         <label for="mailbox" class="col-6 col-form-label">Mailbox: </label>
         <div class="col-6">
-          <input id="mailbox" type="text" class="form-control" style="float:right;" placeholder="Joppa Mailbox Number" formControlName="joppa_apartment_number" />
+          <input id="mailbox" type="text" class="form-control" style="float:right;" placeholder="Joppa Mailbox Number"
+            formControlName="joppa_apartment_number" />
         </div>
       </div>
       <div class="form-group row">
@@ -105,21 +136,25 @@
       <div class="form-group row" *ngIf="isAdmin">
         <label for="admin-notes" class="col-6 col-form-label">Admin Notes: </label>
         <div class="col-6">
-          <textarea id="admin-notes" type="text" class="form-control" rows="3" placeholder="admin notes" style="float:right;" formControlName="admin_notes"></textarea>
+          <textarea id="admin-notes" type="text" class="form-control" rows="3" placeholder="admin notes"
+            style="float:right;" formControlName="admin_notes"></textarea>
         </div>
       </div>
       <div class="form-group row">
         <img [src]="url" *ngIf="url != '' && url != null">
         <label for="client-picture" class="col-6 col-form-label">Image:</label>
         <div class="col-6">
-          <input id="client-picture" type="file" accept="image/*" width="300" height="300" (change)="onAdd($event)" class="form-control" style="float:right;" />
-          <button id="clear-picture" class="btn btn-outline-primary" (click)="clearPicture()" *ngIf="isAdmin">Clear Photo</button>
+          <input id="client-picture" type="file" accept="image/*" width="300" height="300" (change)="onAdd($event)"
+            class="form-control" style="float:right;" />
+          <button id="clear-picture" class="btn btn-outline-primary" (click)="clearPicture()" *ngIf="isAdmin">Clear
+            Photo</button>
         </div>
       </div>
     </form>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-primary" style="float:right;" [disabled]="!clientForm.valid" (click)="submitClient(); c('');">Save Client</button>
+    <button type="button" class="btn btn-primary" style="float:right;" [disabled]="!clientForm.valid"
+      (click)="submitClient(); c('');">Save Client</button>
     <button type="button" class="btn btn-outline-primary" style="float:right;" (click)="c('Close click')">Close</button>
   </div>
 </ng-template>

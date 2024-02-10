@@ -48,106 +48,68 @@ export class LocationsComponent implements OnInit {
     this.heatRoute = JSON.parse(window.localStorage.getItem("heatRoute"));
     this.isAdmin = JSON.parse(window.localStorage.getItem("isAdmin"));
     window.localStorage.setItem("routeId", this.routeId.toString());
-    this.routeAttendanceList = JSON.parse(
-      localStorage.getItem("RouteAttendance")
-    );
-    this.mainService.getRoute(this.routeId).subscribe((route: Route) => {
-      if (route == undefined) {
-        this.thisRoute = new Route();
-      } else {
-        this.thisRoute = route;
-        localStorage.setItem('isAftercare', JSON.stringify(route.is_aftercare));
-        console.log(JSON.stringify(route));
-        this.mainService.getClientCountForRoute(this.thisRoute.id).subscribe((data: number) => {
+
+    this.clientService.getClientAttendanceForRoute(this.routeId).subscribe((attendanceInfo: Appearance[]) => {
+      this.routeAttendanceList = attendanceInfo;
+      console.log(`Attendance: ${JSON.stringify(attendanceInfo)}`);
+
+      this.mainService.getRoute(this.routeId).subscribe((route: Route) => {
+        if (route == undefined) {
+          this.thisRoute = new Route();
+        } else {
+          this.thisRoute = route;
+          localStorage.setItem('isAftercare', JSON.stringify(route.is_aftercare));
+          console.log(JSON.stringify(route));
+          this.mainService.getClientCountForRoute(this.thisRoute.id).subscribe((data: number) => {
             this.clientCountForRoute = data;
 
             this.mainService.getCampsForRoute(this.routeId).subscribe((locations: LocationCamp[]) => {
-                if (locations == null || locations == undefined) {
-                  this.locationCamps = [];
-                } else {
-                  let sortedlocations = locations.sort((a, b) => {
-                    if (a.position > b.position) {
-                      return 1;
-                    } else if (a.position < b.position) {
-                      return -1;
-                    } else {
-                      return 0;
-                    }
-                  });
+              if (locations == null || locations == undefined) {
+                this.locationCamps = [];
+              } else {
+                let sortedlocations = locations.sort((a, b) => {
+                  if (a.position > b.position) {
+                    return 1;
+                  } else if (a.position < b.position) {
+                    return -1;
+                  } else {
+                    return 0;
+                  }
+                });
 
-                  this.locationCamps = sortedlocations;
-                  let locationCampIdList: number[] = [];
-                  sortedlocations.forEach((loc: LocationCamp) => {
-                    locationCampIdList.push(loc.id);
-                    window.localStorage.setItem("LocationCampIdList", JSON.stringify(locationCampIdList));
-                  });
+                this.locationCamps = sortedlocations;
+                let locationCampIdList: number[] = [];
+                sortedlocations.forEach((loc: LocationCamp) => {
+                  locationCampIdList.push(loc.id);
+                  window.localStorage.setItem("LocationCampIdList", JSON.stringify(locationCampIdList));
+                });
 
-                  this.clientCountForRoute = 0;
-                  sortedlocations.forEach((location: LocationCamp) => {
-                    location.all_seen = false;
-                    this.mainService.getClientsForCamp(location.id).subscribe((data: Client[]) => {
-                      let clientsAtCamp = 0;
-                      let clientsSorted = 0;
+                this.clientCountForRoute = 0;
+                sortedlocations.forEach((location: LocationCamp) => {
+                  location.all_seen = false;
+                  this.mainService.getClientsForCamp(location.id).subscribe((data: Client[]) => {
+                    let clientsAtCamp = 0;
+                    let clientsSorted = 0;
 
-                      data.forEach(client => {
-                        this.clientService.getClientDwellings(client.id).subscribe((dwellings: ClientDwelling[]) => {
-                          let dwellingDates = dwellings.map(dwelling => dwelling.created_at);
-                          client.dwelling = dwellings.filter(dwelling => dwelling.created_at === dwellingDates.reduce((a, b) => a > b ? a : b))[0].dwelling;
+                    data.forEach(client => {
+                      this.clientService.getClientDwellings(client.id).subscribe((dwellings: ClientDwelling[]) => {
+                        let dwellingDates = dwellings.map(dwelling => dwelling.created_at);
+                        client.dwelling = dwellings.filter(dwelling => dwelling.created_at === dwellingDates.reduce((a, b) => a > b ? a : b))[0].dwelling;
 
-                          // If heat route, then filter down client list to only those that would show up
-                          if (this.heatRoute) {
-                            if (client.dwelling == "Tent" || client.dwelling == "Garage" || client.dwelling == "Shack" || client.dwelling == "Camper" || client.dwelling == "Broken Down Van") {
-                              clientsAtCamp += 1;
-                            }
-                            // data = data.filter((client) => client.dwelling == "Tent" || client.dwelling == "Garage" || client.dwelling == "Shack" || client.dwelling == "Camper" || client.dwelling == "Broken Down Van");
-                          }
-                          else {
+                        // If heat route, then filter down client list to only those that would show up
+                        if (this.heatRoute) {
+                          if (client.dwelling == "Tent" || client.dwelling == "Garage" || client.dwelling == "Shack" || client.dwelling == "Camper" || client.dwelling == "Broken Down Van") {
                             clientsAtCamp += 1;
                           }
+                          // data = data.filter((client) => client.dwelling == "Tent" || client.dwelling == "Garage" || client.dwelling == "Shack" || client.dwelling == "Camper" || client.dwelling == "Broken Down Van");
+                        }
+                        else {
+                          clientsAtCamp += 1;
+                        }
 
-                          clientsSorted += 1;
+                        clientsSorted += 1;
 
-                          if (clientsSorted == data.length) {
-                            if (clientsAtCamp == 0) {
-                              console.log("location has no people: " + location.name);
-                              let index: number = sortedlocations.findIndex((camp) => camp.id == location.id);
-                              if (index < sortedlocations.length - 1) {
-                                this.locationCamps.splice(index, 1);
-                              } else {
-                                this.locationCamps.pop();
-                              }
-                              //console.log(JSON.stringify(this.locationCamps));
-
-                              locationCampIdList.forEach(
-                                (id: number, index: number) => {
-                                  if (id == location.id) {
-                                    console.log("remove id: " + id);
-                                    if (index < locationCampIdList.length - 1) {
-                                      locationCampIdList.splice(index, 1);
-                                    } else {
-                                      locationCampIdList.pop();
-                                    }
-                                    console.log(JSON.stringify(locationCampIdList));
-                                  }
-                                }
-                              );
-
-                              window.localStorage.setItem("LocationCampIdList", JSON.stringify(locationCampIdList));
-                            }
-
-                            location.number_clients_at_camp = clientsAtCamp;
-
-                            this.clientCountForRoute += clientsAtCamp;
-                            const clientsToCheck = this.routeAttendanceList.filter((client) => Number(client.location_camp_id) === location.id);
-                            location.all_seen = clientsToCheck.length === clientsAtCamp && clientsAtCamp > 0;
-                          }
-                        });
-                      }, error => console.log(error));
-
-                      // Remove camp if there are no clients at the site
-                      if (clientsSorted == data.length) {
-                        if (!this.isAdmin) {
-                          console.log(clientsAtCamp);
+                        if (clientsSorted == data.length) {
                           if (clientsAtCamp == 0) {
                             console.log("location has no people: " + location.name);
                             let index: number = sortedlocations.findIndex((camp) => camp.id == location.id);
@@ -167,30 +129,74 @@ export class LocationsComponent implements OnInit {
                                   } else {
                                     locationCampIdList.pop();
                                   }
-                                  console.log(
-                                    JSON.stringify(locationCampIdList)
-                                  );
+                                  console.log(JSON.stringify(locationCampIdList));
                                 }
                               }
                             );
 
                             window.localStorage.setItem("LocationCampIdList", JSON.stringify(locationCampIdList));
                           }
+
+                          location.number_clients_at_camp = clientsAtCamp;
+
+                          this.clientCountForRoute += clientsAtCamp;
+                          const clientsToCheck = this.routeAttendanceList.filter((client) => Number(client.location_camp_id) === location.id);
+                          location.all_seen = clientsToCheck.length === clientsAtCamp && clientsAtCamp > 0;
                         }
+                      });
+                    }, error => console.log(error));
 
-                        console.log(JSON.stringify(clientsAtCamp));
-                        location.number_clients_at_camp = clientsAtCamp;
+                    // Remove camp if there are no clients at the site
+                    if (clientsSorted == data.length) {
+                      if (!this.isAdmin) {
+                        console.log(clientsAtCamp);
+                        if (clientsAtCamp == 0) {
+                          console.log("location has no people: " + location.name);
+                          let index: number = sortedlocations.findIndex((camp) => camp.id == location.id);
+                          if (index < sortedlocations.length - 1) {
+                            this.locationCamps.splice(index, 1);
+                          } else {
+                            this.locationCamps.pop();
+                          }
+                          //console.log(JSON.stringify(this.locationCamps));
 
-                        const clientsToCheck = this.routeAttendanceList.filter((client) => Number(client.location_camp_id) === location.id);
-                        location.all_seen = clientsToCheck.length === clientsAtCamp && clientsAtCamp > 0;
+                          locationCampIdList.forEach(
+                            (id: number, index: number) => {
+                              if (id == location.id) {
+                                console.log("remove id: " + id);
+                                if (index < locationCampIdList.length - 1) {
+                                  locationCampIdList.splice(index, 1);
+                                } else {
+                                  locationCampIdList.pop();
+                                }
+                                console.log(
+                                  JSON.stringify(locationCampIdList)
+                                );
+                              }
+                            }
+                          );
+
+                          window.localStorage.setItem("LocationCampIdList", JSON.stringify(locationCampIdList));
+                        }
                       }
-                    });
+
+                      console.log(JSON.stringify(clientsAtCamp));
+                      location.number_clients_at_camp = clientsAtCamp;
+
+                      const clientsToCheck = this.routeAttendanceList.filter((client) => Number(client.location_camp_id) === location.id);
+                      location.all_seen = clientsToCheck.length === clientsAtCamp && clientsAtCamp > 0;
+                    }
                   });
-                }
-              });
+                });
+              }
+            });
           });
-      }
+        }
+      });
     });
+    // this.routeAttendanceList = JSON.parse(
+    //   localStorage.getItem("RouteAttendance")
+    // );
   }
 
   ngOnInit() {

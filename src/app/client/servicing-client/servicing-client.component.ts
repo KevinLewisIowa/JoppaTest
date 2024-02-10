@@ -23,6 +23,7 @@ import {
   faInfoCircle,
   faCheckCircle,
   faTimesCircle,
+  faMap,
 } from "@fortawesome/free-solid-svg-icons";
 import { Subscription, timer } from "rxjs";
 import { DatePipe } from "@angular/common";
@@ -80,6 +81,7 @@ export class ServicingClientComponent implements OnInit {
   seenAndServicedIcon = faCheckCircle;
   notSeenAndServicedIcon = farCheckCircle;
   notSeenIcon = faTimesCircle;
+  mapIcon = faMap;
   routeInstanceId: number;
   pinnedNoteString: string = '';
   pipe: DatePipe = new DatePipe("en-us");
@@ -165,9 +167,6 @@ export class ServicingClientComponent implements OnInit {
         this.service.getClientNotesForClient(this.clientId).subscribe(
           (data: Note[]) => {
             this.notes = data;
-            this.notes.sort((a, b) => (a.created_at > b.created_at) ? 1 : -1);
-            let warningNotes: Note[] = data.filter(n => n.source === "WARNING");
-            alert(warningNotes[warningNotes.length - 1].note);
             console.log(JSON.stringify(data));
             let pinnedNotes: Note[] = data.filter(n => n.source == "PINNED NOTE");
             console.log(JSON.stringify(pinnedNotes))
@@ -179,6 +178,12 @@ export class ServicingClientComponent implements OnInit {
               }
               console.log(this.pinnedNoteString);
             });
+
+            this.notes.sort((a, b) => (a.created_at > b.created_at) ? 1 : -1);
+            let warningNotes: Note[] = data.filter(n => n.source === "WARNING");
+            if (warningNotes.length > 0) {
+              alert(warningNotes[warningNotes.length - 1].note);
+            }
           },
           (error) => console.log(error)
         );
@@ -260,14 +265,14 @@ export class ServicingClientComponent implements OnInit {
           },
           (error) => console.log(error)
         );
-        // this.service.getClientLoanedTanks(this.clientId).subscribe((tankInteractions: any[]) => {
-        //   // now get the tank info
-        //   this.tankInteractions = tankInteractions;
-        // });
-        // this.service.getClientLoanedHoses(this.clientId).subscribe((hoseInteractions: any[]) => {
-        //   // now get the Hose info
-        //   this.hoseInteractions = hoseInteractions;
-        // });
+        this.service.getClientLoanedTanks(this.clientId).subscribe((tankInteractions: any[]) => {
+          // now get the tank info
+          this.tankInteractions = tankInteractions;
+        });
+        this.service.getClientLoanedHoses(this.clientId).subscribe((hoseInteractions: any[]) => {
+          // now get the Hose info
+          this.hoseInteractions = hoseInteractions;
+        });
         this.service.getHeatEquipmentNotReturned(this.clientId).subscribe(
           (data: any[]) => {
             this.heatEquipmentNotReturned = data;
@@ -297,8 +302,6 @@ export class ServicingClientComponent implements OnInit {
       } else {
         this.service.getClientNotesForClient(this.clientId).subscribe(
           (data: Note[]) => {
-            let warningNotes: Note[] = data.filter(n => n.source === "WARNING");
-            alert(warningNotes[warningNotes.length - 1].note);
             let pinnedNotes: Note[] = data.filter(n => n.source === "PINNED NOTE");
             pinnedNotes.forEach(n => {
               if (this.pinnedNoteString === '') {
@@ -308,6 +311,10 @@ export class ServicingClientComponent implements OnInit {
               }
               console.log(this.pinnedNoteString);
             });
+            let warningNotes: Note[] = data.filter(n => n.source === "WARNING");
+            if (warningNotes.length > 0) {
+              alert(warningNotes[warningNotes.length - 1].note);
+            }
           },
           (error) => console.log(error)
         );
@@ -457,6 +464,15 @@ export class ServicingClientComponent implements OnInit {
     this.currentStatus = status_id;
   }
 
+  showMap() {
+    if (this.client.latitude !== null && this.client.longitude !== null) {
+      console.log(
+        `latitude: ${this.client.latitude}, longitude: ${this.client.longitude}`
+      );
+      window.open(`https://www.google.com/maps/dir/${this.client.latitude},${this.client.longitude}/@//`,"_blank");
+    }
+  }
+
   updateHeaterEntry(heaterId: number, statusId: number) {
     this.service
       .updateHeaterClient(this.client.id, heaterId, statusId)
@@ -513,6 +529,10 @@ export class ServicingClientComponent implements OnInit {
   }
 
   sendInteraction(interactionType: number) {
+    if (!this.isAdmin) {
+      alert('Attendance recorded');
+    }
+    
     const interaction: Appearance = new Appearance();
     interaction.client_id = this.client.id;
     interaction.location_camp_id = this.locationCampId ? this.locationCampId : this.client.current_camp_id;
@@ -628,6 +648,20 @@ export class ServicingClientComponent implements OnInit {
             document.getElementById("newDwellingButton").click();
           }
 
+          let dwellingDates = this.dwellings.map(dwelling => dwelling.created_at);
+          let clientDwelling: ClientDwelling = this.dwellings.filter(dwelling => dwelling.created_at === dwellingDates.reduce((a, b) => a > b ? a : b))[0];
+
+          console.log(JSON.stringify(clientDwelling));
+          var difference = new Date().getTime() - new Date(clientDwelling.created_at).getTime();
+          difference = Math.ceil(difference / (1000 * 3600 * 24));
+          console.log('Difference: ' + difference)
+          if (interaction.serviced && (clientDwelling.dwelling == "House" || clientDwelling.dwelling == "Apartment" || clientDwelling.dwelling == "Shelter" || clientDwelling.dwelling == "Motel" || clientDwelling.dwelling == "Motel") && difference > 90) {
+            clientDwelling.first_time_homeless = false;
+            this.service.updateClientDwelling(clientDwelling).subscribe(data => {
+              console.log(data);
+            }, error => console.log(error));
+          }
+
           this.updateClientAndListing(routeAttendanceList);
         },
         (error) => console.log(error)
@@ -643,6 +677,20 @@ export class ServicingClientComponent implements OnInit {
           if (!interaction.still_lives_here) {
             alert('Please add a new dwelling to indicate where they went and any other applicable notes');
             document.getElementById("newDwellingButton").click();
+          }
+
+          let dwellingDates = this.dwellings.map(dwelling => dwelling.created_at);
+          let clientDwelling: ClientDwelling = this.dwellings.filter(dwelling => dwelling.created_at === dwellingDates.reduce((a, b) => a > b ? a : b))[0];
+          console.log(JSON.stringify(clientDwelling));
+
+          var difference = new Date().getTime() - new Date(clientDwelling.created_at).getTime();
+          difference = Math.ceil(difference / (1000 * 3600 * 24));
+          console.log('Difference: ' + difference)
+          if (interaction.serviced && (clientDwelling.dwelling == "House" || clientDwelling.dwelling == "Apartment" || clientDwelling.dwelling == "Shelter" || clientDwelling.dwelling == "Motel" || clientDwelling.dwelling == "Camper") && difference > 90) {
+            clientDwelling.first_time_homeless = false;
+            this.service.updateClientDwelling(clientDwelling).subscribe(data => {
+              console.log(data);
+            }, error => console.log(error));
           }
 
           this.updateClientAndListing(routeAttendanceList);
@@ -909,14 +957,14 @@ export class ServicingClientComponent implements OnInit {
       this.notes = this.notes.filter((w) => w.id != id);
       this.pinnedNoteString = '';
       let pinnedNotes: Note[] = this.notes.filter(n => n.source === "PINNED NOTE");
-            pinnedNotes.forEach(n => {
-              if (this.pinnedNoteString === '') {
-                this.pinnedNoteString = n.note;
-              } else {
-                this.pinnedNoteString += '\r\n' + n.note;
-              }
-              console.log(this.pinnedNoteString);
-            });
+      pinnedNotes.forEach(n => {
+        if (this.pinnedNoteString === '') {
+          this.pinnedNoteString = n.note;
+        } else {
+          this.pinnedNoteString += '\r\n' + n.note;
+        }
+        console.log(this.pinnedNoteString);
+      });
     });
   }
 
@@ -974,6 +1022,7 @@ export class ServicingClientComponent implements OnInit {
         (response: Heater) => {
           this.updateHeaterEntry(response.id, 2);
           this.getHeaterStatuses();
+          if (!this.isAdmin) { this.sendInteraction(1); }
         },
         (error) => console.log(error)
       );
@@ -987,6 +1036,7 @@ export class ServicingClientComponent implements OnInit {
           .getClientLoanedTanks(this.clientId)
           .subscribe((data: any) => {
             this.tankInteractions = data;
+            if (!this.isAdmin) { this.sendInteraction(1); }
           });
       });
     }
@@ -999,6 +1049,7 @@ export class ServicingClientComponent implements OnInit {
           .getClientLoanedHoses(this.clientId)
           .subscribe((data: any) => {
             this.hoseInteractions = data;
+            if (!this.isAdmin) { this.sendInteraction(1); }
           });
       });
     }
@@ -1072,14 +1123,14 @@ export class ServicingClientComponent implements OnInit {
     this.service.updateClientNote(note).subscribe((data) => {
       this.pinnedNoteString = '';
       let pinnedNotes: Note[] = this.notes.filter(n => n.source === "PINNED NOTE");
-            pinnedNotes.forEach(n => {
-              if (this.pinnedNoteString === '') {
-                this.pinnedNoteString = n.note;
-              } else {
-                this.pinnedNoteString += '\r\n' + n.note;
-              }
-              console.log(this.pinnedNoteString);
-            });
+      pinnedNotes.forEach(n => {
+        if (this.pinnedNoteString === '') {
+          this.pinnedNoteString = n.note;
+        } else {
+          this.pinnedNoteString += '\r\n' + n.note;
+        }
+        console.log(this.pinnedNoteString);
+      });
     },
       (error) => console.log(error)
     );

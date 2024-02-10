@@ -21,9 +21,15 @@
     </div>
     &nbsp;
     <div>
-      <img [src]="url" width="20%" height="20%" *ngIf="url !== 'data:image/png;base64,null' && url != '' && url != null">
-      <button #clientInfo class="btn btn-primary" style="float: right" (click)="clientEditMdl.openModal(client)"type="button">
+      <img [src]="url" width="20%" height="20%"
+        *ngIf="url !== 'data:image/png;base64,null' && url != '' && url != null">
+      <button #clientInfo class="btn btn-primary" style="float: right" (click)="clientEditMdl.openModal(client)"
+        type="button">
         Client Info <fa-icon [icon]="informationIcon"></fa-icon>
+      </button>
+      <button (click)="showMap()" type="button" style="float: left" class="btn btn-primary"
+        *ngIf="client.latitude != null && client.longitude != null">
+        <fa-icon [icon]="mapIcon"></fa-icon> Show Directions
       </button>
     </div>
   </div>
@@ -35,10 +41,10 @@
           <button type="button" (click)="loanHeater()" class="btn btn-primary" style="float: right">
             New Heater
           </button>
-          <button type="button" (click)="loanTank()" class="btn btn-primary" hidden>
+          <button type="button" (click)="loanTank()" class="btn btn-primary" style="float: right">
             Add Tank
           </button>
-          <button type="button" (click)="loanHose()" class="btn btn-primary" hidden>
+          <button type="button" (click)="loanHose()" class="btn btn-primary" style="float: right">
             Add Hose
           </button>
         </h4>
@@ -71,35 +77,61 @@
                 </button>
               </td>
             </tr>
+            <tr *ngFor="let tank of tankInteractions">
+              <td>Tank</td>
+              <td>N/A</td>
+              <td>{{tank.updated_at | date: 'shortDate'}}</td>
+              <td><select class="form-control" #tankStatus>
+                  <option *ngFor="let option of heaterStatuses" value="{{option.id}}">{{option.status_name}}</option>
+                </select></td>
+              <td><button type="button" (click)="submitTankStatus(tank.id, tankStatus.value)"
+                  class="btn btn-primary">Submit</button></td>
+            </tr>
+            <tr *ngFor="let hose of hoseInteractions">
+              <td>Hose</td>
+              <td>N/A</td>
+              <td>{{hose.updated_at | date: 'shortDate'}}</td>
+              <td>
+                <select class="form-control" #hoseStatus>
+                  <option *ngFor="let option of heaterStatuses" value="{{option.id}}">{{option.status_name}}</option>
+                </select>
+              </td>
+              <td>
+                <button type="button" (click)="submitHoseStatus(hose.id, hoseStatus.value)"
+                  class="btn btn-primary">Submit</button>
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
       <div class="col-lg-12 col-md-12" *ngIf="(heatRoute || isAdmin) && heatEquipmentNotReturned.length > 0">
-        <h4>Heat Equipment Not Returned</h4>
+        <h4>Heat Equipment History</h4>
         <table class="table">
           <thead>
             <tr>
               <th>Item</th>
               <th>Status</th>
               <th>Date Loaned</th>
+              <th>Date of Action</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let equipment of heatEquipmentNotReturned">
               <td>{{ equipment.Type }}</td>
               <td>
+                <span *ngIf="equipment.status_id == 3">Retrieved</span>
                 <span *ngIf="equipment.status_id == 4">Stolen</span>
-                <span *ngIf="equipment.status_id == 5">Lost</span>
+                <span *ngIf="equipment.status_id == 5 || equipment.status_id == 8">Unaccounted For</span>
                 <span *ngIf="equipment.status_id == 6">Destroyed</span>
                 <span *ngIf="equipment.status_id == 7">Broken</span>
-                <span *ngIf="equipment.status_id == 8">Evicted</span>
               </td>
               <td>{{ equipment.created_at | date: "shortDate" }}</td>
+              <td>{{ equipment.updated_at | date: "shortDate" }}</td>
             </tr>
           </tbody>
         </table>
       </div>
-      <div style="padding-bottom: 12px" *ngIf="heatRoute || isAdmin">
+      <div style="padding-bottom: 12px" *ngIf="heatRoute || isAdmin" hidden>
         <div class="col-md-12">
           <h5>
             Tanks/Hoses
@@ -125,7 +157,7 @@
         <h4>
           Circle of Friends
           <button type="button" (click)="goToTop(); clientCircleOfFriendsMdl.showModal()" class="btn btn-primary"
-            style="float: right"  *ngIf="isAdmin">
+            style="float: right" *ngIf="isAdmin">
             New Friend
           </button>
         </h4>
@@ -166,7 +198,8 @@
         <div class="background-color">
           <h4>
             Dwelling History
-            <button type="button" id="newDwellingButton" (click)="goToTop(); clientDwellingMdl.showModal()" class="btn btn-primary" style="float: right">
+            <button type="button" id="newDwellingButton" (click)="goToTop(); clientDwellingMdl.showModal()"
+              class="btn btn-primary" style="float: right">
               New Dwelling
             </button>
           </h4>
@@ -457,7 +490,8 @@
         <div class="background-color">
           <h4>
             Notes
-            <button type="button" (click)="goToTop(); notesMdl.showModal()" class="btn btn-primary" style="float: right">
+            <button type="button" (click)="goToTop(); notesMdl.showModal()" class="btn btn-primary"
+              style="float: right">
               New Note
             </button>
           </h4>
@@ -480,18 +514,19 @@
             <tbody>
               <tr *ngFor="let note of notes">
                 <td>{{ note.created_at | date: "short" }}</td>
-                <td><select id="note_type" class="form-control" style="float: left" #hrt [(ngModel)]="note.source" name="note_type" (change)="onNoteTypeChange(note)">
-                  <option value="Resource Center" *ngIf="isAdmin">Resource Center</option>
-                  <option value="Phone" *ngIf="isAdmin">Phone</option>
-                  <option value="Email" *ngIf="isAdmin">Email</option>
-                  <option value="Circle of Friends" *ngIf="isAdmin">Circle of Friends</option>
-                  <option value="Outreach">Outreach</option>
-                  <option value="Aftercare">Aftercare</option>
-                  <option value="Meeting" *ngIf="isAdmin">Meeting</option>
-                  <option value="Heat">Heat</option>
-                  <option value="WARNING" *ngIf="isAdmin">WARNING</option>
-                  <option value="PINNED NOTE" *ngIf="isAdmin">PINNED NOTE</option>
-                </select></td>
+                <td><select id="note_type" class="form-control" style="float: left" #hrt [(ngModel)]="note.source"
+                    name="note_type" (change)="onNoteTypeChange(note)">
+                    <option value="Resource Center" *ngIf="isAdmin">Resource Center</option>
+                    <option value="Phone" *ngIf="isAdmin">Phone</option>
+                    <option value="Email" *ngIf="isAdmin">Email</option>
+                    <option value="Circle of Friends" *ngIf="isAdmin">Circle of Friends</option>
+                    <option value="Outreach">Outreach</option>
+                    <option value="Aftercare">Aftercare</option>
+                    <option value="Meeting" *ngIf="isAdmin">Meeting</option>
+                    <option value="Heat">Heat</option>
+                    <option value="WARNING" *ngIf="isAdmin">WARNING</option>
+                    <option value="PINNED NOTE" *ngIf="isAdmin">PINNED NOTE</option>
+                  </select></td>
                 <td>{{ note.note }}</td>
                 <td *ngIf="isAdmin">
                   <button type="button" class="btn btn-primary" (click)="removeNote(note.id)">
@@ -653,7 +688,8 @@
         <!-- removed !heatRoute from ngIf to pare down screen -->
         <h4>
           Health Concerns
-          <button type="button" (click)="goToTop(); healthMdl.showModal()" class="btn btn-primary" style="float: right" *ngIf="isAdmin">
+          <button type="button" (click)="goToTop(); healthMdl.showModal()" class="btn btn-primary" style="float: right"
+            *ngIf="isAdmin">
             New Health Concern
           </button>
         </h4>
@@ -719,7 +755,10 @@
                     houseclient.preferred_name }})</span> {{ houseclient.last_name }}
                 </td>
                 <td>
-                  <select id="household_relationship_type" class="form-control" style="float: left" #hrt [(ngModel)]="houseclient.household_relationship_type" *ngIf="houseclient.id != houseclient.household_id" name="household_relationship_type" (change)="onHouseholdRelationshipTypeChange(houseclient)">
+                  <select id="household_relationship_type" class="form-control" style="float: left" #hrt
+                    [(ngModel)]="houseclient.household_relationship_type"
+                    *ngIf="houseclient.id != houseclient.household_id" name="household_relationship_type"
+                    (change)="onHouseholdRelationshipTypeChange(houseclient)">
                     <option value="" disabled selected>Select your option</option>
                     <option>Parent</option>
                     <option>Sibling</option>
@@ -731,12 +770,14 @@
                   </select>
                 </td>
                 <td>
-                  <button type="button" class="btn btn-primary" (click)="viewClient(houseclient)" *ngIf="isAdmin && houseclient.id != client.id">
+                  <button type="button" class="btn btn-primary" (click)="viewClient(houseclient)"
+                    *ngIf="isAdmin && houseclient.id != client.id">
                     Go To Client
                   </button>
                 </td>
                 <td>
-                  <button type="button" class="btn btn-primary" (click)="removeHouseholdClient(houseclient)" *ngIf="houseclient.id != houseclient.household_id">
+                  <button type="button" class="btn btn-primary" (click)="removeHouseholdClient(houseclient)"
+                    *ngIf="houseclient.id != houseclient.household_id">
                     Remove
                   </button>
                 </td>
@@ -787,7 +828,8 @@
                 {{ interaction.at_homeless_resource_center ? 'Yes' : 'No' }}
               </td>
               <td>
-                <button type="button" class="btn btn-primary" (click)="removeAppearance(interaction.id)" *ngIf="isAdmin">
+                <button type="button" class="btn btn-primary" (click)="removeAppearance(interaction.id)"
+                  *ngIf="isAdmin">
                   Remove
                 </button>
               </td>
@@ -824,7 +866,9 @@
               : 'btn btn-primary'
           " (click)="sendInteraction(4)" style="margin-right: 3px">
           <fa-icon [icon]="notSeenIcon"></fa-icon> Not Seen</button>&nbsp;
-        <button type="button" [className]="appearance && appearance.was_seen == false && appearance.serviced == false && appearance.still_lives_here == false ? 'btn btn-success' : 'btn btn-primary'" (click)="sendInteraction(3)" style="margin-right: 3px">No longer lives here</button>&nbsp;
+        <button type="button"
+          [className]="appearance && appearance.was_seen == false && appearance.serviced == false && appearance.still_lives_here == false ? 'btn btn-success' : 'btn btn-primary'"
+          (click)="sendInteraction(3)" style="margin-right: 3px">No longer lives here</button>&nbsp;
         <button type="button" *ngIf="isAdmin" [className]="
             appearance &&
             appearance.was_seen == false &&

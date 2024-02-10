@@ -5,9 +5,10 @@
     <h5 align="left">
       <span style="background-color: yellow">{{
         locationCamp.admin_notes
-      }}</span>
+        }}</span>
     </h5>
-    <h5 align="left" *ngIf="erroredClients !== ''"><span style="background-color: lightsalmon">Clients Needing Dwelling: {{ erroredClients }}</span></h5>
+    <h5 align="left" *ngIf="erroredClients !== ''"><span style="background-color: lightsalmon">Clients Needing Dwelling:
+        {{ erroredClients }}</span></h5>
     <h5 align="left">
       Stop {{ currentStopNumber }}/{{ totalStopsAmount }}
     </h5>
@@ -15,33 +16,18 @@
       Expected arrival time: {{ expectedArrivalTime | date: "shortTime" }}
     </h5>
     <p align="left" *ngIf="heatRoute">
-      <b>Number of People with Tanks: {{ numPeopleWithTanksAtCamp }}</b
-      ><br />
+      <b>Number of People with Tanks: {{ numPeopleWithTanksAtCamp }}</b><br />
       <b>Total Tanks: {{ numberTanksAtCamp }}</b>
     </p>
-    <button
-      (click)="showMap()"
-      type="button"
-      style="float: left"
-      class="btn btn-primary"
-    >
+    <button (click)="showMap()" type="button" style="float: left" class="btn btn-primary">
       <fa-icon [icon]="mapIcon"></fa-icon> Show Directions
     </button>
-    <button
-      (click)="showParkingMap()"
-      type="button"
-      style="margin-left: 1%; float: left"
-      class="btn btn-primary"
-    >
+    <button (click)="showParkingMap()" type="button" style="margin-left: 1%; float: left" class="btn btn-primary">
       <fa-icon [icon]="mapIcon"></fa-icon> Show Map - Parking
     </button>
-    <button type="button" *ngIf="isAdmin && locationCampId == 449" style="line-height:1em; float: right;" class="btn btn-primary" (click)="goToAdminHome()">Admin Home</button>
-    <button
-      type="button"
-      class="btn btn-primary"
-      style="float: right"
-      (click)="campEditMdl.showModal(locationCamp)"
-    >
+    <button type="button" *ngIf="isAdmin && locationCampId == 449" style="line-height:1em; float: right;"
+      class="btn btn-primary" (click)="goToAdminHome()">Admin Home</button>
+    <button type="button" class="btn btn-primary" style="float: right" (click)="campEditMdl.showModal(locationCamp)">
       Location Info <fa-icon [icon]="informationIcon"></fa-icon>
     </button>
   </div>
@@ -49,10 +35,12 @@
     <div class="card">
       <h3 align="left">Clients</h3>
       <div>
-        <button type="button" (click)="clientMdl.showModal()" class="btn btn-primary" style="float: left" *ngIf="!route.is_aftercare || isAdmin">
+        <button type="button" (click)="clientMdl.showModal()" class="btn btn-primary" style="float: left"
+          *ngIf="!route.is_aftercare || isAdmin">
           <fa-icon [icon]="searchIcon"></fa-icon> Search Clients
         </button>
-        <button type="button" (click)="createClient()" class="btn btn-primary" style="float: right" *ngIf="!route.is_aftercare || isAdmin">
+        <button type="button" (click)="createClient()" class="btn btn-primary" style="float: right"
+          *ngIf="!route.is_aftercare || isAdmin">
           <fa-icon [icon]="createIcon"></fa-icon> Create Client
         </button>&nbsp;
       </div>
@@ -70,37 +58,24 @@
           </tr>
         </thead>
         <tbody>
-          <tr
-            *ngFor="let client of clients"
-            (click)="viewClient(client)"
-            class="client-row"
-          >
+          <tr *ngFor="let client of clients" (click)="viewClient(client)" class="client-row">
             <td class="text-left">
+              <fa-icon style="color: #0d6efd" [icon]="mapIcon" *ngIf="client.has_location"></fa-icon>
               {{ client.first_name }}
-              <span
-                *ngIf="
+              <span *ngIf="
                   client.preferred_name != '' && client.preferred_name != null
-                "
-                >({{ client.preferred_name }})</span
-              >
+                ">({{ client.preferred_name }})</span>
               {{ client.last_name }}
-              <fa-icon
-                id="star"
-                style="color: #0d6efd"
-                [icon]="starIcon"
-                *ngIf="clientHasFulfilledItems(client.id)"
-              ></fa-icon>
+              <fa-icon id="star" style="color: #0d6efd" [icon]="starIcon"
+                *ngIf="clientHasFulfilledItems(client.id)"></fa-icon>
             </td>
             <td class="text-left">{{ client.dwelling }}</td>
             <td class="text-left">{{ client.joppa_apartment_number }}</td>
             <td class="text-left">{{ client.phone }}</td>
             <td class="text-left">{{ client.admin_notes }}</td>
             <td class="text-left">
-              <fa-icon
-                id="attendanceIcon"
-                [style.color]="getAttendanceColor(client)"
-                [icon]="getAttendanceIcon(client)"
-              ></fa-icon>
+              <fa-icon id="attendanceIcon" [style.color]="getAttendanceColor(client)"
+                [icon]="getAttendanceIcon(client)"></fa-icon>
               {{ client.last_interaction_date }}
             </td>
           </tr>
@@ -110,12 +85,7 @@
     <div class="card" *ngIf="!route.is_aftercare">
       <h3 align="left">Notes</h3>
       <div>
-        <button
-          type="button"
-          (click)="campNotesMdl.showModal()"
-          class="btn btn-primary"
-          style="float: right"
-        >
+        <button type="button" (click)="campNotesMdl.showModal()" class="btn btn-primary" style="float: right">
           New Note
         </button>
         &nbsp;
@@ -142,11 +112,7 @@
           <td>{{ note.created_at | date: "short" }}</td>
           <td>{{ note.note }}</td>
           <td *ngIf="isAdmin">
-            <button
-              type="button"
-              class="btn btn-primary"
-              (click)="removeCampNote(note.id)"
-            >
+            <button type="button" class="btn btn-primary" (click)="removeCampNote(note.id)">
               Remove
             </button>
           </td>
@@ -157,48 +123,23 @@
   </div>
   <div class="card-footer">
     <div>
-      <button
-        type="button"
-        class="btn btn-primary"
-        style="float: left"
-        (click)="back()"
-      >
+      <button type="button" class="btn btn-primary" style="float: left" (click)="back()">
         <fa-icon [icon]="backIcon"></fa-icon> Back to Camp List
       </button>
-      <button
-        type="button"
-        class="btn btn-primary"
-        style="margin-left: 1%; float: left"
-        *ngIf="isAdmin"
-        (click)="backToCampListing()"
-      >
+      <button type="button" class="btn btn-primary" style="margin-left: 1%; float: left" *ngIf="isAdmin"
+        (click)="backToCampListing()">
         <fa-icon [icon]="backIcon"></fa-icon> Back to Camp Listing
       </button>
-      <button
-        (click)="nextStop()"
-        type="button"
-        class="btn btn-primary"
-        style="float: right"
-      >
+      <button (click)="nextStop()" type="button" class="btn btn-primary" style="float: right">
         Next Stop <fa-icon [icon]="forwardIcon"></fa-icon>
       </button>
-      <button
-        (click)="markRemainingNotSeenNotServiced()"
-        type="button"
-        class="btn btn-primary"
-        style="margin-left: 1%; float: left"
-      >
-      <fa-icon [icon]="userMinus"></fa-icon> Mark remaining clients not seen / serviced
+      <button (click)="markRemainingNotSeenNotServiced()" type="button" class="btn btn-primary"
+        style="margin-left: 1%; float: left">
+        <fa-icon [icon]="userMinus"></fa-icon> Mark remaining clients not seen / serviced
       </button>
     </div>
   </div>
 </div>
-<app-client-search
-  #clientMdl
-  (clientSelected)="clientSelected($event)"
-></app-client-search>
-<app-camp-edit-modal
-  #campEditMdl
-  (editedCamp)="editedCamp($event)"
-></app-camp-edit-modal>
+<app-client-search #clientMdl (clientSelected)="clientSelected($event)"></app-client-search>
+<app-camp-edit-modal #campEditMdl (editedCamp)="editedCamp($event)"></app-camp-edit-modal>
 <camp-notes #campNotesMdl (campNoteAdded)="campNoteAdded($event)"></camp-notes>

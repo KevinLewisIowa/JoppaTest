@@ -38,37 +38,41 @@ export class AdminAddPetFoodUtilityComponent implements OnInit {
         this.clientsPets.forEach((clientPet: ClientPet) => {
           i++;
 
-          this.clientService.getClientById(clientPet.client_id).subscribe((client: Client) => {
-            if (client.status == "Active" && client.current_camp_id != null && client.current_camp_id > 0) {
-              // Create new item request
-              let newItem: RequestedItem = new RequestedItem();
-              newItem.client_id = clientPet.client_id;
-              newItem.date_requested = new Date();
-              newItem.fulfilled = false;
-              newItem.has_received = false;
-              newItem.item_description = clientPet.pet_type + " Food";
-
-              this.clientService.insertRequestedItem(newItem).subscribe((data: RequestedItem) => {
-                if (data != null && data.id != null) {
-                  this.countItemsAdded = this.countItemsAdded + 1;
-
-                  console.log(`Client Active. Number items added: ${this.countItemsAdded}`);
-
-                  if (i == numClients) {
-                    this.petFoodAdderRunning = false;
-                    this.processComplete = true;
+          console.log(JSON.stringify(clientPet));
+          if (this.clientsPets.find(pet => pet.client_id == clientPet.client_id && pet.pet_type == clientPet.pet_type) == clientPet) {
+            this.clientService.getClientById(clientPet.client_id).subscribe((client: Client) => {
+              if (client.status == "Active" && client.current_camp_id != null && client.current_camp_id > 0) {
+                console.log(`Is first pet of this type and going to add; client: ${client.first_name} ${client.last_name}; Pet: ${clientPet.pet_type}`);
+                // Create new item request
+                let newItem: RequestedItem = new RequestedItem();
+                newItem.client_id = clientPet.client_id;
+                newItem.date_requested = new Date();
+                newItem.fulfilled = false;
+                newItem.has_received = false;
+                newItem.item_description = clientPet.pet_type + " Food";
+  
+                this.clientService.insertRequestedItem(newItem).subscribe((data: RequestedItem) => {
+                  if (data != null && data.id != null) {
+                    this.countItemsAdded = this.countItemsAdded + 1;
+  
+                    console.log(`Client Active. Number items added: ${this.countItemsAdded}`);
+  
+                    if (i == numClients) {
+                      this.petFoodAdderRunning = false;
+                      this.processComplete = true;
+                    }
                   }
+                });
+              } else {
+                console.log(`Client not active. Number items added: ${this.countItemsAdded}`);
+  
+                if (i == numClients) {
+                  this.petFoodAdderRunning = false;
+                  this.processComplete = true;
                 }
-              });
-            } else {
-              console.log(`Client not active. Number items added: ${this.countItemsAdded}`);
-
-              if (i == numClients) {
-                this.petFoodAdderRunning = false;
-                this.processComplete = true;
               }
-            }
-          })
+            })
+          }
         });
       }
     });

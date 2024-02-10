@@ -112,6 +112,27 @@ export class ClientService {
       );
   }
 
+  getClientAttendanceForRoute(route_id: number) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+    return this.http
+      .get(this.baseUrl + `getClientAttendanceForRoute?routeId=${route_id}`, {
+        headers: myHeader,
+      })
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
   getBirthdaysByMonth(monthInt: number) {
     const myHeader = new HttpHeaders({
       "Content-Type": "application/json",

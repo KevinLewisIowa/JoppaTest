@@ -55,7 +55,9 @@ export class ClientEditComponent implements OnInit {
       first_time_homeless: null,
       date_became_homeless: '',
       dwelling: 'Tent',
-      client_picture: ''
+      client_picture: '',
+      latitude: 0,
+      longitude: 0
     });
     this.clientForm.get('first_name').setValidators(Validators.required);
     this.clientForm.get('last_name').setValidators(Validators.required);
@@ -109,11 +111,20 @@ export class ClientEditComponent implements OnInit {
     var raw = window.atob(base64);
     var rawLength = raw.length;
     var array = new Uint8Array(new ArrayBuffer(rawLength));
-  
-    for(let i = 0; i < rawLength; i++) {
+
+    for (let i = 0; i < rawLength; i++) {
       array[i] = raw.charCodeAt(i);
     }
     return array;
+  }
+
+  getCurrentLocation() {
+    navigator.geolocation.getCurrentPosition((position) => {
+      this.clientForm.patchValue({
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+      });
+    });
   }
 
   submitClient() {
@@ -125,6 +136,8 @@ export class ClientEditComponent implements OnInit {
     this.theClient.is_veteran = this.clientForm.get('is_veteran').value;
     this.theClient.current_camp_id = this.locationCampId;
     this.theClient.previous_camp_id = null;
+    this.theClient.longitude = (this.clientForm.get('longitude').value == 0 ? undefined : this.clientForm.get('longitude').value);
+    this.theClient.latitude = (this.clientForm.get('latitude').value == 0 ? undefined : this.clientForm.get('latitude').value);
     this.theClient.status = String(this.clientForm.get('status').value).trim();
     this.theClient.inactive_description = '';
     this.theClient.number_meals = this.clientForm.get('number_meals').value as number;
@@ -148,7 +161,7 @@ export class ClientEditComponent implements OnInit {
       let birthday: Date = new Date(this.theClient.birth_date);
       let pastDate: Date = new Date(now.getFullYear() - 100, now.getMonth(), now.getDate());
       if (!this.regExpDate.test(formatDate(birthday, 'MM/dd/yyyy', 'en'))) {
-        
+
       }
       if (birthday.getTime() > now.getTime()) {
         alert('You cannot select a birth date that is in the future');
@@ -169,8 +182,8 @@ export class ClientEditComponent implements OnInit {
     }
 
     this.clientService.insertClient(this.theClient).subscribe((insertedClient: Client) => {
-      if (this.locationCampId == 0) {  
-        let reason_for_homelessness : string = this.clientForm.get('homeless_reason').value;
+      if (this.locationCampId == 0) {
+        let reason_for_homelessness: string = this.clientForm.get('homeless_reason').value;
         let theOtherHomelessReason: string = this.clientForm.get('otherHomelessReason').value;
         if (reason_for_homelessness == 'Other' && theOtherHomelessReason != '') {
           reason_for_homelessness = this.clientForm.get('otherHomelessReason').value;
@@ -179,7 +192,7 @@ export class ClientEditComponent implements OnInit {
           alert('If you select Other as Homeless Reason, need to indicate reason.');
           return;
         }
-        
+
         const theDwelling: ClientDwelling = new ClientDwelling();
         theDwelling.client_id = insertedClient.id;
         theDwelling.dwelling = String(this.clientForm.get('dwelling').value).trim();
@@ -216,8 +229,8 @@ export class ClientEditComponent implements OnInit {
             routeAttendanceList.push(clientInteraction);
             window.localStorage.setItem('RouteAttendance', JSON.stringify(routeAttendanceList));
           }
-  
-          let reason_for_homelessness : string = this.clientForm.get('homeless_reason').value;
+
+          let reason_for_homelessness: string = this.clientForm.get('homeless_reason').value;
           let theOtherHomelessReason: string = this.clientForm.get('otherHomelessReason').value;
           if (reason_for_homelessness == 'Other' && theOtherHomelessReason != '') {
             reason_for_homelessness = this.clientForm.get('otherHomelessReason').value;
@@ -226,7 +239,7 @@ export class ClientEditComponent implements OnInit {
             alert('If you select Other as Homeless Reason, need to indicate reason.');
             return;
           }
-          
+
           const theDwelling: ClientDwelling = new ClientDwelling();
           theDwelling.client_id = insertedClient.id;
           theDwelling.dwelling = String(this.clientForm.get('dwelling').value).trim();

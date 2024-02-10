@@ -32,4 +32,7 @@ export class Client {
     due_to_covid: boolean = false;
     household_relationship_type: string = undefined;
     client_picture: any = undefined;
+    latitude:number = undefined;
+    longitude:number = undefined;
+    has_location:boolean = undefined;
 }

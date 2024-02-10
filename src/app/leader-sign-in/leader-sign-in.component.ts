@@ -20,7 +20,7 @@ export class LeaderSignInComponent implements OnInit {
   forwardIcon = faChevronRight;
   signOutIcon = faSignOutAlt;
 
-  constructor(private fb:FormBuilder, private mainService: MainService, private router: Router) { }
+  constructor(private fb: FormBuilder, private mainService: MainService, private router: Router) { }
 
   ngOnInit() {
     const adminSetting = JSON.parse(window.localStorage.getItem('isAdmin'));
@@ -36,7 +36,7 @@ export class LeaderSignInComponent implements OnInit {
       }
       else {
         if (JSON.parse(window.localStorage.getItem('routeId'))) {
-          this.router.navigate(['route', JSON.parse(window.localStorage.getItem('routeId'))]);  
+          this.router.navigate(['route', JSON.parse(window.localStorage.getItem('routeId'))]);
         }
       }
     }
@@ -75,25 +75,38 @@ export class LeaderSignInComponent implements OnInit {
   }
 
   insertRouteInstance() {
-    this.routeInstance = new RouteInstance();
-    this.routeInstance.heat_route = this.routeInstanceForm.get('heat_route').value;
-    this.routeInstance.leader_name = this.routeInstanceForm.get('leader_name').value;
-    this.routeInstance.leader_phone = this.routeInstanceForm.get('leader_phone').value;
-    this.routeInstance.scribe_name = this.routeInstanceForm.get('scribe_name').value;
-    this.routeInstance.scribe_phone = this.routeInstanceForm.get('scribe_phone').value;
-    this.routeInstance.route_id = this.routeInstanceForm.get('route_id').value;
-    this.routeInstance.start_time = new Date();
-    this.mainService.insertRouteInstance(this.routeInstance).subscribe(data => {
-      window.localStorage.setItem('routeInstance', data.id);
-      window.localStorage.setItem('heatRoute', this.routeInstanceForm.get('heat_route').value);
-      window.localStorage.setItem('routeId', this.routeInstanceForm.get('route_id').value);
+    this.mainService.getActiveRouteInstanceForRoute(this.routeInstanceForm.get('route_id').value, this.routeInstanceForm.get('heat_route').value).subscribe(data => {
+      console.log(JSON.stringify(data));
+      if (data.length > 0) {
+        window.localStorage.setItem('routeInstance', data[0].id);
+        window.localStorage.setItem('heatRoute', this.routeInstanceForm.get('heat_route').value);
+        window.localStorage.setItem('routeId', this.routeInstanceForm.get('route_id').value);
+        // Add end route button
+        this.mainService.showEndRoute.next(true);
 
-      if (this.routeInstanceForm.get('heat_route').value) {
-        this.router.navigate(['checkoutHeaters']);
+        this.router.navigate(['route', this.routeInstanceForm.get('route_id').value])
+      } else {
+        this.routeInstance = new RouteInstance();
+        this.routeInstance.heat_route = this.routeInstanceForm.get('heat_route').value;
+        this.routeInstance.leader_name = this.routeInstanceForm.get('leader_name').value;
+        this.routeInstance.leader_phone = this.routeInstanceForm.get('leader_phone').value;
+        this.routeInstance.scribe_name = this.routeInstanceForm.get('scribe_name').value;
+        this.routeInstance.scribe_phone = this.routeInstanceForm.get('scribe_phone').value;
+        this.routeInstance.route_id = this.routeInstanceForm.get('route_id').value;
+        this.routeInstance.start_time = new Date();
+        this.mainService.insertRouteInstance(this.routeInstance).subscribe(new_data => {
+          window.localStorage.setItem('routeInstance', new_data.id);
+          window.localStorage.setItem('heatRoute', this.routeInstanceForm.get('heat_route').value);
+          window.localStorage.setItem('routeId', this.routeInstanceForm.get('route_id').value);
+
+          if (this.routeInstanceForm.get('heat_route').value) {
+            this.router.navigate(['checkoutHeaters']);
+          }
+          else {
+            this.router.navigate(['volunteerInfo']);
+          }
+        }, error => { console.log(error) });
       }
-      else {
-        this.router.navigate(['volunteerInfo']);
-      }
-    }, error => {console.log(error)});
+    }, error => console.log(error));
   }
 }
