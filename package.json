@@ -36,7 +36,7 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.36",
     "@fortawesome/free-regular-svg-icons": "^5.15.4",
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
-    "@ng-bootstrap/ng-bootstrap": "^10.0.0",
+    "@ng-bootstrap/ng-bootstrap": "^13.1.1",
     "@ngrx/core": "^1.2.0",
     "@popperjs/core": "^2.10.2",
     "@types/googlemaps": "^3.43.3",
