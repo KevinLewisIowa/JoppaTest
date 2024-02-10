@@ -60,6 +60,7 @@ export class ServicingClientComponent implements OnInit {
   referralsResources: ReferralsResources[] = [];
   sentInteraction = false;
   receivedItems: RequestedItem[] = [];
+  filteredReceivedItems: RequestedItem[] = [];
   heatRoute = false;
   tankInteractions: any[] = [];
   hoseInteractions: any[] = [];
@@ -190,6 +191,7 @@ export class ServicingClientComponent implements OnInit {
         this.service.getRecentReceivedItems(this.clientId).subscribe(
           (data: RequestedItem[]) => {
             this.receivedItems = data;
+            this.filteredReceivedItems = this.receivedItems;
           },
           (error) => console.log(error)
         );
@@ -352,6 +354,7 @@ export class ServicingClientComponent implements OnInit {
           .getRecentReceivedItems(this.clientId)
           .subscribe((data: RequestedItem[]) => {
             this.receivedItems = data;
+            this.filteredReceivedItems = this.receivedItems;
           });
         this.service
           .getRequestedItems(this.clientId)
@@ -727,6 +730,17 @@ export class ServicingClientComponent implements OnInit {
       const element = document.querySelector("#items");
       element.scrollIntoView();
     });
+  }
+
+  filterReceivedItems(text: string) {
+    if (text?.length < 3) {
+      this.filteredReceivedItems = this.receivedItems;
+      return;
+    }
+
+    this.filteredReceivedItems = this.receivedItems.filter(
+      item => item.item_description.toLowerCase().includes(text.toLowerCase())
+    );
   }
 
   likeAdded(like: ClientLike) {
