@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MainService } from 'app/services/main.service';
 import { RouteInstance } from 'app/models/route-instance';
@@ -14,13 +14,13 @@ import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons
 export class VolunteerInfoComponent implements OnInit {
   routeInstanceId: number;
   routeId: number;
-  volunteerForm: FormGroup;
+  volunteerForm: UntypedFormGroup;
   isAdmin: boolean;
   routeInstance: RouteInstance = new RouteInstance();
   backIcon = faChevronLeft;
   forwardIcon = faChevronRight;
 
-  constructor(private router: Router, private mainService: MainService,private fb: FormBuilder) { }
+  constructor(private router: Router, private mainService: MainService,private fb: UntypedFormBuilder) { }
 
   ngOnInit() {
     this.routeInstanceId = JSON.parse(window.localStorage.getItem('routeInstance'));

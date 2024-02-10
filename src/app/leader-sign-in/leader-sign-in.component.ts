@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Route } from '../models/route';
 import { MainService } from '../services/main.service';
@@ -12,7 +12,7 @@ import { faChevronRight, faChevronLeft, faSignOutAlt } from '@fortawesome/free-s
   styleUrls: ['./leader-sign-in.component.css']
 })
 export class LeaderSignInComponent implements OnInit {
-  routeInstanceForm: FormGroup;
+  routeInstanceForm: UntypedFormGroup;
   routes: Route[] = [];
   routeInstance: RouteInstance;
   isAdmin = false;
@@ -20,7 +20,7 @@ export class LeaderSignInComponent implements OnInit {
   forwardIcon = faChevronRight;
   signOutIcon = faSignOutAlt;
 
-  constructor(private fb: FormBuilder, private mainService: MainService, private router: Router) { }
+  constructor(private fb: UntypedFormBuilder, private mainService: MainService, private router: Router) { }
 
   ngOnInit() {
     const adminSetting = JSON.parse(window.localStorage.getItem('isAdmin'));

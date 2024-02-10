@@ -1,5 +1,5 @@
 import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Route } from 'app/models/route';
@@ -13,10 +13,10 @@ import { MainService } from 'app/services/main.service';
 export class RouteEditModalComponent implements OnInit {
   @ViewChild('editModal', {static: false}) editModal: ElementRef;
   @Output() editedRoute = new EventEmitter<Route>();
-  routeForm: FormGroup;
+  routeForm: UntypedFormGroup;
   theRoute: Route;
 
-  constructor(private router: Router, private modalService: NgbModal, private mainService: MainService, private fb: FormBuilder) {
+  constructor(private router: Router, private modalService: NgbModal, private mainService: MainService, private fb: UntypedFormBuilder) {
 
   }
 

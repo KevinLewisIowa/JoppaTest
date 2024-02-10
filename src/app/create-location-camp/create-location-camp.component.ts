@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, FormArray, Validators } from '@angular/forms';
+import { UntypedFormBuilder, FormControl, UntypedFormGroup, FormArray, Validators } from '@angular/forms';
 import { Router } from "@angular/router";
 import { MainService } from "app/services/main.service";
 import { LocationCamp } from '../models/location-camp';
@@ -12,12 +12,12 @@ import { Route } from 'app/models/route';
 })
 export class CreateLocationCampComponent implements OnInit {
   theLocationCamp: LocationCamp;
-  locationCampForm: FormGroup;
+  locationCampForm: UntypedFormGroup;
   theRoute: Route;
   routes: Route[];
   isAdmin: boolean;
   constructor(private router: Router, private mainService: MainService,
-              private fb: FormBuilder) { }
+              private fb: UntypedFormBuilder) { }
 
   ngOnInit() {
     this.theRoute = new Route();

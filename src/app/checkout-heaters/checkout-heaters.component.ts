@@ -3,7 +3,7 @@ import { Heater } from '../models/heater';
 import { MainService } from '../services/main.service';
 import { Router } from '@angular/router';
 import { RouteInstanceHeaterInteraction } from 'app/models/route-instance-heater-interaction';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { RouteInstanceTankHoseInteraction } from 'app/models/route-instance-tank-hose-interaction';
 import { Appearance } from 'app/models/appearance';
 import { ClientService } from 'app/services/client.service';
@@ -20,11 +20,11 @@ export class CheckoutHeatersComponent implements OnInit {
   checkedOutRouteInstanceHeaters: RouteInstanceHeaterInteraction[] = [];
   isEndOfRoute: boolean = false;
   isInitialCheckout: boolean = true;
-  routeInstanceTankHoseForm : FormGroup;
+  routeInstanceTankHoseForm : UntypedFormGroup;
   isAdmin: boolean;
   forwardIcon = faChevronRight;
 
-  constructor(private fb:FormBuilder, private mainService: MainService, private clientService: ClientService, private router: Router) { 
+  constructor(private fb:UntypedFormBuilder, private mainService: MainService, private clientService: ClientService, private router: Router) { 
     
   }
 

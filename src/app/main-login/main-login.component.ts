@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { MainService } from 'app/services/main.service';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 
@@ -10,11 +10,11 @@ import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
   styleUrls: ['./main-login.component.css']
 })
 export class MainLoginComponent implements OnInit {
-  passwordForm: FormGroup;
+  passwordForm: UntypedFormGroup;
   invalidText = false;
   forwardIcon = faChevronRight;
 
-  constructor(private fb: FormBuilder, private router: Router, private service: MainService) { }
+  constructor(private fb: UntypedFormBuilder, private router: Router, private service: MainService) { }
 
   ngOnInit() {
     this.passwordForm = this.fb.group({

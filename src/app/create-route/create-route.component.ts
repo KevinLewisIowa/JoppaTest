@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, FormArray, Validators } from '@angular/forms';
+import { UntypedFormBuilder, FormControl, UntypedFormGroup, FormArray, Validators } from '@angular/forms';
 import { Router } from "@angular/router";
 import { MainService } from "app/services/main.service";
 import { Route } from "app/models/route";
@@ -12,13 +12,13 @@ import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
   styleUrls: ['./create-route.component.css']
 })
 export class CreateRouteComponent implements OnInit {
-  routeForm: FormGroup;
+  routeForm: UntypedFormGroup;
   theRoute = new Route();
   backIcon = faChevronLeft;
   isAdmin: boolean;
 
   constructor(private router: Router, private mainService: MainService,
-              private fb: FormBuilder) { }
+              private fb: UntypedFormBuilder) { }
 
   ngOnInit() {
     this.theRoute.region;

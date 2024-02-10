@@ -8,7 +8,7 @@ import {
 } from "@angular/core";
 import { LocationCamp } from "app/models/location-camp";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { FormBuilder, FormGroup } from "@angular/forms";
+import { UntypedFormBuilder, UntypedFormGroup } from "@angular/forms";
 import { Router } from "@angular/router";
 import { MainService } from "app/services/main.service";
 import { Route } from "app/models/route";
@@ -23,7 +23,7 @@ export class CampEditModalComponent implements OnInit {
   @Output() editedCamp = new EventEmitter<LocationCamp>();
   badDate = false;
   routes: Route[] = [];
-  campForm: FormGroup;
+  campForm: UntypedFormGroup;
   theCamp: LocationCamp;
   editing = false;
   isAdmin: boolean;
@@ -32,7 +32,7 @@ export class CampEditModalComponent implements OnInit {
     private router: Router,
     private modalService: NgbModal,
     private mainService: MainService,
-    private fb: FormBuilder
+    private fb: UntypedFormBuilder
   ) {}
 
   ngOnInit() {

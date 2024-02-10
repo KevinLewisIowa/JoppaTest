@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Heater } from '../models/heater';
 import { HeaterType } from '../models/heater-type';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { MainService } from '../services/main.service';
 import { Router } from '@angular/router';
 import { HeaterStatus } from '../models/heater-status';
@@ -14,13 +14,13 @@ import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 })
 export class CreateHeatingUnitComponent implements OnInit {
   theHeater: Heater;
-  heaterForm: FormGroup;
+  heaterForm: UntypedFormGroup;
   heaterTypes: HeaterType[];
   heaterStatuses: HeaterStatus[];
   backIcon = faChevronLeft;
 
 
-  constructor(private mainService: MainService, private fb: FormBuilder,
+  constructor(private mainService: MainService, private fb: UntypedFormBuilder,
     private router: Router) { }
 
   ngOnInit() {

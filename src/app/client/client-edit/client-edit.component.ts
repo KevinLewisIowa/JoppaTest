@@ -1,5 +1,5 @@
 import { Component, Inject, LOCALE_ID, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from "@angular/router";
 import { ClientService } from "app/services/client.service";
 import { Client } from "app/models/client";
@@ -14,7 +14,7 @@ import { ClientDwelling } from 'app/models/client-dwelling';
 })
 export class ClientEditComponent implements OnInit {
   badDate = false;
-  clientForm: FormGroup;
+  clientForm: UntypedFormGroup;
   regExpDate = /^\d{1,2}\/\d{1,2}\/\d{4}$/
   theClient: Client;
   url: any;
@@ -25,7 +25,7 @@ export class ClientEditComponent implements OnInit {
   extraInfoNeeded: boolean = false;
   homelessReasonOptions: string[] = ['Eviction', 'Job Loss', 'Family Dispute', 'Family Loss', 'Legal Issues', 'Health Issues', 'Addictions', 'Mental Health', 'Other'];
 
-  constructor(private router: Router, private clientService: ClientService, private fb: FormBuilder, @Inject(LOCALE_ID) private locale: string) { }
+  constructor(private router: Router, private clientService: ClientService, private fb: UntypedFormBuilder, @Inject(LOCALE_ID) private locale: string) { }
 
   ngOnInit() {
     this.isAdmin = JSON.parse(window.localStorage.getItem('isAdmin'));

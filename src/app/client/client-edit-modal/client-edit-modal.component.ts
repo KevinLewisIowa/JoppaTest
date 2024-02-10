@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter, Inject, LOCALE_ID } from '@angular/core';
-import { FormGroup, FormBuilder } from "@angular/forms";
+import { UntypedFormGroup, UntypedFormBuilder } from "@angular/forms";
 import { Client } from "app/models/client";
 import { ClientService } from "app/services/client.service";
 import { Router } from "@angular/router";
@@ -15,7 +15,7 @@ export class ClientEditModalComponent implements OnInit {
   @ViewChild('editModal', { static: false }) editModal: ElementRef;
   @Output() editedClient = new EventEmitter<Client>();
   badDate = false;
-  clientForm: FormGroup;
+  clientForm: UntypedFormGroup;
   regExpDate = /^\d{1,2}\/\d{1,2}\/\d{4}$/
   theClient: Client;
   firstTimeHomeless: string = 'Unknown';
@@ -24,7 +24,7 @@ export class ClientEditModalComponent implements OnInit {
   url: any;
   byteArray: any;
 
-  constructor(private router: Router, private modalService: NgbModal, private clientService: ClientService, private fb: FormBuilder, @Inject(LOCALE_ID) private locale: string) { }
+  constructor(private router: Router, private modalService: NgbModal, private clientService: ClientService, private fb: UntypedFormBuilder, @Inject(LOCALE_ID) private locale: string) { }
 
   ngOnInit() {
     this.theClient = new Client();

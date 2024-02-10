@@ -99,7 +99,6 @@
       }
     }
   },
-  "defaultProject": "joppa",
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "app"
