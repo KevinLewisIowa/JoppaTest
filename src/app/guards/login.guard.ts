@@ -1,14 +1,9 @@
 import { Injectable } from '@angular/core';
-import {
-  CanActivate,
-  ActivatedRouteSnapshot,
-  RouterStateSnapshot,
-  Router
-} from '@angular/router';
+import { ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 
 
 @Injectable()
-export class IsLoggedInGuard implements CanActivate {
+export class IsLoggedInGuard  {
 
   constructor(
     private router: Router
@@ -30,7 +25,7 @@ export class IsLoggedInGuard implements CanActivate {
 }
 
 @Injectable()
-export class IsAdminGuard implements CanActivate {
+export class IsAdminGuard  {
 
   constructor(
     private router: Router
