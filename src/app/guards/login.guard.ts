@@ -9,9 +9,6 @@ import {
 
 @Injectable()
 export class IsLoggedInGuard implements CanActivate {
-  private isAuthorized = false;
-  private appAuth = false;
-  private Application;
 
   constructor(
     private router: Router
@@ -34,9 +31,6 @@ export class IsLoggedInGuard implements CanActivate {
 
 @Injectable()
 export class IsAdminGuard implements CanActivate {
-  private isAuthorized = false;
-  private appAuth = false;
-  private Application;
 
   constructor(
     private router: Router
