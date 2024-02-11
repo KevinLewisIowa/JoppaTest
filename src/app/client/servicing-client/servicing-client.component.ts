@@ -32,7 +32,7 @@ import {
   ConfirmDialogModel,
   CustomConfirmationDialogComponent,
 } from "app/custom-confirmation-dialog/custom-confirmation-dialog.component";
-import { MatDialog } from "@angular/material/dialog";
+import { MatLegacyDialog as MatDialog } from "@angular/material/legacy-dialog";
 import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
 import { DateSelectorComponent } from "app/insert-modals/date-selector/date-selector.component";
 

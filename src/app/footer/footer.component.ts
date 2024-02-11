@@ -7,7 +7,7 @@ import { RouteInstanceHeaterInteraction } from 'app/models/route-instance-heater
 import { Appearance } from 'app/models/appearance';
 import { ClientService } from 'app/services/client.service';
 import { Client } from 'app/models/client';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { ConfirmDialogModel, CustomConfirmationDialogComponent } from 'app/custom-confirmation-dialog/custom-confirmation-dialog.component';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { DateSelectorComponent } from 'app/insert-modals/date-selector/date-selector.component';

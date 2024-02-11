@@ -7,18 +7,18 @@ import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { MainReducer } from "./state-management/main.reducer";
 import { APIReducer } from "./state-management/error.reducer";
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
-import { MatButtonModule } from "@angular/material/button";
+import { MatLegacyButtonModule as MatButtonModule } from "@angular/material/legacy-button";
 import { MatNativeDateModule } from "@angular/material/core";
 import {
   MatDatepicker,
   MatDatepickerModule,
 } from "@angular/material/datepicker";
-import { MatDialogModule } from "@angular/material/dialog";
-import { MatFormFieldModule } from "@angular/material/form-field";
-import { MatInputModule } from "@angular/material/input";
-import { MatPaginatorModule } from "@angular/material/paginator";
+import { MatLegacyDialogModule as MatDialogModule } from "@angular/material/legacy-dialog";
+import { MatLegacyFormFieldModule as MatFormFieldModule } from "@angular/material/legacy-form-field";
+import { MatLegacyInputModule as MatInputModule } from "@angular/material/legacy-input";
+import { MatLegacyPaginatorModule as MatPaginatorModule } from "@angular/material/legacy-paginator";
 import { MatSortModule } from "@angular/material/sort";
-import { MatTableModule } from "@angular/material/table";
+import { MatLegacyTableModule as MatTableModule } from "@angular/material/legacy-table";
 
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
