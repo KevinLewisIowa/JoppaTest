@@ -79,7 +79,8 @@ export class LocationCampComponent implements OnInit {
   ngOnInit() {
     this.isAdmin = JSON.parse(window.localStorage.getItem("isAdmin"));
     let routeInstanceId: number = JSON.parse(window.localStorage.getItem("routeInstance"));
-    if (routeInstanceId > 0) {
+    let primary_device: boolean = JSON.parse(window.localStorage.getItem('primary_device'));
+    if (routeInstanceId > 0 && primary_device) {
       this.mainService.showEndRoute.next(true);
     }
 

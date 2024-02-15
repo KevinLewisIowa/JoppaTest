@@ -42,7 +42,11 @@ export class VolunteerInfoComponent implements OnInit {
 
     }, (error) => { console.log(error); });
 
-    this.mainService.showEndRoute.next(true);
+    let primary_device: boolean = JSON.parse(window.localStorage.getItem('primary_device'));
+    if (primary_device) {
+      this.mainService.showEndRoute.next(true);
+    }
+    
     let routeAttendance:Appearance[] = [];
     window.localStorage.setItem('RouteAttendance', JSON.stringify(routeAttendance));
     this.router.navigate(['route', this.routeId]);

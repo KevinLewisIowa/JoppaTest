@@ -30,7 +30,11 @@ export class LeaderSignInComponent implements OnInit {
       this.router.navigate(['adminHome']);
     }
     if (JSON.parse(window.localStorage.getItem('routeInstance')) !== null) {
-      this.mainService.showEndRoute.next(true);
+      let primary_device: boolean = JSON.parse(window.localStorage.getItem('primary_device'));
+      if (primary_device) {
+        this.mainService.showEndRoute.next(true);
+      }
+      
       if (JSON.parse(window.localStorage.getItem('heatRoute')) && (JSON.parse(window.localStorage.getItem('checkedOutHeaters')) == null || JSON.parse(window.localStorage.getItem('tankHoseInteractionId')) == null)) {
         this.router.navigate(['checkoutHeaters']);
       }
@@ -52,7 +56,8 @@ export class LeaderSignInComponent implements OnInit {
       scribe_name: '',
       scribe_phone: '',
       route_id: '',
-      heat_route: false
+      heat_route: false,
+      primary_device: false
     });
 
     const phoneRegEx = /^[\s.-]?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/;
@@ -81,8 +86,12 @@ export class LeaderSignInComponent implements OnInit {
         window.localStorage.setItem('routeInstance', data[0].id);
         window.localStorage.setItem('heatRoute', this.routeInstanceForm.get('heat_route').value);
         window.localStorage.setItem('routeId', this.routeInstanceForm.get('route_id').value);
+        window.localStorage.setItem('primary_device', this.routeInstanceForm.get('primary_device').value)
+
         // Add end route button
-        this.mainService.showEndRoute.next(true);
+        if (this.routeInstanceForm.get('primary_device').value) {
+          this.mainService.showEndRoute.next(true);
+        }
 
         this.router.navigate(['route', this.routeInstanceForm.get('route_id').value])
       } else {

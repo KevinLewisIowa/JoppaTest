@@ -44,7 +44,7 @@ export class FooterComponent implements OnInit {
   endRoute() {
     let routeInstanceId = JSON.parse(window.localStorage.getItem('routeInstance'));
     let heatRoute: boolean = JSON.parse(window.localStorage.getItem('heatRoute'));
-
+    let primary_device: boolean = JSON.parse(window.localStorage.getItem('primary_device'));
     let routeAttendanceList:Appearance[] = JSON.parse(window.localStorage.getItem('RouteAttendance'));
 
     if (routeAttendanceList == null) {
@@ -81,7 +81,7 @@ export class FooterComponent implements OnInit {
       let canContinue: boolean = JSON.parse(result);
 
       if (canContinue) {
-        this.continueWithEndingRoute(heatRoute, routeInstanceId);
+        this.continueWithEndingRoute(heatRoute, routeInstanceId, primary_device);
       }
       else {
         this.mainService.showEndRoute.next(true);
@@ -90,7 +90,7 @@ export class FooterComponent implements OnInit {
     });
   }
 
-  private continueWithEndingRoute(heatRoute: boolean, routeInstanceId: any) {
+  private continueWithEndingRoute(heatRoute: boolean, routeInstanceId: any, primary_device: boolean) {
     this.mainService.showEndRoute.next(false);
     console.log(this.isAdmin);
 
@@ -101,13 +101,26 @@ export class FooterComponent implements OnInit {
       this.goToAdminHome();
     }
     else {
-      this.mainService.getRouteInstance(routeInstanceId).subscribe(data => {
-        this.routeInstance = data;
-
-        if (new Date(this.routeInstance.start_time).getDate() < new Date().getDate()) {
-          this.routeInstance.end_time = new Date(this.routeInstance.start_time);
-          this.routeInstance.end_time.setHours(this.routeInstance.end_time.getHours() + 5);
-            
+      if (primary_device) {
+        this.mainService.getRouteInstance(routeInstanceId).subscribe(data => {
+          this.routeInstance = data;
+  
+          if (new Date(this.routeInstance.start_time).getDate() < new Date().getDate()) {
+            this.routeInstance.end_time = new Date(this.routeInstance.start_time);
+            this.routeInstance.end_time.setHours(this.routeInstance.end_time.getHours() + 5);
+              
+              this.mainService.updateRouteInstance(this.routeInstance).subscribe((data) => {
+                let apiKey: string = window.localStorage.getItem('apiToken');
+                window.localStorage.clear();
+                window.localStorage.setItem('apiToken', apiKey);
+                window.localStorage.setItem('isAdmin', JSON.stringify(this.isAdmin));
+      
+                this.router.navigate(['login']);
+              }, error => console.log(error));
+          }
+          else {
+            this.routeInstance.end_time = new Date();
+  
             this.mainService.updateRouteInstance(this.routeInstance).subscribe((data) => {
               let apiKey: string = window.localStorage.getItem('apiToken');
               window.localStorage.clear();
@@ -116,20 +129,14 @@ export class FooterComponent implements OnInit {
     
               this.router.navigate(['login']);
             }, error => console.log(error));
-        }
-        else {
-          this.routeInstance.end_time = new Date();
-
-          this.mainService.updateRouteInstance(this.routeInstance).subscribe((data) => {
-            let apiKey: string = window.localStorage.getItem('apiToken');
-            window.localStorage.clear();
-            window.localStorage.setItem('apiToken', apiKey);
-            window.localStorage.setItem('isAdmin', JSON.stringify(this.isAdmin));
-  
-            this.router.navigate(['login']);
-          }, error => console.log(error));
-        }
-      }, error => console.log(error));
+          }
+        }, error => console.log(error));
+      }
+      else {
+        window.localStorage.clear();
+        this.router.navigate(['login']);
+      }
+      
     }
   }
 
