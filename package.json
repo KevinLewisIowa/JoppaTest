@@ -10,8 +10,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "prodServe": "ng server --configuration production --open",
-    "heroku-postbuild": "ng build --aot --configuration production"
+    "prodServe": "ng server --configuration production --open"
+    // "heroku-postbuild": "ng build --aot --configuration production"
   },
   "engines": {
     "node": "18.10.0",
