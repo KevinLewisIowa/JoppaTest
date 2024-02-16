@@ -107,6 +107,7 @@ export class LeaderSignInComponent implements OnInit {
           window.localStorage.setItem('routeInstance', new_data.id);
           window.localStorage.setItem('heatRoute', this.routeInstanceForm.get('heat_route').value);
           window.localStorage.setItem('routeId', this.routeInstanceForm.get('route_id').value);
+          window.localStorage.setItem('primary_device', this.routeInstanceForm.get('primary_device').value)
 
           if (this.routeInstanceForm.get('heat_route').value) {
             this.router.navigate(['checkoutHeaters']);
