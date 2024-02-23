@@ -3,12 +3,8 @@
     <h2>Camp Listing</h2>
   </div>
   <div class="panel-body">
-    <mat-form-field>
-      <input
-        matInput
-        (keyup)="applyFilter($event.target.value)"
-        placeholder="Filter"
-      />
+    <mat-form-field appearance="standard">
+      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter" #input/>
     </mat-form-field>
   </div>
   <div class="panel-body">
