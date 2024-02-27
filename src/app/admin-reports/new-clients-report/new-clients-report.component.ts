@@ -16,6 +16,7 @@ export class NewClientsReportComponent implements OnInit {
   ngOnInit() {
     this.service.getClientsNewToCamps().subscribe(data => {
       this.clients = data;
+      console.log(JSON.stringify(data));
     }, error => {console.log(error)});
   }
 

@@ -18,10 +18,9 @@ export class AdminRouteUnfulfilledGoalsNextStepsComponent implements OnInit {
 
   ngOnInit() {
     this.service.getAdminRouteUnfulfilledGoalsNextSteps().subscribe(data => {
-      this.unfulfilledGoalsNextSteps = data, error => {
-        console.log(error);
-      }
-    });
+      this.unfulfilledGoalsNextSteps = data;
+      console.log(JSON.stringify(data));
+    }, error => console.log(error));
   }
 
 }

@@ -4,13 +4,13 @@
   </div>
   <div class="panel-body">
     <div>
-      <mat-form-field>
-        <input matInput [matDatepicker]="startDateDP" [min]="minDate" [max]="maxDate" placeholder="Choose start date" [(ngModel)]="startDate">
+      <mat-form-field appearance="standard">
+        <input matInput [matDatepicker]="startDateDP" [min]="minDate" [max]="maxDate" placeholder="Choose start date" [(ngModel)]="startDate" #input>
         <mat-datepicker-toggle matSuffix [for]="startDateDP"></mat-datepicker-toggle>
         <mat-datepicker #startDateDP></mat-datepicker>
       </mat-form-field>
-      <mat-form-field>
-        <input matInput [matDatepicker]="endDateDP" [min]="minDate" [max]="maxDate" placeholder="Choose end date" [(ngModel)]="endDate">
+      <mat-form-field appearance="standard">
+        <input matInput [matDatepicker]="endDateDP" [min]="minDate" [max]="maxDate" placeholder="Choose end date" [(ngModel)]="endDate" #input>
         <mat-datepicker-toggle matSuffix [for]="endDateDP"></mat-datepicker-toggle>
         <mat-datepicker #endDateDP></mat-datepicker>
       </mat-form-field>
