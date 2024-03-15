@@ -41,7 +41,7 @@ export class AdminAddPetFoodUtilityComponent implements OnInit {
           console.log(JSON.stringify(clientPet));
           if (this.clientsPets.find(pet => pet.client_id == clientPet.client_id && pet.pet_type == clientPet.pet_type) == clientPet) {
             this.clientService.getClientById(clientPet.client_id).subscribe((client: Client) => {
-              if (client.status == "Active" && client.current_camp_id != null && client.current_camp_id > 0) {
+              if (client.status == "Active" && client.current_camp_id != null && client.current_camp_id > 0  && client.current_camp_id != 449 && client.current_camp_id != 704) {
                 console.log(`Is first pet of this type and going to add; client: ${client.first_name} ${client.last_name}; Pet: ${clientPet.pet_type}`);
                 // Create new item request
                 let newItem: RequestedItem = new RequestedItem();
