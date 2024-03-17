@@ -34,7 +34,7 @@ export class LeaderSignInComponent implements OnInit {
       if (primary_device) {
         this.mainService.showEndRoute.next(true);
       }
-      
+
       if (JSON.parse(window.localStorage.getItem('heatRoute')) && (JSON.parse(window.localStorage.getItem('checkedOutHeaters')) == null || JSON.parse(window.localStorage.getItem('tankHoseInteractionId')) == null)) {
         this.router.navigate(['checkoutHeaters']);
       }
@@ -84,8 +84,13 @@ export class LeaderSignInComponent implements OnInit {
       console.log(JSON.stringify(data));
 
       // Calculate when it is a day after the last route started. If current date and time is before a day, then use the existing route.  Otherwise, create a new route.
-      let day_after_route_start: Date = data[0].start_time;
-      day_after_route_start.setDate(day_after_route_start.getDate() + 1);
+      let day_after_route_start: Date = new Date(new Date().toUTCString());
+      day_after_route_start.setDate(day_after_route_start.getDate() - 1);
+      if (data.length > 0) {
+        day_after_route_start = data[0].start_time;
+        day_after_route_start.setDate(day_after_route_start.getDate() + 1);
+      }
+
       if (data.length > 0 && new Date(new Date().toUTCString()) <= day_after_route_start) {
         window.localStorage.setItem('routeInstance', data[0].id);
         window.localStorage.setItem('heatRoute', this.routeInstanceForm.get('heat_route').value);
