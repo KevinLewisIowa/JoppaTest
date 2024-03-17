@@ -85,10 +85,12 @@ export class LeaderSignInComponent implements OnInit {
 
       // Calculate when it is a day after the last route started. If current date and time is before a day, then use the existing route.  Otherwise, create a new route.
       let day_after_route_start: Date = new Date(new Date().toUTCString());
-      day_after_route_start.setDate(day_after_route_start.getDate() - 1);
+      day_after_route_start = new Date(day_after_route_start.setDate(day_after_route_start.getDate() - 1));
       if (data.length > 0) {
-        day_after_route_start = data[0].start_time;
-        day_after_route_start.setDate(day_after_route_start.getDate() + 1);
+        day_after_route_start = new Date(data[0].start_time);
+        console.log('Set day after route start to start time');
+        day_after_route_start = new Date(day_after_route_start.setDate(day_after_route_start.getDate() + 1));
+        console.log('new date: ' + JSON.stringify(day_after_route_start));
       }
 
       if (data.length > 0 && new Date(new Date().toUTCString()) <= day_after_route_start) {
