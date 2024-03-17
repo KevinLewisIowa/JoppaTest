@@ -82,7 +82,11 @@ export class LeaderSignInComponent implements OnInit {
   insertRouteInstance() {
     this.mainService.getActiveRouteInstanceForRoute(this.routeInstanceForm.get('route_id').value, this.routeInstanceForm.get('heat_route').value).subscribe(data => {
       console.log(JSON.stringify(data));
-      if (data.length > 0) {
+
+      // Calculate when it is a day after the last route started. If current date and time is before a day, then use the existing route.  Otherwise, create a new route.
+      let day_after_route_start: Date = data[0].start_time;
+      day_after_route_start.setDate(day_after_route_start.getDate() + 1);
+      if (data.length > 0 && new Date(new Date().toUTCString()) <= day_after_route_start) {
         window.localStorage.setItem('routeInstance', data[0].id);
         window.localStorage.setItem('heatRoute', this.routeInstanceForm.get('heat_route').value);
         window.localStorage.setItem('routeId', this.routeInstanceForm.get('route_id').value);
@@ -95,6 +99,14 @@ export class LeaderSignInComponent implements OnInit {
 
         this.router.navigate(['route', this.routeInstanceForm.get('route_id').value])
       } else {
+        if (data.length > 0) {
+          let route_instance_to_update: RouteInstance = data[0];
+          route_instance_to_update.end_time = route_instance_to_update.start_time;
+          this.mainService.updateRouteInstance(route_instance_to_update).subscribe(updatedRouteInstance => {
+            // the route instance is now closed
+          }, error => console.log(error));
+        }
+
         this.routeInstance = new RouteInstance();
         this.routeInstance.heat_route = this.routeInstanceForm.get('heat_route').value;
         this.routeInstance.leader_name = this.routeInstanceForm.get('leader_name').value;
