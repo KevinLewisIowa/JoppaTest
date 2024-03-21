@@ -108,7 +108,9 @@ export class LeaderSignInComponent implements OnInit {
       } else {
         if (data.length > 0) {
           let route_instance_to_update: RouteInstance = data[0];
-          route_instance_to_update.end_time = route_instance_to_update.start_time;
+          let route_end_time: Date = new Date(route_instance_to_update.start_time);
+          route_end_time = new Date(route_end_time.setHours(route_end_time.getHours() + 7));
+          route_instance_to_update.end_time = route_end_time;
           this.mainService.updateRouteInstance(route_instance_to_update).subscribe(updatedRouteInstance => {
             // the route instance is now closed
           }, error => console.log(error));
