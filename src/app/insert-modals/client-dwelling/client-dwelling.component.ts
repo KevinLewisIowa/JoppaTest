@@ -18,6 +18,7 @@ export class ClientDwellingComponent implements OnInit {
   other_dwelling: string = '';
   homeless_reason: string = '';
   other_homeless_reason: string = '';
+  where_sleep_last_night: string = '';
   notes: string = '';
   extraInfoNeededForDwelling: boolean = false;
   extraInfoNeededForHomelessReason: boolean = false;
@@ -65,6 +66,7 @@ export class ClientDwellingComponent implements OnInit {
       clientDwelling.homeless_reason = (this.homeless_reason == 'Other') ? this.other_homeless_reason : this.homeless_reason;
       clientDwelling.notes = this.notes;
       clientDwelling.client_id = clientId;
+      clientDwelling.where_sleep_last_night = this.where_sleep_last_night;
       
       console.log(JSON.stringify(clientDwelling));
       this.clientService.insertClientDwelling(clientDwelling).subscribe((data: ClientDwelling) => {

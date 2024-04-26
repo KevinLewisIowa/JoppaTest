@@ -7,4 +7,5 @@ export class ClientDwelling {
   homeless_reason: string = undefined;
   notes: string = undefined;
   client_id: number = undefined;
+  where_sleep_last_night: string = undefined;
 }

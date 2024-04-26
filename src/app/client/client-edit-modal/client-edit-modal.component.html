@@ -80,10 +80,61 @@
         </div>
       </div>
       <div class="form-group row">
+        <label for="highest_level_education" class="col-6 col-form-label">Highest Level of Education: </label>
+        <div class="col-6">
+          <select id="highest_level_education" class="form-control" formControlName="highest_level_education" style="float:right;">
+            <option value="K-8">K-8</option>
+            <option value="9-12">9-12</option>
+            <option value="College 2 or 4 yr Degree">College 2 or 4 yr Degree</option>
+            <option value="College Advanced Degree">College Advanced Degree</option>
+            <option value="Drop Out K-12">Drop Out K-12</option>
+            <option value="HS Grad/GED">HS Grad/GED</option>
+            <option value="HS Grad / Some College">HS Grad / Some College</option>
+            <option value="No Schooling">No Schooling</option>
+            <option value="Not Selected">Not Selected</option>
+            <option value="Pre-K and younger (Currently)">Pre-K and younger (Currently)</option>
+            <option value="Unknown">Unknown</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="what_brought_to_des_moines" class="col-6 col-form-label">What Brought You to Des Moines?: </label>
+        <div class="col-6">
+          <select id="what_brought_to_des_moines" class="form-control" formControlName="what_brought_to_des_moines" style="float:right;" (change)="onReasonForDesMoinesChange(what_brought_to_des_moines)">
+            <option value="Friend">Friend</option>
+            <option value="Family">Family</option>
+            <option value="Work/Job">Work/Job</option>
+            <option value="Better Homeless Services">Better Homeless Services</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-6"></label>
+        <div class="col-6">
+          <input type="text" class="form-control" placeholder="Reason" *ngIf="extraInfoNeededReasonForDesMoines"
+            formControlName="otherReasonForDesMoines" />
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="city_state_before_homelessness" class="col-6 col-form-label">What city and state did you live in before you became homeless?: </label>
+        <div class="col-6">
+          <input id="city_state_before_homelessness" type="text" class="form-control" style="float:right;" placeholder="City, State"
+            formControlName="city_state_before_homelessness" />
+        </div>
+      </div>
+      <div class="form-group row">
         <label for="veteran" class="col-6 col-form-label">Is Veteran:</label>
         <div class="col-6">
           <input id="veteran" class="form-control-checkbox" type="checkbox" style="float:right; width:5%; height:100%;"
             formControlName="is_veteran" />
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="diagnosed_physical_mental_disability" class="col-6 col-form-label">Has Diagnosed Physical or Mental Disability:</label>
+        <div class="col-6">
+          <input id="diagnosed_physical_mental_disability" class="form-control-checkbox" type="checkbox"
+            style="float:right; width:5%; height:100%;" formControlName="diagnosed_physical_mental_disability" />
         </div>
       </div>
       <div class="form-group row">

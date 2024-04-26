@@ -23,6 +23,7 @@ export class ClientEditModalComponent implements OnInit {
   isAdmin: boolean;
   url: any;
   byteArray: any;
+  extraInfoNeededReasonForDesMoines: boolean = false;
 
   constructor(private router: Router, private modalService: NgbModal, private clientService: ClientService, private fb: UntypedFormBuilder, @Inject(LOCALE_ID) private locale: string) { }
 
@@ -43,6 +44,15 @@ export class ClientEditModalComponent implements OnInit {
     }
     else {
       this.clientForm.patchValue({ first_time_homeless: false });
+    }
+  }
+
+  onReasonForDesMoinesChange(value: string) {
+    if (value == 'Other') {
+      this.extraInfoNeededReasonForDesMoines = true;
+    } else {
+      this.extraInfoNeededReasonForDesMoines = false;
+      this.clientForm.patchValue({ otherReasonForDesMoines: '' });
     }
   }
 

@@ -39,6 +39,29 @@
                 <option value="Other">Other</option>
               </select>
             </div>
+            <div class="form-group row">
+              <label for="where_sleep_last_night" class="col-6 col-form-label">Where Did You Sleep Last Night?: </label>
+              <div class="col-6">
+                <select id="where_sleep_last_night" class="form-control" style="float:right;" formControlName="where_sleep_last_night">
+                  <option value="Abandoned Structure">Abandoned Structure</option>
+                  <option value="Apartment">Apartment</option>
+                  <option value="Broken Down Van">Broken Down Van</option>
+                  <option value="Camper">Camper</option>
+                  <option value="Couch Surfing">Couch Surfing</option>
+                  <option value="Garage">Garage</option>
+                  <option value="House">House</option>
+                  <option value="Mobile Home">Mobile Home</option>
+                  <option value="Motel">Motel</option>
+                  <option value="Shack">Shack</option>
+                  <option value="Shelter">Shelter</option>
+                  <option value="Tent">Tent</option>
+                  <option value="Streets">Streets</option>
+                  <option value="Under Bridge">Under Bridge</option>
+                  <option value="Vehicle">Vehicle</option>
+                  <option value="Unknown">Unknown</option>
+                </select>
+              </div>
+            </div>
             <div class="col-md-6">
               <label for="homeless-reason">Reason for Homelessness</label>
                 <select id="source" class= "form-control" [(ngModel)]="homeless_reason" (change)="onChange('homeless_reason', homeless_reason)" style="float:left;">

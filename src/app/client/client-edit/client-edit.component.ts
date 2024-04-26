@@ -23,6 +23,7 @@ export class ClientEditComponent implements OnInit {
   locationCampId: number;
   //otherHomelessReason: string = '';
   extraInfoNeeded: boolean = false;
+  extraInfoNeededReasonForDesMoines: boolean = false;
   homelessReasonOptions: string[] = ['Eviction', 'Job Loss', 'Family Dispute', 'Family Loss', 'Legal Issues', 'Health Issues', 'Addictions', 'Mental Health', 'Other'];
 
   constructor(private router: Router, private clientService: ClientService, private fb: UntypedFormBuilder, @Inject(LOCALE_ID) private locale: string) { }
@@ -57,12 +58,18 @@ export class ClientEditComponent implements OnInit {
       dwelling: 'Tent',
       client_picture: '',
       latitude: 0,
-      longitude: 0
+      longitude: 0,
+      diagnosed_physical_mental_disability: false,
+      highest_level_education: '',
+      what_brought_to_des_moines: '',
+      otherReasonForDesMoines: '',
+      city_state_before_homelessness: ''
     });
     this.clientForm.get('first_name').setValidators(Validators.required);
     this.clientForm.get('last_name').setValidators(Validators.required);
     this.clientForm.get('gender').setValidators(Validators.required);
     this.clientForm.get('dwelling').setValidators(Validators.required);
+    this.clientForm.get('city_state_before_homelessness').setValidators(Validators.required);
   }
 
   onChange(value: string) {
@@ -71,6 +78,15 @@ export class ClientEditComponent implements OnInit {
     } else {
       this.extraInfoNeeded = false;
       this.clientForm.patchValue({ otherHomelessReason: '' });
+    }
+  }
+
+  onReasonForDesMoinesChange(value: string) {
+    if (value == 'Other') {
+      this.extraInfoNeededReasonForDesMoines = true;
+    } else {
+      this.extraInfoNeededReasonForDesMoines = false;
+      this.clientForm.patchValue({ otherReasonForDesMoines: '' });
     }
   }
 
@@ -149,6 +165,20 @@ export class ClientEditComponent implements OnInit {
     this.theClient.admin_notes = String(this.clientForm.get('admin_notes').value).trim();
     this.theClient.last_interaction_date = new Date();
     this.theClient.client_picture = this.byteArray;
+    this.theClient.diagnosed_physical_mental_disability = this.clientForm.get('is_veteran').value;
+    this.theClient.highest_level_education = String(this.clientForm.get('highest_level_education').value).trim();
+    this.theClient.city_state_before_homelessness = String(this.clientForm.get('city_state_before_homelessness').value).trim();
+
+    let reason_for_des_moines: string = this.clientForm.get('what_brought_to_des_moines').value;
+    let theOtherReasonForDesMoines: string = this.clientForm.get('otherReasonForDesMoines').value;
+    if (reason_for_des_moines == 'Other' && theOtherReasonForDesMoines != '') {
+      reason_for_des_moines = this.clientForm.get('otherReasonForDesMoines').value;
+    }
+    else if (reason_for_des_moines == 'Other' && theOtherReasonForDesMoines == '') {
+      alert('If you select Other as what brought you to Des Moines, need to indicate reason.');
+      return;
+    }
+    this.theClient.what_brought_to_des_moines = String(this.clientForm.get('what_brought_to_des_moines').value).trim();
 
     // validate that client birth date is not unreasonable
     if (this.theClient.birth_date) {
@@ -199,6 +229,7 @@ export class ClientEditComponent implements OnInit {
         theDwelling.homeless_reason = reason_for_homelessness;
         theDwelling.date_became_homeless = new Date(Date.parse(this.clientForm.get('date_became_homeless').value));
         theDwelling.first_time_homeless = this.clientForm.get('first_time_homeless').value;
+        theDwelling.where_sleep_last_night = this.clientForm.get('where_sleep_last_night').value;
         this.clientService.insertClientDwelling(theDwelling).subscribe((data: ClientDwelling) => {
           insertedClient.household_id = insertedClient.id;
           this.clientService.updateClient(insertedClient).subscribe(updatedClient => {
@@ -246,6 +277,7 @@ export class ClientEditComponent implements OnInit {
           theDwelling.homeless_reason = reason_for_homelessness;
           theDwelling.date_became_homeless = new Date(Date.parse(this.clientForm.get('date_became_homeless').value));
           theDwelling.first_time_homeless = this.clientForm.get('first_time_homeless').value;
+          theDwelling.where_sleep_last_night = this.clientForm.get('where_sleep_last_night').value;
           this.clientService.insertClientDwelling(theDwelling).subscribe((data: ClientDwelling) => {
             insertedClient.household_id = insertedClient.id;
             this.clientService.updateClient(insertedClient).subscribe(updatedClient => {
