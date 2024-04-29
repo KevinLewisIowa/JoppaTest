@@ -18,6 +18,8 @@ export class ClientEditModalComponent implements OnInit {
   clientForm: UntypedFormGroup;
   regExpDate = /^\d{1,2}\/\d{1,2}\/\d{4}$/
   theClient: Client;
+  city_before_homelessness: string = '';
+  state_before_homelessness: string = '';
   firstTimeHomeless: string = 'Unknown';
   editing = false;
   isAdmin: boolean;
@@ -58,6 +60,8 @@ export class ClientEditModalComponent implements OnInit {
 
   openModal(client: Client) {
     this.theClient = client;
+    this.city_before_homelessness = client.city_state_before_homelessness.split(',')[0];
+    this.state_before_homelessness = client.city_state_before_homelessness.split(',')[1];
 
     if (this.theClient.client_picture != '' && this.theClient.client_picture != null) {
       this.url = 'data:image/png;base64,' + this.theClient.client_picture;
@@ -134,6 +138,8 @@ export class ClientEditModalComponent implements OnInit {
       updatedClient.previous_camp_id = updatedClient.current_camp_id;
       updatedClient.current_camp_id = 0;
     }
+
+    updatedClient.city_state_before_homelessness = `${this.city_before_homelessness}, ${this.state_before_homelessness}`;
 
     this.clientService.updateClient(updatedClient).subscribe(data => {
       this.editedClient.emit(updatedClient);

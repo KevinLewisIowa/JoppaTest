@@ -63,13 +63,15 @@ export class ClientEditComponent implements OnInit {
       highest_level_education: '',
       what_brought_to_des_moines: '',
       otherReasonForDesMoines: '',
-      city_state_before_homelessness: ''
+      city_before_homelessness: '',
+      state_before_homelessness: ''
     });
     this.clientForm.get('first_name').setValidators(Validators.required);
     this.clientForm.get('last_name').setValidators(Validators.required);
     this.clientForm.get('gender').setValidators(Validators.required);
     this.clientForm.get('dwelling').setValidators(Validators.required);
-    this.clientForm.get('city_state_before_homelessness').setValidators(Validators.required);
+    this.clientForm.get('city_before_homelessness').setValidators(Validators.required);
+    this.clientForm.get('state_before_homelessness').setValidators(Validators.required);
   }
 
   onChange(value: string) {
@@ -165,9 +167,11 @@ export class ClientEditComponent implements OnInit {
     this.theClient.admin_notes = String(this.clientForm.get('admin_notes').value).trim();
     this.theClient.last_interaction_date = new Date();
     this.theClient.client_picture = this.byteArray;
+    console.log('Made it to client picture');
     this.theClient.diagnosed_physical_mental_disability = this.clientForm.get('is_veteran').value;
     this.theClient.highest_level_education = String(this.clientForm.get('highest_level_education').value).trim();
-    this.theClient.city_state_before_homelessness = String(this.clientForm.get('city_state_before_homelessness').value).trim();
+    this.theClient.city_state_before_homelessness = `${String(this.clientForm.get('city_before_homelessness').value).trim()}, ${String(this.clientForm.get('state_before_homelessness').value).trim()}`;
+    console.log('Made it after disability, education and city state');
 
     let reason_for_des_moines: string = this.clientForm.get('what_brought_to_des_moines').value;
     let theOtherReasonForDesMoines: string = this.clientForm.get('otherReasonForDesMoines').value;
@@ -210,6 +214,7 @@ export class ClientEditComponent implements OnInit {
         return;
       }
     }
+    console.log('Made it to inserting');
 
     this.clientService.insertClient(this.theClient).subscribe((insertedClient: Client) => {
       if (this.locationCampId == 0) {
