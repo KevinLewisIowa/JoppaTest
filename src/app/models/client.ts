@@ -35,8 +35,9 @@ export class Client {
     latitude:number = undefined;
     longitude:number = undefined;
     has_location:boolean = undefined;
-    diagnosed_physical_mental_disability:boolean = undefined;
+    diagnosed_mental_physical_disability:boolean = undefined;
     highest_level_education:string = undefined;
-    city_state_before_homelessness:string = undefined;
+    city_before_homelessness:string = undefined;
+    state_before_homelessness:string = undefined;
     what_brought_to_des_moines:string = undefined;
 }

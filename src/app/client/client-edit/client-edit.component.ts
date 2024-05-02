@@ -59,12 +59,13 @@ export class ClientEditComponent implements OnInit {
       client_picture: '',
       latitude: 0,
       longitude: 0,
-      diagnosed_physical_mental_disability: false,
+      diagnosed_mental_physical_disability: false,
       highest_level_education: '',
       what_brought_to_des_moines: '',
       otherReasonForDesMoines: '',
       city_before_homelessness: '',
-      state_before_homelessness: ''
+      state_before_homelessness: '',
+      where_sleep_last_night: ''
     });
     this.clientForm.get('first_name').setValidators(Validators.required);
     this.clientForm.get('last_name').setValidators(Validators.required);
@@ -84,6 +85,7 @@ export class ClientEditComponent implements OnInit {
   }
 
   onReasonForDesMoinesChange(value: string) {
+    console.log(value);
     if (value == 'Other') {
       this.extraInfoNeededReasonForDesMoines = true;
     } else {
@@ -167,22 +169,21 @@ export class ClientEditComponent implements OnInit {
     this.theClient.admin_notes = String(this.clientForm.get('admin_notes').value).trim();
     this.theClient.last_interaction_date = new Date();
     this.theClient.client_picture = this.byteArray;
-    console.log('Made it to client picture');
-    this.theClient.diagnosed_physical_mental_disability = this.clientForm.get('is_veteran').value;
+    this.theClient.diagnosed_mental_physical_disability = this.clientForm.get('diagnosed_mental_physical_disability').value;
     this.theClient.highest_level_education = String(this.clientForm.get('highest_level_education').value).trim();
-    this.theClient.city_state_before_homelessness = `${String(this.clientForm.get('city_before_homelessness').value).trim()}, ${String(this.clientForm.get('state_before_homelessness').value).trim()}`;
-    console.log('Made it after disability, education and city state');
-
-    let reason_for_des_moines: string = this.clientForm.get('what_brought_to_des_moines').value;
+    this.theClient.city_before_homelessness = String(this.clientForm.get('city_before_homelessness').value).trim();
+    this.theClient.state_before_homelessness = String(this.clientForm.get('state_before_homelessness').value).trim();
+    
+    let reason_for_des_moines: string = String(this.clientForm.get('what_brought_to_des_moines').value);
     let theOtherReasonForDesMoines: string = this.clientForm.get('otherReasonForDesMoines').value;
     if (reason_for_des_moines == 'Other' && theOtherReasonForDesMoines != '') {
-      reason_for_des_moines = this.clientForm.get('otherReasonForDesMoines').value;
+      reason_for_des_moines = String(this.clientForm.get('otherReasonForDesMoines').value);
     }
     else if (reason_for_des_moines == 'Other' && theOtherReasonForDesMoines == '') {
       alert('If you select Other as what brought you to Des Moines, need to indicate reason.');
       return;
     }
-    this.theClient.what_brought_to_des_moines = String(this.clientForm.get('what_brought_to_des_moines').value).trim();
+    this.theClient.what_brought_to_des_moines = reason_for_des_moines;
 
     // validate that client birth date is not unreasonable
     if (this.theClient.birth_date) {
@@ -214,9 +215,9 @@ export class ClientEditComponent implements OnInit {
         return;
       }
     }
-    console.log('Made it to inserting');
-
+    
     this.clientService.insertClient(this.theClient).subscribe((insertedClient: Client) => {
+      console.log(this.locationCampId);
       if (this.locationCampId == 0) {
         let reason_for_homelessness: string = this.clientForm.get('homeless_reason').value;
         let theOtherHomelessReason: string = this.clientForm.get('otherHomelessReason').value;
@@ -234,7 +235,8 @@ export class ClientEditComponent implements OnInit {
         theDwelling.homeless_reason = reason_for_homelessness;
         theDwelling.date_became_homeless = new Date(Date.parse(this.clientForm.get('date_became_homeless').value));
         theDwelling.first_time_homeless = this.clientForm.get('first_time_homeless').value;
-        theDwelling.where_sleep_last_night = this.clientForm.get('where_sleep_last_night').value;
+        theDwelling.where_sleep_last_night = String(this.clientForm.get('where_sleep_last_night').value);
+        
         this.clientService.insertClientDwelling(theDwelling).subscribe((data: ClientDwelling) => {
           insertedClient.household_id = insertedClient.id;
           this.clientService.updateClient(insertedClient).subscribe(updatedClient => {

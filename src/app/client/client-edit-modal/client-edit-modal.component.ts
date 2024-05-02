@@ -18,8 +18,6 @@ export class ClientEditModalComponent implements OnInit {
   clientForm: UntypedFormGroup;
   regExpDate = /^\d{1,2}\/\d{1,2}\/\d{4}$/
   theClient: Client;
-  city_before_homelessness: string = '';
-  state_before_homelessness: string = '';
   firstTimeHomeless: string = 'Unknown';
   editing = false;
   isAdmin: boolean;
@@ -36,19 +34,6 @@ export class ClientEditModalComponent implements OnInit {
     this.isAdmin = JSON.parse(window.localStorage.getItem('isAdmin'));
   }
 
-  onFTHChange(value: string) {
-    this.firstTimeHomeless = value;
-    if (value == 'Unknown') {
-      this.clientForm.patchValue({ first_time_homeless: null });
-    }
-    else if (value == 'Yes') {
-      this.clientForm.patchValue({ first_time_homeless: true });
-    }
-    else {
-      this.clientForm.patchValue({ first_time_homeless: false });
-    }
-  }
-
   onReasonForDesMoinesChange(value: string) {
     if (value == 'Other') {
       this.extraInfoNeededReasonForDesMoines = true;
@@ -60,9 +45,7 @@ export class ClientEditModalComponent implements OnInit {
 
   openModal(client: Client) {
     this.theClient = client;
-    this.city_before_homelessness = client.city_state_before_homelessness.split(',')[0];
-    this.state_before_homelessness = client.city_state_before_homelessness.split(',')[1];
-
+    
     if (this.theClient.client_picture != '' && this.theClient.client_picture != null) {
       this.url = 'data:image/png;base64,' + this.theClient.client_picture;
     }
@@ -116,7 +99,7 @@ export class ClientEditModalComponent implements OnInit {
   submitClient() {
     let updatedClient: Client = this.clientForm.value;
     updatedClient.client_picture = this.byteArray;
-
+    
     let now: Date = new Date();
     let birthday: Date = new Date(updatedClient.birth_date);
     let pastDate: Date = new Date(now.getFullYear() - 100, now.getMonth(), now.getDate());
@@ -138,8 +121,6 @@ export class ClientEditModalComponent implements OnInit {
       updatedClient.previous_camp_id = updatedClient.current_camp_id;
       updatedClient.current_camp_id = 0;
     }
-
-    updatedClient.city_state_before_homelessness = `${this.city_before_homelessness}, ${this.state_before_homelessness}`;
 
     this.clientService.updateClient(updatedClient).subscribe(data => {
       this.editedClient.emit(updatedClient);
