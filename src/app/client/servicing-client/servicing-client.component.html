@@ -205,11 +205,12 @@
           </h4>
           <table class="table" id="items">
             <colgroup>
-              <col span="1" style="width: 20%" />
-              <col span="1" style="width: 20%" />
-              <col span="1" style="width: 20%" />
-              <col span="1" style="width: 20%" />
-              <col span="1" style="width: 20%" />
+              <col span="1" style="width: 16%" />
+              <col span="1" style="width: 16%" />
+              <col span="1" style="width: 16%" />
+              <col span="1" style="width: 16%" />
+              <col span="1" style="width: 16%" />
+              <col span="1" style="width: 16%" />
             </colgroup>
             <thead>
               <tr>
@@ -217,6 +218,7 @@
                 <th>Date Became Homeless</th>
                 <th>Dwelling Location</th>
                 <th>Reason for Homelessness</th>
+                <th>Where'd You Sleep Last Night?</th>
                 <th>Notes</th>
               </tr>
             </thead>
@@ -226,6 +228,7 @@
                 <td>{{ item.date_became_homeless | date: "shortDate" }}</td>
                 <td>{{ item.dwelling }}</td>
                 <td>{{ item.homeless_reason }}</td>
+                <td>{{ item.where_sleep_last_night }}</td>
                 <td>{{ item.notes }}</td>
                 <td>
                   <button type="button" class="btn btn-primary" (click)="removeClientDwelling(item.id)" *ngIf="isAdmin">
