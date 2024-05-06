@@ -39,10 +39,10 @@
                 <option value="Other">Other</option>
               </select>
             </div>
-            <div class="form-group row">
-              <label for="where_sleep_last_night" class="col-6 col-form-label">Where Did You Sleep Last Night?: </label>
-              <div class="col-6">
-                <select id="where_sleep_last_night" class="form-control" style="float:right;" formControlName="where_sleep_last_night">
+            <div class="row">
+              <div class="col-md-6">
+                <label for="where_sleep_last_night" class="col-6 col-form-label">Where Did You Sleep Last Night?: </label>
+                <select id="where_sleep_last_night" class="form-control" style="float:right;" [(ngModel)]="where_sleep_last_night">
                   <option value="Abandoned Structure">Abandoned Structure</option>
                   <option value="Apartment">Apartment</option>
                   <option value="Broken Down Van">Broken Down Van</option>
