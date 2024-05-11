@@ -194,6 +194,89 @@
         </table>
       </div>
 
+      <div class="col-lg-12 col-md-12">
+        <h4>
+          Next of Kin
+          <button type="button" (click)="goToTop(); clientNextOfKinMdl.showModal()" class="btn btn-primary"
+            style="float: right" *ngIf="isAdmin">
+            New Next of Kin
+          </button>
+        </h4>
+        <table class="table" id="circle-of-friends">
+          <colgroup>
+            <col span="1" style="width: 14%" />
+            <col span="1" style="width: 14%" />
+            <col span="1" style="width: 14%" />
+            <col span="1" style="width: 14%" />
+            <col span="1" style="width: 14%" />
+            <col span="1" style="width: 14%" />
+            <col span="1" style="width: 14%" />
+          </colgroup>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Relation to Client</th>
+              <th>Phone</th>
+              <th>Street Address</th>
+              <th>Email</th>
+              <th>Note</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let friend of circleOfFriends">
+              <td>{{ friend.volunteer_name }}</td>
+              <td>{{ friend.phone_number }}</td>
+              <td>{{ friend.email }}</td>
+              <td>{{ friend.notes }}</td>
+              <td>
+                <button type="button" class="btn btn-primary" *ngIf="isAdmin" (click)="removeClientFriend(friend.id)">
+                  Delete
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="col-lg-12 col-md-12">
+        <h4>
+          Client Income
+          <button type="button" (click)="goToTop(); clientCircleOfFriendsMdl.showModal()" class="btn btn-primary"
+            style="float: right" *ngIf="isAdmin">
+            New Income Record
+          </button>
+        </h4>
+        <table class="table" id="income">
+          <colgroup>
+            <col span="1" style="width: 25%" />
+            <col span="1" style="width: 25%" />
+            <col span="1" style="width: 25%" />
+            <col span="1" style="width: 25%" />
+          </colgroup>
+          <thead>
+            <tr>
+              <th>Have Income</th>
+              <th>Monthly Money?</th>
+              <th>What is your income from?</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let income of incomes">
+              <td>{{ income.has_income }}</td>
+              <td>{{ income.monthly_money }}</td>
+              <td>{{ income.what_income_from }}</td>
+              <td>
+                <button type="button" class="btn btn-primary" *ngIf="isAdmin" (click)="removeClientIncome(income.id)">
+                  Delete
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
       <div class="col-lg-12 col-md-12" *ngIf="!heatRoute">
         <div class="background-color">
           <h4>
