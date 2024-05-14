@@ -349,70 +349,69 @@ export class ServicingClientComponent implements OnInit {
             }
           });
         this.getHeaterStatuses();
-      } else {
-        this.service
-          .getRecentReceivedItems(this.clientId)
-          .subscribe((data: RequestedItem[]) => {
-            this.receivedItems = data;
-            this.filteredReceivedItems = this.receivedItems;
-          });
-        this.service
-          .getRequestedItems(this.clientId)
-          .subscribe((data: RequestedItem[]) => {
-            this.requestedItems = data.filter((w) => w.has_received != true);
-          });
-        this.service
-          .getClientPets(this.clientId)
-          .subscribe((data: ClientPet[]) => {
-            this.pets = data;
-          });
-        this.service
-          .getClientCircleOfFriends(this.clientId)
-          .subscribe((data: ClientCircleOfFriends[]) => {
-            this.circleOfFriends = data;
-          });
-        this.service
-          .getTentsForClient(this.clientId)
-          .subscribe((data: Tent[]) => {
-            this.tents = data;
-          });
-        this.service
-          .getClientDwellings(this.clientId)
-          .subscribe((data: ClientDwelling[]) => {
-            this.dwellings = data;
-          });
-        this.service
-          .getClientReferrals(this.clientId)
-          .subscribe((data: ReferralsResources[]) => {
-            this.referralsResources = data;
-          });
-        this.service
-          .getGoalsAndNextSteps(this.clientId)
-          .subscribe((data: GoalsNextStep[]) => {
-            this.goalsAndSteps = data;
-          });
-        this.service
-          .getClientLikes(this.clientId)
-          .subscribe((data: ClientLike[]) => {
-            this.clientLikes = data;
-          });
-        this.service
-          .getClientDislikes(this.clientId)
-          .subscribe((data: ClientDislike[]) => {
-            this.clientDislikes = data;
-          });
-        this.service
-          .getHealthConcerns(this.clientId)
-          .subscribe((data: HealthConcern[]) => {
-            this.healthConcerns = data;
-            this.goToTop();
-            let difference = new Date().getTime() - new Date(this.client.created_at).getTime();
-            difference = difference / (1000 * 3600 * 24)
-            if (difference < 14) {
-              alert('Please ask if the client has any pets and get the type (dog or cat), name, breed, age, and if they want monthly pet food in the Pets section.');
-            }
-          });
       }
+      this.service
+        .getRecentReceivedItems(this.clientId)
+        .subscribe((data: RequestedItem[]) => {
+          this.receivedItems = data;
+          this.filteredReceivedItems = this.receivedItems;
+        });
+      this.service
+        .getRequestedItems(this.clientId)
+        .subscribe((data: RequestedItem[]) => {
+          this.requestedItems = data.filter((w) => w.has_received != true);
+        });
+      this.service
+        .getClientPets(this.clientId)
+        .subscribe((data: ClientPet[]) => {
+          this.pets = data;
+        });
+      this.service
+        .getClientCircleOfFriends(this.clientId)
+        .subscribe((data: ClientCircleOfFriends[]) => {
+          this.circleOfFriends = data;
+        });
+      this.service
+        .getTentsForClient(this.clientId)
+        .subscribe((data: Tent[]) => {
+          this.tents = data;
+        });
+      this.service
+        .getClientDwellings(this.clientId)
+        .subscribe((data: ClientDwelling[]) => {
+          this.dwellings = data;
+        });
+      this.service
+        .getClientReferrals(this.clientId)
+        .subscribe((data: ReferralsResources[]) => {
+          this.referralsResources = data;
+        });
+      this.service
+        .getGoalsAndNextSteps(this.clientId)
+        .subscribe((data: GoalsNextStep[]) => {
+          this.goalsAndSteps = data;
+        });
+      this.service
+        .getClientLikes(this.clientId)
+        .subscribe((data: ClientLike[]) => {
+          this.clientLikes = data;
+        });
+      this.service
+        .getClientDislikes(this.clientId)
+        .subscribe((data: ClientDislike[]) => {
+          this.clientDislikes = data;
+        });
+      this.service
+        .getHealthConcerns(this.clientId)
+        .subscribe((data: HealthConcern[]) => {
+          this.healthConcerns = data;
+          this.goToTop();
+          let difference = new Date().getTime() - new Date(this.client.created_at).getTime();
+          difference = difference / (1000 * 3600 * 24)
+          if (difference < 14) {
+            alert('Please ask if the client has any pets and get the type (dog or cat), name, breed, age, and if they want monthly pet food in the Pets section.');
+          }
+        });
     } else {
       this.router.navigate(["/routes"]);
     }
