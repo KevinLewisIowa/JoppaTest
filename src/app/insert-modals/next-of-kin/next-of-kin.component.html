@@ -1,1 +1,46 @@
-<p>next-of-kin works!</p>
+<ng-template #nextOfKinMdl let-c="close" let-d="dismiss">
+    <div class="modal-header">
+      <h4 class="modal-title">Create Next of Kin</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')"><span aria-hidden="true">&times;</span></button>
+    </div>
+    <form>
+      <div class="modal-body">
+        <div class="form-group">
+          <div class="row">
+            <div class="col-md-6">
+              <label for="name">Name </label>
+              <input id="name" type="text" class="form-control" [(ngModel)]="name" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+                <label for="relation_to_client">Relation to Client</label>
+                <input id="relation_to_client" type="text" class="form-control" [(ngModel)]="relation_to_client" />
+              </div>
+            <div class="col-md-6">
+              <label for="phone_number">Phone Number</label>
+              <input id="phone_number" type="text" class="form-control" placeholder="Phone" [(ngModel)]="phone_number" style="float:left;"/>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <label for="street_address">Street Address</label>
+                <input id="street_address" type="text" class="form-control" [(ngModel)]="street_address" />
+              </div>
+            </div>
+            <div class="col-md-6">
+                <label for="email">Email</label>
+                <input id="email" type="text" class="form-control" [(ngModel)]="email" />
+            </div>
+            <div class="col-md-6">
+              <textarea id="note" class="form-control" rows="4" [(ngModel)]="note" placeholder="Notes"
+                name="note"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary" (click)="submitNextOfKin();c('')">Submit</button>
+      <button type="button" class="btn btn-outline-primary" (click)="c('Close click')">Close</button>
+    </div>
+  </ng-template>

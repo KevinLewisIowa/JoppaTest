@@ -197,12 +197,12 @@
       <div class="col-lg-12 col-md-12">
         <h4>
           Next of Kin
-          <button type="button" (click)="goToTop(); clientNextOfKinMdl.showModal()" class="btn btn-primary"
+          <button type="button" (click)="goToTop(); nextOfKinMdl.showModal()" class="btn btn-primary"
             style="float: right" *ngIf="isAdmin">
             New Next of Kin
           </button>
         </h4>
-        <table class="table" id="circle-of-friends">
+        <table class="table" id="next_of_kin">
           <colgroup>
             <col span="1" style="width: 14%" />
             <col span="1" style="width: 14%" />
@@ -242,7 +242,7 @@
       <div class="col-lg-12 col-md-12">
         <h4>
           Client Income
-          <button type="button" (click)="goToTop(); clientCircleOfFriendsMdl.showModal()" class="btn btn-primary"
+          <button type="button" (click)="goToTop(); incomeMdl.showModal()" class="btn btn-primary"
             style="float: right" *ngIf="isAdmin">
             New Income Record
           </button>
@@ -982,6 +982,8 @@
   </div>
 </div>
 <!--these are the modals for inserting new stuff-->
+<app-income #incomeMdl (incomeAdded)="incomeAdded($event)"></app-income>
+<app-next-of-kin #nextOfKinMdl (nextOfKinAdded)="nextOfKinAdded($event)"></app-next-of-kin>
 <app-client-like #likeMdl (likeAdded)="likeAdded($event)"></app-client-like>
 <app-client-dislike #dislikeMdl (dislikeAdded)="dislikeAdded($event)"></app-client-dislike>
 <app-requested-item #requestItemMdl (requestedItemAdded)="requestedItemAdded($event)"></app-requested-item>

@@ -35,6 +35,8 @@ import {
 import { MatLegacyDialog as MatDialog } from "@angular/material/legacy-dialog";
 import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
 import { DateSelectorComponent } from "app/insert-modals/date-selector/date-selector.component";
+import { ClientIncome } from "app/models/client-income";
+import { ClientNextOfKin } from "app/models/client-next-of-kin";
 
 @Component({
   selector: "app-servicing-client",
@@ -48,6 +50,8 @@ export class ServicingClientComponent implements OnInit {
   requestedItems: RequestedItem[] = [];
   goalsAndSteps: GoalsNextStep[] = [];
   clientLikes: ClientLike[] = [];
+  clientIncomes: ClientIncome[] = [];
+  clientNextOfKins: ClientNextOfKin[] = [];
   clientDislikes: ClientDislike[] = [];
   healthConcerns: HealthConcern[] = [];
   prayerRequestsAndNeeds: PrayerRequestAndNeed[] = [];
@@ -746,6 +750,18 @@ export class ServicingClientComponent implements OnInit {
   likeAdded(like: ClientLike) {
     this.clientLikes.push(like);
     const element = document.querySelector("#likes");
+    element.scrollIntoView();
+  }
+
+  incomeAdded(income: ClientIncome) {
+    this.clientIncomes.push(income);
+    const element = document.querySelector("#income");
+    element.scrollIntoView();
+  }
+
+  nextOfKinAdded(next_of_kin: ClientNextOfKin) {
+    this.clientNextOfKins.push(next_of_kin);
+    const element = document.querySelector("#next_of_kin");
     element.scrollIntoView();
   }
 
