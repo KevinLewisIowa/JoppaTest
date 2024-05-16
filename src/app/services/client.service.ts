@@ -943,6 +943,28 @@ export class ClientService {
     }), catchError(this.handleError));
   }
 
+  removeIncome(id: number) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+    return this.http.delete(this.baseUrl + `client_incomes/${id}`, { headers: myHeader })
+    .pipe(map((res) => {
+      return true;
+    }), catchError(this.handleError));
+  }
+
+  removeNextOfKin(id: number) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+    return this.http.delete(this.baseUrl + `client_next_of_kins/${id}`, { headers: myHeader })
+    .pipe(map((res) => {
+      return true;
+    }), catchError(this.handleError));
+  }
+
   removeAppearance(id: number) {
     const myHeader = new HttpHeaders({
       "Content-Type": "application/json",

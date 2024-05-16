@@ -26,6 +26,9 @@ export class IncomeComponent implements OnInit {
 
   showModal() {
     this.modalService.open(this.incomeMdl, { size: 'lg', backdrop: 'static'});
+    this.has_income = false;
+    this.monthly_money = '';
+    this.what_income_from = '';
   }
 
   submitIncome() {

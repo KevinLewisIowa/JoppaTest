@@ -224,13 +224,15 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let friend of circleOfFriends">
-              <td>{{ friend.volunteer_name }}</td>
-              <td>{{ friend.phone_number }}</td>
-              <td>{{ friend.email }}</td>
-              <td>{{ friend.notes }}</td>
+            <tr *ngFor="let nok of clientNextOfKins">
+              <td>{{ nok.name }}</td>
+              <td>{{ nok.relation_to_client }}</td>
+              <td>{{ nok.phone_number }}</td>
+              <td>{{ nok.street_address }}</td>
+              <td>{{ nok.email }}</td>
+              <td>{{ nok.note }}</td>
               <td>
-                <button type="button" class="btn btn-primary" *ngIf="isAdmin" (click)="removeClientFriend(friend.id)">
+                <button type="button" class="btn btn-primary" *ngIf="isAdmin" (click)="removeClientNextOfKin(nok.id)">
                   Delete
                 </button>
               </td>
@@ -263,7 +265,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let income of incomes">
+            <tr *ngFor="let income of clientIncomes">
               <td>{{ income.has_income }}</td>
               <td>{{ income.monthly_money }}</td>
               <td>{{ income.what_income_from }}</td>

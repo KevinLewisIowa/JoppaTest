@@ -9,7 +9,7 @@ import { ClientService } from 'app/services/client.service';
   styleUrls: ['./next-of-kin.component.css']
 })
 export class NextOfKinComponent implements OnInit {
-  @ViewChild ('nextOfKinMdl', {static: false}) nextOfKinMdl: ElementRef
+  @ViewChild('nextOfKinMdl', { static: false }) nextOfKinMdl: ElementRef
   @Output() nextOfKinAdded = new EventEmitter<ClientNextOfKin>();
 
   name: string = '';
@@ -24,11 +24,17 @@ export class NextOfKinComponent implements OnInit {
   }
 
   ngOnInit() {
-    
+
   }
 
   showModal() {
-    this.modalService.open(this.nextOfKinMdl, { size: 'lg', backdrop: 'static'});
+    this.modalService.open(this.nextOfKinMdl, { size: 'lg', backdrop: 'static' });
+    this.name = '';
+    this.phone_number = '';
+    this.relation_to_client = '';
+    this.street_address = '';
+    this.email = '';
+    this.note = '';
   }
 
   submitNextOfKin() {
@@ -42,7 +48,7 @@ export class NextOfKinComponent implements OnInit {
       nextOfKin.street_address = this.street_address;
       nextOfKin.email = this.email;
       nextOfKin.note = this.note;
-      
+
       this.service.insertClientNextOfKin(nextOfKin).subscribe(new_next_of_kin => {
         if (new_next_of_kin != null && new_next_of_kin.id != null) {
           this.nextOfKinAdded.emit(new_next_of_kin);

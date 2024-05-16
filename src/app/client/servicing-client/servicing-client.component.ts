@@ -361,8 +361,7 @@ export class ServicingClientComponent implements OnInit {
             this.filteredReceivedItems = this.receivedItems;
           });
         this.service
-          .getRequestedItems(this.clientId)
-          .subscribe((data: RequestedItem[]) => {
+          .getRequestedItems(this.clientId).subscribe((data: RequestedItem[]) => {
             this.requestedItems = data.filter((w) => w.has_received != true);
           });
         this.service
@@ -370,6 +369,12 @@ export class ServicingClientComponent implements OnInit {
           .subscribe((data: ClientPet[]) => {
             this.pets = data;
           });
+        this.service.getClientIncomes(this.clientId).subscribe((data: ClientIncome[]) => {
+          this.clientIncomes = data;
+        }, error => console.log(error));
+        this.service.getClientNextOfKins(this.clientId).subscribe((data: ClientNextOfKin[]) => {
+          this.clientNextOfKins = data;
+        }, error => console.log(error));
         this.service
           .getClientCircleOfFriends(this.clientId)
           .subscribe((data: ClientCircleOfFriends[]) => {
@@ -476,7 +481,7 @@ export class ServicingClientComponent implements OnInit {
       console.log(
         `latitude: ${this.client.latitude}, longitude: ${this.client.longitude}`
       );
-      window.open(`https://www.google.com/maps/dir/${this.client.latitude},${this.client.longitude}/@//`,"_blank");
+      window.open(`https://www.google.com/maps/dir/${this.client.latitude},${this.client.longitude}/@//`, "_blank");
     }
   }
 
@@ -539,7 +544,7 @@ export class ServicingClientComponent implements OnInit {
     if (!this.isAdmin) {
       alert('Attendance recorded');
     }
-    
+
     const interaction: Appearance = new Appearance();
     interaction.client_id = this.client.id;
     interaction.location_camp_id = this.locationCampId ? this.locationCampId : this.client.current_camp_id;
@@ -913,6 +918,18 @@ export class ServicingClientComponent implements OnInit {
   removeLike(id: number) {
     this.service.removeLike(id).subscribe((res) => {
       this.clientLikes = this.clientLikes.filter((w) => w.id != id);
+    });
+  }
+
+  removeClientIncome(id: number) {
+    this.service.removeIncome(id).subscribe((res) => {
+      this.clientIncomes = this.clientIncomes.filter((w) => w.id != id);
+    });
+  }
+
+  removeClientNextOfKin(id: number) {
+    this.service.removeNextOfKin(id).subscribe((res) => {
+      this.clientNextOfKins = this.clientNextOfKins.filter((w) => w.id != id);
     });
   }
 
