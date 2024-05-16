@@ -19,6 +19,8 @@ import { ClientDwelling } from "app/models/client-dwelling";
 import { ClientCircleOfFriends } from "app/models/client-circle-of-friends";
 import { environment } from "environments/environment";
 import { map, catchError } from "rxjs/operators";
+import { ClientIncome } from "app/models/client-income";
+import { ClientNextOfKin } from "app/models/client-next-of-kin";
 
 // adding a new comment
 @Injectable()
@@ -941,6 +943,28 @@ export class ClientService {
     }), catchError(this.handleError));
   }
 
+  removeIncome(id: number) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+    return this.http.delete(this.baseUrl + `client_incomes/${id}`, { headers: myHeader })
+    .pipe(map((res) => {
+      return true;
+    }), catchError(this.handleError));
+  }
+
+  removeNextOfKin(id: number) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+    return this.http.delete(this.baseUrl + `client_next_of_kins/${id}`, { headers: myHeader })
+    .pipe(map((res) => {
+      return true;
+    }), catchError(this.handleError));
+  }
+
   removeAppearance(id: number) {
     const myHeader = new HttpHeaders({
       "Content-Type": "application/json",
@@ -1167,6 +1191,94 @@ export class ClientService {
         { goals_and_next_step: goal },
         { headers: myHeader }
       )
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  insertClientIncome(income: ClientIncome) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+    return this.http
+      .post(
+        this.baseUrl + `client_incomes`,
+        { client_income: income },
+        { headers: myHeader }
+      )
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  getClientIncomes(id: number) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+    return this.http
+      .get(this.baseUrl + `getClientIncomes?clientId=${id}`, {
+        headers: myHeader,
+      })
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  insertClientNextOfKin(nextOfKin: ClientNextOfKin) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+    return this.http
+      .post(
+        this.baseUrl + `client_next_of_kins`,
+        { client_next_of_kin: nextOfKin },
+        { headers: myHeader }
+      )
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  getClientNextOfKins(id: number) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+    return this.http
+      .get(this.baseUrl + `getClientNextOfKins?clientId=${id}`, {
+        headers: myHeader,
+      })
       .pipe(
         map((res: any) => {
           if (res.message === "invalid-token") {

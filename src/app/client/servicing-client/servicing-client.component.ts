@@ -35,6 +35,8 @@ import {
 import { MatLegacyDialog as MatDialog } from "@angular/material/legacy-dialog";
 import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
 import { DateSelectorComponent } from "app/insert-modals/date-selector/date-selector.component";
+import { ClientIncome } from "app/models/client-income";
+import { ClientNextOfKin } from "app/models/client-next-of-kin";
 
 @Component({
   selector: "app-servicing-client",
@@ -48,6 +50,8 @@ export class ServicingClientComponent implements OnInit {
   requestedItems: RequestedItem[] = [];
   goalsAndSteps: GoalsNextStep[] = [];
   clientLikes: ClientLike[] = [];
+  clientIncomes: ClientIncome[] = [];
+  clientNextOfKins: ClientNextOfKin[] = [];
   clientDislikes: ClientDislike[] = [];
   healthConcerns: HealthConcern[] = [];
   prayerRequestsAndNeeds: PrayerRequestAndNeed[] = [];
@@ -349,69 +353,75 @@ export class ServicingClientComponent implements OnInit {
             }
           });
         this.getHeaterStatuses();
+      } else {
+        this.service
+          .getRecentReceivedItems(this.clientId)
+          .subscribe((data: RequestedItem[]) => {
+            this.receivedItems = data;
+            this.filteredReceivedItems = this.receivedItems;
+          });
+        this.service
+          .getRequestedItems(this.clientId).subscribe((data: RequestedItem[]) => {
+            this.requestedItems = data.filter((w) => w.has_received != true);
+          });
+        this.service
+          .getClientPets(this.clientId)
+          .subscribe((data: ClientPet[]) => {
+            this.pets = data;
+          });
+        this.service.getClientIncomes(this.clientId).subscribe((data: ClientIncome[]) => {
+          this.clientIncomes = data;
+        }, error => console.log(error));
+        this.service.getClientNextOfKins(this.clientId).subscribe((data: ClientNextOfKin[]) => {
+          this.clientNextOfKins = data;
+        }, error => console.log(error));
+        this.service
+          .getClientCircleOfFriends(this.clientId)
+          .subscribe((data: ClientCircleOfFriends[]) => {
+            this.circleOfFriends = data;
+          });
+        this.service
+          .getTentsForClient(this.clientId)
+          .subscribe((data: Tent[]) => {
+            this.tents = data;
+          });
+        this.service
+          .getClientDwellings(this.clientId)
+          .subscribe((data: ClientDwelling[]) => {
+            this.dwellings = data;
+          });
+        this.service
+          .getClientReferrals(this.clientId)
+          .subscribe((data: ReferralsResources[]) => {
+            this.referralsResources = data;
+          });
+        this.service
+          .getGoalsAndNextSteps(this.clientId)
+          .subscribe((data: GoalsNextStep[]) => {
+            this.goalsAndSteps = data;
+          });
+        this.service
+          .getClientLikes(this.clientId)
+          .subscribe((data: ClientLike[]) => {
+            this.clientLikes = data;
+          });
+        this.service
+          .getClientDislikes(this.clientId)
+          .subscribe((data: ClientDislike[]) => {
+            this.clientDislikes = data;
+          });
+        this.service
+          .getHealthConcerns(this.clientId)
+          .subscribe((data: HealthConcern[]) => {
+            this.healthConcerns = data;
+            this.goToTop();
+            let difference = new Date().getTime() - new Date(this.client.created_at).getTime();
+            difference = difference / (1000 * 3600 * 24)
+            if (difference < 14) {
+              alert('Please ask if the client has any pets and get the type (dog or cat), name, breed, age, and if they want monthly pet food in the Pets section.');
+            }
+          });
       }
-      this.service
-        .getRecentReceivedItems(this.clientId)
-        .subscribe((data: RequestedItem[]) => {
-          this.receivedItems = data;
-          this.filteredReceivedItems = this.receivedItems;
-        });
-      this.service
-        .getRequestedItems(this.clientId)
-        .subscribe((data: RequestedItem[]) => {
-          this.requestedItems = data.filter((w) => w.has_received != true);
-        });
-      this.service
-        .getClientPets(this.clientId)
-        .subscribe((data: ClientPet[]) => {
-          this.pets = data;
-        });
-      this.service
-        .getClientCircleOfFriends(this.clientId)
-        .subscribe((data: ClientCircleOfFriends[]) => {
-          this.circleOfFriends = data;
-        });
-      this.service
-        .getTentsForClient(this.clientId)
-        .subscribe((data: Tent[]) => {
-          this.tents = data;
-        });
-      this.service
-        .getClientDwellings(this.clientId)
-        .subscribe((data: ClientDwelling[]) => {
-          this.dwellings = data;
-        });
-      this.service
-        .getClientReferrals(this.clientId)
-        .subscribe((data: ReferralsResources[]) => {
-          this.referralsResources = data;
-        });
-      this.service
-        .getGoalsAndNextSteps(this.clientId)
-        .subscribe((data: GoalsNextStep[]) => {
-          this.goalsAndSteps = data;
-        });
-      this.service
-        .getClientLikes(this.clientId)
-        .subscribe((data: ClientLike[]) => {
-          this.clientLikes = data;
-        });
-      this.service
-        .getClientDislikes(this.clientId)
-        .subscribe((data: ClientDislike[]) => {
-          this.clientDislikes = data;
-        });
-      this.service
-        .getHealthConcerns(this.clientId)
-        .subscribe((data: HealthConcern[]) => {
-          this.healthConcerns = data;
-          this.goToTop();
-          let difference = new Date().getTime() - new Date(this.client.created_at).getTime();
-          difference = difference / (1000 * 3600 * 24)
-          if (difference < 14) {
-            alert('Please ask if the client has any pets and get the type (dog or cat), name, breed, age, and if they want monthly pet food in the Pets section.');
-          }
-        });
     } else {
       this.router.navigate(["/routes"]);
     }
@@ -471,7 +481,7 @@ export class ServicingClientComponent implements OnInit {
       console.log(
         `latitude: ${this.client.latitude}, longitude: ${this.client.longitude}`
       );
-      window.open(`https://www.google.com/maps/dir/${this.client.latitude},${this.client.longitude}/@//`,"_blank");
+      window.open(`https://www.google.com/maps/dir/${this.client.latitude},${this.client.longitude}/@//`, "_blank");
     }
   }
 
@@ -534,7 +544,7 @@ export class ServicingClientComponent implements OnInit {
     if (!this.isAdmin) {
       alert('Attendance recorded');
     }
-    
+
     const interaction: Appearance = new Appearance();
     interaction.client_id = this.client.id;
     interaction.location_camp_id = this.locationCampId ? this.locationCampId : this.client.current_camp_id;
@@ -748,6 +758,18 @@ export class ServicingClientComponent implements OnInit {
     element.scrollIntoView();
   }
 
+  incomeAdded(income: ClientIncome) {
+    this.clientIncomes.push(income);
+    const element = document.querySelector("#income");
+    element.scrollIntoView();
+  }
+
+  nextOfKinAdded(next_of_kin: ClientNextOfKin) {
+    this.clientNextOfKins.push(next_of_kin);
+    const element = document.querySelector("#next_of_kin");
+    element.scrollIntoView();
+  }
+
   tentAdded(tent: Tent) {
     this.tents.push(tent);
     const element = document.querySelector("#tents");
@@ -896,6 +918,18 @@ export class ServicingClientComponent implements OnInit {
   removeLike(id: number) {
     this.service.removeLike(id).subscribe((res) => {
       this.clientLikes = this.clientLikes.filter((w) => w.id != id);
+    });
+  }
+
+  removeClientIncome(id: number) {
+    this.service.removeIncome(id).subscribe((res) => {
+      this.clientIncomes = this.clientIncomes.filter((w) => w.id != id);
+    });
+  }
+
+  removeClientNextOfKin(id: number) {
+    this.service.removeNextOfKin(id).subscribe((res) => {
+      this.clientNextOfKins = this.clientNextOfKins.filter((w) => w.id != id);
     });
   }
 
