@@ -266,8 +266,8 @@
           </thead>
           <tbody>
             <tr *ngFor="let income of clientIncomes">
-              <td>{{ income.created_at }}</td>
-              <td>{{ income.has_income }}</td>
+              <td>{{ income.created_at | date: "shortDate" }}</td>
+              <td>{{ income.has_income  ? 'Yes' : 'No' }}</td>
               <td>{{ income.monthly_money }}</td>
               <td>{{ income.what_income_from }}</td>
               <td>
