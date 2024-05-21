@@ -353,75 +353,75 @@ export class ServicingClientComponent implements OnInit {
             }
           });
         this.getHeaterStatuses();
-      } else {
-        this.service
-          .getRecentReceivedItems(this.clientId)
-          .subscribe((data: RequestedItem[]) => {
-            this.receivedItems = data;
-            this.filteredReceivedItems = this.receivedItems;
-          });
-        this.service
-          .getRequestedItems(this.clientId).subscribe((data: RequestedItem[]) => {
-            this.requestedItems = data.filter((w) => w.has_received != true);
-          });
-        this.service
-          .getClientPets(this.clientId)
-          .subscribe((data: ClientPet[]) => {
-            this.pets = data;
-          });
-        this.service.getClientIncomes(this.clientId).subscribe((data: ClientIncome[]) => {
-          this.clientIncomes = data;
-        }, error => console.log(error));
-        this.service.getClientNextOfKins(this.clientId).subscribe((data: ClientNextOfKin[]) => {
-          this.clientNextOfKins = data;
-        }, error => console.log(error));
-        this.service
-          .getClientCircleOfFriends(this.clientId)
-          .subscribe((data: ClientCircleOfFriends[]) => {
-            this.circleOfFriends = data;
-          });
-        this.service
-          .getTentsForClient(this.clientId)
-          .subscribe((data: Tent[]) => {
-            this.tents = data;
-          });
-        this.service
-          .getClientDwellings(this.clientId)
-          .subscribe((data: ClientDwelling[]) => {
-            this.dwellings = data;
-          });
-        this.service
-          .getClientReferrals(this.clientId)
-          .subscribe((data: ReferralsResources[]) => {
-            this.referralsResources = data;
-          });
-        this.service
-          .getGoalsAndNextSteps(this.clientId)
-          .subscribe((data: GoalsNextStep[]) => {
-            this.goalsAndSteps = data;
-          });
-        this.service
-          .getClientLikes(this.clientId)
-          .subscribe((data: ClientLike[]) => {
-            this.clientLikes = data;
-          });
-        this.service
-          .getClientDislikes(this.clientId)
-          .subscribe((data: ClientDislike[]) => {
-            this.clientDislikes = data;
-          });
-        this.service
-          .getHealthConcerns(this.clientId)
-          .subscribe((data: HealthConcern[]) => {
-            this.healthConcerns = data;
-            this.goToTop();
-            let difference = new Date().getTime() - new Date(this.client.created_at).getTime();
-            difference = difference / (1000 * 3600 * 24)
-            if (difference < 14) {
-              alert('Please ask if the client has any pets and get the type (dog or cat), name, breed, age, and if they want monthly pet food in the Pets section.');
-            }
-          });
       }
+
+      this.service
+        .getRecentReceivedItems(this.clientId)
+        .subscribe((data: RequestedItem[]) => {
+          this.receivedItems = data;
+          this.filteredReceivedItems = this.receivedItems;
+        });
+      this.service
+        .getRequestedItems(this.clientId).subscribe((data: RequestedItem[]) => {
+          this.requestedItems = data.filter((w) => w.has_received != true);
+        });
+      this.service
+        .getClientPets(this.clientId)
+        .subscribe((data: ClientPet[]) => {
+          this.pets = data;
+        });
+      this.service.getClientIncomes(this.clientId).subscribe((data: ClientIncome[]) => {
+        this.clientIncomes = data;
+      }, error => console.log(error));
+      this.service.getClientNextOfKins(this.clientId).subscribe((data: ClientNextOfKin[]) => {
+        this.clientNextOfKins = data;
+      }, error => console.log(error));
+      this.service
+        .getClientCircleOfFriends(this.clientId)
+        .subscribe((data: ClientCircleOfFriends[]) => {
+          this.circleOfFriends = data;
+        });
+      this.service
+        .getTentsForClient(this.clientId)
+        .subscribe((data: Tent[]) => {
+          this.tents = data;
+        });
+      this.service
+        .getClientDwellings(this.clientId)
+        .subscribe((data: ClientDwelling[]) => {
+          this.dwellings = data;
+        });
+      this.service
+        .getClientReferrals(this.clientId)
+        .subscribe((data: ReferralsResources[]) => {
+          this.referralsResources = data;
+        });
+      this.service
+        .getGoalsAndNextSteps(this.clientId)
+        .subscribe((data: GoalsNextStep[]) => {
+          this.goalsAndSteps = data;
+        });
+      this.service
+        .getClientLikes(this.clientId)
+        .subscribe((data: ClientLike[]) => {
+          this.clientLikes = data;
+        });
+      this.service
+        .getClientDislikes(this.clientId)
+        .subscribe((data: ClientDislike[]) => {
+          this.clientDislikes = data;
+        });
+      this.service
+        .getHealthConcerns(this.clientId)
+        .subscribe((data: HealthConcern[]) => {
+          this.healthConcerns = data;
+          this.goToTop();
+          let difference = new Date().getTime() - new Date(this.client.created_at).getTime();
+          difference = difference / (1000 * 3600 * 24)
+          if (difference < 14) {
+            alert('Please ask if the client has any pets and get the type (dog or cat), name, breed, age, and if they want monthly pet food in the Pets section.');
+          }
+        });
     } else {
       this.router.navigate(["/routes"]);
     }
@@ -540,10 +540,12 @@ export class ServicingClientComponent implements OnInit {
     this.updateTimerSubscription.unsubscribe();
   }
 
-  sendInteraction(interactionType: number) {
+  sendInteraction(interactionType: number, heatEquipmentAdded: boolean = false) {
     if (!this.isAdmin) {
       alert('Attendance recorded');
     }
+
+    console.log('sendInteraction Heat equipment added: ' + JSON.stringify(heatEquipmentAdded));
 
     const interaction: Appearance = new Appearance();
     interaction.client_id = this.client.id;
@@ -606,14 +608,14 @@ export class ServicingClientComponent implements OnInit {
               this.client.last_interaction_date = interaction.serviced_date;
             }
 
-            this.createUpdateInteraction(interaction);
+            this.createUpdateInteraction(interaction, heatEquipmentAdded);
           } else if (!interaction.still_lives_here) {
             this.client.previous_camp_id = interaction.location_camp_id;
             this.client.current_camp_id = null;
 
-            this.createUpdateInteraction(interaction);
+            this.createUpdateInteraction(interaction, heatEquipmentAdded);
           } else {
-            this.createUpdateInteraction(interaction);
+            this.createUpdateInteraction(interaction, heatEquipmentAdded);
           }
         }
       });
@@ -621,21 +623,21 @@ export class ServicingClientComponent implements OnInit {
       interaction.serviced_date = new Date();
       if (interaction.serviced) {
         this.client.last_interaction_date = new Date();
-        this.createUpdateInteraction(interaction);
+        this.createUpdateInteraction(interaction, heatEquipmentAdded);
       } else if (!interaction.still_lives_here) {
         this.client.previous_camp_id = interaction.location_camp_id;
         this.client.current_camp_id = null;
 
-        this.createUpdateInteraction(interaction);
+        this.createUpdateInteraction(interaction, heatEquipmentAdded);
       } else {
-        this.createUpdateInteraction(interaction);
+        this.createUpdateInteraction(interaction, heatEquipmentAdded);
       }
     }
 
     console.log("camp id: " + interaction.location_camp_id);
   }
 
-  private createUpdateInteraction(interaction: Appearance) {
+  private createUpdateInteraction(interaction: Appearance, heatEquipmentAdded: boolean = false) {
     let routeAttendanceList: Appearance[] = JSON.parse(
       window.localStorage.getItem("RouteAttendance")
     );
@@ -647,6 +649,8 @@ export class ServicingClientComponent implements OnInit {
     if (interaction.serviced && this.client.status === "Inactive") {
       this.client.status = "Active";
     }
+
+    console.log('createUpdateInteraction Heat equipment added: ' + JSON.stringify(heatEquipmentAdded));
 
     if (appearance) {
       interaction.id = appearance.id;
@@ -674,7 +678,7 @@ export class ServicingClientComponent implements OnInit {
             }, error => console.log(error));
           }
 
-          this.updateClientAndListing(routeAttendanceList);
+          this.updateClientAndListing(routeAttendanceList, heatEquipmentAdded);
         },
         (error) => console.log(error)
       );
@@ -684,6 +688,11 @@ export class ServicingClientComponent implements OnInit {
         (data) => {
           interaction.id = data.id;
           routeAttendanceList.push(interaction);
+          window.localStorage.setItem(
+            "RouteAttendance",
+            JSON.stringify(routeAttendanceList)
+          );
+
           this.clientInteractions.push(data);
 
           if (!interaction.still_lives_here) {
@@ -705,18 +714,29 @@ export class ServicingClientComponent implements OnInit {
             }, error => console.log(error));
           }
 
-          this.updateClientAndListing(routeAttendanceList);
+          this.updateClientAndListing(routeAttendanceList, heatEquipmentAdded);
         },
         (error) => console.log(error)
       );
     }
   }
 
-  private updateClientAndListing(routeAttendanceList: Appearance[]) {
+  private updateClientAndListing(routeAttendanceList: Appearance[], heatEquipmentAdded: boolean = false) {
+    console.log('updateclientandlisting Heat equipment added: ' + JSON.stringify(heatEquipmentAdded));
+
     this.service.updateClient(this.client).subscribe(
       (data) => {
+        let routeAttendanceList: Appearance[] = JSON.parse(
+          localStorage.getItem("RouteAttendance")
+        );
+        if (routeAttendanceList.length != null) {
+          this.appearance = routeAttendanceList.find(
+            (x) => x.client_id == this.clientId
+          );
+        }
+
         console.log(data.status);
-        if (!this.isAdmin) {
+        if (!this.isAdmin  && !heatEquipmentAdded) {
           window.localStorage.setItem(
             "RouteAttendance",
             JSON.stringify(routeAttendanceList)
@@ -880,6 +900,23 @@ export class ServicingClientComponent implements OnInit {
     if (this.isAdmin) {
       this.router.navigate([`/locationCamp/${this.campId}`]);
     } else {
+      let routeAttendanceList: Appearance[] = JSON.parse(
+        localStorage.getItem("RouteAttendance")
+      );
+      console.log(this.clientId);
+      console.log(JSON.stringify(routeAttendanceList));
+      if (routeAttendanceList.length != null) {
+        this.appearance = routeAttendanceList.find(
+          (x) => x.client_id == this.clientId
+        );
+      }
+  
+      console.log(JSON.stringify(this.appearance))
+      if (this.appearance) {
+        this.sentInteraction = true;
+      }
+
+      console.log('Sent interaction: ' + JSON.stringify(this.sentInteraction));
       if (!this.sentInteraction) {
         message =
           "Are you sure you want to close out of this client? You have not yet marked them as seen or serviced.";
@@ -1069,7 +1106,7 @@ export class ServicingClientComponent implements OnInit {
         (response: Heater) => {
           this.updateHeaterEntry(response.id, 2);
           this.getHeaterStatuses();
-          if (!this.isAdmin) { this.sendInteraction(1); }
+          if (!this.isAdmin) { this.sendInteraction(1, true); }
         },
         (error) => console.log(error)
       );
@@ -1083,7 +1120,7 @@ export class ServicingClientComponent implements OnInit {
           .getClientLoanedTanks(this.clientId)
           .subscribe((data: any) => {
             this.tankInteractions = data;
-            if (!this.isAdmin) { this.sendInteraction(1); }
+            if (!this.isAdmin) { this.sendInteraction(1, true); }
           });
       });
     }
@@ -1096,7 +1133,7 @@ export class ServicingClientComponent implements OnInit {
           .getClientLoanedHoses(this.clientId)
           .subscribe((data: any) => {
             this.hoseInteractions = data;
-            if (!this.isAdmin) { this.sendInteraction(1); }
+            if (!this.isAdmin) { this.sendInteraction(1, true); }
           });
       });
     }
