@@ -14,3 +14,11 @@
        font-size: 12px;
    }
 }
+
+.missing {
+    background-color: red;
+}
+
+.unknown {
+    background-color: orange;
+}

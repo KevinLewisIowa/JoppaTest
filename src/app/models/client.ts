@@ -40,4 +40,5 @@ export class Client {
     city_before_homelessness:string = undefined;
     state_before_homelessness:string = undefined;
     what_brought_to_des_moines:string = undefined;
+    information_missing_or_unknown: string = undefined;
 }

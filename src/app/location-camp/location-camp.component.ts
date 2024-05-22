@@ -65,6 +65,8 @@ export class LocationCampComponent implements OnInit {
   totalStopsAmount: number;
   routeAttendanceList: Appearance[] = [];
   private baseUrl = environment.api_url;
+  missing: boolean = false;
+  unknown: boolean = false;
 
   constructor(
     private http: HttpClient,
@@ -132,6 +134,14 @@ export class LocationCampComponent implements OnInit {
                       this.erroredClients += `,${client.first_name} ${client.last_name}`;
                     }
                     pushClient = false;
+                  }
+                  
+                  if (client.race == null || client.ethnicity == null || client.gender == "" || client.birth_date == null) {
+                    client.information_missing_or_unknown = "missing";
+                  } else if (client.race == "Data not collected" || client.ethnicity == "Data not collected") {
+                    client.information_missing_or_unknown = "unknown";
+                  } else {
+                    client.information_missing_or_unknown = "";
                   }
 
                   if (client.longitude != null && client.latitude != null) client.has_location = true;
