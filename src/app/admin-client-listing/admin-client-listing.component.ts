@@ -28,7 +28,6 @@ export class AdminClientListingComponent implements OnInit {
     // this.clientService.seenAndServicedReport().subscribe(data => {
     //   console.log('seenAndServiced ' + JSON.stringify(data));
     // });
-    // Comment to push change
 
     this.clientService.getClientsByName('').subscribe(data => {
       this.clients = data;
