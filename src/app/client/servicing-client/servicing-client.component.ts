@@ -37,6 +37,7 @@ import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
 import { DateSelectorComponent } from "app/insert-modals/date-selector/date-selector.component";
 import { ClientIncome } from "app/models/client-income";
 import { ClientNextOfKin } from "app/models/client-next-of-kin";
+import { ClientHomelessHistory } from "app/models/client-homeless-histories";
 
 @Component({
   selector: "app-servicing-client",
@@ -60,6 +61,7 @@ export class ServicingClientComponent implements OnInit {
   pets: ClientPet[] = [];
   tents: Tent[] = [];
   dwellings: ClientDwelling[] = [];
+  homelessHistories: ClientHomelessHistory[] = [];
   circleOfFriends: ClientCircleOfFriends[] = [];
   referralsResources: ReferralsResources[] = [];
   sentInteraction = false;
@@ -226,6 +228,12 @@ export class ServicingClientComponent implements OnInit {
         this.service.getClientDwellings(this.clientId).subscribe(
           (data: ClientDwelling[]) => {
             this.dwellings = data;
+          },
+          (error) => console.log(error)
+        );
+        this.service.getClientHomelessHistory(this.clientId).subscribe(
+          (data: ClientHomelessHistory[]) => {
+            this.homelessHistories = data;
           },
           (error) => console.log(error)
         );
@@ -665,15 +673,17 @@ export class ServicingClientComponent implements OnInit {
           }
 
           let dwellingDates = this.dwellings.map(dwelling => dwelling.created_at);
+          let historyDates = this.homelessHistories.map(history => history.created_at);
           let clientDwelling: ClientDwelling = this.dwellings.filter(dwelling => dwelling.created_at === dwellingDates.reduce((a, b) => a > b ? a : b))[0];
+          let clientHistory: ClientHomelessHistory = this.homelessHistories.filter(history => history.created_at === historyDates.reduce((a, b) => a > b ? a : b))[0];
 
           console.log(JSON.stringify(clientDwelling));
           var difference = new Date().getTime() - new Date(clientDwelling.created_at).getTime();
           difference = Math.ceil(difference / (1000 * 3600 * 24));
           console.log('Difference: ' + difference)
           if (interaction.serviced && (clientDwelling.dwelling == "House" || clientDwelling.dwelling == "Apartment" || clientDwelling.dwelling == "Shelter" || clientDwelling.dwelling == "Motel" || clientDwelling.dwelling == "Motel") && difference > 90) {
-            clientDwelling.first_time_homeless = false;
-            this.service.updateClientDwelling(clientDwelling).subscribe(data => {
+            clientHistory.first_time_homeless = false;
+            this.service.updateHomelessHistory(clientHistory).subscribe(data => {
               console.log(data);
             }, error => console.log(error));
           }
@@ -701,15 +711,17 @@ export class ServicingClientComponent implements OnInit {
           }
 
           let dwellingDates = this.dwellings.map(dwelling => dwelling.created_at);
+          let historyDates = this.homelessHistories.map(history => history.created_at);
           let clientDwelling: ClientDwelling = this.dwellings.filter(dwelling => dwelling.created_at === dwellingDates.reduce((a, b) => a > b ? a : b))[0];
+          let clientHistory: ClientHomelessHistory = this.homelessHistories.filter(history => history.created_at === historyDates.reduce((a, b) => a > b ? a : b))[0];
           console.log(JSON.stringify(clientDwelling));
 
           var difference = new Date().getTime() - new Date(clientDwelling.created_at).getTime();
           difference = Math.ceil(difference / (1000 * 3600 * 24));
           console.log('Difference: ' + difference)
           if (interaction.serviced && (clientDwelling.dwelling == "House" || clientDwelling.dwelling == "Apartment" || clientDwelling.dwelling == "Shelter" || clientDwelling.dwelling == "Motel" || clientDwelling.dwelling == "Camper") && difference > 90) {
-            clientDwelling.first_time_homeless = false;
-            this.service.updateClientDwelling(clientDwelling).subscribe(data => {
+            clientHistory.first_time_homeless = false;
+            this.service.updateHomelessHistory(clientHistory).subscribe(data => {
               console.log(data);
             }, error => console.log(error));
           }

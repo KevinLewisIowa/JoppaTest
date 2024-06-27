@@ -21,6 +21,7 @@ import { environment } from "environments/environment";
 import { map, catchError } from "rxjs/operators";
 import { ClientIncome } from "app/models/client-income";
 import { ClientNextOfKin } from "app/models/client-next-of-kin";
+import { ClientHomelessHistory } from "app/models/client-homeless-histories";
 
 // adding a new comment
 @Injectable()
@@ -359,6 +360,72 @@ export class ClientService {
       .patch(
         this.baseUrl + `client_dwellings/${theDwelling.id}`,
         { client_dwelling: theDwelling },
+        { headers: myHeader }
+      )
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  getClientHomelessHistory(id) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+
+    return this.http
+      .get(this.baseUrl + `getDwellingHistoriesForClient?clientId=${id}`, { headers: myHeader })
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  insertClientHomelessHistory(theHistory: ClientDwelling) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+    return this.http
+      .post(
+        this.baseUrl + `client_homeless_histories`,
+        { client_homeless_history: theHistory },
+        { headers: myHeader }
+      )
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  updateHomelessHistory(theHistory: ClientHomelessHistory) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+    return this.http
+      .patch(
+        this.baseUrl + `client_homeless_histories/${theHistory.id}`,
+        { client_homeless_history: theHistory },
         { headers: myHeader }
       )
       .pipe(
