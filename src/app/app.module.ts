@@ -88,6 +88,7 @@ import { ClientDwellingComponent } from "./insert-modals/client-dwelling/client-
 import { AdminAddPetFoodUtilityComponent } from './admin-add-pet-food-utility/admin-add-pet-food-utility.component';
 import { IncomeComponent } from './insert-modals/income/income.component';
 import { NextOfKinComponent } from './insert-modals/next-of-kin/next-of-kin.component';
+import { ClientHomelessHistoryComponent } from './insert-modals/client-homeless-history/client-homeless-history.component';
 
 const reducers = {
   user: MainReducer,
@@ -157,6 +158,7 @@ const reducers = {
         AdminAddPetFoodUtilityComponent,
         IncomeComponent,
         NextOfKinComponent,
+        ClientHomelessHistoryComponent,
     ],
     imports: [
         BrowserModule,

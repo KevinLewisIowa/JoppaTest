@@ -6,6 +6,7 @@ import { Client } from "app/models/client";
 import { Appearance } from 'app/models/appearance';
 import { formatDate } from '@angular/common';
 import { ClientDwelling } from 'app/models/client-dwelling';
+import { ClientHomelessHistory } from 'app/models/client-homeless-histories';
 
 @Component({
   selector: 'app-client-edit',
@@ -56,6 +57,7 @@ export class ClientEditComponent implements OnInit {
       first_time_homeless: null,
       date_became_homeless: '',
       dwelling: 'Tent',
+      date_moved: '',
       client_picture: '',
       latitude: 0,
       longitude: 0,
@@ -173,7 +175,7 @@ export class ClientEditComponent implements OnInit {
     this.theClient.highest_level_education = String(this.clientForm.get('highest_level_education').value).trim();
     this.theClient.city_before_homelessness = String(this.clientForm.get('city_before_homelessness').value).trim();
     this.theClient.state_before_homelessness = String(this.clientForm.get('state_before_homelessness').value).trim();
-    
+
     let reason_for_des_moines: string = String(this.clientForm.get('what_brought_to_des_moines').value);
     let theOtherReasonForDesMoines: string = this.clientForm.get('otherReasonForDesMoines').value;
     if (reason_for_des_moines == 'Other' && theOtherReasonForDesMoines != '') {
@@ -215,7 +217,7 @@ export class ClientEditComponent implements OnInit {
         return;
       }
     }
-    
+
     this.clientService.insertClient(this.theClient).subscribe((insertedClient: Client) => {
       console.log(this.locationCampId);
       if (this.locationCampId == 0) {
@@ -229,24 +231,30 @@ export class ClientEditComponent implements OnInit {
           return;
         }
 
-        const theDwelling: ClientDwelling = new ClientDwelling();
-        theDwelling.client_id = insertedClient.id;
-        theDwelling.dwelling = String(this.clientForm.get('dwelling').value).trim();
-        theDwelling.homeless_reason = reason_for_homelessness;
-        theDwelling.date_became_homeless = new Date(Date.parse(this.clientForm.get('date_became_homeless').value));
-        theDwelling.first_time_homeless = this.clientForm.get('first_time_homeless').value;
-        theDwelling.where_sleep_last_night = String(this.clientForm.get('where_sleep_last_night').value);
-        
-        this.clientService.insertClientDwelling(theDwelling).subscribe((data: ClientDwelling) => {
-          insertedClient.household_id = insertedClient.id;
-          this.clientService.updateClient(insertedClient).subscribe(updatedClient => {
-            if (this.locationCampId == 0) {
-              this.router.navigate(['admin/clientListing']);
-            } else {
-              this.router.navigate([`/locationCamp/${this.locationCampId}`]);
-            }
-          }, error => console.log(error));
-        });
+        const theHistory: ClientHomelessHistory = new ClientHomelessHistory();
+        theHistory.reason_for_homelessness = reason_for_homelessness;
+        theHistory.date_became_homeless = new Date(Date.parse(this.clientForm.get('date_became_homeless').value));
+        theHistory.first_time_homeless = this.clientForm.get('first_time_homeless').value;
+        this.clientService.insertClientHomelessHistory(theHistory).subscribe((history: ClientHomelessHistory) => {
+          console.log('History: ' + JSON.stringify(history));
+          const theDwelling: ClientDwelling = new ClientDwelling();
+          theDwelling.client_id = insertedClient.id;
+          theDwelling.dwelling = String(this.clientForm.get('dwelling').value).trim();
+          theDwelling.where_sleep_last_night = String(this.clientForm.get('where_sleep_last_night').value);
+          theDwelling.date_moved = new Date(Date.parse(this.clientForm.get('date_moved').value));
+
+          this.clientService.insertClientDwelling(theDwelling).subscribe((dwelling: ClientDwelling) => {
+            console.log('Dwelling: ' + JSON.stringify(dwelling));
+            insertedClient.household_id = insertedClient.id;
+            this.clientService.updateClient(insertedClient).subscribe((updatedClient: Client) => {
+              if (this.locationCampId == 0) {
+                this.router.navigate(['admin/clientListing']);
+              } else {
+                this.router.navigate([`/locationCamp/${this.locationCampId}`]);
+              }
+            }, error => console.log(error));
+          });
+        }, error => console.log(error));
       } else {
         // create appearance of client as they were seen and serviced
         const clientInteraction: Appearance = new Appearance();
@@ -278,23 +286,26 @@ export class ClientEditComponent implements OnInit {
             return;
           }
 
-          const theDwelling: ClientDwelling = new ClientDwelling();
-          theDwelling.client_id = insertedClient.id;
-          theDwelling.dwelling = String(this.clientForm.get('dwelling').value).trim();
-          theDwelling.homeless_reason = reason_for_homelessness;
-          theDwelling.date_became_homeless = new Date(Date.parse(this.clientForm.get('date_became_homeless').value));
-          theDwelling.first_time_homeless = this.clientForm.get('first_time_homeless').value;
-          theDwelling.where_sleep_last_night = this.clientForm.get('where_sleep_last_night').value;
-          this.clientService.insertClientDwelling(theDwelling).subscribe((data: ClientDwelling) => {
-            insertedClient.household_id = insertedClient.id;
-            this.clientService.updateClient(insertedClient).subscribe(updatedClient => {
-              if (this.locationCampId == 0) {
-                this.router.navigate(['admin/clientListing']);
-              } else {
-                this.router.navigate([`/locationCamp/${this.locationCampId}`]);
-              }
-            }, error => console.log(error));
-          });
+          const theHistory: ClientHomelessHistory = new ClientHomelessHistory();
+          theHistory.reason_for_homelessness = reason_for_homelessness;
+          theHistory.date_became_homeless = new Date(Date.parse(this.clientForm.get('date_became_homeless').value));
+          theHistory.first_time_homeless = this.clientForm.get('first_time_homeless').value;
+          this.clientService.insertClientHomelessHistory(theHistory).subscribe((data: ClientHomelessHistory) => {
+            const theDwelling: ClientDwelling = new ClientDwelling();
+            theDwelling.client_id = insertedClient.id;
+            theDwelling.dwelling = String(this.clientForm.get('dwelling').value).trim();
+            theDwelling.where_sleep_last_night = this.clientForm.get('where_sleep_last_night').value;
+            this.clientService.insertClientDwelling(theDwelling).subscribe((data: ClientDwelling) => {
+              insertedClient.household_id = insertedClient.id;
+              this.clientService.updateClient(insertedClient).subscribe(updatedClient => {
+                if (this.locationCampId == 0) {
+                  this.router.navigate(['admin/clientListing']);
+                } else {
+                  this.router.navigate([`/locationCamp/${this.locationCampId}`]);
+                }
+              }, error => console.log(error));
+            });
+          }, error => console.log(error));
         }, error => console.log(error));
       }
     }, error => {
