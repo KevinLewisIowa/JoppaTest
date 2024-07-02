@@ -394,7 +394,7 @@ export class ClientService {
       );
   }
 
-  insertClientHomelessHistory(theHistory: ClientDwelling) {
+  insertClientHomelessHistory(theHistory: ClientHomelessHistory) {
     const myHeader = new HttpHeaders({
       "Content-Type": "application/json",
       Authorization: window.localStorage.getItem("apiToken"),
@@ -469,6 +469,17 @@ export class ClientService {
       Authorization: window.localStorage.getItem("apiToken"),
     });
     return this.http.delete(this.baseUrl + `client_dwellings/${id}`, { headers: myHeader })
+    .pipe(map((res) => {
+      return true;
+    }), catchError(this.handleError));
+  }
+
+  removeClientHomelessHistory(id: number) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+    return this.http.delete(this.baseUrl + `client_homeless_histories/${id}`, { headers: myHeader })
     .pipe(map((res) => {
       return true;
     }), catchError(this.handleError));

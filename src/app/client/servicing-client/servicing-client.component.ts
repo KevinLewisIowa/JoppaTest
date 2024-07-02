@@ -814,6 +814,14 @@ export class ServicingClientComponent implements OnInit {
     element.scrollIntoView();
   }
 
+  clientHistoryAdded(history: ClientHomelessHistory) {
+    console.log(JSON.stringify(history));
+    this.homelessHistories.push(history);
+    console.log(JSON.stringify(this.homelessHistories));
+    const element = document.querySelector("#histories");
+    element.scrollIntoView();
+  }
+
   referralResourceAdded(referralResource: ReferralsResources) {
     this.referralsResources.push(referralResource);
     const element = document.querySelector("#referralsResources");
@@ -1017,6 +1025,12 @@ export class ServicingClientComponent implements OnInit {
   removeClientDwelling(id: number) {
     this.service.removeClientDwelling(id).subscribe((res) => {
       this.dwellings = this.dwellings.filter((w) => w.id != id);
+    });
+  }
+
+  removeClientHomelessHistory(id: number) {
+    this.service.removeClientHomelessHistory(id).subscribe((res) => {
+      this.homelessHistories = this.homelessHistories.filter((w) => w.id != id);
     });
   }
 

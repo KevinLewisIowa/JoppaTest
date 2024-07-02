@@ -8,14 +8,8 @@
         <div class="form-group">
           <div class="row">
             <div class="col-md-6">
-              <label for="first-time-homeless">First Time Homeless? &nbsp; </label>
-              <input id="first-time-homeless" type="checkbox" class="form-control-checkbox" [(ngModel)]="first_time_homeless" />
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-6">
-              <label for="date-became-homeless">Date Became Homeless (Date must be MM/DD/YYYY)</label>
-              <input id="date-became-homeless" type="text" class="form-control" placeholder="mm/dd/yyyy" [(ngModel)]="date_became_homeless" style="float:left;"/>
+              <label for="date-moved">Date Moved (Date must be MM/DD/YYYY)</label>
+              <input id="date-moved" type="text" class="form-control" placeholder="mm/dd/yyyy" [(ngModel)]="date_moved" style="float:left;"/>
             </div>
             <div class="col-md-6">
               <label for="dwelling-location">Dwelling Location</label>
@@ -62,25 +56,8 @@
                 </select>
               </div>
             </div>
-            <div class="col-md-6">
-              <label for="homeless-reason">Reason for Homelessness</label>
-                <select id="source" class= "form-control" [(ngModel)]="homeless_reason" (change)="onChange('homeless_reason', homeless_reason)" style="float:left;">
-                  <option value="Eviction">Eviction</option>
-                  <option value="Job Loss">Job Loss</option>
-                  <option value="Family Dispute">Family Dispute</option>
-                  <option value="Family Loss">Family Loss</option>
-                  <option value="Legal Issues">Legal Issues</option>
-                  <option value="Health Issues">Health Issues</option>
-                  <option value="Addictions">Addictions</option>
-                  <option value="Mental Health">Mental Health</option>
-                  <option value="Other">Other</option>
-                </select>
-            </div>
             <div class="col-md-6" *ngIf="extraInfoNeededForDwelling">
               <input id="extraInfoDwelling" type="text" class="form-control" placeholder="Other Dwelling Location" [(ngModel)]="other_dwelling" style="float:left;"/>
-            </div>
-            <div class="col-md-6" *ngIf="extraInfoNeededForHomelessReason">
-              <input id="extraInfoHomelessReason" type="text" class="form-control" placeholder="Other Reason" [(ngModel)]="other_homeless_reason" style="float:left;"/>
             </div>
             <div class="col-md-6">
               <textarea id="focusMe" class="form-control" rows="4" [(ngModel)]="notes" placeholder="Notes"
