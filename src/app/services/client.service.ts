@@ -22,6 +22,7 @@ import { map, catchError } from "rxjs/operators";
 import { ClientIncome } from "app/models/client-income";
 import { ClientNextOfKin } from "app/models/client-next-of-kin";
 import { ClientHomelessHistory } from "app/models/client-homeless-histories";
+import { Heater } from "app/models/heater";
 
 // adding a new comment
 @Injectable()
@@ -721,6 +722,75 @@ export class ClientService {
       .patch(
         this.baseUrl + `client_pets/${thePet.id}`,
         { client_pet: thePet },
+        { headers: myHeader }
+      )
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  updateHeater(theHeater: Heater) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+    return this.http
+      .patch(
+        this.baseUrl + `heaters/${theHeater.id}`,
+        { heater: theHeater },
+        { headers: myHeader }
+      )
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  updateTank(theTank: any) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+    return this.http
+      .patch(
+        this.baseUrl + `client_tank_interactions/${theTank.id}`,
+        { client_tank_interaction: theTank },
+        { headers: myHeader }
+      )
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  updateHose(theHose: any) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+    return this.http
+      .patch(
+        this.baseUrl + `client_hose_interactions/${theHose.id}`,
+        { client_hose_interaction: theHose },
         { headers: myHeader }
       )
       .pipe(

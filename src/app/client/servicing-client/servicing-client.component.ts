@@ -537,6 +537,27 @@ export class ServicingClientComponent implements OnInit {
     });
   }
 
+  updateHeaterInfo(heater: Heater) {
+    console.log('Heater to update: ' + JSON.stringify(heater));
+    this.service.updateHeater(heater).subscribe((data) => {
+      console.log(JSON.stringify(data));
+    })
+  }
+
+  updateTankInfo(tank: any) {
+    console.log('Tank to update: ' + JSON.stringify(tank));
+    this.service.updateTank(tank).subscribe((data) => {
+      console.log(JSON.stringify(data));
+    })
+  }
+
+  updateHoseInfo(hose: any) {
+    console.log('Hose to update: ' + JSON.stringify(hose));
+    this.service.updateHose(hose).subscribe((data) => {
+      console.log(JSON.stringify(data));
+    })
+  }
+
   updateClientCircleOfFriends(friend: ClientCircleOfFriends) {
     this.service.updateCircleOfFriends(friend).subscribe((data) => {
       console.log(JSON.stringify(data));

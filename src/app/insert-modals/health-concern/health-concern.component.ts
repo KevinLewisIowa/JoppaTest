@@ -29,6 +29,7 @@ description: string = '';
       concern.client_id = Number(clientId);
       this.service.insertHealthConcern(concern).subscribe((data: HealthConcern) => {
         if (data != null && data.id != null) {
+          this.description = '';
           this.healthConcernAdded.emit(data);
         }
       }, error => { console.log('error saving health concern')});
