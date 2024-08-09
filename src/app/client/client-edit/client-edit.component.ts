@@ -232,6 +232,7 @@ export class ClientEditComponent implements OnInit {
         }
 
         const theHistory: ClientHomelessHistory = new ClientHomelessHistory();
+        theHistory.client_id = insertedClient.id;
         theHistory.reason_for_homelessness = reason_for_homelessness;
         theHistory.date_became_homeless = new Date(Date.parse(this.clientForm.get('date_became_homeless').value));
         theHistory.first_time_homeless = this.clientForm.get('first_time_homeless').value;
