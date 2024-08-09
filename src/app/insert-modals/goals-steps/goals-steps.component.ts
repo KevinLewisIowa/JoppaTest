@@ -19,6 +19,8 @@ export class GoalsStepsComponent implements OnInit {
 
   showModal() {
     this.modalService.open(this.goalMdl, { size: 'lg', backdrop: 'static'});
+
+    this.description = '';
   }
 
   submitGoal() {

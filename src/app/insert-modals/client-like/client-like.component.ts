@@ -19,6 +19,8 @@ export class ClientLikeComponent implements OnInit {
 
   showModal() {
     this.modalService.open(this.clientLikeMdl, { size: 'lg', backdrop: 'static'});
+
+    this.description = '';
   }
 
   submitLike() {

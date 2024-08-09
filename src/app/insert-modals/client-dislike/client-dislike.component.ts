@@ -20,6 +20,8 @@ export class ClientDislikeComponent implements OnInit {
 
   showModal() {
     this.modalService.open(this.clientDislikeMdl, { size: 'lg', backdrop: 'static'});
+
+    this.description = '';
   }
 
   submitDislike() {

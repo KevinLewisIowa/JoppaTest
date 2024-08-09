@@ -27,6 +27,12 @@ export class PetsComponent implements OnInit {
 
   showModal() {
     this.modalService.open(this.petsMdl, { size: 'lg', backdrop: 'static' });
+
+    this.pet_type = '';
+        this.pet_name = '';
+        this.age = null;
+        this.breed = '';
+        this.food_requested = true;
   }
 
   onChange() {

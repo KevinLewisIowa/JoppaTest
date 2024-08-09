@@ -28,6 +28,11 @@ export class ClientHomelessHistoryComponent {
 
   showModal() {
     this.modalService.open(this.clientHomelessHistoryMdl, {size: 'lg', backdrop: 'static'});
+
+    this.first_time_homeless = false;
+    this.homeless_reason = '';
+    this.notes = '';
+    this.date_became_homeless = null;
   }
 
   onChange(field_name: string, value: string) {
@@ -63,9 +68,5 @@ export class ClientHomelessHistoryComponent {
         }
       }, error => {console.log(error)});
     }
-
-    this.first_time_homeless = false;
-    this.homeless_reason = '';
-    this.notes = '';
   }
 }

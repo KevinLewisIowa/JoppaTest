@@ -25,6 +25,11 @@ export class ClientCircleOfFriendsComponent implements OnInit {
 
   showModal() {
     this.modalService.open(this.clientCircleOfFriendsMdl, {size: 'lg', backdrop: 'static'});
+
+    this.volunteer_name = '';
+    this.email = '';
+    this.phone_number = '';
+    this.notes = '';
   }
 
 
@@ -47,11 +52,6 @@ export class ClientCircleOfFriendsComponent implements OnInit {
         }
       }, error => {console.log(error)});
     }
-
-    this.volunteer_name = '';
-    this.email = '';
-    this.phone_number = '';
-    this.notes = '';
   }
 
 }

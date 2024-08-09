@@ -10,7 +10,7 @@ import { ClientService } from 'app/services/client.service';
 })
 export class TentComponent implements OnInit {
 
-  @ViewChild('tentMdl', {static: false}) tentMdl: ElementRef;
+  @ViewChild('tentMdl', { static: false }) tentMdl: ElementRef;
   @Output() tentAdded = new EventEmitter<Tent>();
   detail: string = '';
   type: string = '';
@@ -25,7 +25,14 @@ export class TentComponent implements OnInit {
   }
 
   showModal() {
-    this.modalService.open(this.tentMdl, {size:'lg', backdrop: 'static'});
+    this.modalService.open(this.tentMdl, { size: 'lg', backdrop: 'static' });
+
+    this.detail = '';
+    this.type = '';
+    this.condition = '';
+    this.given_by = '';
+    this.set_up_by = '';
+    this.rejected = false;
   }
 
   submitTent() {
@@ -47,7 +54,7 @@ export class TentComponent implements OnInit {
         if (data != null && data.id != null) {
           this.tentAdded.emit(data);
         }
-      }, error => {console.log(error)});
+      }, error => { console.log(error) });
     }
   }
 

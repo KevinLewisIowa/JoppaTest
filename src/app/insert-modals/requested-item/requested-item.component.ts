@@ -31,6 +31,10 @@ export class RequestedItemComponent implements OnInit {
       size: "lg",
       backdrop: "static",
     });
+
+    this.description = '';
+    this.extraInfo = '';
+    this.extraInfoNeeded = false;
   }
 
   onChange(selectedItem: string) {
@@ -132,9 +136,5 @@ export class RequestedItemComponent implements OnInit {
     } else {
       alert("You need to enter an item");
     }
-
-    this.description = "";
-    this.extraInfo = "";
-    this.extraInfoNeeded = false;
   }
 }

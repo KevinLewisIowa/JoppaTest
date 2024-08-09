@@ -21,6 +21,7 @@ export class PrayerRequestsAndNeedsComponent implements OnInit {
 
   showModal() {
     this.modalService.open(this.prayerRequestNeedMdl, {size:'lg', backdrop: 'static'});
+    this.detail = '';
   }
 
   submitPrayerRequestNeed() {

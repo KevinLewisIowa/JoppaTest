@@ -23,15 +23,19 @@ export class ReferralsResourcesComponent implements OnInit {
   quantity: number;
   notes: string = "";
 
-  constructor(private modalService: NgbModal, private service: ClientService) {}
+  constructor(private modalService: NgbModal, private service: ClientService) { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   showModal() {
     this.modalService.open(this.referralsResourcesMdl, {
       size: "lg",
       backdrop: "static",
     });
+
+    this.type = '';
+    this.quantity = null;
+    this.notes = '';
   }
 
   submitReferralsResources() {

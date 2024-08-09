@@ -29,6 +29,11 @@ export class ClientDwellingComponent implements OnInit {
 
   showModal() {
     this.modalService.open(this.clientDwellingMdl, {size: 'lg', backdrop: 'static'});
+
+    this.dwelling = '';
+    this.notes = '';
+    this.where_sleep_last_night = '';
+    this.other_dwelling = '';
   }
 
   onChange(field_name: string, value: string) {
@@ -62,10 +67,6 @@ export class ClientDwellingComponent implements OnInit {
         }
       }, error => {console.log(error)});
     }
-
-    this.dwelling = '';
-    this.notes = '';
-    this.where_sleep_last_night = '';
   }
 
 }

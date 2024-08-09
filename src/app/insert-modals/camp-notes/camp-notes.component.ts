@@ -37,6 +37,8 @@ export class CampNotesComponent implements OnInit {
       size: "lg",
       backdrop: "static",
     });
+
+    this.note = '';
   }
 
   submitCampNote() {

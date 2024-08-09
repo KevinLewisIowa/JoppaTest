@@ -40,6 +40,8 @@ export class NotesComponent implements OnInit {
 
   showModal() {
     this.modalService.open(this.notesMdl, {size: 'lg', backdrop: 'static'});
+
+    this.note = '';
   }
 
   submitNote() {
@@ -60,8 +62,6 @@ export class NotesComponent implements OnInit {
         }
       }, error => {console.log(error)});
     }
-
-    this.note = '';
   }
 
 }
