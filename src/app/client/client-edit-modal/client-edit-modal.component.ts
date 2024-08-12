@@ -31,6 +31,8 @@ export class ClientEditModalComponent implements OnInit {
     this.theClient = new Client();
     this.clientForm = this.fb.group(this.theClient);
 
+    console.log('Is Veteran ' + this.theClient.diagnosed_mental_physical_disability);
+
     this.isAdmin = JSON.parse(window.localStorage.getItem('isAdmin'));
   }
 
@@ -74,6 +76,43 @@ export class ClientEditModalComponent implements OnInit {
         longitude: position.coords.longitude,
       });
     });
+  }
+
+  onVeteranChange(value: string) {
+    console.log(value);
+    if (value.toLowerCase() == 'null') {
+      this.clientForm.patchValue({ is_veteran: null });
+    }
+    else if (value.toLowerCase() == 'true') {
+      this.clientForm.patchValue({ is_veteran: true });
+    }
+    else {
+      this.clientForm.patchValue({ is_veteran: false });
+    }
+  }
+
+  onAftercareChange(value: string) {
+    if (value.toLowerCase() == 'null') {
+      this.clientForm.patchValue({ is_aftercare: null });
+    }
+    else if (value.toLowerCase() == 'true') {
+      this.clientForm.patchValue({ is_aftercare: true });
+    }
+    else {
+      this.clientForm.patchValue({ is_aftercare: false });
+    }
+  }
+
+  onDiagnosedChange(value: string) {
+    if (value.toLowerCase() == 'null') {
+      this.clientForm.patchValue({ diagnosed_mental_physical_disability: null });
+    }
+    else if (value.toLowerCase() == 'true') {
+      this.clientForm.patchValue({ diagnosed_mental_physical_disability: true });
+    }
+    else {
+      this.clientForm.patchValue({ diagnosed_mental_physical_disability: false });
+    }
   }
 
   onAdd(event: any) {

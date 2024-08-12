@@ -25,7 +25,7 @@ export class ClientEditComponent implements OnInit {
   //otherHomelessReason: string = '';
   extraInfoNeeded: boolean = false;
   extraInfoNeededReasonForDesMoines: boolean = false;
-  homelessReasonOptions: string[] = ['Eviction', 'Job Loss', 'Family Dispute', 'Family Loss', 'Legal Issues', 'Health Issues', 'Addictions', 'Mental Health', 'Other'];
+  homelessReasonOptions: string[] = ['Addictions', 'Eviction', 'Family Dispute', 'Family Loss', 'Health Issues', 'Job Loss', 'Legal Issues', 'Mental Health', 'Prison/Jail', 'Other'];
 
   constructor(private router: Router, private clientService: ClientService, private fb: UntypedFormBuilder, @Inject(LOCALE_ID) private locale: string) { }
 
@@ -38,8 +38,8 @@ export class ClientEditComponent implements OnInit {
       first_name: '',
       last_name: '',
       preferred_name: '',
-      is_aftercare: false,
-      is_veteran: false,
+      is_aftercare: null,
+      is_veteran: null,
       previous_camp_id: 0,
       current_camp_id: 0,
       shoe_size: '',
@@ -61,7 +61,7 @@ export class ClientEditComponent implements OnInit {
       client_picture: '',
       latitude: 0,
       longitude: 0,
-      diagnosed_mental_physical_disability: false,
+      diagnosed_mental_physical_disability: null,
       highest_level_education: '',
       what_brought_to_des_moines: '',
       otherReasonForDesMoines: '',
@@ -116,14 +116,51 @@ export class ClientEditComponent implements OnInit {
   }
 
   onFTHChange(value: string) {
-    if (value == 'Unknown') {
+    if (value.toLowerCase() == 'unknown') {
       this.clientForm.patchValue({ first_time_homeless: null });
     }
-    else if (value == 'Yes') {
+    else if (value.toLowerCase() == 'yes') {
       this.clientForm.patchValue({ first_time_homeless: true });
     }
     else {
       this.clientForm.patchValue({ first_time_homeless: false });
+    }
+  }
+
+  onVeteranChange(value: string) {
+    console.log(value);
+    if (value.toLowerCase() == 'null') {
+      this.clientForm.patchValue({ is_veteran: null });
+    }
+    else if (value.toLowerCase() == 'true') {
+      this.clientForm.patchValue({ is_veteran: true });
+    }
+    else {
+      this.clientForm.patchValue({ is_veteran: false });
+    }
+  }
+
+  onAftercareChange(value: string) {
+    if (value.toLowerCase() == 'null') {
+      this.clientForm.patchValue({ is_aftercare: null });
+    }
+    else if (value.toLowerCase() == 'true') {
+      this.clientForm.patchValue({ is_aftercare: true });
+    }
+    else {
+      this.clientForm.patchValue({ is_aftercare: false });
+    }
+  }
+
+  onDiagnosedChange(value: string) {
+    if (value.toLowerCase() == 'null') {
+      this.clientForm.patchValue({ diagnosed_mental_physical_disability: null });
+    }
+    else if (value.toLowerCase() == 'true') {
+      this.clientForm.patchValue({ diagnosed_mental_physical_disability: true });
+    }
+    else {
+      this.clientForm.patchValue({ diagnosed_mental_physical_disability: false });
     }
   }
 
