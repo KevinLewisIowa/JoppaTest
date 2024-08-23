@@ -33,9 +33,13 @@ export class AdminClientListingComponent implements OnInit {
       this.clients = data;
       this.dataSource = new MatTableDataSource(this.clients);
       this.dataSource.sort = this.sort;
+      this.sort.active = "updated_at";
+      this.sort.direction = "desc";
       this.dataSource.sortingDataAccessor = (item, property) => {
         switch (property) {
-          case 'updated_at': return new Date(item.last_interaction_date);
+          case 'updated_at':
+            console.log(JSON.stringify(item.last_interaction_date));
+            return new Date(item.last_interaction_date);
           default: return item[property];
         }
       };
