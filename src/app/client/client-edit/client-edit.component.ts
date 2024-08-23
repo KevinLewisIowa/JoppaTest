@@ -38,7 +38,7 @@ export class ClientEditComponent implements OnInit {
       first_name: '',
       last_name: '',
       preferred_name: '',
-      is_aftercare: null,
+      is_aftercare: false,
       is_veteran: null,
       previous_camp_id: 0,
       current_camp_id: 0,
@@ -71,6 +71,7 @@ export class ClientEditComponent implements OnInit {
     });
     this.clientForm.get('first_name').setValidators(Validators.required);
     this.clientForm.get('last_name').setValidators(Validators.required);
+    this.clientForm.get('birth_date').setValidators(Validators.required);
     this.clientForm.get('gender').setValidators(Validators.required);
     this.clientForm.get('dwelling').setValidators(Validators.required);
     this.clientForm.get('city_before_homelessness').setValidators(Validators.required);
@@ -226,7 +227,8 @@ export class ClientEditComponent implements OnInit {
 
     // validate that client birth date is not unreasonable
     if (this.theClient.birth_date) {
-      if (!this.regExpDate.test(this.clientForm.get('birth_date').value)) {
+      console.log(new Date(this.clientForm.get('birth_date').value).toDateString());
+      if (!this.regExpDate.test(formatDate(new Date(this.clientForm.get('birth_date').value), 'MM/dd/yyyy', this.locale))) {
         alert('Birth date must be entered in format mm/dd/yyyy');
         return;
       }
@@ -234,7 +236,7 @@ export class ClientEditComponent implements OnInit {
       let now: Date = new Date();
       let birthday: Date = new Date(this.theClient.birth_date);
       let pastDate: Date = new Date(now.getFullYear() - 100, now.getMonth(), now.getDate());
-      if (!this.regExpDate.test(formatDate(birthday, 'MM/dd/yyyy', 'en'))) {
+      if (!this.regExpDate.test(formatDate(birthday, 'MM/dd/yyyy', this.locale))) {
 
       }
       if (birthday.getTime() > now.getTime()) {
