@@ -16,6 +16,7 @@ import { ClientHomelessHistory } from 'app/models/client-homeless-histories';
 export class ClientEditComponent implements OnInit {
   badDate = false;
   clientForm: UntypedFormGroup;
+  regExpDate = /^\d{1,2}\/\d{1,2}\/\d{4}$/
   theClient: Client;
   url: any;
   byteArray: any;
@@ -237,6 +238,14 @@ export class ClientEditComponent implements OnInit {
       }
       else if (birthday.getTime() < pastDate.getTime()) {
         alert('You cannot set a birth date this far back in the past');
+        return;
+      }
+    }
+
+    // validate that date became homeless is not unreasonable
+    if (this.clientForm.get('date_became_homeless').value !== "") {
+      if (!this.regExpDate.test(this.clientForm.get('date_became_homeless').value)) {
+        alert('Date Became Homeless must be entered in format mm/dd/yyyy');
         return;
       }
     }
