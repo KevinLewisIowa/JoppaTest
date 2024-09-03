@@ -16,7 +16,6 @@ import { ClientHomelessHistory } from 'app/models/client-homeless-histories';
 export class ClientEditComponent implements OnInit {
   badDate = false;
   clientForm: UntypedFormGroup;
-  regExpDate = /^\d{1,2}\/\d{1,2}\/\d{4}$/
   theClient: Client;
   url: any;
   byteArray: any;
@@ -228,31 +227,16 @@ export class ClientEditComponent implements OnInit {
     // validate that client birth date is not unreasonable
     if (this.theClient.birth_date) {
       console.log(new Date(this.clientForm.get('birth_date').value).toDateString());
-      if (!this.regExpDate.test(formatDate(new Date(this.clientForm.get('birth_date').value), 'MM/dd/yyyy', this.locale))) {
-        alert('Birth date must be entered in format mm/dd/yyyy');
-        return;
-      }
 
       let now: Date = new Date();
       let birthday: Date = new Date(this.theClient.birth_date);
       let pastDate: Date = new Date(now.getFullYear() - 100, now.getMonth(), now.getDate());
-      if (!this.regExpDate.test(formatDate(birthday, 'MM/dd/yyyy', this.locale))) {
-
-      }
       if (birthday.getTime() > now.getTime()) {
         alert('You cannot select a birth date that is in the future');
         return;
       }
       else if (birthday.getTime() < pastDate.getTime()) {
         alert('You cannot set a birth date this far back in the past');
-        return;
-      }
-    }
-
-    // validate that date became homeless is not unreasonable
-    if (this.clientForm.get('date_became_homeless').value !== "") {
-      if (!this.regExpDate.test(this.clientForm.get('date_became_homeless').value)) {
-        alert('Date Became Homeless must be entered in format mm/dd/yyyy');
         return;
       }
     }
@@ -270,6 +254,8 @@ export class ClientEditComponent implements OnInit {
           return;
         }
 
+        // TODO need to update dwelling logic here like the modal if we choose not to
+        // change the DB; otherwise this can all stay the same (same w/ below area)
         const theHistory: ClientHomelessHistory = new ClientHomelessHistory();
         theHistory.client_id = insertedClient.id;
         theHistory.reason_for_homelessness = reason_for_homelessness;
@@ -326,6 +312,8 @@ export class ClientEditComponent implements OnInit {
             return;
           }
 
+        // TODO need to update dwelling logic here like the modal if we choose not to
+        // change the DB; otherwise this can all stay the same (same w/ above area)
           const theHistory: ClientHomelessHistory = new ClientHomelessHistory();
           theHistory.reason_for_homelessness = reason_for_homelessness;
           theHistory.date_became_homeless = new Date(Date.parse(this.clientForm.get('date_became_homeless').value));

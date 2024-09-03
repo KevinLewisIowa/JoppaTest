@@ -2,6 +2,7 @@ import { Component, ViewChild, Output, OnInit, ElementRef, EventEmitter } from '
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ClientService } from 'app/services/client.service';
 import { ClientDwelling } from 'app/models/client-dwelling';
+import { formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-client-dwellings',
@@ -54,7 +55,15 @@ export class ClientDwellingComponent implements OnInit {
     const routeInstanceId: number = this.isAdmin ? -1 : JSON.parse(localStorage.getItem('routeInstance'));
     
     if (this.dwelling != null && !isNaN(clientId) && !isNaN(routeInstanceId)) {
-      clientDwelling.date_moved = new Date(this.date_moved);
+      // TODO might be able to remove all this new stuff if we update the DB instead
+      if (this.date_moved.toString() === '') {
+        alert('Date moved not entered in mm/dd/yyyy format');
+        return;
+      }
+      // convert to local string format so html date input accounts for UTC adjustment before date conversion
+      let stringDateMoved = formatDate(this.date_moved, 'MM/dd/yyyy', 'en')
+      let dateMoved: Date = new Date(stringDateMoved);
+      clientDwelling.date_moved = new Date(dateMoved);
       clientDwelling.dwelling = (this.dwelling == 'Other') ? this.other_dwelling : this.dwelling;
       clientDwelling.notes = this.notes;
       clientDwelling.client_id = clientId;

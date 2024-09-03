@@ -16,7 +16,6 @@ export class ClientEditModalComponent implements OnInit {
   @Output() editedClient = new EventEmitter<Client>();
   badDate = false;
   clientForm: UntypedFormGroup;
-  regExpDate = /^\d{1,2}\/\d{1,2}\/\d{4}$/
   theClient: Client;
   firstTimeHomeless: string = 'Unknown';
   editing = false;
@@ -24,6 +23,8 @@ export class ClientEditModalComponent implements OnInit {
   url: any;
   byteArray: any;
   extraInfoNeededReasonForDesMoines: boolean = false;
+  submitted: boolean = false;
+  staticBirthday: string = '';
 
   constructor(private router: Router, private modalService: NgbModal, private clientService: ClientService, private fb: UntypedFormBuilder, @Inject(LOCALE_ID) private locale: string) { }
 
@@ -61,8 +62,14 @@ export class ClientEditModalComponent implements OnInit {
 
     this.clientForm = null;
     this.clientForm = this.fb.group(this.theClient);
-    this.clientForm.patchValue({ birth_date: formatDate(this.clientForm.get('birth_date').value, 'MM/dd/yyyy', 'en') })
-    this.modalService.open(this.editModal, { size: 'lg', backdrop: 'static' });
+    if (this.submitted) {
+      // handling if user re-visits the modal before page refresh and UTC auto-adjustment
+      this.clientForm.patchValue({ birth_date: this.staticBirthday });
+    }
+    else {
+      this.clientForm.patchValue({ birth_date: formatDate(this.clientForm.get('birth_date').value, 'yyyy-MM-dd', 'en') })
+    }
+      this.modalService.open(this.editModal, { size: 'lg', backdrop: 'static' });
   }
 
   toggleEditMode() {
@@ -140,12 +147,13 @@ export class ClientEditModalComponent implements OnInit {
     updatedClient.client_picture = this.byteArray;
     
     let now: Date = new Date();
-    let birthday: Date = new Date(updatedClient.birth_date);
-    let pastDate: Date = new Date(now.getFullYear() - 100, now.getMonth(), now.getDate());
-    if (!this.regExpDate.test(formatDate(birthday, 'MM/dd/yyyy', this.locale))) {
+    if (updatedClient.birth_date.toString() === '') {
       alert('Birthday not entered in mm/dd/yyyy format');
       return;
     }
+    this.staticBirthday = this.clientForm.get('birth_date').value
+    let birthday: Date = new Date((Date.parse(this.staticBirthday)));
+    let pastDate: Date = new Date(now.getFullYear() - 100, now.getMonth(), now.getDate());
     if (birthday.getTime() > now.getTime()) {
       alert('You cannot select a birth date that is in the future');
       return;
@@ -155,6 +163,7 @@ export class ClientEditModalComponent implements OnInit {
       return;
     }
     updatedClient.birth_date = birthday;
+    this.submitted = true;
 
     if (updatedClient.status == 'Inactive') {
       updatedClient.previous_camp_id = updatedClient.current_camp_id;
