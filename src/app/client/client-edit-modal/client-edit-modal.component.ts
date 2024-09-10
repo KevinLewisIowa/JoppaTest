@@ -148,7 +148,7 @@ export class ClientEditModalComponent implements OnInit {
     
     let now: Date = new Date();
     if (updatedClient.birth_date.toString() === '') {
-      alert('Birthday not entered in mm/dd/yyyy format');
+      alert('Birthday not fully entered');
       return;
     }
     this.staticBirthday = this.clientForm.get('birth_date').value

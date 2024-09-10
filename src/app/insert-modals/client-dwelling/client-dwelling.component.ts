@@ -53,17 +53,18 @@ export class ClientDwellingComponent implements OnInit {
     const clientDwelling = new ClientDwelling();
     const clientId: number = JSON.parse(localStorage.getItem('selectedClient'));
     const routeInstanceId: number = this.isAdmin ? -1 : JSON.parse(localStorage.getItem('routeInstance'));
+
+    if (this.dwelling === '') {
+      alert('No dwelling entered');
+      return;
+    }
     
-    if (this.dwelling != null && !isNaN(clientId) && !isNaN(routeInstanceId)) {
-      // TODO might be able to remove all this new stuff if we update the DB instead
-      if (this.date_moved.toString() === '') {
-        alert('Date moved not entered in mm/dd/yyyy format');
+    if (this.dwelling !== '' && !isNaN(clientId) && !isNaN(routeInstanceId)) {
+      if (typeof this.date_moved === 'undefined') {
+        alert('Date moved not fully entered');
         return;
       }
-      // convert to local string format so html date input accounts for UTC adjustment before date conversion
-      let stringDateMoved = formatDate(this.date_moved, 'MM/dd/yyyy', 'en')
-      let dateMoved: Date = new Date(stringDateMoved);
-      clientDwelling.date_moved = new Date(dateMoved);
+      clientDwelling.date_moved = new Date(this.date_moved);
       clientDwelling.dwelling = (this.dwelling == 'Other') ? this.other_dwelling : this.dwelling;
       clientDwelling.notes = this.notes;
       clientDwelling.client_id = clientId;

@@ -16,7 +16,7 @@ import { ClientHomelessHistory } from 'app/models/client-homeless-histories';
 export class ClientEditComponent implements OnInit {
   badDate = false;
   clientForm: UntypedFormGroup;
-  regExpDate = /^\d{1,2}\/\d{1,2}\/\d{4}$/
+  regExpDate = /^\d{4}-\d{1,2}-\d{1,2}$/
   theClient: Client;
   url: any;
   byteArray: any;
@@ -245,7 +245,7 @@ export class ClientEditComponent implements OnInit {
     // validate that date became homeless is not unreasonable
     if (this.clientForm.get('date_became_homeless').value !== "") {
       if (!this.regExpDate.test(this.clientForm.get('date_became_homeless').value)) {
-        alert('Date Became Homeless must be entered in format mm/dd/yyyy');
+        alert('Please finish filling out the entire "Date Became Homeless" field');
         return;
       }
     }
@@ -263,8 +263,6 @@ export class ClientEditComponent implements OnInit {
           return;
         }
 
-        // TODO need to update dwelling logic here like the modal if we choose not to
-        // change the DB; otherwise this can all stay the same (same w/ below area)
         const theHistory: ClientHomelessHistory = new ClientHomelessHistory();
         theHistory.client_id = insertedClient.id;
         theHistory.reason_for_homelessness = reason_for_homelessness;
@@ -321,8 +319,6 @@ export class ClientEditComponent implements OnInit {
             return;
           }
 
-        // TODO need to update dwelling logic here like the modal if we choose not to
-        // change the DB; otherwise this can all stay the same (same w/ above area)
           const theHistory: ClientHomelessHistory = new ClientHomelessHistory();
           theHistory.reason_for_homelessness = reason_for_homelessness;
           theHistory.date_became_homeless = new Date(Date.parse(this.clientForm.get('date_became_homeless').value));
