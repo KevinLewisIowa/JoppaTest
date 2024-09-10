@@ -16,7 +16,6 @@ import { ClientHomelessHistory } from 'app/models/client-homeless-histories';
 export class ClientEditComponent implements OnInit {
   badDate = false;
   clientForm: UntypedFormGroup;
-  regExpDate = /^\d{4}-\d{1,2}-\d{1,2}$/
   theClient: Client;
   url: any;
   byteArray: any;
@@ -225,16 +224,9 @@ export class ClientEditComponent implements OnInit {
     }
     this.theClient.what_brought_to_des_moines = reason_for_des_moines;
 
-    console.log('date_became_homeless', this.clientForm.get('date_became_homeless').value);
-    console.log('date_moved', this.clientForm.get('date_moved').value);
-
     // validate that client birth date is not unreasonable
     if (this.theClient.birth_date) {
       console.log(new Date(this.clientForm.get('birth_date').value).toDateString());
-      if (!this.regExpDate.test(this.clientForm.get('birth_date').value)) {
-        alert('Please finish filling out the entire "Birthday" field');
-        return;
-      }
 
       let now: Date = new Date();
       let birthday: Date = new Date(this.theClient.birth_date);
