@@ -69,7 +69,7 @@ export class ClientEditModalComponent implements OnInit {
     else {
       this.clientForm.patchValue({ birth_date: formatDate(this.clientForm.get('birth_date').value, 'yyyy-MM-dd', 'en') })
     }
-      this.modalService.open(this.editModal, { size: 'lg', backdrop: 'static' });
+    this.modalService.open(this.editModal, { size: 'lg', backdrop: 'static' });
   }
 
   toggleEditMode() {

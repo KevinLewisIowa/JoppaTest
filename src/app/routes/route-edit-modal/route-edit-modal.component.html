@@ -42,7 +42,7 @@
     </form>
   </div>
   <div class="modal-footer">
-    <button type="button" [disabled]="!routeForm.valid" (click)="submitRoute(); c('');" class="btn btn-primary">Submit Route</button>
-    <button type="button" class="btn btn-outline-primary" (click)="c('Close click')">Close</button>
+    <button type="button" class="btn btn-outline-primary" (click)="c('Close click')">Don't Save</button>
+    <button type="button" [disabled]="!routeForm.valid" (click)="submitRoute(); c('');" class="btn btn-primary">Save</button>
   </div>
 </ng-template>
