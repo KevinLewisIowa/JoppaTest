@@ -2,7 +2,6 @@ import { Component, ViewChild, Output, OnInit, ElementRef, EventEmitter } from '
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ClientService } from 'app/services/client.service';
 import { ClientDwelling } from 'app/models/client-dwelling';
-import { formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-client-dwellings',
@@ -60,10 +59,6 @@ export class ClientDwellingComponent implements OnInit {
     }
     
     if (this.dwelling !== '' && !isNaN(clientId) && !isNaN(routeInstanceId)) {
-      if (typeof this.date_moved === 'undefined') {
-        alert('Date moved not fully entered');
-        return;
-      }
       clientDwelling.date_moved = new Date(this.date_moved);
       clientDwelling.dwelling = (this.dwelling == 'Other') ? this.other_dwelling : this.dwelling;
       clientDwelling.notes = this.notes;

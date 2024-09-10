@@ -53,10 +53,6 @@ export class ClientHomelessHistoryComponent {
     const routeInstanceId: number = this.isAdmin ? -1 : JSON.parse(localStorage.getItem('routeInstance'));
     
     if (!isNaN(clientId) && !isNaN(routeInstanceId)) {
-      if (typeof this.date_became_homeless === 'undefined') {
-        alert('Date became homeless not fully entered');
-        return;
-      }
       clientHistory.first_time_homeless = this.first_time_homeless;
       clientHistory.date_became_homeless = new Date(this.date_became_homeless);
       clientHistory.reason_for_homelessness = (this.homeless_reason == 'Other') ? this.other_homeless_reason : this.homeless_reason;
