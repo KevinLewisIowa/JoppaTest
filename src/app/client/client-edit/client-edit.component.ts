@@ -225,9 +225,16 @@ export class ClientEditComponent implements OnInit {
     }
     this.theClient.what_brought_to_des_moines = reason_for_des_moines;
 
+    console.log('date_became_homeless', this.clientForm.get('date_became_homeless').value);
+    console.log('date_moved', this.clientForm.get('date_moved').value);
+
     // validate that client birth date is not unreasonable
     if (this.theClient.birth_date) {
       console.log(new Date(this.clientForm.get('birth_date').value).toDateString());
+      if (!this.regExpDate.test(this.clientForm.get('birth_date').value)) {
+        alert('Please finish filling out the entire "Birthday" field');
+        return;
+      }
 
       let now: Date = new Date();
       let birthday: Date = new Date(this.theClient.birth_date);
@@ -238,14 +245,6 @@ export class ClientEditComponent implements OnInit {
       }
       else if (birthday.getTime() < pastDate.getTime()) {
         alert('You cannot set a birth date this far back in the past');
-        return;
-      }
-    }
-
-    // validate that date became homeless is not unreasonable
-    if (this.clientForm.get('date_became_homeless').value !== "") {
-      if (!this.regExpDate.test(this.clientForm.get('date_became_homeless').value)) {
-        alert('Please finish filling out the entire "Date Became Homeless" field');
         return;
       }
     }
