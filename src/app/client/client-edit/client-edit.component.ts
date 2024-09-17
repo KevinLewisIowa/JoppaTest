@@ -4,7 +4,6 @@ import { Router } from "@angular/router";
 import { ClientService } from "app/services/client.service";
 import { Client } from "app/models/client";
 import { Appearance } from 'app/models/appearance';
-import { formatDate } from '@angular/common';
 import { ClientDwelling } from 'app/models/client-dwelling';
 import { ClientHomelessHistory } from 'app/models/client-homeless-histories';
 
@@ -244,6 +243,25 @@ export class ClientEditComponent implements OnInit {
     this.clientService.insertClient(this.theClient).subscribe((insertedClient: Client) => {
       console.log(this.locationCampId);
       if (this.locationCampId == 0) {
+        this.locationCampId = 449;
+      } 
+      // create appearance of client as they were seen and serviced
+      const clientInteraction: Appearance = new Appearance();
+      clientInteraction.client_id = insertedClient.id;
+      clientInteraction.location_camp_id = this.locationCampId;
+      clientInteraction.still_lives_here = true;
+      clientInteraction.serviced = true;
+      clientInteraction.was_seen = true;
+      let today = new Date();
+      clientInteraction.serviced_date = today;
+      // HRC true if Sunday
+      clientInteraction.at_homeless_resource_center = today.getDay() === 0;
+
+      this.clientService.insertClientAppearance(clientInteraction).subscribe((data: Appearance) => {
+        let routeAttendanceList: Appearance[] = JSON.parse(window.localStorage.getItem('RouteAttendance'));
+        clientInteraction.id = data.id;
+        routeAttendanceList.push(clientInteraction);
+        window.localStorage.setItem('RouteAttendance', JSON.stringify(routeAttendanceList));
         let reason_for_homelessness: string = this.clientForm.get('homeless_reason').value;
         let theOtherHomelessReason: string = this.clientForm.get('otherHomelessReason').value;
         if (reason_for_homelessness == 'Other' && theOtherHomelessReason != '') {
@@ -255,23 +273,18 @@ export class ClientEditComponent implements OnInit {
         }
 
         const theHistory: ClientHomelessHistory = new ClientHomelessHistory();
-        theHistory.client_id = insertedClient.id;
         theHistory.reason_for_homelessness = reason_for_homelessness;
         theHistory.date_became_homeless = new Date(Date.parse(this.clientForm.get('date_became_homeless').value));
         theHistory.first_time_homeless = this.clientForm.get('first_time_homeless').value;
-        this.clientService.insertClientHomelessHistory(theHistory).subscribe((history: ClientHomelessHistory) => {
-          console.log('History: ' + JSON.stringify(history));
+        this.clientService.insertClientHomelessHistory(theHistory).subscribe((data: ClientHomelessHistory) => {
           const theDwelling: ClientDwelling = new ClientDwelling();
           theDwelling.client_id = insertedClient.id;
           theDwelling.dwelling = String(this.clientForm.get('dwelling').value).trim();
-          theDwelling.where_sleep_last_night = String(this.clientForm.get('where_sleep_last_night').value);
-          theDwelling.date_moved = new Date(Date.parse(this.clientForm.get('date_moved').value));
-
-          this.clientService.insertClientDwelling(theDwelling).subscribe((dwelling: ClientDwelling) => {
-            console.log('Dwelling: ' + JSON.stringify(dwelling));
+          theDwelling.where_sleep_last_night = this.clientForm.get('where_sleep_last_night').value;
+          this.clientService.insertClientDwelling(theDwelling).subscribe((data: ClientDwelling) => {
             insertedClient.household_id = insertedClient.id;
-            this.clientService.updateClient(insertedClient).subscribe((updatedClient: Client) => {
-              if (this.locationCampId == 0) {
+            this.clientService.updateClient(insertedClient).subscribe(updatedClient => {
+              if (this.isAdmin && this.locationCampId === 449) {
                 this.router.navigate(['admin/clientListing']);
               } else {
                 this.router.navigate([`/locationCamp/${this.locationCampId}`]);
@@ -279,59 +292,7 @@ export class ClientEditComponent implements OnInit {
             }, error => console.log(error));
           });
         }, error => console.log(error));
-      } else {
-        // create appearance of client as they were seen and serviced
-        const clientInteraction: Appearance = new Appearance();
-        clientInteraction.client_id = insertedClient.id;
-        clientInteraction.location_camp_id = this.locationCampId;
-        clientInteraction.still_lives_here = true;
-        clientInteraction.serviced = true;
-        clientInteraction.was_seen = true;
-        if (this.locationCampId == 0) {
-          clientInteraction.at_homeless_resource_center = true;
-        }
-
-        this.clientService.insertClientAppearance(clientInteraction).subscribe((data: Appearance) => {
-          // if during route, add this interaction to route interaction list
-          if (!this.isAdmin) {
-            let routeAttendanceList: Appearance[] = JSON.parse(window.localStorage.getItem('RouteAttendance'));
-            clientInteraction.id = data.id;
-            routeAttendanceList.push(clientInteraction);
-            window.localStorage.setItem('RouteAttendance', JSON.stringify(routeAttendanceList));
-          }
-
-          let reason_for_homelessness: string = this.clientForm.get('homeless_reason').value;
-          let theOtherHomelessReason: string = this.clientForm.get('otherHomelessReason').value;
-          if (reason_for_homelessness == 'Other' && theOtherHomelessReason != '') {
-            reason_for_homelessness = this.clientForm.get('otherHomelessReason').value;
-          }
-          else if (reason_for_homelessness == 'Other' && theOtherHomelessReason == '') {
-            alert('If you select Other as Homeless Reason, need to indicate reason.');
-            return;
-          }
-
-          const theHistory: ClientHomelessHistory = new ClientHomelessHistory();
-          theHistory.reason_for_homelessness = reason_for_homelessness;
-          theHistory.date_became_homeless = new Date(Date.parse(this.clientForm.get('date_became_homeless').value));
-          theHistory.first_time_homeless = this.clientForm.get('first_time_homeless').value;
-          this.clientService.insertClientHomelessHistory(theHistory).subscribe((data: ClientHomelessHistory) => {
-            const theDwelling: ClientDwelling = new ClientDwelling();
-            theDwelling.client_id = insertedClient.id;
-            theDwelling.dwelling = String(this.clientForm.get('dwelling').value).trim();
-            theDwelling.where_sleep_last_night = this.clientForm.get('where_sleep_last_night').value;
-            this.clientService.insertClientDwelling(theDwelling).subscribe((data: ClientDwelling) => {
-              insertedClient.household_id = insertedClient.id;
-              this.clientService.updateClient(insertedClient).subscribe(updatedClient => {
-                if (this.locationCampId == 0) {
-                  this.router.navigate(['admin/clientListing']);
-                } else {
-                  this.router.navigate([`/locationCamp/${this.locationCampId}`]);
-                }
-              }, error => console.log(error));
-            });
-          }, error => console.log(error));
-        }, error => console.log(error));
-      }
+      }, error => console.log(error));
     }, error => {
       console.log(error);
       alert('Error creating client.  There may already be a client with the same name.  Please search for the client before continuing.');
