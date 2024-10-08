@@ -294,14 +294,7 @@ export class ServicingClientComponent implements OnInit {
           (error) => console.log(error)
         );
         this.getHeaterStatuses();
-        this.mainService
-          .getClientAttendanceHistory(
-            this.clientId,
-            this.pipe.transform(this.attendanceFromDate, "yyyy-MM-dd"),
-            this.pipe.transform(this.attendanceToDate, "yyyy-MM-dd")
-          )
-          .subscribe(
-            (data: any[]) => {
+        this.mainService.getClientAttendanceHistory(this.clientId,this.pipe.transform(this.attendanceFromDate, "yyyy-MM-dd"),this.pipe.transform(this.attendanceToDate, "yyyy-MM-dd")).subscribe((data: any[]) => {
               this.clientInteractions = data;
               this.clientInteractions.sort(function (a, b) {
                 return (
@@ -309,6 +302,14 @@ export class ServicingClientComponent implements OnInit {
                   new Date(a.serviced_date).valueOf()
                 );
               });
+
+              if (!this.isAdmin) {
+                const now = new Date();
+                const oneMonthAgo = new Date();
+                oneMonthAgo.setMonth(now.getMonth() - 1);
+                this.clientInteractions = this.clientInteractions.filter(ci => ci.serviced_date > oneMonthAgo && !ci.at_homeless_resource_center)
+              }
+              
               this.goToTop();
             },
             (error) => console.log(error)
