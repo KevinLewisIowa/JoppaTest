@@ -55,7 +55,7 @@
               <th>Serial #</th>
               <th>Date Given</th>
               <th>Action</th>
-              <th>Submit</th>
+              <th>Save</th>
             </tr>
           </thead>
           <tbody>
@@ -76,7 +76,7 @@
               <td>
                 <button type="button" (click)="submitHeaterStatus(heater.id, heaterStatus.value)"
                   class="btn btn-primary" *ngIf="currentStatus != 2">
-                  Submit
+                  Save
                 </button>
               </td>
             </tr>
@@ -91,7 +91,7 @@
                   <option *ngFor="let option of heaterStatuses" value="{{option.id}}">{{option.status_name}}</option>
                 </select></td>
               <td><button type="button" (click)="submitTankStatus(tank.id, tankStatus.value)"
-                  class="btn btn-primary">Submit</button></td>
+                  class="btn btn-primary">Save</button></td>
             </tr>
             <tr *ngFor="let hose of hoseInteractions">
               <td>Hose</td>
@@ -107,7 +107,7 @@
               </td>
               <td>
                 <button type="button" (click)="submitHoseStatus(hose.id, hoseStatus.value)"
-                  class="btn btn-primary">Submit</button>
+                  class="btn btn-primary">Save</button>
               </td>
             </tr>
           </tbody>

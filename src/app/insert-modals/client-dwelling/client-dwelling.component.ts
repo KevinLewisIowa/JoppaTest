@@ -52,8 +52,13 @@ export class ClientDwellingComponent implements OnInit {
     const clientDwelling = new ClientDwelling();
     const clientId: number = JSON.parse(localStorage.getItem('selectedClient'));
     const routeInstanceId: number = this.isAdmin ? -1 : JSON.parse(localStorage.getItem('routeInstance'));
+
+    if (this.dwelling === '') {
+      alert('No dwelling entered');
+      return;
+    }
     
-    if (this.dwelling != null && !isNaN(clientId) && !isNaN(routeInstanceId)) {
+    if (this.dwelling !== '' && !isNaN(clientId) && !isNaN(routeInstanceId)) {
       clientDwelling.date_moved = new Date(this.date_moved);
       clientDwelling.dwelling = (this.dwelling == 'Other') ? this.other_dwelling : this.dwelling;
       clientDwelling.notes = this.notes;

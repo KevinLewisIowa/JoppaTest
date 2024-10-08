@@ -9,7 +9,7 @@
           <div class="row">
             <div class="col-md-6">
               <label for="date-moved">Date Moved (Date must be MM/DD/YYYY)</label>
-              <input id="date-moved" type="text" class="form-control" placeholder="mm/dd/yyyy" [(ngModel)]="date_moved" style="float:left;"/>
+              <input id="date-moved" type="date" class="form-control" placeholder="mm/dd/yyyy" [(ngModel)]="date_moved" [ngModel]="date_moved | date:'yyyy-MM-dd'" style="float:left;"/>
             </div>
             <div class="col-md-6">
               <label for="dwelling-location">Dwelling Location</label>
@@ -68,7 +68,7 @@
       </div>
     </form>
     <div class="modal-footer">
-      <button type="button" class="btn btn-primary" (click)="submitClientDwelling();c('')">Submit</button>
-      <button type="button" class="btn btn-outline-primary" (click)="c('Close click')">Close</button>
+      <button type="button" class="btn btn-outline-primary" (click)="c('Close click')">Don't Save</button>
+      <button type="button" class="btn btn-primary" (click)="submitClientDwelling();c('')">Save</button>
     </div>
   </ng-template>

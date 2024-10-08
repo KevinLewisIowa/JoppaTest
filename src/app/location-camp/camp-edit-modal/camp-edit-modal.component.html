@@ -207,18 +207,18 @@
   <div class="modal-footer">
     <button
       type="button"
+      class="btn btn-outline-primary"
+      (click)="c('Close click')"
+    >
+      Don't Save
+    </button>
+    <button
+      type="button"
       [disabled]="!campForm.valid"
       (click)="submitCamp(); c('')"
       class="btn btn-primary"
     >
-      Submit Camp
-    </button>
-    <button
-      type="button"
-      class="btn btn-outline-primary"
-      (click)="c('Close click')"
-    >
-      Close
+      Save
     </button>
   </div>
 </ng-template>

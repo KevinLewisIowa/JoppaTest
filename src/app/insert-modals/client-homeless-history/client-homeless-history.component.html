@@ -17,8 +17,8 @@
         <div class="row">
           <div class="col-md-6">
             <label for="date-became-homeless">Date Became Homeless (Date must be MM/DD/YYYY)</label>
-            <input id="date-became-homeless" type="text" class="form-control" placeholder="mm/dd/yyyy"
-              [(ngModel)]="date_became_homeless" style="float:left;" />
+            <input id="date-became-homeless" type="date" class="form-control" placeholder="mm/dd/yyyy"
+              [(ngModel)]="date_became_homeless" [ngModel]="date_became_homeless | date:'yyyy-MM-dd'" style="float:left;" />
           </div>
           <div class="col-md-6">
             <label for="homeless-reason">Reason for Homelessness</label>
@@ -49,7 +49,7 @@
     </div>
   </form>
   <div class="modal-footer">
-    <button type="button" class="btn btn-primary" (click)="submitClientHomelessHistory();c('')">Submit</button>
-    <button type="button" class="btn btn-outline-primary" (click)="c('Close click')">Close</button>
+    <button type="button" class="btn btn-outline-primary" (click)="c('Close click')">Don't Save</button>
+    <button type="button" class="btn btn-primary" (click)="submitClientHomelessHistory();c('')">Save</button>
   </div>
 </ng-template>

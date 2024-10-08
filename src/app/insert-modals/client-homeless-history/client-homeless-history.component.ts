@@ -32,7 +32,6 @@ export class ClientHomelessHistoryComponent {
     this.first_time_homeless = false;
     this.homeless_reason = '';
     this.notes = '';
-    this.date_became_homeless = null;
   }
 
   onChange(field_name: string, value: string) {
