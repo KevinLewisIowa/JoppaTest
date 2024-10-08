@@ -294,26 +294,6 @@ export class ServicingClientComponent implements OnInit {
           (error) => console.log(error)
         );
         this.getHeaterStatuses();
-        this.mainService.getClientAttendanceHistory(this.clientId,this.pipe.transform(this.attendanceFromDate, "yyyy-MM-dd"),this.pipe.transform(this.attendanceToDate, "yyyy-MM-dd")).subscribe((data: any[]) => {
-              this.clientInteractions = data;
-              this.clientInteractions.sort(function (a, b) {
-                return (
-                  new Date(b.serviced_date).valueOf() -
-                  new Date(a.serviced_date).valueOf()
-                );
-              });
-
-              if (!this.isAdmin) {
-                const now = new Date();
-                const oneMonthAgo = new Date();
-                oneMonthAgo.setMonth(now.getMonth() - 1);
-                this.clientInteractions = this.clientInteractions.filter(ci => ci.serviced_date > oneMonthAgo && !ci.at_homeless_resource_center)
-              }
-              
-              this.goToTop();
-            },
-            (error) => console.log(error)
-          );
       } else {
         this.service.getClientNotesForClient(this.clientId).subscribe(
           (data: Note[]) => {
@@ -333,6 +313,33 @@ export class ServicingClientComponent implements OnInit {
           },
           (error) => console.log(error)
         );
+
+        this.mainService.getClientAttendanceHistory(this.clientId,this.pipe.transform(this.attendanceFromDate, "yyyy-MM-dd"),this.pipe.transform(this.attendanceToDate, "yyyy-MM-dd")).subscribe((data: any[]) => {
+          this.clientInteractions = data;
+          this.clientInteractions.sort(function (a, b) {
+            return (
+              new Date(b.serviced_date).valueOf() -
+              new Date(a.serviced_date).valueOf()
+            );
+          });
+
+          console.log(JSON.stringify(this.clientInteractions));
+
+          if (!this.isAdmin) {
+            const now = new Date();
+            const oneMonthAgo = new Date();
+            oneMonthAgo.setMonth(now.getMonth() - 1);
+
+            console.log(oneMonthAgo);
+            this.clientInteractions = this.clientInteractions.filter(ci => new Date(ci.serviced_date) > new Date(oneMonthAgo) && !ci.at_homeless_resource_center)
+
+            console.log(JSON.stringify(this.clientInteractions));
+          }
+          
+          this.goToTop();
+        },
+        (error) => console.log(error)
+      );
       }
 
       if (this.heatRoute) {
@@ -703,7 +710,8 @@ export class ServicingClientComponent implements OnInit {
           var difference = new Date().getTime() - new Date(clientDwelling.created_at).getTime();
           difference = Math.ceil(difference / (1000 * 3600 * 24));
           console.log('Difference: ' + difference)
-          if (interaction.serviced && (clientDwelling.dwelling == "House" || clientDwelling.dwelling == "Apartment" || clientDwelling.dwelling == "Shelter" || clientDwelling.dwelling == "Motel" || clientDwelling.dwelling == "Motel") && difference > 90) {
+          if (interaction.serviced && (clientDwelling.dwelling == "House" || clientDwelling.dwelling == "Apartment" || clientDwelling.dwelling == "Shelter" || clientDwelling.dwelling == "Motel" || clientDwelling.dwelling == "Motel") && difference > 90 && clientHistory != null) {
+            
             clientHistory.first_time_homeless = false;
             this.service.updateHomelessHistory(clientHistory).subscribe(data => {
               console.log(data);
