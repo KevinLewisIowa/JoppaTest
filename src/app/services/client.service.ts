@@ -1374,6 +1374,29 @@ export class ClientService {
       );
   }
 
+  updateClientIncome(theIncome: ClientIncome) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+    return this.http
+      .patch(
+        this.baseUrl + `client_incomes/${theIncome.id}`,
+        { client_income: theIncome },
+        { headers: myHeader }
+      )
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
   getClientIncomes(id: number) {
     const myHeader = new HttpHeaders({
       "Content-Type": "application/json",
@@ -1383,6 +1406,29 @@ export class ClientService {
       .get(this.baseUrl + `getClientIncomes?clientId=${id}`, {
         headers: myHeader,
       })
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  updateNextOfKin(theNextOfKin: ClientNextOfKin) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+    return this.http
+      .patch(
+        this.baseUrl + `client_next_of_kins/${theNextOfKin.id}`,
+        { client_next_of_kin: theNextOfKin },
+        { headers: myHeader }
+      )
       .pipe(
         map((res: any) => {
           if (res.message === "invalid-token") {

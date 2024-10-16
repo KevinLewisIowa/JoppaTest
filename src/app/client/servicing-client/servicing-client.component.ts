@@ -38,6 +38,7 @@ import { DateSelectorComponent } from "app/insert-modals/date-selector/date-sele
 import { ClientIncome } from "app/models/client-income";
 import { ClientNextOfKin } from "app/models/client-next-of-kin";
 import { ClientHomelessHistory } from "app/models/client-homeless-histories";
+import { NextOfKinComponent } from "app/insert-modals/next-of-kin/next-of-kin.component";
 
 @Component({
   selector: "app-servicing-client",
@@ -541,6 +542,25 @@ export class ServicingClientComponent implements OnInit {
 
   updatePetInfo(pet: ClientPet) {
     this.service.updatePet(pet).subscribe((data) => {
+      console.log(JSON.stringify(data));
+    });
+  }
+
+  updateHasClientIncome(ci: ClientIncome) {
+    ci.has_income = !ci.has_income;
+    this.service.updateClientIncome(ci).subscribe((data) => {
+      console.log(JSON.stringify(data));
+    });
+  }
+
+  updateClientIncome(ci: ClientIncome) {
+    this.service.updateClientIncome(ci).subscribe((data) => {
+      console.log(JSON.stringify(data));
+    });
+  }
+
+  updateNextOfKin(nok: ClientNextOfKin) {
+    this.service.updateNextOfKin(nok).subscribe((data) => {
       console.log(JSON.stringify(data));
     });
   }

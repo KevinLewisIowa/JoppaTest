@@ -233,12 +233,12 @@
           </thead>
           <tbody>
             <tr *ngFor="let nok of clientNextOfKins">
-              <td>{{ nok.name }}</td>
-              <td>{{ nok.relation_to_client }}</td>
-              <td>{{ nok.phone_number }}</td>
-              <td>{{ nok.street_address }}</td>
-              <td>{{ nok.email }}</td>
-              <td>{{ nok.note }}</td>
+              <td><input type="text" class="form-control" (change)="updateNextOfKin(nok)" [(ngModel)]="nok.name" /></td>
+              <td><input type="text" class="form-control" (change)="updateNextOfKin(nok)" [(ngModel)]="nok.relation_to_client" /></td>
+              <td><input type="text" class="form-control" (change)="updateNextOfKin(nok)" [(ngModel)]="nok.phone_number" /></td>
+              <td><input type="text" class="form-control" (change)="updateNextOfKin(nok)" [(ngModel)]="nok.street_address" /></td>
+              <td><input type="text" class="form-control" (change)="updateNextOfKin(nok)" [(ngModel)]="nok.email" /></td>
+              <td><input type="text" class="form-control" (change)="updateNextOfKin(nok)" [(ngModel)]="nok.note" /></td>
               <td>
                 <button type="button" class="btn btn-primary" *ngIf="isAdmin" (click)="removeClientNextOfKin(nok.id)">
                   Delete
@@ -276,9 +276,9 @@
           <tbody>
             <tr *ngFor="let income of clientIncomes">
               <td>{{ income.created_at | date: "shortDate" }}</td>
-              <td>{{ income.has_income  ? 'Yes' : 'No' }}</td>
-              <td>{{ income.monthly_money }}</td>
-              <td>{{ income.what_income_from }}</td>
+              <td><button type="button" class="btn btn-outline-primary" (click)="updateHasClientIncome(income)">{{ income.has_income ? 'Yes' : 'No' }}</button></td>
+              <td><input type="text" class="form-control" (change)="updateClientIncome(income)" [(ngModel)]="income.monthly_money" /></td>
+              <td><input type="text" class="form-control" (change)="updateClientIncome(income)" [(ngModel)]="income.what_income_from" /></td>
               <td>
                 <button type="button" class="btn btn-primary" *ngIf="isAdmin" (click)="removeClientIncome(income.id)">
                   Delete
@@ -756,16 +756,13 @@
                   {{ pet.pet_type }}
                 </td>
                 <td>
-                  <input type="text" class="form-control" style="max-width: 75%" (change)="updatePetInfo(pet)"
-                    [(ngModel)]="pet.pet_name" />
+                  <input type="text" class="form-control" style="max-width: 75%" (change)="updatePetInfo(pet)" [(ngModel)]="pet.pet_name" />
                 </td>
                 <td>
-                  <input type="text" class="form-control" style="max-width: 75%" (change)="updatePetInfo(pet)"
-                    [(ngModel)]="pet.breed" />
+                  <input type="text" class="form-control" style="max-width: 75%" (change)="updatePetInfo(pet)" [(ngModel)]="pet.breed" />
                 </td>
                 <td>
-                  <input type="text" class="form-control" style="max-width: 75%" (change)="updatePetInfo(pet)"
-                    [(ngModel)]="pet.age" />
+                  <input type="text" class="form-control" style="max-width: 75%" (change)="updatePetInfo(pet)" [(ngModel)]="pet.age" />
                 </td>
                 <td>
                   <button type="button" class="btn btn-outline-primary" (click)="updateNeedPetFood(pet)">{{
