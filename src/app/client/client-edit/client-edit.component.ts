@@ -212,6 +212,8 @@ export class ClientEditComponent implements OnInit {
     this.theClient.city_before_homelessness = String(this.clientForm.get('city_before_homelessness').value).trim();
     this.theClient.state_before_homelessness = String(this.clientForm.get('state_before_homelessness').value).trim();
 
+    //test upgrade stack
+
     let reason_for_des_moines: string = String(this.clientForm.get('what_brought_to_des_moines').value);
     let theOtherReasonForDesMoines: string = this.clientForm.get('otherReasonForDesMoines').value;
     if (reason_for_des_moines == 'Other' && theOtherReasonForDesMoines != '') {
