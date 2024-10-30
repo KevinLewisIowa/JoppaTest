@@ -39,6 +39,8 @@ import { ClientIncome } from "app/models/client-income";
 import { ClientNextOfKin } from "app/models/client-next-of-kin";
 import { ClientHomelessHistory } from "app/models/client-homeless-histories";
 import { NextOfKinComponent } from "app/insert-modals/next-of-kin/next-of-kin.component";
+import { LocationCamp } from "app/models/location-camp";
+import { Route } from "app/models/route";
 
 @Component({
   selector: "app-servicing-client",
@@ -59,6 +61,7 @@ export class ServicingClientComponent implements OnInit {
   prayerRequestsAndNeeds: PrayerRequestAndNeed[] = [];
   householdClients: Client[] = [];
   notes: Note[] = [];
+  routeName: string = '';
   pets: ClientPet[] = [];
   tents: Tent[] = [];
   dwellings: ClientDwelling[] = [];
@@ -147,6 +150,13 @@ export class ServicingClientComponent implements OnInit {
         }
         console.log(this.url);
         this.campId = this.client.current_camp_id;
+
+        this.mainService.getLocationCamp(this.campId).subscribe((camp: LocationCamp) => {
+          let route_id = camp.route_id;
+          this.mainService.getRouteById(route_id).subscribe((route: Route) => {
+            this.routeName = route.name;
+          }, error => console.log(error));
+        }, (error) => console.log(error));
 
         this.service.getClientDwellings(this.clientId).subscribe((data: ClientDwelling[]) => {
           if (data.length === 0) {

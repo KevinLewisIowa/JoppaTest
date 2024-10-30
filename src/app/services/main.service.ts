@@ -44,6 +44,23 @@ export class MainService {
     );
   }
 
+  getRouteById(id:number) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+    return this.http.get(this.apiUrl + `routes/${id}`, { headers: myHeader }).pipe(
+      map((res: any) => {
+        if (res.message === "invalid-token") {
+          window.localStorage.removeItem("apiToken");
+          this.router.navigate(["/application-login"]);
+        }
+        return res;
+      }),
+      catchError(this.handleError)
+    );
+  }
+
   attemptLogin(thePassword: string) {
     const myHeader = new HttpHeaders({
       "Content-Type": "application/json",

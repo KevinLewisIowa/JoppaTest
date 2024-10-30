@@ -5,6 +5,9 @@
       <span *ngIf="client.preferred_name != '' && client.preferred_name != null">({{ client.preferred_name }})</span>
       {{ client.last_name }}
     </h2>
+    <div *ngIf="isAdmin && routeName !== ''">
+      <h5>Route: {{ routeName }}</h5>
+    </div>
     &nbsp;
     <div *ngIf="client.admin_notes !== ''">
       <h4>Admin Notes:</h4>
