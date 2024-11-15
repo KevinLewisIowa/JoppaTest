@@ -327,7 +327,6 @@ export class ServicingClientComponent implements OnInit {
               } else {
                 this.pinnedNoteString += '\r\n' + n.note;
               }
-              console.log(this.pinnedNoteString);
             });
             let warningNotes: Note[] = data.filter(n => n.source === "WARNING");
             if (warningNotes.length > 0) {
@@ -346,16 +345,11 @@ export class ServicingClientComponent implements OnInit {
             );
           });
 
-          console.log(JSON.stringify(this.clientInteractions));
-
           const now = new Date();
           const oneMonthAgo = new Date();
           oneMonthAgo.setMonth(now.getMonth() - 1);
 
-          console.log(oneMonthAgo);
           this.clientInteractions = this.clientInteractions.filter(ci => new Date(ci.serviced_date) > new Date(oneMonthAgo) && !ci.at_homeless_resource_center)
-
-          console.log(JSON.stringify(this.clientInteractions));
 
           this.goToTop();
         },

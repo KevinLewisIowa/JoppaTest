@@ -936,10 +936,11 @@
         </div>
         <table class="table" id="weeklyAttendance">
           <colgroup>
-            <col span="1" style="width: 25%" />
-            <col span="1" style="width: 25%" />
-            <col span="1" style="width: 25%" />
-            <col span="1" style="width: 25%" />
+            <col span="1" style="width: 20%" />
+            <col span="1" style="width: 20%" />
+            <col span="1" style="width: 20%" />
+            <col span="1" style="width: 20%" />
+            <col span="1" style="width: 20%" />
           </colgroup>
           <thead>
             <tr>
@@ -947,6 +948,7 @@
               <th>Seen</th>
               <th>Serviced</th>
               <th>Resource Center</th>
+              <th>Route</th>
               <th></th>
             </tr>
           </thead>
@@ -963,6 +965,9 @@
               </td>
               <td>
                 {{ interaction.at_homeless_resource_center ? 'Yes' : 'No' }}
+              </td>
+              <td>
+                {{ interaction.name }} - {{ interaction.camp_name }}
               </td>
               <td>
                 <button type="button" class="btn btn-primary" (click)="removeAppearance(interaction.id)"
