@@ -86,7 +86,6 @@ export class ClientEditComponent implements OnInit {
   }
 
   onReasonForDesMoinesChange(value: string) {
-    console.log(value);
     if (value == 'Other') {
       this.extraInfoNeededReasonForDesMoines = true;
     } else {
@@ -96,7 +95,6 @@ export class ClientEditComponent implements OnInit {
   }
 
   onAdd(event: any) {
-    console.log(event);
     if (event.target.files && event.target.files[0]) {
       var reader = new FileReader();
       reader.onload = (event: any) => {
@@ -127,7 +125,6 @@ export class ClientEditComponent implements OnInit {
   }
 
   onVeteranChange(value: string) {
-    console.log(value);
     if (value.toLowerCase() == 'null') {
       this.clientForm.patchValue({ is_veteran: null });
     }
@@ -212,8 +209,6 @@ export class ClientEditComponent implements OnInit {
     this.theClient.city_before_homelessness = String(this.clientForm.get('city_before_homelessness').value).trim();
     this.theClient.state_before_homelessness = String(this.clientForm.get('state_before_homelessness').value).trim();
 
-    //test upgrade stack
-
     let reason_for_des_moines: string = String(this.clientForm.get('what_brought_to_des_moines').value);
     let theOtherReasonForDesMoines: string = this.clientForm.get('otherReasonForDesMoines').value;
     if (reason_for_des_moines == 'Other' && theOtherReasonForDesMoines != '') {
@@ -227,8 +222,6 @@ export class ClientEditComponent implements OnInit {
 
     // validate that client birth date is not unreasonable
     if (this.theClient.birth_date) {
-      console.log(new Date(this.clientForm.get('birth_date').value).toDateString());
-
       let now: Date = new Date();
       let birthday: Date = new Date(this.theClient.birth_date);
       let pastDate: Date = new Date(now.getFullYear() - 100, now.getMonth(), now.getDate());
@@ -243,7 +236,6 @@ export class ClientEditComponent implements OnInit {
     }
 
     this.clientService.insertClient(this.theClient).subscribe((insertedClient: Client) => {
-      console.log(this.locationCampId);
       if (this.locationCampId == 0) {
         this.locationCampId = 449;
       } 
@@ -278,6 +270,9 @@ export class ClientEditComponent implements OnInit {
         theHistory.reason_for_homelessness = reason_for_homelessness;
         theHistory.date_became_homeless = new Date(Date.parse(this.clientForm.get('date_became_homeless').value));
         theHistory.first_time_homeless = this.clientForm.get('first_time_homeless').value;
+        theHistory.client_id = insertedClient.id;
+        theHistory.note = "";
+        console.log(JSON.stringify(theHistory));
         this.clientService.insertClientHomelessHistory(theHistory).subscribe((data: ClientHomelessHistory) => {
           const theDwelling: ClientDwelling = new ClientDwelling();
           theDwelling.client_id = insertedClient.id;
