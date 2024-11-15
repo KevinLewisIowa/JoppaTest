@@ -208,7 +208,7 @@ export class ServicingClientComponent implements OnInit {
         this.service.getRecentReceivedItems(this.clientId).subscribe(
           (data: RequestedItem[]) => {
             this.receivedItems = data;
-            this.filteredReceivedItems = this.receivedItems;
+            this.filteredReceivedItems = this.receivedItems.slice(0,10);
           },
           (error) => console.log(error)
         );
@@ -386,14 +386,11 @@ export class ServicingClientComponent implements OnInit {
         this.getHeaterStatuses();
       }
 
-      this.service
-        .getRecentReceivedItems(this.clientId)
-        .subscribe((data: RequestedItem[]) => {
+      this.service.getRecentReceivedItems(this.clientId).subscribe((data: RequestedItem[]) => {
           this.receivedItems = data;
-          this.filteredReceivedItems = this.receivedItems;
+          this.filteredReceivedItems = this.receivedItems.slice(0,10);
         });
-      this.service
-        .getRequestedItems(this.clientId).subscribe((data: RequestedItem[]) => {
+      this.service.getRequestedItems(this.clientId).subscribe((data: RequestedItem[]) => {
           this.requestedItems = data.filter((w) => w.has_received != true);
         });
       this.service
@@ -845,7 +842,7 @@ export class ServicingClientComponent implements OnInit {
 
     this.filteredReceivedItems = this.receivedItems.filter(
       item => item.item_description.toLowerCase().includes(text.toLowerCase())
-    );
+    ).slice(0,10);
   }
 
   likeAdded(like: ClientLike) {
@@ -1176,10 +1173,9 @@ export class ServicingClientComponent implements OnInit {
   receivedRequest(id: number) {
     this.service.receivedRequestedItem(id).subscribe((response) => {
       this.requestedItems = this.requestedItems.filter((w) => w.id != id);
-      this.service
-        .getRecentReceivedItems(this.client.id)
-        .subscribe((data: RequestedItem[]) => {
+      this.service.getRecentReceivedItems(this.client.id).subscribe((data: RequestedItem[]) => {
           this.receivedItems = data;
+          this.filteredReceivedItems = this.receivedItems.slice(0,10);
         });
     });
   }
