@@ -385,7 +385,7 @@ export class ServicingClientComponent implements OnInit {
             this.goToTop();
             let difference = new Date().getTime() - new Date(this.client.created_at).getTime();
             difference = difference / (1000 * 3600 * 24)
-            if (difference < 14) {
+            if (difference < 7) {
               alert('Please ask if the client has any pets and get the type (dog or cat), name, breed, age, and if they want monthly pet food in the Pets section.');
             }
           });

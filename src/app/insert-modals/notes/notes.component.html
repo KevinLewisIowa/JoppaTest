@@ -10,16 +10,19 @@
           <div class="col-md-6" *ngIf="isAdmin">
             <label for="source">Source</label>
             <select id="source" class= "form-control" [(ngModel)]="source" style="float:left;">
-              <option value="Resource Center" *ngIf="isAdmin">Resource Center</option>
-              <option value="Phone" *ngIf="isAdmin">Phone</option>
-              <option value="Email" *ngIf="isAdmin">Email</option>
-              <option value="Circle of Friends" *ngIf="isAdmin">Circle of Friends</option>
-              <option value="Outreach">Outreach</option>
               <option value="Aftercare">Aftercare</option>
-              <option value="Meeting" *ngIf="isAdmin">Meeting</option>
+              <option value="Circle of Friends" *ngIf="isAdmin">Circle of Friends</option>
+              <option value="Email" *ngIf="isAdmin">Email</option>
               <option value="Heat">Heat</option>
-              <option value="WARNING" *ngIf="isAdmin">WARNING</option>
+              <option value="Meeting" *ngIf="isAdmin">Meeting</option>
+              <option value="Outreach">Outreach</option>
+              <option value="Phone" *ngIf="isAdmin">Phone</option>
               <option value="PINNED NOTE" *ngIf="isAdmin">PINNED NOTE</option>
+              <option value="Resource Center" *ngIf="isAdmin">Resource Center</option>
+              <option value="Source-Carrie">Source-Carrie</option>
+              <option value="Source-Megan">Source-Megan</option>
+              <option value="Source-Pat">Source-Pet</option>
+              <option value="WARNING" *ngIf="isAdmin">WARNING</option>
             </select>
           </div>
           <div class="col-md-6">
