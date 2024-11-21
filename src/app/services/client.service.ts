@@ -95,13 +95,13 @@ export class ClientService {
       );
   }
 
-  seenAndServicedReport() {
+  seenAndServicedReport(fromDate: string, toDate: string) {
     const myHeader = new HttpHeaders({
       "Content-Type": "application/json",
       Authorization: window.localStorage.getItem("apiToken"),
     });
     return this.http
-      .get(this.baseUrl + `seen_and_serviced_report?fromDate=2022-11-01&toDate=2022-11-20`, {
+      .get(this.baseUrl + `seen_and_serviced_report?fromDate=${fromDate}&toDate=${toDate}`, {
         headers: myHeader,
       })
       .pipe(
