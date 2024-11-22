@@ -67,7 +67,7 @@
               <td>{{ heater.serial_number }}</td>
               <td>
                 <input type="date" class="form-control" style="max-width: 75%" (focusout)="updateHeaterInfo(heater)"
-                [(ngModel)]="heater.updated_at" [ngModel]="heater.updated_at | date:'yyyy-MM-dd'" />
+                  [(ngModel)]="heater.updated_at" [ngModel]="heater.updated_at | date:'yyyy-MM-dd'" />
               </td>
               <td>
                 <select class="form-control" #heaterStatus (change)="heaterStatusChanged(heaterStatus.value)">
@@ -88,7 +88,7 @@
               <td>N/A</td>
               <td>
                 <input type="date" class="form-control" style="max-width: 75%" (blur)="updateTankInfo(tank)"
-                [(ngModel)]="tank.updated_at" [ngModel]="tank.updated_at | date: 'yyyy-MM-dd'" />
+                  [(ngModel)]="tank.updated_at" [ngModel]="tank.updated_at | date: 'yyyy-MM-dd'" />
               </td>
               <td><select class="form-control" #tankStatus>
                   <option *ngFor="let option of heaterStatuses" value="{{option.id}}">{{option.status_name}}</option>
@@ -101,7 +101,7 @@
               <td>N/A</td>
               <td>
                 <input type="date" class="form-control" style="max-width: 75%" (blur)="updateHoseInfo(hose)"
-                [(ngModel)]="hose.updated_at" [ngModel]="hose.updated_at | date: 'yyyy-MM-dd'" />
+                  [(ngModel)]="hose.updated_at" [ngModel]="hose.updated_at | date: 'yyyy-MM-dd'" />
               </td>
               <td>
                 <select class="form-control" #hoseStatus>
@@ -209,7 +209,8 @@
       <div class="col-lg-12 col-md-12">
         <h4>
           Next of Kin
-          <button type="button" (click)="goToTop(); nextOfKinMdl.showModal()" class="btn btn-primary" style="float: right">
+          <button type="button" (click)="goToTop(); nextOfKinMdl.showModal()" class="btn btn-primary"
+            style="float: right">
             New Next of Kin
           </button>
         </h4>
@@ -237,10 +238,14 @@
           <tbody>
             <tr *ngFor="let nok of clientNextOfKins">
               <td><input type="text" class="form-control" (change)="updateNextOfKin(nok)" [(ngModel)]="nok.name" /></td>
-              <td><input type="text" class="form-control" (change)="updateNextOfKin(nok)" [(ngModel)]="nok.relation_to_client" /></td>
-              <td><input type="text" class="form-control" (change)="updateNextOfKin(nok)" [(ngModel)]="nok.phone_number" /></td>
-              <td><input type="text" class="form-control" (change)="updateNextOfKin(nok)" [(ngModel)]="nok.street_address" /></td>
-              <td><input type="text" class="form-control" (change)="updateNextOfKin(nok)" [(ngModel)]="nok.email" /></td>
+              <td><input type="text" class="form-control" (change)="updateNextOfKin(nok)"
+                  [(ngModel)]="nok.relation_to_client" /></td>
+              <td><input type="text" class="form-control" (change)="updateNextOfKin(nok)"
+                  [(ngModel)]="nok.phone_number" /></td>
+              <td><input type="text" class="form-control" (change)="updateNextOfKin(nok)"
+                  [(ngModel)]="nok.street_address" /></td>
+              <td><input type="text" class="form-control" (change)="updateNextOfKin(nok)" [(ngModel)]="nok.email" />
+              </td>
               <td><input type="text" class="form-control" (change)="updateNextOfKin(nok)" [(ngModel)]="nok.note" /></td>
               <td>
                 <button type="button" class="btn btn-primary" *ngIf="isAdmin" (click)="removeClientNextOfKin(nok.id)">
@@ -279,9 +284,12 @@
           <tbody>
             <tr *ngFor="let income of clientIncomes">
               <td>{{ income.created_at | date: "shortDate" }}</td>
-              <td><button type="button" class="btn btn-outline-primary" (click)="updateHasClientIncome(income)">{{ income.has_income ? 'Yes' : 'No' }}</button></td>
-              <td><input type="text" class="form-control" (change)="updateClientIncome(income)" [(ngModel)]="income.monthly_money" /></td>
-              <td><input type="text" class="form-control" (change)="updateClientIncome(income)" [(ngModel)]="income.what_income_from" /></td>
+              <td><button type="button" class="btn btn-outline-primary" (click)="updateHasClientIncome(income)">{{
+                  income.has_income ? 'Yes' : 'No' }}</button></td>
+              <td><input type="text" class="form-control" (change)="updateClientIncome(income)"
+                  [(ngModel)]="income.monthly_money" /></td>
+              <td><input type="text" class="form-control" (change)="updateClientIncome(income)"
+                  [(ngModel)]="income.what_income_from" /></td>
               <td>
                 <button type="button" class="btn btn-primary" *ngIf="isAdmin" (click)="removeClientIncome(income.id)">
                   Delete
@@ -368,7 +376,8 @@
                 <td>{{ item.reason_for_homelessness }}</td>
                 <td>{{ item.note }}</td>
                 <td>
-                  <button type="button" class="btn btn-primary" (click)="removeClientHomelessHistory(item.id)" *ngIf="isAdmin">
+                  <button type="button" class="btn btn-primary" (click)="removeClientHomelessHistory(item.id)"
+                    *ngIf="isAdmin">
                     Delete
                   </button>
                 </td>
@@ -424,7 +433,8 @@
       <div *ngIf="receivedItems.length > 0 && !heatRoute" class="col-lg-12 col-md-12">
         <!-- added !heatRoute from ngIf to pare down heat screen -->
         <h4>Recently Received Items</h4>
-        <input class="form-control" style="max-width: 15%; margin-bottom: 5px" type="text" placeholder="Filter items" (keyup)="filterReceivedItems(receivedFilter.value)" #receivedFilter />
+        <input class="form-control" style="max-width: 15%; margin-bottom: 5px" type="text" placeholder="Filter items"
+          (keyup)="filterReceivedItems(receivedFilter.value)" #receivedFilter />
         <table class="table" id="items">
           <colgroup>
             <col span="1" style="width: 25%" />
@@ -656,16 +666,19 @@
                 <td>{{ note.created_at | date: "short" }}</td>
                 <td><select id="note_type" class="form-control" style="float: left" #hrt [(ngModel)]="note.source"
                     name="note_type" (change)="onNoteTypeChange(note)">
-                    <option value="Resource Center" *ngIf="isAdmin">Resource Center</option>
-                    <option value="Phone" *ngIf="isAdmin">Phone</option>
-                    <option value="Email" *ngIf="isAdmin">Email</option>
-                    <option value="Circle of Friends" *ngIf="isAdmin">Circle of Friends</option>
-                    <option value="Outreach">Outreach</option>
                     <option value="Aftercare">Aftercare</option>
-                    <option value="Meeting" *ngIf="isAdmin">Meeting</option>
+                    <option value="Circle of Friends" *ngIf="isAdmin">Circle of Friends</option>
+                    <option value="Email" *ngIf="isAdmin">Email</option>
                     <option value="Heat">Heat</option>
-                    <option value="WARNING" *ngIf="isAdmin">WARNING</option>
+                    <option value="Meeting" *ngIf="isAdmin">Meeting</option>
+                    <option value="Outreach">Outreach</option>
+                    <option value="Phone" *ngIf="isAdmin">Phone</option>
                     <option value="PINNED NOTE" *ngIf="isAdmin">PINNED NOTE</option>
+                    <option value="Resource Center" *ngIf="isAdmin">Resource Center</option>
+                    <option value="Staff: Carrie">Staff: Carrie</option>
+                    <option value="Staff: Megan">Staff: Megan</option>
+                    <option value="Staff: Pat">Staff: Pat</option>
+                    <option value="WARNING" *ngIf="isAdmin">WARNING</option>
                   </select></td>
                 <td>{{ note.note }}</td>
                 <td *ngIf="isAdmin">
@@ -759,13 +772,16 @@
                   {{ pet.pet_type }}
                 </td>
                 <td>
-                  <input type="text" class="form-control" style="max-width: 75%" (change)="updatePetInfo(pet)" [(ngModel)]="pet.pet_name" />
+                  <input type="text" class="form-control" style="max-width: 75%" (change)="updatePetInfo(pet)"
+                    [(ngModel)]="pet.pet_name" />
                 </td>
                 <td>
-                  <input type="text" class="form-control" style="max-width: 75%" (change)="updatePetInfo(pet)" [(ngModel)]="pet.breed" />
+                  <input type="text" class="form-control" style="max-width: 75%" (change)="updatePetInfo(pet)"
+                    [(ngModel)]="pet.breed" />
                 </td>
                 <td>
-                  <input type="text" class="form-control" style="max-width: 75%" (change)="updatePetInfo(pet)" [(ngModel)]="pet.age" />
+                  <input type="text" class="form-control" style="max-width: 75%" (change)="updatePetInfo(pet)"
+                    [(ngModel)]="pet.age" />
                 </td>
                 <td>
                   <button type="button" class="btn btn-outline-primary" (click)="updateNeedPetFood(pet)">{{
