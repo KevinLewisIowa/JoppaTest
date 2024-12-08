@@ -208,7 +208,7 @@ export class ServicingClientComponent implements OnInit {
         this.service.getRecentReceivedItems(this.clientId).subscribe(
           (data: RequestedItem[]) => {
             this.receivedItems = data;
-            this.filteredReceivedItems = this.receivedItems.slice(0,10);
+            this.filteredReceivedItems = this.receivedItems.slice(0, 10);
           },
           (error) => console.log(error)
         );
@@ -377,22 +377,24 @@ export class ServicingClientComponent implements OnInit {
           .subscribe((data: any[]) => {
             this.heatEquipmentNotReturned = data;
             this.goToTop();
-            let difference = new Date().getTime() - new Date(this.client.created_at).getTime();
-            difference = difference / (1000 * 3600 * 24)
-            if (difference < 7) {
-              alert('Please ask if the client has any pets and get the type (dog or cat), name, breed, age, and if they want monthly pet food in the Pets section.');
+            if (!this.isAdmin) {
+              let difference = new Date().getTime() - new Date(this.client.created_at).getTime();
+              difference = difference / (1000 * 3600 * 24)
+              if (difference < 7) {
+                alert('Please ask if the client has any pets and get the type (dog or cat), name, breed, age, and if they want monthly pet food in the Pets section.');
+              }
             }
           });
         this.getHeaterStatuses();
       }
 
       this.service.getRecentReceivedItems(this.clientId).subscribe((data: RequestedItem[]) => {
-          this.receivedItems = data;
-          this.filteredReceivedItems = this.receivedItems.slice(0,10);
-        });
+        this.receivedItems = data;
+        this.filteredReceivedItems = this.receivedItems.slice(0, 10);
+      });
       this.service.getRequestedItems(this.clientId).subscribe((data: RequestedItem[]) => {
-          this.requestedItems = data.filter((w) => w.has_received != true);
-        });
+        this.requestedItems = data.filter((w) => w.has_received != true);
+      });
       this.service
         .getClientPets(this.clientId)
         .subscribe((data: ClientPet[]) => {
@@ -444,10 +446,13 @@ export class ServicingClientComponent implements OnInit {
         .subscribe((data: HealthConcern[]) => {
           this.healthConcerns = data;
           this.goToTop();
-          let difference = new Date().getTime() - new Date(this.client.created_at).getTime();
-          difference = difference / (1000 * 3600 * 24)
-          if (difference < 14) {
-            alert('Please ask if the client has any pets and get the type (dog or cat), name, breed, age, and if they want monthly pet food in the Pets section.');
+
+          if (!this.isAdmin) {
+            let difference = new Date().getTime() - new Date(this.client.created_at).getTime();
+            difference = difference / (1000 * 3600 * 24)
+            if (difference < 7) {
+              alert('Please ask if the client has any pets and get the type (dog or cat), name, breed, age, and if they want monthly pet food in the Pets section.');
+            }
           }
         });
     } else {
@@ -842,7 +847,7 @@ export class ServicingClientComponent implements OnInit {
 
     this.filteredReceivedItems = this.receivedItems.filter(
       item => item.item_description.toLowerCase().includes(text.toLowerCase())
-    ).slice(0,10);
+    ).slice(0, 10);
   }
 
   likeAdded(like: ClientLike) {
@@ -1174,9 +1179,9 @@ export class ServicingClientComponent implements OnInit {
     this.service.receivedRequestedItem(id).subscribe((response) => {
       this.requestedItems = this.requestedItems.filter((w) => w.id != id);
       this.service.getRecentReceivedItems(this.client.id).subscribe((data: RequestedItem[]) => {
-          this.receivedItems = data;
-          this.filteredReceivedItems = this.receivedItems.slice(0,10);
-        });
+        this.receivedItems = data;
+        this.filteredReceivedItems = this.receivedItems.slice(0, 10);
+      });
     });
   }
 
