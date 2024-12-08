@@ -29,10 +29,10 @@ export class PetsComponent implements OnInit {
     this.modalService.open(this.petsMdl, { size: 'lg', backdrop: 'static' });
 
     this.pet_type = '';
-        this.pet_name = '';
-        this.age = null;
-        this.breed = '';
-        this.food_requested = true;
+    this.pet_name = '';
+    this.age = null;
+    this.breed = '';
+    this.food_requested = true;
   }
 
   onChange() {
@@ -43,8 +43,6 @@ export class PetsComponent implements OnInit {
     else {
       this.extraInfoNeeded = false;
     }
-
-    console.log(this.pet_type);
   }
 
   submitPet() {
@@ -65,7 +63,6 @@ export class PetsComponent implements OnInit {
     pet.breed = this.breed;
     pet.food_requested = this.food_requested;
 
-    console.log(JSON.stringify(pet));
     this.service.insertPet(pet).subscribe((data: ClientPet) => {
       if (data != null && data.id != null) {
         this.petAdded.emit(data);

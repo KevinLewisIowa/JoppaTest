@@ -16,8 +16,7 @@
             </select>
           </div>
           <div class="col-sm-2">
-            <input class="form-control" type="text" [(ngModel)]="extraInfo" name="extraInfo" *ngIf="extraInfoNeeded"
-              [placeholder]="placeholderText" required />
+            <input name="extraInfo" class="form-control" type="text" [(ngModel)]="extraInfo" *ngIf="extraInfoNeeded" [placeholder]="placeholderText" required />
           </div>
           <div class="col-sm-3">
             <label for="pet_name">Pet Name</label>

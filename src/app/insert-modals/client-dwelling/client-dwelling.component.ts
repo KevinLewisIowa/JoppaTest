@@ -9,7 +9,7 @@ import { ClientDwelling } from 'app/models/client-dwelling';
   styleUrls: ['./client-dwelling.component.css']
 })
 export class ClientDwellingComponent implements OnInit {
-  @ViewChild('clientDwellingMdl', {static: false}) clientDwellingMdl: ElementRef;
+  @ViewChild('clientDwellingMdl', { static: false }) clientDwellingMdl: ElementRef;
   @Output() clientDwellingAdded = new EventEmitter<ClientDwelling>();
   isAdmin: boolean = false;
   date_moved: Date;
@@ -17,8 +17,7 @@ export class ClientDwellingComponent implements OnInit {
   other_dwelling: string = '';
   where_sleep_last_night: string = '';
   notes: string = '';
-  extraInfoNeededForDwelling: boolean = false;
-  extraInfoNeededForHomelessReason: boolean = false;
+  extraInfoNeeded: boolean = false;
   client_id: number;
 
   constructor(private modalService: NgbModal, private clientService: ClientService) { }
@@ -28,23 +27,22 @@ export class ClientDwellingComponent implements OnInit {
   }
 
   showModal() {
-    this.modalService.open(this.clientDwellingMdl, {size: 'lg', backdrop: 'static'});
+    this.modalService.open(this.clientDwellingMdl, { size: 'lg', backdrop: 'static' });
 
     this.dwelling = '';
     this.notes = '';
     this.where_sleep_last_night = '';
     this.other_dwelling = '';
+    this.date_moved = null;
   }
 
-  onChange(field_name: string, value: string) {
-    switch (field_name) {
-      case 'dwelling':
-        if (value == 'Other') {
-          this.extraInfoNeededForDwelling = true;
-        } else {
-          this.extraInfoNeededForDwelling = false;
-          this.other_dwelling = '';
-        }
+  onChange() {
+    if (this.dwelling == 'Other') {
+      this.extraInfoNeeded = true;
+    }
+    else {
+      this.extraInfoNeeded = false;
+      this.other_dwelling = '';
     }
   }
 
@@ -57,20 +55,19 @@ export class ClientDwellingComponent implements OnInit {
       alert('No dwelling entered');
       return;
     }
-    
+
     if (this.dwelling !== '' && !isNaN(clientId) && !isNaN(routeInstanceId)) {
       clientDwelling.date_moved = new Date(this.date_moved);
       clientDwelling.dwelling = (this.dwelling == 'Other') ? this.other_dwelling : this.dwelling;
       clientDwelling.notes = this.notes;
       clientDwelling.client_id = clientId;
       clientDwelling.where_sleep_last_night = this.where_sleep_last_night;
-      
-      console.log(JSON.stringify(clientDwelling));
+
       this.clientService.insertClientDwelling(clientDwelling).subscribe((data: ClientDwelling) => {
         if (data != null && data.id != null) {
           this.clientDwellingAdded.emit(data);
         }
-      }, error => {console.log(error)});
+      }, error => { console.log(error) });
     }
   }
 

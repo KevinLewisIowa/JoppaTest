@@ -1,7 +1,8 @@
 <ng-template #notesMdl let-c="close" let-d="dismiss">
   <div class="modal-header">
     <h4 class="modal-title">Create Note</h4>
-    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')"><span aria-hidden="true">&times;</span></button>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')"><span
+        aria-hidden="true">&times;</span></button>
   </div>
   <form>
     <div class="modal-body">
@@ -9,7 +10,7 @@
         <div class="row">
           <div class="col-md-6" *ngIf="isAdmin">
             <label for="source">Source</label>
-            <select id="source" class= "form-control" [(ngModel)]="source" style="float:left;">
+            <select id="source" class="form-control" [(ngModel)]="source" style="float:left;">
               <option value="Aftercare">Aftercare</option>
               <option value="Circle of Friends" *ngIf="isAdmin">Circle of Friends</option>
               <option value="Email" *ngIf="isAdmin">Email</option>
@@ -19,9 +20,9 @@
               <option value="Phone" *ngIf="isAdmin">Phone</option>
               <option value="PINNED NOTE" *ngIf="isAdmin">PINNED NOTE</option>
               <option value="Resource Center" *ngIf="isAdmin">Resource Center</option>
-              <option value="Source-Carrie">Source-Carrie</option>
-              <option value="Source-Megan">Source-Megan</option>
-              <option value="Source-Pat">Source-Pat</option>
+              <option value="Staff: Carrie">Staff: Carrie</option>
+              <option value="Staff: Megan">Staff: Megan</option>
+              <option value="Staff: Pat">Staff: Pat</option>
               <option value="WARNING" *ngIf="isAdmin">WARNING</option>
             </select>
           </div>
