@@ -131,7 +131,7 @@
         (click)="backToCampListing()">
         <fa-icon [icon]="backIcon"></fa-icon> Back to Camp Listing
       </button>
-      <button (click)="nextStop()" type="button" class="btn btn-primary" style="float: right">
+      <button (click)="nextStop()" type="button" class="btn btn-primary" style="float: right" *ngIf="locationCampList != null">
         Next Stop <fa-icon [icon]="forwardIcon"></fa-icon>
       </button>
       <button (click)="markRemainingNotSeenNotServiced()" type="button" class="btn btn-primary"

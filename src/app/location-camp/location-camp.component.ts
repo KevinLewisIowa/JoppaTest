@@ -61,6 +61,7 @@ export class LocationCampComponent implements OnInit {
   informationIcon = faInfoCircle;
   isAdmin: boolean = false;
   clientsWithFulfilledItems: number[] = [];
+  locationCampList: number[] = [];
   currentStopNumber: number;
   totalStopsAmount: number;
   routeAttendanceList: Appearance[] = [];
@@ -101,14 +102,15 @@ export class LocationCampComponent implements OnInit {
 
         this.mainService.getRoute(this.routeId).subscribe((route: Route) => {
           this.route = route;
-          let locationCampList: number[] = JSON.parse(
-            window.localStorage.getItem("LocationCampIdList")
-          );
-          let indexCurrCamp: number = locationCampList.findIndex(
-            (campId) => campId == this.locationCampId
-          );
-          this.currentStopNumber = indexCurrCamp + 1;
-          this.totalStopsAmount = locationCampList.length;
+          this.locationCampList = JSON.parse(window.localStorage.getItem("LocationCampIdList"));
+
+          if (this.locationCampList) {
+            let indexCurrCamp: number = this.locationCampList.findIndex(
+              (campId) => campId == this.locationCampId
+            );
+            this.currentStopNumber = indexCurrCamp + 1;
+            this.totalStopsAmount = this.locationCampList.length;
+          }
 
           this.mainService.getLocationCamp(this.locationCampId).subscribe((data) => {
             this.locationCamp = data;
@@ -179,14 +181,14 @@ export class LocationCampComponent implements OnInit {
         this.mainService.getLocationCamp(this.locationCampId).subscribe((data) => {
           this.locationCamp = data;
 
-          let locationCampList: number[] = JSON.parse(
-            window.localStorage.getItem("LocationCampIdList")
-          );
-          let indexCurrCamp: number = locationCampList.findIndex(
-            (campId) => campId == this.locationCampId
-          );
-          this.currentStopNumber = indexCurrCamp + 1;
-          this.totalStopsAmount = locationCampList.length;
+          this.locationCampList = JSON.parse(window.localStorage.getItem("LocationCampIdList"));
+          if (this.locationCampList) {
+            let indexCurrCamp: number = this.locationCampList.findIndex(
+              (campId) => campId == this.locationCampId
+            );
+            this.currentStopNumber = indexCurrCamp + 1;
+            this.totalStopsAmount = this.locationCampList.length;
+          }
 
           if (this.locationCamp.expected_arrival_time && this.locationCamp.expected_arrival_time != "") {
             let timeArray: string[] = this.locationCamp.expected_arrival_time.split(":");
