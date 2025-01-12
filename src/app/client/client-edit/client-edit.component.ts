@@ -47,6 +47,7 @@ export class ClientEditComponent implements OnInit {
       number_meals: 1,
       status: 'Active',
       phone: '',
+      email: '',
       joppa_apartment_number: '',
       gender: '',
       race: '',
@@ -57,6 +58,7 @@ export class ClientEditComponent implements OnInit {
       first_time_homeless: null,
       date_became_homeless: '',
       dwelling: 'Tent',
+      dwelling_note: '',
       date_moved: '',
       client_picture: '',
       latitude: 0,
@@ -199,6 +201,7 @@ export class ClientEditComponent implements OnInit {
     this.theClient.inactive_description = '';
     this.theClient.number_meals = this.clientForm.get('number_meals').value as number;
     this.theClient.phone = String(this.clientForm.get('phone').value).trim();
+    this.theClient.email = String(this.clientForm.get('email').value).trim();
     this.theClient.joppa_apartment_number = String(this.clientForm.get('joppa_apartment_number').value).trim();
     this.theClient.gender = this.clientForm.get('gender').value;
     this.theClient.race = this.clientForm.get('race').value;
@@ -293,6 +296,12 @@ export class ClientEditComponent implements OnInit {
                 theDwelling.client_id = insertedClient.id;
                 theDwelling.dwelling = String(this.clientForm.get('dwelling').value).trim();
                 theDwelling.where_sleep_last_night = this.clientForm.get('where_sleep_last_night').value;
+                if (this.clientForm.get('date_moved').value == '') {
+                  theDwelling.date_moved = new Date();
+                } else {
+                  theDwelling.date_moved = new Date(this.clientForm.get('date_moved').value);
+                }
+                theDwelling.notes = this.clientForm.get('dwelling_note').value;
                 this.clientService.insertClientDwelling(theDwelling).subscribe((data: ClientDwelling) => {
                   insertedClient.household_id = insertedClient.id;
                   this.clientService.updateClient(insertedClient).subscribe(updatedClient => {

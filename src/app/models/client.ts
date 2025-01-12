@@ -8,6 +8,7 @@ export class Client {
     shoe_size: string = undefined;
     boot_size: string = undefined;
     phone: string = undefined;
+    email: string = undefined;
     status: string = undefined;
     is_veteran: boolean = false;
     inactive_description: string = undefined;

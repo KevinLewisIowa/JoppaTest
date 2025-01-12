@@ -32,8 +32,6 @@ export class ClientEditModalComponent implements OnInit {
     this.theClient = new Client();
     this.clientForm = this.fb.group(this.theClient);
 
-    console.log('Is Veteran ' + this.theClient.diagnosed_mental_physical_disability);
-
     this.isAdmin = JSON.parse(window.localStorage.getItem('isAdmin'));
   }
 
