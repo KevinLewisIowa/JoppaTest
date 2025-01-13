@@ -137,7 +137,7 @@ export class LocationCampComponent implements OnInit {
                     }
                     pushClient = false;
                   }
-                  
+
                   if (client.race == null || client.ethnicity == null || client.gender == "" || client.birth_date == null) {
                     client.information_missing_or_unknown = "missing";
                   } else if (client.race == "Data not collected" || client.ethnicity == "Data not collected") {
@@ -288,22 +288,35 @@ export class LocationCampComponent implements OnInit {
           window.localStorage.setItem('RouteAttendance', JSON.stringify(attendanceInfo));
           this.routeAttendanceList = attendanceInfo;
           console.log(`Attendance: ${JSON.stringify(attendanceInfo)}`);
-        });
+
+          client.previous_camp_id = client.current_camp_id;
+          client.current_camp_id = JSON.parse(
+            window.localStorage.getItem("locationCampId")
+          );
+          client.status = "Active";
+          client.last_interaction_date = new Date();
+          console.log("yooooooo : " + client.last_interaction_date);
+
+          this.clientService.updateClient(client).subscribe((data) => {
+            console.log("updated client");
+            console.log(data);
+          }, error => console.log(error));
+        }, error => console.log(error));
+      } else {
+        client.previous_camp_id = client.current_camp_id;
+        client.current_camp_id = JSON.parse(
+          window.localStorage.getItem("locationCampId")
+        );
+        client.status = "Active";
+        client.last_interaction_date = new Date();
+        console.log("yooooooo : " + client.last_interaction_date);
+
+        this.clientService.updateClient(client).subscribe((data) => {
+          console.log("updated client");
+          console.log(data);
+        }, error => console.log(error));
       }
-
-      client.previous_camp_id = client.current_camp_id;
-      client.current_camp_id = JSON.parse(
-        window.localStorage.getItem("locationCampId")
-      );
-      client.status = "Active";
-      client.last_interaction_date = new Date();
-      console.log("yooooooo : " + client.last_interaction_date);
-
-      this.clientService.updateClient(client).subscribe((data) => {
-        console.log("updated client");
-        console.log(data);
-      });
-    });
+    }, error => console.log(error));
   }
 
   markRemainingNotSeenNotServiced() {
