@@ -30,6 +30,7 @@ export class AdminClientListingComponent implements OnInit {
     // });
 
     this.clientService.getClientsByName('').subscribe(data => {
+      console.log('Number of clients: ' + data.length)
       this.clients = data;
       this.dataSource = new MatTableDataSource(this.clients);
       this.dataSource.sort = this.sort;
