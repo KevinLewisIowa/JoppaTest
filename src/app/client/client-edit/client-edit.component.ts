@@ -69,6 +69,7 @@ export class ClientEditComponent implements OnInit {
       otherReasonForDesMoines: '',
       city_before_homelessness: '',
       state_before_homelessness: '',
+      homeless_history_note: '',
       where_sleep_last_night: ''
     });
     this.clientForm.get('first_name').setValidators(Validators.required);
@@ -289,7 +290,7 @@ export class ClientEditComponent implements OnInit {
               theHistory.date_became_homeless = new Date(Date.parse(this.clientForm.get('date_became_homeless').value));
               theHistory.first_time_homeless = this.clientForm.get('first_time_homeless').value;
               theHistory.client_id = insertedClient.id;
-              theHistory.note = "";
+              theHistory.note = this.clientForm.get('homeless_history_note').value;
               console.log(JSON.stringify(theHistory));
               this.clientService.insertClientHomelessHistory(theHistory).subscribe((data: ClientHomelessHistory) => {
                 const theDwelling: ClientDwelling = new ClientDwelling();

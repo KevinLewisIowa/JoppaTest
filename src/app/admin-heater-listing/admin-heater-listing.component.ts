@@ -12,6 +12,8 @@ import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 export class AdminHeaterListingComponent implements OnInit {
 
   heaterList: Observable<any>[];
+  tankList: Observable<any>[];
+  hoseList: Observable<any>[];
 
   constructor(private mainService: MainService, private clientService: ClientService) { };
 
@@ -19,16 +21,28 @@ export class AdminHeaterListingComponent implements OnInit {
 
 
   ngOnInit() {
-    this.getHeaterListing();
+    this.getHeaterTankHoseListing();
   }
 
   unassignHeater(heaterId: number) {
     this.clientService.updateHeaterClient(null, heaterId, 1).subscribe(response => {
-      this.getHeaterListing();
+      this.getHeaterTankHoseListing();
     });
   }
 
-  getHeaterListing() {
+  unassignTank(tankId: number) {
+    this.clientService.updateTankInteraction(tankId, 1).subscribe(response => {
+      this.getHeaterTankHoseListing();
+    });
+  }
+
+  unassignHose(hoseId: number) {
+    this.clientService.updateHoseInteraction(hoseId, 1).subscribe(response => {
+      this.getHeaterTankHoseListing();
+    });
+  }
+
+  getHeaterTankHoseListing() {
     this.mainService.getHeaterListing().subscribe(data => {
       this.heaterList = data.sort(function(heater1, heater2) {
         if (heater1.serial_number < heater2.serial_number) {
@@ -43,7 +57,15 @@ export class AdminHeaterListingComponent implements OnInit {
       }), error => {
         console.log(error);
       }
-    });
+    }, error => console.log(error));
+
+    this.mainService.getHoseListing().subscribe(data => {
+      this.hoseList = data;
+    }, error => console.log(error));
+
+    this.mainService.getTankListing().subscribe(data => {
+      this.tankList = data;
+    }, error => console.log(error));
   }
 
 }

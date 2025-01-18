@@ -1207,9 +1207,7 @@ export class ServicingClientComponent implements OnInit {
   loanTank() {
     if (this.clientId != null) {
       this.service.loanTank(this.clientId).subscribe((response) => {
-        this.service
-          .getClientLoanedTanks(this.clientId)
-          .subscribe((data: any) => {
+        this.service.getClientLoanedTanks(this.clientId).subscribe((data: any) => {
             this.tankInteractions = data;
             if (!this.isAdmin) { this.sendInteraction(1, true); }
           });
