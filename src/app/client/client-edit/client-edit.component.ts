@@ -84,6 +84,7 @@ export class ClientEditComponent implements OnInit {
   onChange(value: string) {
     if (value == 'Other') {
       this.extraInfoNeeded = true;
+      console.log(this.clientForm.get('otherHomelessReason').value);
     } else {
       this.extraInfoNeeded = false;
       this.clientForm.patchValue({ otherHomelessReason: '' });
@@ -278,7 +279,7 @@ export class ClientEditComponent implements OnInit {
               let reason_for_homelessness: string = this.clientForm.get('homeless_reason').value;
               let theOtherHomelessReason: string = this.clientForm.get('otherHomelessReason').value;
               if (reason_for_homelessness == 'Other' && theOtherHomelessReason != '') {
-                reason_for_homelessness = this.clientForm.get('otherHomelessReason').value;
+                reason_for_homelessness = theOtherHomelessReason;
               }
               else if (reason_for_homelessness == 'Other' && theOtherHomelessReason == '') {
                 alert('If you select Other as Homeless Reason, need to indicate reason.');
@@ -329,7 +330,7 @@ export class ClientEditComponent implements OnInit {
           let reason_for_homelessness: string = this.clientForm.get('homeless_reason').value;
           let theOtherHomelessReason: string = this.clientForm.get('otherHomelessReason').value;
           if (reason_for_homelessness == 'Other' && theOtherHomelessReason != '') {
-            reason_for_homelessness = this.clientForm.get('otherHomelessReason').value;
+            reason_for_homelessness = theOtherHomelessReason;
           }
           else if (reason_for_homelessness == 'Other' && theOtherHomelessReason == '') {
             alert('If you select Other as Homeless Reason, need to indicate reason.');
@@ -341,13 +342,19 @@ export class ClientEditComponent implements OnInit {
           theHistory.date_became_homeless = new Date(Date.parse(this.clientForm.get('date_became_homeless').value));
           theHistory.first_time_homeless = this.clientForm.get('first_time_homeless').value;
           theHistory.client_id = insertedClient.id;
-          theHistory.note = "";
+          theHistory.note = this.clientForm.get('homeless_history_note').value;
           console.log(JSON.stringify(theHistory));
           this.clientService.insertClientHomelessHistory(theHistory).subscribe((data: ClientHomelessHistory) => {
             const theDwelling: ClientDwelling = new ClientDwelling();
             theDwelling.client_id = insertedClient.id;
             theDwelling.dwelling = String(this.clientForm.get('dwelling').value).trim();
             theDwelling.where_sleep_last_night = this.clientForm.get('where_sleep_last_night').value;
+            if (this.clientForm.get('date_moved').value == '') {
+              theDwelling.date_moved = new Date();
+            } else {
+              theDwelling.date_moved = new Date(this.clientForm.get('date_moved').value);
+            }
+            theDwelling.notes = this.clientForm.get('dwelling_note').value;
             this.clientService.insertClientDwelling(theDwelling).subscribe((data: ClientDwelling) => {
               insertedClient.household_id = insertedClient.id;
               this.clientService.updateClient(insertedClient).subscribe(updatedClient => {
