@@ -94,10 +94,10 @@ export class FooterComponent implements OnInit {
     this.mainService.showEndRoute.next(false);
     console.log(this.isAdmin);
 
-    if (heatRoute) {
-      this.router.navigate(['checkoutHeaters']);
-    }
-    else if (this.isAdmin) {
+    // if (heatRoute) {
+    //   this.router.navigate(['checkoutHeaters']);
+    // }
+    if (this.isAdmin) {
       this.goToAdminHome();
     }
     else {

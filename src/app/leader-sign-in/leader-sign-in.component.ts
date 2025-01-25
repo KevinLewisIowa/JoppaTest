@@ -35,13 +35,16 @@ export class LeaderSignInComponent implements OnInit {
         this.mainService.showEndRoute.next(true);
       }
 
-      if (JSON.parse(window.localStorage.getItem('heatRoute')) && (JSON.parse(window.localStorage.getItem('checkedOutHeaters')) == null || JSON.parse(window.localStorage.getItem('tankHoseInteractionId')) == null)) {
-        this.router.navigate(['checkoutHeaters']);
-      }
-      else {
-        if (JSON.parse(window.localStorage.getItem('routeId'))) {
-          this.router.navigate(['route', JSON.parse(window.localStorage.getItem('routeId'))]);
-        }
+      // if (JSON.parse(window.localStorage.getItem('heatRoute')) && (JSON.parse(window.localStorage.getItem('checkedOutHeaters')) == null || JSON.parse(window.localStorage.getItem('tankHoseInteractionId')) == null)) {
+      //   this.router.navigate(['checkoutHeaters']);
+      // }
+      // else {
+      //   if (JSON.parse(window.localStorage.getItem('routeId'))) {
+      //     this.router.navigate(['route', JSON.parse(window.localStorage.getItem('routeId'))]);
+      //   }
+      // }
+      if (JSON.parse(window.localStorage.getItem('routeId'))) {
+        this.router.navigate(['route', JSON.parse(window.localStorage.getItem('routeId'))]);
       }
     }
     else {
@@ -130,12 +133,18 @@ export class LeaderSignInComponent implements OnInit {
           window.localStorage.setItem('routeId', this.routeInstanceForm.get('route_id').value);
           window.localStorage.setItem('primary_device', this.routeInstanceForm.get('primary_device').value)
 
-          if (this.routeInstanceForm.get('heat_route').value) {
-            this.router.navigate(['checkoutHeaters']);
-          }
-          else {
-            this.router.navigate(['volunteerInfo']);
-          }
+          // if (this.routeInstanceForm.get('heat_route').value) {
+          //   this.router.navigate(['checkoutHeaters']);
+          // }
+          // else {
+          //   this.router.navigate(['volunteerInfo']);
+          // }
+          // if (this.routeInstanceForm.get('heat_route').value) {
+          //   this.router.navigate(['checkoutHeaters']);
+          // }
+          // else {
+          this.router.navigate(['volunteerInfo']);
+          //}
         }, error => { console.log(error) });
       }
     }, error => console.log(error));
