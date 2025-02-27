@@ -52,13 +52,13 @@ export class AdminClientListingComponent implements OnInit {
         const preferredLastName = `${data.preferred_name} ${data.last_name}`.toLowerCase();
         return firstLastName.includes(filterValue) ||
                preferredLastName.includes(filterValue) ||
-               data.phone.toLowerCase().includes(filterValue) ||
+               (data.phone != null && data.phone.toLowerCase().includes(filterValue)) ||
                (data.birth_date != null && data.birth_date.toLowerCase().includes(filterValue)) ||
                (data.route_name != null && data.route_name.toLowerCase().includes(filterValue)) ||
                (data.camp_name != null && data.camp_name.toLowerCase().includes(filterValue)) ||
                (data.status != null && data.status.toLowerCase().includes(filterValue)) ||
                (data.updated_at != null && data.updated_at.toLowerCase().includes(filterValue)) ||
-               data.last_name.toLowerCase().includes(filterValue)
+               (data.last_name != null && data.last_name.toLowerCase().includes(filterValue))
       };
     }, error => console.log(error));
   }
@@ -77,7 +77,6 @@ export class AdminClientListingComponent implements OnInit {
   }
 
   applyFilter(filterValue: string) {
-    console.log(filterValue);
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
