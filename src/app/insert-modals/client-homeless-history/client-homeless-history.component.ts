@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Output, ViewChild } from '@angular/core';
+import { AfterViewChecked, ChangeDetectorRef, Component, ElementRef, EventEmitter, Output, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ClientHomelessHistory } from 'app/models/client-homeless-histories';
 import { ClientService } from 'app/services/client.service';
@@ -8,7 +8,7 @@ import { ClientService } from 'app/services/client.service';
   templateUrl: './client-homeless-history.component.html',
   styleUrls: ['./client-homeless-history.component.css']
 })
-export class ClientHomelessHistoryComponent {
+export class ClientHomelessHistoryComponent implements AfterViewChecked {
   @ViewChild('clientHomelessHistoryMdl', { static: false }) clientHomelessHistoryMdl: ElementRef;
   @Output() clientHistoryAdded = new EventEmitter<ClientHomelessHistory>();
   isAdmin: boolean = false;
@@ -20,10 +20,20 @@ export class ClientHomelessHistoryComponent {
   extraInfoNeeded: boolean = false;
   client_id: number;
 
-  constructor(private modalService: NgbModal, private clientService: ClientService) { }
+  constructor(private modalService: NgbModal, private clientService: ClientService, private cdr: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.isAdmin = JSON.parse(localStorage.getItem('isAdmin'));
+  }
+
+  ngAfterViewChecked(): void {
+    if (this.extraInfoNeeded) {
+      this.cdr.detectChanges();
+      const extraInfoElement = document.getElementById('extraInfo');
+      if (extraInfoElement) {
+        extraInfoElement.focus();
+      }
+    }
   }
 
   showModal() {

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter, Inject, LOCALE_ID } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter, Inject, LOCALE_ID, AfterViewChecked, ChangeDetectorRef } from '@angular/core';
 import { UntypedFormGroup, UntypedFormBuilder } from "@angular/forms";
 import { Client } from "app/models/client";
 import { ClientService } from "app/services/client.service";
@@ -11,7 +11,7 @@ import { formatDate } from '@angular/common';
   templateUrl: './client-edit-modal.component.html',
   styleUrls: ['./client-edit-modal.component.css']
 })
-export class ClientEditModalComponent implements OnInit {
+export class ClientEditModalComponent implements OnInit, AfterViewChecked {
   @ViewChild('editModal', { static: false }) editModal: ElementRef;
   @Output() editedClient = new EventEmitter<Client>();
   badDate = false;
@@ -26,13 +26,26 @@ export class ClientEditModalComponent implements OnInit {
   submitted: boolean = false;
   staticBirthday: string = '';
 
-  constructor(private router: Router, private modalService: NgbModal, private clientService: ClientService, private fb: UntypedFormBuilder, @Inject(LOCALE_ID) private locale: string) { }
+  constructor(private router: Router, private modalService: NgbModal, private clientService: ClientService, private fb: UntypedFormBuilder, @Inject(LOCALE_ID) private locale: string, private cdr: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.theClient = new Client();
     this.clientForm = this.fb.group(this.theClient);
 
     this.isAdmin = JSON.parse(window.localStorage.getItem('isAdmin'));
+  }
+
+  ngAfterViewChecked(): void {
+    console.log(JSON.stringify(this.extraInfoNeededReasonForDesMoines));
+    if (this.extraInfoNeededReasonForDesMoines) {
+      console.log('about to detect changes');
+      this.cdr.detectChanges();
+      const extraInfoElement = document.getElementById('otherReasonForDesMoines');
+      console.log(JSON.stringify(extraInfoElement));
+      if (extraInfoElement) {
+        extraInfoElement.focus();
+      }
+    }
   }
 
   onReasonForDesMoinesChange(value: string) {

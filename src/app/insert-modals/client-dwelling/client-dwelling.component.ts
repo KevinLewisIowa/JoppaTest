@@ -1,4 +1,4 @@
-import { Component, ViewChild, Output, OnInit, ElementRef, EventEmitter } from '@angular/core';
+import { Component, ViewChild, Output, OnInit, ElementRef, EventEmitter, AfterViewChecked, ChangeDetectorRef } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ClientService } from 'app/services/client.service';
 import { ClientDwelling } from 'app/models/client-dwelling';
@@ -8,7 +8,7 @@ import { ClientDwelling } from 'app/models/client-dwelling';
   templateUrl: './client-dwelling.component.html',
   styleUrls: ['./client-dwelling.component.css']
 })
-export class ClientDwellingComponent implements OnInit {
+export class ClientDwellingComponent implements OnInit, AfterViewChecked {
   @ViewChild('clientDwellingMdl', { static: false }) clientDwellingMdl: ElementRef;
   @Output() clientDwellingAdded = new EventEmitter<ClientDwelling>();
   isAdmin: boolean = false;
@@ -20,10 +20,20 @@ export class ClientDwellingComponent implements OnInit {
   extraInfoNeeded: boolean = false;
   client_id: number;
 
-  constructor(private modalService: NgbModal, private clientService: ClientService) { }
+  constructor(private modalService: NgbModal, private clientService: ClientService, private cdr: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.isAdmin = JSON.parse(localStorage.getItem('isAdmin'));
+  }
+
+  ngAfterViewChecked(): void {
+    if (this.extraInfoNeeded) {
+      this.cdr.detectChanges();
+      const extraInfoElement = document.getElementById('extraInfo');
+      if (extraInfoElement) {
+        extraInfoElement.focus();
+      }
+    }
   }
 
   showModal() {

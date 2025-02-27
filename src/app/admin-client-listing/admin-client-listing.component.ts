@@ -44,6 +44,22 @@ export class AdminClientListingComponent implements OnInit {
         }
       };
       this.dataSource.paginator = this.paginator;
+
+      // displayedColumns = ['first_name', 'last_name', 'preferred_name', 'phone', 'birth_date', 'route_name', 'camp_name', 'status', 'household_id', 'updated_at'];
+      this.dataSource.filterPredicate = (data, filter: string) => {
+        const filterValue = filter.trim().toLowerCase();
+        const firstLastName = `${data.first_name} ${data.last_name}`.toLowerCase();
+        const preferredLastName = `${data.preferred_name} ${data.last_name}`.toLowerCase();
+        return firstLastName.includes(filterValue) ||
+               preferredLastName.includes(filterValue) ||
+               data.phone.toLowerCase().includes(filterValue) ||
+               (data.birth_date != null && data.birth_date.toLowerCase().includes(filterValue)) ||
+               (data.route_name != null && data.route_name.toLowerCase().includes(filterValue)) ||
+               (data.camp_name != null && data.camp_name.toLowerCase().includes(filterValue)) ||
+               (data.status != null && data.status.toLowerCase().includes(filterValue)) ||
+               (data.updated_at != null && data.updated_at.toLowerCase().includes(filterValue)) ||
+               data.last_name.toLowerCase().includes(filterValue)
+      };
     }, error => console.log(error));
   }
 
@@ -61,9 +77,8 @@ export class AdminClientListingComponent implements OnInit {
   }
 
   applyFilter(filterValue: string) {
-    filterValue = filterValue.trim();
-    filterValue = filterValue.toLowerCase();
-    this.dataSource.filter = filterValue;
+    console.log(filterValue);
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
   createClient() {

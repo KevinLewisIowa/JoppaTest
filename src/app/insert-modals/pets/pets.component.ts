@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter, AfterViewChecked, ChangeDetectorRef } from '@angular/core';
 import { ClientPet } from 'app/models/client-pet';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ClientService } from 'app/services/client.service';
@@ -8,7 +8,7 @@ import { ClientService } from 'app/services/client.service';
   templateUrl: './pets.component.html',
   styleUrls: ['./pets.component.css']
 })
-export class PetsComponent implements OnInit {
+export class PetsComponent implements OnInit, AfterViewChecked {
 
   @ViewChild('petsMdl', { static: false }) petsMdl: ElementRef
   @Output() petAdded = new EventEmitter<ClientPet>();
@@ -20,9 +20,19 @@ export class PetsComponent implements OnInit {
   placeholderText: string = '';
   food_requested: boolean = true;
   extraInfoNeeded: boolean = false;
-  constructor(private modalService: NgbModal, private service: ClientService) { }
+  constructor(private modalService: NgbModal, private service: ClientService, private cdr: ChangeDetectorRef) { }
 
   ngOnInit() {
+  }
+
+  ngAfterViewChecked(): void {
+    if (this.extraInfoNeeded) {
+      this.cdr.detectChanges();
+      const extraInfoElement = document.getElementById('extraInfo');
+      if (extraInfoElement) {
+        extraInfoElement.focus();
+      }
+    }
   }
 
   showModal() {

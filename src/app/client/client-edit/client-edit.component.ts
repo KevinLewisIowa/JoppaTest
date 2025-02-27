@@ -1,4 +1,4 @@
-import { Component, Inject, LOCALE_ID, OnInit } from '@angular/core';
+import { AfterViewChecked, ChangeDetectorRef, Component, Inject, LOCALE_ID, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from "@angular/router";
 import { ClientService } from "app/services/client.service";
@@ -14,7 +14,7 @@ import { DateSelectorComponent } from 'app/insert-modals/date-selector/date-sele
   templateUrl: './client-edit.component.html',
   styleUrls: ['./client-edit.component.css']
 })
-export class ClientEditComponent implements OnInit {
+export class ClientEditComponent implements OnInit, AfterViewChecked {
   badDate = false;
   clientForm: UntypedFormGroup;
   theClient: Client;
@@ -27,7 +27,7 @@ export class ClientEditComponent implements OnInit {
   extraInfoNeededReasonForDesMoines: boolean = false;
   homelessReasonOptions: string[] = ['Addictions', 'Eviction', 'Family Dispute', 'Family Loss', 'Health Issues', 'Job Loss', 'Legal Issues', 'Mental Health', 'Prison/Jail', 'Other'];
 
-  constructor(private router: Router, private clientService: ClientService, private modalService: NgbModal, private fb: UntypedFormBuilder, @Inject(LOCALE_ID) private locale: string) { }
+  constructor(private router: Router, private clientService: ClientService, private modalService: NgbModal, private fb: UntypedFormBuilder, @Inject(LOCALE_ID) private locale: string, private cdr: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.isAdmin = JSON.parse(window.localStorage.getItem('isAdmin'));
@@ -79,6 +79,23 @@ export class ClientEditComponent implements OnInit {
     this.clientForm.get('dwelling').setValidators(Validators.required);
     this.clientForm.get('city_before_homelessness').setValidators(Validators.required);
     this.clientForm.get('state_before_homelessness').setValidators(Validators.required);
+  }
+
+  ngAfterViewChecked(): void {
+    if (this.extraInfoNeeded) {
+      this.cdr.detectChanges();
+      const extraInfoElement = document.getElementById('otherHomelessReason');
+      if (extraInfoElement) {
+        extraInfoElement.focus();
+      }
+    }
+    if (this.extraInfoNeededReasonForDesMoines) {
+      this.cdr.detectChanges();
+      const extraInfoElement = document.getElementById('otherReasonForDesMoines');
+      if (extraInfoElement) {
+        extraInfoElement.focus();
+      }
+    }
   }
 
   onChange(value: string) {

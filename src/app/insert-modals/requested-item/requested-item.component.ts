@@ -5,6 +5,8 @@ import {
   ViewChild,
   Output,
   EventEmitter,
+  ChangeDetectorRef,
+  AfterViewChecked,
 } from "@angular/core";
 import { RequestedItem } from "app/models/requested-item";
 import { ClientService } from "app/services/client.service";
@@ -15,16 +17,26 @@ import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
   templateUrl: "./requested-item.component.html",
   styleUrls: ["./requested-item.component.css"],
 })
-export class RequestedItemComponent implements OnInit {
+export class RequestedItemComponent implements OnInit, AfterViewChecked {
   @ViewChild("requestedItemMdl", { static: false }) requestedItemMdl: ElementRef;
   @Output() requestedItemAdded = new EventEmitter<RequestedItem[]>();
   description: string = "";
   placeholderText: string = "Test";
   extraInfo: string = "";
   extraInfoNeeded: boolean = false;
-  constructor(private modalService: NgbModal, private service: ClientService) { }
+  constructor(private modalService: NgbModal, private service: ClientService, private cdr: ChangeDetectorRef) { }
 
   ngOnInit() { }
+
+  ngAfterViewChecked(): void {
+    if (this.extraInfoNeeded) {
+      this.cdr.detectChanges();
+      const extraInfoElement = document.getElementById('extraInfo');
+      if (extraInfoElement) {
+        extraInfoElement.focus();
+      }
+    }
+  }
 
   showModal() {
     this.modalService.open(this.requestedItemMdl, {
