@@ -108,10 +108,12 @@
         <label for="what_brought_to_des_moines" class="col-6 col-form-label">What Brought You to Des Moines?: </label>
         <div class="col-6">
           <select id="what_brought_to_des_moines" class="form-control" formControlName="what_brought_to_des_moines" #bdm style="float:right;" (change)="onReasonForDesMoinesChange(bdm.value)">
-            <option value="Friend">Friend</option>
-            <option value="Family">Family</option>
-            <option value="Work/Job">Work/Job</option>
             <option value="Better Homeless Services">Better Homeless Services</option>
+            <option value="Family">Family</option>
+            <option value="Friend">Friend</option>
+            <option value="From Des Moines">From Des Moines</option>
+            <option value="School">School</option>
+            <option value="Work/Job">Work/Job</option>
             <option value="Other">Other</option>
           </select>
         </div>

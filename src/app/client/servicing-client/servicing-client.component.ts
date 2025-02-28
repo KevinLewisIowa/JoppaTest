@@ -41,6 +41,7 @@ import { ClientHomelessHistory } from "app/models/client-homeless-histories";
 import { NextOfKinComponent } from "app/insert-modals/next-of-kin/next-of-kin.component";
 import { LocationCamp } from "app/models/location-camp";
 import { Route } from "app/models/route";
+import { ClientHealthInsurance } from "app/models/client-health-insurance";
 
 @Component({
   selector: "app-servicing-client",
@@ -60,6 +61,7 @@ export class ServicingClientComponent implements OnInit {
   healthConcerns: HealthConcern[] = [];
   prayerRequestsAndNeeds: PrayerRequestAndNeed[] = [];
   householdClients: Client[] = [];
+  healthInsurances: ClientHealthInsurance[] = [];
   notes: Note[] = [];
   routeName: string = '';
   pets: ClientPet[] = [];
@@ -205,6 +207,11 @@ export class ServicingClientComponent implements OnInit {
           },
           (error) => console.log(error)
         );
+
+        this.service.getClientHealthInsurance(this.clientId).subscribe((data: ClientHealthInsurance[]) => {
+          this.healthInsurances = data;
+        }, error => console.log(error));
+
         this.service.getRecentReceivedItems(this.clientId).subscribe(
           (data: RequestedItem[]) => {
             this.receivedItems = data;
@@ -950,6 +957,12 @@ export class ServicingClientComponent implements OnInit {
     element.scrollIntoView();
   }
 
+  clientHealthInsuranceAdded(insurance: ClientHealthInsurance) {
+    this.healthInsurances.push(insurance);
+    const element = document.querySelector("#healthInsurance");
+    element.scrollIntoView();
+  }
+
   clientSelected(client: Client) {
     this.householdClients.push(client);
 
@@ -1042,6 +1055,12 @@ export class ServicingClientComponent implements OnInit {
     this.service.removeLike(id).subscribe((res) => {
       this.clientLikes = this.clientLikes.filter((w) => w.id != id);
     });
+  }
+
+  removeHealthInsurance(id: number) {
+    this.service.removeHealthInsurance(id).subscribe(res => {
+      this.healthInsurances = this.healthInsurances.filter((w) => w.id != id);
+    })
   }
 
   removeClientIncome(id: number) {

@@ -879,6 +879,49 @@
         </table>
       </div>
       <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
+        <!-- removed !heatRoute from ngIf to pare down screen -->
+        <h4>
+          Health Insurance
+          <button type="button" (click)="goToTop(); clientHealthInsuranceMdl.showModal()" class="btn btn-primary" style="float: right" *ngIf="isAdmin">
+            New Health Insurance
+          </button>
+        </h4>
+        <table class="table" id="healthInsurance">
+          <colgroup>
+            <col span="1" style="width: 25%" />
+            <col span="1" style="width: 25%" />
+            <col span="1" style="width: 25%" />
+            <col span="1" style="width: 25%" />
+          </colgroup>
+          <thead>
+            <tr>
+              <th>Date Added</th>
+              <th>Has Insurance</th>
+              <th>Company</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let insurance of healthInsurances">
+              <td>
+                {{ insurance.created_at | date: "shortDate" }}
+              </td>
+              <td>
+                {{ insurance.has_health_insurance }}
+              </td>
+              <td>
+                {{ insurance.company }}
+              </td>
+              <td>
+                <button type="button" class="btn btn-primary" (click)="removeHealthInsurance(insurance.id)" *ngIf="isAdmin">
+                  Remove
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
         <div class="background-color">
           <h4>
             Household
@@ -1069,4 +1112,5 @@
 <app-client-homeless-history #clientHomelessHistoryMdl (clientHistoryAdded)="clientHistoryAdded($event)"></app-client-homeless-history>
 <app-referrals-resources #referralsResourcesMdl (referralResourceAdded)="referralResourceAdded($event)"></app-referrals-resources>
 <app-client-search #clientMdl (clientSelected)="clientSelected($event)"></app-client-search>
-<app-client-circle-of-friends #clientCircleOfFriendsMdl (friendAdded)="friendAdded($event)"></app-client-circle-of-friends>"
+<app-client-circle-of-friends #clientCircleOfFriendsMdl (friendAdded)="friendAdded($event)"></app-client-circle-of-friends>
+<app-client-health-insurance #clientHealthInsuranceMdl (clientHealthInsuranceAdded)="clientHealthInsuranceAdded($event)"></app-client-health-insurance>

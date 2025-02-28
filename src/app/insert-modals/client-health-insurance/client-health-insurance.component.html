@@ -1,0 +1,51 @@
+<ng-template #clientHealthInsuranceMdl let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title">Create Health Insurance Record</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')"><span
+                aria-hidden="true">&times;</span></button>
+    </div>
+    <form>
+        <div class="modal-body">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="has_health_insurancee">Has Health Insurance</label>
+                        <select id="has_health_insurancee" class="form-control" [(ngModel)]="has_health_insurance" (change)="onChangeHasInsurance()">
+                            <option value="Unknown">Unknown</option>
+                            <option value="Yes">Yes</option>
+                            <option value="Yes">No</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row" *ngIf="has_insurance">
+                    <div class="col-md-6">
+                        <label for="company">Company</label>
+                        <select id="company" class="form-control" [(ngModel)]="company" (change)="onChange()">
+                            <option>Atena</option>
+                            <option>BCBS</option>
+                            <option>Humana</option>
+                            <option>Iowa Total Care</option>
+                            <option>Medicaid</option>
+                            <option>Medicare</option>
+                            <option>Molina</option>
+                            <option>Oscar</option>
+                            <option>United Healthcare</option>
+                            <option>Veterans</option>
+                            <option>Wellmark</option>
+                            <option>Wellpoint (Amerigroup)</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <input id="extraInfo" name="extraInfoCompany" class="form-control" type="text"
+                            [(ngModel)]="other_company" *ngIf="extraInfoNeeded" placeholder="Other Company" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-primary" (click)="c('Close click')">Don't Save</button>
+        <button type="button" class="btn btn-primary" (click)="submitClientInsurance();c('')">Save</button>
+    </div>
+</ng-template>

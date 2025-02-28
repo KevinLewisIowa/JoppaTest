@@ -23,6 +23,12 @@ import { ClientIncome } from "app/models/client-income";
 import { ClientNextOfKin } from "app/models/client-next-of-kin";
 import { ClientHomelessHistory } from "app/models/client-homeless-histories";
 import { Heater } from "app/models/heater";
+import { ClientDebt } from "app/models/client-debt";
+import { ClientFelony } from "app/models/client-felony";
+import { ClientPastEviction } from "app/models/client-past-eviction";
+import { ClientStep } from "app/models/client-step";
+import { ClientSkill } from "app/models/client-skill";
+import { ClientHealthInsurance } from "app/models/client-health-insurance";
 
 // adding a new comment
 @Injectable()
@@ -965,6 +971,270 @@ export class ClientService {
       );
   }
 
+  insertDebt(debt: ClientDebt) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+
+    return this.http
+      .post(
+        this.baseUrl + `client_debts`,
+        { client_debt: debt },
+        { headers: myHeader }
+      )
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  getClientDebt(id) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+
+    return this.http
+      .get(this.baseUrl + `getClientDebt?clientId=${id}`, { headers: myHeader })
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  insertFelony(felony: ClientFelony) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+
+    return this.http
+      .post(
+        this.baseUrl + `client_felonies`,
+        { client_felony: felony },
+        { headers: myHeader }
+      )
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  getClientFelonies(id) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+
+    return this.http
+      .get(this.baseUrl + `getClientFelonies?clientId=${id}`, { headers: myHeader })
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  insertPastEviction(eviction: ClientPastEviction) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+
+    return this.http
+      .post(
+        this.baseUrl + `client_past_evictions`,
+        { client_past_eviction: eviction },
+        { headers: myHeader }
+      )
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  getPastEvictions(id) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+
+    return this.http
+      .get(this.baseUrl + `getPastEvictions?clientId=${id}`, { headers: myHeader })
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  insertStep(step: ClientStep) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+
+    return this.http
+      .post(
+        this.baseUrl + `client_steps`,
+        { client_step: step },
+        { headers: myHeader }
+      )
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  getClientSteps(id) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+
+    return this.http
+      .get(this.baseUrl + `getClientSteps?clientId=${id}`, { headers: myHeader })
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  insertSkill(skill: ClientSkill) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+
+    return this.http
+      .post(
+        this.baseUrl + `client_skills`,
+        { client_skill: skill },
+        { headers: myHeader }
+      )
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  getClientSkills(id) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+
+    return this.http
+      .get(this.baseUrl + `getClientSkills?clientId=${id}`, { headers: myHeader })
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  insertHealthInsurance(insurance: ClientHealthInsurance) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+
+    return this.http
+      .post(
+        this.baseUrl + `client_health_insurances`,
+        { client_health_insurance: insurance },
+        { headers: myHeader }
+      )
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  getClientHealthInsurance(id) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+
+    return this.http
+      .get(this.baseUrl + `getClientHealthInsurance?clientId=${id}`, { headers: myHeader })
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
   getClientPets(id) {
     const myHeader = new HttpHeaders({
       "Content-Type": "application/json",
@@ -1086,6 +1356,17 @@ export class ClientService {
       Authorization: window.localStorage.getItem("apiToken"),
     });
     return this.http.delete(this.baseUrl + `client_likes/${id}`, { headers: myHeader })
+    .pipe(map((res) => {
+      return true;
+    }), catchError(this.handleError));
+  }
+
+  removeHealthInsurance(id: number) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+    return this.http.delete(this.baseUrl + `client_health_insurances/${id}`, { headers: myHeader })
     .pipe(map((res) => {
       return true;
     }), catchError(this.handleError));
