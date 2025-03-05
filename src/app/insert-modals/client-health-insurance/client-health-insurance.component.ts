@@ -43,7 +43,7 @@ export class ClientHealthInsuranceComponent implements OnInit, AfterViewChecked 
   ngAfterViewChecked(): void {
     if (this.extraInfoNeeded) {
       const extraInfoElement = document.getElementById('extraInfo');
-      if (extraInfoElement) {
+      if (extraInfoElement && this.other_company == '') {
         extraInfoElement.focus();
       }
     }

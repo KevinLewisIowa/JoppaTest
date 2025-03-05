@@ -25,30 +25,35 @@ export class ClientEditModalComponent implements OnInit, AfterViewChecked {
   extraInfoNeededReasonForDesMoines: boolean = false;
   submitted: boolean = false;
   staticBirthday: string = '';
+  whatbroughtyoutodesmoines: string[] = [
+    'Better Homeless Services',
+    'Family',
+    'Friend',
+    'From Des Moines',
+    'School',
+    'Work/Job',
+    'Other'
+  ];
 
   constructor(private router: Router, private modalService: NgbModal, private clientService: ClientService, private fb: UntypedFormBuilder, @Inject(LOCALE_ID) private locale: string, private cdr: ChangeDetectorRef) { }
 
   ngOnInit() {
-    this.theClient = new Client();
-    this.clientForm = this.fb.group(this.theClient);
-
     this.isAdmin = JSON.parse(window.localStorage.getItem('isAdmin'));
   }
 
   ngAfterViewChecked(): void {
-    console.log(JSON.stringify(this.extraInfoNeededReasonForDesMoines));
     if (this.extraInfoNeededReasonForDesMoines) {
-      console.log('about to detect changes');
       this.cdr.detectChanges();
-      const extraInfoElement = document.getElementById('otherReasonForDesMoines');
-      console.log(JSON.stringify(extraInfoElement));
-      if (extraInfoElement) {
-        extraInfoElement.focus();
-      }
+      setTimeout(() => {
+        const extraInfoElement = document.getElementById('otherReasonForDesMoines');
+        if (extraInfoElement && this.clientForm.get('otherReasonForDesMoines').value == '') {
+          extraInfoElement.focus();
+        }
+      }, 0);
     }
   }
 
-  onReasonForDesMoinesChange(value: string) {
+  onReasonChange(value: string) {
     if (value == 'Other') {
       this.extraInfoNeededReasonForDesMoines = true;
     } else {
@@ -72,7 +77,57 @@ export class ClientEditModalComponent implements OnInit, AfterViewChecked {
     }
 
     this.clientForm = null;
-    this.clientForm = this.fb.group(this.theClient);
+    const whatBroughtToDesMoines = this.theClient.what_brought_to_des_moines || '';
+    const isKnownReason = this.whatbroughtyoutodesmoines.includes(whatBroughtToDesMoines);
+    this.clientForm = this.fb.group({
+      id: [this.theClient.id || undefined],
+      first_name: [this.theClient.first_name || ''],
+      last_name: [this.theClient.last_name || ''],
+      preferred_name: [this.theClient.preferred_name || ''],
+      birth_date: [this.theClient.birth_date || undefined],
+      is_aftercare: [this.theClient.is_aftercare || false],
+      shoe_size: [this.theClient.shoe_size || ''],
+      boot_size: [this.theClient.boot_size || ''],
+      phone: [this.theClient.phone || ''],
+      email: [this.theClient.email || ''],
+      status: [this.theClient.status || ''],
+      is_veteran: [this.theClient.is_veteran || false],
+      inactive_description: [this.theClient.inactive_description || ''],
+      number_meals: [this.theClient.number_meals || undefined],
+      joppa_apartment_number: [this.theClient.joppa_apartment_number || ''],
+      dwelling: [this.theClient.dwelling || ''],
+      created_at: [this.theClient.created_at || undefined],
+      updated_at: [this.theClient.updated_at || undefined],
+      last_interaction_date: [this.theClient.last_interaction_date || undefined],
+      gender: [this.theClient.gender || ''],
+      race: [this.theClient.race || ''],
+      ethnicity: [this.theClient.ethnicity || ''],
+      admin_notes: [this.theClient.admin_notes || ''],
+      current_camp_id: [this.theClient.current_camp_id || undefined],
+      previous_camp_id: [this.theClient.previous_camp_id || undefined],
+      number_tanks: [this.theClient.number_tanks || undefined],
+      number_hoses: [this.theClient.number_hoses || undefined],
+      household_id: [this.theClient.household_id || undefined],
+      first_time_homeless: [this.theClient.first_time_homeless || false],
+      date_became_homeless: [this.theClient.date_became_homeless || undefined],
+      homeless_reason: [this.theClient.homeless_reason || ''],
+      due_to_covid: [this.theClient.due_to_covid || false],
+      household_relationship_type: [this.theClient.household_relationship_type || ''],
+      client_picture: [this.theClient.client_picture || undefined],
+      latitude: [this.theClient.latitude || undefined],
+      longitude: [this.theClient.longitude || undefined],
+      has_location: [this.theClient.has_location || undefined],
+      diagnosed_mental_physical_disability: [this.theClient.diagnosed_mental_physical_disability || false],
+      highest_level_education: [this.theClient.highest_level_education || ''],
+      city_before_homelessness: [this.theClient.city_before_homelessness || ''],
+      state_before_homelessness: [this.theClient.state_before_homelessness || ''],
+      what_brought_to_des_moines: [isKnownReason ? whatBroughtToDesMoines : 'Other'],
+      otherReasonForDesMoines: [!isKnownReason ? whatBroughtToDesMoines : '']
+    });
+
+    if (!isKnownReason) {
+      this.extraInfoNeededReasonForDesMoines = true;
+    }
     if (this.submitted) {
       // handling if user re-visits the modal before page refresh and UTC auto-adjustment
       this.clientForm.patchValue({ birth_date: this.staticBirthday });
@@ -97,7 +152,6 @@ export class ClientEditModalComponent implements OnInit, AfterViewChecked {
   }
 
   onVeteranChange(value: string) {
-    console.log(value);
     if (value.toLowerCase() == 'null') {
       this.clientForm.patchValue({ is_veteran: null });
     }
@@ -134,11 +188,9 @@ export class ClientEditModalComponent implements OnInit, AfterViewChecked {
   }
 
   onAdd(event: any) {
-    console.log(event);
     if (event.target.files && event.target.files[0]) {
       var reader = new FileReader();
       reader.onload = (event: any) => {
-        console.log(JSON.stringify(event.target.result));
         this.url = event.target.result;
         this.byteArray = event.target.result.split('base64,')[1];
       }
@@ -179,6 +231,13 @@ export class ClientEditModalComponent implements OnInit, AfterViewChecked {
     if (updatedClient.status == 'Inactive') {
       updatedClient.previous_camp_id = updatedClient.current_camp_id;
       updatedClient.current_camp_id = 0;
+    }
+
+    if (updatedClient.what_brought_to_des_moines == 'Other' && this.clientForm.get('otherReasonForDesMoines').value == '') {
+      alert('Please enter what brought you to Des Moines');
+      return;
+    } else if (updatedClient.what_brought_to_des_moines == 'Other' && this.clientForm.get('otherReasonForDesMoines').value != '') {
+      updatedClient.what_brought_to_des_moines = this.clientForm.get('otherReasonForDesMoines').value;
     }
 
     this.clientService.updateClient(updatedClient).subscribe(data => {

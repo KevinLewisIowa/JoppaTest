@@ -111,7 +111,6 @@ export class ServicingClientComponent implements OnInit {
 
   ngOnInit() {
     this.routeInstanceId = JSON.parse(localStorage.getItem("routeInstance"));
-    console.log(this.routeInstanceId);
     this.heatRoute = JSON.parse(window.localStorage.getItem("heatRoute"));
     this.isAdmin = JSON.parse(window.localStorage.getItem("isAdmin"));
     this.locationCampId = JSON.parse(
@@ -187,16 +186,13 @@ export class ServicingClientComponent implements OnInit {
         this.service.getClientNotesForClient(this.clientId).subscribe(
           (data: Note[]) => {
             this.notes = data;
-            console.log(JSON.stringify(data));
             let pinnedNotes: Note[] = data.filter(n => n.source == "PINNED NOTE");
-            console.log(JSON.stringify(pinnedNotes))
             pinnedNotes.forEach(n => {
               if (this.pinnedNoteString === "") {
                 this.pinnedNoteString = n.note;
               } else {
                 this.pinnedNoteString += '\r\n' + n.note;
               }
-              console.log(this.pinnedNoteString);
             });
 
             this.notes.sort((a, b) => (a.created_at > b.created_at) ? 1 : -1);
@@ -518,9 +514,6 @@ export class ServicingClientComponent implements OnInit {
 
   showMap() {
     if (this.client.latitude !== null && this.client.longitude !== null) {
-      console.log(
-        `latitude: ${this.client.latitude}, longitude: ${this.client.longitude}`
-      );
       window.open(`https://www.google.com/maps/dir/${this.client.latitude},${this.client.longitude}/@//`, "_blank");
     }
   }
@@ -589,21 +582,18 @@ export class ServicingClientComponent implements OnInit {
   }
 
   updateHeaterInfo(heater: Heater) {
-    console.log('Heater to update: ' + JSON.stringify(heater));
     this.service.updateHeater(heater).subscribe((data) => {
       console.log(JSON.stringify(data));
     })
   }
 
   updateTankInfo(tank: any) {
-    console.log('Tank to update: ' + JSON.stringify(tank));
     this.service.updateTank(tank).subscribe((data) => {
       console.log(JSON.stringify(data));
     })
   }
 
   updateHoseInfo(hose: any) {
-    console.log('Hose to update: ' + JSON.stringify(hose));
     this.service.updateHose(hose).subscribe((data) => {
       console.log(JSON.stringify(data));
     })
@@ -624,8 +614,6 @@ export class ServicingClientComponent implements OnInit {
     if (!this.isAdmin) {
       alert('Attendance recorded');
     }
-
-    console.log('sendInteraction Heat equipment added: ' + JSON.stringify(heatEquipmentAdded));
 
     const interaction: Appearance = new Appearance();
     interaction.client_id = this.client.id;
@@ -713,8 +701,6 @@ export class ServicingClientComponent implements OnInit {
         this.createUpdateInteraction(interaction, heatEquipmentAdded);
       }
     }
-
-    console.log("camp id: " + interaction.location_camp_id);
   }
 
   private createUpdateInteraction(interaction: Appearance, heatEquipmentAdded: boolean = false) {
@@ -749,15 +735,13 @@ export class ServicingClientComponent implements OnInit {
           let clientDwelling: ClientDwelling = this.dwellings.filter(dwelling => dwelling.created_at === dwellingDates.reduce((a, b) => a > b ? a : b))[0];
           let clientHistory: ClientHomelessHistory = this.homelessHistories.filter(history => history.created_at === historyDates.reduce((a, b) => a > b ? a : b))[0];
 
-          console.log(JSON.stringify(clientDwelling));
           var difference = new Date().getTime() - new Date(clientDwelling.created_at).getTime();
           difference = Math.ceil(difference / (1000 * 3600 * 24));
-          console.log('Difference: ' + difference)
           if (interaction.serviced && (clientDwelling.dwelling == "House" || clientDwelling.dwelling == "Apartment" || clientDwelling.dwelling == "Shelter" || clientDwelling.dwelling == "Motel" || clientDwelling.dwelling == "Motel") && difference > 90 && clientHistory != null) {
 
             clientHistory.first_time_homeless = false;
             this.service.updateHomelessHistory(clientHistory).subscribe(data => {
-              console.log(data);
+              
             }, error => console.log(error));
           }
 
@@ -766,7 +750,6 @@ export class ServicingClientComponent implements OnInit {
         (error) => console.log(error)
       );
     } else {
-      console.log(`Appearance to add: ${JSON.stringify(interaction)}`);
       this.service.insertClientAppearance(interaction).subscribe(
         (data) => {
           interaction.id = data.id;
@@ -787,15 +770,13 @@ export class ServicingClientComponent implements OnInit {
           let historyDates = this.homelessHistories.map(history => history.created_at);
           let clientDwelling: ClientDwelling = this.dwellings.filter(dwelling => dwelling.created_at === dwellingDates.reduce((a, b) => a > b ? a : b))[0];
           let clientHistory: ClientHomelessHistory = this.homelessHistories.filter(history => history.created_at === historyDates.reduce((a, b) => a > b ? a : b))[0];
-          console.log(JSON.stringify(clientDwelling));
-
+          
           var difference = new Date().getTime() - new Date(clientDwelling.created_at).getTime();
           difference = Math.ceil(difference / (1000 * 3600 * 24));
-          console.log('Difference: ' + difference)
           if (interaction.serviced && (clientDwelling.dwelling == "House" || clientDwelling.dwelling == "Apartment" || clientDwelling.dwelling == "Shelter" || clientDwelling.dwelling == "Motel" || clientDwelling.dwelling == "Camper") && difference > 90) {
             clientHistory.first_time_homeless = false;
             this.service.updateHomelessHistory(clientHistory).subscribe(data => {
-              console.log(data);
+              
             }, error => console.log(error));
           }
 
@@ -807,8 +788,7 @@ export class ServicingClientComponent implements OnInit {
   }
 
   private updateClientAndListing(routeAttendanceList: Appearance[], heatEquipmentAdded: boolean = false) {
-    console.log('updateclientandlisting Heat equipment added: ' + JSON.stringify(heatEquipmentAdded));
-
+    
     this.service.updateClient(this.client).subscribe(
       (data) => {
         let routeAttendanceList: Appearance[] = JSON.parse(
@@ -820,17 +800,11 @@ export class ServicingClientComponent implements OnInit {
           );
         }
 
-        console.log(data.status);
         if (!this.isAdmin && !heatEquipmentAdded) {
           window.localStorage.setItem(
             "RouteAttendance",
             JSON.stringify(routeAttendanceList)
           );
-          console.log(
-            "Number of interactions in route attendance list: " +
-            routeAttendanceList.length
-          );
-          console.log(JSON.stringify(routeAttendanceList));
           this.router.navigate([`/locationCamp/${this.locationCampId}`]);
         }
       },
@@ -888,9 +862,7 @@ export class ServicingClientComponent implements OnInit {
   }
 
   clientHistoryAdded(history: ClientHomelessHistory) {
-    console.log(JSON.stringify(history));
     this.homelessHistories.push(history);
-    console.log(JSON.stringify(this.homelessHistories));
     const element = document.querySelector("#histories");
     element.scrollIntoView();
   }
@@ -1002,20 +974,17 @@ export class ServicingClientComponent implements OnInit {
       let routeAttendanceList: Appearance[] = JSON.parse(
         localStorage.getItem("RouteAttendance")
       );
-      console.log(this.clientId);
-      console.log(JSON.stringify(routeAttendanceList));
       if (routeAttendanceList.length != null) {
         this.appearance = routeAttendanceList.find(
           (x) => x.client_id == this.clientId
         );
       }
 
-      console.log(JSON.stringify(this.appearance))
+      
       if (this.appearance) {
         this.sentInteraction = true;
       }
 
-      console.log('Sent interaction: ' + JSON.stringify(this.sentInteraction));
       if (!this.sentInteraction) {
         message =
           "Are you sure you want to close out of this client? You have not yet marked them as seen or serviced.";
@@ -1158,7 +1127,6 @@ export class ServicingClientComponent implements OnInit {
         } else {
           this.pinnedNoteString += '\r\n' + n.note;
         }
-        console.log(this.pinnedNoteString);
       });
     });
   }
@@ -1321,7 +1289,6 @@ export class ServicingClientComponent implements OnInit {
         } else {
           this.pinnedNoteString += '\r\n' + n.note;
         }
-        console.log(this.pinnedNoteString);
       });
     },
       (error) => console.log(error)

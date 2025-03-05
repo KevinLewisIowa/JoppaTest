@@ -89,7 +89,8 @@
       <div class="form-group row">
         <label for="highest_level_education" class="col-6 col-form-label">Highest Level of Education: </label>
         <div class="col-6">
-          <select id="highest_level_education" class="form-control" formControlName="highest_level_education" style="float:right;">
+          <select id="highest_level_education" class="form-control" formControlName="highest_level_education"
+            style="float:right;">
             <option value="K-8">K-8</option>
             <option value="9-12">9-12</option>
             <option value="College 2 or 4 yr Degree">College 2 or 4 yr Degree</option>
@@ -107,31 +108,29 @@
       <div class="form-group row">
         <label for="what_brought_to_des_moines" class="col-6 col-form-label">What Brought You to Des Moines?: </label>
         <div class="col-6">
-          <select id="what_brought_to_des_moines" class="form-control" formControlName="what_brought_to_des_moines" #bdm style="float:right;" (change)="onReasonForDesMoinesChange(bdm.value)">
-            <option value="Better Homeless Services">Better Homeless Services</option>
-            <option value="Family">Family</option>
-            <option value="Friend">Friend</option>
-            <option value="From Des Moines">From Des Moines</option>
-            <option value="School">School</option>
-            <option value="Work/Job">Work/Job</option>
-            <option value="Other">Other</option>
+          <select id="what_brought_to_des_moines" #bdm class="form-control" formControlName="what_brought_to_des_moines"
+            style="float:right;" (change)="onReasonChange(bdm.value)">
+            <option value="" disabled selected>Reason</option>
+            <option *ngFor="let option of whatbroughtyoutodesmoines" [value]="option">{{ option }}</option>
           </select>
         </div>
       </div>
       <div class="form-group row">
         <label class="col-6"></label>
         <div class="col-6">
-          <input id="otherReasonForDesMoines" type="text" class="form-control" placeholder="Reason" *ngIf="extraInfoNeededReasonForDesMoines"
-            formControlName="otherReasonForDesMoines" />
+          <input id="otherReasonForDesMoines" type="text" class="form-control" placeholder="Reason"
+            formControlName="otherReasonForDesMoines" *ngIf="extraInfoNeededReasonForDesMoines" />
         </div>
       </div>
       <div class="form-group row">
         <label class="col-6 col-form-label">What City and State Did You Live In Before You Became Homeless?: </label>
         <div class="col-3">
-          <input class="form-control" formControlName="city_before_homelessness" style="float:right" placeholder="City" />
+          <input class="form-control" formControlName="city_before_homelessness" style="float:right"
+            placeholder="City" />
         </div>
         <div class="col-3">
-          <select id="state_before_homelessness" class="form-control" formControlName="state_before_homelessness" style="float:right;">
+          <select id="state_before_homelessness" class="form-control" formControlName="state_before_homelessness"
+            style="float:right;">
             <option value="" disabled selected>State</option>
             <option value="Alabama">Alabama</option>
             <option value="Alaska">Alaska</option>
@@ -190,7 +189,8 @@
       <div class="form-group row">
         <label for="veteran" class="col-6 col-form-label">Is Veteran:</label>
         <div class="col-6">
-          <select name="veteran" id="veteran" class="form-control" #veteranitem style="float:right;" (change)="onVeteranChange(veteranitem.value)" formControlName="is_veteran">
+          <select name="veteran" id="veteran" class="form-control" #veteranitem style="float:right;"
+            (change)="onVeteranChange(veteranitem.value)" formControlName="is_veteran">
             <option value="null" disabled selected>Unknown</option>
             <option value="true">Yes</option>
             <option value="false">No</option>
@@ -198,9 +198,12 @@
         </div>
       </div>
       <div class="form-group row">
-        <label for="diagnosed_mental_physical_disability" class="col-6 col-form-label">Has Diagnosed Physical or Mental Disability:</label>
+        <label for="diagnosed_mental_physical_disability" class="col-6 col-form-label">Has Diagnosed Physical or Mental
+          Disability:</label>
         <div class="col-6">
-          <select name="diagnosed_mental_physical_disability" id="diagnosed_mental_physical_disability" class="form-control" #diagnoseditem style="float:right;" (change)="onDiagnosedChange(diagnoseditem.value)" formControlName="diagnosed_mental_physical_disability">
+          <select name="diagnosed_mental_physical_disability" id="diagnosed_mental_physical_disability"
+            class="form-control" #diagnoseditem style="float:right;" (change)="onDiagnosedChange(diagnoseditem.value)"
+            formControlName="diagnosed_mental_physical_disability">
             <option value="null" disabled selected>Unknown</option>
             <option value="true">Yes</option>
             <option value="false">No</option>
@@ -210,7 +213,8 @@
       <div class="form-group row">
         <label for="aftercare" class="col-6 col-form-label">Is After Care:</label>
         <div class="col-6">
-          <select name="aftercare" id="aftercare" #aftercareitem class="form-control" style="float:right;" (change)="onAftercareChange(aftercareitem.value)" formControlName="is_aftercare">
+          <select name="aftercare" id="aftercare" #aftercareitem class="form-control" style="float:right;"
+            (change)="onAftercareChange(aftercareitem.value)" formControlName="is_aftercare">
             <option value="null" disabled selected>Unknown</option>
             <option value="true">Yes</option>
             <option value="false">No</option>
@@ -220,22 +224,26 @@
       <div class="form-group row">
         <label for="camp-latitude" class="col-6 col-form-label">Camp Latitude: </label>
         <div class="col-3">
-          <button class="btn btn-primary" style="float: right" (click)="getCurrentLocation()">Get Current Location for Camp</button>
+          <button class="btn btn-primary" style="float: right" (click)="getCurrentLocation()">Get Current Location for
+            Camp</button>
         </div>
         <div class="col-3">
-          <input id="camp-latitude" type="text" class="form-control" placeholder="camp latitude" formControlName="latitude" />
+          <input id="camp-latitude" type="text" class="form-control" placeholder="camp latitude"
+            formControlName="latitude" />
         </div>
       </div>
       <div class="form-group row">
         <label for="camp-longitude" class="col-9 col-form-label">Camp Longitude: </label>
         <div class="col-3">
-          <input id="camp-longitude" type="text" class="form-control" style="float: right" placeholder="Camp Longitude" formControlName="longitude" />
+          <input id="camp-longitude" type="text" class="form-control" style="float: right" placeholder="Camp Longitude"
+            formControlName="longitude" />
         </div>
       </div>
       <div class="form-group row">
         <label for="mailbox" class="col-6 col-form-label">Mailbox: </label>
         <div class="col-6">
-          <input id="mailbox" type="text" class="form-control" style="float:right;" placeholder="Joppa Mailbox Number" formControlName="joppa_apartment_number" />
+          <input id="mailbox" type="text" class="form-control" style="float:right;" placeholder="Joppa Mailbox Number"
+            formControlName="joppa_apartment_number" />
         </div>
       </div>
       <div class="form-group row">
@@ -252,21 +260,26 @@
       <div class="form-group row" *ngIf="isAdmin">
         <label for="admin-notes" class="col-6 col-form-label">Admin Notes: </label>
         <div class="col-6">
-          <textarea id="admin-notes" type="text" class="form-control" rows="3" placeholder="admin notes" style="float:right;" formControlName="admin_notes"></textarea>
+          <textarea id="admin-notes" type="text" class="form-control" rows="3" placeholder="admin notes"
+            style="float:right;" formControlName="admin_notes"></textarea>
         </div>
       </div>
       <div class="form-group row">
         <img [src]="url" *ngIf="url != '' && url != null">
         <label for="client-picture" class="col-6 col-form-label">Image:</label>
         <div class="col-6">
-          <input id="client-picture" type="file" accept="image/*" width="300" height="300" (change)="onAdd($event)" class="form-control" style="float:right;" />
-          <button id="clear-picture" class="btn btn-outline-primary" (click)="clearPicture()" *ngIf="isAdmin">Clear Photo</button>
+          <input id="client-picture" type="file" accept="image/*" width="300" height="300" (change)="onAdd($event)"
+            class="form-control" style="float:right;" />
+          <button id="clear-picture" class="btn btn-outline-primary" (click)="clearPicture()" *ngIf="isAdmin">Clear
+            Photo</button>
         </div>
       </div>
     </form>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-outline-primary" style="float:right;" (click)="c('Close click')">Don't Save</button>
-    <button type="button" class="btn btn-primary" style="float:right;" [disabled]="!clientForm.valid" (click)="submitClient(); c('');">Save</button>
+    <button type="button" class="btn btn-outline-primary" style="float:right;" (click)="c('Close click')">Don't
+      Save</button>
+    <button type="button" class="btn btn-primary" style="float:right;" [disabled]="!clientForm.valid"
+      (click)="submitClient(); c('');">Save</button>
   </div>
 </ng-template>

@@ -30,7 +30,7 @@ export class ClientHomelessHistoryComponent implements AfterViewChecked {
     if (this.extraInfoNeeded) {
       this.cdr.detectChanges();
       const extraInfoElement = document.getElementById('extraInfo');
-      if (extraInfoElement) {
+      if (extraInfoElement && this.other_homeless_reason == '') {
         extraInfoElement.focus();
       }
     }

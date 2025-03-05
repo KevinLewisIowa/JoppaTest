@@ -85,14 +85,14 @@ export class ClientEditComponent implements OnInit, AfterViewChecked {
     if (this.extraInfoNeeded) {
       this.cdr.detectChanges();
       const extraInfoElement = document.getElementById('otherHomelessReason');
-      if (extraInfoElement) {
+      if (extraInfoElement && this.clientForm.get('otherHomelessReason').value == '') {
         extraInfoElement.focus();
       }
     }
     if (this.extraInfoNeededReasonForDesMoines) {
       this.cdr.detectChanges();
       const extraInfoElement = document.getElementById('otherReasonForDesMoines');
-      if (extraInfoElement) {
+      if (extraInfoElement && this.clientForm.get('otherReasonForDesMoines').value == '') {
         extraInfoElement.focus();
       }
     }
@@ -231,6 +231,13 @@ export class ClientEditComponent implements OnInit, AfterViewChecked {
     this.theClient.diagnosed_mental_physical_disability = this.clientForm.get('diagnosed_mental_physical_disability').value;
     this.theClient.highest_level_education = String(this.clientForm.get('highest_level_education').value).trim();
     this.theClient.city_before_homelessness = String(this.clientForm.get('city_before_homelessness').value).trim();
+    //const validCities = ['New York', 'Los Angeles', 'Chicago', 'Houston', 'Phoenix']; // Add more valid cities as needed
+    // const cityBeforeHomelessness = String(this.clientForm.get('city_before_homelessness').value).trim();
+    // if (!validCities.includes(cityBeforeHomelessness)) {
+    //   alert('Please enter a valid city before homelessness.');
+    //   return;
+    // }
+    
     this.theClient.state_before_homelessness = String(this.clientForm.get('state_before_homelessness').value).trim();
 
     let reason_for_des_moines: string = String(this.clientForm.get('what_brought_to_des_moines').value);

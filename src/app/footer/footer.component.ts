@@ -92,8 +92,7 @@ export class FooterComponent implements OnInit {
 
   private continueWithEndingRoute(heatRoute: boolean, routeInstanceId: any, primary_device: boolean) {
     this.mainService.showEndRoute.next(false);
-    console.log(this.isAdmin);
-
+    
     // if (heatRoute) {
     //   this.router.navigate(['checkoutHeaters']);
     // }

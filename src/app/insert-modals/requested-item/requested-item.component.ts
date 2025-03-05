@@ -32,7 +32,7 @@ export class RequestedItemComponent implements OnInit, AfterViewChecked {
     if (this.extraInfoNeeded) {
       this.cdr.detectChanges();
       const extraInfoElement = document.getElementById('extraInfo');
-      if (extraInfoElement) {
+      if (extraInfoElement && this.extraInfo == '') {
         extraInfoElement.focus();
       }
     }
