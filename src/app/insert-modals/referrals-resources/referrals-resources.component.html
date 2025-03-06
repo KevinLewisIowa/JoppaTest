@@ -11,41 +11,13 @@
         <div class="row">
           <div class="col-sm-4">
             <label for="type">Type</label>
-            <select id="type" class="form-control" [(ngModel)]="type" name="type">
-              <option value="Aging Resources">Aging Resources</option>
-              <option value="Case Management List">Case Management List</option>
-              <option value="Cell Phone List">Cell Phone List</option>
-              <option value="Clothing List">Clothing List</option>
-              <option value="Cricket Wireless">Cricket Wireless</option>
-              <option value="Disability List">Disability List</option>
-              <option value="DOT Appt $10">DOT Appt $10</option>
-              <option value="Employment List">Employment List</option>
-              <option value="Exemplar Care">Exemplar Care</option>
-              <option value="Financial Assistance">Financial Assistance</option>
-              <option value="Food List">Food List</option>
-              <option value="FreeStore Referral">FreeStore Referral</option>
-              <option value="Haircut List">Haircut List</option>
-              <option value="Housing List">Housing List</option>
-              <option value="Joppa PO Box">Joppa PO Box</option>
-              <option value="Joppa Relocation">Joppa Relocation</option>
-              <option value="Laundry List">Laundry List</option>
-              <option value="Legal Assistance List">Legal Assistance List</option>
-              <option value="Medical List">Medical List</option>
-              <option value="Dental List">Dental List</option>
-              <option value="Mental Health List">Mental Health List</option>
-              <option value="Substance Abuse List">Substance Abuse List</option>
-              <option value="Pet Food Pantry List">Pet Food Pantry List</option>
-              <option value="PHC intake information">PHC intake information</option>
-              <option value="PHC verification">PHC verification</option>
-              <option value="Pregnancy List">Pregnancy List</option>
-              <option value="Rent & Utilities Assistance List">Rent & Utilities Assistance List</option>
-              <option value="SNAP Application">SNAP Application</option>
-              <option value="Shelters List">Shelters List</option>
-              <option value="Shower Locations List">Shower Locations List</option>
-              <option value="Transportation List">Transportation List</option>
-              <option value="Thriftmart Gift Card">Thriftmart Gift Card</option>
-              <option value="Other">Other</option>
+            <select id="type" class="form-control" [(ngModel)]="type" name="type" (change)="onTypeChange()">
+              <option value="" disabled selected>Select Type</option>
+              <option *ngFor="let type of types" [value]="type">{{ type }}</option>
             </select>
+          </div>
+          <div class="col-sm-4">
+            <input id="extraInfo" name="extraInfoType" class="form-control" type="text" [(ngModel)]="other_type" *ngIf="extraInfoNeeded" placeholder="Other Type" />
           </div>
           <div class="col-sm-4">
             <label for="quantity">Quantity</label>

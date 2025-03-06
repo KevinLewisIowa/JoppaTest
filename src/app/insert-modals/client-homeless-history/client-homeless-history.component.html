@@ -11,16 +11,8 @@
           <div class="col-md-6">
             <label for="homeless-reason">Reason for Homelessness</label>
             <select id="homeless-reason" class="form-control" [(ngModel)]="homeless_reason" (change)="onChange()">
-              <option value="Addictions">Addictions</option>
-              <option value="Eviction">Eviction</option>
-              <option value="Family Dispute">Family Dispute</option>
-              <option value="Family Loss">Family Loss</option>
-              <option value="Health Issues">Health Issues</option>
-              <option value="Job Loss">Job Loss</option>
-              <option value="Legal Issues">Legal Issues</option>
-              <option value="Mental Health">Mental Health</option>
-              <option value="Prison/Jail">Prison/Jail</option>
-              <option value="Other">Other</option>
+              <option value="" disabled selected>Select Reason</option>
+              <option *ngFor="let reason of reason_for_homelessness" [value]="reason">{{ reason }}</option>
             </select>
           </div>
           <div class="col-md-6">

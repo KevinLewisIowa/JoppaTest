@@ -15,10 +15,22 @@ export class ClientHomelessHistoryComponent implements AfterViewChecked {
   first_time_homeless: boolean = false;
   date_became_homeless: Date;
   homeless_reason: string = '';
-  other_homeless_reason: string;
+  other_homeless_reason: string = '';
   notes: string = '';
   extraInfoNeeded: boolean = false;
   client_id: number;
+  reason_for_homelessness: string[] = [
+    'Addictions',
+    'Eviction',
+    'Family Dispute',
+    'Family Loss',
+    'Health Issues',
+    'Job Loss',
+    'Legal Issues',
+    'Mental Health',
+    'Prison/Jail',
+    'Other'
+  ];
 
   constructor(private modalService: NgbModal, private clientService: ClientService, private cdr: ChangeDetectorRef) { }
 
@@ -29,10 +41,12 @@ export class ClientHomelessHistoryComponent implements AfterViewChecked {
   ngAfterViewChecked(): void {
     if (this.extraInfoNeeded) {
       this.cdr.detectChanges();
-      const extraInfoElement = document.getElementById('extraInfo');
-      if (extraInfoElement && this.other_homeless_reason == '') {
-        extraInfoElement.focus();
-      }
+      setTimeout(() => {
+        const extraInfoElement = document.getElementById('extraInfo');
+        if (extraInfoElement && this.other_homeless_reason == '') {
+          extraInfoElement.focus();
+        }
+      }, 0);
     }
   }
 

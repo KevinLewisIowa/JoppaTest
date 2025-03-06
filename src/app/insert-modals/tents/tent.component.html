@@ -9,13 +9,13 @@
           <div class="row">
             <div class="col-sm-3">
               <label for="tent_type">Type</label>
-              <select id="tent_type" class="form-control" [(ngModel)]="type" name="type">
-                <option value="Summer">Summer</option>
-                <option value="Winter">Winter</option>
-                <option value="Emergency">Emergency</option>
-                <option value="Donated">Donated</option>
-                <option value="Other">Other</option>
-              </select>
+                <select id="tent_type" class="form-control" [(ngModel)]="type" name="type" (change)="onTentTypeChange()">
+                <option value="" disabled selected>Select Tent</option>
+                <option *ngFor="let tent of tent_types" [value]="tent">{{ tent }}</option>
+                </select>
+            </div>
+            <div class="col-sm-3">
+              <input id="extraInfo" name="extraInfoTent" class="form-control" type="text" [(ngModel)]="other_tent" *ngIf="extraInfoNeeded" placeholder="Other Tent" />
             </div>
             <div class="col-sm-3">
               <label for="tent_condition">Condition</label>
