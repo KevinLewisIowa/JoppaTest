@@ -42,6 +42,7 @@ import { NextOfKinComponent } from "app/insert-modals/next-of-kin/next-of-kin.co
 import { LocationCamp } from "app/models/location-camp";
 import { Route } from "app/models/route";
 import { ClientHealthInsurance } from "app/models/client-health-insurance";
+import { ClientStep } from "app/models/client-step";
 
 @Component({
   selector: "app-servicing-client",
@@ -66,6 +67,7 @@ export class ServicingClientComponent implements OnInit {
   routeName: string = '';
   pets: ClientPet[] = [];
   tents: Tent[] = [];
+  steps: ClientStep[] = [];
   dwellings: ClientDwelling[] = [];
   homelessHistories: ClientHomelessHistory[] = [];
   circleOfFriends: ClientCircleOfFriends[] = [];
@@ -204,8 +206,15 @@ export class ServicingClientComponent implements OnInit {
           (error) => console.log(error)
         );
 
-        this.service.getClientHealthInsurance(this.clientId).subscribe((data: ClientHealthInsurance[]) => {
-          this.healthInsurances = data;
+        this.service.getClientHealthInsurance(this.clientId).subscribe({
+          next: (data: ClientHealthInsurance[]) => {
+            this.healthInsurances = data;
+          },
+          error: (error) => console.log(error)
+        });
+
+        this.service.getClientSteps(this.clientId).subscribe((data: ClientStep[]) => {
+          this.steps = data;
         }, error => console.log(error));
 
         this.service.getRecentReceivedItems(this.clientId).subscribe(
@@ -933,6 +942,20 @@ export class ServicingClientComponent implements OnInit {
     this.healthInsurances.push(insurance);
     const element = document.querySelector("#healthInsurance");
     element.scrollIntoView();
+  }
+
+  stepAdded(step: ClientStep) {
+    console.log(JSON.stringify(step));
+    this.steps.push(step);
+
+    const element = document.querySelector("#steps");
+    element.scrollIntoView();
+  }
+
+  removeStep(id: number) {
+    this.service.removeClientStep(id).subscribe((res) => {
+      this.steps = this.steps.filter((w) => w.id != id);
+    });
   }
 
   clientSelected(client: Client) {

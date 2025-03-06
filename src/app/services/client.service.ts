@@ -1147,6 +1147,17 @@ export class ClientService {
       );
   }
 
+  removeClientStep(id: number) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+    return this.http.delete(this.baseUrl + `client_steps/${id}`, { headers: myHeader })
+    .pipe(map((res) => {
+      return true;
+    }), catchError(this.handleError));
+  }
+
   insertSkill(skill: ClientSkill) {
     const myHeader = new HttpHeaders({
       "Content-Type": "application/json",

@@ -837,6 +837,44 @@
           </tbody>
         </table>
       </div>
+      <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
+        <div class="background-color">
+          <h4>
+            Steps Taken
+            <button type="button" (click)="goToTop(); clientStepMdl.showModal()" class="btn btn-primary" style="float: right">
+              New Step
+            </button>
+          </h4>
+          <table class="table" id="steps">
+            <colgroup>
+              <col span="1" style="width: 25%" />
+              <col span="1" style="width: 25%" />
+              <col span="1" style="width: 25%" />
+              <col span="1" style="width: 25%" />
+            </colgroup>
+            <thead>
+              <tr>
+                <th>Step Type</th>
+                <th>Date Completed</th>
+                <th>Notes</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let step of steps">
+                <td>{{ step.step_type }}</td>
+                <td>{{ step.date_completed | date: "shortDate" }}</td>
+                <td>{{ step.notes }}</td>
+                <td>
+                  <button type="button" class="btn btn-primary" (click)="removeStep(step.id)">
+                    Remove
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
       <div class="col-lg-12 col-md-12">
         <!-- removed !heatRoute from ngIf to pare down screen -->
         <h4>
@@ -1114,3 +1152,4 @@
 <app-client-search #clientMdl (clientSelected)="clientSelected($event)"></app-client-search>
 <app-client-circle-of-friends #clientCircleOfFriendsMdl (friendAdded)="friendAdded($event)"></app-client-circle-of-friends>
 <app-client-health-insurance #clientHealthInsuranceMdl (clientHealthInsuranceAdded)="clientHealthInsuranceAdded($event)"></app-client-health-insurance>
+<app-steps-taken #clientStepMdl (stepAdded)="stepAdded($event)"></app-steps-taken>
