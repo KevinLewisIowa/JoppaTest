@@ -13,7 +13,7 @@ export class ClientHealthInsuranceComponent implements OnInit, AfterViewChecked 
   @Output() clientHealthInsuranceAdded = new EventEmitter<ClientHealthInsurance>();
   
   isAdmin: boolean = false;
-  has_insurance: boolean;
+  has_insurance: string = 'Unknown';
   company: string = '';
   other_company: string = '';
   extraInfoNeeded: boolean = false;
@@ -53,14 +53,6 @@ export class ClientHealthInsuranceComponent implements OnInit, AfterViewChecked 
     this.modalService.open(this.clientHealthInsuranceMdl, { size: 'lg', backdrop: 'static' });
   }
 
-  onInsuranceChange() {
-    if (!this.has_insurance) {
-      this.company = '';
-      this.other_company = '';
-      this.extraInfoNeeded = false;
-    }
-  }
-
   onChange() {
     if (this.company === 'Other') {
       this.extraInfoNeeded = true;
@@ -83,7 +75,7 @@ export class ClientHealthInsuranceComponent implements OnInit, AfterViewChecked 
       clientHealthInsurance.client_id = clientId;
       
       this.clientService.insertHealthInsurance(clientHealthInsurance).subscribe((insurance) => {
-        this.has_insurance = false;
+        this.has_insurance = 'Unknown';
         this.company = '';
         if (insurance != null && insurance.id != null) {
           this.clientHealthInsuranceAdded.emit(insurance);

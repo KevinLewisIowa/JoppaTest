@@ -10,16 +10,18 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="hasInsurance" [(ngModel)]="has_insurance" (change)="onInsuranceChange()">
-                            <label class="form-check-label" for="hasInsurance">
-                                Has Insurance
-                            </label>
+                            <label for="hasInsurance">Has Insurance</label>
+                            <select id="hasInsurance" name="hasInsurance" class="form-control" [(ngModel)]="has_insurance">
+                                <option value="Unknown" selected>Unknown</option>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <select id="company" name="company" class="form-control" [(ngModel)]="company" *ngIf="has_insurance" (change)="onChange()">
+                        <select id="company" name="company" class="form-control" [(ngModel)]="company" *ngIf="has_insurance === 'Yes'" (change)="onChange()">
                             <option value="" disabled selected>Select Company</option>
                             <option *ngFor="let company of insurance_companies" [value]="company">{{ company }}</option>
                         </select>
