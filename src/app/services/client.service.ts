@@ -30,7 +30,6 @@ import { ClientStep } from "app/models/client-step";
 import { ClientSkill } from "app/models/client-skill";
 import { ClientHealthInsurance } from "app/models/client-health-insurance";
 
-// adding a new comment
 @Injectable()
 export class ClientService {
   theHeader = new HttpHeaders().set("Content-Type", "application/json");

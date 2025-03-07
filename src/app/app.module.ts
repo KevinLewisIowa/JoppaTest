@@ -31,6 +31,7 @@ import { AppRoutingModule } from "./app-routing.module";
 
 import { MainService } from "./services/main.service";
 import { ClientService } from "./services/client.service";
+import { CountryStateCityService } from "./services/countrystatecity.service";
 import { LocationClientsComponent } from "./location-clients/location-clients.component";
 import { ClientComponent } from "./client/client.component";
 import { ClientEditComponent } from "./client/client-edit/client-edit.component";
@@ -183,7 +184,7 @@ const reducers = {
         FontAwesomeModule,
         AppRoutingModule,
     ],
-    providers: [MainService, ClientService],
+    providers: [MainService, ClientService, CountryStateCityService],
     bootstrap: [AppComponent]
 })
 export class AppModule {}

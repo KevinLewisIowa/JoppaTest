@@ -5,6 +5,7 @@ import { ClientService } from "app/services/client.service";
 import { Router } from "@angular/router";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { formatDate } from '@angular/common';
+import { CountryStateCityService } from 'app/services/countrystatecity.service';
 
 @Component({
   selector: 'app-client-edit-modal',
@@ -35,7 +36,7 @@ export class ClientEditModalComponent implements OnInit, AfterViewChecked {
     'Other'
   ];
 
-  constructor(private router: Router, private modalService: NgbModal, private clientService: ClientService, private fb: UntypedFormBuilder, @Inject(LOCALE_ID) private locale: string, private cdr: ChangeDetectorRef) { }
+  constructor(private router: Router, private modalService: NgbModal, private clientService: ClientService, private fb: UntypedFormBuilder, private cscService: CountryStateCityService, @Inject(LOCALE_ID) private locale: string, private cdr: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.isAdmin = JSON.parse(window.localStorage.getItem('isAdmin'));
@@ -64,7 +65,7 @@ export class ClientEditModalComponent implements OnInit, AfterViewChecked {
 
   openModal(client: Client) {
     this.theClient = client;
-    
+
     if (this.theClient.client_picture != '' && this.theClient.client_picture != null) {
       this.url = 'data:image/png;base64,' + this.theClient.client_picture;
     }
@@ -208,44 +209,58 @@ export class ClientEditModalComponent implements OnInit, AfterViewChecked {
   submitClient() {
     let updatedClient: Client = this.clientForm.value;
     updatedClient.client_picture = this.byteArray;
-    
-    let now: Date = new Date();
-    if (updatedClient.birth_date.toString() === '') {
-      alert('Birthday not fully entered');
-      return;
-    }
-    this.staticBirthday = this.clientForm.get('birth_date').value
-    let birthday: Date = new Date((Date.parse(this.staticBirthday)));
-    let pastDate: Date = new Date(now.getFullYear() - 100, now.getMonth(), now.getDate());
-    if (birthday.getTime() > now.getTime()) {
-      alert('You cannot select a birth date that is in the future');
-      return;
-    }
-    else if (birthday.getTime() < pastDate.getTime()) {
-      alert('You cannot set a birth date this far back in the past');
-      return;
-    }
-    updatedClient.birth_date = birthday;
-    this.submitted = true;
 
-    if (updatedClient.status == 'Inactive') {
-      updatedClient.previous_camp_id = updatedClient.current_camp_id;
-      updatedClient.current_camp_id = 0;
-    }
+    this.cscService.getCitiesByCountryAndState(String(this.clientForm.get('state_before_homelessness').value).trim()).then((validCities: string[]) => {
+      const cityBeforeHomelessness = String(this.clientForm.get('city_before_homelessness').value).trim();
+      console.log(cityBeforeHomelessness);
+      console.log(JSON.stringify(validCities));
+      if (!validCities.includes(cityBeforeHomelessness)) {
+        alert('Please enter a valid city before homelessness.');
+        return;
+      }
 
-    if (updatedClient.what_brought_to_des_moines == 'Other' && this.clientForm.get('otherReasonForDesMoines').value == '') {
-      alert('Please enter what brought you to Des Moines');
-      return;
-    } else if (updatedClient.what_brought_to_des_moines == 'Other' && this.clientForm.get('otherReasonForDesMoines').value != '') {
-      updatedClient.what_brought_to_des_moines = this.clientForm.get('otherReasonForDesMoines').value;
-    }
+      let now: Date = new Date();
+      if (updatedClient.birth_date.toString() === '') {
+        alert('Birthday not fully entered');
+        return;
+      }
 
-    this.clientService.updateClient(updatedClient).subscribe(data => {
-      this.editedClient.emit(updatedClient);
-    }, error => {
-      console.log(error);
-      alert('Error creating client.  There may already be a client with the same name.  Please search for the client before continuing.');
-    });
+      this.staticBirthday = this.clientForm.get('birth_date').value
+      let birthday: Date = new Date((Date.parse(this.staticBirthday)));
+      let pastDate: Date = new Date(now.getFullYear() - 100, now.getMonth(), now.getDate());
+      if (birthday.getTime() > now.getTime()) {
+        alert('You cannot select a birth date that is in the future');
+        return;
+      }
+      else if (birthday.getTime() < pastDate.getTime()) {
+        alert('You cannot set a birth date this far back in the past');
+        return;
+      }
+      updatedClient.birth_date = birthday;
+      this.submitted = true;
+
+      if (updatedClient.status == 'Inactive') {
+        updatedClient.previous_camp_id = updatedClient.current_camp_id;
+        updatedClient.current_camp_id = 0;
+      }
+
+      if (updatedClient.what_brought_to_des_moines == 'Other' && this.clientForm.get('otherReasonForDesMoines').value == '') {
+        alert('Please enter what brought you to Des Moines');
+        return;
+      } else if (updatedClient.what_brought_to_des_moines == 'Other' && this.clientForm.get('otherReasonForDesMoines').value != '') {
+        updatedClient.what_brought_to_des_moines = this.clientForm.get('otherReasonForDesMoines').value;
+      }
+
+      this.clientService.updateClient(updatedClient).subscribe({
+        next: (data) => {
+          this.editedClient.emit(updatedClient);
+        },
+        error: (error) => {
+          console.log(error);
+          alert('Error creating client.  There may already be a client with the same name.  Please search for the client before continuing.');
+        }
+      });
+    }, error => console.log(error));
   }
 
 }
