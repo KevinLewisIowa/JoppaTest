@@ -30,7 +30,7 @@ export class ClientHealthInsuranceComponent implements OnInit, AfterViewChecked 
     'United Healthcare',
     'Veterans',
     'Wellmark',
-    'Wellpoint (Amerigroup)',
+    'Wellpoint',
     'Other'
   ];
 
