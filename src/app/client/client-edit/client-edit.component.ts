@@ -240,7 +240,7 @@ export class ClientEditComponent implements OnInit, AfterViewChecked {
     this.theClient.city_before_homelessness = String(this.clientForm.get('city_before_homelessness').value).trim();
     this.countryStateCityService.getCitiesByCountryAndState(String(this.clientForm.get('state_before_homelessness').value).trim()).then((validCities: string[]) => {
       const cityBeforeHomelessness = String(this.clientForm.get('city_before_homelessness').value).trim();
-      if (!validCities.includes(cityBeforeHomelessness)) {
+      if (!validCities.includes(cityBeforeHomelessness) && cityBeforeHomelessness != 'Unknown' && cityBeforeHomelessness != 'Refused') {
         alert('Please enter a valid city before homelessness.');
         return;
       }
