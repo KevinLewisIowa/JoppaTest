@@ -23,6 +23,7 @@ export class ClientEditModalComponent implements OnInit, AfterViewChecked {
   isAdmin: boolean;
   url: any;
   byteArray: any;
+  initialOther: boolean = true;
   extraInfoNeededReasonForDesMoines: boolean = false;
   submitted: boolean = false;
   staticBirthday: string = '';
@@ -47,8 +48,9 @@ export class ClientEditModalComponent implements OnInit, AfterViewChecked {
       this.cdr.detectChanges();
       setTimeout(() => {
         const extraInfoElement = document.getElementById('otherReasonForDesMoines');
-        if (extraInfoElement && this.clientForm.get('otherReasonForDesMoines').value == '') {
+        if (extraInfoElement && this.clientForm.get('otherReasonForDesMoines').value == '' && this.initialOther) {
           extraInfoElement.focus();
+          this.initialOther = false;
         }
       }, 0);
     }
@@ -57,6 +59,7 @@ export class ClientEditModalComponent implements OnInit, AfterViewChecked {
   onReasonChange(value: string) {
     if (value == 'Other') {
       this.extraInfoNeededReasonForDesMoines = true;
+      this.initialOther = true;
     } else {
       this.extraInfoNeededReasonForDesMoines = false;
       this.clientForm.patchValue({ otherReasonForDesMoines: '' });

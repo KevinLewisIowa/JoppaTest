@@ -12,6 +12,7 @@ export class ClientDwellingComponent implements OnInit, AfterViewChecked {
   @ViewChild('clientDwellingMdl', { static: false }) clientDwellingMdl: ElementRef;
   @Output() clientDwellingAdded = new EventEmitter<ClientDwelling>();
   isAdmin: boolean = false;
+  initialOther: boolean = false;
   date_moved: Date;
   dwelling: string = '';
   other_dwelling: string = '';
@@ -30,7 +31,8 @@ export class ClientDwellingComponent implements OnInit, AfterViewChecked {
     if (this.extraInfoNeeded) {
       this.cdr.detectChanges();
       const extraInfoElement = document.getElementById('extraInfo');
-      if (extraInfoElement && this.other_dwelling == '') {
+      if (extraInfoElement && this.other_dwelling == '' && this.initialOther) {
+        this.initialOther = false;
         extraInfoElement.focus();
       }
     }
@@ -49,6 +51,7 @@ export class ClientDwellingComponent implements OnInit, AfterViewChecked {
   onChange() {
     if (this.dwelling == 'Other') {
       this.extraInfoNeeded = true;
+      this.initialOther = true;
     }
     else {
       this.extraInfoNeeded = false;

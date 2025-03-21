@@ -18,6 +18,7 @@ export class ClientHealthInsuranceComponent implements OnInit, AfterViewChecked 
   other_company: string = '';
   extraInfoNeeded: boolean = false;
   client_id: number;
+  initialOther: boolean = true;
   insurance_companies: string[] = [
     'Atena',
     'BCBS',
@@ -43,7 +44,8 @@ export class ClientHealthInsuranceComponent implements OnInit, AfterViewChecked 
   ngAfterViewChecked(): void {
     if (this.extraInfoNeeded) {
       const extraInfoElement = document.getElementById('extraInfo');
-      if (extraInfoElement && this.other_company == '') {
+      if (extraInfoElement && this.other_company == '' && this.initialOther) {
+        this.initialOther = false;
         extraInfoElement.focus();
       }
     }
@@ -56,6 +58,7 @@ export class ClientHealthInsuranceComponent implements OnInit, AfterViewChecked 
   onChange() {
     if (this.company === 'Other') {
       this.extraInfoNeeded = true;
+      this.initialOther = true;
     }
     else {
       this.extraInfoNeeded = false;

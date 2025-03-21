@@ -22,6 +22,7 @@ export class RequestedItemComponent implements OnInit, AfterViewChecked {
   @Output() requestedItemAdded = new EventEmitter<RequestedItem[]>();
   description: string = "";
   placeholderText: string = "Test";
+  intialOther: boolean = true;
   extraInfo: string = "";
   extraInfoNeeded: boolean = false;
   constructor(private modalService: NgbModal, private service: ClientService, private cdr: ChangeDetectorRef) { }
@@ -32,7 +33,8 @@ export class RequestedItemComponent implements OnInit, AfterViewChecked {
     if (this.extraInfoNeeded) {
       this.cdr.detectChanges();
       const extraInfoElement = document.getElementById('extraInfo');
-      if (extraInfoElement && this.extraInfo == '') {
+      if (extraInfoElement && this.extraInfo == '' && this.intialOther) {
+        this.intialOther = false;
         extraInfoElement.focus();
       }
     }
@@ -87,6 +89,8 @@ export class RequestedItemComponent implements OnInit, AfterViewChecked {
         this.extraInfoNeeded = false;
         break;
     }
+
+    this.intialOther = this.extraInfoNeeded;
   }
 
   submitItem() {

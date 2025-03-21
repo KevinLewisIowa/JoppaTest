@@ -22,6 +22,7 @@ export class ReferralsResourcesComponent implements OnInit, AfterViewChecked {
   @Output() referralResourceAdded = new EventEmitter<ReferralsResources>();
   type: string = '';
   other_type: string = '';
+  initialOther: boolean = true;
   extraInfoNeeded: boolean = false;
   quantity: number;
   notes: string = '';
@@ -69,7 +70,8 @@ export class ReferralsResourcesComponent implements OnInit, AfterViewChecked {
     if (this.extraInfoNeeded) {
       setTimeout(() => {
         const extraInfoElement = document.getElementById("extraInfo");
-        if (extraInfoElement && this.other_type == "") {
+        if (extraInfoElement && this.other_type == "" && this.initialOther) {
+          this.initialOther = false;
           extraInfoElement.focus();
         }
       }, 0);
@@ -78,6 +80,7 @@ export class ReferralsResourcesComponent implements OnInit, AfterViewChecked {
 
   onTypeChange() {
     this.extraInfoNeeded = this.type == "Other";
+    this.initialOther = this.type == "Other";
   }
 
   showModal() {

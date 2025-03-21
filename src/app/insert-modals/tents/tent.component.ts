@@ -18,6 +18,7 @@ export class TentComponent implements OnInit, AfterViewChecked {
   given_by: string;
   set_up_by: string;
   rejected: boolean = false;
+  intialOther: boolean = true;
   tent_types: string[] = ['Summer', 'Winter', 'Emergency', 'Donated', 'Other'];
   extraInfoNeeded: boolean = false;
   other_tent: string = '';
@@ -31,7 +32,8 @@ export class TentComponent implements OnInit, AfterViewChecked {
     if (this.extraInfoNeeded) {
       setTimeout(() => {
         const extraInfoElement = document.getElementById('extraInfo');
-        if (extraInfoElement && this.other_tent == '') {
+        if (extraInfoElement && this.other_tent == '' && this.intialOther) {
+          this.intialOther = false;
           extraInfoElement.focus();
         }
       }, 0);
@@ -51,6 +53,7 @@ export class TentComponent implements OnInit, AfterViewChecked {
 
   onTentTypeChange() {
     this.extraInfoNeeded = this.type == 'Other';
+    this.intialOther = this.type == 'Other';
   }
 
   submitTent() {

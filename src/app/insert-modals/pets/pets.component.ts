@@ -19,6 +19,7 @@ export class PetsComponent implements OnInit, AfterViewChecked {
   breed: string;
   placeholderText: string = '';
   food_requested: boolean = true;
+  intialOther: boolean = true;
   extraInfoNeeded: boolean = false;
   constructor(private modalService: NgbModal, private service: ClientService, private cdr: ChangeDetectorRef) { }
 
@@ -29,7 +30,8 @@ export class PetsComponent implements OnInit, AfterViewChecked {
     if (this.extraInfoNeeded) {
       this.cdr.detectChanges();
       const extraInfoElement = document.getElementById('extraInfo');
-      if (extraInfoElement && this.extraInfo == '') {
+      if (extraInfoElement && this.extraInfo == '' && this.intialOther) {
+        this.intialOther = false;
         extraInfoElement.focus();
       }
     }
@@ -49,6 +51,7 @@ export class PetsComponent implements OnInit, AfterViewChecked {
     if (this.pet_type == 'Other') {
       this.extraInfoNeeded = true;
       this.placeholderText = 'Species';
+      this.intialOther = true;
     }
     else {
       this.extraInfoNeeded = false;

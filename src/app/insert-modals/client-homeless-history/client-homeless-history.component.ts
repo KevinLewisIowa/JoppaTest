@@ -16,6 +16,7 @@ export class ClientHomelessHistoryComponent implements AfterViewChecked {
   date_became_homeless: Date;
   homeless_reason: string = '';
   other_homeless_reason: string = '';
+  initialOther: boolean = true;
   notes: string = '';
   extraInfoNeeded: boolean = false;
   client_id: number;
@@ -43,7 +44,8 @@ export class ClientHomelessHistoryComponent implements AfterViewChecked {
       this.cdr.detectChanges();
       setTimeout(() => {
         const extraInfoElement = document.getElementById('extraInfo');
-        if (extraInfoElement && this.other_homeless_reason == '') {
+        if (extraInfoElement && this.other_homeless_reason == '' && this.initialOther) {
+          this.initialOther = false;
           extraInfoElement.focus();
         }
       }, 0);
@@ -62,6 +64,7 @@ export class ClientHomelessHistoryComponent implements AfterViewChecked {
   onChange() {
     if (this.homeless_reason == 'Other') {
       this.extraInfoNeeded = true;
+      this.initialOther = true;
     }
     else {
       this.extraInfoNeeded = false;

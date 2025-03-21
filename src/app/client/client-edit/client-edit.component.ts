@@ -22,6 +22,8 @@ export class ClientEditComponent implements OnInit, AfterViewChecked {
   url: any;
   byteArray: any;
   isAdmin: boolean;
+  initialOtherReason: boolean = true;
+  initialOtherDesMoines: boolean = true;
   locationCampId: number;
   //otherHomelessReason: string = '';
   extraInfoNeeded: boolean = false;
@@ -86,14 +88,16 @@ export class ClientEditComponent implements OnInit, AfterViewChecked {
     if (this.extraInfoNeeded) {
       this.cdr.detectChanges();
       const extraInfoElement = document.getElementById('otherHomelessReason');
-      if (extraInfoElement && this.clientForm.get('otherHomelessReason').value == '') {
+      if (extraInfoElement && this.clientForm.get('otherHomelessReason').value == '' && this.initialOtherReason) {
+        this.initialOtherReason = false;
         extraInfoElement.focus();
       }
     }
     if (this.extraInfoNeededReasonForDesMoines) {
       this.cdr.detectChanges();
       const extraInfoElement = document.getElementById('otherReasonForDesMoines');
-      if (extraInfoElement && this.clientForm.get('otherReasonForDesMoines').value == '') {
+      if (extraInfoElement && this.clientForm.get('otherReasonForDesMoines').value == '' && this.initialOtherDesMoines) {
+        this.initialOtherDesMoines = false;
         extraInfoElement.focus();
       }
     }
@@ -102,6 +106,7 @@ export class ClientEditComponent implements OnInit, AfterViewChecked {
   onChange(value: string) {
     if (value == 'Other') {
       this.extraInfoNeeded = true;
+      this.initialOtherReason = true;
       console.log(this.clientForm.get('otherHomelessReason').value);
     } else {
       this.extraInfoNeeded = false;
@@ -112,6 +117,7 @@ export class ClientEditComponent implements OnInit, AfterViewChecked {
   onReasonForDesMoinesChange(value: string) {
     if (value == 'Other') {
       this.extraInfoNeededReasonForDesMoines = true;
+      this.initialOtherDesMoines = true;
     } else {
       this.extraInfoNeededReasonForDesMoines = false;
       this.clientForm.patchValue({ otherReasonForDesMoines: '' });
