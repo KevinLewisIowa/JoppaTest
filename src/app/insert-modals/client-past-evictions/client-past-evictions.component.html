@@ -12,9 +12,9 @@
                     <div class="col-md-6">
                         <label for="eviction-type">Eviction Type</label>
                         <select id="eviction-type" class="form-control" [(ngModel)]="eviction_type" name="eviction_type"
-                            (change)="onChange()"></select>
-                        <option value="None" selected>None</option>
-                        <option *ngFor="let type of evictionTypes" [value]="type">{{ type }}</option>
+                            (change)="onChange()">
+                            <option value="None" selected>None</option>
+                            <option *ngFor="let type of evictionTypes" [value]="type">{{ type }}</option>
                         </select>
                     </div>
                     <div class="col-md-6">
