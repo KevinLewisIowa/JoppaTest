@@ -92,6 +92,9 @@ import { NextOfKinComponent } from './insert-modals/next-of-kin/next-of-kin.comp
 import { ClientHomelessHistoryComponent } from './insert-modals/client-homeless-history/client-homeless-history.component';
 import { ClientHealthInsuranceComponent } from './insert-modals/client-health-insurance/client-health-insurance.component';
 import { StepsTakenComponent } from './insert-modals/steps-taken/steps-taken.component';
+import { ClientPastEvictionsComponent } from './insert-modals/client-past-evictions/client-past-evictions.component';
+import { ClientPastFeloniesComponent } from './insert-modals/client-past-felonies/client-past-felonies.component';
+import { ClientDebtComponent } from './insert-modals/client-debt/client-debt.component';
 
 const reducers = {
   user: MainReducer,
@@ -164,6 +167,9 @@ const reducers = {
         ClientHomelessHistoryComponent,
         ClientHealthInsuranceComponent,
         StepsTakenComponent,
+        ClientPastEvictionsComponent,
+        ClientPastFeloniesComponent,
+        ClientDebtComponent,
     ],
     imports: [
         BrowserModule,

@@ -27,6 +27,7 @@ export class ClientSearchComponent implements OnInit, OnDestroy {
   nextEnabled = false;
   userSubscription;
   searchSubscription;
+  isAdmin: boolean = false;
   loading = false;
   showing = '';
   of = '';
@@ -38,6 +39,7 @@ export class ClientSearchComponent implements OnInit, OnDestroy {
   }
 
   showModal() {
+    this.isAdmin = JSON.parse(window.localStorage.getItem("isAdmin"));
     this.clients = [];
     this.nameSearch = '';
     this.nextEnabled = false;
@@ -56,6 +58,7 @@ export class ClientSearchComponent implements OnInit, OnDestroy {
     this.searchSubscription = this.clientService.getClientsByName(this.nameSearch).subscribe(results => {
       this.loading = false;
       this.clients = results as any[];
+      if (!this.isAdmin) this.clients = this.clients.filter(client => !client.is_aftercare);
       this.resultCount = this.clients.length;
       if (this.clients.length == 0) {
         this.noResultsMessage = 'No results.';
