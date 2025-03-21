@@ -1,1 +1,44 @@
-<p>client-past-evictions works!</p>
+<ng-template #clientPastEvictionMdl let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title">Add Client Past Eviction</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <form>
+        <div class="modal-body">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="eviction-type">Eviction Type</label>
+                        <select id="eviction-type" class="form-control" [(ngModel)]="eviction_type" name="eviction_type"
+                            (change)="onChange()"></select>
+                        <option value="None" selected>None</option>
+                        <option *ngFor="let type of evictionTypes" [value]="type">{{ type }}</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <input id="extraInfo" name="extraInfoEviction" class="form-control" type="text"
+                            [(ngModel)]="other_eviction_type" *ngIf="extraInfoNeeded"
+                            placeholder="Other Eviction Type" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="year-occurred">Year Occurred</label>
+                        <input id="year-occurred" type="text" class="form-control" [(ngModel)]="year_occurred"
+                            name="year_occurred" />
+                    </div>
+                    <div class="col-md-12">
+                        <label for="notes">Notes</label>
+                        <textarea id="notes" class="form-control" rows="4" [(ngModel)]="notes" name="notes"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-primary" (click)="c('Close click')">Don't Save</button>
+        <button type="button" class="btn btn-primary" (click)="submitEviction();c('')">Save</button>
+    </div>
+</ng-template>
