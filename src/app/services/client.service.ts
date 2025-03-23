@@ -1014,6 +1014,19 @@ export class ClientService {
       );
   }
 
+  removeDebt(id: number) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+
+    return this.http.delete(this.baseUrl + `client_debts/${id}`, { headers: myHeader }).pipe(
+      map((res) => {
+        return true;
+      }), catchError(this.handleError)
+    );
+  }
+
   insertFelony(felony: ClientFelony) {
     const myHeader = new HttpHeaders({
       "Content-Type": "application/json",
@@ -1058,6 +1071,19 @@ export class ClientService {
       );
   }
 
+  removeClientFelony(id: number) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+
+    return this.http.delete(this.baseUrl + `client_felonies/${id}`, { headers: myHeader }).pipe(
+      map((res) => {
+        return true;
+      }), catchError(this.handleError)
+    );
+  }
+
   insertPastEviction(eviction: ClientPastEviction) {
     const myHeader = new HttpHeaders({
       "Content-Type": "application/json",
@@ -1100,6 +1126,20 @@ export class ClientService {
         }),
         catchError(this.handleError)
       );
+  }
+
+  removePastEviction(id: number) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+
+    return this.http.delete(this.baseUrl + `client_past_evictions/${id}`, { headers: myHeader }).pipe(
+      map((res) => {
+        return true;
+      }
+      ), catchError(this.handleError)
+    );
   }
 
   insertStep(step: ClientStep) {

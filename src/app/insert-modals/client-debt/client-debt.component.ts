@@ -11,7 +11,7 @@ import { ClientDebt } from '../../models/client-debt';
 })
 export class ClientDebtComponent implements OnInit, AfterViewChecked {
   @ViewChild('clientDebtMdl', { static: false }) clientDebtMdl: ElementRef;
-  @Output() clientDebtAdded = new EventEmitter<ClientDebt>();
+  @Output() debtAdded = new EventEmitter<ClientDebt>();
   isAdmin: boolean = false;
   debt_type: string = '';
   other_debt_type: string = '';
@@ -62,11 +62,11 @@ export class ClientDebtComponent implements OnInit, AfterViewChecked {
     }
     else {
       this.extraInfoNeeded = false;
-      this.debt_type = '';
+      this.other_debt_type = '';
     }
   }
 
-  submitClientDebt() {
+  submitDebt() {
     const clientDebt = new ClientDebt();
     const clientId: number = JSON.parse(localStorage.getItem('selectedClient'));
 
@@ -83,7 +83,7 @@ export class ClientDebtComponent implements OnInit, AfterViewChecked {
 
       this.clientService.insertDebt(clientDebt).subscribe((data: ClientDebt) => {
         if (data != null && data.id != null) {
-          this.clientDebtAdded.emit(data);
+          this.debtAdded.emit(data);
         }
       }, error => { console.log(error) });
     }

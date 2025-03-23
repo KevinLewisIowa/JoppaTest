@@ -876,6 +876,114 @@
         </div>
       </div>
       <div class="col-lg-12 col-md-12">
+        <h4>
+          Client Debts
+          <button type="button" (click)="goToTop(); clientDebtMdl.showModal()" class="btn btn-primary" style="float: right">
+            New Debt
+          </button>
+        </h4>
+        <table class="table" id="clientDebts">
+          <colgroup>
+            <col span="1" style="width: 25%" />
+            <col span="1" style="width: 25%" />
+            <col span="1" style="width: 25%" />
+            <col span="1" style="width: 25%" />
+          </colgroup>
+          <thead>
+            <tr>
+              <th>Debt Type</th>
+              <th>Amount</th>
+              <th>Notes</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let debt of clientDebts">
+              <td>{{ debt.debt_type }}</td>
+              <td>{{ debt.amount }}</td>
+              <td>{{ debt.notes }}</td>
+              <td>
+                <button type="button" class="btn btn-primary" (click)="removeClientDebt(debt.id)">
+                  Remove
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-lg-12 col-md-12">
+        <h4>
+          Client Felonies
+          <button type="button" (click)="goToTop(); clientFelonyMdl.showModal()" class="btn btn-primary" style="float: right">
+            New Felony
+          </button>
+        </h4>
+        <table class="table" id="clientFelonies">
+          <colgroup>
+            <col span="1" style="width: 25%" />
+            <col span="1" style="width: 25%" />
+            <col span="1" style="width: 25%" />
+            <col span="1" style="width: 25%" />
+          </colgroup>
+          <thead>
+            <tr>
+              <th>Felony Type</th>
+              <th>Year Occurred</th>
+              <th>Notes</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let felony of clientFelonies">
+              <td>{{ felony.felony_type }}</td>
+              <td>{{ felony.year_occurred }}</td>
+              <td>{{ felony.notes }}</td>
+              <td>
+                <button type="button" class="btn btn-primary" (click)="removeClientFelony(felony.id)">
+                  Remove
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-lg-12 col-md-12">
+        <h4>
+          Past Evictions
+          <button type="button" (click)="goToTop(); clientEvictionMdl.showModal()" class="btn btn-primary" style="float: right">
+            New Eviction
+          </button>
+        </h4>
+        <table class="table" id="clientPastEvictions">
+          <colgroup>
+            <col span="1" style="width: 25%" />
+            <col span="1" style="width: 25%" />
+            <col span="1" style="width: 25%" />
+            <col span="1" style="width: 25%" />
+          </colgroup>
+          <thead>
+            <tr>
+              <th>Eviction Type</th>
+              <th>Year Occurred</th>
+              <th>Notes</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let eviction of clientPastEvictions">
+              <td>{{ eviction.eviction_type }}</td>
+              <td>{{ eviction.year_occurred }}</td>
+              <td>{{ eviction.notes }}</td>
+              <td>
+                <button type="button" class="btn btn-primary" (click)="removeClientEviction(eviction.id)">
+                  Remove
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-lg-12 col-md-12">
         <!-- removed !heatRoute from ngIf to pare down screen -->
         <h4>
           Health Concerns
@@ -1153,3 +1261,6 @@
 <app-client-circle-of-friends #clientCircleOfFriendsMdl (friendAdded)="friendAdded($event)"></app-client-circle-of-friends>
 <app-client-health-insurance #clientHealthInsuranceMdl (clientHealthInsuranceAdded)="clientHealthInsuranceAdded($event)"></app-client-health-insurance>
 <app-steps-taken #clientStepMdl (stepAdded)="stepAdded($event)"></app-steps-taken>
+<app-client-debt #clientDebtMdl (debtAdded)="debtAdded($event)"></app-client-debt>
+<app-client-past-evictions #clientEvictionMdl (clientEvictionAdded)="clientEvictionAdded($event)"></app-client-past-evictions>
+<app-client-past-felonies #clientFelonyMdl (clientFelonyAdded)="clientFelonyAdded($event)"></app-client-past-felonies>

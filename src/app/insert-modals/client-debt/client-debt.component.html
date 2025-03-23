@@ -11,9 +11,9 @@
                 <div class="row">
                     <div class="col-md-6">
                         <label for="debt-type">Debt Type</label>
-                        <select id="debt-type" class="form-control" [(ngModel)]="clientDebt.debt_type" (change)="onChange()" name="debt_type">
+                        <select id="debt-type" class="form-control" [(ngModel)]="debt_type" (change)="onChange()" name="debt_type">
                             <option value="None" selected>None</option>
-                            <option *ngFor="let type of debtTypes" [value]="type">{{ type }}</option>
+                            <option *ngFor="let debt of debtTypes" [value]="debt">{{ debt }}</option>
                         </select>
                     </div>
                     <div class="col-md-6">
@@ -25,11 +25,11 @@
                 <div class="row">
                     <div class="col-md-6">
                         <label for="amount">Amount</label>
-                        <input id="amount" type="text" class="form-control" [(ngModel)]="clientDebt.amount" name="amount" />
+                        <input id="amount" type="text" class="form-control" [(ngModel)]="amount" name="amount" />
                     </div>
                     <div class="col-md-6">
                         <label for="notes">Notes</label>
-                        <textarea id="notes" class="form-control" rows="4" [(ngModel)]="clientDebt.notes" name="notes"></textarea>
+                        <textarea id="notes" class="form-control" rows="4" [(ngModel)]="notes" name="notes"></textarea>
                     </div>
                 </div>
             </div>

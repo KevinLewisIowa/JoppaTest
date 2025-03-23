@@ -61,11 +61,11 @@ export class ClientPastEvictionsComponent implements OnInit, AfterViewChecked {
     }
     else {
       this.extraInfoNeeded = false;
-      this.eviction_type = '';
+      this.other_eviction_type = '';
     }
   }
 
-  submitClientEviction() {
+  submitEviction() {
     const clientEviction = new ClientPastEviction();
     const clientId: number = JSON.parse(localStorage.getItem('selectedClient'));
 

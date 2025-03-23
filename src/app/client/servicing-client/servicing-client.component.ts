@@ -43,6 +43,9 @@ import { LocationCamp } from "app/models/location-camp";
 import { Route } from "app/models/route";
 import { ClientHealthInsurance } from "app/models/client-health-insurance";
 import { ClientStep } from "app/models/client-step";
+import { ClientPastEviction } from "app/models/client-past-eviction";
+import { ClientFelony } from "app/models/client-felony";
+import { ClientDebt } from "app/models/client-debt";
 
 @Component({
   selector: "app-servicing-client",
@@ -65,6 +68,9 @@ export class ServicingClientComponent implements OnInit {
   healthInsurances: ClientHealthInsurance[] = [];
   notes: Note[] = [];
   routeName: string = '';
+  clientPastEvictions: ClientPastEviction[] = [];
+  clientFelonies: ClientFelony[] = [];
+  clientDebts: ClientDebt[] = [];
   pets: ClientPet[] = [];
   tents: Tent[] = [];
   steps: ClientStep[] = [];
@@ -213,9 +219,33 @@ export class ServicingClientComponent implements OnInit {
           error: (error) => console.log(error)
         });
 
-        this.service.getClientSteps(this.clientId).subscribe((data: ClientStep[]) => {
-          this.steps = data;
-        }, error => console.log(error));
+        this.service.getClientSteps(this.clientId).subscribe({
+          next: (data: ClientStep[]) => {
+            this.steps = data;
+          },
+          error: (error) => console.log(error)
+        });
+
+        this.service.getClientDebt(this.clientId).subscribe({
+          next: (data: ClientDebt[]) => {
+            this.clientDebts = data;
+          },
+          error: (error) => console.log(error)
+        });
+
+        this.service.getClientFelonies(this.clientId).subscribe({
+          next: (data: ClientFelony[]) => {
+            this.clientFelonies = data;
+          },
+          error: (error) => console.log(error)
+        });
+
+        this.service.getPastEvictions(this.clientId).subscribe({
+          next: (data: ClientPastEviction[]) => {
+            this.clientPastEvictions = data;
+          },
+          error: (error) => console.log(error)
+        });
 
         this.service.getRecentReceivedItems(this.clientId).subscribe(
           (data: RequestedItem[]) => {
@@ -950,6 +980,42 @@ export class ServicingClientComponent implements OnInit {
 
     const element = document.querySelector("#steps");
     element.scrollIntoView();
+  }
+
+  clientEvictionAdded(eviction: ClientPastEviction) {
+    this.clientPastEvictions.push(eviction);
+    const element = document.querySelector("#clientPastEvictions");
+    element.scrollIntoView();
+  }
+
+  clientFelonyAdded(felony: ClientFelony) {
+    this.clientFelonies.push(felony);
+    const element = document.querySelector("#clientFelonies");
+    element.scrollIntoView();
+  }
+
+  debtAdded(debt: ClientDebt) {
+    this.clientDebts.push(debt);
+    const element = document.querySelector("#clientDebts");
+    element.scrollIntoView();
+  }
+
+  removeClientEviction(id: number) {
+    this.service.removePastEviction(id).subscribe((res) => {
+      this.clientPastEvictions = this.clientPastEvictions.filter((w) => w.id != id);
+    });
+  }
+
+  removeClientFelony(id: number) {
+    this.service.removeClientFelony(id).subscribe((res) => {
+      this.clientFelonies = this.clientFelonies.filter((w) => w.id != id);
+    });
+  }
+
+  removeClientDebt(id: number) {
+    this.service.removeDebt(id).subscribe((res) => {
+      this.clientDebts = this.clientDebts.filter((w) => w.id != id);
+    });
   }
 
   removeStep(id: number) {

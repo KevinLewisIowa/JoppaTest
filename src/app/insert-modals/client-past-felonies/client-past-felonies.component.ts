@@ -60,11 +60,11 @@ export class ClientPastFeloniesComponent implements OnInit, AfterViewChecked {
     }
     else {
       this.extraInfoNeeded = false;
-      this.felony_type = '';
+      this.other_felony_type = '';
     }
   }
 
-  submitClientFelony() {
+  submitFelony() {
     const clientFelony = new ClientFelony();
     const clientId: number = JSON.parse(localStorage.getItem('selectedClient'));
 
