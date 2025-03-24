@@ -1241,6 +1241,19 @@ export class ClientService {
       );
   }
 
+  removeClientSkill(id: number) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+
+    return this.http.delete(this.baseUrl + `client_skills/${id}`, { headers: myHeader }).pipe(
+      map((res) => {
+        return true;
+      }), catchError(this.handleError)
+    );
+  }
+
   insertHealthInsurance(insurance: ClientHealthInsurance) {
     const myHeader = new HttpHeaders({
       "Content-Type": "application/json",
