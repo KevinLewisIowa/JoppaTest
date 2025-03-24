@@ -46,6 +46,7 @@ import { ClientStep } from "app/models/client-step";
 import { ClientPastEviction } from "app/models/client-past-eviction";
 import { ClientFelony } from "app/models/client-felony";
 import { ClientDebt } from "app/models/client-debt";
+import { ClientSkill } from "app/models/client-skill";
 
 @Component({
   selector: "app-servicing-client",
@@ -66,6 +67,7 @@ export class ServicingClientComponent implements OnInit {
   prayerRequestsAndNeeds: PrayerRequestAndNeed[] = [];
   householdClients: Client[] = [];
   healthInsurances: ClientHealthInsurance[] = [];
+  clientSkills: ClientSkill[] = [];
   notes: Note[] = [];
   routeName: string = '';
   clientPastEvictions: ClientPastEviction[] = [];
@@ -243,6 +245,13 @@ export class ServicingClientComponent implements OnInit {
         this.service.getPastEvictions(this.clientId).subscribe({
           next: (data: ClientPastEviction[]) => {
             this.clientPastEvictions = data;
+          },
+          error: (error) => console.log(error)
+        });
+
+        this.service.getClientSkills(this.clientId).subscribe({
+          next: (data: ClientSkill[]) => {
+            this.clientSkills = data;
           },
           error: (error) => console.log(error)
         });
@@ -1000,6 +1009,12 @@ export class ServicingClientComponent implements OnInit {
     element.scrollIntoView();
   }
 
+  skillAdded(skill: any) {
+    this.clientSkills.push(skill);
+    const element = document.querySelector("#clientSkills");
+    element.scrollIntoView();
+  }
+
   removeClientEviction(id: number) {
     this.service.removePastEviction(id).subscribe((res) => {
       this.clientPastEvictions = this.clientPastEvictions.filter((w) => w.id != id);
@@ -1021,6 +1036,12 @@ export class ServicingClientComponent implements OnInit {
   removeStep(id: number) {
     this.service.removeClientStep(id).subscribe((res) => {
       this.steps = this.steps.filter((w) => w.id != id);
+    });
+  }
+
+  removeSkill(id: number) {
+    this.service.removeClientSkill(id).subscribe((res) => {
+      this.clientSkills = this.clientSkills.filter((w) => w.id != id);
     });
   }
 
