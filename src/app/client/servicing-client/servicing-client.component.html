@@ -875,7 +875,7 @@
           </table>
         </div>
       </div>
-      <div class="col-lg-12 col-md-12">
+      <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
         <h4>
           Client Debts
           <button type="button" (click)="goToTop(); clientDebtMdl.showModal()" class="btn btn-primary" style="float: right">
@@ -911,7 +911,7 @@
           </tbody>
         </table>
       </div>
-      <div class="col-lg-12 col-md-12">
+      <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
         <h4>
           Client Felonies
           <button type="button" (click)="goToTop(); clientFelonyMdl.showModal()" class="btn btn-primary" style="float: right">
@@ -947,7 +947,7 @@
           </tbody>
         </table>
       </div>
-      <div class="col-lg-12 col-md-12">
+      <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
         <h4>
           Past Evictions
           <button type="button" (click)="goToTop(); clientEvictionMdl.showModal()" class="btn btn-primary" style="float: right">
@@ -983,7 +983,7 @@
           </tbody>
         </table>
       </div>
-      <div class="col-lg-12 col-md-12">
+      <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
         <h4>
           Client Skills
           <button type="button" (click)="goToTop(); clientSkillMdl.showModal()" class="btn btn-primary" style="float: right">
