@@ -1,0 +1,28 @@
+<ng-template #clientSkillMdl let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title">Add Skill</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <form>
+        <div class="modal-body">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <input id="skillInput" class="form-control" type="text" [(ngModel)]="skill" placeholder="Skill" name="skill" />
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-sm-6">
+                        <textarea id="notesInput" class="form-control" [(ngModel)]="notes" placeholder="Notes" name="notes"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-primary" (click)="c('Close click')">Don't Save</button>
+        <button type="button" class="btn btn-primary" (click)="submitSkill();c('')">Save</button>
+    </div>
+</ng-template>
