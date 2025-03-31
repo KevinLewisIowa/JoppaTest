@@ -3,56 +3,56 @@
     <h2>Heat Equipment Listing</h2>
   </div>
   <div class="row">
-    <div class="col-md-12 col-lg-12">
-      <table class="table" id="heaterListing">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Serial Number</th>
-              <th>Heater Type</th>
-              <th>Heater Status</th>
-              <th>Status Reason</th>
-              <th>Is Active</th>
-              <th>Last Updated</th>
-              <th>Mark Unassigned</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let heater of heaterList">
-              <td>{{heater.first_name}} <span *ngIf="heater.preferred_name != '' && heater.preferred_name != null">({{heater.preferred_name}})</span> {{heater.last_name}}</td>
-              <td>{{heater.serial_number}}</td>
-              <td>{{heater.type_description}}</td>
-              <td>{{heater.status_name}}</td>
-              <td>{{heater.status_reason}}</td>
-              <td>{{heater.is_active}}</td>
-              <td>{{heater.updated_at | date: 'short'}}</td>
-              <td><button type="button" class="btn btn-primary" (click)="unassignHeater(heater.id)" *ngIf="heater.status_name == 'Assigned'">Mark Unassigned</button></td>
-            </tr>
-            <tr *ngFor="let hose of hoseList">
-              <td>{{hose.first_name}} <span *ngIf="hose.preferred_name != '' && hose.preferred_name != null">({{hose.preferred_name}})</span> {{hose.last_name}}</td>
-              <td>Hose</td>
-              <td>N/A</td>
-              <td>{{hose.status_name}}</td>
-              <td>N/A</td>
-              <td>N/A</td>
-              <td>{{hose.updated_at | date: 'short'}}</td>
-              <td><button type="button" class="btn btn-primary" (click)="unassignHose(hose.id)" *ngIf="hose.status_name == 'Assigned'">Mark Unassigned</button></td>
-            </tr>
-            <tr *ngFor="let tank of tankList">
-              <td>{{tank.first_name}} <span *ngIf="tank.preferred_name != '' && tank.preferred_name != null">({{tank.preferred_name}})</span> {{tank.last_name}}</td>
-              <td>Tank</td>
-              <td>N/A</td>
-              <td>{{tank.status_name}}</td>
-              <td>N/A</td>
-              <td>N/A</td>
-              <td>{{tank.updated_at | date: 'short'}}</td>
-              <td><button type="button" class="btn btn-primary" (click)="unassignTank(tank.id)" *ngIf="tank.status_name == 'Assigned'">Mark Unassigned</button></td>
-            </tr>              
-          </tbody>
-        </table>
-      </div>
+    <div class="col-12">
+      <table class="table table-responsive table-striped" id="heaterListing">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Serial Number</th>
+            <th>Heater Type</th>
+            <th>Heater Status</th>
+            <th>Status Reason</th>
+            <th>Is Active</th>
+            <th>Last Updated</th>
+            <th>Mark Unassigned</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let heater of heaterList">
+            <td>{{heater.first_name}} <span *ngIf="heater.preferred_name != '' && heater.preferred_name != null">({{heater.preferred_name}})</span> {{heater.last_name}}</td>
+            <td>{{heater.serial_number}}</td>
+            <td>{{heater.type_description}}</td>
+            <td>{{heater.status_name}}</td>
+            <td>{{heater.status_reason}}</td>
+            <td>{{heater.is_active}}</td>
+            <td>{{heater.updated_at | date: 'short'}}</td>
+            <td><button type="button" class="btn btn-primary" (click)="unassignHeater(heater.id)" *ngIf="heater.status_name == 'Assigned'">Mark Unassigned</button></td>
+          </tr>
+          <tr *ngFor="let hose of hoseList">
+            <td>{{hose.first_name}} <span *ngIf="hose.preferred_name != '' && hose.preferred_name != null">({{hose.preferred_name}})</span> {{hose.last_name}}</td>
+            <td>Hose</td>
+            <td>N/A</td>
+            <td>{{hose.status_name}}</td>
+            <td>N/A</td>
+            <td>N/A</td>
+            <td>{{hose.updated_at | date: 'short'}}</td>
+            <td><button type="button" class="btn btn-primary" (click)="unassignHose(hose.id)" *ngIf="hose.status_name == 'Assigned'">Mark Unassigned</button></td>
+          </tr>
+          <tr *ngFor="let tank of tankList">
+            <td>{{tank.first_name}} <span *ngIf="tank.preferred_name != '' && tank.preferred_name != null">({{tank.preferred_name}})</span> {{tank.last_name}}</td>
+            <td>Tank</td>
+            <td>N/A</td>
+            <td>{{tank.status_name}}</td>
+            <td>N/A</td>
+            <td>N/A</td>
+            <td>{{tank.updated_at | date: 'short'}}</td>
+            <td><button type="button" class="btn btn-primary" (click)="unassignTank(tank.id)" *ngIf="tank.status_name == 'Assigned'">Mark Unassigned</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
-  <div class="card-footer">
-    <button routerLink="/admin/reports" class="btn btn-primary" style="float: left"><fa-icon [icon]="backIcon"></fa-icon> Back</button>
+  <div class="card-footer d-flex justify-content-between flex-wrap">
+    <button routerLink="/admin/reports" class="btn btn-primary"><fa-icon [icon]="backIcon"></fa-icon> Back</button>
   </div>
 </div>

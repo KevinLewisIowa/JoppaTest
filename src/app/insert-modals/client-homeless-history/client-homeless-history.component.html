@@ -1,48 +1,91 @@
 <ng-template #clientHomelessHistoryMdl let-c="close" let-d="dismiss">
   <div class="modal-header">
     <h4 class="modal-title">Create Client Homeless History</h4>
-    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')"><span
-        aria-hidden="true">&times;</span></button>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
   </div>
   <form>
     <div class="modal-body">
       <div class="form-group">
         <div class="row">
-          <div class="col-md-6">
+          <div class="col-12 col-md-6 mb-3">
             <label for="homeless-reason">Reason for Homelessness</label>
-            <select id="homeless-reason" class="form-control" [(ngModel)]="homeless_reason" (change)="onChange()">
+            <select
+              id="homeless-reason"
+              class="form-control"
+              [(ngModel)]="homeless_reason"
+              (change)="onChange()"
+            >
               <option value="" disabled selected>Select Reason</option>
               <option *ngFor="let reason of reason_for_homelessness" [value]="reason">{{ reason }}</option>
             </select>
           </div>
-          <div class="col-md-6">
-            <input id="extraInfo" name="extraInfoReason" class="form-control" type="text" [(ngModel)]="other_homeless_reason" *ngIf="extraInfoNeeded" placeholder="Other Reason" />
+          <div class="col-12 col-md-6 mb-3">
+            <input
+              id="extraInfo"
+              name="extraInfoReason"
+              class="form-control"
+              type="text"
+              [(ngModel)]="other_homeless_reason"
+              *ngIf="extraInfoNeeded"
+              placeholder="Other Reason"
+            />
           </div>
         </div>
         <div class="row">
-          <div class="col-md-6">
-            <label for="date-became-homeless">Date Became Homeless (Date must be MM/DD/YYYY)</label>
-            <input id="date-became-homeless" type="date" class="form-control" placeholder="mm/dd/yyyy"
-              [(ngModel)]="date_became_homeless" [ngModel]="date_became_homeless | date:'yyyy-MM-dd'" style="float:left;" />
+          <div class="col-12 col-md-6 mb-3">
+            <label for="date-became-homeless">Date Became Homeless</label>
+            <input
+              id="date-became-homeless"
+              type="date"
+              class="form-control"
+              [(ngModel)]="date_became_homeless"
+              [ngModel]="date_became_homeless | date:'yyyy-MM-dd'"
+              placeholder="mm/dd/yyyy"
+            />
           </div>
         </div>
         <div class="row">
-          <div class="col-md-6">
-            <label for="first-time-homeless">First Time Homeless? &nbsp; </label>
-            <input id="first-time-homeless" type="checkbox" class="form-control-checkbox" [(ngModel)]="first_time_homeless" />
+          <div class="col-12 col-md-6 mb-3">
+            <label for="first-time-homeless">First Time Homeless?</label>
+            <input
+              id="first-time-homeless"
+              type="checkbox"
+              class="form-check-input"
+              [(ngModel)]="first_time_homeless"
+            />
           </div>
         </div>
         <div class="row">
-          <div class="col-md-6">
-            <textarea id="focusMe" class="form-control" rows="4" [(ngModel)]="notes" placeholder="Notes"
-              name="notes"></textarea>
+          <div class="col-12 mb-3">
+            <textarea
+              id="focusMe"
+              class="form-control"
+              rows="4"
+              [(ngModel)]="notes"
+              placeholder="Notes"
+              name="notes"
+            ></textarea>
           </div>
         </div>
       </div>
     </div>
   </form>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-outline-primary" (click)="c('Close click')">Don't Save</button>
-    <button type="button" class="btn btn-primary" (click)="submitClientHomelessHistory();c('')">Save</button>
+  <div class="modal-footer d-flex justify-content-between flex-wrap">
+    <button
+      type="button"
+      class="btn btn-outline-primary"
+      (click)="c('Close click')"
+    >
+      Don't Save
+    </button>
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="submitClientHomelessHistory();c('')"
+    >
+      Save
+    </button>
   </div>
 </ng-template>

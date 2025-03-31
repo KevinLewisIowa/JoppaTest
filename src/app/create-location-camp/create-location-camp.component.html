@@ -5,49 +5,49 @@
     </div>
     <div class="panel-body" style="opacity:0.93">
       <div class="form-group row">
-        <label for="name" class="col-sm-6 col-form-label">Name: </label>
-        <div class="col-sm-6">
-          <input id="name" type="text" class="form-control" style="float:right;" placeholder="Camp Name" formControlName="name" />
+        <label for="name" class="col-12 col-md-6 col-form-label">Name:</label>
+        <div class="col-12 col-md-6">
+          <input id="name" type="text" class="form-control" placeholder="Camp Name" formControlName="name" />
         </div>
       </div>
       <div class="form-group row">
-        <label for="routes" class="col-sm-6 col-form-label">Route:</label>
-        <div class="col-sm-6">
-          <select id="routes" class="form-control" style="float:right;" formControlName="route_id">
+        <label for="routes" class="col-12 col-md-6 col-form-label">Route:</label>
+        <div class="col-12 col-md-6">
+          <select id="routes" class="form-control" formControlName="route_id">
             <option value="" disabled selected>Select a route</option>
             <option *ngFor="let route of routes" [value]="route.id">{{route.name}}</option>
           </select>
         </div>
       </div>
-      <div class="form-group row">        
-        <label for="arrival_time" class="col-sm-6 col-form-label">Expected Arrival Time: </label>
-        <div class="col-sm-6">
-          <input id="arrival_time" type="time" class="form-control" style="float:right;" placeholder="Expected Arrival Time" formControlName="expected_arrival_time" />
+      <div class="form-group row">
+        <label for="arrival_time" class="col-12 col-md-6 col-form-label">Expected Arrival Time:</label>
+        <div class="col-12 col-md-6">
+          <input id="arrival_time" type="time" class="form-control" placeholder="Expected Arrival Time" formControlName="expected_arrival_time" />
         </div>
       </div>
       <div class="form-group row">
-        <label id="position" class="col-sm-6 col-form-label">Position: </label>
-        <div class="col-sm-6">
-          <input id="position" type="number" class="form-control" style="float:right;" placeholder="Position" formControlName="position" />
+        <label id="position" class="col-12 col-md-6 col-form-label">Position:</label>
+        <div class="col-12 col-md-6">
+          <input id="position" type="number" class="form-control" placeholder="Position" formControlName="position" />
         </div>
       </div>
       <div class="form-group row">
-        <label for="remain_on_route" class="col-sm-6 col-form-label">Remain On Route: </label>
-        <div class="col-sm-6">
-          <input id="remain_on_route" type="checkbox" class="form-control-checkbox" style="float:right; width:5%; height:100%;" formControlName="remain_on_route" />
+        <label for="remain_on_route" class="col-12 col-md-6 col-form-label">Remain On Route:</label>
+        <div class="col-12 col-md-6">
+          <input id="remain_on_route" type="checkbox" class="form-check-input" formControlName="remain_on_route" />
         </div>
       </div>
       <div class="form-group row">
-        <label for="notes" class="col-sm-6 col-form-label">Notes: </label>
-        <div class="col-sm-6">
-          <textarea id="notes" placeholder="Notes" class="form-control" rows="3" cols="19" style="float:right;" formControlName="notes" ></textarea>
+        <label for="notes" class="col-12 col-md-6 col-form-label">Notes:</label>
+        <div class="col-12 col-md-6">
+          <textarea id="notes" placeholder="Notes" class="form-control" rows="3" formControlName="notes"></textarea>
         </div>
       </div>
     </div>
     <div class="card-footer">
-      <div class="text-center">
-        <button type="button" class="btn btn-primary" style="float:left;" (click)="back()">Don't Save</button>
-        <button type="button" class="btn btn-primary" style="float:right;" [disabled]="!locationCampForm.valid" (click)="submitLocationCamp()" >Save Location Camp</button>
+      <div class="d-flex justify-content-between">
+        <button type="button" class="btn btn-primary" (click)="back()">Don't Save</button>
+        <button type="button" class="btn btn-primary" [disabled]="!locationCampForm.valid" (click)="submitLocationCamp()">Save Location Camp</button>
       </div>
     </div>
   </div>

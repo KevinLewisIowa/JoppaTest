@@ -1,36 +1,32 @@
 <ng-template #editModal let-c="close" let-d="dismiss">
   <div class="modal-header">
     <h4 class="modal-title">Client Details</h4>
-    <button type="button" class="btn btn-primary" aria-label="Close" (click)="d('Cross click')"><span
-        aria-hidden="true">x</span></button>
+    <button type="button" class="btn btn-primary" aria-label="Close" (click)="d('Cross click')"><span aria-hidden="true">x</span></button>
   </div>
   <div class="modal-body">
     <form [formGroup]="clientForm" style="opacity:0.93">
       <div class="form-group row">
-        <label for="first-name" class="col-6 col-form-label">First Name: </label>
-        <div class="col-6">
-          <input id="first-name" type="text" class="form-control" style="float:right;" placeholder="First Name"
-            formControlName="first_name" />
+        <label for="first-name" class="col-12 col-md-6 col-form-label">First Name:</label>
+        <div class="col-12 col-md-6">
+          <input id="first-name" type="text" class="form-control" placeholder="First Name" formControlName="first_name" />
         </div>
       </div>
       <div class="form-group row">
-        <label for="last-name" class="col-6 col-form-label">Last Name: </label>
-        <div class="col-6">
-          <input id="last-name" type="text" class="form-control" style="float:right;" placeholder="Last Name"
-            formControlName="last_name" />
+        <label for="last-name" class="col-12 col-md-6 col-form-label">Last Name:</label>
+        <div class="col-12 col-md-6">
+          <input id="last-name" type="text" class="form-control" placeholder="Last Name" formControlName="last_name" />
         </div>
       </div>
       <div class="form-group row">
-        <label for="preferred-name" class="col-6 col-form-label">Preferred Name: </label>
-        <div class="col-6">
-          <input id="preferred-name" type="text" class="form-control" style="float:right;" placeholder="Preferred Name"
-            formControlName="preferred_name" />
+        <label for="preferred-name" class="col-12 col-md-6 col-form-label">Preferred Name:</label>
+        <div class="col-12 col-md-6">
+          <input id="preferred-name" type="text" class="form-control" placeholder="Preferred Name" formControlName="preferred_name" />
         </div>
       </div>
       <div class="form-group row">
-        <label for="gender" class="col-6 col-form-label">Gender: </label>
-        <div class="col-6">
-          <select id="gender" class="form-control" formControlName="gender" style="float:right;">
+        <label for="gender" class="col-12 col-md-6 col-form-label">Gender:</label>
+        <div class="col-12 col-md-6">
+          <select id="gender" class="form-control" formControlName="gender">
             <option value="Male">Male</option>
             <option value="Female">Female</option>
             <option value="Other">Other</option>
@@ -38,11 +34,10 @@
         </div>
       </div>
       <div class="form-group row">
-        <label for="race" class="col-6 col-form-label">Race: </label>
-        <div class="col-6">
-          <select id="race" class="form-control" formControlName="race" style="float:right;">
-            <option value="American Indian, Alaska Native, or Indigenous">American Indian, Alaska Native, or Indigenous
-            </option>
+        <label for="race" class="col-12 col-md-6 col-form-label">Race:</label>
+        <div class="col-12 col-md-6">
+          <select id="race" class="form-control" formControlName="race">
+            <option value="American Indian, Alaska Native, or Indigenous">American Indian, Alaska Native, or Indigenous</option>
             <option value="Asian or Asian American">Asian or Asian American</option>
             <option value="Black, African American, or African">Black, African American, or African</option>
             <option value="Native Hawaiian or Pacific Islander">Native Hawaiian or Pacific Islander</option>
@@ -54,9 +49,9 @@
         </div>
       </div>
       <div class="form-group row">
-        <label for="ethnicity" class="col-6 col-form-label">Ethnicity: </label>
-        <div class="col-6">
-          <select id="ethnicity" class="form-control" formControlName="ethnicity" style="float:right;">
+        <label for="ethnicity" class="col-12 col-md-6 col-form-label">Ethnicity:</label>
+        <div class="col-12 col-md-6">
+          <select id="ethnicity" class="form-control" formControlName="ethnicity">
             <option value="Non-Hispanic/Non-Latin(a)(o)(x)">Non-Hispanic/Non-Latin(a)(o)(x)</option>
             <option value="Hispanic/Latin(a)(o)(x)">Hispanic/Latin(a)(o)(x)</option>
             <option value="Client doesn't know">Client doesn't know</option>
@@ -66,31 +61,27 @@
         </div>
       </div>
       <div class="form-group row">
-        <label for="birth-date" class="col-6 col-form-label">Birth Date (Date must be MM/DD/YYYY): </label>
-        <div class="col-6">
-          <input id="birth-date" type="date" class="form-control" placeholder="mm\/dd\/yyyy"
-            formControlName="birth_date" style="float:right;" />
+        <label for="birth-date" class="col-12 col-md-6 col-form-label">Birth Date (MM/DD/YYYY):</label>
+        <div class="col-12 col-md-6">
+          <input id="birth-date" type="date" class="form-control" placeholder="mm/dd/yyyy" formControlName="birth_date" />
         </div>
       </div>
       <div class="form-group row">
-        <label for="phone" class="col-6 col-form-label">Phone: </label>
-        <div class="col-6">
-          <input id="phone" type="text" class="form-control" style="float:right;" placeholder="phone"
-            formControlName="phone" />
+        <label for="phone" class="col-12 col-md-6 col-form-label">Phone:</label>
+        <div class="col-12 col-md-6">
+          <input id="phone" type="text" class="form-control" placeholder="Phone" formControlName="phone" />
         </div>
       </div>
       <div class="form-group row">
-        <label for="email" class="col-6 col-form-label">Email: </label>
-        <div class="col-6">
-          <input id="email" type="text" class="form-control" style="float:right;" placeholder="email"
-            formControlName="email" />
+        <label for="email" class="col-12 col-md-6 col-form-label">Email:</label>
+        <div class="col-12 col-md-6">
+          <input id="email" type="text" class="form-control" placeholder="Email" formControlName="email" />
         </div>
       </div>
       <div class="form-group row">
-        <label for="highest_level_education" class="col-6 col-form-label">Highest Level of Education: </label>
-        <div class="col-6">
-          <select id="highest_level_education" class="form-control" formControlName="highest_level_education"
-            style="float:right;">
+        <label for="highest_level_education" class="col-12 col-md-6 col-form-label">Highest Level of Education:</label>
+        <div class="col-12 col-md-6">
+          <select id="highest_level_education" class="form-control" formControlName="highest_level_education">
             <option value="K-8">K-8</option>
             <option value="9-12">9-12</option>
             <option value="College 2 or 4 yr Degree">College 2 or 4 yr Degree</option>
@@ -106,31 +97,27 @@
         </div>
       </div>
       <div class="form-group row">
-        <label for="what_brought_to_des_moines" class="col-6 col-form-label">What Brought You to Des Moines?: </label>
-        <div class="col-6">
-          <select id="what_brought_to_des_moines" #bdm class="form-control" formControlName="what_brought_to_des_moines"
-            style="float:right;" (change)="onReasonChange(bdm.value)">
+        <label for="what_brought_to_des_moines" class="col-12 col-md-6 col-form-label">What Brought You to Des Moines?:</label>
+        <div class="col-12 col-md-6">
+          <select id="what_brought_to_des_moines" #bdm class="form-control" formControlName="what_brought_to_des_moines" (change)="onReasonChange(bdm.value)">
             <option value="" disabled selected>Reason</option>
             <option *ngFor="let option of whatbroughtyoutodesmoines" [value]="option">{{ option }}</option>
           </select>
         </div>
       </div>
       <div class="form-group row">
-        <label class="col-6"></label>
-        <div class="col-6">
-          <input id="otherReasonForDesMoines" type="text" class="form-control" placeholder="Reason"
-            formControlName="otherReasonForDesMoines" *ngIf="extraInfoNeededReasonForDesMoines" />
+        <label class="col-12 col-md-6"></label>
+        <div class="col-12 col-md-6">
+          <input id="otherReasonForDesMoines" type="text" class="form-control" placeholder="Reason" formControlName="otherReasonForDesMoines" *ngIf="extraInfoNeededReasonForDesMoines" />
         </div>
       </div>
       <div class="form-group row">
-        <label class="col-6 col-form-label">What City and State Did You Live In Before You Became Homeless?: </label>
-        <div class="col-3">
-          <input class="form-control" formControlName="city_before_homelessness" style="float:right"
-            placeholder="City" />
+        <label class="col-12 col-md-6 col-form-label">What City and State Did You Live In Before You Became Homeless?:</label>
+        <div class="col-12 col-md-3">
+          <input class="form-control" formControlName="city_before_homelessness" placeholder="City" />
         </div>
-        <div class="col-3">
-          <select id="state_before_homelessness" class="form-control" formControlName="state_before_homelessness"
-            style="float:right;">
+        <div class="col-12 col-md-3">
+          <select id="state_before_homelessness" class="form-control" formControlName="state_before_homelessness">
             <option value="" disabled selected>State</option>
             <option value="AL">Alabama</option>
             <option value="AK">Alaska</option>
@@ -187,10 +174,9 @@
         </div>
       </div>
       <div class="form-group row">
-        <label for="veteran" class="col-6 col-form-label">Is Veteran:</label>
-        <div class="col-6">
-          <select name="veteran" id="veteran" class="form-control" #veteranitem style="float:right;"
-            (change)="onVeteranChange(veteranitem.value)" formControlName="is_veteran">
+        <label for="veteran" class="col-12 col-md-6 col-form-label">Is Veteran:</label>
+        <div class="col-12 col-md-6">
+          <select name="veteran" id="veteran" class="form-control" #veteranitem (change)="onVeteranChange(veteranitem.value)" formControlName="is_veteran">
             <option value="null" disabled selected>Unknown</option>
             <option value="true">Yes</option>
             <option value="false">No</option>
@@ -198,12 +184,9 @@
         </div>
       </div>
       <div class="form-group row">
-        <label for="diagnosed_mental_physical_disability" class="col-6 col-form-label">Has Diagnosed Physical or Mental
-          Disability:</label>
-        <div class="col-6">
-          <select name="diagnosed_mental_physical_disability" id="diagnosed_mental_physical_disability"
-            class="form-control" #diagnoseditem style="float:right;" (change)="onDiagnosedChange(diagnoseditem.value)"
-            formControlName="diagnosed_mental_physical_disability">
+        <label for="diagnosed_mental_physical_disability" class="col-12 col-md-6 col-form-label">Has Diagnosed Physical or Mental Disability:</label>
+        <div class="col-12 col-md-6">
+          <select name="diagnosed_mental_physical_disability" id="diagnosed_mental_physical_disability" class="form-control" #diagnoseditem (change)="onDiagnosedChange(diagnoseditem.value)" formControlName="diagnosed_mental_physical_disability">
             <option value="null" disabled selected>Unknown</option>
             <option value="true">Yes</option>
             <option value="false">No</option>
@@ -211,10 +194,9 @@
         </div>
       </div>
       <div class="form-group row">
-        <label for="aftercare" class="col-6 col-form-label">Is After Care:</label>
-        <div class="col-6">
-          <select name="aftercare" id="aftercare" #aftercareitem class="form-control" style="float:right;"
-            (change)="onAftercareChange(aftercareitem.value)" formControlName="is_aftercare">
+        <label for="aftercare" class="col-12 col-md-6 col-form-label">Is After Care:</label>
+        <div class="col-12 col-md-6">
+          <select name="aftercare" id="aftercare" #aftercareitem class="form-control" (change)="onAftercareChange(aftercareitem.value)" formControlName="is_aftercare">
             <option value="null" disabled selected>Unknown</option>
             <option value="true">Yes</option>
             <option value="false">No</option>
@@ -222,34 +204,27 @@
         </div>
       </div>
       <div class="form-group row">
-        <label for="camp-latitude" class="col-6 col-form-label">Camp Latitude: </label>
-        <div class="col-3">
-          <button class="btn btn-primary" style="float: right" (click)="getCurrentLocation()">Get Current Location for
-            Camp</button>
-        </div>
-        <div class="col-3">
-          <input id="camp-latitude" type="text" class="form-control" placeholder="camp latitude"
-            formControlName="latitude" />
+        <label for="camp-latitude" class="col-12 col-md-6 col-form-label">Camp Latitude:</label>
+        <div class="col-12 col-md-6">
+          <input id="camp-latitude" type="text" class="form-control" placeholder="Camp Latitude" formControlName="latitude" />
         </div>
       </div>
       <div class="form-group row">
-        <label for="camp-longitude" class="col-9 col-form-label">Camp Longitude: </label>
-        <div class="col-3">
-          <input id="camp-longitude" type="text" class="form-control" style="float: right" placeholder="Camp Longitude"
-            formControlName="longitude" />
+        <label for="camp-longitude" class="col-12 col-md-6 col-form-label">Camp Longitude:</label>
+        <div class="col-12 col-md-6">
+          <input id="camp-longitude" type="text" class="form-control" placeholder="Camp Longitude" formControlName="longitude" />
         </div>
       </div>
       <div class="form-group row">
-        <label for="mailbox" class="col-6 col-form-label">Mailbox: </label>
-        <div class="col-6">
-          <input id="mailbox" type="text" class="form-control" style="float:right;" placeholder="Joppa Mailbox Number"
-            formControlName="joppa_apartment_number" />
+        <label for="mailbox" class="col-12 col-md-6 col-form-label">Mailbox:</label>
+        <div class="col-12 col-md-6">
+          <input id="mailbox" type="text" class="form-control" placeholder="Joppa Mailbox Number" formControlName="joppa_apartment_number" />
         </div>
       </div>
       <div class="form-group row">
-        <label for="status" class="col-6 col-form-label">Status: </label>
-        <div class="col-6">
-          <select id="status" class="form-control" style="float:right;" formControlName="status">
+        <label for="status" class="col-12 col-md-6 col-form-label">Status:</label>
+        <div class="col-12 col-md-6">
+          <select id="status" class="form-control" formControlName="status">
             <option value="Active">Active</option>
             <option value="Inactive">Inactive</option>
             <option value="Alumni">Alumni</option>
@@ -258,28 +233,22 @@
         </div>
       </div>
       <div class="form-group row" *ngIf="isAdmin">
-        <label for="admin-notes" class="col-6 col-form-label">Admin Notes: </label>
-        <div class="col-6">
-          <textarea id="admin-notes" type="text" class="form-control" rows="3" placeholder="admin notes"
-            style="float:right;" formControlName="admin_notes"></textarea>
+        <label for="admin-notes" class="col-12 col-md-6 col-form-label">Admin Notes:</label>
+        <div class="col-12 col-md-6">
+          <textarea id="admin-notes" type="text" class="form-control" rows="3" placeholder="Admin Notes" formControlName="admin_notes"></textarea>
         </div>
       </div>
       <div class="form-group row">
-        <img [src]="url" *ngIf="url != '' && url != null">
-        <label for="client-picture" class="col-6 col-form-label">Image:</label>
-        <div class="col-6">
-          <input id="client-picture" type="file" accept="image/*" width="300" height="300" (change)="onAdd($event)"
-            class="form-control" style="float:right;" />
-          <button id="clear-picture" class="btn btn-outline-primary" (click)="clearPicture()" *ngIf="isAdmin">Clear
-            Photo</button>
+        <label for="client-picture" class="col-12 col-md-6 col-form-label">Image:</label>
+        <div class="col-12 col-md-6">
+          <input id="client-picture" type="file" accept="image/*" class="form-control" (change)="onAdd($event)" />
+          <button id="clear-picture" class="btn btn-outline-primary mt-2" (click)="clearPicture()" *ngIf="isAdmin">Clear Photo</button>
         </div>
       </div>
     </form>
   </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-outline-primary" style="float:right;" (click)="c('Close click')">Don't
-      Save</button>
-    <button type="button" class="btn btn-primary" style="float:right;" [disabled]="!clientForm.valid"
-      (click)="submitClient(); c('');">Save</button>
+  <div class="modal-footer d-flex justify-content-between flex-wrap">
+    <button type="button" class="btn btn-outline-primary" (click)="c('Close click')">Don't Save</button>
+    <button type="button" class="btn btn-primary" [disabled]="!clientForm.valid" (click)="submitClient(); c('');">Save</button>
   </div>
 </ng-template>

@@ -1,29 +1,27 @@
 <ng-template #referralsResourcesMdl let-c="close" let-d="dismiss">
   <div class="modal-header">
     <h4 class="modal-title">Create Referral / Resource</h4>
-    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
-      <span aria-hidden="true">&times;</span>
-    </button>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')"><span aria-hidden="true">&times;</span></button>
   </div>
   <form>
     <div class="modal-body">
       <div class="form-group">
-        <div class="row">
-          <div class="col-sm-4">
+        <div class="row mb-3">
+          <div class="col-12 col-md-4">
             <label for="type">Type</label>
             <select id="type" class="form-control" [(ngModel)]="type" name="type" (change)="onTypeChange()">
               <option value="" disabled selected>Select Type</option>
               <option *ngFor="let type of types" [value]="type">{{ type }}</option>
             </select>
           </div>
-          <div class="col-sm-4">
+          <div class="col-12 col-md-4">
             <input id="extraInfo" name="extraInfoType" class="form-control" type="text" [(ngModel)]="other_type" *ngIf="extraInfoNeeded" placeholder="Other Type" />
           </div>
-          <div class="col-sm-4">
+          <div class="col-12 col-md-4">
             <label for="quantity">Quantity</label>
             <input type="number" id="quantity" class="form-control" [(ngModel)]="quantity" name="quantity" />
           </div>
-          <div class="col-sm-4">
+          <div class="col-12">
             <label for="notes">Notes</label>
             <input type="text" id="notes" class="form-control" [(ngModel)]="notes" name="notes" />
           </div>
@@ -31,12 +29,8 @@
       </div>
     </div>
   </form>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-outline-primary" (click)="c('Close click')">
-      Don't Save
-    </button>
-    <button type="button" class="btn btn-primary" (click)="submitReferralsResources(); c('')">
-      Save
-    </button>
+  <div class="modal-footer d-flex justify-content-between flex-wrap">
+    <button type="button" class="btn btn-outline-primary" (click)="c('Close click')">Don't Save</button>
+    <button type="button" class="btn btn-primary" (click)="submitReferralsResources(); c('')">Save</button>
   </div>
 </ng-template>

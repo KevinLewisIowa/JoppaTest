@@ -1,47 +1,45 @@
 <ng-template #editModal let-c="close" let-d="dismiss">
   <div class="modal-header">
     <h4 class="modal-title">Route Updates</h4>
-    <button type="button" class="btn btn-primary" aria-label="Close" (click)="d('Cross click')"><span
-        aria-hidden="true">x</span></button>
+    <button type="button" class="btn btn-primary" aria-label="Close" (click)="d('Cross click')"><span aria-hidden="true">x</span></button>
   </div>
   <div class="modal-body">
     <form [formGroup]="routeForm" style="opacity:0.93">
-      <div class="login-box">
+      <div class="container">
         <div class="form-group row">
-            <label for="name" class="col-6 col-form-label">Name: </label>
-            <div class="col-6">
-              <input id="name" type="text" class="form-control" style="float:right;" placeholder="Name" formControlName="name" />
-            </div>
-        </div>
-        <div class="form-group row">
-          <label for="region" class="col-6 col-form-label">Region: </label>
-          <div class="col-6">
-            <input id="region" type="text" class="form-control" style="float:right;" placeholder="Region" formControlName="region" />
+          <label for="name" class="col-12 col-md-6 col-form-label">Name:</label>
+          <div class="col-12 col-md-6">
+            <input id="name" type="text" class="form-control" placeholder="Name" formControlName="name" />
           </div>
         </div>
         <div class="form-group row">
-          <label for="active" class="col-6 col-form-label">Active:</label>
-          <div class="col-6">
-            <input id="active" type="checkbox" class="form-control-checkbox" style="float:right; width:5%; height:100%;" formControlName="is_active" />
+          <label for="region" class="col-12 col-md-6 col-form-label">Region:</label>
+          <div class="col-12 col-md-6">
+            <input id="region" type="text" class="form-control" placeholder="Region" formControlName="region" />
           </div>
         </div>
         <div class="form-group row">
-          <label for="aftercare" class="col-6 col-form-label">Aftercare:</label>
-          <div class="col-6">
-            <input id="aftercare" type="checkbox" class="form-control-checkbox" style="float:right; width:5%; height:100%;" formControlName="is_aftercare" />
+          <label for="active" class="col-12 col-md-6 col-form-label">Active:</label>
+          <div class="col-12 col-md-6">
+            <input id="active" type="checkbox" class="form-check-input" formControlName="is_active" />
           </div>
         </div>
         <div class="form-group row">
-          <label for="admin-notes" class="col-6 col-form-label">Admin Notes: </label>
-          <div class="col-6">
-            <textarea id="admin-notes" type="text" class="form-control" rows="3" placeholder="Admin Notes"
-              style="float:right;" formControlName="admin_notes"></textarea>
+          <label for="aftercare" class="col-12 col-md-6 col-form-label">Aftercare:</label>
+          <div class="col-12 col-md-6">
+            <input id="aftercare" type="checkbox" class="form-check-input" formControlName="is_aftercare" />
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="admin-notes" class="col-12 col-md-6 col-form-label">Admin Notes:</label>
+          <div class="col-12 col-md-6">
+            <textarea id="admin-notes" class="form-control" rows="3" placeholder="Admin Notes" formControlName="admin_notes"></textarea>
           </div>
         </div>
       </div>
     </form>
   </div>
-  <div class="modal-footer">
+  <div class="modal-footer d-flex justify-content-between flex-wrap">
     <button type="button" class="btn btn-outline-primary" (click)="c('Close click')">Don't Save</button>
     <button type="button" [disabled]="!routeForm.valid" (click)="submitRoute(); c('');" class="btn btn-primary">Save</button>
   </div>

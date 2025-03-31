@@ -3,55 +3,49 @@
     <h2>Camp Listing</h2>
   </div>
   <div class="panel-body">
-    <mat-form-field appearance="standard">
-      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter" #input/>
+    <mat-form-field appearance="standard" class="w-100">
+      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter" #input />
     </mat-form-field>
   </div>
   <div class="panel-body">
     <div>
-      <mat-table #table [dataSource]="dataSource" matSort matSortActive="is_active" matSortDirection="desc">
+      <mat-table #table [dataSource]="dataSource" matSort matSortActive="is_active" matSortDirection="desc" class="mat-elevation-z8">
         <ng-container matColumnDef="route_name">
           <mat-header-cell *matHeaderCellDef mat-sort-header>Route</mat-header-cell>
           <mat-cell *matCellDef="let camp">
-            <select type="string" placeholder="route" style="max-width: 75%;" [(ngModel)]="camp.route_id">
+            <select type="string" placeholder="route" class="form-select w-100" [(ngModel)]="camp.route_id">
               <option *ngFor="let route of routes" [value]="route.id">{{route.name}}</option>
             </select>
           </mat-cell>
         </ng-container>
-
         <ng-container matColumnDef="camp_name">
           <mat-header-cell *matHeaderCellDef mat-sort-header>Camp</mat-header-cell>
-          <mat-cell (click)="viewCamp(camp)" *matCellDef="let camp">{{ camp.camp_name }}</mat-cell>
+          <mat-cell (click)="viewCamp(camp)" *matCellDef="let camp">{{camp.camp_name}}</mat-cell>
         </ng-container>
-
         <ng-container matColumnDef="position">
           <mat-header-cell *matHeaderCellDef mat-sort-header>Position</mat-header-cell>
-          <mat-cell *matCellDef="let camp"><input type="number" placeholder="position" style="max-width: 75%;" [(ngModel)]="camp.position" /></mat-cell>
+          <mat-cell *matCellDef="let camp">
+            <input type="number" placeholder="position" class="form-control w-100" [(ngModel)]="camp.position" />
+          </mat-cell>
         </ng-container>
-
         <ng-container matColumnDef="is_active">
           <mat-header-cell *matHeaderCellDef mat-sort-header>Is Active?</mat-header-cell>
-          <mat-cell (click)="viewCamp(camp)" *matCellDef="let camp">{{ camp.is_active }}</mat-cell>
+          <mat-cell (click)="viewCamp(camp)" *matCellDef="let camp">{{camp.is_active}}</mat-cell>
         </ng-container>
-
         <ng-container matColumnDef="remain_on_route">
           <mat-header-cell *matHeaderCellDef mat-sort-header>Remain On Route?</mat-header-cell>
           <mat-cell *matCellDef="let camp">
             <input type="checkbox" [(ngModel)]="camp.remain_on_route" />
           </mat-cell>
         </ng-container>
-
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row *matRowDef="let camp; columns: displayedColumns"></mat-row>
+        <mat-row *matRowDef="let camp; columns: displayedColumns;"></mat-row>
       </mat-table>
-
       <mat-paginator [pageSizeOptions]="[50, 25, 75, 100]"></mat-paginator>
     </div>
   </div>
-  <div class="card-footer">
-    <button routerLink="/adminHome" class="btn btn-primary" style="float: left" (click)="back()">
-      <fa-icon [icon]="backIcon"></fa-icon> Don't Save
-    </button>
-    <button class="btn btn-primary" style="float: right" (click)="submitCamp()">Save</button>
+  <div class="card-footer d-flex justify-content-between flex-wrap">
+    <button routerLink="/adminHome" class="btn btn-primary" (click)="back()"><fa-icon [icon]="backIcon"></fa-icon> Don't Save</button>
+    <button class="btn btn-primary" (click)="submitCamp()">Save</button>
   </div>
 </div>

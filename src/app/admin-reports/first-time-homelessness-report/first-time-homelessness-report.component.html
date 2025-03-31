@@ -3,52 +3,44 @@
     <h2>First Time Homelessness Report</h2>
   </div>
   <div class="panel-body">
-    <mat-form-field>
-      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+    <mat-form-field class="w-100">
+      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter" />
     </mat-form-field>
   </div>
   <div class="panel-body">
     <div>
-      <mat-table #table [dataSource]="dataSource" matSort>
-
+      <mat-table #table [dataSource]="dataSource" matSort class="mat-elevation-z8">
         <ng-container matColumnDef="name">
           <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
           <mat-cell *matCellDef="let client">{{client.first_name}} <span *ngIf="client.preferred_name != '' && client.preferred_name != null">({{client.preferred_name}})</span> {{client.last_name}}</mat-cell>
         </ng-container>
-        
         <ng-container matColumnDef="phone">
           <mat-header-cell *matHeaderCellDef mat-sort-header>Phone</mat-header-cell>
           <mat-cell *matCellDef="let client">{{client.phone}}</mat-cell>
         </ng-container>
-
         <ng-container matColumnDef="birth_date">
           <mat-header-cell *matHeaderCellDef mat-sort-header>Birth Date</mat-header-cell>
           <mat-cell *matCellDef="let client">{{client.birth_date}}</mat-cell>
         </ng-container>
-        
         <ng-container matColumnDef="first_time_homeless">
           <mat-header-cell *matHeaderCellDef mat-sort-header>Is First Time Homeless</mat-header-cell>
           <mat-cell *matCellDef="let client">{{client.first_time_homeless}}</mat-cell>
         </ng-container>
-        
         <ng-container matColumnDef="date_became_homeless">
           <mat-header-cell *matHeaderCellDef mat-sort-header>Date Became Homeless</mat-header-cell>
           <mat-cell *matCellDef="let client">{{client.date_became_homeless}}</mat-cell>
         </ng-container>
-        
         <ng-container matColumnDef="homeless_reason">
           <mat-header-cell *matHeaderCellDef mat-sort-header>Homeless Reason</mat-header-cell>
           <mat-cell *matCellDef="let client">{{client.homeless_reason}}</mat-cell>
         </ng-container>
-
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
         <mat-row (click)="viewClient(client)" *matRowDef="let client; columns: displayedColumns;"></mat-row>
       </mat-table>
-
       <mat-paginator [pageSizeOptions]="[50, 25, 75, 100]"></mat-paginator>
     </div>
   </div>
-  <div class="card-footer">
-    <button routerLink="/admin/reports" class="btn btn-primary" style="float: left"><fa-icon [icon]="backIcon"></fa-icon> Back</button>
+  <div class="card-footer d-flex justify-content-between flex-wrap">
+    <button routerLink="/admin/reports" class="btn btn-primary"><fa-icon [icon]="backIcon"></fa-icon> Back</button>
   </div>
 </div>

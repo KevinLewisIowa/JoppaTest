@@ -3,12 +3,14 @@
     <h2>Seen and Serviced Report</h2>
   </div>
   <div class="panel-body">
-    <div>
-      From Date: <input type="date" value="fromDate" [(ngModel)]="fromDate" />
-      To Date: <input type="date" value="toDate" [(ngModel)]="toDate" />
-      <button type="button" class="btn btn-primary" (click)="searchSeenAndServiced()">Search</button>
+    <div class="mb-3">
+      <label for="fromDate" class="me-2">From Date:</label>
+      <input id="fromDate" type="date" [(ngModel)]="fromDate" class="form-control d-inline w-auto" />
+      <label for="toDate" class="ms-3 me-2">To Date:</label>
+      <input id="toDate" type="date" [(ngModel)]="toDate" class="form-control d-inline w-auto" />
+      <button type="button" class="btn btn-primary ms-3" (click)="searchSeenAndServiced()">Search</button>
     </div>
-    <table class="table" id="seenServiced" *ngIf=seenServicedRecords>
+    <table class="table table-responsive table-striped" id="seenServiced" *ngIf="seenServicedRecords">
       <thead>
         <tr>
           <th>Route</th>
@@ -31,7 +33,7 @@
       </tbody>
     </table>
   </div>
-  <div class="card-footer">
-    <button routerLink="/admin/reports" class="btn btn-primary" style="float: left"><fa-icon [icon]="backIcon"></fa-icon> Back</button>
+  <div class="card-footer d-flex justify-content-between flex-wrap">
+    <button routerLink="/admin/reports" class="btn btn-primary"><fa-icon [icon]="backIcon"></fa-icon> Back</button>
   </div>
 </div>

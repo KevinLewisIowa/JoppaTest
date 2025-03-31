@@ -1,15 +1,19 @@
 <div class="card text-center" style="opacity:0.93">
   <div class="card-header">
-    <h2 align="left">Routes</h2>
-    <button routerLink="/routeNew" class="btn btn-primary" style="float:right;" type="button"><fa-icon [icon]="faPlus"></fa-icon> New Route</button>
+    <h2 class="text-left">Routes</h2>
+    <div class="d-flex justify-content-end">
+      <button routerLink="/routeNew" class="btn btn-primary mb-2" type="button"><fa-icon [icon]="faPlus"></fa-icon> New Route</button>
+    </div>
   </div>
   <div class="panel-body text-center" style="opacity:0.93">
-    <div *ngFor="let route of routes" class="route-div well" (click)="openRoute(route.id)">
-      <h4 align="left" style="margin-bottom:0.1em;">{{route.name}}</h4>
-      <h6 align="left">Clients - {{route.number_clients}}, Stops - {{route.number_stops}}</h6>
+    <div *ngFor="let route of routes" class="route-div well mb-3 p-3" (click)="openRoute(route.id)">
+      <h4 class="text-left mb-1">{{ route.name }}</h4>
+      <h6 class="text-left">Clients - {{ route.number_clients }}, Stops - {{ route.number_stops }}</h6>
     </div>
   </div>
   <div class="card-footer">
-    <button routerLink="/adminHome" class="btn btn-primary" style="float: left"><fa-icon [icon]="backIcon"></fa-icon> Back</button>
+    <div class="d-flex justify-content-start">
+      <button routerLink="/adminHome" class="btn btn-primary" type="button"><fa-icon [icon]="backIcon"></fa-icon> Back</button>
+    </div>
   </div>
 </div>

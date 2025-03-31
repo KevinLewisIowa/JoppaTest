@@ -3,9 +3,8 @@
     <h2>Inventory Report</h2>
   </div>
   <div class="panel-body">
-    <br />    
     <div class="row">
-      <div class="col-lg-12 col-md-12">
+      <div class="col-12">
         <dl>
           <dt>Tanks Out</dt><dd>{{inventory.tanksOut}}</dd>
           <dt>Hoses Out</dt><dd>{{inventory.hosesOut}}</dd>
@@ -16,10 +15,9 @@
           <dt>Stolen Heaters</dt><dd>{{inventory.stolenHeaters}}</dd>
         </dl>
       </div>
-      <br />
-      <div class="col-lg-12 col-md-12">
+      <div class="col-12">
         <h4>Heaters</h4>
-        <table class="table">
+        <table class="table table-responsive table-striped">
           <thead>
             <tr>
               <th>Client Name</th>
@@ -28,7 +26,7 @@
           </thead>
           <tbody>
             <tr *ngFor="let heater of inventory.heaterList">
-              <td >{{heater.first_name}} <span *ngIf="heater.preferred_name != '' && heater.preferred_name != null">({{heater.preferred_name}})</span> {{heater.last_name}}</td>
+              <td>{{heater.first_name}} <span *ngIf="heater.preferred_name != '' && heater.preferred_name != null">({{heater.preferred_name}})</span> {{heater.last_name}}</td>
               <td>{{heater.serial_number}}</td>
             </tr>
           </tbody>
@@ -36,7 +34,7 @@
       </div>
     </div>
   </div>
-  <div class="card-footer">
-    <button routerLink="/admin/reports" class="btn btn-primary" style="float: left" (click)="back()"><fa-icon [icon]="backIcon"></fa-icon> Back</button>
+  <div class="card-footer d-flex justify-content-between flex-wrap">
+    <button routerLink="/admin/reports" class="btn btn-primary"><fa-icon [icon]="backIcon"></fa-icon> Back</button>
   </div>
 </div>

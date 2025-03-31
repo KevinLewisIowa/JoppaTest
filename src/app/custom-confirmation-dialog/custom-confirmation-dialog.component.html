@@ -1,12 +1,6 @@
-<h1 mat-dialog-title>
-  {{title}}
-</h1>
- 
-<div mat-dialog-content>
-  <p>{{message}}</p>
-</div>
- 
-<div mat-dialog-actions>
+<h1 mat-dialog-title>{{title}}</h1>
+<div mat-dialog-content><p>{{message}}</p></div>
+<div mat-dialog-actions class="d-flex justify-content-between flex-wrap">
   <button mat-raised-button color="primary" (click)="onConfirm()">{{confirmText}}</button>
   <button mat-button (click)="onDismiss()">{{dismissText}}</button>
 </div>

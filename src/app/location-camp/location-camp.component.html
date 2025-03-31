@@ -1,52 +1,48 @@
 <div class="card text-center" style="opacity: 0.93">
   <div class="card-header text-center">
-    <h2 align="left">{{ route.name }} -> {{ locationCamp.name }}</h2>
-    <h5 align="left">{{ locationCamp.notes }}</h5>
-    <h5 align="left">
-      <span style="background-color: yellow">{{
-        locationCamp.admin_notes
-        }}</span>
+    <h2 class="text-left">{{ route.name }} -> {{ locationCamp.name }}</h2>
+    <h5 class="text-left">{{ locationCamp.notes }}</h5>
+    <h5 class="text-left">
+      <span class="bg-warning">{{ locationCamp.admin_notes }}</span>
     </h5>
-    <h5 align="left" *ngIf="erroredClients !== ''"><span style="background-color: lightsalmon">Clients Needing Dwelling:
-        {{ erroredClients }}</span></h5>
-    <h5 align="left">
-      Stop {{ currentStopNumber }}/{{ totalStopsAmount }}
+    <h5 class="text-left" *ngIf="erroredClients !== ''">
+      <span class="bg-danger text-white">Clients Needing Dwelling: {{ erroredClients }}</span>
     </h5>
-    <h5 align="left">
-      Expected arrival time: {{ expectedArrivalTime | date: "shortTime" }}
-    </h5>
-    <p align="left" *ngIf="heatRoute">
+    <h5 class="text-left">Stop {{ currentStopNumber }}/{{ totalStopsAmount }}</h5>
+    <h5 class="text-left">Expected arrival time: {{ expectedArrivalTime | date: "shortTime" }}</h5>
+    <p class="text-left" *ngIf="heatRoute">
       <b>Number of People with Tanks: {{ numPeopleWithTanksAtCamp }}</b><br />
       <b>Total Tanks: {{ numberTanksAtCamp }}</b>
     </p>
-    <button (click)="showMap()" type="button" style="float: left" class="btn btn-primary">
-      <fa-icon [icon]="mapIcon"></fa-icon> Show Directions
-    </button>
-    <button (click)="showParkingMap()" type="button" style="margin-left: 1%; float: left" class="btn btn-primary">
-      <fa-icon [icon]="mapIcon"></fa-icon> Show Map - Parking
-    </button>
-    <button type="button" *ngIf="isAdmin && locationCampId == 449" style="line-height:1em; float: right;"
-      class="btn btn-primary" (click)="goToAdminHome()">Admin Home</button>
-    <button type="button" class="btn btn-primary" style="float: right" (click)="campEditMdl.showModal(locationCamp)">
-      Location Info <fa-icon [icon]="informationIcon"></fa-icon>
-    </button>
+    <div class="d-flex flex-wrap justify-content-between">
+      <button (click)="showMap()" type="button" class="btn btn-primary mb-2">
+        <fa-icon [icon]="mapIcon"></fa-icon> Show Directions
+      </button>
+      <button (click)="showParkingMap()" type="button" class="btn btn-primary mb-2">
+        <fa-icon [icon]="mapIcon"></fa-icon> Show Map - Parking
+      </button>
+      <button type="button" *ngIf="isAdmin && locationCampId == 449" class="btn btn-primary mb-2" (click)="goToAdminHome()">
+        Admin Home
+      </button>
+      <button type="button" class="btn btn-primary mb-2" (click)="campEditMdl.showModal(locationCamp)">
+        Location Info <fa-icon [icon]="informationIcon"></fa-icon>
+      </button>
+    </div>
   </div>
   <div class="panel-body">
     <div class="card">
-      <h3 align="left">Clients</h3>
-      <div>
-        <button type="button" (click)="clientMdl.showModal()" class="btn btn-primary" style="float: left"
-          *ngIf="!route.is_aftercare || isAdmin">
+      <h3 class="text-left">Clients</h3>
+      <div class="d-flex flex-wrap justify-content-between">
+        <button type="button" (click)="clientMdl.showModal()" class="btn btn-primary mb-2" *ngIf="!route.is_aftercare || isAdmin">
           <fa-icon [icon]="searchIcon"></fa-icon> Search Clients
         </button>
-        <button type="button" (click)="createClient()" class="btn btn-primary" style="float: right"
-          *ngIf="!route.is_aftercare || isAdmin">
+        <button type="button" (click)="createClient()" class="btn btn-primary mb-2" *ngIf="!route.is_aftercare || isAdmin">
           <fa-icon [icon]="createIcon"></fa-icon> Create Client
-        </button>&nbsp;
+        </button>
       </div>
     </div>
     <div>
-      <table class="table">
+      <table class="table table-responsive">
         <thead>
           <tr>
             <th class="text-left">Name</th>
@@ -61,22 +57,37 @@
           <tr *ngFor="let client of clients" (click)="viewClient(client)" class="client-row">
             <td class="text-left">
               <fa-icon style="color: #0d6efd" [icon]="mapIcon" *ngIf="client.has_location"></fa-icon>&nbsp;
-              <span [className]="client.information_missing_or_unknown == 'missing' ? 'missing' : client.information_missing_or_unknown == 'unknown' ? 'unknown': ''">&nbsp;</span>
+              <span
+                [className]="
+                  client.information_missing_or_unknown == 'missing'
+                    ? 'missing'
+                    : client.information_missing_or_unknown == 'unknown'
+                    ? 'unknown'
+                    : ''
+                "
+              ></span>
               {{ client.first_name }}
-              <span *ngIf="
-                  client.preferred_name != '' && client.preferred_name != null
-                ">({{ client.preferred_name }})</span>
+              <span *ngIf="client.preferred_name != '' && client.preferred_name != null">
+                ({{ client.preferred_name }})
+              </span>
               {{ client.last_name }}
-              <fa-icon id="star" style="color: #0d6efd" [icon]="starIcon"
-                *ngIf="clientHasFulfilledItems(client.id)"></fa-icon>
+              <fa-icon
+                id="star"
+                style="color: #0d6efd"
+                [icon]="starIcon"
+                *ngIf="clientHasFulfilledItems(client.id)"
+              ></fa-icon>
             </td>
             <td class="text-left">{{ client.dwelling }}</td>
             <td class="text-left">{{ client.joppa_apartment_number }}</td>
             <td class="text-left">{{ client.phone }}</td>
             <td class="text-left">{{ client.admin_notes }}</td>
             <td class="text-left">
-              <fa-icon id="attendanceIcon" [style.color]="getAttendanceColor(client)"
-                [icon]="getAttendanceIcon(client)"></fa-icon>
+              <fa-icon
+                id="attendanceIcon"
+                [style.color]="getAttendanceColor(client)"
+                [icon]="getAttendanceIcon(client)"
+              ></fa-icon>
               {{ client.last_interaction_date }}
             </td>
           </tr>
@@ -84,21 +95,14 @@
       </table>
     </div>
     <div class="card" *ngIf="!route.is_aftercare">
-      <h3 align="left">Notes</h3>
-      <div>
-        <button type="button" (click)="campNotesMdl.showModal()" class="btn btn-primary" style="float: right">
+      <h3 class="text-left">Notes</h3>
+      <div class="d-flex justify-content-end">
+        <button type="button" (click)="campNotesMdl.showModal()" class="btn btn-primary mb-2">
           New Note
         </button>
-        &nbsp;
       </div>
     </div>
-    <table class="table" id="camp-notes" *ngIf="!route.is_aftercare">
-      <colgroup>
-        <col span="1" style="width: 25%" />
-        <col span="1" style="width: 25%" />
-        <col span="1" style="width: 25%" />
-        <col span="1" style="width: 25%" />
-      </colgroup>
+    <table class="table table-responsive" id="camp-notes" *ngIf="!route.is_aftercare">
       <thead>
         <tr>
           <th>Date Added</th>
@@ -107,7 +111,6 @@
           <th></th>
         </tr>
       </thead>
-
       <tbody>
         <tr *ngFor="let note of campNotes">
           <td>{{ note.created_at | date: "short" }}</td>
@@ -123,19 +126,22 @@
     </table>
   </div>
   <div class="card-footer">
-    <div>
-      <button type="button" class="btn btn-primary" style="float: left" (click)="back()">
+    <div class="d-flex flex-wrap justify-content-between">
+      <button type="button" class="btn btn-primary mb-2" (click)="back()">
         <fa-icon [icon]="backIcon"></fa-icon> Back to Camp List
       </button>
-      <button type="button" class="btn btn-primary" style="margin-left: 1%; float: left" *ngIf="isAdmin"
-        (click)="backToCampListing()">
+      <button
+        type="button"
+        class="btn btn-primary mb-2"
+        *ngIf="isAdmin"
+        (click)="backToCampListing()"
+      >
         <fa-icon [icon]="backIcon"></fa-icon> Back to Camp Listing
       </button>
-      <button (click)="nextStop()" type="button" class="btn btn-primary" style="float: right" *ngIf="locationCampList != null">
+      <button (click)="nextStop()" type="button" class="btn btn-primary mb-2" *ngIf="locationCampList != null">
         Next Stop <fa-icon [icon]="forwardIcon"></fa-icon>
       </button>
-      <button (click)="markRemainingNotSeenNotServiced()" type="button" class="btn btn-primary"
-        style="margin-left: 1%; float: left">
+      <button (click)="markRemainingNotSeenNotServiced()" type="button" class="btn btn-primary mb-2">
         <fa-icon [icon]="userMinus"></fa-icon> Mark remaining clients not seen / serviced
       </button>
     </div>

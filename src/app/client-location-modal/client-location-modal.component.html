@@ -1,23 +1,19 @@
-<ng-template #locationModal let-c="close" let-d="dismiss"> 
+<ng-template #locationModal let-c="close" let-d="dismiss">
   <div class="modal-header">
     <h4 class="modal-title">{{modalTitle}}</h4>
-      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')"><span aria-hidden="true">&times;</span></button>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')"><span aria-hidden="true">&times;</span></button>
   </div>
-    <div class="modal-body">
-      <div class="row">
-        <div class="col-md-3">
-          Route:
-        </div>
-        <div class="col-md-9">{{route.name}}</div>
-      </div>
-        <div class="row">
-          <div class="col-md-3">
-            Location Camp:
-          </div>
-          <div class="col-md-9">{{locationCamp.name}}</div>
-        </div>
+  <div class="modal-body">
+    <div class="row mb-2">
+      <div class="col-12 col-md-3"><strong>Route:</strong></div>
+      <div class="col-12 col-md-9">{{route.name}}</div>
     </div>
+    <div class="row">
+      <div class="col-12 col-md-3"><strong>Location Camp:</strong></div>
+      <div class="col-12 col-md-9">{{locationCamp.name}}</div>
+    </div>
+  </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-primary" (click)="c('Close click')">Close</button>
+    <button type="button" class="btn btn-primary w-100" (click)="c('Close click')">Close</button>
   </div>
 </ng-template>

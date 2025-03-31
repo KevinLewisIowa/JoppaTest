@@ -1,19 +1,17 @@
 <form [formGroup]="passwordForm">
-  <div class="card" style="opacity:0.93">
-    <div class="card-header text-center" id="topOfScreen">
-      <h2>Login</h2>
-    </div>
+  <div class="card" style="opacity: 0.93">
+    <div class="card-header text-center" id="topOfScreen"><h2>Login</h2></div>
     <div class="panel-body" style="opacity: 0.93;">
-      <div class="entry-box" style="margin:0 auto; max-width:50%;">
+      <div class="entry-box mx-auto" style="max-width: 100%; padding: 0 1em;">
         <div class="form-group">
-          <label for="pwd">Password: </label>
+          <label for="pwd">Password:</label>
           <input id="pwd" class="form-control" type="password" formControlName="the_password" />
         </div>
-        <p style="color:red; text-align: center;" *ngIf="invalidText">Login Not Valid</p>
+        <p class="text-danger text-center" *ngIf="invalidText">Login Not Valid</p>
       </div>
     </div>
     <div class="card-footer text-center">
-      <button type="submit" (click)="login()" style="float:right;" class="btn btn-primary">Login <fa-icon [icon]="forwardIcon"></fa-icon></button>
+      <button type="submit" (click)="login()" class="btn btn-primary">Login <fa-icon [icon]="forwardIcon"></fa-icon></button>
     </div>
   </div>
 </form>

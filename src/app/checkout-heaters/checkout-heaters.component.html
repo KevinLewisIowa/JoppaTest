@@ -6,35 +6,47 @@
   <form [formGroup]="routeInstanceTankHoseForm" *ngIf="routeInstanceTankHoseForm">
     <div class="text-center" style="opacity:0.93;">
       <div class="entry-box">
-        <div class="col-md-12" *ngIf="isInitialCheckout">
-          <label>Heaters Out:<font color="red">*</font></label>
-          <input type="text" placeholder="0" formControlName="number_heaters_out" />
+        <div class="form-group row" *ngIf="isInitialCheckout">
+          <label class="col-12 col-md-6 col-form-label">Heaters Out:<font color="red">*</font></label>
+          <div class="col-12 col-md-6">
+            <input type="text" class="form-control" placeholder="0" formControlName="number_heaters_out" />
+          </div>
         </div>
-        <div class="col-md-12" *ngIf="isInitialCheckout">
-          <label>Hoses Out:<font color="red">*</font></label>
-          <input type="text" placeholder="0" formControlName="number_hoses_out" />
+        <div class="form-group row" *ngIf="isInitialCheckout">
+          <label class="col-12 col-md-6 col-form-label">Hoses Out:<font color="red">*</font></label>
+          <div class="col-12 col-md-6">
+            <input type="text" class="form-control" placeholder="0" formControlName="number_hoses_out" />
+          </div>
         </div>
-        <div class="col-md-12" *ngIf="isInitialCheckout">
-          <label>Tanks Out:<font color="red">*</font></label>
-          <input type="tel" placeholder="0" formControlName="number_tanks_out" />
+        <div class="form-group row" *ngIf="isInitialCheckout">
+          <label class="col-12 col-md-6 col-form-label">Tanks Out:<font color="red">*</font></label>
+          <div class="col-12 col-md-6">
+            <input type="tel" class="form-control" placeholder="0" formControlName="number_tanks_out" />
+          </div>
         </div>
-        <div class="col-md-12" *ngIf="!isInitialCheckout">
-          <label>Heaters In:<font color="red">*</font></label>
-          <input type="text" placeholder="0" formControlName="number_heaters_in" />
+        <div class="form-group row" *ngIf="!isInitialCheckout">
+          <label class="col-12 col-md-6 col-form-label">Heaters In:<font color="red">*</font></label>
+          <div class="col-12 col-md-6">
+            <input type="text" class="form-control" placeholder="0" formControlName="number_heaters_in" />
+          </div>
         </div>
-        <div class="col-md-12" *ngIf="!isInitialCheckout">
-          <label>Hoses In:<font color="red">*</font></label>
-          <input type="text" placeholder="0" formControlName="number_hoses_in" />
+        <div class="form-group row" *ngIf="!isInitialCheckout">
+          <label class="col-12 col-md-6 col-form-label">Hoses In:<font color="red">*</font></label>
+          <div class="col-12 col-md-6">
+            <input type="text" class="form-control" placeholder="0" formControlName="number_hoses_in" />
+          </div>
         </div>
-        <div class="col-md-12" *ngIf="!isInitialCheckout">
-          <label>Tanks In:<font color="red">*</font></label>
-          <input type="text" placeholder="0" formControlName="number_tanks_in" />
+        <div class="form-group row" *ngIf="!isInitialCheckout">
+          <label class="col-12 col-md-6 col-form-label">Tanks In:<font color="red">*</font></label>
+          <div class="col-12 col-md-6">
+            <input type="text" class="form-control" placeholder="0" formControlName="number_tanks_in" />
+          </div>
         </div>
       </div>
     </div>
   </form>
-  <div class="card-footer">
-    <button *ngIf="!isEndOfRoute" [disabled]="routeInstanceTankHoseForm !== undefined ? !routeInstanceTankHoseForm.valid : null" type="submit" class="btn btn-primary" style="float:right;" (click)="next();">Continue <fa-icon [icon]="forwardIcon"></fa-icon></button>
-    <button *ngIf="isEndOfRoute" [disabled]="routeInstanceTankHoseForm !== undefined ? !routeInstanceTankHoseForm.valid : null" type="button" class="btn btn-primary" style="float:right;" (click)="endRoute()">End Route <fa-icon [icon]="forwardIcon"></fa-icon></button>
+  <div class="card-footer d-flex justify-content-between flex-wrap">
+    <button *ngIf="!isEndOfRoute" [disabled]="routeInstanceTankHoseForm !== undefined ? !routeInstanceTankHoseForm.valid : null" type="submit" class="btn btn-primary" (click)="next()">Continue <fa-icon [icon]="forwardIcon"></fa-icon></button>
+    <button *ngIf="isEndOfRoute" [disabled]="routeInstanceTankHoseForm !== undefined ? !routeInstanceTankHoseForm.valid : null" type="button" class="btn btn-primary" (click)="endRoute()">End Route <fa-icon [icon]="forwardIcon"></fa-icon></button>
   </div>
 </div>

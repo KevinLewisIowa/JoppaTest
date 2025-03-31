@@ -1,7 +1,7 @@
 <div class="card text-center" style="opacity:0.93">
   <div class="card-header">
-    <br/>
-    <h2>Birthdays in <select (change)="monthChanged($event)" [(ngModel)]="monthInt">
+    <h2>Birthdays in 
+      <select (change)="monthChanged($event)" [(ngModel)]="monthInt" class="form-select w-auto d-inline">
         <option value="1">January</option>
         <option value="2">February</option>
         <option value="3">March</option>
@@ -18,29 +18,29 @@
     </h2>
   </div>
   <div class="panel-body">
-    <div class="row text-center" style="margin-left:20px;">
-      {{resultMessage}}
+    <div class="row text-center">
+      <p>{{resultMessage}}</p>
     </div>
-      <table class="table" id="birthdayInfo">
-          <thead>
-            <tr>
-              <th>First Name</th>
-              <th>Preferred Name</th>
-              <th>Last Name</th>
-              <th>Birthday</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let client of monthBirthdays">
-              <td>{{client.first_name}}</td>
-              <td>{{client.preferred_name}}</td>
-              <td>{{client.last_name}}</td>
-              <td>{{client.birth_date | date: 'longDate'}}</td>
-            </tr>
-          </tbody>
-        </table>          
+    <table class="table table-responsive table-striped" id="birthdayInfo">
+      <thead>
+        <tr>
+          <th>First Name</th>
+          <th>Preferred Name</th>
+          <th>Last Name</th>
+          <th>Birthday</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let client of monthBirthdays">
+          <td>{{client.first_name}}</td>
+          <td>{{client.preferred_name}}</td>
+          <td>{{client.last_name}}</td>
+          <td>{{client.birth_date | date: 'longDate'}}</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-  <div class="card-footer">
-    <button routerLink="/admin/reports" class="btn btn-primary" style="float: left"><fa-icon [icon]="backIcon"></fa-icon> Back</button>
+  <div class="card-footer d-flex justify-content-between flex-wrap">
+    <button routerLink="/admin/reports" class="btn btn-primary"><fa-icon [icon]="backIcon"></fa-icon> Back</button>
   </div>
 </div>

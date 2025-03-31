@@ -10,34 +10,32 @@
   <div class="panel-body" style="opacity:0.93">
     <form [formGroup]="routeForm" style="opacity:0.93">
       <div class="form-group row">
-          <label for="name" class="col-6 col-form-label" style="float:left">Name:</label>
-          <div class="col-6">
-            <input id="name" class="form-control" type="text" placeholder="Name" formControlName="name" style="float:right" />
-          </div>
-      </div>
-      <div class="form-group row">
-        <label for="region" class="col-6 col-form-label" style="float:left">Region:</label>
-        <div class="col-6">
-          <input id="region" class="form-control" type="text" placeholder="Region" formControlName="region" style="float:right" />
+        <label for="name" class="col-12 col-md-6 col-form-label">Name:</label>
+        <div class="col-12 col-md-6">
+          <input id="name" class="form-control" type="text" placeholder="Name" formControlName="name" />
         </div>
       </div>
       <div class="form-group row">
-        <label for="aftercare" class="col-6 col-form-label">Aftercare:</label>
-        <div class="col-6">
-          <input id="aftercare" type="checkbox" class="form-control-checkbox" style="float:right; width:5%; height:100%;" formControlName="is_aftercare" />
+        <label for="region" class="col-12 col-md-6 col-form-label">Region:</label>
+        <div class="col-12 col-md-6">
+          <input id="region" class="form-control" type="text" placeholder="Region" formControlName="region" />
         </div>
       </div>
       <div class="form-group row">
-        <label for="admin-notes" class="col-6 col-form-label">Admin Notes: </label>
-        <div class="col-6">
-          <textarea id="admin-notes" type="text" class="form-control" rows="3" placeholder="Admin Notes"
-            style="float:right;" formControlName="admin_notes"></textarea>
+        <label for="aftercare" class="col-12 col-md-6 col-form-label">Aftercare:</label>
+        <div class="col-12 col-md-6">
+          <input id="aftercare" type="checkbox" class="form-check-input" formControlName="is_aftercare" />
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="admin-notes" class="col-12 col-md-6 col-form-label">Admin Notes:</label>
+        <div class="col-12 col-md-6">
+          <textarea id="admin-notes" class="form-control" rows="3" placeholder="Admin Notes" formControlName="admin_notes"></textarea>
         </div>
       </div>
     </form>
   </div>
   <div class="card-footer text-center">
-    <button type="button" class="btn btn-primary" style="float:right" [disabled]="!routeForm.valid"
-      (click)="submitRoute()">Submit Route</button>
+    <button type="button" class="btn btn-primary" [disabled]="!routeForm.valid" (click)="submitRoute()">Submit Route</button>
   </div>
 </div>

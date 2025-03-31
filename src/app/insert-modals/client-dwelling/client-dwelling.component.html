@@ -1,74 +1,75 @@
 <ng-template #clientDwellingMdl let-c="close" let-d="dismiss">
-    <div class="modal-header">
-      <h4 class="modal-title">Create Client Dwelling</h4>
-      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')"><span aria-hidden="true">&times;</span></button>
-    </div>
-    <form>
-      <div class="modal-body">
-        <div class="form-group">
-          <div class="row">
-            <div class="col-md-6">
-              <label for="dwelling-location">Dwelling Location</label>
-              <select id="dwelling-location" class= "form-control" [(ngModel)]="dwelling" (change)="onChange()">
-                <option value="Abandoned Structure">Abandoned Structure</option>
-                <option value="Apartment">Apartment</option>
-                <option value="Broken Down Van">Broken Down Van</option>
-                <option value="Camper">Camper</option>
-                <option value="Couch Surfing">Couch Surfing</option>
-                <option value="Garage">Garage</option>
-                <option value="House">House</option>
-                <option value="Mobile Home">Mobile Home</option>
-                <option value="Motel">Motel</option>
-                <option value="Shack">Shack</option>
-                <option value="Shelter">Shelter</option>
-                <option value="Tent">Tent</option>
-                <option value="Streets">Streets</option>            
-                <option value="Under Bridge">Under Bridge</option>
-                <option value="Vehicle">Vehicle</option>
-                <option value="Unknown">Unknown</option>
-                <option value="Other">Other</option>
-              </select>
-            </div>
-            <div class="col-md-6">
-              <input id="extraInfo" name="extraInfoDwelling" class="form-control" type="text" [(ngModel)]="other_dwelling" *ngIf="extraInfoNeeded" placeholder="Other Dwelling Location"/>
-            </div>
-            <div class="col-md-6">
-              <label for="date-moved">Date Moved (Date must be MM/DD/YYYY)</label>
-              <input id="date-moved" type="date" class="form-control" placeholder="mm/dd/yyyy" [(ngModel)]="date_moved" [ngModel]="date_moved | date:'yyyy-MM-dd'" style="float:left;"/>
-            </div>
-            <div class="row">
-              <div class="col-md-6">
-                <label for="where_sleep_last_night" class="col-6 col-form-label">Where Did You Sleep Last Night?: </label>
-                <select id="where_sleep_last_night" class="form-control" style="float:right;" [(ngModel)]="where_sleep_last_night">
-                  <option value="Abandoned Structure">Abandoned Structure</option>
-                  <option value="Apartment">Apartment</option>
-                  <option value="Broken Down Van">Broken Down Van</option>
-                  <option value="Camper">Camper</option>
-                  <option value="Couch Surfing">Couch Surfing</option>
-                  <option value="Garage">Garage</option>
-                  <option value="House">House</option>
-                  <option value="Mobile Home">Mobile Home</option>
-                  <option value="Motel">Motel</option>
-                  <option value="Shack">Shack</option>
-                  <option value="Shelter">Shelter</option>
-                  <option value="Tent">Tent</option>
-                  <option value="Streets">Streets</option>
-                  <option value="Under Bridge">Under Bridge</option>
-                  <option value="Vehicle">Vehicle</option>
-                  <option value="Unknown">Unknown</option>
-                </select>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <textarea id="focusMe" class="form-control" rows="4" [(ngModel)]="notes" placeholder="Notes"
-                name="notes"></textarea>
-            </div>
+  <div class="modal-header">
+    <h4 class="modal-title">Create Client Dwelling</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')"><span aria-hidden="true">&times;</span></button>
+  </div>
+  <form>
+    <div class="modal-body">
+      <div class="form-group">
+        <div class="row mb-3">
+          <div class="col-12 col-md-6">
+            <label for="dwelling-location">Dwelling Location</label>
+            <select id="dwelling-location" class="form-control" [(ngModel)]="dwelling" (change)="onChange()">
+              <option value="Abandoned Structure">Abandoned Structure</option>
+              <option value="Apartment">Apartment</option>
+              <option value="Broken Down Van">Broken Down Van</option>
+              <option value="Camper">Camper</option>
+              <option value="Couch Surfing">Couch Surfing</option>
+              <option value="Garage">Garage</option>
+              <option value="House">House</option>
+              <option value="Mobile Home">Mobile Home</option>
+              <option value="Motel">Motel</option>
+              <option value="Shack">Shack</option>
+              <option value="Shelter">Shelter</option>
+              <option value="Tent">Tent</option>
+              <option value="Streets">Streets</option>
+              <option value="Under Bridge">Under Bridge</option>
+              <option value="Vehicle">Vehicle</option>
+              <option value="Unknown">Unknown</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="col-12 col-md-6">
+            <input id="extraInfo" name="extraInfoDwelling" class="form-control" type="text" [(ngModel)]="other_dwelling" *ngIf="extraInfoNeeded" placeholder="Other Dwelling Location" />
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-12 col-md-6">
+            <label for="date-moved">Date Moved (Date must be MM/DD/YYYY)</label>
+            <input id="date-moved" type="date" class="form-control" placeholder="mm/dd/yyyy" [(ngModel)]="date_moved" [ngModel]="date_moved | date:'yyyy-MM-dd'" />
+          </div>
+          <div class="col-12 col-md-6">
+            <label for="where_sleep_last_night">Where Did You Sleep Last Night?</label>
+            <select id="where_sleep_last_night" class="form-control" [(ngModel)]="where_sleep_last_night">
+              <option value="Abandoned Structure">Abandoned Structure</option>
+              <option value="Apartment">Apartment</option>
+              <option value="Broken Down Van">Broken Down Van</option>
+              <option value="Camper">Camper</option>
+              <option value="Couch Surfing">Couch Surfing</option>
+              <option value="Garage">Garage</option>
+              <option value="House">House</option>
+              <option value="Mobile Home">Mobile Home</option>
+              <option value="Motel">Motel</option>
+              <option value="Shack">Shack</option>
+              <option value="Shelter">Shelter</option>
+              <option value="Tent">Tent</option>
+              <option value="Streets">Streets</option>
+              <option value="Under Bridge">Under Bridge</option>
+              <option value="Vehicle">Vehicle</option>
+              <option value="Unknown">Unknown</option>
+            </select>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-12">
+            <textarea id="focusMe" class="form-control" rows="4" [(ngModel)]="notes" placeholder="Notes" name="notes"></textarea>
           </div>
         </div>
       </div>
-    </form>
-    <div class="modal-footer">
+    </div>
+    <div class="modal-footer d-flex justify-content-between flex-wrap">
       <button type="button" class="btn btn-outline-primary" (click)="c('Close click')">Don't Save</button>
       <button type="button" class="btn btn-primary" (click)="submitClientDwelling();c('')">Save</button>
     </div>
-  </ng-template>
+  </form>
+</ng-template>

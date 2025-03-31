@@ -2,19 +2,41 @@
   <div class="card text-center" style="opacity:0.93">
     <div class="card-header">
       <h2>Volunteer Info</h2>
-      <h6><label><font color="red">*</font></label>Indicates Required Field</h6>
+      <h6>
+        <label><font color="red">*</font></label>Indicates Required Field
+      </h6>
     </div>
-    <div class="panel-body" style="opacity:0.93">
-      <div class="entry-box">
-        <div class="col-md-12">
-          <label>Number of Route Members (including yourself):<font color="red">*</font></label>
-          <input type="text" placeholder="0" formControlName="number_route_members" />
-        </div>
+    <div class="card-body" style="opacity:0.93">
+      <div class="form-group">
+        <label for="numberRouteMembers">
+          Number of Route Members (including yourself):<font color="red">*</font>
+        </label>
+        <input
+          id="numberRouteMembers"
+          type="text"
+          class="form-control"
+          placeholder="0"
+          formControlName="number_route_members"
+        />
       </div>
     </div>
-    <div class="card-footer">
-      <button class="btn btn-primary" style="float:right;" type="submit" [disabled]="!volunteerForm.valid" (click)="addNumberRouteMembers()">Begin Route <fa-icon [icon]="forwardIcon"></fa-icon></button>
-      <button class="btn btn-primary" style="float:left;" type="button" (click)="back()" *ngIf="isAdmin"><fa-icon [icon]="backIcon"></fa-icon> Back</button>
+    <div class="card-footer d-flex justify-content-between">
+      <button
+        class="btn btn-primary"
+        type="button"
+        (click)="back()"
+        *ngIf="isAdmin"
+      >
+        <fa-icon [icon]="backIcon"></fa-icon> Back
+      </button>
+      <button
+        class="btn btn-primary"
+        type="submit"
+        [disabled]="!volunteerForm.valid"
+        (click)="addNumberRouteMembers()"
+      >
+        Begin Route <fa-icon [icon]="forwardIcon"></fa-icon>
+      </button>
     </div>
   </div>
 </form>

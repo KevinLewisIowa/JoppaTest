@@ -4,27 +4,27 @@
   </div>
   <div class="panel-body">
     <div>
-      <mat-form-field appearance="standard">
+      <mat-form-field appearance="standard" class="w-100">
         <input matInput [matDatepicker]="startDateDP" [min]="minDate" [max]="maxDate" placeholder="Choose start date" [(ngModel)]="startDate" #input>
         <mat-datepicker-toggle matSuffix [for]="startDateDP"></mat-datepicker-toggle>
         <mat-datepicker #startDateDP></mat-datepicker>
       </mat-form-field>
-      <mat-form-field appearance="standard">
+      <mat-form-field appearance="standard" class="w-100">
         <input matInput [matDatepicker]="endDateDP" [min]="minDate" [max]="maxDate" placeholder="Choose end date" [(ngModel)]="endDate" #input>
         <mat-datepicker-toggle matSuffix [for]="endDateDP"></mat-datepicker-toggle>
         <mat-datepicker #endDateDP></mat-datepicker>
       </mat-form-field>
-      <button class="btn btn-primary" type="submit" (click)="retrieveOverallAttendance()"><fa-icon [icon]="searchIcon"></fa-icon> Search</button>
+      <button class="btn btn-primary w-100 mt-2" type="submit" (click)="retrieveOverallAttendance()"><fa-icon [icon]="searchIcon"></fa-icon> Search</button>
     </div>
-    <div *ngIf="attendanceCounts != undefined">
-      <label>Individuals Serviced: {{attendanceCounts.individualsServiced}}</label><br/>
-      <label>Households Serviced: {{attendanceCounts.householdsServiced}}</label><br/>
+    <div *ngIf="attendanceCounts != undefined" class="mt-3">
+      <label>Individuals Serviced: {{attendanceCounts.individualsServiced}}</label><br />
+      <label>Households Serviced: {{attendanceCounts.householdsServiced}}</label><br />
     </div>
-    <div *ngIf="attendanceCounts == undefined">
-      <label>Enter a date range to see the number of seen and serviced over the specified period</label><br/>
+    <div *ngIf="attendanceCounts == undefined" class="mt-3">
+      <label>Enter a date range to see the number of seen and serviced over the specified period</label><br />
     </div>
   </div>
-  <div class="card-footer">
+  <div class="card-footer d-flex justify-content-between flex-wrap">
     <button type="button" class="btn btn-primary" (click)="back()"><fa-icon [icon]="backIcon"></fa-icon> Back</button>
   </div>
 </div>

@@ -3,21 +3,13 @@
     <h2>Client Inactive Updater</h2>
   </div>
   <div class="panel-body" style="opacity: 0.93">
-    <div class="col-md-12 col-lg-12">
-      <button class="btn btn-primary mt-3 mb-3" (click)="updateInactive()">
-        Run Updater
-      </button>
-      <p *ngIf="countInactivated > 0 || processComplete">
-        Number of Clients Inactivated: {{ countInactivated }}
-      </p>
-      <p *ngIf="inactiveUpdaterRunning">
-        Running...
-      </p>
+    <div class="col-12">
+      <button class="btn btn-primary w-100 mt-3 mb-3" (click)="updateInactive()">Run Updater</button>
+      <p *ngIf="countInactivated > 0 || processComplete">Number of Clients Inactivated: {{ countInactivated }}</p>
+      <p *ngIf="inactiveUpdaterRunning">Running...</p>
     </div>
   </div>
-  <div class="card-footer">
-    <button routerLink="/adminHome" class="btn btn-primary" style="float: left">
-      <fa-icon [icon]="backIcon"></fa-icon> Back
-    </button>
+  <div class="card-footer d-flex justify-content-between flex-wrap">
+    <button routerLink="/adminHome" class="btn btn-primary"><fa-icon [icon]="backIcon"></fa-icon> Back</button>
   </div>
 </div>

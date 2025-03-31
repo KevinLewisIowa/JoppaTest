@@ -1,36 +1,32 @@
 <ng-template #incomeMdl let-c="close" let-d="dismiss">
-    <div class="modal-header">
-        <h4 class="modal-title">Create Income Record</h4>
-        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')"><span
-                aria-hidden="true">&times;</span></button>
-    </div>
-    <form>
-        <div class="modal-body">
-            <div class="form-group">
-                <div class="row">
-                    <div class="col-md-6">
-                        <label for="has_income" class="col-6 col-form-label">Has Income:</label>
-                        <input id="has_income" class="form-control-checkbox" type="checkbox" [(ngModel)]="has_income"
-                            name="has_income" />
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <label for="monthly_money">Monthly income?</label>
-                    <input id="monthly_money" type="text" class="form-control" placeholder="Amount"
-                        [(ngModel)]="monthly_money" style="float:left;" />
-                </div>
-                <div class="col-md-6">
-                    <label for="what_income_from">What income is from?</label>
-                    <input id="what_income_from" type="text" class="form-control" placeholder="What income is from"
-                        [(ngModel)]="what_income_from" style="float:left;" />
-                </div>
-            </div>
+  <div class="modal-header">
+    <h4 class="modal-title">Create Income Record</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')"><span aria-hidden="true">&times;</span></button>
+  </div>
+  <form>
+    <div class="modal-body">
+      <div class="form-group">
+        <div class="row mb-3">
+          <div class="col-12 col-md-6">
+            <label for="has_income" class="col-form-label">Has Income:</label>
+            <input id="has_income" class="form-check-input" type="checkbox" [(ngModel)]="has_income" name="has_income" />
+          </div>
         </div>
-    </form>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-outline-primary" (click)="c('Close click')">Don't Save</button>
-        <button type="button" class="btn btn-primary" (click)="submitIncome();c('')">Save</button>
+      </div>
+      <div class="row mb-3">
+        <div class="col-12 col-md-6">
+          <label for="monthly_money">Monthly income?</label>
+          <input id="monthly_money" type="text" class="form-control" placeholder="Amount" [(ngModel)]="monthly_money" />
+        </div>
+        <div class="col-12 col-md-6">
+          <label for="what_income_from">What income is from?</label>
+          <input id="what_income_from" type="text" class="form-control" placeholder="What income is from" [(ngModel)]="what_income_from" />
+        </div>
+      </div>
     </div>
+    <div class="modal-footer d-flex justify-content-between flex-wrap">
+      <button type="button" class="btn btn-outline-primary" (click)="c('Close click')">Don't Save</button>
+      <button type="button" class="btn btn-primary" (click)="submitIncome();c('')">Save</button>
+    </div>
+  </form>
 </ng-template>

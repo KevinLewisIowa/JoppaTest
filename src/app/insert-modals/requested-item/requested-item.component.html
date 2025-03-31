@@ -1,17 +1,14 @@
 <ng-template #requestedItemMdl let-c="close" let-d="dismiss">
   <div class="modal-header">
     <h4 class="modal-title">Create Requested Item</h4>
-    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
-      <span aria-hidden="true">&times;</span>
-    </button>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')"><span aria-hidden="true">&times;</span></button>
   </div>
   <form>
     <div class="modal-body">
       <div class="form-group">
-        <div class="row">
-          <div class="col-sm-4">
-            <select id="focusMe" class="form-control" style="float: left" #item [(ngModel)]="description"
-              name="description" (change)="onChange(item.value)">
+        <div class="row mb-3">
+          <div class="col-12 col-md-6">
+            <select id="focusMe" class="form-control" [(ngModel)]="description" name="description" (change)="onChange(description)">
               <option value="" disabled selected>Select your option</option>
               <option>AA Batteries</option>
               <option>AAA Batteries</option>
@@ -38,20 +35,15 @@
               <option>Other</option>
             </select>
           </div>
-          <div class="col-sm-4">
-            <input id="extraInfo" class="form-control" style="float: left" type="text" [(ngModel)]="extraInfo"
-              name="extraInfo" *ngIf="extraInfoNeeded" [placeholder]="placeholderText" />
+          <div class="col-12 col-md-6">
+            <input id="extraInfo" class="form-control" type="text" [(ngModel)]="extraInfo" name="extraInfo" *ngIf="extraInfoNeeded" [placeholder]="placeholderText" />
           </div>
         </div>
       </div>
     </div>
   </form>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-outline-primary" (click)="c('Close click')">
-      Don't Save
-    </button>
-    <button type="button" class="btn btn-primary" (click)="submitItem(); c('')">
-      Save
-    </button>
+  <div class="modal-footer d-flex justify-content-between flex-wrap">
+    <button type="button" class="btn btn-outline-primary" (click)="c('Close click')">Don't Save</button>
+    <button type="button" class="btn btn-primary" (click)="submitItem(); c('')">Save</button>
   </div>
 </ng-template>

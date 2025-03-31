@@ -1,21 +1,21 @@
-<ng-template #clientDislikeMdl let-c="close" let-d="dismiss"> 
+<ng-template #clientDislikeMdl let-c="close" let-d="dismiss">
   <div class="modal-header">
     <h4 class="modal-title">Create Dislike</h4>
-      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')"><span aria-hidden="true">&times;</span></button>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')"><span aria-hidden="true">&times;</span></button>
   </div>
   <form>
     <div class="modal-body">
       <div class="form-group">
-       <div class="row">
-         <div class="col-sm-4">
-           <input id="focusMe" class="form-control" type="text" [(ngModel)]="description" placeholder="Description" name="description"/>
-         </div>
-       </div>
+        <div class="row">
+          <div class="col-12">
+            <input id="focusMe" class="form-control" type="text" [(ngModel)]="description" placeholder="Description" name="description" />
+          </div>
+        </div>
       </div>
     </div>
+    <div class="modal-footer d-flex justify-content-between flex-wrap">
+      <button type="button" class="btn btn-outline-primary" (click)="c('Close click')">Don't Save</button>
+      <button type="button" class="btn btn-primary" (click)="submitDislike();c('')">Save</button>
+    </div>
   </form>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-outline-primary" (click)="c('Close click')">Don't Save</button>
-    <button type="button" class="btn btn-primary" (click)="submitDislike();c('')">Save</button>
-  </div>
 </ng-template>

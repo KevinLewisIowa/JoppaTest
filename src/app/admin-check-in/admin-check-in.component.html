@@ -3,12 +3,13 @@
     <h2>Heater Check-In</h2>
   </div>
   <div class="row">
-    <div class="col-md-12 col-lg-12">
-      <button class="btn btn-secondary" type="button" (click)="checkInHeaters()">Check In All Heaters</button>
-      <br /><br /><b *ngIf="heatersUpdated !== undefined">{{heatersUpdated}} heaters checked in</b>
+    <div class="col-12">
+      <button class="btn btn-secondary w-100" type="button" (click)="checkInHeaters()">Check In All Heaters</button>
+      <br /><br />
+      <b *ngIf="heatersUpdated !== undefined">{{heatersUpdated}} heaters checked in</b>
     </div>
   </div>
-  <div class="card-footer">
-    <button routerLink="/adminHome" class="btn btn-primary" style="float: left"><fa-icon [icon]="backIcon"></fa-icon> Back</button>
+  <div class="card-footer d-flex justify-content-between flex-wrap">
+    <button routerLink="/adminHome" class="btn btn-primary"><fa-icon [icon]="backIcon"></fa-icon> Back</button>
   </div>
 </div>

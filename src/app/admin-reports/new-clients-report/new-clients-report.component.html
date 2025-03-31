@@ -3,26 +3,27 @@
     <h2>Clients New To A Camp</h2>
   </div>
   <div class="panel-body">
-      <table class="table" id="reportList">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>New Camp ID</th>
-              <th>Previous Camp ID</th>
-              <th>Confirm</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let client of clients">
-              <td>{{client.first_name}} <span *ngIf="client.preferred_name != '' && client.preferred_name != null">({{client.preferred_name}})</span> {{client.last_name}}</td>
-              <td><span (click)="locationModal.showModal('New Location', client.current_camp_id)" class="link-modal">{{client.current_camp_id}}</span></td>
-              <td><span *ngIf="client.previous_camp_id != 0" class="link-modal" (click)="locationModal.showModal('Previous Location', client.previous_camp_id)">{{client.previous_camp_id}}</span><span *ngIf="client.previous_camp_id == 0">NA</span></td>
-              <td><button type="button" class="btn btn-primary" (click)="confirm(client)">Confirm</button></td>
-            </tr>
-          </tbody>
-        </table>
+    <table class="table table-responsive table-striped" id="reportList">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>New Camp ID</th>
+          <th>Previous Camp ID</th>
+          <th>Confirm</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let client of clients">
+          <td>{{client.first_name}} <span *ngIf="client.preferred_name != '' && client.preferred_name != null">({{client.preferred_name}})</span> {{client.last_name}}</td>
+          <td><span (click)="locationModal.showModal('New Location', client.current_camp_id)" class="link-modal">{{client.current_camp_id}}</span></td>
+          <td><span *ngIf="client.previous_camp_id != 0" class="link-modal" (click)="locationModal.showModal('Previous Location', client.previous_camp_id)">{{client.previous_camp_id}}</span><span *ngIf="client.previous_camp_id == 0">NA</span></td>
+          <td><button type="button" class="btn btn-primary" (click)="confirm(client)">Confirm</button></td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-  <div class="card-footer">
-    <button routerLink="/admin/reports" class="btn btn-primary" style="float: left"><fa-icon [icon]="backIcon"></fa-icon> Back</button>
+  <div class="card-footer d-flex justify-content-between flex-wrap">
+    <button routerLink="/admin/reports" class="btn btn-primary"><fa-icon [icon]="backIcon"></fa-icon> Back</button>
   </div>
-<app-client-location-modal #locationModal></app-client-location-modal>
+  <app-client-location-modal #locationModal></app-client-location-modal>
+</div>

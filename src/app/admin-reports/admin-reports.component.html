@@ -3,53 +3,25 @@
     <h2>Reports</h2>
   </div>
   <div class="panel-body">
-      <table class="table" id="reportList">
-          <tbody>
-            <tr>
-              <td style="height:75px;" (click)="openOverallAttendanceReport()">Overall Attendance</td>
-            </tr>
-            <tr>
-              <td style="height:75px;" (click)="openNewClientsReport()">Clients New To Camps</td>
-            </tr>
-            <tr>
-              <td style="height:75px;" (click)="openAdminRouteUndeliveredItems()">Undelivered Items Listing</td>
-            </tr>
-            <tr>
-              <td style="height:75px;" (click)="openAdminRouteNumberMeals()">Meals Expected</td>
-            </tr>
-            <tr>
-              <td style="height:75px;" (click)="openAdminRouteUnfulfilledGoalsNextSteps()">Goals/Next Steps Not Fulfilled Listing</td>
-            </tr>
-            <tr>
-              <td style="height:75px;" (click)="openAdminRouteUnfulfilledPrayerRequestsNeeds()">Prayer Requests/Needs Not Fulfilled Listing</td>
-            </tr>
-            <tr>
-              <td style="height:75px;" (click)="openAdminHeaterListing()">Heat Equipment Listing</td>
-            </tr>
-            <tr>
-              <td style="height:75px;" (click)="openRouteSummaryReport()">Route Summary Report</td>
-            </tr>
-            <tr>
-              <td style="height:75px;" (click)="openInventoryReport()">Inventory Report</td>
-            </tr>
-            <tr>
-              <td style="height:75px;" (click)="openHeatEquipmentPerRouteReport()">Heat Equipment Per Route Report</td>
-            </tr>
-            <tr>
-              <td style="height:75px;" (click)="openSeenServicedReport()">Seen and Serviced Report</td>
-            </tr>
-            <tr>
-              <td style="height:75px;" (click)="openFirstTimeHomelessnessReport()">First Time Homelessness Report</td>
-            </tr>
-            <tr>
-              <td style="height:75px;" (click)="birthdayMonthsReport()">Birthday Months</td>
-            </tr>
-          </tbody>        
-        </table>
+    <table class="table table-hover" id="reportList">
+      <tbody>
+        <tr><td class="py-3" (click)="openOverallAttendanceReport()">Overall Attendance</td></tr>
+        <tr><td class="py-3" (click)="openNewClientsReport()">Clients New To Camps</td></tr>
+        <tr><td class="py-3" (click)="openAdminRouteUndeliveredItems()">Undelivered Items Listing</td></tr>
+        <tr><td class="py-3" (click)="openAdminRouteNumberMeals()">Meals Expected</td></tr>
+        <tr><td class="py-3" (click)="openAdminRouteUnfulfilledGoalsNextSteps()">Goals/Next Steps Not Fulfilled Listing</td></tr>
+        <tr><td class="py-3" (click)="openAdminRouteUnfulfilledPrayerRequestsNeeds()">Prayer Requests/Needs Not Fulfilled Listing</td></tr>
+        <tr><td class="py-3" (click)="openAdminHeaterListing()">Heat Equipment Listing</td></tr>
+        <tr><td class="py-3" (click)="openRouteSummaryReport()">Route Summary Report</td></tr>
+        <tr><td class="py-3" (click)="openInventoryReport()">Inventory Report</td></tr>
+        <tr><td class="py-3" (click)="openHeatEquipmentPerRouteReport()">Heat Equipment Per Route Report</td></tr>
+        <tr><td class="py-3" (click)="openSeenServicedReport()">Seen and Serviced Report</td></tr>
+        <tr><td class="py-3" (click)="openFirstTimeHomelessnessReport()">First Time Homelessness Report</td></tr>
+        <tr><td class="py-3" (click)="birthdayMonthsReport()">Birthday Months</td></tr>
+      </tbody>
+    </table>
   </div>
- 
-  <div class="card-footer">
-    <button routerLink="/adminHome" class="btn btn-primary" style="float: left"><fa-icon [icon]="backIcon"></fa-icon> Back</button>
+  <div class="card-footer d-flex justify-content-between flex-wrap">
+    <button routerLink="/adminHome" class="btn btn-primary"><fa-icon [icon]="backIcon"></fa-icon> Back</button>
   </div>
-
 </div>

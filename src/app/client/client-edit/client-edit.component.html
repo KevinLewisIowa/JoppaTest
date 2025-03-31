@@ -1,40 +1,33 @@
 <div class="card panel-info" style="opacity:0.93">
   <div class="card-header text-left">
     <h2>Create Client</h2>
-    <h6>
-      <label>
-        <font color="red">*</font>
-      </label>Indicates Required Field
-    </h6>
+    <h6><label><font color="red">*</font></label>Indicates Required Field</h6>
   </div>
   <div class="panel-body" style="opacity:0.93">
     <form [formGroup]="clientForm" style="opacity:0.93">
       <div class="login-box">
         <div class="form-group row">
-          <label for="first-name" class="col-6 col-form-label">First Name:<font color="red">*</font> </label>
-          <div class="col-6">
-            <input id="first-name" type="text" class="form-control" style="float:right;" placeholder="First Name"
-              formControlName="first_name" />
+          <label for="first-name" class="col-12 col-md-6 col-form-label">First Name:<font color="red">*</font></label>
+          <div class="col-12 col-md-6">
+            <input id="first-name" type="text" class="form-control" placeholder="First Name" formControlName="first_name" />
           </div>
         </div>
         <div class="form-group row">
-          <label for="last-name" class="col-6 col-form-label">Last Name:<font color="red">*</font> </label>
-          <div class="col-6">
-            <input id="last-name" type="text" class="form-control" style="float:right;" placeholder="Last Name"
-              formControlName="last_name" />
+          <label for="last-name" class="col-12 col-md-6 col-form-label">Last Name:<font color="red">*</font></label>
+          <div class="col-12 col-md-6">
+            <input id="last-name" type="text" class="form-control" placeholder="Last Name" formControlName="last_name" />
           </div>
         </div>
         <div class="form-group row">
-          <label for="preferred-name" class="col-6 col-form-label">Preferred Name: </label>
-          <div class="col-6">
-            <input id="preferred-name" type="text" class="form-control" style="float:right;"
-              placeholder="Preferred Name" formControlName="preferred_name" />
+          <label for="preferred-name" class="col-12 col-md-6 col-form-label">Preferred Name:</label>
+          <div class="col-12 col-md-6">
+            <input id="preferred-name" type="text" class="form-control" placeholder="Preferred Name" formControlName="preferred_name" />
           </div>
         </div>
         <div class="form-group row">
-          <label for="gender" class="col-6 col-form-label">Gender:<font color="red">*</font> </label>
-          <div class="col-6">
-            <select id="gender" class="form-control" formControlName="gender" style="float:right;">
+          <label for="gender" class="col-12 col-md-6 col-form-label">Gender:<font color="red">*</font></label>
+          <div class="col-12 col-md-6">
+            <select id="gender" class="form-control" formControlName="gender">
               <option value="Male">Male</option>
               <option value="Female">Female</option>
               <option value="Other">Other</option>
@@ -42,11 +35,10 @@
           </div>
         </div>
         <div class="form-group row">
-          <label for="race" class="col-6 col-form-label">Race: </label>
-          <div class="col-6">
-            <select id="race" class="form-control" formControlName="race" style="float:right;">
-              <option value="American Indian, Alaska Native, or Indigenous">American Indian, Alaska Native, or
-                Indigenous</option>
+          <label for="race" class="col-12 col-md-6 col-form-label">Race:</label>
+          <div class="col-12 col-md-6">
+            <select id="race" class="form-control" formControlName="race">
+              <option value="American Indian, Alaska Native, or Indigenous">American Indian, Alaska Native, or Indigenous</option>
               <option value="Asian or Asian American">Asian or Asian American</option>
               <option value="Black, African American, or African">Black, African American, or African</option>
               <option value="Native Hawaiian or Pacific Islander">Native Hawaiian or Pacific Islander</option>
@@ -58,37 +50,27 @@
           </div>
         </div>
         <div class="form-group row">
-          <label for="ethnicity" class="col-6 col-form-label">Ethnicity: </label>
-          <div class="col-6">
-            <select id="ethnicity" class="form-control" formControlName="ethnicity" style="float:right;">
-              <option value="Non-Hispanic/Non-Latin(a)(o)(x)">Non-Hispanic/Non-Latin(a)(o)(x)</option>
-              <option value="Hispanic/Latin(a)(o)(x)">Hispanic/Latin(a)(o)(x)</option>
-              <option value="Client doesn't know">Client doesn't know</option>
-              <option value="Client refused">Client refused</option>
-              <option value="Data not collected">Data not collected</option>
-            </select>
+          <label for="birth-date" class="col-12 col-md-6 col-form-label">Birth Date (MM/DD/YYYY):<font color="red">*</font></label>
+          <div class="col-12 col-md-6">
+            <input id="birth-date" type="date" class="form-control" placeholder="mm/dd/yyyy" formControlName="birth_date" />
           </div>
         </div>
         <div class="form-group row">
-          <label for="birth-date" class="col-6 col-form-label">Birth Date (Date must be MM/DD/YYYY):<font color="red">*
-            </font> </label>
-          <div class="col-6">
-            <input id="birth-date" type="date" class="form-control" placeholder="mm/dd/yyyy"
-              formControlName="birth_date" style="float:right;" />
+          <label for="phone" class="col-12 col-md-6 col-form-label">Phone:</label>
+          <div class="col-12 col-md-6">
+            <input id="phone" type="text" class="form-control" placeholder="Phone" formControlName="phone" />
           </div>
         </div>
         <div class="form-group row">
-          <label for="phone" class="col-6 col-form-label">Phone: </label>
-          <div class="col-6">
-            <input id="phone" type="text" class="form-control" style="float:right;" placeholder="phone"
-              formControlName="phone" />
+          <label for="email" class="col-12 col-md-6 col-form-label">Email:</label>
+          <div class="col-12 col-md-6">
+            <input id="email" type="text" class="form-control" placeholder="Email" formControlName="email" />
           </div>
         </div>
         <div class="form-group row">
-          <label for="email" class="col-6 col-form-label">Email: </label>
-          <div class="col-6">
-            <input id="email" type="text" class="form-control" style="float:right;" placeholder="email"
-              formControlName="email" />
+          <label for="homeless-history-note" class="col-12 col-md-6 col-form-label">Homeless History Note:</label>
+          <div class="col-12 col-md-6">
+            <textarea id="homeless-history-note" type="text" class="form-control" rows="3" placeholder="Homeless history notes" formControlName="homeless_history_note"></textarea>
           </div>
         </div>
         <div class="form-group row">
@@ -307,10 +289,9 @@
           </div>
         </div>
         <div class="form-group row">
-          <label for="veteran" class="col-6 col-form-label">Is Veteran:</label>
-          <div class="col-6">
-            <select name="veteran" id="veteran" class="form-control" #veteranitem style="float:right;"
-              (change)="onVeteranChange(veteranitem.value)" formControlName="is_veteran">
+          <label for="veteran" class="col-12 col-md-6 col-form-label">Is Veteran:</label>
+          <div class="col-12 col-md-6">
+            <select id="veteran" class="form-control" formControlName="is_veteran">
               <option value="null" disabled selected>Unknown</option>
               <option value="true">Yes</option>
               <option value="false">No</option>
@@ -318,12 +299,9 @@
           </div>
         </div>
         <div class="form-group row">
-          <label for="diagnosed_mental_physical_disability" class="col-6 col-form-label">Has Diagnosed Physical or
-            Mental Disability:</label>
-          <div class="col-6">
-            <select name="diagnosed_mental_physical_disability" id="diagnosed_mental_physical_disability"
-              class="form-control" #diagnoseditem style="float:right;" (change)="onDiagnosedChange(diagnoseditem.value)"
-              formControlName="diagnosed_mental_physical_disability">
+          <label for="diagnosed_mental_physical_disability" class="col-12 col-md-6 col-form-label">Has Diagnosed Physical or Mental Disability:</label>
+          <div class="col-12 col-md-6">
+            <select id="diagnosed_mental_physical_disability" class="form-control" formControlName="diagnosed_mental_physical_disability">
               <option value="null" disabled selected>Unknown</option>
               <option value="true">Yes</option>
               <option value="false">No</option>
@@ -331,10 +309,9 @@
           </div>
         </div>
         <div class="form-group row">
-          <label for="aftercare" class="col-6 col-form-label">Is After Care:</label>
-          <div class="col-6">
-            <select name="aftercare" id="aftercare" #aftercareitem class="form-control" style="float:right;"
-              (change)="onAftercareChange(aftercareitem.value)" formControlName="is_aftercare">
+          <label for="aftercare" class="col-12 col-md-6 col-form-label">Is After Care:</label>
+          <div class="col-12 col-md-6">
+            <select id="aftercare" class="form-control" formControlName="is_aftercare">
               <option value="null" disabled selected>Unknown</option>
               <option value="true">Yes</option>
               <option value="false">No</option>
@@ -342,35 +319,28 @@
           </div>
         </div>
         <div class="form-group row">
-          <label for="mailbox" class="col-6 col-form-label">Mailbox: </label>
-          <div class="col-6">
-            <input id="mailbox" type="text" class="form-control" style="float:right;" placeholder="Joppa Mailbox Number"
-              formControlName="joppa_apartment_number" />
+          <label for="mailbox" class="col-12 col-md-6 col-form-label">Mailbox:</label>
+          <div class="col-12 col-md-6">
+            <input id="mailbox" type="text" class="form-control" placeholder="Joppa Mailbox Number" formControlName="joppa_apartment_number" />
           </div>
         </div>
         <div class="form-group row">
-          <label for="camp-latitude" class="col-6 col-form-label">Camp Latitude: </label>
-          <div class="col-3">
-            <button class="btn btn-primary" style="float: right" (click)="getCurrentLocation()">
-              Get Current Location for Camp
-            </button>
-          </div>
-          <div class="col-3">
-            <input id="camp-latitude" type="text" class="form-control" placeholder="camp latitude"
-              formControlName="latitude" />
+          <label for="camp-latitude" class="col-12 col-md-6 col-form-label">Camp Latitude:</label>
+          <div class="col-12 col-md-6">
+            <button class="btn btn-primary w-100 mb-2" (click)="getCurrentLocation()">Get Current Location for Camp</button>
+            <input id="camp-latitude" type="text" class="form-control" placeholder="Camp Latitude" formControlName="latitude" />
           </div>
         </div>
         <div class="form-group row">
-          <label for="camp-longitude" class="col-9 col-form-label">Camp Longitude: </label>
-          <div class="col-3">
-            <input id="camp-longitude" type="text" class="form-control" style="float: right"
-              placeholder="Camp Longitude" formControlName="longitude" />
+          <label for="camp-longitude" class="col-12 col-md-6 col-form-label">Camp Longitude:</label>
+          <div class="col-12 col-md-6">
+            <input id="camp-longitude" type="text" class="form-control" placeholder="Camp Longitude" formControlName="longitude" />
           </div>
         </div>
         <div class="form-group row">
-          <label for="status" class="col-6 col-form-label">Status: </label>
-          <div class="col-6">
-            <select id="status" class="form-control" style="float:right;" formControlName="status">
+          <label for="status" class="col-12 col-md-6 col-form-label">Status:</label>
+          <div class="col-12 col-md-6">
+            <select id="status" class="form-control" formControlName="status">
               <option value="Active">Active</option>
               <option value="Inactive">Inactive</option>
               <option value="Alumni">Alumni</option>
@@ -379,28 +349,23 @@
           </div>
         </div>
         <div class="form-group row" *ngIf="isAdmin">
-          <label for="admin-notes" class="col-6 col-form-label">Admin Notes: </label>
-          <div class="col-6">
-            <textarea id="admin-notes" type="text" class="form-control" rows="3" placeholder="admin notes"
-              style="float:right;" formControlName="admin_notes"></textarea>
+          <label for="admin-notes" class="col-12 col-md-6 col-form-label">Admin Notes:</label>
+          <div class="col-12 col-md-6">
+            <textarea id="admin-notes" class="form-control" rows="3" placeholder="Admin Notes" formControlName="admin_notes"></textarea>
           </div>
         </div>
         <div class="form-group row">
-          <img [src]="url" *ngIf="url != null && url != ''">
-          <label for="client-picture" class="col-6 col-form-label">Image:</label>
-          <div class="col-6">
-            <input id="client-picture" type="file" accept="image/*" (change)="onAdd($event)" width="300" height="300"
-              class="form-control" style="float:right;" formControlName="client_picture" />
-            <button id="clear-picture" class="btn btn-outline-primary" (click)="clearPicture()" *ngIf="isAdmin">Clear
-              Photo</button>
+          <label for="client-picture" class="col-12 col-md-6 col-form-label">Image:</label>
+          <div class="col-12 col-md-6">
+            <input id="client-picture" type="file" accept="image/*" class="form-control" (change)="onAdd($event)" />
+            <button id="clear-picture" class="btn btn-outline-primary mt-2 w-100" (click)="clearPicture()" *ngIf="isAdmin">Clear Photo</button>
           </div>
         </div>
       </div>
     </form>
   </div>
-  <div class="card-footer text-right">
-    <button type="button" class="btn btn-outline-primary" style="float:left;" (click)="close()">Don't Save</button>
-    <button class="btn btn-primary" type="button" style="float:right;" [disabled]="!clientForm.valid"
-      (click)="submitClient()">Save</button>
+  <div class="card-footer d-flex justify-content-between flex-wrap">
+    <button type="button" class="btn btn-outline-primary" (click)="close()">Don't Save</button>
+    <button type="button" class="btn btn-primary" [disabled]="!clientForm.valid" (click)="submitClient()">Save</button>
   </div>
 </div>

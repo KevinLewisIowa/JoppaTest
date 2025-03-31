@@ -1,42 +1,78 @@
 <ng-template #clientDebtMdl let-c="close" let-d="dismiss">
-    <div class="modal-header">
-        <h4 class="modal-title">Add Client Debt</h4>
-        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    <form>
-        <div class="modal-body">
-            <div class="form-group">
-                <div class="row">
-                    <div class="col-md-6">
-                        <label for="debt-type">Debt Type</label>
-                        <select id="debt-type" class="form-control" [(ngModel)]="debt_type" (change)="onChange()" name="debt_type">
-                            <option value="None" selected>None</option>
-                            <option *ngFor="let debt of debtTypes" [value]="debt">{{ debt }}</option>
-                        </select>
-                    </div>
-                    <div class="col-md-6">
-                        <input id="extraInfo" name="extraInfoDebt" class="form-control" type="text"
-                            [(ngModel)]="other_debt_type" *ngIf="extraInfoNeeded"
-                            placeholder="Other Debt" />
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <label for="amount">Amount</label>
-                        <input id="amount" type="text" class="form-control" [(ngModel)]="amount" name="amount" />
-                    </div>
-                    <div class="col-md-6">
-                        <label for="notes">Notes</label>
-                        <textarea id="notes" class="form-control" rows="4" [(ngModel)]="notes" name="notes"></textarea>
-                    </div>
-                </div>
-            </div>
+  <div class="modal-header">
+    <h4 class="modal-title">Add Client Debt</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <form>
+    <div class="modal-body">
+      <div class="form-group">
+        <div class="row">
+          <div class="col-12 col-md-6 mb-3">
+            <label for="debt-type">Debt Type</label>
+            <select
+              id="debt-type"
+              class="form-control"
+              [(ngModel)]="debt_type"
+              (change)="onChange()"
+              name="debt_type"
+            >
+              <option value="None" selected>None</option>
+              <option *ngFor="let debt of debtTypes" [value]="debt">{{ debt }}</option>
+            </select>
+          </div>
+          <div class="col-12 col-md-6 mb-3">
+            <input
+              id="extraInfo"
+              name="extraInfoDebt"
+              class="form-control"
+              type="text"
+              [(ngModel)]="other_debt_type"
+              *ngIf="extraInfoNeeded"
+              placeholder="Other Debt"
+            />
+          </div>
         </div>
-    </form>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-outline-primary" (click)="c('Close click')">Don't Save</button>
-        <button type="button" class="btn btn-primary" (click)="submitDebt();c('')">Save</button>
+        <div class="row">
+          <div class="col-12 col-md-6 mb-3">
+            <label for="amount">Amount</label>
+            <input
+              id="amount"
+              type="text"
+              class="form-control"
+              [(ngModel)]="amount"
+              name="amount"
+            />
+          </div>
+          <div class="col-12 col-md-6 mb-3">
+            <label for="notes">Notes</label>
+            <textarea
+              id="notes"
+              class="form-control"
+              rows="4"
+              [(ngModel)]="notes"
+              name="notes"
+            ></textarea>
+          </div>
+        </div>
+      </div>
     </div>
+  </form>
+  <div class="modal-footer d-flex justify-content-between flex-wrap">
+    <button
+      type="button"
+      class="btn btn-outline-primary"
+      (click)="c('Close click')"
+    >
+      Don't Save
+    </button>
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="submitDebt();c('')"
+    >
+      Save
+    </button>
+  </div>
 </ng-template>

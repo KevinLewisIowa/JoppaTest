@@ -9,36 +9,70 @@
         <div class="modal-body">
             <div class="form-group">
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-12 col-md-6 mb-3">
                         <label for="felony-type">Felony Type</label>
-                        <select id="felony-type" class="form-control" [(ngModel)]="felony_type" name="felony_type"
-                            (change)="onChange()">
+                        <select
+                            id="felony-type"
+                            class="form-control"
+                            [(ngModel)]="felony_type"
+                            name="felony_type"
+                            (change)="onChange()"
+                        >
                             <option value="None" selected>None</option>
                             <option *ngFor="let type of felonyTypes" [value]="type">{{ type }}</option>
                         </select>
                     </div>
-                    <div class="col-md-6">
-                        <input id="extraInfo" name="extraInfoFelony" class="form-control" type="text"
-                            [(ngModel)]="other_felony_type" *ngIf="extraInfoNeeded"
-                            placeholder="Other FelonyType" />
+                    <div class="col-12 col-md-6 mb-3">
+                        <input
+                            id="extraInfo"
+                            name="extraInfoFelony"
+                            class="form-control"
+                            type="text"
+                            [(ngModel)]="other_felony_type"
+                            *ngIf="extraInfoNeeded"
+                            placeholder="Other Felony Type"
+                        />
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-12 col-md-6 mb-3">
                         <label for="year-occurred">Year Occurred</label>
-                        <input id="year-occurred" type="text" class="form-control" [(ngModel)]="year_occurred"
-                            name="year_occurred" />
+                        <input
+                            id="year-occurred"
+                            type="text"
+                            class="form-control"
+                            [(ngModel)]="year_occurred"
+                            name="year_occurred"
+                        />
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-12 mb-3">
                         <label for="notes">Notes</label>
-                        <textarea id="notes" class="form-control" rows="4" [(ngModel)]="notes" name="notes"></textarea>
+                        <textarea
+                            id="notes"
+                            class="form-control"
+                            rows="4"
+                            [(ngModel)]="notes"
+                            name="notes"
+                        ></textarea>
                     </div>
                 </div>
             </div>
         </div>
     </form>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-outline-primary" (click)="c('Close click')">Don't Save</button>
-        <button type="button" class="btn btn-primary" (click)="submitFelony();c('')">Save</button>
+    <div class="modal-footer d-flex justify-content-between flex-wrap">
+        <button
+            type="button"
+            class="btn btn-outline-primary"
+            (click)="c('Close click')"
+        >
+            Don't Save
+        </button>
+        <button
+            type="button"
+            class="btn btn-primary"
+            (click)="submitFelony();c('')"
+        >
+            Save
+        </button>
     </div>
 </ng-template>

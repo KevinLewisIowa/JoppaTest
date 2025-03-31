@@ -4,22 +4,22 @@
   </div>
   <div class="panel-body">
     <div class="row">
-      <div class="col-lg-12 col-md-12">
+      <div class="col-12">
         <span>Please select a date and route to see the route summary.</span><br /><br />
         <div class="form-group">
           <label for="routeDate">Route Date:</label>
-          <input type="date" [(ngModel)]="routeDate" name="routeDate"/>
+          <input type="date" [(ngModel)]="routeDate" name="routeDate" class="form-control" />
         </div>
-        <button *ngFor="let route of routes" type="button" class="btn btn-primary" style="margin:10px 5px;" (click)="loadRouteInstance(route.id)">{{route.name}}</button>&nbsp;
+        <button *ngFor="let route of routes" type="button" class="btn btn-primary m-2" (click)="loadRouteInstance(route.id)">{{route.name}}</button>
       </div>
     </div>
     <br />
     <div class="row">
-      <div class="col-lg-12 col-md-12" *ngIf="routeInstances && routeInstances.length == 0">
+      <div class="col-12" *ngIf="routeInstances && routeInstances.length == 0">
         <span>There were no routes for this day</span>
       </div>
-      <div class="col-lg-12 col-md-12" *ngIf="routeInstances && routeInstances.length > 0">
-        <table class="table">
+      <div class="col-12" *ngIf="routeInstances && routeInstances.length > 0">
+        <table class="table table-responsive table-striped">
           <thead>
             <tr>
               <th>Leader Name</th>
@@ -40,7 +40,7 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-lg-12 col-md-12" *ngIf="routeInstance">
+      <div class="col-12" *ngIf="routeInstance">
         <dl>
           <dt>Leader Name</dt><dd>{{routeInstance.leader_name}}</dd>
           <dt>Leader Phone</dt><dd>{{routeInstance.leader_phone}}</dd>
@@ -55,9 +55,9 @@
         </dl>
       </div>
       <br />
-      <div class="col-lg-12 col-md-12" *ngIf="notes">
+      <div class="col-12" *ngIf="notes">
         <h4>Notes</h4>
-        <table class="table">
+        <table class="table table-responsive table-striped">
           <thead>
             <tr>
               <th>Client Name</th>
@@ -74,7 +74,7 @@
       </div>
     </div>
   </div>
-  <div class="card-footer">
-    <button routerLink="/admin/reports" class="btn btn-primary" style="float: left" (click)="back()"><fa-icon [icon]="backIcon"></fa-icon> Back</button>
+  <div class="card-footer d-flex justify-content-between flex-wrap">
+    <button routerLink="/admin/reports" class="btn btn-primary"><fa-icon [icon]="backIcon"></fa-icon> Back</button>
   </div>
 </div>

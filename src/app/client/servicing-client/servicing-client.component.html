@@ -780,15 +780,29 @@
                     [(ngModel)]="pet.breed" />
                 </td>
                 <td>
-                  <input type="text" class="form-control" style="max-width: 75%" (change)="updatePetInfo(pet)"
-                    [(ngModel)]="pet.age" />
+                  <input
+                    type="text"
+                    class="form-control w-100"
+                    (change)="updatePetInfo(pet)"
+                    [(ngModel)]="pet.age"
+                  />
                 </td>
                 <td>
-                  <button type="button" class="btn btn-outline-primary" (click)="updateNeedPetFood(pet)">{{
-                    pet.food_requested ? 'Yes' : 'No' }}</button>
+                  <button
+                    type="button"
+                    class="btn btn-outline-primary w-100"
+                    (click)="updateNeedPetFood(pet)"
+                  >
+                    {{ pet.food_requested ? 'Yes' : 'No' }}
+                  </button>
                 </td>
                 <td>
-                  <button type="button" class="btn btn-primary" (click)="removePet(pet.id)" *ngIf="isAdmin">
+                  <button
+                    type="button"
+                    class="btn btn-primary w-100"
+                    (click)="removePet(pet.id)"
+                    *ngIf="isAdmin"
+                  >
                     Remove
                   </button>
                 </td>
@@ -797,15 +811,18 @@
           </table>
         </div>
       </div>
-      <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
-        <h4>
+      <div class="col-12" *ngIf="isAdmin">
+        <h4 class="d-flex justify-content-between align-items-center">
           Referrals/Resources
-          <button type="button" (click)="goToTop(); referralsResourcesMdl.showModal()" class="btn btn-primary"
-            style="float: right">
+          <button
+            type="button"
+            (click)="goToTop(); referralsResourcesMdl.showModal()"
+            class="btn btn-primary"
+          >
             New Referral/Resource
           </button>
         </h4>
-        <table class="table" id="referralsResources">
+        <table class="table table-responsive" id="referralsResources">
           <colgroup>
             <col span="1" style="width: 25%" />
             <col span="1" style="width: 25%" />
@@ -818,18 +835,20 @@
               <th>Type</th>
               <th>Quantity</th>
               <th>Notes</th>
-              <th></th>
             </tr>
           </thead>
-
           <tbody>
             <tr *ngFor="let referral of referralsResources; let rowIndex = index">
-              <td>{{ referral.created_at | date: "short" }}</td>
+              <td>{{ referral.created_at | date: 'short' }}</td>
               <td>{{ referral.referral_type }}</td>
               <td>{{ referral.quantity }}</td>
               <td>{{ referral.notes }}</td>
               <td>
-                <button type="button" class="btn btn-primary" (click)="removeReferralResource(referral.id)">
+                <button
+                  type="button"
+                  class="btn btn-primary w-100"
+                  (click)="removeReferralResource(referral.id)"
+                >
                   Remove
                 </button>
               </td>

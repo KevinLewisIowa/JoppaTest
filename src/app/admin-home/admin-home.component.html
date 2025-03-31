@@ -5,31 +5,17 @@
   <div class="panel-body" style="opacity: 0.93">
     <table class="table">
       <tbody>
-        <tr>
-          <td style="height: 75px" (click)="goToClientListing()">Client Listing</td>
-        </tr>
-        <tr>
-          <td style="height: 75px" (click)="goToCampListing()">Camp Listing</td>
-        </tr>
-        <tr>
-          <td style="height: 75px" (click)="goToRoutes()">Route Listing</td>
-        </tr>
-        <tr>
-          <td style="height: 75px" (click)="openAdminReports()">Reports</td>
-        </tr>
-        <tr>
-          <td style="height: 75px" (click)="openInactiveUpdater()">Update Inactive Clients</td>
-        </tr>
-        <tr>
-          <td style="height: 75px" (click)="openPetFoodAdder()">Pet Food Item Adder</td>
-        </tr>
-        <tr>
-          <td style="height: 75px" (click)="openChangeRegularPassword()">Change Regular Password</td>
-        </tr>
+        <tr><td class="py-3" (click)="goToClientListing()">Client Listing</td></tr>
+        <tr><td class="py-3" (click)="goToCampListing()">Camp Listing</td></tr>
+        <tr><td class="py-3" (click)="goToRoutes()">Route Listing</td></tr>
+        <tr><td class="py-3" (click)="openAdminReports()">Reports</td></tr>
+        <tr><td class="py-3" (click)="openInactiveUpdater()">Update Inactive Clients</td></tr>
+        <tr><td class="py-3" (click)="openPetFoodAdder()">Pet Food Item Adder</td></tr>
+        <tr><td class="py-3" (click)="openChangeRegularPassword()">Change Regular Password</td></tr>
       </tbody>
     </table>
   </div>
-  <div class="card-footer">
-    <button type="button" (click)="signOut()" class="btn btn-primary" style="float:left"><fa-icon [icon]="signOutIcon"></fa-icon> Sign Out</button>
+  <div class="card-footer d-flex justify-content-between flex-wrap">
+    <button type="button" (click)="signOut()" class="btn btn-primary"><fa-icon [icon]="signOutIcon"></fa-icon> Sign Out</button>
   </div>
 </div>

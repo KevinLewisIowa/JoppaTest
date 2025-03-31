@@ -9,20 +9,46 @@
         <div class="modal-body">
             <div class="form-group">
                 <div class="row">
-                    <div class="col-sm-6">
-                        <input id="skillInput" class="form-control" type="text" [(ngModel)]="skill" placeholder="Skill" name="skill" />
+                    <div class="col-12 col-md-6 mb-3">
+                        <input
+                            id="skillInput"
+                            class="form-control"
+                            type="text"
+                            [(ngModel)]="skill"
+                            placeholder="Skill"
+                            name="skill"
+                        />
                     </div>
                 </div>
-                <div class="row mt-3">
-                    <div class="col-sm-6">
-                        <textarea id="notesInput" class="form-control" [(ngModel)]="notes" placeholder="Notes" name="notes"></textarea>
+                <div class="row">
+                    <div class="col-12 col-md-6 mb-3">
+                        <textarea
+                            id="notesInput"
+                            class="form-control"
+                            rows="4"
+                            [(ngModel)]="notes"
+                            placeholder="Notes"
+                            name="notes"
+                        ></textarea>
                     </div>
                 </div>
             </div>
         </div>
     </form>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-outline-primary" (click)="c('Close click')">Don't Save</button>
-        <button type="button" class="btn btn-primary" (click)="submitSkill();c('')">Save</button>
+    <div class="modal-footer d-flex justify-content-between flex-wrap">
+        <button
+            type="button"
+            class="btn btn-outline-primary"
+            (click)="c('Close click')"
+        >
+            Don't Save
+        </button>
+        <button
+            type="button"
+            class="btn btn-primary"
+            (click)="submitSkill();c('')"
+        >
+            Save
+        </button>
     </div>
 </ng-template>

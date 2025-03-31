@@ -1,24 +1,21 @@
 <ng-template #clientSearchMdl let-c="close" let-d="dismiss">
   <div class="modal-header">
     <h4 class="modal-title">Search For Clients</h4>
-    <button type="button" class="btn btn-primary" aria-label="Close" (click)="d('Cross click')"><span
-        aria-hidden="true">x</span></button>
+    <button type="button" class="btn btn-primary" aria-label="Close" (click)="d('Cross click')"><span aria-hidden="true">x</span></button>
   </div>
   <form>
     <div class="modal-body">
       <div class="form-group">
         <div class="row">
-          <div class="col-sm-8">
-            <input id="focusMe" (keyup.enter)="performSearch()" class="form-control" type="text"
-              [(ngModel)]="nameSearch" placeholder="Name" name="nameSearch" />
+          <div class="col-12 col-md-8">
+            <input id="focusMe" (keyup.enter)="performSearch()" class="form-control" type="text" [(ngModel)]="nameSearch" placeholder="Name" name="nameSearch" />
           </div>
-          <div class="col-sm-4">
-            <button name="btnSearch" class="btn btn-primary" style="float:right;" type="button" [disabled]="nameSearch == ''"
-              (click)="performSearch()">Search</button>
+          <div class="col-12 col-md-4">
+            <button name="btnSearch" class="btn btn-primary w-100" type="button" [disabled]="nameSearch == ''" (click)="performSearch()">Search</button>
           </div>
         </div>
         <div [hidden]="clients.length > 0" class="row">
-          <div class="col-sm-12">
+          <div class="col-12">
             <div class="text-left">
               <br>
               <b>{{resultMessage}}</b>
@@ -30,16 +27,18 @@
   </form>
   <div [hidden]="clients.length > 0" class="modal-body">
     <div class="row">
-      {{noResultsMessage}}
+      <div class="col-12 text-center">
+        {{noResultsMessage}}
+      </div>
     </div>
   </div>
-  <div [hidden]="clients.length===0" class="modal-body">
+  <div [hidden]="clients.length === 0" class="modal-body">
     <div class="row">
-      <div class="col-sm-12">
+      <div class="col-12">
         <div class="text-right">
           {{resultMessage}}
         </div>
-        <table class="table-sm table-striped table-hover w-100">
+        <table class="table table-sm table-striped table-hover w-100">
           <thead>
             <tr>
               <th>Name</th>
@@ -52,8 +51,7 @@
           </tbody>
         </table>
         <div class="text-right pt-2">
-          <button type="button" class="btn btn-primary" id="prev" (click)="previousPage()"
-            [disabled]="!previousEnabled">
+          <button type="button" class="btn btn-primary" id="prev" (click)="previousPage()" [disabled]="!previousEnabled">
             <span class="oi oi-arrow-left" aria-hidden="true"></span>
           </button>&nbsp;&nbsp;
           <button type="button" class="btn btn-primary" id="next" (click)="nextPage()" [disabled]="!nextEnabled">
@@ -64,6 +62,6 @@
     </div>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-outline-primary" (click)="c('Close click')">Close</button>
+    <button type="button" class="btn btn-outline-primary w-100" (click)="c('Close click')">Close</button>
   </div>
 </ng-template>

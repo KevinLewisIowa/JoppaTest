@@ -5,26 +5,28 @@
     </div>
     <div class="panel-body" style="opacity:0.93">
       <div class="entry-box">
-        <div class="col-md-12">
-          <input type="text" placeholder="Serial Number" formControlName="serial_number" style="width: 185px; float:right;"/>
-          <label>Serial Number: </label>
+        <div class="form-group row mb-3">
+          <label for="serial_number" class="col-12 col-md-6 col-form-label">Serial Number:</label>
+          <div class="col-12 col-md-6">
+            <input id="serial_number" type="text" class="form-control" placeholder="Serial Number" formControlName="serial_number" />
+          </div>
         </div>
-        <div class="col-md-12">
-          <select id="heaterType" formControlName="heater_type_id" style="width: 185px; float:right;">
-            <option value="" disabled selected>Select a heater type</option>
-            <option *ngFor="let heatertype of heaterTypes" [value]="heatertype.id">{{heatertype.type_description}}
-            </option>
-          </select>
-          <label>Heater Type: </label>
+        <div class="form-group row mb-3">
+          <label for="heaterType" class="col-12 col-md-6 col-form-label">Heater Type:</label>
+          <div class="col-12 col-md-6">
+            <select id="heaterType" class="form-control" formControlName="heater_type_id">
+              <option value="" disabled selected>Select a heater type</option>
+              <option *ngFor="let heatertype of heaterTypes" [value]="heatertype.id">{{heatertype.type_description}}</option>
+            </select>
+          </div>
         </div>
-        <div class="col-md-12" style="float:right;">
-          <button type="button" [disabled]="!heaterForm.valid" (click)="submitHeater()" class="btn btn-primary">Submit
-            Heater</button>
+        <div class="form-group text-center">
+          <button type="button" [disabled]="!heaterForm.valid" (click)="submitHeater()" class="btn btn-primary">Submit Heater</button>
         </div>
       </div>
     </div>
-    <div class="card-footer">
-      <button routerLink="/adminHome" class="btn btn-primary" style="float: left" (click)="back()"><fa-icon [icon]="backIcon"></fa-icon> Back</button>
+    <div class="card-footer d-flex justify-content-between">
+      <button routerLink="/adminHome" class="btn btn-primary" (click)="back()"><fa-icon [icon]="backIcon"></fa-icon> Back</button>
     </div>
   </div>
 </form>

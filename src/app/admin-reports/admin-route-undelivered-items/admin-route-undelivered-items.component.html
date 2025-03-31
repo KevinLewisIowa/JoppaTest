@@ -3,52 +3,44 @@
     <h2>Undelivered Items</h2>
   </div>
   <div class="panel-body">
-    <mat-form-field appearance="standard">
-      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter" #input>
+    <mat-form-field appearance="standard" class="w-100">
+      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter" #input />
     </mat-form-field>
   </div>
   <div class="panel-body">
     <div>
-      <mat-table #table [dataSource]="dataSource" matSort>
-
+      <mat-table #table [dataSource]="dataSource" matSort class="mat-elevation-z8">
         <ng-container matColumnDef="name">
           <mat-header-cell *matHeaderCellDef mat-sort-header>Route</mat-header-cell>
           <mat-cell *matCellDef="let row">{{row.name}}</mat-cell>
         </ng-container>
-
         <ng-container matColumnDef="preferred_name">
           <mat-header-cell *matHeaderCellDef mat-sort-header>Client Name</mat-header-cell>
-          <mat-cell *matCellDef="let row">{{row.first_name}} <span
-              *ngIf="row.preferred_name != '' && row.preferred_name != null">({{row.preferred_name}})</span>
-            {{row.last_name}}</mat-cell>
+          <mat-cell *matCellDef="let row">{{row.first_name}} <span *ngIf="row.preferred_name != '' && row.preferred_name != null">({{row.preferred_name}})</span> {{row.last_name}}</mat-cell>
         </ng-container>
-
         <ng-container matColumnDef="item_description">
           <mat-header-cell *matHeaderCellDef mat-sort-header>Item</mat-header-cell>
           <mat-cell *matCellDef="let row">{{row.item_description}}</mat-cell>
         </ng-container>
-
         <ng-container matColumnDef="date_requested">
           <mat-header-cell *matHeaderCellDef mat-sort-header>Date Requested</mat-header-cell>
           <mat-cell *matCellDef="let row">{{row.created_at | date:'shortDate'}}</mat-cell>
         </ng-container>
-
         <ng-container matColumnDef="fulfilled">
           <mat-header-cell *matHeaderCellDef mat-sort-header>On Cart</mat-header-cell>
-          <mat-cell *matCellDef="let row"><input *ngIf="isAdmin" type="checkbox" [(ngModel)]="row.fulfilled" /><span *ngIf="!isAdmin">{{row.fulfilled ? 'Yes' : 'No'}}</span></mat-cell>
+          <mat-cell *matCellDef="let row">
+            <input *ngIf="isAdmin" type="checkbox" [(ngModel)]="row.fulfilled" />
+            <span *ngIf="!isAdmin">{{row.fulfilled ? 'Yes' : 'No'}}</span>
+          </mat-cell>
         </ng-container>
-
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
         <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
       </mat-table>
-
       <mat-paginator [pageSizeOptions]="[25, 10, 50, 100]"></mat-paginator>
     </div>
   </div>
-  <div class="card-footer">
-    <button (click)="back()" style="float: left" class="btn btn-primary" type="button">
-      <fa-icon [icon]="backIcon"></fa-icon> Don't Save
-    </button>
-    <button *ngIf="isAdmin" class="btn btn-primary" style="float: right" (click)="submitItems()">Save</button>
+  <div class="card-footer d-flex justify-content-between flex-wrap">
+    <button (click)="back()" class="btn btn-primary"><fa-icon [icon]="backIcon"></fa-icon> Don't Save</button>
+    <button *ngIf="isAdmin" class="btn btn-primary" (click)="submitItems()">Save</button>
   </div>
 </div>

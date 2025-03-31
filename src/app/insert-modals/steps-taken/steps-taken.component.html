@@ -1,35 +1,33 @@
 <ng-template #clientStepMdl let-c="close" let-d="dismiss">
-    <div class="modal-header">
-        <h4 class="modal-title">Add Client Step</h4>
-        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    <form>
-        <div class="modal-body">
-            <div class="form-group">
-                <div class="row">
-                    <div class="col-sm-4">
-                        <label for="step">Step</label>
-                        <select id="step" class="form-control" [(ngModel)]="step_description" name="step" required>
-                            <option value="" disabled selected>Select Step</option>
-                            <option *ngFor="let step of steps" [value]="step">{{ step }}</option>
-                        </select>
-                    </div>
-                    <div class="col-sm-4">
-                        <label for="dateCompleted">Date Completed</label>
-                        <input id="dateCompleted" class="form-control" type="date" [(ngModel)]="step_date" name="dateCompleted" />
-                    </div>
-                    <div class="col-sm-4">
-                        <label for="notes">Notes</label>
-                        <textarea id="notes" class="form-control" rows="3" [(ngModel)]="notes" name="notes" placeholder="Enter notes"></textarea>
-                    </div>
-                </div>
-            </div>
+  <div class="modal-header">
+    <h4 class="modal-title">Add Client Step</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')"><span aria-hidden="true">&times;</span></button>
+  </div>
+  <form>
+    <div class="modal-body">
+      <div class="form-group">
+        <div class="row mb-3">
+          <div class="col-12 col-md-4">
+            <label for="step">Step</label>
+            <select id="step" class="form-control" [(ngModel)]="step_description" name="step" required>
+              <option value="" disabled selected>Select Step</option>
+              <option *ngFor="let step of steps" [value]="step">{{ step }}</option>
+            </select>
+          </div>
+          <div class="col-12 col-md-4">
+            <label for="dateCompleted">Date Completed</label>
+            <input id="dateCompleted" class="form-control" type="date" [(ngModel)]="step_date" name="dateCompleted" />
+          </div>
+          <div class="col-12 col-md-4">
+            <label for="notes">Notes</label>
+            <textarea id="notes" class="form-control" rows="3" [(ngModel)]="notes" name="notes" placeholder="Enter notes"></textarea>
+          </div>
         </div>
-    </form>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-outline-primary" (click)="c('Close click')">Don't Save</button>
-        <button type="button" class="btn btn-primary" (click)="submitClientStep();c('')">Save</button>
+      </div>
     </div>
+  </form>
+  <div class="modal-footer d-flex justify-content-between flex-wrap">
+    <button type="button" class="btn btn-outline-primary" (click)="c('Close click')">Don't Save</button>
+    <button type="button" class="btn btn-primary" (click)="submitClientStep();c('')">Save</button>
+  </div>
 </ng-template>

@@ -1,16 +1,15 @@
 <ng-template #notesMdl let-c="close" let-d="dismiss">
   <div class="modal-header">
     <h4 class="modal-title">Create Note</h4>
-    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')"><span
-        aria-hidden="true">&times;</span></button>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')"><span aria-hidden="true">&times;</span></button>
   </div>
   <form>
     <div class="modal-body">
       <div class="form-group">
         <div class="row">
-          <div class="col-md-6" *ngIf="isAdmin">
+          <div class="col-12 col-md-6" *ngIf="isAdmin">
             <label for="source">Source</label>
-            <select id="source" class="form-control" [(ngModel)]="source" style="float:left;">
+            <select id="source" class="form-control" [(ngModel)]="source">
               <option value="Aftercare">Aftercare</option>
               <option value="Circle of Friends" *ngIf="isAdmin">Circle of Friends</option>
               <option value="Email" *ngIf="isAdmin">Email</option>
@@ -26,15 +25,14 @@
               <option value="WARNING" *ngIf="isAdmin">WARNING</option>
             </select>
           </div>
-          <div class="col-md-6">
-            <textarea id="focusMe" class="form-control" rows="4" [(ngModel)]="note" placeholder="Note"
-              name="note"></textarea>
+          <div class="col-12 col-md-6">
+            <textarea id="focusMe" class="form-control" rows="4" [(ngModel)]="note" placeholder="Note" name="note"></textarea>
           </div>
         </div>
       </div>
     </div>
   </form>
-  <div class="modal-footer">
+  <div class="modal-footer d-flex justify-content-between flex-wrap">
     <button type="button" class="btn btn-outline-primary" (click)="c('Close click')">Don't Save</button>
     <button type="button" class="btn btn-primary" (click)="submitNote();c('')">Save</button>
   </div>
