@@ -32,7 +32,6 @@ import { AppRoutingModule } from "./app-routing.module";
 import { MainService } from "./services/main.service";
 import { ClientService } from "./services/client.service";
 import { CountryStateCityService } from "./services/countrystatecity.service";
-import { LocationClientsComponent } from "./location-clients/location-clients.component";
 import { ClientComponent } from "./client/client.component";
 import { ClientEditComponent } from "./client/client-edit/client-edit.component";
 import { RouteEditModalComponent } from "./routes/route-edit-modal/route-edit-modal.component";
@@ -108,7 +107,6 @@ const reducers = {
         FooterComponent,
         RoutesComponent,
         LocationsComponent,
-        LocationClientsComponent,
         ClientComponent,
         ClientEditComponent,
         RouteEditModalComponent,
