@@ -72,11 +72,16 @@ export class ClientHealthInsuranceComponent implements OnInit, AfterViewChecked 
     const routeInstanceId: number = this.isAdmin ? -1 : JSON.parse(localStorage.getItem('routeInstance'));
 
     if (!isNaN(clientId) && !isNaN(routeInstanceId)) {
-      clientHealthInsurance.company = (this.company == 'Other') ? this.other_company : this.company;
-      clientHealthInsurance.company = this.has_insurance ? clientHealthInsurance.company : '';
-      clientHealthInsurance.has_health_insurance = this.has_insurance ? 'Yes' : 'No';
+      if (this.has_insurance === 'Unknown') {
+        clientHealthInsurance.company = 'Unknown'; // Set company to 'Unknown' if has_insurance is 'Unknown'
+      } else {
+        clientHealthInsurance.company = (this.company === 'Other') ? this.other_company : this.company;
+        clientHealthInsurance.company = this.has_insurance ? clientHealthInsurance.company : '';
+      }
+
+      clientHealthInsurance.has_health_insurance = this.has_insurance;
       clientHealthInsurance.client_id = clientId;
-      
+
       this.clientService.insertHealthInsurance(clientHealthInsurance).subscribe((insurance) => {
         this.has_insurance = 'Unknown';
         this.company = '';
