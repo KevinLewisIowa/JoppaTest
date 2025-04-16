@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ElementRef, ViewChild, Renderer2} from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ElementRef, ViewChild, Renderer2 } from '@angular/core';
 import { Client } from "app/models/client";
 import { ClientService } from "app/services/client.service";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
@@ -12,7 +12,7 @@ import { ConfirmDialogModel, CustomConfirmationDialogComponent } from 'app/custo
 })
 export class ClientSearchComponent implements OnInit, OnDestroy {
   @Output() clientSelected = new EventEmitter<Client>();
-  @ViewChild('clientSearchMdl', {static: false}) clientSearchMdl: ElementRef;
+  @ViewChild('clientSearchMdl', { static: false }) clientSearchMdl: ElementRef;
   clients: Client[] = [];
   nameSearch = '';
   stateSearch = '';
@@ -58,7 +58,6 @@ export class ClientSearchComponent implements OnInit, OnDestroy {
     this.searchSubscription = this.clientService.getClientsByName(this.nameSearch).subscribe(results => {
       this.loading = false;
       this.clients = results as any[];
-      if (!this.isAdmin) this.clients = this.clients.filter(client => !client.is_aftercare);
       this.resultCount = this.clients.length;
       if (this.clients.length == 0) {
         this.noResultsMessage = 'No results.';
@@ -78,16 +77,20 @@ export class ClientSearchComponent implements OnInit, OnDestroy {
     let dismissText: string = 'No';
     let message: string;
 
-    message = 'Are you sure you want to select ' + client.first_name + ' ' + client.last_name + '?';
-    const dialogData = new ConfirmDialogModel(title, message, confirmText, dismissText);
-    const dialogRef = this.dialog.open(CustomConfirmationDialogComponent, {data: dialogData, maxWidth:'400px'});
+    if (client.is_aftercare && !this.isAdmin) {
+      alert('This client is in the Aftercare program and cannot be moved to a camp location.  If they are no longer in housing, they need to inform Joppa.  Please tell them that they need to be home to be served on Sunday.  Thank you!');
+    } else {
+      message = 'Are you sure you want to select ' + client.first_name + ' ' + client.last_name + '?';
+      const dialogData = new ConfirmDialogModel(title, message, confirmText, dismissText);
+      const dialogRef = this.dialog.open(CustomConfirmationDialogComponent, { data: dialogData, maxWidth: '400px' });
 
-    dialogRef.afterClosed().subscribe(result => {
-      let canContinue: boolean = JSON.parse(result);
-      if(canContinue) {
-        this.clientSelected.emit(client);
-      }
-    });
+      dialogRef.afterClosed().subscribe(result => {
+        let canContinue: boolean = JSON.parse(result);
+        if (canContinue) {
+          this.clientSelected.emit(client);
+        }
+      });
+    }
   }
 
   ngOnDestroy() {

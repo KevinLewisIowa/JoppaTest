@@ -22,12 +22,15 @@ export class ClientHomelessHistoryComponent implements AfterViewChecked {
   client_id: number;
   reason_for_homelessness: string[] = [
     'Addictions',
+    'Client Refused',
+    'Domestic Violence',
     'Eviction',
     'Family Dispute',
     'Family Loss',
     'Health Issues',
     'Job Loss',
     'Legal Issues',
+    'Lost Income',
     'Mental Health',
     'Prison/Jail',
     'Other'
