@@ -75,13 +75,15 @@ export class ClientEditModalComponent implements OnInit, AfterViewChecked {
 
     if (this.theClient.first_time_homeless) {
       this.firstTimeHomeless = 'Yes';
-    }
-    else if (!this.theClient.first_time_homeless && this.theClient.first_time_homeless != null) {
+    } else if (!this.theClient.first_time_homeless && this.theClient.first_time_homeless != null) {
       this.firstTimeHomeless = 'No';
     }
 
     this.clientForm = null;
     const whatBroughtToDesMoines = this.theClient.what_brought_to_des_moines || '';
+    console.log('What brought to Des Moines:', whatBroughtToDesMoines);
+
+    // Determine if the reason is known or should be set to "Other"
     const isKnownReason = this.whatbroughtyoutodesmoines.includes(whatBroughtToDesMoines);
     this.clientForm = this.fb.group({
       id: [this.theClient.id || undefined],
@@ -125,19 +127,18 @@ export class ClientEditModalComponent implements OnInit, AfterViewChecked {
       highest_level_education: [this.theClient.highest_level_education || ''],
       city_before_homelessness: [this.theClient.city_before_homelessness || ''],
       state_before_homelessness: [this.theClient.state_before_homelessness || ''],
-      what_brought_to_des_moines: [isKnownReason ? whatBroughtToDesMoines : 'Other'],
-      otherReasonForDesMoines: [!isKnownReason ? whatBroughtToDesMoines : '']
+      what_brought_to_des_moines: [whatBroughtToDesMoines === '' ? '' : (isKnownReason ? whatBroughtToDesMoines : 'Other')],
+      otherReasonForDesMoines: [whatBroughtToDesMoines !== '' && !isKnownReason ? whatBroughtToDesMoines : '']
     });
 
-    if (!isKnownReason) {
+    if (!isKnownReason && whatBroughtToDesMoines !== '') {
       this.extraInfoNeededReasonForDesMoines = true;
     }
     if (this.submitted) {
-      // handling if user re-visits the modal before page refresh and UTC auto-adjustment
+      // Handle if user re-visits the modal before page refresh and UTC auto-adjustment
       this.clientForm.patchValue({ birth_date: this.staticBirthday });
-    }
-    else {
-      this.clientForm.patchValue({ birth_date: formatDate(this.clientForm.get('birth_date').value, 'yyyy-MM-dd', 'en') })
+    } else {
+      this.clientForm.patchValue({ birth_date: formatDate(this.clientForm.get('birth_date').value, 'yyyy-MM-dd', 'en') });
     }
     this.modalService.open(this.editModal, { size: 'lg', backdrop: 'static' });
   }
@@ -213,57 +214,68 @@ export class ClientEditModalComponent implements OnInit, AfterViewChecked {
     let updatedClient: Client = this.clientForm.value;
     updatedClient.client_picture = this.byteArray;
 
-    this.cscService.getCitiesByCountryAndState(String(this.clientForm.get('state_before_homelessness').value).trim()).then((validCities: string[]) => {
-      const cityBeforeHomelessness = String(this.clientForm.get('city_before_homelessness').value).trim();
-      console.log(cityBeforeHomelessness);
-      console.log(JSON.stringify(validCities));
-      if (!validCities.includes(cityBeforeHomelessness) && cityBeforeHomelessness != 'Unknown' && cityBeforeHomelessness != 'Refused') {
-        alert('Please enter a valid city before homelessness.');
-        return;
-      }
+    const stateBeforeHomelessness = String(this.clientForm.get('state_before_homelessness').value).trim();
+    const cityBeforeHomelessness = String(this.clientForm.get('city_before_homelessness').value).trim();
 
-      let now: Date = new Date();
-      if (updatedClient.birth_date.toString() === '') {
-        alert('Birthday not fully entered');
-        return;
-      }
-
-      this.staticBirthday = this.clientForm.get('birth_date').value
-      let birthday: Date = new Date((Date.parse(this.staticBirthday)));
-      let pastDate: Date = new Date(now.getFullYear() - 100, now.getMonth(), now.getDate());
-      if (birthday.getTime() > now.getTime()) {
-        alert('You cannot select a birth date that is in the future');
-        return;
-      }
-      else if (birthday.getTime() < pastDate.getTime()) {
-        alert('You cannot set a birth date this far back in the past');
-        return;
-      }
-      updatedClient.birth_date = birthday;
-      this.submitted = true;
-
-      if (updatedClient.status == 'Inactive') {
-        updatedClient.previous_camp_id = updatedClient.current_camp_id;
-        updatedClient.current_camp_id = 0;
-      }
-
-      if (updatedClient.what_brought_to_des_moines == 'Other' && this.clientForm.get('otherReasonForDesMoines').value == '') {
-        alert('Please enter what brought you to Des Moines');
-        return;
-      } else if (updatedClient.what_brought_to_des_moines == 'Other' && this.clientForm.get('otherReasonForDesMoines').value != '') {
-        updatedClient.what_brought_to_des_moines = this.clientForm.get('otherReasonForDesMoines').value;
-      }
-
-      this.clientService.updateClient(updatedClient).subscribe({
-        next: (data) => {
-          this.editedClient.emit(updatedClient);
-        },
-        error: (error) => {
-          console.log(error);
-          alert('Error creating client.  There may already be a client with the same name.  Please search for the client before continuing.');
+    // Only check city and state if they have a value
+    if (stateBeforeHomelessness && cityBeforeHomelessness) {
+      this.cscService.getCitiesByCountryAndState(stateBeforeHomelessness).then((validCities: string[]) => {
+        console.log(cityBeforeHomelessness);
+        console.log(JSON.stringify(validCities));
+        if (!validCities.includes(cityBeforeHomelessness) && cityBeforeHomelessness != 'Unknown' && cityBeforeHomelessness != 'Refused') {
+          alert('Please enter a valid city before homelessness.');
+          return;
         }
-      });
-    }, error => console.log(error));
+
+        this.processClientSubmission(updatedClient);
+      }, error => console.log(error));
+    } else {
+      // Skip city/state validation and proceed with submission
+      this.processClientSubmission(updatedClient);
+    }
+  }
+
+  private processClientSubmission(updatedClient: Client) {
+    let now: Date = new Date();
+    if (updatedClient.birth_date.toString() === '') {
+      alert('Birthday not fully entered');
+      return;
+    }
+
+    this.staticBirthday = this.clientForm.get('birth_date').value;
+    let birthday: Date = new Date(Date.parse(this.staticBirthday));
+    let pastDate: Date = new Date(now.getFullYear() - 100, now.getMonth(), now.getDate());
+    if (birthday.getTime() > now.getTime()) {
+      alert('You cannot select a birth date that is in the future');
+      return;
+    } else if (birthday.getTime() < pastDate.getTime()) {
+      alert('You cannot set a birth date this far back in the past');
+      return;
+    }
+    updatedClient.birth_date = birthday;
+    this.submitted = true;
+
+    if (updatedClient.status == 'Inactive') {
+      updatedClient.previous_camp_id = updatedClient.current_camp_id;
+      updatedClient.current_camp_id = 0;
+    }
+
+    if (updatedClient.what_brought_to_des_moines == 'Other' && this.clientForm.get('otherReasonForDesMoines').value == '') {
+      alert('Please enter what brought you to Des Moines');
+      return;
+    } else if (updatedClient.what_brought_to_des_moines == 'Other' && this.clientForm.get('otherReasonForDesMoines').value != '') {
+      updatedClient.what_brought_to_des_moines = this.clientForm.get('otherReasonForDesMoines').value;
+    }
+
+    this.clientService.updateClient(updatedClient).subscribe({
+      next: (data) => {
+        this.editedClient.emit(updatedClient);
+      },
+      error: (error) => {
+        console.log(error);
+        alert('Error creating client. There may already be a client with the same name. Please search for the client before continuing.');
+      }
+    });
   }
 
 }

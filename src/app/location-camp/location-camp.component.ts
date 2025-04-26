@@ -266,6 +266,7 @@ export class LocationCampComponent implements OnInit {
 
   clientSelected(client: Client) {
     this.clients.push(client);
+    client.is_aftercare = this.route.is_aftercare;
 
     let clientInteraction: Appearance = new Appearance();
     clientInteraction.client_id = client.id;

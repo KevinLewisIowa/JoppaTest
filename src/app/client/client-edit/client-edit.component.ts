@@ -238,182 +238,195 @@ export class ClientEditComponent implements OnInit, AfterViewChecked {
     this.theClient.diagnosed_mental_physical_disability = this.clientForm.get('diagnosed_mental_physical_disability').value;
     this.theClient.highest_level_education = String(this.clientForm.get('highest_level_education').value).trim();
     this.theClient.city_before_homelessness = String(this.clientForm.get('city_before_homelessness').value).trim();
-    this.countryStateCityService.getCitiesByCountryAndState(String(this.clientForm.get('state_before_homelessness').value).trim()).then((validCities: string[]) => {
-      const cityBeforeHomelessness = String(this.clientForm.get('city_before_homelessness').value).trim();
-      if (!validCities.includes(cityBeforeHomelessness) && cityBeforeHomelessness != 'Unknown' && cityBeforeHomelessness != 'Refused') {
-        alert('Please enter a valid city before homelessness.');
-        return;
-      }
-      this.theClient.state_before_homelessness = String(this.clientForm.get('state_before_homelessness').value).trim();
-      let reason_for_des_moines: string = String(this.clientForm.get('what_brought_to_des_moines').value);
-      let theOtherReasonForDesMoines: string = this.clientForm.get('otherReasonForDesMoines').value;
-      if (reason_for_des_moines == 'Other' && theOtherReasonForDesMoines != '') {
-        reason_for_des_moines = String(this.clientForm.get('otherReasonForDesMoines').value);
-      }
-      else if (reason_for_des_moines == 'Other' && theOtherReasonForDesMoines == '') {
-        alert('If you select Other as what brought you to Des Moines, need to indicate reason.');
-        return;
-      }
-      this.theClient.what_brought_to_des_moines = reason_for_des_moines;
 
-      // validate that client birth date is not unreasonable
-      if (this.theClient.birth_date) {
-        let now: Date = new Date();
-        let birthday: Date = new Date(this.theClient.birth_date);
-        let pastDate: Date = new Date(now.getFullYear() - 100, now.getMonth(), now.getDate());
-        if (birthday.getTime() > now.getTime()) {
-          alert('You cannot select a birth date that is in the future');
+    const stateBeforeHomelessness = String(this.clientForm.get('state_before_homelessness').value).trim();
+    const cityBeforeHomelessness = String(this.clientForm.get('city_before_homelessness').value).trim();
+
+    // Only check city and state if they have a value
+    if (stateBeforeHomelessness && cityBeforeHomelessness) {
+      this.countryStateCityService.getCitiesByCountryAndState(stateBeforeHomelessness).then((validCities: string[]) => {
+        if (!validCities.includes(cityBeforeHomelessness) && cityBeforeHomelessness != 'Unknown' && cityBeforeHomelessness != 'Refused') {
+          alert('Please enter a valid city before homelessness.');
           return;
         }
-        else if (birthday.getTime() < pastDate.getTime()) {
-          alert('You cannot set a birth date this far back in the past');
-          return;
-        }
+
+        this.theClient.state_before_homelessness = stateBeforeHomelessness;
+        this.processClientSubmission();
+      }, error => console.log(error));
+    } else {
+      // Skip city/state validation and proceed with submission
+      this.processClientSubmission();
+    }
+  }
+
+  private processClientSubmission() {
+    let reason_for_des_moines: string = String(this.clientForm.get('what_brought_to_des_moines').value);
+    let theOtherReasonForDesMoines: string = this.clientForm.get('otherReasonForDesMoines').value;
+    if (reason_for_des_moines == 'Other' && theOtherReasonForDesMoines != '') {
+      reason_for_des_moines = String(this.clientForm.get('otherReasonForDesMoines').value);
+    } else if (reason_for_des_moines == 'Other' && theOtherReasonForDesMoines == '') {
+      alert('If you select Other as what brought you to Des Moines, need to indicate reason.');
+      return;
+    }
+    this.theClient.what_brought_to_des_moines = reason_for_des_moines;
+
+    // Validate that client birth date is not unreasonable
+    if (this.theClient.birth_date) {
+      let now: Date = new Date();
+      let birthday: Date = new Date(this.theClient.birth_date);
+      let pastDate: Date = new Date(now.getFullYear() - 100, now.getMonth(), now.getDate());
+      if (birthday.getTime() > now.getTime()) {
+        alert('You cannot select a birth date that is in the future');
+        return;
+      } else if (birthday.getTime() < pastDate.getTime()) {
+        alert('You cannot set a birth date this far back in the past');
+        return;
       }
+    }
 
-      this.clientService.insertClient(this.theClient).subscribe((insertedClient: Client) => {
-        if (this.locationCampId == 0) {
-          this.locationCampId = 449;
-        }
-        // create appearance of client as they were seen and serviced
-        const clientInteraction: Appearance = new Appearance();
-        clientInteraction.client_id = insertedClient.id;
-        clientInteraction.location_camp_id = this.locationCampId;
-        clientInteraction.still_lives_here = true;
-        clientInteraction.serviced = true;
-        clientInteraction.was_seen = true;
-        // HRC true if Sunday
-        clientInteraction.at_homeless_resource_center = new Date().getDay() !== 0;
+    // Proceed with the rest of the client submission logic
+    this.clientService.insertClient(this.theClient).subscribe((insertedClient: Client) => {
+      if (this.locationCampId == 0) {
+        this.locationCampId = 449;
+      }
+      // create appearance of client as they were seen and serviced
+      const clientInteraction: Appearance = new Appearance();
+      clientInteraction.client_id = insertedClient.id;
+      clientInteraction.location_camp_id = this.locationCampId;
+      clientInteraction.still_lives_here = true;
+      clientInteraction.serviced = true;
+      clientInteraction.was_seen = true;
+      // HRC true if Sunday
+      clientInteraction.at_homeless_resource_center = new Date().getDay() !== 0;
 
-        if (this.isAdmin) {
-          // Allow them to select a Date
-          const modalRef: NgbModalRef = this.modalService.open(
-            DateSelectorComponent,
-            {
-              size: "lg",
-              backdrop: "static",
-            }
-          );
-          modalRef.result.then((selected_date: Date) => {
-            if (!selected_date) {
-              return;
+      if (this.isAdmin) {
+        // Allow them to select a Date
+        const modalRef: NgbModalRef = this.modalService.open(
+          DateSelectorComponent,
+          {
+            size: "lg",
+            backdrop: "static",
+          }
+        );
+        modalRef.result.then((selected_date: Date) => {
+          if (!selected_date) {
+            return;
+          } else {
+            clientInteraction.serviced_date = selected_date;
+
+            this.clientService.insertClientAppearance(clientInteraction).subscribe({
+              next: (data: Appearance) => {
+                let routeAttendanceList: Appearance[] = JSON.parse(window.localStorage.getItem('RouteAttendance'));
+                clientInteraction.id = data.id;
+                routeAttendanceList.push(clientInteraction);
+                window.localStorage.setItem('RouteAttendance', JSON.stringify(routeAttendanceList));
+                let reason_for_homelessness: string = this.clientForm.get('homeless_reason').value;
+                let theOtherHomelessReason: string = this.clientForm.get('otherHomelessReason').value;
+                if (reason_for_homelessness == 'Other' && theOtherHomelessReason != '') {
+                  reason_for_homelessness = theOtherHomelessReason;
+                }
+                else if (reason_for_homelessness == 'Other' && theOtherHomelessReason == '') {
+                  alert('If you select Other as Homeless Reason, need to indicate reason.');
+                  return;
+                }
+
+                const theHistory: ClientHomelessHistory = new ClientHomelessHistory();
+                theHistory.reason_for_homelessness = reason_for_homelessness;
+                theHistory.date_became_homeless = new Date(Date.parse(this.clientForm.get('date_became_homeless').value));
+                theHistory.first_time_homeless = this.clientForm.get('first_time_homeless').value;
+                theHistory.client_id = insertedClient.id;
+                theHistory.note = this.clientForm.get('homeless_history_note').value;
+                console.log(JSON.stringify(theHistory));
+                this.clientService.insertClientHomelessHistory(theHistory).subscribe({
+                  next: (data: ClientHomelessHistory) => {
+                    const theDwelling: ClientDwelling = new ClientDwelling();
+                    theDwelling.client_id = insertedClient.id;
+                    theDwelling.dwelling = String(this.clientForm.get('dwelling').value).trim();
+                    theDwelling.where_sleep_last_night = this.clientForm.get('where_sleep_last_night').value;
+                    if (this.clientForm.get('date_moved').value == '') {
+                      theDwelling.date_moved = new Date();
+                    } else {
+                      theDwelling.date_moved = new Date(this.clientForm.get('date_moved').value);
+                    }
+                    theDwelling.notes = this.clientForm.get('dwelling_note').value;
+                    this.clientService.insertClientDwelling(theDwelling).subscribe({
+                      next: (data: ClientDwelling) => {
+                        insertedClient.household_id = insertedClient.id;
+                        this.clientService.updateClient(insertedClient).subscribe({
+                          next: updatedClient => {
+                            if (this.isAdmin && this.locationCampId === 449) {
+                              this.router.navigate(['admin/clientListing']);
+                            } else {
+                              this.router.navigate([`/locationCamp/${this.locationCampId}`]);
+                            }
+                          },
+                          error: error => console.log(error)
+                        });
+                      },
+                      error: error => console.log(error)
+                    });
+                  },
+                  error: error => console.log(error)
+                });
+              },
+              error: error => console.log(error)
+            });
+          }
+        });
+      }
+      else {
+        clientInteraction.serviced_date = new Date();
+
+        this.clientService.insertClientAppearance(clientInteraction).subscribe((data: Appearance) => {
+          let routeAttendanceList: Appearance[] = JSON.parse(window.localStorage.getItem('RouteAttendance'));
+          clientInteraction.id = data.id;
+          routeAttendanceList.push(clientInteraction);
+          window.localStorage.setItem('RouteAttendance', JSON.stringify(routeAttendanceList));
+          let reason_for_homelessness: string = this.clientForm.get('homeless_reason').value;
+          let theOtherHomelessReason: string = this.clientForm.get('otherHomelessReason').value;
+          if (reason_for_homelessness == 'Other' && theOtherHomelessReason != '') {
+            reason_for_homelessness = theOtherHomelessReason;
+          }
+          else if (reason_for_homelessness == 'Other' && theOtherHomelessReason == '') {
+            alert('If you select Other as Homeless Reason, need to indicate reason.');
+            return;
+          }
+
+          const theHistory: ClientHomelessHistory = new ClientHomelessHistory();
+          theHistory.reason_for_homelessness = reason_for_homelessness;
+          theHistory.date_became_homeless = new Date(Date.parse(this.clientForm.get('date_became_homeless').value));
+          theHistory.first_time_homeless = this.clientForm.get('first_time_homeless').value;
+          theHistory.client_id = insertedClient.id;
+          theHistory.note = this.clientForm.get('homeless_history_note').value;
+          console.log(JSON.stringify(theHistory));
+          this.clientService.insertClientHomelessHistory(theHistory).subscribe((data: ClientHomelessHistory) => {
+            const theDwelling: ClientDwelling = new ClientDwelling();
+            theDwelling.client_id = insertedClient.id;
+            theDwelling.dwelling = String(this.clientForm.get('dwelling').value).trim();
+            theDwelling.where_sleep_last_night = this.clientForm.get('where_sleep_last_night').value;
+            if (this.clientForm.get('date_moved').value == '') {
+              theDwelling.date_moved = new Date();
             } else {
-              clientInteraction.serviced_date = selected_date;
-
-              this.clientService.insertClientAppearance(clientInteraction).subscribe({
-                next: (data: Appearance) => {
-                  let routeAttendanceList: Appearance[] = JSON.parse(window.localStorage.getItem('RouteAttendance'));
-                  clientInteraction.id = data.id;
-                  routeAttendanceList.push(clientInteraction);
-                  window.localStorage.setItem('RouteAttendance', JSON.stringify(routeAttendanceList));
-                  let reason_for_homelessness: string = this.clientForm.get('homeless_reason').value;
-                  let theOtherHomelessReason: string = this.clientForm.get('otherHomelessReason').value;
-                  if (reason_for_homelessness == 'Other' && theOtherHomelessReason != '') {
-                    reason_for_homelessness = theOtherHomelessReason;
-                  }
-                  else if (reason_for_homelessness == 'Other' && theOtherHomelessReason == '') {
-                    alert('If you select Other as Homeless Reason, need to indicate reason.');
-                    return;
-                  }
-    
-                  const theHistory: ClientHomelessHistory = new ClientHomelessHistory();
-                  theHistory.reason_for_homelessness = reason_for_homelessness;
-                  theHistory.date_became_homeless = new Date(Date.parse(this.clientForm.get('date_became_homeless').value));
-                  theHistory.first_time_homeless = this.clientForm.get('first_time_homeless').value;
-                  theHistory.client_id = insertedClient.id;
-                  theHistory.note = this.clientForm.get('homeless_history_note').value;
-                  console.log(JSON.stringify(theHistory));
-                  this.clientService.insertClientHomelessHistory(theHistory).subscribe({
-                    next: (data: ClientHomelessHistory) => {
-                      const theDwelling: ClientDwelling = new ClientDwelling();
-                      theDwelling.client_id = insertedClient.id;
-                      theDwelling.dwelling = String(this.clientForm.get('dwelling').value).trim();
-                      theDwelling.where_sleep_last_night = this.clientForm.get('where_sleep_last_night').value;
-                      if (this.clientForm.get('date_moved').value == '') {
-                        theDwelling.date_moved = new Date();
-                      } else {
-                        theDwelling.date_moved = new Date(this.clientForm.get('date_moved').value);
-                      }
-                      theDwelling.notes = this.clientForm.get('dwelling_note').value;
-                      this.clientService.insertClientDwelling(theDwelling).subscribe({
-                        next: (data: ClientDwelling) => {
-                          insertedClient.household_id = insertedClient.id;
-                          this.clientService.updateClient(insertedClient).subscribe({
-                            next: updatedClient => {
-                              if (this.isAdmin && this.locationCampId === 449) {
-                                this.router.navigate(['admin/clientListing']);
-                              } else {
-                                this.router.navigate([`/locationCamp/${this.locationCampId}`]);
-                              }
-                            },
-                            error: error => console.log(error)
-                          });
-                        },
-                        error: error => console.log(error)
-                      });
-                    },
-                    error: error => console.log(error)
-                  });
-                },
-                error: error => console.log(error)
-              });
+              theDwelling.date_moved = new Date(this.clientForm.get('date_moved').value);
             }
-          });
-        }
-        else {
-          clientInteraction.serviced_date = new Date();
-
-          this.clientService.insertClientAppearance(clientInteraction).subscribe((data: Appearance) => {
-            let routeAttendanceList: Appearance[] = JSON.parse(window.localStorage.getItem('RouteAttendance'));
-            clientInteraction.id = data.id;
-            routeAttendanceList.push(clientInteraction);
-            window.localStorage.setItem('RouteAttendance', JSON.stringify(routeAttendanceList));
-            let reason_for_homelessness: string = this.clientForm.get('homeless_reason').value;
-            let theOtherHomelessReason: string = this.clientForm.get('otherHomelessReason').value;
-            if (reason_for_homelessness == 'Other' && theOtherHomelessReason != '') {
-              reason_for_homelessness = theOtherHomelessReason;
-            }
-            else if (reason_for_homelessness == 'Other' && theOtherHomelessReason == '') {
-              alert('If you select Other as Homeless Reason, need to indicate reason.');
-              return;
-            }
-
-            const theHistory: ClientHomelessHistory = new ClientHomelessHistory();
-            theHistory.reason_for_homelessness = reason_for_homelessness;
-            theHistory.date_became_homeless = new Date(Date.parse(this.clientForm.get('date_became_homeless').value));
-            theHistory.first_time_homeless = this.clientForm.get('first_time_homeless').value;
-            theHistory.client_id = insertedClient.id;
-            theHistory.note = this.clientForm.get('homeless_history_note').value;
-            console.log(JSON.stringify(theHistory));
-            this.clientService.insertClientHomelessHistory(theHistory).subscribe((data: ClientHomelessHistory) => {
-              const theDwelling: ClientDwelling = new ClientDwelling();
-              theDwelling.client_id = insertedClient.id;
-              theDwelling.dwelling = String(this.clientForm.get('dwelling').value).trim();
-              theDwelling.where_sleep_last_night = this.clientForm.get('where_sleep_last_night').value;
-              if (this.clientForm.get('date_moved').value == '') {
-                theDwelling.date_moved = new Date();
-              } else {
-                theDwelling.date_moved = new Date(this.clientForm.get('date_moved').value);
-              }
-              theDwelling.notes = this.clientForm.get('dwelling_note').value;
-              this.clientService.insertClientDwelling(theDwelling).subscribe((data: ClientDwelling) => {
-                insertedClient.household_id = insertedClient.id;
-                this.clientService.updateClient(insertedClient).subscribe(updatedClient => {
-                  if (this.isAdmin && this.locationCampId === 449) {
-                    this.router.navigate(['admin/clientListing']);
-                  } else {
-                    this.router.navigate([`/locationCamp/${this.locationCampId}`]);
-                  }
-                }, error => console.log(error));
-              });
-            }, error => console.log(error));
+            theDwelling.notes = this.clientForm.get('dwelling_note').value;
+            this.clientService.insertClientDwelling(theDwelling).subscribe((data: ClientDwelling) => {
+              insertedClient.household_id = insertedClient.id;
+              this.clientService.updateClient(insertedClient).subscribe(updatedClient => {
+                if (this.isAdmin && this.locationCampId === 449) {
+                  this.router.navigate(['admin/clientListing']);
+                } else {
+                  this.router.navigate([`/locationCamp/${this.locationCampId}`]);
+                }
+              }, error => console.log(error));
+            });
           }, error => console.log(error));
-        }
-      }, error => {
-        console.log(error);
-        alert('Error creating client.  There may already be a client with the same name.  Please search for the client before continuing.');
-      });
-    }, error => console.log(error));
+        }, error => console.log(error));
+      }
+    }, error => {
+      console.log(error);
+      alert('Error creating client. There may already be a client with the same name. Please search for the client before continuing.');
+    });
   }
 
   close() {
