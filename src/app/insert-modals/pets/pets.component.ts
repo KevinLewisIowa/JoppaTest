@@ -12,6 +12,7 @@ export class PetsComponent implements OnInit, AfterViewChecked {
 
   @ViewChild('petsMdl', { static: false }) petsMdl: ElementRef
   @Output() petAdded = new EventEmitter<ClientPet>();
+  isAdmin: boolean = false;
   pet_type: string = '';
   age: number;
   pet_name: string;
@@ -38,13 +39,14 @@ export class PetsComponent implements OnInit, AfterViewChecked {
   }
 
   showModal() {
+    this.isAdmin = JSON.parse(window.localStorage.getItem("isAdmin"));
     this.modalService.open(this.petsMdl, { size: 'lg', backdrop: 'static' });
 
     this.pet_type = '';
     this.pet_name = '';
     this.age = null;
     this.breed = '';
-    this.food_requested = true;
+    this.food_requested = !this.isAdmin;
   }
 
   onChange() {
