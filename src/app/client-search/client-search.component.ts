@@ -58,6 +58,8 @@ export class ClientSearchComponent implements OnInit, OnDestroy {
     this.searchSubscription = this.clientService.getClientsByName(this.nameSearch).subscribe(results => {
       this.loading = false;
 
+      this.clients = (results as any[]);
+
       if (!this.isAdmin) {
         this.clients = (results as any[]).filter(client => client.status !== 'Deceased');
       }
