@@ -109,8 +109,9 @@
                 </select>
               </td>
               <td>
-                <button type="button" (click)="submitHoseStatus(hose.id, hoseStatus.value)"
-                  class="btn btn-primary">Save</button>
+                <button type="button" class="btn btn-primary" (click)="submitHoseStatus(hose.id, hoseStatus.value)">
+                  Save
+                </button>
               </td>
             </tr>
           </tbody>
@@ -1135,13 +1136,17 @@
                     *ngIf="houseclient.id != houseclient.household_id" name="household_relationship_type"
                     (change)="onHouseholdRelationshipTypeChange(houseclient)">
                     <option value="" disabled selected>Select your option</option>
+                    <option>Aunt</option>
+                    <option>Boyfriend</option>
+                    <option>Caretaker</option>
+                    <option>Child</option>
+                    <option>Cousin</option>
+                    <option>Girlfriend</option>
+                    <option>Grandparent</option>
                     <option>Parent</option>
                     <option>Sibling</option>
-                    <option>Cousin</option>
-                    <option>Caretaker</option>
-                    <option>Grandparent</option>
                     <option>Spouse/Partner</option>
-                    <option>Child</option>
+                    <option>Uncle</option>
                   </select>
                 </td>
                 <td>
