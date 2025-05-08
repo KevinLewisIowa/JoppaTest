@@ -6,16 +6,16 @@
         <table class="table" id="unfulfilledPrayerRequestsNeeds">
             <thead>
               <tr>
-                <th>Route</th>
                 <th>Client Name</th>
                 <th>Prayer Request/Need</th>
+                <th>Created Date</th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let prayerRequestNeed of unfulfilledPrayerRequestsNeeds">
-                <td>{{prayerRequestNeed.name}}</td>
                 <td>{{prayerRequestNeed.first_name}} <span *ngIf="prayerRequestNeed.preferred_name != '' && prayerRequestNeed.preferred_name != null">({{prayerRequestNeed.preferred_name}})</span> {{prayerRequestNeed.last_name}}</td>
                 <td>{{prayerRequestNeed.detail}}</td>
+                <td>{{prayerRequestNeed.created_at | date: 'MM/dd/yyyy'}}</td>
               </tr>
             </tbody>
           </table>

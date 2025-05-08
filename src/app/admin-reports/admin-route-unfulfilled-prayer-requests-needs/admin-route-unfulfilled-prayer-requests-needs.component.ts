@@ -17,8 +17,8 @@ export class AdminRouteUnfulfilledPrayerRequestsNeedsComponent implements OnInit
 
   ngOnInit() {
     this.service.getAdminRouteUnfulfilledPrayerRequestsNeeds().subscribe(data => {
-      this.unfulfilledPrayerRequestsNeeds = data;
       console.log(JSON.stringify(data));
+      this.unfulfilledPrayerRequestsNeeds = data;
     }, error => console.log(error));
   }
 
