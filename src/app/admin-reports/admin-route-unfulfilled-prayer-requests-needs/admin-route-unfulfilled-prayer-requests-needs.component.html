@@ -1,26 +1,53 @@
-<div class="card text-center" style="opacity:0.93">
-    <div class="card-header">
-      <h2>Unfulfilled Prayer Requests and Needs</h2>
-    </div>
-    <div class="panel-body">
-        <table class="table" id="unfulfilledPrayerRequestsNeeds">
-            <thead>
-              <tr>
-                <th>Client Name</th>
-                <th>Prayer Request/Need</th>
-                <th>Created Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let prayerRequestNeed of unfulfilledPrayerRequestsNeeds">
-                <td>{{prayerRequestNeed.first_name}} <span *ngIf="prayerRequestNeed.preferred_name != '' && prayerRequestNeed.preferred_name != null">({{prayerRequestNeed.preferred_name}})</span> {{prayerRequestNeed.last_name}}</td>
-                <td>{{prayerRequestNeed.detail}}</td>
-                <td>{{prayerRequestNeed.created_at | date: 'MM/dd/yyyy'}}</td>
-              </tr>
-            </tbody>
-          </table>
-    </div>
-    <div class="card-footer">
-      <button routerLink="/admin/reports" class="btn btn-primary" style="float: left"><fa-icon [icon]="backIcon"></fa-icon> Back</button>
-    </div>
+<div class="card" style="opacity:0.93">
+  <div class="card-header">
+    <h2>Prayer Requests List</h2>
+    <button type="button" (click)="exportToCSV()" class="btn btn-primary" style="float: right; margin-right: 10px;">
+      <fa-icon [icon]="'file-csv'"></fa-icon> Export to CSV
+    </button>
   </div>
+  <div class="panel-body">
+    <input id="filterDate" type="date" [(ngModel)]="filterDate" (change)="onDateChange()" class="form-control" />
+  </div>
+  <div class="panel-body">
+    <table mat-table [dataSource]="dataSource" matSort>
+
+      <!-- First Name Column -->
+      <ng-container matColumnDef="first_name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>First Name</th>
+        <td mat-cell *matCellDef="let element">{{ element.first_name }}</td>
+      </ng-container>
+
+      <!-- Preferred Name Column -->
+      <ng-container matColumnDef="preferred_name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Preferred Name</th>
+        <td mat-cell *matCellDef="let element">{{ element.preferred_name }}</td>
+      </ng-container>
+
+      <!-- Last Name Column -->
+      <ng-container matColumnDef="last_name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Last Name</th>
+        <td mat-cell *matCellDef="let element">{{ element.last_name }}</td>
+      </ng-container>
+
+      <!-- Request or Note Column -->
+      <ng-container matColumnDef="request_or_note">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Request/Note</th>
+        <td mat-cell *matCellDef="let element">{{ element.request_or_note }}</td>
+      </ng-container>
+
+      <!-- Created At Column -->
+      <ng-container matColumnDef="created_at">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Created At</th>
+        <td mat-cell *matCellDef="let element">{{ element.created_at | date: 'MM/dd/yyyy' }}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+</div>
+<div class="card-footer">
+  <button routerLink="/admin/reports" class="btn btn-primary" style="float: left">
+    <fa-icon [icon]="backIcon"></fa-icon> Back
+  </button>
+</div>

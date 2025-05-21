@@ -44,7 +44,7 @@ export class MainService {
     );
   }
 
-  getRouteById(id:number) {
+  getRouteById(id: number) {
     const myHeader = new HttpHeaders({
       "Content-Type": "application/json",
       Authorization: window.localStorage.getItem("apiToken"),
@@ -146,7 +146,7 @@ export class MainService {
     return this.http
       .get(
         this.apiUrl +
-          `getRouteSummaryInfoForRoute?routeInstanceId=${routeInstanceId}`
+        `getRouteSummaryInfoForRoute?routeInstanceId=${routeInstanceId}`
       )
       .pipe(
         map((res: any) => {
@@ -187,7 +187,7 @@ export class MainService {
     return this.http
       .get(
         this.apiUrl +
-          `getNotesForRouteInstance?routeInstanceId=${routeInstanceId}`
+        `getNotesForRouteInstance?routeInstanceId=${routeInstanceId}`
       )
       .pipe(
         map((res: any) => {
@@ -445,14 +445,14 @@ export class MainService {
       Authorization: window.localStorage.getItem("apiToken"),
     });
     return this.http.get(this.apiUrl + `updateCampRoutePosition?campId=${campId}&routeId=${routeId}&position=${position}`, { headers: myHeader }).pipe(map((res: any) => {
-          if (res.message === "invalid-token") {
-            window.localStorage.removeItem("apiToken");
-            this.router.navigate(["/application-login"]);
-          }
-          return res;
-        }),
-        catchError(this.handleError)
-      );
+      if (res.message === "invalid-token") {
+        window.localStorage.removeItem("apiToken");
+        this.router.navigate(["/application-login"]);
+      }
+      return res;
+    }),
+      catchError(this.handleError)
+    );
   }
 
   updateLocationCamp(theLocationCamp: LocationCamp) {
@@ -558,7 +558,7 @@ export class MainService {
     return this.http
       .patch(
         this.apiUrl +
-          `route_instance_tank_hose_interactions/${theRouteInstanceTanksHoses.id}`,
+        `route_instance_tank_hose_interactions/${theRouteInstanceTanksHoses.id}`,
         { route_instance_tank_hose_interaction: theRouteInstanceTanksHoses },
         { headers: myHeader }
       )
@@ -573,7 +573,7 @@ export class MainService {
         catchError(this.handleError)
       )
       .subscribe(
-        (response) => {},
+        (response) => { },
         (error) => {
           console.log(error);
         }
@@ -590,7 +590,7 @@ export class MainService {
     return this.http
       .patch(
         this.apiUrl +
-          `route_instance_heater_interactions/${theRouteInstanceHeaterInteraction.id}`,
+        `route_instance_heater_interactions/${theRouteInstanceHeaterInteraction.id}`,
         {
           route_instance_heater_interaction: theRouteInstanceHeaterInteraction,
         },
@@ -607,7 +607,7 @@ export class MainService {
         catchError(this.handleError)
       )
       .subscribe(
-        (response) => {},
+        (response) => { },
         (error) => console.log(error)
       );
   }
@@ -918,13 +918,15 @@ export class MainService {
       );
   }
 
-  getAdminRouteUnfulfilledPrayerRequestsNeeds() {
+  getAdminRouteUnfulfilledPrayerRequestsNeeds(filterDate: string) {
     const myHeader = new HttpHeaders({
       "Content-Type": "application/json",
       Authorization: window.localStorage.getItem("apiToken"),
     });
+
+    // Pass the filterDate as a query parameter
     return this.http
-      .get(this.apiUrl + `getAdminRouteUnfulfilledPrayerRequestsNeeds`, {
+      .get(this.apiUrl + `getAdminRouteUnfulfilledPrayerRequestsNeeds?filterDate=${filterDate}`, {
         headers: myHeader,
       })
       .pipe(
@@ -1042,7 +1044,7 @@ export class MainService {
     return this.http
       .get(
         this.apiUrl +
-          `seen_and_serviced_report?fromDate=${fromDate}&toDate=${toDate}`,
+        `seen_and_serviced_report?fromDate=${fromDate}&toDate=${toDate}`,
         { headers: myHeader }
       )
       .pipe(
@@ -1090,7 +1092,7 @@ export class MainService {
     return this.http
       .get(
         this.apiUrl +
-          `clientAttendanceHistory?clientId=${clientId}&fromDate=${fromDate}&toDate=${toDate}`,
+        `clientAttendanceHistory?clientId=${clientId}&fromDate=${fromDate}&toDate=${toDate}`,
         { headers: myHeader }
       )
       .pipe(
@@ -1196,7 +1198,7 @@ export class MainService {
     return this.http
       .patch(
         this.apiUrl +
-          `route_instance_heater_interactions/${theRouteInstanceHeaterInteraction.id}`,
+        `route_instance_heater_interactions/${theRouteInstanceHeaterInteraction.id}`,
         {
           route_instance_heater_interaction: theRouteInstanceHeaterInteraction,
         },
@@ -1222,7 +1224,7 @@ export class MainService {
     return this.http
       .get(
         this.apiUrl +
-          `getOverallAttendanceReport?startDate=${startDate}&endDate=${endDate}`,
+        `getOverallAttendanceReport?startDate=${startDate}&endDate=${endDate}`,
         { headers: myHeader }
       )
       .pipe(
