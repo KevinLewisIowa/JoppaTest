@@ -1135,7 +1135,7 @@
                     [(ngModel)]="houseclient.household_relationship_type"
                     *ngIf="houseclient.id != houseclient.household_id" name="household_relationship_type"
                     (change)="onHouseholdRelationshipTypeChange(houseclient)">
-                    <option value="" disabled selected>Select your option</option>
+                    <option value="" disabled>Select your option</option>
                     <option>Aunt</option>
                     <option>Boyfriend</option>
                     <option>Caretaker</option>
@@ -1147,7 +1147,17 @@
                     <option>Sibling</option>
                     <option>Spouse/Partner</option>
                     <option>Uncle</option>
+                    <option>Other</option>
                   </select>
+                  <input
+                    *ngIf="isOtherRelationship(houseclient.household_relationship_type)"
+                    type="text"
+                    class="form-control"
+                    style="margin-top: 5px; max-width: 200px"
+                    placeholder="Enter relationship"
+                    [(ngModel)]="houseclient.household_relationship_type"
+                    (ngModelChange)="onHouseholdRelationshipTypeChange(houseclient)"
+                  />
                 </td>
                 <td>
                   <button type="button" class="btn btn-primary" (click)="viewClient(houseclient)"

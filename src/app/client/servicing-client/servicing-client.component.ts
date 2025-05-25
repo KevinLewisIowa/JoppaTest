@@ -1131,83 +1131,109 @@ export class ServicingClientComponent implements OnInit {
   }
 
   removeLike(id: number) {
-    this.service.removeLike(id).subscribe((res) => {
-      this.clientLikes = this.clientLikes.filter((w) => w.id != id);
-    });
+    if (confirm("Are you sure you want to remove this like?")) {
+      this.service.removeLike(id).subscribe((res) => {
+        this.clientLikes = this.clientLikes.filter((w) => w.id != id);
+      });
+    }
   }
 
   removeHealthInsurance(id: number) {
-    this.service.removeHealthInsurance(id).subscribe(res => {
-      this.healthInsurances = this.healthInsurances.filter((w) => w.id != id);
-    })
+    if (confirm("Are you sure you want to remove this health insurance?")) {
+      this.service.removeHealthInsurance(id).subscribe(res => {
+        this.healthInsurances = this.healthInsurances.filter((w) => w.id != id);
+      });
+    }
   }
 
   removeClientIncome(id: number) {
-    this.service.removeIncome(id).subscribe((res) => {
-      this.clientIncomes = this.clientIncomes.filter((w) => w.id != id);
-    });
+    if (confirm("Are you sure you want to remove this income?")) {
+      this.service.removeIncome(id).subscribe((res) => {
+        this.clientIncomes = this.clientIncomes.filter((w) => w.id != id);
+      });
+    }
   }
 
   removeClientNextOfKin(id: number) {
-    this.service.removeNextOfKin(id).subscribe((res) => {
-      this.clientNextOfKins = this.clientNextOfKins.filter((w) => w.id != id);
-    });
+    if (confirm("Are you sure you want to remove this next of kin?")) {
+      this.service.removeNextOfKin(id).subscribe((res) => {
+        this.clientNextOfKins = this.clientNextOfKins.filter((w) => w.id != id);
+      });
+    }
   }
 
   removeClientFriend(id: number) {
-    this.service.removeClientFriend(id).subscribe((res) => {
-      this.circleOfFriends = this.circleOfFriends.filter((w) => w.id != id);
-    })
+    if (confirm("Are you sure you want to remove this friend?")) {
+      this.service.removeClientFriend(id).subscribe((res) => {
+        this.circleOfFriends = this.circleOfFriends.filter((w) => w.id != id);
+      });
+    }
   }
 
   removeDislike(id: number) {
-    this.service.removeDislike(id).subscribe((res) => {
-      this.clientDislikes = this.clientDislikes.filter((w) => w.id != id);
-    });
+    if (confirm("Are you sure you want to remove this dislike?")) {
+      this.service.removeDislike(id).subscribe((res) => {
+        this.clientDislikes = this.clientDislikes.filter((w) => w.id != id);
+      });
+    }
   }
 
   removeReferralResource(id: number) {
-    this.service.removeReferralResource(id).subscribe((res) => {
-      this.referralsResources = this.referralsResources.filter(
-        (w) => w.id != id
-      );
-    });
+    if (confirm("Are you sure you want to remove this referral/resource?")) {
+      this.service.removeReferralResource(id).subscribe((res) => {
+        this.referralsResources = this.referralsResources.filter(
+          (w) => w.id != id
+        );
+      });
+    }
   }
 
   removeReceivedItem(id: number) {
-    this.service.deletedRequestedItem(id).subscribe((res) => {
-      this.receivedItems = this.receivedItems.filter((w) => w.id != id);
-    });
+    if (confirm("Are you sure you want to remove this received item?")) {
+      this.service.deletedRequestedItem(id).subscribe((res) => {
+        this.receivedItems = this.receivedItems.filter((w) => w.id != id);
+      });
+    }
   }
 
   removeTent(id: number) {
-    this.service.removeTent(id).subscribe((res) => {
-      this.tents = this.tents.filter((w) => w.id != id);
-    });
+    if (confirm("Are you sure you want to remove this tent?")) {
+      this.service.removeTent(id).subscribe((res) => {
+        this.tents = this.tents.filter((w) => w.id != id);
+      });
+    }
   }
 
   removeClientDwelling(id: number) {
-    this.service.removeClientDwelling(id).subscribe((res) => {
-      this.dwellings = this.dwellings.filter((w) => w.id != id);
-    });
+    if (confirm("Are you sure you want to remove this dwelling?")) {
+      this.service.removeClientDwelling(id).subscribe((res) => {
+        this.dwellings = this.dwellings.filter((w) => w.id != id);
+      });
+    }
   }
 
   removeClientHomelessHistory(id: number) {
-    this.service.removeClientHomelessHistory(id).subscribe((res) => {
-      this.homelessHistories = this.homelessHistories.filter((w) => w.id != id);
-    });
+    if (confirm("Are you sure you want to remove this homeless history?")) {
+      this.service.removeClientHomelessHistory(id).subscribe((res) => {
+        this.homelessHistories = this.homelessHistories.filter((w) => w.id != id);
+      });
+    }
   }
 
   removeGoal(id: number) {
-    this.service.deleteGoalAndNextStep(id).subscribe((res) => {
-      this.goalsAndSteps = this.goalsAndSteps.filter((w) => w.id != id);
-    });
+    if (confirm("Are you sure you want to remove this goal?")) {
+      this.service.deleteGoalAndNextStep(id).subscribe((res) => {
+        this.goalsAndSteps = this.goalsAndSteps.filter((w) => w.id != id);
+      });
+    }
   }
 
   removePet(id: number) {
-    this.service.removePet(id).subscribe((res) => {
-      this.pets = this.pets.filter((w) => w.id != id);
-    });
+    if (confirm("Are you sure you want to remove this pet?")) {
+      this.service.removePet(id).subscribe((res) => {
+        this.pets = this.pets.filter((w) => w.id != id);
+      });
+    }
   }
 
   removeAppearance(id: number) {
@@ -1221,32 +1247,38 @@ export class ServicingClientComponent implements OnInit {
   }
 
   removeHealthConcern(id: number) {
-    this.service.removeHealthConcern(id).subscribe((res) => {
-      this.healthConcerns = this.healthConcerns.filter((w) => w.id != id);
-    });
+    if (confirm("Are you sure you want to remove this health concern?")) {
+      this.service.removeHealthConcern(id).subscribe((res) => {
+        this.healthConcerns = this.healthConcerns.filter((w) => w.id != id);
+      });
+    }
   }
 
   removeNote(id: number) {
-    this.service.removeNote(id).subscribe((res) => {
-      this.notes = this.notes.filter((w) => w.id != id);
-      this.pinnedNoteString = '';
-      let pinnedNotes: Note[] = this.notes.filter(n => n.source === "PINNED NOTE");
-      pinnedNotes.forEach(n => {
-        if (this.pinnedNoteString === '') {
-          this.pinnedNoteString = n.note;
-        } else {
-          this.pinnedNoteString += '\r\n' + n.note;
-        }
+    if (confirm("Are you sure you want to remove this note?")) {
+      this.service.removeNote(id).subscribe((res) => {
+        this.notes = this.notes.filter((w) => w.id != id);
+        this.pinnedNoteString = '';
+        let pinnedNotes: Note[] = this.notes.filter(n => n.source === "PINNED NOTE");
+        pinnedNotes.forEach(n => {
+          if (this.pinnedNoteString === '') {
+            this.pinnedNoteString = n.note;
+          } else {
+            this.pinnedNoteString += '\r\n' + n.note;
+          }
+        });
       });
-    });
+    }
   }
 
   removePrayerRequestNeed(id: number) {
-    this.service.removePrayerRequestNeed(id).subscribe((res) => {
-      this.prayerRequestsAndNeeds = this.prayerRequestsAndNeeds.filter(
-        (w) => w.id != id
-      );
-    });
+    if (confirm("Are you sure you want to remove this prayer request/need?")) {
+      this.service.removePrayerRequestNeed(id).subscribe((res) => {
+        this.prayerRequestsAndNeeds = this.prayerRequestsAndNeeds.filter(
+          (w) => w.id != id
+        );
+      });
+    }
   }
 
   removeHouseholdClient(client: Client) {
@@ -1403,5 +1435,13 @@ export class ServicingClientComponent implements OnInit {
     },
       (error) => console.log(error)
     );
+  }
+
+  isOtherRelationship(value: string): boolean {
+    const standard = [
+      "Aunt", "Boyfriend", "Caretaker", "Child", "Cousin", "Girlfriend",
+      "Grandparent", "Parent", "Sibling", "Spouse/Partner", "Uncle"
+    ];
+    return value && !standard.includes(value);
   }
 }

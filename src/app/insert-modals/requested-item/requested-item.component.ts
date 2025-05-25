@@ -118,48 +118,22 @@ export class RequestedItemComponent implements OnInit, AfterViewChecked {
           itemDescription = this.description;
         }
 
-        // if (itemDescription === "Mail") {
-        //   for (let i = 0; i < countItemsToAdd; i++) {
-        //     item.item_description = itemDescription;
-        //     item.client_id = Number(clientId);
-        //     item.date_requested = new Date();
-        //     item.fulfilled = true;
-        //     this.service.insertRequestedItem(item).subscribe((data: RequestedItem) => {
-        //       if (data != null && data.id != null) {
-        //         addedItems.push(data);
-        //         itemsAdded = itemsAdded + 1;
-
-        //         if (itemsAdded == countItemsToAdd) {
-        //           this.requestedItemAdded.emit(addedItems);
-        //         }
-        //       }
-        //     });
-        //   }
-        // } else {
-        //   item.item_description = itemDescription;
-        //   item.client_id = Number(clientId);
-        //   item.date_requested = new Date();
-        //   item.fulfilled = false;
-        //   this.service.insertRequestedItem(item).subscribe((data: RequestedItem) => {
-        //     if (data != null && data.id != null) {
-        //       addedItems.push(data);
-
-        //       this.requestedItemAdded.emit(addedItems);
-        //     }
-        //   });
-        // }
+        item.fulfilled = false;
+        if (itemDescription.includes("Mail")) {
+          item.fulfilled = true;
+        }
 
         item.item_description = itemDescription;
-          item.client_id = Number(clientId);
-          item.date_requested = new Date();
-          item.fulfilled = false;
-          this.service.insertRequestedItem(item).subscribe((data: RequestedItem) => {
-            if (data != null && data.id != null) {
-              addedItems.push(data);
+        item.client_id = Number(clientId);
+        item.date_requested = new Date();
+        
+        this.service.insertRequestedItem(item).subscribe((data: RequestedItem) => {
+          if (data != null && data.id != null) {
+            addedItems.push(data);
 
-              this.requestedItemAdded.emit(addedItems);
-            }
-          });
+            this.requestedItemAdded.emit(addedItems);
+          }
+        });
       }
     } else {
       alert("You need to enter an item");
