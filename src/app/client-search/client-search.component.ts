@@ -58,18 +58,28 @@ export class ClientSearchComponent implements OnInit, OnDestroy {
     this.searchSubscription = this.clientService.getClientsByName(this.nameSearch).subscribe(results => {
       this.loading = false;
 
-      this.clients = (results as any[]);
-
+      let clients = (results as any[]);
       if (!this.isAdmin) {
-        this.clients = (results as any[]).filter(client => client.status !== 'Deceased');
+        clients = clients.filter(client => client.status !== 'Deceased');
       }
-      
+
+      // Count matches for first and last name
+      const searchValue = this.nameSearch.trim().toLowerCase();
+      const firstNameMatches = clients.filter(c => c.first_name?.toLowerCase() === searchValue);
+      const lastNameMatches = clients.filter(c => c.last_name?.toLowerCase() === searchValue);
+      console.log(`First Name Matches: ${firstNameMatches.length}, Last Name Matches: ${lastNameMatches.length}`);
+
+      if (lastNameMatches.length >= firstNameMatches.length) {
+        // More matches by last name, sort by first name
+        clients = clients.sort((a, b) => a.first_name.localeCompare(b.first_name) || a.last_name.localeCompare(b.last_name));
+      } else if (firstNameMatches.length > lastNameMatches.length) {
+        // More matches by first name, sort by last name
+        clients = clients.sort((a, b) => a.last_name.localeCompare(b.last_name) || a.first_name.localeCompare(b.first_name));
+      }
+
+      this.clients = clients;
       this.resultCount = this.clients.length;
-      if (this.clients.length == 0) {
-        this.noResultsMessage = 'No results.';
-      } else {
-        this.noResultsMessage = '';
-      }
+      this.noResultsMessage = this.clients.length === 0 ? 'No results.' : '';
     }, error => {
       console.log(error);
       this.clients = [];
