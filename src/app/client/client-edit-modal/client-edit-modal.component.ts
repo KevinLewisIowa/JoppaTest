@@ -29,10 +29,14 @@ export class ClientEditModalComponent implements OnInit, AfterViewChecked {
   staticBirthday: string = '';
   whatbroughtyoutodesmoines: string[] = [
     'Better Homeless Services',
+    'Didn’t Share',
     'Family',
+    'Fresh Start',
     'Friend',
     'From Des Moines',
     'School',
+    'Significant Other',
+    'Treatment',
     'Work/Job',
     'Other'
   ];
