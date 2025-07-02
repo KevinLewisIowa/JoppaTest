@@ -2129,16 +2129,15 @@ export class ClientService {
       );
   }
 
-  insertCaseworker(caseworker: Caseworker, clientId: number) {
+  insertCaseworker(caseworker: Caseworker) {
     const myHeader = new HttpHeaders({
       "Content-Type": "application/json",
       Authorization: window.localStorage.getItem("apiToken"),
     });
-    // Assuming your API expects { caseworker: ..., client_id: ... }
     return this.http
       .post(
         this.baseUrl + `client_caseworkers`,
-        { caseworker: caseworker, client_id: clientId },
+        { client_caseworker: caseworker },
         { headers: myHeader }
       )
       .pipe(

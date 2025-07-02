@@ -11,12 +11,17 @@
         <div class="row">
           <div class="col-md-6">
             <label for="organization">Organization</label>
-            <select id="organization" class="form-control" [(ngModel)]="organization" name="organization">
+            <select id="organization" class="form-control" [(ngModel)]="organization" name="organization" (change)="onOrganizationChange()">
               <option value="" disabled selected>Select organization</option>
               <option *ngFor="let org of organizations" [value]="org">{{ org }}</option>
             </select>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-6" *ngIf="extraInfoNeeded">
+            <label for="extraInfoOrg">Other Organization</label>
+            <input id="extraInfoOrg" name="extraInfoOrg" class="form-control" type="text"
+              [(ngModel)]="otherOrganization" placeholder="Other Organization" />
+          </div>
+          <div class="col-md-6" [ngClass]="{'mt-2': extraInfoNeeded}">
             <label for="caseworker-name">Name</label>
             <input id="caseworker-name" type="text" class="form-control" [(ngModel)]="name" name="name" />
           </div>

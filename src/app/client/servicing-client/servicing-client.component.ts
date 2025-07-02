@@ -185,6 +185,10 @@ export class ServicingClientComponent implements OnInit {
           },
           (error) => console.log(error)
         );
+
+        this.service.getClientCaseworkers(this.clientId).subscribe((data: Caseworker[]) => {
+          this.clientCaseworkers = data;
+        }, (error) => console.log(error));
       });
       if (this.routeInstanceId != null) {
         this.service.getClientNotesForRoute(this.clientId, this.routeInstanceId).subscribe((data: Note[]) => {
@@ -215,10 +219,6 @@ export class ServicingClientComponent implements OnInit {
           },
           (error) => console.log(error)
         );
-
-        this.service.getClientCaseworkers(this.clientId).subscribe((data: Caseworker[]) => {
-          this.clientCaseworkers = data;
-        }, (error) => console.log(error));
 
         this.service.getClientHealthInsurance(this.clientId).subscribe({
           next: (data: ClientHealthInsurance[]) => {
@@ -906,6 +906,12 @@ export class ServicingClientComponent implements OnInit {
   tentAdded(tent: Tent) {
     this.tents.push(tent);
     const element = document.querySelector("#tents");
+    element.scrollIntoView();
+  }
+
+  caseworkerAdded(caseworker: Caseworker) {
+    this.clientCaseworkers.push(caseworker);
+    const element = document.querySelector("#caseworkers");
     element.scrollIntoView();
   }
 
