@@ -1,0 +1,47 @@
+<ng-template #clientCaseworkerMdl let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Add Caseworker</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <form>
+    <div class="modal-body">
+      <div class="form-group">
+        <div class="row">
+          <div class="col-md-6">
+            <label for="organization">Organization</label>
+            <select id="organization" class="form-control" [(ngModel)]="organization" name="organization">
+              <option value="" disabled selected>Select organization</option>
+              <option *ngFor="let org of organizations" [value]="org">{{ org }}</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label for="caseworker-name">Name</label>
+            <input id="caseworker-name" type="text" class="form-control" [(ngModel)]="name" name="name" />
+          </div>
+        </div>
+        <div class="row mt-2">
+          <div class="col-md-6">
+            <label for="caseworker-phone">Phone Number</label>
+            <input id="caseworker-phone" type="text" class="form-control" placeholder="###-###-####" [(ngModel)]="phoneNumber" name="phoneNumber" />
+          </div>
+          <div class="col-md-6">
+            <label for="caseworker-email">Email Address</label>
+            <input id="caseworker-email" type="email" class="form-control" [(ngModel)]="emailAddress" name="emailAddress" />
+          </div>
+        </div>
+        <div class="row mt-2">
+          <div class="col-md-12">
+            <label for="caseworker-notes">Notes</label>
+            <textarea id="caseworker-notes" class="form-control" rows="4" [(ngModel)]="notes" name="notes"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-primary" (click)="c('Close click')">Don't Save</button>
+    <button type="button" class="btn btn-primary" (click)="submitCaseworker();c('')">Save</button>
+  </div>
+</ng-template>

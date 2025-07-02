@@ -96,6 +96,7 @@ import { ClientPastEvictionsComponent } from './insert-modals/client-past-evicti
 import { ClientPastFeloniesComponent } from './insert-modals/client-past-felonies/client-past-felonies.component';
 import { ClientDebtComponent } from './insert-modals/client-debt/client-debt.component';
 import { ClientSkillComponent } from './insert-modals/client-skill/client-skill.component';
+import { ClientCaseworkerComponent } from './insert-modals/client-caseworker/client-caseworker.component';
 
 const reducers = {
   user: MainReducer,
@@ -172,6 +173,7 @@ const reducers = {
         ClientPastFeloniesComponent,
         ClientDebtComponent,
         ClientSkillComponent,
+        ClientCaseworkerComponent,
     ],
     imports: [
         BrowserModule,

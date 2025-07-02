@@ -29,6 +29,7 @@ import { ClientPastEviction } from "app/models/client-past-eviction";
 import { ClientStep } from "app/models/client-step";
 import { ClientSkill } from "app/models/client-skill";
 import { ClientHealthInsurance } from "app/models/client-health-insurance";
+import { Caseworker } from "../models/caseworker";
 
 @Injectable()
 export class ClientService {
@@ -603,6 +604,8 @@ export class ClientService {
         catchError(this.handleError)
       );
   }
+
+  
 
   updateHeaterClient(theClientId, theHeaterId, theStatusId) {
     const myHeader = new HttpHeaders({
@@ -2114,6 +2117,63 @@ export class ClientService {
           `updateHeaterInteraction?interactionId=${interactionId}&statusId=${statusId}`,
         { headers: myHeader }
       )
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  insertCaseworker(caseworker: Caseworker, clientId: number) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+    // Assuming your API expects { caseworker: ..., client_id: ... }
+    return this.http
+      .post(
+        this.baseUrl + `client_caseworkers`,
+        { caseworker: caseworker, client_id: clientId },
+        { headers: myHeader }
+      )
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  removeClientCaseworker(id: number) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+    return this.http.delete(this.baseUrl + `client_caseworkers/${id}`, { headers: myHeader })
+      .pipe(
+        map((res) => {
+          return true;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  getClientCaseworkers(clientId: number) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+    return this.http
+      .get(this.baseUrl + `getClientCaseworkers?clientId=${clientId}`, { headers: myHeader })
       .pipe(
         map((res: any) => {
           if (res.message === "invalid-token") {

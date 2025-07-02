@@ -257,7 +257,50 @@
           </tbody>
         </table>
       </div>
-
+      <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
+        <h4>
+          Client Caseworker
+          <button type="button" (click)="goToTop(); clientCaseworkerMdl.showModal()" class="btn btn-primary"
+            style="float: right" *ngIf="isAdmin">
+            New Caseworker
+          </button>
+        </h4>
+        <table class="table" id="caseworkers">
+          <colgroup>
+            <col span="1" style="width: 20%" />
+            <col span="1" style="width: 20%" />
+            <col span="1" style="width: 20%" />
+            <col span="1" style="width: 20%" />
+            <col span="1" style="width: 20%" />
+            <col span="1" style="width: 10%" />
+          </colgroup>
+          <thead>
+            <tr>
+              <th>Organization</th>
+              <th>Name</th>
+              <th>Phone Number</th>
+              <th>Email Address</th>
+              <th>Notes</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let caseworker of clientCaseworkers">
+              <td>{{ caseworker.organization }}</td>
+              <td>{{ caseworker.name }}</td>
+              <td>{{ caseworker.phoneNumber }}</td>
+              <td>{{ caseworker.emailAddress }}</td>
+              <td>{{ caseworker.notes }}</td>
+              <td>
+                <button type="button" class="btn btn-primary" *ngIf="isAdmin"
+                  (click)="removeClientCaseworker(caseworker.id)">
+                  Delete
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
       <div class="col-lg-12 col-md-12">
         <h4>
           Client Income
@@ -842,7 +885,8 @@
         <div class="background-color">
           <h4>
             Steps Taken
-            <button type="button" (click)="goToTop(); clientStepMdl.showModal()" class="btn btn-primary" style="float: right">
+            <button type="button" (click)="goToTop(); clientStepMdl.showModal()" class="btn btn-primary"
+              style="float: right">
               New Step
             </button>
           </h4>
@@ -879,7 +923,8 @@
       <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
         <h4>
           Client Debts
-          <button type="button" (click)="goToTop(); clientDebtMdl.showModal()" class="btn btn-primary" style="float: right">
+          <button type="button" (click)="goToTop(); clientDebtMdl.showModal()" class="btn btn-primary"
+            style="float: right">
             New Debt
           </button>
         </h4>
@@ -915,7 +960,8 @@
       <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
         <h4>
           Client Felonies
-          <button type="button" (click)="goToTop(); clientFelonyMdl.showModal()" class="btn btn-primary" style="float: right">
+          <button type="button" (click)="goToTop(); clientFelonyMdl.showModal()" class="btn btn-primary"
+            style="float: right">
             New Felony
           </button>
         </h4>
@@ -951,7 +997,8 @@
       <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
         <h4>
           Past Evictions
-          <button type="button" (click)="goToTop(); clientEvictionMdl.showModal()" class="btn btn-primary" style="float: right">
+          <button type="button" (click)="goToTop(); clientEvictionMdl.showModal()" class="btn btn-primary"
+            style="float: right">
             New Eviction
           </button>
         </h4>
@@ -987,7 +1034,8 @@
       <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
         <h4>
           Client Skills
-          <button type="button" (click)="goToTop(); clientSkillMdl.showModal()" class="btn btn-primary" style="float: right">
+          <button type="button" (click)="goToTop(); clientSkillMdl.showModal()" class="btn btn-primary"
+            style="float: right">
             New Skill
           </button>
         </h4>
@@ -1062,7 +1110,8 @@
         <!-- removed !heatRoute from ngIf to pare down screen -->
         <h4>
           Health Insurance
-          <button type="button" (click)="goToTop(); clientHealthInsuranceMdl.showModal()" class="btn btn-primary" style="float: right" *ngIf="isAdmin">
+          <button type="button" (click)="goToTop(); clientHealthInsuranceMdl.showModal()" class="btn btn-primary"
+            style="float: right" *ngIf="isAdmin">
             New Health Insurance
           </button>
         </h4>
@@ -1093,7 +1142,8 @@
                 {{ insurance.company }}
               </td>
               <td>
-                <button type="button" class="btn btn-primary" (click)="removeHealthInsurance(insurance.id)" *ngIf="isAdmin">
+                <button type="button" class="btn btn-primary" (click)="removeHealthInsurance(insurance.id)"
+                  *ngIf="isAdmin">
                   Remove
                 </button>
               </td>
@@ -1150,15 +1200,10 @@
                     <option>Uncle</option>
                     <option>Other</option>
                   </select>
-                  <input
-                    *ngIf="isOtherRelationship(houseclient.household_relationship_type)"
-                    type="text"
-                    class="form-control"
-                    style="margin-top: 5px; max-width: 200px"
-                    placeholder="Enter relationship"
+                  <input *ngIf="isOtherRelationship(houseclient.household_relationship_type)" type="text"
+                    class="form-control" style="margin-top: 5px; max-width: 200px" placeholder="Enter relationship"
                     [(ngModel)]="houseclient.household_relationship_type"
-                    (ngModelChange)="onHouseholdRelationshipTypeChange(houseclient)"
-                  />
+                    (ngModelChange)="onHouseholdRelationshipTypeChange(houseclient)" />
                 </td>
                 <td>
                   <button type="button" class="btn btn-primary" (click)="viewClient(houseclient)"
@@ -1301,16 +1346,23 @@
 <app-notes #notesMdl (noteAdded)="noteAdded($event)"></app-notes>
 <app-client-edit-modal #clientEditMdl (editedClient)="editedClient($event)"></app-client-edit-modal>
 <app-pets #petsMdl (petAdded)="petAdded($event)"></app-pets>
-<app-prayer-requests-and-needs #prayerRequestsNeedsMdl (prayerRequestNeedAdded)="prayerRequestNeedAdded($event)"></app-prayer-requests-and-needs>
+<app-prayer-requests-and-needs #prayerRequestsNeedsMdl
+  (prayerRequestNeedAdded)="prayerRequestNeedAdded($event)"></app-prayer-requests-and-needs>
 <app-tents #tentMdl (tentAdded)="tentAdded($event)"></app-tents>
 <app-client-dwellings #clientDwellingMdl (clientDwellingAdded)="clientDwellingAdded($event)"></app-client-dwellings>
-<app-client-homeless-history #clientHomelessHistoryMdl (clientHistoryAdded)="clientHistoryAdded($event)"></app-client-homeless-history>
-<app-referrals-resources #referralsResourcesMdl (referralResourceAdded)="referralResourceAdded($event)"></app-referrals-resources>
+<app-client-homeless-history #clientHomelessHistoryMdl
+  (clientHistoryAdded)="clientHistoryAdded($event)"></app-client-homeless-history>
+<app-referrals-resources #referralsResourcesMdl
+  (referralResourceAdded)="referralResourceAdded($event)"></app-referrals-resources>
 <app-client-search #clientMdl (clientSelected)="clientSelected($event)"></app-client-search>
-<app-client-circle-of-friends #clientCircleOfFriendsMdl (friendAdded)="friendAdded($event)"></app-client-circle-of-friends>
-<app-client-health-insurance #clientHealthInsuranceMdl (clientHealthInsuranceAdded)="clientHealthInsuranceAdded($event)"></app-client-health-insurance>
+<app-client-circle-of-friends #clientCircleOfFriendsMdl
+  (friendAdded)="friendAdded($event)"></app-client-circle-of-friends>
+<app-client-health-insurance #clientHealthInsuranceMdl
+  (clientHealthInsuranceAdded)="clientHealthInsuranceAdded($event)"></app-client-health-insurance>
 <app-steps-taken #clientStepMdl (stepAdded)="stepAdded($event)"></app-steps-taken>
 <app-client-debt #clientDebtMdl (debtAdded)="debtAdded($event)"></app-client-debt>
-<app-client-past-evictions #clientEvictionMdl (clientEvictionAdded)="clientEvictionAdded($event)"></app-client-past-evictions>
+<app-client-past-evictions #clientEvictionMdl
+  (clientEvictionAdded)="clientEvictionAdded($event)"></app-client-past-evictions>
 <app-client-past-felonies #clientFelonyMdl (clientFelonyAdded)="clientFelonyAdded($event)"></app-client-past-felonies>
 <app-client-skill #clientSkillMdl (skillAdded)="skillAdded($event)"></app-client-skill>
+<app-client-caseworker #clientCaseworkerMdl (caseworkerAdded)="caseworkerAdded($event)"></app-client-caseworker>

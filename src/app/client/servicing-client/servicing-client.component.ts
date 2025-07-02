@@ -47,6 +47,7 @@ import { ClientPastEviction } from "app/models/client-past-eviction";
 import { ClientFelony } from "app/models/client-felony";
 import { ClientDebt } from "app/models/client-debt";
 import { ClientSkill } from "app/models/client-skill";
+import { Caseworker } from "app/models/caseworker";
 
 @Component({
   selector: "app-servicing-client",
@@ -88,6 +89,7 @@ export class ServicingClientComponent implements OnInit {
   hoseInteractions: any[] = [];
   heatEquipmentNotReturned: any[] = [];
   clientId = null;
+  clientCaseworkers: Caseworker[] = [];
   heaterStatuses: HeaterStatus[] = [];
   currentStatus: number = 2;
   heaters: any[] = [];
@@ -213,6 +215,10 @@ export class ServicingClientComponent implements OnInit {
           },
           (error) => console.log(error)
         );
+
+        this.service.getClientCaseworkers(this.clientId).subscribe((data: Caseworker[]) => {
+          this.clientCaseworkers = data;
+        }, (error) => console.log(error));
 
         this.service.getClientHealthInsurance(this.clientId).subscribe({
           next: (data: ClientHealthInsurance[]) => {
@@ -789,7 +795,7 @@ export class ServicingClientComponent implements OnInit {
 
             clientHistory.first_time_homeless = false;
             this.service.updateHomelessHistory(clientHistory).subscribe(data => {
-              
+
             }, error => console.log(error));
           }
 
@@ -818,13 +824,13 @@ export class ServicingClientComponent implements OnInit {
           let historyDates = this.homelessHistories.map(history => history.created_at);
           let clientDwelling: ClientDwelling = this.dwellings.filter(dwelling => dwelling.created_at === dwellingDates.reduce((a, b) => a > b ? a : b))[0];
           let clientHistory: ClientHomelessHistory = this.homelessHistories.filter(history => history.created_at === historyDates.reduce((a, b) => a > b ? a : b))[0];
-          
+
           var difference = new Date().getTime() - new Date(clientDwelling.created_at).getTime();
           difference = Math.ceil(difference / (1000 * 3600 * 24));
           if (interaction.serviced && (clientDwelling.dwelling == "House" || clientDwelling.dwelling == "Apartment" || clientDwelling.dwelling == "Shelter" || clientDwelling.dwelling == "Motel" || clientDwelling.dwelling == "Camper") && difference > 90) {
             clientHistory.first_time_homeless = false;
             this.service.updateHomelessHistory(clientHistory).subscribe(data => {
-              
+
             }, error => console.log(error));
           }
 
@@ -836,7 +842,7 @@ export class ServicingClientComponent implements OnInit {
   }
 
   private updateClientAndListing(routeAttendanceList: Appearance[], heatEquipmentAdded: boolean = false) {
-    
+
     this.service.updateClient(this.client).subscribe(
       (data) => {
         let routeAttendanceList: Appearance[] = JSON.parse(
@@ -1090,7 +1096,7 @@ export class ServicingClientComponent implements OnInit {
         );
       }
 
-      
+
       if (this.appearance) {
         this.sentInteraction = true;
       }
@@ -1337,9 +1343,9 @@ export class ServicingClientComponent implements OnInit {
     if (this.clientId != null) {
       this.service.loanTank(this.clientId).subscribe((response) => {
         this.service.getClientLoanedTanks(this.clientId).subscribe((data: any) => {
-            this.tankInteractions = data;
-            if (!this.isAdmin) { this.sendInteraction(1, true); }
-          });
+          this.tankInteractions = data;
+          if (!this.isAdmin) { this.sendInteraction(1, true); }
+        });
       });
     }
   }
@@ -1443,5 +1449,13 @@ export class ServicingClientComponent implements OnInit {
       "Grandparent", "Parent", "Sibling", "Spouse/Partner", "Uncle"
     ];
     return value && !standard.includes(value);
+  }
+
+  removeClientCaseworker(id: number) {
+    if (confirm("Are you sure you want to remove this caseworker?")) {
+      this.service.removeClientCaseworker(id).subscribe((res) => {
+        this.clientCaseworkers = this.clientCaseworkers.filter((w) => w.id != id);
+      });
+    }
   }
 }
