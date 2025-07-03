@@ -509,53 +509,6 @@
           </tbody>
         </table>
       </div>
-      <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
-        <!-- removed !heatRoute from ngIf to pare down screen -->
-        <div class="background-color">
-          <h4>
-            Goals
-            <button type="button" (click)="goToTop(); goalMdl.showModal()" class="btn btn-primary" style="float: right">
-              New Goal
-            </button>
-          </h4>
-          <table class="table" id="goals">
-            <colgroup>
-              <col span="1" style="width: 25%" />
-              <col span="1" style="width: 25%" />
-              <col span="1" style="width: 25%" />
-              <col span="1" style="width: 25%" />
-            </colgroup>
-            <thead>
-              <tr>
-                <th>Description</th>
-                <th>Created At</th>
-                <th></th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let goal of goalsAndSteps">
-                <td>
-                  {{ goal.description }}
-                </td>
-                <td>
-                  {{ goal.created_at | date: "shortDate" }}
-                </td>
-                <td>
-                  <button type="button" class="btn btn-primary" (click)="completedGoal(goal)">
-                    Completed
-                  </button>
-                </td>
-                <td>
-                  <button type="button" class="btn btn-primary" (click)="removeGoal(goal.id)">
-                    Remove
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
       <div class="col-lg-12 col-md-12">
         <h4>
           Prayer Requests/Needs
@@ -880,6 +833,53 @@
             </tr>
           </tbody>
         </table>
+      </div>
+      <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
+        <!-- removed !heatRoute from ngIf to pare down screen -->
+        <div class="background-color">
+          <h4>
+            Goals
+            <button type="button" (click)="goToTop(); goalMdl.showModal()" class="btn btn-primary" style="float: right">
+              New Goal
+            </button>
+          </h4>
+          <table class="table" id="goals">
+            <colgroup>
+              <col span="1" style="width: 25%" />
+              <col span="1" style="width: 25%" />
+              <col span="1" style="width: 25%" />
+              <col span="1" style="width: 25%" />
+            </colgroup>
+            <thead>
+              <tr>
+                <th>Description</th>
+                <th>Created At</th>
+                <th></th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let goal of goalsAndSteps">
+                <td>
+                  {{ goal.description }}
+                </td>
+                <td>
+                  {{ goal.created_at | date: "shortDate" }}
+                </td>
+                <td>
+                  <button type="button" class="btn btn-primary" (click)="completedGoal(goal)">
+                    Completed
+                  </button>
+                </td>
+                <td>
+                  <button type="button" class="btn btn-primary" (click)="removeGoal(goal.id)">
+                    Remove
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
       <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
         <div class="background-color">
