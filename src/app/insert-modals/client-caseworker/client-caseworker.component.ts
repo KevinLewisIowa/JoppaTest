@@ -73,7 +73,7 @@ export class ClientCaseworkerComponent implements OnInit {
     }
   }
 
-  submitCaseworker() {
+  submitCaseworker(close?: Function) {
     const caseworker = new Caseworker();
     const clientId: number = JSON.parse(localStorage.getItem('selectedClient'));
 
@@ -88,8 +88,12 @@ export class ClientCaseworkerComponent implements OnInit {
       this.clientService.insertCaseworker(caseworker).subscribe((data: Caseworker) => {
         if (data && data.id) {
           this.caseworkerAdded.emit(data);
+          if (close) close();
         }
       }, error => { console.log(error); });
+    }
+    else {
+      alert('Please fill in all required fields: Organization, Name, and either Phone or Email.');
     }
   }
 }
