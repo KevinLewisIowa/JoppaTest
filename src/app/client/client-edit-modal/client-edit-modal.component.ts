@@ -92,6 +92,7 @@ export class ClientEditModalComponent implements OnInit, AfterViewChecked {
     this.clientForm = this.fb.group({
       id: [this.theClient.id || undefined],
       first_name: [this.theClient.first_name || ''],
+      middle_name: [this.theClient.middle_name || ''],
       last_name: [this.theClient.last_name || ''],
       preferred_name: [this.theClient.preferred_name || ''],
       birth_date: [this.theClient.birth_date || undefined],
@@ -273,6 +274,7 @@ export class ClientEditModalComponent implements OnInit, AfterViewChecked {
 
     this.clientService.updateClient(updatedClient).subscribe({
       next: (data) => {
+        console.log(data);
         this.editedClient.emit(updatedClient);
       },
       error: (error) => {

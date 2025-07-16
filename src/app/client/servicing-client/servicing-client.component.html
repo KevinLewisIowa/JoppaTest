@@ -1,7 +1,7 @@
 <div class="card text-left" style="opacity: 0.93">
   <div class="card-header" id="topOfScreen">
     <h2>
-      {{ client.first_name }}
+      {{ client.first_name }} {{ client.middle_name }}
       <span *ngIf="client.preferred_name != '' && client.preferred_name != null">({{ client.preferred_name }})</span>
       {{ client.last_name }}
     </h2>

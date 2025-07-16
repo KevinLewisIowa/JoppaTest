@@ -39,6 +39,7 @@ export class ClientEditComponent implements OnInit, AfterViewChecked {
     this.clientForm = this.fb.group({
       birth_date: '',
       first_name: '',
+      middle_name: '',
       last_name: '',
       preferred_name: '',
       is_aftercare: false,
@@ -214,6 +215,7 @@ export class ClientEditComponent implements OnInit, AfterViewChecked {
 
   submitClient() {
     this.theClient.first_name = String(this.clientForm.get('first_name').value).trim();
+    this.theClient.middle_name = String(this.clientForm.get('middle_name').value).trim();
     this.theClient.last_name = String(this.clientForm.get('last_name').value).trim();
     this.theClient.preferred_name = String(this.clientForm.get('preferred_name').value).trim();
     this.theClient.birth_date = (this.clientForm.get('birth_date').value === "") ? undefined : new Date(Date.parse(this.clientForm.get('birth_date').value));
@@ -284,6 +286,8 @@ export class ClientEditComponent implements OnInit, AfterViewChecked {
       }
     }
 
+
+    console.log("Submitting client: " + JSON.stringify(this.theClient));
     // Proceed with the rest of the client submission logic
     this.clientService.insertClient(this.theClient).subscribe((insertedClient: Client) => {
       if (this.locationCampId == 0) {

@@ -1,6 +1,7 @@
 export class Client {
     id: number = undefined;
     first_name: string = undefined;
+    middle_name: string = undefined;
     last_name: string = undefined;
     preferred_name: string = undefined;
     birth_date: Date = undefined;

@@ -19,6 +19,11 @@
         <mat-cell *matCellDef="let client"><span [className]="(client.race == null || client.ethnicity == null || client.birth_date == null) ? 'missing' : (client.race == 'Data not collected' || client.ethnicity == 'Data not collected') ? 'unknown': ''">&nbsp;</span>&nbsp; {{client.first_name}}</mat-cell>
       </ng-container>
 
+      <ng-container matColumnDef="middle_name">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Middle Name</mat-header-cell>
+        <mat-cell *matCellDef="let client">{{client.middle_name}}</mat-cell>
+      </ng-container>
+
       <ng-container matColumnDef="preferred_name">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Preferred Name</mat-header-cell>
         <mat-cell *matCellDef="let client">{{client.preferred_name}}</mat-cell>
