@@ -210,7 +210,7 @@ export class ClientService {
     return this.http
       .get(
         this.baseUrl +
-          `getClientNotesForRoute?clientId=${clientId}&routeInstanceId=${routeInstanceId}`,
+        `getClientNotesForRoute?clientId=${clientId}&routeInstanceId=${routeInstanceId}`,
         { headers: myHeader }
       )
       .pipe(
@@ -476,9 +476,9 @@ export class ClientService {
       Authorization: window.localStorage.getItem("apiToken"),
     });
     return this.http.delete(this.baseUrl + `client_dwellings/${id}`, { headers: myHeader })
-    .pipe(map((res) => {
-      return true;
-    }), catchError(this.handleError));
+      .pipe(map((res) => {
+        return true;
+      }), catchError(this.handleError));
   }
 
   removeClientHomelessHistory(id: number) {
@@ -487,9 +487,9 @@ export class ClientService {
       Authorization: window.localStorage.getItem("apiToken"),
     });
     return this.http.delete(this.baseUrl + `client_homeless_histories/${id}`, { headers: myHeader })
-    .pipe(map((res) => {
-      return true;
-    }), catchError(this.handleError));
+      .pipe(map((res) => {
+        return true;
+      }), catchError(this.handleError));
   }
 
   getTentsForClient(client_id: number) {
@@ -605,7 +605,7 @@ export class ClientService {
       );
   }
 
-  
+
 
   updateHeaterClient(theClientId, theHeaterId, theStatusId) {
     const myHeader = new HttpHeaders({
@@ -615,7 +615,7 @@ export class ClientService {
     return this.http
       .get(
         this.baseUrl +
-          `updateHeaterClient?clientId=${theClientId}&heaterId=${theHeaterId}&status=${theStatusId}`,
+        `updateHeaterClient?clientId=${theClientId}&heaterId=${theHeaterId}&status=${theStatusId}`,
         { headers: myHeader }
       )
       .pipe(
@@ -812,7 +812,7 @@ export class ClientService {
         catchError(this.handleError)
       );
   }
-  
+
   updateCircleOfFriends(theFriend: ClientCircleOfFriends) {
     const myHeader = new HttpHeaders({
       "Content-Type": "application/json",
@@ -1195,9 +1195,27 @@ export class ClientService {
       Authorization: window.localStorage.getItem("apiToken"),
     });
     return this.http.delete(this.baseUrl + `client_steps/${id}`, { headers: myHeader })
-    .pipe(map((res) => {
-      return true;
-    }), catchError(this.handleError));
+      .pipe(map((res) => {
+        return true;
+      }), catchError(this.handleError));
+  }
+
+  updateClientStep(step: ClientStep) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+    return this.http.put(this.baseUrl + `client_steps/${step.id}`, { client_step: step }, { headers: myHeader })
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
   }
 
   insertSkill(skill: ClientSkill) {
@@ -1390,8 +1408,8 @@ export class ClientService {
     });
     return this.http.delete(this.baseUrl + `client_referrals/${id}`, { headers: myHeader, })
       .pipe(map((res) => {
-          return true;
-        }), catchError(this.handleError));
+        return true;
+      }), catchError(this.handleError));
   }
 
   removeClientFriend(id: number) {
@@ -1401,8 +1419,8 @@ export class ClientService {
     });
     return this.http.delete(this.baseUrl + `client_circle_of_friends/${id}`, { headers: myHeader, })
       .pipe(map((res) => {
-          return true;
-        }), catchError(this.handleError));
+        return true;
+      }), catchError(this.handleError));
   }
 
   deletedRequestedItem(id: number) {
@@ -1411,9 +1429,9 @@ export class ClientService {
       Authorization: window.localStorage.getItem("apiToken"),
     });
     return this.http.delete(this.baseUrl + `requested_items/${id}`, { headers: myHeader })
-    .pipe(map((res) => {
-      return true;
-    }), catchError(this.handleError));
+      .pipe(map((res) => {
+        return true;
+      }), catchError(this.handleError));
   }
 
   removeLike(id: number) {
@@ -1422,9 +1440,9 @@ export class ClientService {
       Authorization: window.localStorage.getItem("apiToken"),
     });
     return this.http.delete(this.baseUrl + `client_likes/${id}`, { headers: myHeader })
-    .pipe(map((res) => {
-      return true;
-    }), catchError(this.handleError));
+      .pipe(map((res) => {
+        return true;
+      }), catchError(this.handleError));
   }
 
   removeHealthInsurance(id: number) {
@@ -1433,9 +1451,9 @@ export class ClientService {
       Authorization: window.localStorage.getItem("apiToken"),
     });
     return this.http.delete(this.baseUrl + `client_health_insurances/${id}`, { headers: myHeader })
-    .pipe(map((res) => {
-      return true;
-    }), catchError(this.handleError));
+      .pipe(map((res) => {
+        return true;
+      }), catchError(this.handleError));
   }
 
   removeIncome(id: number) {
@@ -1444,9 +1462,9 @@ export class ClientService {
       Authorization: window.localStorage.getItem("apiToken"),
     });
     return this.http.delete(this.baseUrl + `client_incomes/${id}`, { headers: myHeader })
-    .pipe(map((res) => {
-      return true;
-    }), catchError(this.handleError));
+      .pipe(map((res) => {
+        return true;
+      }), catchError(this.handleError));
   }
 
   removeNextOfKin(id: number) {
@@ -1455,9 +1473,9 @@ export class ClientService {
       Authorization: window.localStorage.getItem("apiToken"),
     });
     return this.http.delete(this.baseUrl + `client_next_of_kins/${id}`, { headers: myHeader })
-    .pipe(map((res) => {
-      return true;
-    }), catchError(this.handleError));
+      .pipe(map((res) => {
+        return true;
+      }), catchError(this.handleError));
   }
 
   removeAppearance(id: number) {
@@ -1466,9 +1484,9 @@ export class ClientService {
       Authorization: window.localStorage.getItem("apiToken"),
     });
     return this.http.delete(this.baseUrl + `client_interactions/${id}`, { headers: myHeader })
-    .pipe(map((res) => {
-      return true;
-    }), catchError(this.handleError));
+      .pipe(map((res) => {
+        return true;
+      }), catchError(this.handleError));
   }
 
   removeDislike(id: number) {
@@ -1477,9 +1495,9 @@ export class ClientService {
       Authorization: window.localStorage.getItem("apiToken"),
     });
     return this.http.delete(this.baseUrl + `client_dislikes/${id}`, { headers: myHeader })
-    .pipe(map((res) => {
-      return true;
-    }), catchError(this.handleError));
+      .pipe(map((res) => {
+        return true;
+      }), catchError(this.handleError));
   }
 
   removeTent(id: number) {
@@ -1488,9 +1506,9 @@ export class ClientService {
       Authorization: window.localStorage.getItem("apiToken"),
     });
     return this.http.delete(this.baseUrl + `client_tents/${id}`, { headers: myHeader })
-    .pipe(map((res) => {
-      return true;
-    }), catchError(this.handleError));
+      .pipe(map((res) => {
+        return true;
+      }), catchError(this.handleError));
   }
 
   removePet(id: number) {
@@ -1499,9 +1517,9 @@ export class ClientService {
       Authorization: window.localStorage.getItem("apiToken"),
     });
     return this.http.delete(this.baseUrl + `client_pets/${id}`, { headers: myHeader })
-    .pipe(map((res) => {
-      return true;
-    }), catchError(this.handleError));
+      .pipe(map((res) => {
+        return true;
+      }), catchError(this.handleError));
   }
 
   removeHealthConcern(id: number) {
@@ -1510,9 +1528,9 @@ export class ClientService {
       Authorization: window.localStorage.getItem("apiToken"),
     });
     return this.http.delete(this.baseUrl + `health_concerns/${id}`, { headers: myHeader })
-    .pipe(map((res) => {
-      return true;
-    }), catchError(this.handleError));
+      .pipe(map((res) => {
+        return true;
+      }), catchError(this.handleError));
   }
 
   removeNote(id: number) {
@@ -1521,9 +1539,9 @@ export class ClientService {
       Authorization: window.localStorage.getItem("apiToken"),
     });
     return this.http.delete(this.baseUrl + `client_notes/${id}`, { headers: myHeader })
-    .pipe(map((res) => {
-      return true;
-    }), catchError(this.handleError));
+      .pipe(map((res) => {
+        return true;
+      }), catchError(this.handleError));
   }
 
   removePrayerRequestNeed(id: number) {
@@ -1532,9 +1550,9 @@ export class ClientService {
       Authorization: window.localStorage.getItem("apiToken"),
     });
     return this.http.delete(this.baseUrl + `prayer_request_and_needs/${id}`, { headers: myHeader })
-    .pipe(map((res) => {
-      return true;
-    }), catchError(this.handleError));
+      .pipe(map((res) => {
+        return true;
+      }), catchError(this.handleError));
   }
 
   completePrayerRequestNeed(thePrayerRequestNeed: PrayerRequestAndNeed) {
@@ -1566,9 +1584,9 @@ export class ClientService {
       Authorization: window.localStorage.getItem("apiToken"),
     });
     return this.http.delete(this.baseUrl + `goals_and_next_steps/${id}`, { headers: myHeader })
-    .pipe(map((res) => {
-      return true;
-    }), catchError(this.handleError));
+      .pipe(map((res) => {
+        return true;
+      }), catchError(this.handleError));
   }
 
   completeGoalAndNextStep(theGoal: GoalsNextStep) {
@@ -1641,7 +1659,7 @@ export class ClientService {
       "Content-Type": "application/json",
       Authorization: window.localStorage.getItem("apiToken"),
     });
-    return this.http.post(this.baseUrl + `client_referrals`,{ client_referral: referralsResources }, { headers: myHeader })
+    return this.http.post(this.baseUrl + `client_referrals`, { client_referral: referralsResources }, { headers: myHeader })
       .pipe(
         map((res: any) => {
           if (res.message === "invalid-token") {
@@ -2068,7 +2086,7 @@ export class ClientService {
     return this.http
       .get(
         this.baseUrl +
-          `updateTankInteraction?interactionId=${interactionId}&statusId=${statusId}`,
+        `updateTankInteraction?interactionId=${interactionId}&statusId=${statusId}`,
         { headers: myHeader }
       )
       .pipe(
@@ -2091,7 +2109,7 @@ export class ClientService {
     return this.http
       .get(
         this.baseUrl +
-          `updateHoseInteraction?interactionId=${interactionId}&statusId=${statusId}`,
+        `updateHoseInteraction?interactionId=${interactionId}&statusId=${statusId}`,
         { headers: myHeader }
       )
       .pipe(
@@ -2114,7 +2132,7 @@ export class ClientService {
     return this.http
       .get(
         this.baseUrl +
-          `updateHeaterInteraction?interactionId=${interactionId}&statusId=${statusId}`,
+        `updateHeaterInteraction?interactionId=${interactionId}&statusId=${statusId}`,
         { headers: myHeader }
       )
       .pipe(

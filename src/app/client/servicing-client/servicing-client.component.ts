@@ -110,6 +110,52 @@ export class ServicingClientComponent implements OnInit {
   routeInstanceId: number;
   pinnedNoteString: string = '';
   pipe: DatePipe = new DatePipe("en-us");
+  reasonForHomelessnessOptions = [
+    "Eviction",
+    "Job Loss",
+    "Domestic Violence",
+    "Mental Health",
+    "Substance Abuse",
+    "Family Conflict",
+    "Medical Issues",
+    "Release from Jail",
+    "Release from Hospital",
+    "Release from Treatment",
+    "Natural Disaster",
+    "Financial Hardship",
+    "Unknown",
+    "Other"
+  ];
+  stepOptions = [
+  'Apply for a birth certificate',
+    'Apply for a half-price of bus pass',
+    'Apply for disability or social security benefits',
+    'Apply for Dress for Success or Men on the Move program',
+    'Apply for food stamps',
+    'Apply for healthcare benefits',
+    'Apply for housing or an apartment',
+    'Apply for job',
+    'Apply for social security card',
+    'Buy a cell phone',
+    'Complete Intake with PHC',
+    'Contact a landlord or apartment complex',
+    'Create a gratitude journal',
+    'Find a church family',
+    'Find weekly activities you enjoy, such as bingo, community events, etc.',
+    'Get a library card',
+    'Get job training, such as St. Vincent De Paul Back2Work program',
+    'Learn to use a computer',
+    'Prepare for a job, such as clothing, haircut, boots, etc.',
+    'Schedule a doctor’s appointment',
+    'Schedule DOT appointment to get a driver’s license or ID',
+    'Search for housing',
+    'Search for jobs',
+    'Seek help from a counselor, therapist, or mental health professional',
+    'Set goals',
+    'Set up a budget',
+    'Set up a personal email',
+    'Set up your cell phone'
+];
 
   @ViewChild("clientInfo", { static: false }) clientInfo: ElementRef;
 
@@ -652,6 +698,19 @@ export class ServicingClientComponent implements OnInit {
       console.log(JSON.stringify(data));
     })
   }
+
+  formatDate(date: Date): string {
+  if (!date) return '';
+  const d = new Date(date);
+  const month = ('0' + (d.getMonth() + 1)).slice(-2);
+  const day = ('0' + d.getDate()).slice(-2);
+  return `${d.getFullYear()}-${month}-${day}`;
+}
+
+updateStepDate(step: any, value: string) {
+  step.date_completed = value ? new Date(value) : null;
+  this.saveStep(step);
+}
 
   updateClientCircleOfFriends(friend: ClientCircleOfFriends) {
     this.service.updateCircleOfFriends(friend).subscribe((data) => {
@@ -1463,5 +1522,32 @@ export class ServicingClientComponent implements OnInit {
         this.clientCaseworkers = this.clientCaseworkers.filter((w) => w.id != id);
       });
     }
+  }
+
+  toggleOnCart(item: any) {
+    item.fulfilled = !item.fulfilled;
+    // Optionally, call a service to persist this change to the backend
+    this.mainService.updateRequestedItem(item).subscribe();
+  }
+
+  saveDwelling(item: any) {
+    // Call your service to update the dwelling
+    this.service.updateClientDwelling(item).subscribe(() => {
+      // Optionally show a success message
+    });
+  }
+
+  saveStep(step: any) {
+    // Call your service to update the step
+    this.service.updateClientStep(step).subscribe(() => {
+      // Optionally show a success message
+    });
+  }
+
+  saveHomelessHistory(item: any) {
+    // Call your service to update the homeless history record
+    this.service.updateHomelessHistory(item).subscribe(() => {
+      // Optionally show a success message
+    });
   }
 }

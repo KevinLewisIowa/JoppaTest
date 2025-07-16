@@ -372,10 +372,62 @@
             </thead>
             <tbody>
               <tr *ngFor="let item of dwellings">
-                <td>{{ item.date_moved | date: "shortDate" }}</td>
-                <td>{{ item.dwelling }}</td>
-                <td>{{ item.where_sleep_last_night }}</td>
-                <td>{{ item.notes }}</td>
+                <td>
+                  <input *ngIf="isAdmin" type="date" class="form-control" [(ngModel)]="item.date_moved"
+                    (ngModelChange)="saveDwelling(item)" />
+                  <span *ngIf="!isAdmin">{{ item.date_moved | date: "shortDate" }}</span>
+                </td>
+                <td>
+                  <select *ngIf="isAdmin" class="form-control" [(ngModel)]="item.dwelling"
+                    (ngModelChange)="saveDwelling(item)">
+                    <option value="Abandoned Structure">Abandoned Structure</option>
+                    <option value="Apartment">Apartment</option>
+                    <option value="Broken Down Van">Broken Down Van</option>
+                    <option value="Camper">Camper</option>
+                    <option value="Couch Surfing">Couch Surfing</option>
+                    <option value="Garage">Garage</option>
+                    <option value="House">House</option>
+                    <option value="Mobile Home">Mobile Home</option>
+                    <option value="Motel">Motel</option>
+                    <option value="Shack">Shack</option>
+                    <option value="Shelter">Shelter</option>
+                    <option value="Tent">Tent</option>
+                    <option value="Streets">Streets</option>
+                    <option value="Under Bridge">Under Bridge</option>
+                    <option value="Vehicle">Vehicle</option>
+                    <option value="Unknown">Unknown</option>
+                    <option value="Other">Other</option>
+                  </select>
+                  <span *ngIf="!isAdmin">{{ item.dwelling }}</span>
+                </td>
+                <td>
+                  <select *ngIf="isAdmin" class="form-control" [(ngModel)]="item.where_sleep_last_night"
+                    (ngModelChange)="saveDwelling(item)">
+                    <option value="Abandoned Structure">Abandoned Structure</option>
+                    <option value="Apartment">Apartment</option>
+                    <option value="Broken Down Van">Broken Down Van</option>
+                    <option value="Camper">Camper</option>
+                    <option value="Couch Surfing">Couch Surfing</option>
+                    <option value="Garage">Garage</option>
+                    <option value="House">House</option>
+                    <option value="Mobile Home">Mobile Home</option>
+                    <option value="Motel">Motel</option>
+                    <option value="Shack">Shack</option>
+                    <option value="Shelter">Shelter</option>
+                    <option value="Tent">Tent</option>
+                    <option value="Streets">Streets</option>
+                    <option value="Under Bridge">Under Bridge</option>
+                    <option value="Vehicle">Vehicle</option>
+                    <option value="Unknown">Unknown</option>
+                    <option value="Other">Other</option>
+                  </select>
+                  <span *ngIf="!isAdmin">{{ item.where_sleep_last_night }}</span>
+                </td>
+                <td>
+                  <input *ngIf="isAdmin" type="text" class="form-control" [(ngModel)]="item.notes"
+                    (ngModelChange)="saveDwelling(item)" />
+                  <span *ngIf="!isAdmin">{{ item.notes }}</span>
+                </td>
                 <td>
                   <button type="button" class="btn btn-primary" (click)="removeClientDwelling(item.id)" *ngIf="isAdmin">
                     Delete
@@ -415,10 +467,31 @@
             </thead>
             <tbody>
               <tr *ngFor="let item of homelessHistories">
-                <td>{{ item.first_time_homeless ? 'Yes' : 'No' }}</td>
-                <td>{{ item.date_became_homeless | date: "shortDate" }}</td>
-                <td>{{ item.reason_for_homelessness }}</td>
-                <td>{{ item.note }}</td>
+                <td>
+                  <select *ngIf="isAdmin" class="form-control" [(ngModel)]="item.first_time_homeless"
+                    (ngModelChange)="saveHomelessHistory(item)">
+                    <option [ngValue]="true">Yes</option>
+                    <option [ngValue]="false">No</option>
+                  </select>
+                  <span *ngIf="!isAdmin">{{ item.first_time_homeless ? 'Yes' : 'No' }}</span>
+                </td>
+                <td>
+                  <input *ngIf="isAdmin" type="date" class="form-control" [(ngModel)]="item.date_became_homeless"
+                    (ngModelChange)="saveHomelessHistory(item)" />
+                  <span *ngIf="!isAdmin">{{ item.date_became_homeless | date: "shortDate" }}</span>
+                </td>
+                <td>
+                  <select *ngIf="isAdmin" class="form-control" [(ngModel)]="item.reason_for_homelessness"
+                    (ngModelChange)="saveHomelessHistory(item)">
+                    <option *ngFor="let reason of reasonForHomelessnessOptions" [value]="reason">{{ reason }}</option>
+                  </select>
+                  <span *ngIf="!isAdmin">{{ item.reason_for_homelessness }}</span>
+                </td>
+                <td>
+                  <input *ngIf="isAdmin" type="text" class="form-control" [(ngModel)]="item.note"
+                    (ngModelChange)="saveHomelessHistory(item)" />
+                  <span *ngIf="!isAdmin">{{ item.note }}</span>
+                </td>
                 <td>
                   <button type="button" class="btn btn-primary" (click)="removeClientHomelessHistory(item.id)"
                     *ngIf="isAdmin">
@@ -459,7 +532,12 @@
             <tr *ngFor="let item of requestedItems">
               <td>{{ item.item_description }}</td>
               <td>{{ item.created_at | date: "shortDate" }}</td>
-              <td>{{ item.fulfilled ? 'Yes' : 'No' }}</td>
+              <td>
+                <button *ngIf="isAdmin" type="button" class="btn btn-outline-primary" (click)="toggleOnCart(item)">
+                  {{ item.fulfilled ? 'Yes' : 'No' }}
+                </button>
+                <span *ngIf="!isAdmin">{{ item.fulfilled ? 'Yes' : 'No' }}</span>
+              </td>
               <td>
                 <button type="button" class="btn btn-primary" (click)="receivedRequest(item.id)">
                   Received
@@ -907,11 +985,25 @@
             </thead>
             <tbody>
               <tr *ngFor="let step of steps">
-                <td>{{ step.step_type }}</td>
-                <td>{{ step.date_completed | date: "shortDate" }}</td>
-                <td>{{ step.notes }}</td>
                 <td>
-                  <button type="button" class="btn btn-primary" (click)="removeStep(step.id)">
+                  <select *ngIf="isAdmin" class="form-control" [(ngModel)]="step.step_type"
+                    (ngModelChange)="saveStep(step)">
+                    <option value="" disabled>Select Step</option>
+                    <option *ngFor="let option of stepOptions" [value]="option">{{ option }}</option>
+                  </select>
+                  <span *ngIf="!isAdmin">{{ step.step_type }}</span>
+                </td>
+                <td>
+                  <input *ngIf="isAdmin" type="date" class="form-control" [ngModel]="formatDate(step.date_completed)" (ngModelChange)="updateStepDate(step, $event)" />
+                  <span *ngIf="!isAdmin">{{ step.date_completed | date: "shortDate" }}</span>
+                </td>
+                <td>
+                  <input *ngIf="isAdmin" type="text" class="form-control" [(ngModel)]="step.notes"
+                    (ngModelChange)="saveStep(step)" />
+                  <span *ngIf="!isAdmin">{{ step.notes }}</span>
+                </td>
+                <td>
+                  <button type="button" class="btn btn-primary" (click)="removeStep(step.id)" *ngIf="isAdmin">
                     Remove
                   </button>
                 </td>
