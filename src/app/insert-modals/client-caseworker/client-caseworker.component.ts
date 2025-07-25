@@ -84,7 +84,7 @@ export class ClientCaseworkerComponent implements OnInit {
     caseworker.notes = this.notes;
     caseworker.client_id = clientId;
 
-    if (caseworker.organization && caseworker.name && (caseworker.phone || caseworker.email)) {
+    if (caseworker.organization && caseworker.name) {
       this.clientService.insertCaseworker(caseworker).subscribe((data: Caseworker) => {
         if (data && data.id) {
           this.caseworkerAdded.emit(data);

@@ -447,6 +447,29 @@ export class ClientService {
       );
   }
 
+  updateCaseworker(caseworker: Caseworker) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+    return this.http
+      .patch(
+        this.baseUrl + `client_caseworkers/${caseworker.id}`,
+        { client_caseworker: caseworker },
+        { headers: myHeader }
+      )
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
   updateClientNote(theNote: Note) {
     const myHeader = new HttpHeaders({
       "Content-Type": "application/json",
