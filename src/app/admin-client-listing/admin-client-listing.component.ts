@@ -49,8 +49,10 @@ export class AdminClientListingComponent implements OnInit {
       this.dataSource.filterPredicate = (data, filter: string) => {
         const filterValue = filter.trim().toLowerCase();
         const firstLastName = `${data.first_name} ${data.last_name}`.toLowerCase();
+        const firstMiddleLastName = `${data.first_name} ${data.middle_name} ${data.last_name}`.toLowerCase();
         const preferredLastName = `${data.preferred_name} ${data.last_name}`.toLowerCase();
         return firstLastName.includes(filterValue) ||
+               firstMiddleLastName.includes(filterValue) ||
                preferredLastName.includes(filterValue) ||
                (data.phone != null && data.phone.toLowerCase().includes(filterValue)) ||
                (data.birth_date != null && data.birth_date.toLowerCase().includes(filterValue)) ||
@@ -58,7 +60,8 @@ export class AdminClientListingComponent implements OnInit {
                (data.camp_name != null && data.camp_name.toLowerCase().includes(filterValue)) ||
                (data.status != null && data.status.toLowerCase().includes(filterValue)) ||
                (data.updated_at != null && data.updated_at.toLowerCase().includes(filterValue)) ||
-               (data.last_name != null && data.last_name.toLowerCase().includes(filterValue))
+               (data.last_name != null && data.last_name.toLowerCase().includes(filterValue)) ||
+               (data.middle_name != null && data.middle_name.toLowerCase().includes(filterValue))
       };
     }, error => console.log(error));
   }
