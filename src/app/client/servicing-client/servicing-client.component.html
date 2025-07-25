@@ -286,11 +286,33 @@
           </thead>
           <tbody>
             <tr *ngFor="let caseworker of clientCaseworkers">
-              <td>{{ caseworker.organization }}</td>
-              <td>{{ caseworker.name }}</td>
-              <td>{{ caseworker.phone }}</td>
-              <td>{{ caseworker.email }}</td>
-              <td>{{ caseworker.notes }}</td>
+              <td>
+                <select *ngIf="isAdmin" class="form-control" [(ngModel)]="caseworker.organization"
+                  (change)="updateCaseworker(caseworker)">
+                  <option *ngFor="let org of organizations" [value]="org">{{ org }}</option>
+                </select>
+                <span *ngIf="!isAdmin">{{ caseworker.organization }}</span>
+              </td>
+              <td>
+                <input *ngIf="isAdmin" class="form-control" [(ngModel)]="caseworker.name"
+                  (change)="updateCaseworker(caseworker)" />
+                <span *ngIf="!isAdmin">{{ caseworker.name }}</span>
+              </td>
+              <td>
+                <input *ngIf="isAdmin" class="form-control" [(ngModel)]="caseworker.phone"
+                  (change)="updateCaseworker(caseworker)" />
+                <span *ngIf="!isAdmin">{{ caseworker.phone }}</span>
+              </td>
+              <td>
+                <input *ngIf="isAdmin" class="form-control" [(ngModel)]="caseworker.email"
+                  (change)="updateCaseworker(caseworker)" />
+                <span *ngIf="!isAdmin">{{ caseworker.email }}</span>
+              </td>
+              <td>
+                <input *ngIf="isAdmin" class="form-control" [(ngModel)]="caseworker.notes"
+                  (change)="updateCaseworker(caseworker)" />
+                <span *ngIf="!isAdmin">{{ caseworker.notes }}</span>
+              </td>
               <td>
                 <button type="button" class="btn btn-primary" *ngIf="isAdmin"
                   (click)="removeClientCaseworker(caseworker.id)">
@@ -951,7 +973,8 @@
                   <span *ngIf="!isAdmin">{{ step.step_type }}</span>
                 </td>
                 <td>
-                  <input *ngIf="isAdmin" type="date" class="form-control" [ngModel]="formatDate(step.date_completed)" (ngModelChange)="updateStepDate(step, $event)" />
+                  <input *ngIf="isAdmin" type="date" class="form-control" [ngModel]="formatDate(step.date_completed)"
+                    (ngModelChange)="updateStepDate(step, $event)" />
                   <span *ngIf="!isAdmin">{{ step.date_completed | date: "shortDate" }}</span>
                 </td>
                 <td>

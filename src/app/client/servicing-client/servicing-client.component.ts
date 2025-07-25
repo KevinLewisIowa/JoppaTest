@@ -127,7 +127,7 @@ export class ServicingClientComponent implements OnInit {
     "Other"
   ];
   stepOptions = [
-  'Apply for a birth certificate',
+    'Apply for a birth certificate',
     'Apply for a half-price of bus pass',
     'Apply for disability or social security benefits',
     'Apply for Dress for Success or Men on the Move program',
@@ -155,7 +155,22 @@ export class ServicingClientComponent implements OnInit {
     'Set up a budget',
     'Set up a personal email',
     'Set up your cell phone'
-];
+  ];
+  organizations: string[] = [
+    'Anawim',
+    'Aging Resources',
+    'Broadlawns',
+    'Community Support Advocate',
+    'DHS',
+    'Eyerly Ball',
+    'Iowa Total Care',
+    'Molina',
+    'Primary Health Care',
+    'Wellshare',
+    'Wellpoint',
+    'YMCA Supportive Housing',
+    'Other'
+  ];
 
   @ViewChild("clientInfo", { static: false }) clientInfo: ElementRef;
 
@@ -700,17 +715,17 @@ export class ServicingClientComponent implements OnInit {
   }
 
   formatDate(date: Date): string {
-  if (!date) return '';
-  const d = new Date(date);
-  const month = ('0' + (d.getMonth() + 1)).slice(-2);
-  const day = ('0' + d.getDate()).slice(-2);
-  return `${d.getFullYear()}-${month}-${day}`;
-}
+    if (!date) return '';
+    const d = new Date(date);
+    const month = ('0' + (d.getMonth() + 1)).slice(-2);
+    const day = ('0' + d.getDate()).slice(-2);
+    return `${d.getFullYear()}-${month}-${day}`;
+  }
 
-updateStepDate(step: any, value: string) {
-  step.date_completed = value ? new Date(value) : null;
-  this.saveStep(step);
-}
+  updateStepDate(step: any, value: string) {
+    step.date_completed = value ? new Date(value) : null;
+    this.saveStep(step);
+  }
 
   updateClientCircleOfFriends(friend: ClientCircleOfFriends) {
     this.service.updateCircleOfFriends(friend).subscribe((data) => {
