@@ -10,75 +10,81 @@
       <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter" #input>
     </mat-form-field>
   </div>
-<div class="panel-body">
-  <div>
-    <mat-table #table [dataSource]="dataSource" matSort>
+  <div class="panel-body">
+    <div>
+      <mat-table #table [dataSource]="dataSource" matSort>
 
-      <ng-container matColumnDef="first_name">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>First Name</mat-header-cell>
-        <mat-cell *matCellDef="let client"><span [className]="(client.race == null || client.ethnicity == null || client.birth_date == null) ? 'missing' : (client.race == 'Data not collected' || client.ethnicity == 'Data not collected') ? 'unknown': ''">&nbsp;</span>&nbsp; {{client.first_name}}</mat-cell>
-      </ng-container>
+        <ng-container matColumnDef="first_name">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>First Name</mat-header-cell>
+          <mat-cell *matCellDef="let client">
+            <fa-icon *ngIf="client.hasAttentionNote" [icon]="flagIcon"
+              title="Attention: Admin note, warning, or pinned note"></fa-icon>&nbsp;
+            <span
+              [className]="(client.race == null || client.ethnicity == null || client.birth_date == null) ? 'missing' : (client.race == 'Data not collected' || client.ethnicity == 'Data not collected') ? 'unknown': ''">&nbsp;</span>
+            {{client.first_name}}
+          </mat-cell>
+        </ng-container>
 
-      <ng-container matColumnDef="middle_name">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Middle Name</mat-header-cell>
-        <mat-cell *matCellDef="let client">{{client.middle_name}}</mat-cell>
-      </ng-container>
+        <ng-container matColumnDef="middle_name">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Middle Name</mat-header-cell>
+          <mat-cell *matCellDef="let client">{{client.middle_name}}</mat-cell>
+        </ng-container>
 
-      <ng-container matColumnDef="preferred_name">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Preferred Name</mat-header-cell>
-        <mat-cell *matCellDef="let client">{{client.preferred_name}}</mat-cell>
-      </ng-container>
+        <ng-container matColumnDef="preferred_name">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Preferred Name</mat-header-cell>
+          <mat-cell *matCellDef="let client">{{client.preferred_name}}</mat-cell>
+        </ng-container>
 
-      <ng-container matColumnDef="last_name">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Last Name</mat-header-cell>
-        <mat-cell *matCellDef="let client">{{client.last_name}}</mat-cell>
-      </ng-container>
+        <ng-container matColumnDef="last_name">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Last Name</mat-header-cell>
+          <mat-cell *matCellDef="let client">{{client.last_name}}</mat-cell>
+        </ng-container>
 
-      <ng-container matColumnDef="phone">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Phone</mat-header-cell>
-        <mat-cell *matCellDef="let client">{{client.phone}}</mat-cell>
-      </ng-container>
+        <ng-container matColumnDef="phone">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Phone</mat-header-cell>
+          <mat-cell *matCellDef="let client">{{client.phone}}</mat-cell>
+        </ng-container>
 
-      <ng-container matColumnDef="birth_date">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Birthday</mat-header-cell>
-        <mat-cell *matCellDef="let client">{{client.birth_date}}</mat-cell>
-      </ng-container>
+        <ng-container matColumnDef="birth_date">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Birthday</mat-header-cell>
+          <mat-cell *matCellDef="let client">{{client.birth_date}}</mat-cell>
+        </ng-container>
 
-      <ng-container matColumnDef="route_name">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Route</mat-header-cell>
-        <mat-cell *matCellDef="let client">{{client.route_name}}</mat-cell>
-      </ng-container>
+        <ng-container matColumnDef="route_name">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Route</mat-header-cell>
+          <mat-cell *matCellDef="let client">{{client.route_name}}</mat-cell>
+        </ng-container>
 
-      <ng-container matColumnDef="camp_name">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Camp</mat-header-cell>
-        <mat-cell *matCellDef="let client">{{client.camp_name}}</mat-cell>
-      </ng-container>
+        <ng-container matColumnDef="camp_name">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Camp</mat-header-cell>
+          <mat-cell *matCellDef="let client">{{client.camp_name}}</mat-cell>
+        </ng-container>
 
-      <ng-container matColumnDef="status">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Status</mat-header-cell>
-        <mat-cell *matCellDef="let client">{{client.status}}</mat-cell>
-      </ng-container>
+        <ng-container matColumnDef="status">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Status</mat-header-cell>
+          <mat-cell *matCellDef="let client">{{client.status}}</mat-cell>
+        </ng-container>
 
-      <ng-container matColumnDef="household_id">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Household</mat-header-cell>
-        <mat-cell *matCellDef="let client">{{client.household_id}}</mat-cell>
-      </ng-container>
+        <ng-container matColumnDef="household_id">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Household</mat-header-cell>
+          <mat-cell *matCellDef="let client">{{client.household_id}}</mat-cell>
+        </ng-container>
 
-      <ng-container matColumnDef="updated_at">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Last Interaction</mat-header-cell>
-        <mat-cell [class.bg-warning]="isOverMonthOld(client.last_interaction_date) && client.status == 'Active'"
-          *matCellDef="let client">{{client.last_interaction_date}}</mat-cell>
-      </ng-container>
+        <ng-container matColumnDef="updated_at">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Last Interaction</mat-header-cell>
+          <mat-cell [class.bg-warning]="isOverMonthOld(client.last_interaction_date) && client.status == 'Active'"
+            *matCellDef="let client">{{client.last_interaction_date}}</mat-cell>
+        </ng-container>
 
-      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row (click)="viewClient(client)" *matRowDef="let client; columns: displayedColumns;"></mat-row>
-    </mat-table>
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row (click)="viewClient(client)" *matRowDef="let client; columns: displayedColumns;"></mat-row>
+      </mat-table>
 
-    <mat-paginator [pageSizeOptions]="[50, 25, 75, 100]"></mat-paginator>
+      <mat-paginator [pageSizeOptions]="[50, 25, 75, 100]"></mat-paginator>
+    </div>
   </div>
-</div>
-<div class="card-footer">
-  <button routerLink="/adminHome" class="btn btn-primary" style="float: left" (click)="back()"><fa-icon
-      [icon]="backIcon"></fa-icon> Back</button>
-</div>
+  <div class="card-footer">
+    <button routerLink="/adminHome" class="btn btn-primary" style="float: left" (click)="back()"><fa-icon
+        [icon]="backIcon"></fa-icon> Back</button>
+  </div>
 </div>

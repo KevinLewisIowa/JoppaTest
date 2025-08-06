@@ -4,7 +4,9 @@ import { Router } from '@angular/router';
 import { MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatLegacyTableDataSource as MatTableDataSource, MatLegacyTable as MatTable } from '@angular/material/legacy-table';
-import { faChevronLeft, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faPlus, faFlag } from '@fortawesome/free-solid-svg-icons';
+import { Client } from 'app/models/client';
+import { Note } from 'app/models/note';
 
 @Component({
   selector: 'app-admin-client-listing',
@@ -16,11 +18,12 @@ export class AdminClientListingComponent implements OnInit {
   clients: any[] = [];
   dataSource: MatTableDataSource<any>;
   backIcon = faChevronLeft;
+  flagIcon = faFlag;
   pastDate: Date = new Date();
   createIcon = faPlus;
 
-  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
-  @ViewChild(MatSort, {static: false}) sort: MatSort;
+  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: false }) sort: MatSort;
 
   constructor(private clientService: ClientService, private router: Router) {
     window.localStorage.removeItem('routeId');
@@ -32,6 +35,10 @@ export class AdminClientListingComponent implements OnInit {
     this.clientService.getClientsByName('').subscribe(data => {
       console.log('Number of clients: ' + data.length)
       this.clients = data;
+
+      // Set hasAttentionNote for each client
+      this.clients.forEach(client => this.processClient(client));
+
       this.dataSource = new MatTableDataSource(this.clients);
       this.dataSource.sort = this.sort;
       this.sort.active = "updated_at";
@@ -52,16 +59,16 @@ export class AdminClientListingComponent implements OnInit {
         const firstMiddleLastName = `${data.first_name} ${data.middle_name} ${data.last_name}`.toLowerCase();
         const preferredLastName = `${data.preferred_name} ${data.last_name}`.toLowerCase();
         return firstLastName.includes(filterValue) ||
-               firstMiddleLastName.includes(filterValue) ||
-               preferredLastName.includes(filterValue) ||
-               (data.phone != null && data.phone.toLowerCase().includes(filterValue)) ||
-               (data.birth_date != null && data.birth_date.toLowerCase().includes(filterValue)) ||
-               (data.route_name != null && data.route_name.toLowerCase().includes(filterValue)) ||
-               (data.camp_name != null && data.camp_name.toLowerCase().includes(filterValue)) ||
-               (data.status != null && data.status.toLowerCase().includes(filterValue)) ||
-               (data.updated_at != null && data.updated_at.toLowerCase().includes(filterValue)) ||
-               (data.last_name != null && data.last_name.toLowerCase().includes(filterValue)) ||
-               (data.middle_name != null && data.middle_name.toLowerCase().includes(filterValue))
+          firstMiddleLastName.includes(filterValue) ||
+          preferredLastName.includes(filterValue) ||
+          (data.phone != null && data.phone.toLowerCase().includes(filterValue)) ||
+          (data.birth_date != null && data.birth_date.toLowerCase().includes(filterValue)) ||
+          (data.route_name != null && data.route_name.toLowerCase().includes(filterValue)) ||
+          (data.camp_name != null && data.camp_name.toLowerCase().includes(filterValue)) ||
+          (data.status != null && data.status.toLowerCase().includes(filterValue)) ||
+          (data.updated_at != null && data.updated_at.toLowerCase().includes(filterValue)) ||
+          (data.last_name != null && data.last_name.toLowerCase().includes(filterValue)) ||
+          (data.middle_name != null && data.middle_name.toLowerCase().includes(filterValue))
       };
     }, error => console.log(error));
   }
@@ -77,6 +84,18 @@ export class AdminClientListingComponent implements OnInit {
   viewClient(theClient) {
     localStorage.setItem('selectedClient', JSON.stringify(theClient.id));
     this.router.navigate(['/serviceClient']);
+  }
+
+  processClient(client: Client) {
+    client.hasAttentionNote = !!(client.admin_notes && client.admin_notes.trim() !== '')
+    if (!client.hasAttentionNote) {
+      this.clientService.getClientNotesForClient(client.id).subscribe((notes: Note[]) => {
+        client.hasAttentionNote = notes && Array.isArray(notes) &&
+          notes.some(
+            note => note.source === 'WARNING' || note.source === 'PINNED NOTE'
+          );
+      }, error => console.log(error));
+    }
   }
 
   applyFilter(filterValue: string) {

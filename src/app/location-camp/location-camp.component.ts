@@ -26,9 +26,11 @@ import {
   IconDefinition,
   faMap,
   faInfoCircle,
-  faUserMinus
+  faUserMinus,
+  faFlag
 } from "@fortawesome/free-solid-svg-icons";
 import { ClientDwelling } from "app/models/client-dwelling";
+import { Note } from "app/models/note";
 
 @Component({
   selector: "app-location-camp",
@@ -49,6 +51,7 @@ export class LocationCampComponent implements OnInit {
   searchIcon = faSearch;
   createIcon = faPlus;
   backIcon = faChevronLeft;
+  flagIcon = faFlag;
   erroredClients = '';
   forwardIcon = faChevronRight;
   questionCircleIcon = farQuestionCircle;
@@ -121,6 +124,7 @@ export class LocationCampComponent implements OnInit {
 
             this.mainService.getClientsForCamp(this.locationCampId).subscribe((data: Client[]) => {
               data.forEach(client => {
+                this.processClient(client);
                 this.clientService.getClientDwellings(client.id).subscribe((data: ClientDwelling[]) => {
                   console.log(`${client.first_name} ${client.last_name}`);
                   let pushClient: boolean = true;
@@ -318,6 +322,18 @@ export class LocationCampComponent implements OnInit {
         }, error => console.log(error));
       }
     }, error => console.log(error));
+  }
+
+  processClient(client: Client) {
+    client.hasAttentionNote = !!(client.admin_notes && client.admin_notes.trim() !== '')
+    if (!client.hasAttentionNote) {
+      this.clientService.getClientNotesForClient(client.id).subscribe((notes: Note[]) => {
+        client.hasAttentionNote = notes && Array.isArray(notes) &&
+          notes.some(
+            note => note.source === 'WARNING' || note.source === 'PINNED NOTE'
+          );
+      }, error => console.log(error));
+    }
   }
 
   markRemainingNotSeenNotServiced() {
