@@ -198,33 +198,129 @@
           </div>
         </div>
         <div class="form-group row">
+          <label for="needs_translation" class="col-6 col-form-label">Needs Translation?</label>
+          <div class="col-6">
+            <input id="needs_translation" type="checkbox" style="float:right;" formControlName="needs_translation" />
+          </div>
+        </div>
+        <div class="form-group row" *ngIf="clientForm.get('needs_translation')?.value">
+          <label for="translation_language" class="col-6 col-form-label">Language to Translate:</label>
+          <div class="col-6">
+            <select id="translation_language" class="form-control" style="float:right;" formControlName="translation_language">
+              <option value="" disabled selected>Select Language</option>
+              <option value="Amharic">Amharic</option>
+              <option value="Arabic">Arabic</option>
+              <option value="Armenian">Armenian</option>
+              <option value="Bengali">Bengali</option>
+              <option value="Bosnian">Bosnian</option>
+              <option value="Bulgarian">Bulgarian</option>
+              <option value="Burmese">Burmese</option>
+              <option value="Cambodian">Cambodian</option>
+              <option value="Cantonese (Simplified)">Cantonese (Simplified)</option>
+              <option value="Cantonese (Traditional)">Cantonese (Traditional)</option>
+              <option value="Catalan">Catalan</option>
+              <option value="Croatian">Croatian</option>
+              <option value="Czech">Czech</option>
+              <option value="Danish">Danish</option>
+              <option value="Dari">Dari</option>
+              <option value="Dutch">Dutch</option>
+              <option value="Estonian">Estonian</option>
+              <option value="Finnish">Finnish</option>
+              <option value="French">French</option>
+              <option value="German">German</option>
+              <option value="Greek">Greek</option>
+              <option value="Gniarati">Gniarati</option>
+              <option value="Haitian Creole">Haitian Creole</option>
+              <option value="Hebrew">Hebrew</option>
+              <option value="Hindi">Hindi</option>
+              <option value="Hmong">Hmong</option>
+              <option value="Hungarian">Hungarian</option>
+              <option value="Icelandic">Icelandic</option>
+              <option value="Ilocano">Ilocano</option>
+              <option value="Indonesian">Indonesian</option>
+              <option value="Italian">Italian</option>
+              <option value="Japanese">Japanese</option>
+              <option value="Kackchiquel">Kackchiquel</option>
+              <option value="Korean">Korean</option>
+              <option value="Kurdish (General)">Kurdish (General)</option>
+              <option value="Kurdish (Kurmanci)">Kurdish (Kurmanci)</option>
+              <option value="Latvian">Latvian</option>
+              <option value="Lithuanian">Lithuanian</option>
+              <option value="Mam">Mam</option>
+              <option value="Mandarin (Simplified)">Mandarin (Simplified)</option>
+              <option value="Mandarin (Traditional)">Mandarin (Traditional)</option>
+              <option value="Mon">Mon</option>
+              <option value="Norwegian">Norwegian</option>
+              <option value="Persian">Persian</option>
+              <option value="Polish">Polish</option>
+              <option value="Portuguese (Brazil)">Portuguese (Brazil)</option>
+              <option value="Portuguese (Portugal)">Portuguese (Portugal)</option>
+              <option value="Punjabi">Punjabi</option>
+              <option value="Qanjobal">Qanjobal</option>
+              <option value="Quiche">Quiche</option>
+              <option value="Romanian">Romanian</option>
+              <option value="Russian">Russian</option>
+              <option value="Serbian">Serbian</option>
+              <option value="Sign Language">Sign Language</option>
+              <option value="Slovak">Slovak</option>
+              <option value="Slovenian">Slovenian</option>
+              <option value="Somali">Somali</option>
+              <option value="Spanish">Spanish</option>
+              <option value="Swahili">Swahili</option>
+              <option value="Swedish">Swedish</option>
+              <option value="Tagalog">Tagalog</option>
+              <option value="Tamil">Tamil</option>
+              <option value="Thai">Thai</option>
+              <option value="Turkish">Turkish</option>
+              <option value="Ukrainian">Ukrainian</option>
+              <option value="Urdu">Urdu</option>
+              <option value="Vietnamese">Vietnamese</option>
+              <option value="Welsh">Welsh</option>
+              <option value="Xhosa">Xhosa</option>
+              <option value="Yiddish">Yiddish</option>
+              <option value="Yoruba">Yoruba</option>
+              <option value="Zulu">Zulu</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group row"
+          *ngIf="clientForm.get('translation_language')?.value === 'Other' && clientForm.get('needs_translation')?.value">
+          <label for="other_translation_language" class="col-6 col-form-label">Please specify language:</label>
+          <div class="col-6">
+            <input id="other_translation_language" type="text" class="form-control" style="float:right;"
+              placeholder="Enter language" formControlName="other_translation_language" />
+          </div>
+        </div>
+        <div class="form-group row">
           <label for="highest_level_education" class="col-6 col-form-label">Highest Level of Education: </label>
           <div class="col-6">
             <select id="highest_level_education" class="form-control" formControlName="highest_level_education"
               style="float:right;">
               <option value="No schooling">No schooling</option>
-            <option value="Grade K-5">Grade K-5</option>
-            <option value="Grade 6-8">Grade 6-8</option>
-            <option value="Grade 9 -11">Grade 9 -11</option>
-            <option value="Grade 12/High school diploma">Grade 12/High school diploma</option>
-            <option value="GED">GED</option>
-            <option value="Some College">Some College</option>
-            <option value="Associate degree">Associate degree</option>
-            <option value="Bachelor degree">Bachelor degree</option>
-            <option value="Master degree">Master degree</option>
-            <option value="Vocational Certification">Vocational Certification</option>
-            <option value="Currently in school - high school">Currently in school - high school</option>
-            <option value="Currently in school - GED">Currently in school - GED</option>
-            <option value="Currently in school - vocational">Currently in school - vocational</option>
-            <option value="Currently in school - college">Currently in school - college</option>
-            <option value="Unknown">Unknown</option>
-            <option value="Data not collected">Data not collected</option>
-            <option value="Client refused">Client refused</option>
+              <option value="Grade K-5">Grade K-5</option>
+              <option value="Grade 6-8">Grade 6-8</option>
+              <option value="Grade 9 -11">Grade 9 -11</option>
+              <option value="Grade 12/High school diploma">Grade 12/High school diploma</option>
+              <option value="GED">GED</option>
+              <option value="Some College">Some College</option>
+              <option value="Associate degree">Associate degree</option>
+              <option value="Bachelor degree">Bachelor degree</option>
+              <option value="Master degree">Master degree</option>
+              <option value="Vocational Certification">Vocational Certification</option>
+              <option value="Currently in school - high school">Currently in school - high school</option>
+              <option value="Currently in school - GED">Currently in school - GED</option>
+              <option value="Currently in school - vocational">Currently in school - vocational</option>
+              <option value="Currently in school - college">Currently in school - college</option>
+              <option value="Unknown">Unknown</option>
+              <option value="Data not collected">Data not collected</option>
+              <option value="Client refused">Client refused</option>
             </select>
           </div>
         </div>
         <div class="form-group row">
-          <label for="what_brought_to_des_moines" class="col-6 col-form-label">What Brought You to Des Moines?: </label>
+          <label for="what_brought_to_des_moines" class="col-6 col-form-label">What Brought You to Des Moines?:
+          </label>
           <div class="col-6">
             <select id="what_brought_to_des_moines" class="form-control" formControlName="what_brought_to_des_moines"
               #bdm style="float:right;" (change)="onReasonForDesMoinesChange(bdm.value)">

@@ -54,6 +54,9 @@ export class ClientEditComponent implements OnInit, AfterViewChecked {
       email: '',
       joppa_apartment_number: '',
       gender: '',
+      needs_translation: false,
+      translation_language: '',
+      other_translation_language: '',
       race: '',
       ethnicity: '',
       admin_notes: '',
@@ -243,6 +246,22 @@ export class ClientEditComponent implements OnInit, AfterViewChecked {
 
     const stateBeforeHomelessness = String(this.clientForm.get('state_before_homelessness').value).trim();
     const cityBeforeHomelessness = String(this.clientForm.get('city_before_homelessness').value).trim();
+
+    const needsTranslation = this.clientForm.get('needs_translation').value;
+    let translationLanguage = this.clientForm.get('translation_language').value;
+    const otherTranslationLanguage = this.clientForm.get('other_translation_language').value;
+
+    if (needsTranslation) {
+      if (translationLanguage === 'Other' && otherTranslationLanguage) {
+        translationLanguage = otherTranslationLanguage;
+      }
+      // Save translationLanguage to your client object or wherever needed
+      this.theClient.translation_language = translationLanguage;
+      this.theClient.needs_translation = true;
+    } else {
+      this.theClient.translation_language = '';
+      this.theClient.needs_translation = false;
+    }
 
     // Only check city and state if they have a value
     if (stateBeforeHomelessness && cityBeforeHomelessness) {

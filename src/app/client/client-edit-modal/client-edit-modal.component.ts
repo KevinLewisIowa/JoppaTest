@@ -41,6 +41,81 @@ export class ClientEditModalComponent implements OnInit, AfterViewChecked {
     'Other'
   ];
 
+  languages: string[] = [
+    'Amharic',
+    'Arabic',
+    'Armenian',
+    'Bengali',
+    'Bosnian',
+    'Bulgarian',
+    'Burmese',
+    'Cambodian',
+    'Cantonese (Simplified)',
+    'Cantonese (Traditional)',
+    'Catalan',
+    'Croatian',
+    'Czech',
+    'Danish',
+    'Dari',
+    'Dutch',
+    'Estonian',
+    'Finnish',
+    'French',
+    'German',
+    'Greek',
+    'Gniarati',
+    'Haitian Creole',
+    'Hebrew',
+    'Hindi',
+    'Hmong',
+    'Hungarian',
+    'Icelandic',
+    'Ilocano',
+    'Indonesian',
+    'Italian',
+    'Japanese',
+    'Kackchiquel',
+    'Korean',
+    'Kurdish (General)',
+    'Kurdish (Kurmanci)',
+    'Latvian',
+    'Lithuanian',
+    'Mam',
+    'Mandarin (Simplified)',
+    'Mandarin (Traditional)',
+    'Mon',
+    'Norwegian',
+    'Persian',
+    'Polish',
+    'Portuguese (Brazil)',
+    'Portuguese (Portugal)',
+    'Punjabi',
+    'Qanjobal',
+    'Quiche',
+    'Romanian',
+    'Russian',
+    'Serbian',
+    'Sign Language',
+    'Slovak',
+    'Slovenian',
+    'Somali',
+    'Spanish',
+    'Swahili',
+    'Swedish',
+    'Tagalog',
+    'Tamil',
+    'Thai',
+    'Turkish',
+    'Ukrainian',
+    'Urdu',
+    'Vietnamese',
+    'Welsh',
+    'Xhosa',
+    'Yiddish',
+    'Yoruba',
+    'Zulu'
+  ];
+
   constructor(private router: Router, private modalService: NgbModal, private clientService: ClientService, private fb: UntypedFormBuilder, private cscService: CountryStateCityService, @Inject(LOCALE_ID) private locale: string, private cdr: ChangeDetectorRef) { }
 
   ngOnInit() {
@@ -86,9 +161,12 @@ export class ClientEditModalComponent implements OnInit, AfterViewChecked {
     this.clientForm = null;
     const whatBroughtToDesMoines = this.theClient.what_brought_to_des_moines || '';
     console.log('What brought to Des Moines:', whatBroughtToDesMoines);
-
     // Determine if the reason is known or should be set to "Other"
     const isKnownReason = this.whatbroughtyoutodesmoines.includes(whatBroughtToDesMoines);
+
+    const translation_language = this.theClient.translation_language || '';
+    const isKnownLanguage = this.languages.includes(translation_language);
+
     this.clientForm = this.fb.group({
       id: [this.theClient.id || undefined],
       first_name: [this.theClient.first_name || ''],
@@ -133,12 +211,16 @@ export class ClientEditModalComponent implements OnInit, AfterViewChecked {
       city_before_homelessness: [this.theClient.city_before_homelessness || ''],
       state_before_homelessness: [this.theClient.state_before_homelessness || ''],
       what_brought_to_des_moines: [whatBroughtToDesMoines === '' ? '' : (isKnownReason ? whatBroughtToDesMoines : 'Other')],
-      otherReasonForDesMoines: [whatBroughtToDesMoines !== '' && !isKnownReason ? whatBroughtToDesMoines : '']
+      otherReasonForDesMoines: [whatBroughtToDesMoines !== '' && !isKnownReason ? whatBroughtToDesMoines : ''],
+      needs_translation: [this.theClient.needs_translation || false],
+      translation_language: [translation_language === '' ? '' : (isKnownLanguage ? translation_language : 'Other')],
+      other_translation_language: [translation_language !== '' && !isKnownLanguage ? translation_language : '']
     });
 
     if (!isKnownReason && whatBroughtToDesMoines !== '') {
       this.extraInfoNeededReasonForDesMoines = true;
     }
+
     if (this.submitted) {
       // Handle if user re-visits the modal before page refresh and UTC auto-adjustment
       this.clientForm.patchValue({ birth_date: this.staticBirthday });
@@ -270,6 +352,23 @@ export class ClientEditModalComponent implements OnInit, AfterViewChecked {
       return;
     } else if (updatedClient.what_brought_to_des_moines == 'Other' && this.clientForm.get('otherReasonForDesMoines').value != '') {
       updatedClient.what_brought_to_des_moines = this.clientForm.get('otherReasonForDesMoines').value;
+    }
+
+    if (
+      updatedClient.needs_translation &&
+      updatedClient.translation_language === 'Other' &&
+      !this.clientForm.get('other_translation_language').value
+    ) {
+      alert('Please specify the language for translation.');
+      return;
+    }
+
+    if (updatedClient.needs_translation) {
+      if (updatedClient.translation_language === 'Other') {
+        updatedClient.translation_language = this.clientForm.get('other_translation_language').value;
+      }
+    } else {
+      updatedClient.translation_language = '';
     }
 
     this.clientService.updateClient(updatedClient).subscribe({

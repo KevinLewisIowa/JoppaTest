@@ -94,6 +94,31 @@
         </div>
       </div>
       <div class="form-group row">
+        <label for="needs_translation" class="col-6 col-form-label">Needs Translation?</label>
+        <div class="col-6">
+          <input id="needs_translation" type="checkbox" style="float:right;" formControlName="needs_translation" />
+        </div>
+      </div>
+      <div class="form-group row" *ngIf="clientForm.get('needs_translation')?.value">
+        <label for="translation_language" class="col-6 col-form-label">Language to Translate:</label>
+        <div class="col-6">
+          <select id="translation_language" class="form-control" style="float:right;"
+            formControlName="translation_language">
+            <option value="" disabled selected>Select Language</option>
+            <option *ngFor="let lang of languages" [value]="lang">{{ lang }}</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group row"
+        *ngIf="clientForm.get('needs_translation')?.value && clientForm.get('translation_language')?.value === 'Other'">
+        <label for="other_translation_language" class="col-6 col-form-label">Please specify language:</label>
+        <div class="col-6">
+          <input id="other_translation_language" type="text" class="form-control" style="float:right;"
+            placeholder="Enter language" formControlName="other_translation_language" />
+        </div>
+      </div>
+      <div class="form-group row">
         <label for="highest_level_education" class="col-6 col-form-label">Highest Level of Education: </label>
         <div class="col-6">
           <select id="highest_level_education" class="form-control" formControlName="highest_level_education"

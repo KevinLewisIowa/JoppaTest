@@ -43,4 +43,6 @@ export class Client {
     state_before_homelessness:string = undefined;
     what_brought_to_des_moines:string = undefined;
     information_missing_or_unknown: string = undefined;
+    needs_translation: boolean = false;
+    translation_language: string = undefined;
 }
