@@ -28,7 +28,28 @@ export class ClientEditComponent implements OnInit, AfterViewChecked {
   //otherHomelessReason: string = '';
   extraInfoNeeded: boolean = false;
   extraInfoNeededReasonForDesMoines: boolean = false;
-  homelessReasonOptions: string[] = ['Addictions', 'Eviction', 'Family Dispute', 'Family Loss', 'Health Issues', 'Job Loss', 'Legal Issues', 'Mental Health', 'Prison/Jail', 'Other'];
+  homelessReasonOptions: string[] = [
+    "Addictions",
+    "Domestic Violence",
+    "Eviction",
+    "Family Conflict",
+    "Family Dispute",
+    "Family Loss",
+    "Financial Hardship",
+    "Health Issues",
+    "Job Loss",
+    "Legal Issues",
+    "Medical Issues",
+    "Mental Health",
+    "Natural Disaster",
+    "Prison/Jail",
+    "Release from Hospital",
+    "Release from Jail",
+    "Release from Treatment",
+    "Substance Abuse",
+    "Unknown",
+    "Other"
+  ];
 
   constructor(private router: Router, private clientService: ClientService, private countryStateCityService: CountryStateCityService, private modalService: NgbModal, private fb: UntypedFormBuilder, @Inject(LOCALE_ID) private locale: string, private cdr: ChangeDetectorRef) { }
 
