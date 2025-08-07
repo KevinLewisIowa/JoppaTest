@@ -797,10 +797,7 @@ export class ServicingClientComponent implements OnInit {
         } else {
           interaction.serviced_date = selected_date;
           if (interaction.serviced) {
-            if (
-              interaction.serviced_date.valueOf() >
-              new Date(this.client.last_interaction_date).valueOf()
-            ) {
+            if (interaction.serviced_date.valueOf() > new Date(this.client.last_interaction_date).valueOf()) {
               this.client.last_interaction_date = interaction.serviced_date;
             }
 

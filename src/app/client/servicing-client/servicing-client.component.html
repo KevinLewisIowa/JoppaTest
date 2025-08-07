@@ -309,8 +309,7 @@
                 <span *ngIf="!isAdmin">{{ caseworker.email }}</span>
               </td>
               <td>
-                <input *ngIf="isAdmin" class="form-control" [(ngModel)]="caseworker.notes"
-                  (change)="updateCaseworker(caseworker)" />
+                <textarea *ngIf="isAdmin" class="form-control" rows="3" [(ngModel)]="caseworker.notes" (change)="updateCaseworker(caseworker)"></textarea>
                 <span *ngIf="!isAdmin">{{ caseworker.notes }}</span>
               </td>
               <td>
@@ -403,8 +402,7 @@
                   <span *ngIf="!isAdmin">{{ item.where_sleep_last_night }}</span>
                 </td>
                 <td>
-                  <input *ngIf="isAdmin" type="text" class="form-control" [(ngModel)]="item.notes"
-                    (ngModelChange)="saveDwelling(item)" />
+                  <textarea *ngIf="isAdmin" class="form-control" rows="3" [(ngModel)]="item.notes" (ngModelChange)="saveDwelling(item)"></textarea>
                   <span *ngIf="!isAdmin">{{ item.notes }}</span>
                 </td>
                 <td>
@@ -467,8 +465,7 @@
                   <span *ngIf="!isAdmin">{{ item.reason_for_homelessness }}</span>
                 </td>
                 <td>
-                  <input *ngIf="isAdmin" type="text" class="form-control" [(ngModel)]="item.note"
-                    (ngModelChange)="saveHomelessHistory(item)" />
+                  <textarea *ngIf="isAdmin" class="form-control" rows="3" [(ngModel)]="item.note" (ngModelChange)="saveHomelessHistory(item)"></textarea>
                   <span *ngIf="!isAdmin">{{ item.note }}</span>
                 </td>
                 <td>
@@ -978,8 +975,7 @@
                   <span *ngIf="!isAdmin">{{ step.date_completed | date: "shortDate" }}</span>
                 </td>
                 <td>
-                  <input *ngIf="isAdmin" type="text" class="form-control" [(ngModel)]="step.notes"
-                    (ngModelChange)="saveStep(step)" />
+                  <textarea *ngIf="isAdmin" class="form-control" rows="3" [(ngModel)]="step.notes" (ngModelChange)="saveStep(step)"></textarea>
                   <span *ngIf="!isAdmin">{{ step.notes }}</span>
                 </td>
                 <td>
