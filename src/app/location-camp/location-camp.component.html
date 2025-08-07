@@ -60,6 +60,7 @@
         <tbody>
           <tr *ngFor="let client of clients" (click)="viewClient(client)" class="client-row">
             <td class="text-left">
+              <fa-icon *ngIf="client.client_picture" [icon]="cameraIcon" style="color: #0d6efd" title="Client has a picture"></fa-icon>&nbsp;
               <fa-icon style="color: #0d6efd" [icon]="mapIcon" *ngIf="client.has_location"></fa-icon>&nbsp;
               <fa-icon *ngIf="client.hasAttentionNote" [icon]="flagIcon" title="Attention: Admin note, warning, or pinned note"></fa-icon>&nbsp;
               <span [className]="client.information_missing_or_unknown == 'missing' ? 'missing' : client.information_missing_or_unknown == 'unknown' ? 'unknown': ''">&nbsp;</span>

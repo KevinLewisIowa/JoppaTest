@@ -27,7 +27,8 @@ import {
   faMap,
   faInfoCircle,
   faUserMinus,
-  faFlag
+  faFlag,
+  faCamera
 } from "@fortawesome/free-solid-svg-icons";
 import { ClientDwelling } from "app/models/client-dwelling";
 import { Note } from "app/models/note";
@@ -61,6 +62,7 @@ export class LocationCampComponent implements OnInit {
   userMinus = faUserMinus;
   mapIcon = faMap;
   starIcon = faStar;
+  cameraIcon = faCamera;
   informationIcon = faInfoCircle;
   isAdmin: boolean = false;
   clientsWithFulfilledItems: number[] = [];

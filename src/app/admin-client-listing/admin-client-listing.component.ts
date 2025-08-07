@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatLegacyTableDataSource as MatTableDataSource, MatLegacyTable as MatTable } from '@angular/material/legacy-table';
-import { faChevronLeft, faPlus, faFlag } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faPlus, faFlag, faCamera } from '@fortawesome/free-solid-svg-icons';
 import { Client } from 'app/models/client';
 import { Note } from 'app/models/note';
 
@@ -19,6 +19,7 @@ export class AdminClientListingComponent implements OnInit {
   dataSource: MatTableDataSource<any>;
   backIcon = faChevronLeft;
   flagIcon = faFlag;
+  cameraIcon = faCamera;
   pastDate: Date = new Date();
   createIcon = faPlus;
 
