@@ -50,7 +50,7 @@ export class ClientEditComponent implements OnInit, AfterViewChecked {
     "Unknown",
     "Other"
   ];
-
+  
   constructor(private router: Router, private clientService: ClientService, private countryStateCityService: CountryStateCityService, private modalService: NgbModal, private fb: UntypedFormBuilder, @Inject(LOCALE_ID) private locale: string, private cdr: ChangeDetectorRef) { }
 
   ngOnInit() {
