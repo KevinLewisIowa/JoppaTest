@@ -38,7 +38,7 @@ export class AdminClientListingComponent implements OnInit {
       this.clients = data;
 
       // Set hasAttentionNote for each client
-      this.clients.forEach(client => this.processClient(client));
+      // this.clients.forEach(client => this.processClient(client));
 
       this.dataSource = new MatTableDataSource(this.clients);
       this.dataSource.sort = this.sort;
