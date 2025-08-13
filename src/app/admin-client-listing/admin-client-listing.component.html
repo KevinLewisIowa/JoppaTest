@@ -17,8 +17,8 @@
         <ng-container matColumnDef="first_name">
           <mat-header-cell *matHeaderCellDef mat-sort-header>First Name</mat-header-cell>
           <mat-cell *matCellDef="let client">
-            <fa-icon *ngIf="client.client_picture" [icon]="cameraIcon" style="color: #0d6efd" title="Client has a picture"></fa-icon>&nbsp;
-            <fa-icon *ngIf="client.hasAttentionNote" [icon]="flagIcon"
+            <fa-icon *ngIf="client.has_picture" [icon]="cameraIcon" style="color: #0d6efd" title="Client has a picture"></fa-icon>&nbsp;
+            <fa-icon *ngIf="client.hasAttentionNote" [icon]="flagIcon" style="color: #0d6efd"
               title="Attention: Admin note, warning, or pinned note"></fa-icon>&nbsp;
             <span
               [className]="(client.race == null || client.ethnicity == null || client.birth_date == null) ? 'missing' : (client.race == 'Data not collected' || client.ethnicity == 'Data not collected') ? 'unknown': ''">&nbsp;</span>

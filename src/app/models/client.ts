@@ -45,5 +45,6 @@ export class Client {
     information_missing_or_unknown: string = undefined;
     needs_translation: boolean = false;
     translation_language: string = undefined;
+    has_picture: boolean = false; // not a DB column
     hasAttentionNote: boolean = false; // UI/computed property, not a DB column
 }

@@ -38,7 +38,7 @@ export class AdminClientListingComponent implements OnInit {
       this.clients = data;
 
       // Set hasAttentionNote for each client
-      // this.clients.forEach(client => this.processClient(client));
+      this.clients.forEach(client => this.processClient(client));
 
       this.dataSource = new MatTableDataSource(this.clients);
       this.dataSource.sort = this.sort;
@@ -90,11 +90,8 @@ export class AdminClientListingComponent implements OnInit {
   processClient(client: Client) {
     client.hasAttentionNote = !!(client.admin_notes && client.admin_notes.trim() !== '')
     if (!client.hasAttentionNote) {
-      this.clientService.getClientNotesForClient(client.id).subscribe((notes: Note[]) => {
-        client.hasAttentionNote = notes && Array.isArray(notes) &&
-          notes.some(
-            note => note.source === 'WARNING' || note.source === 'PINNED NOTE'
-          );
+      this.clientService.hasPinnedOrWarningNote(client.id).subscribe(data => {
+        client.hasAttentionNote = data.hasPinnedOrWarningNote;
       }, error => console.log(error));
     }
   }

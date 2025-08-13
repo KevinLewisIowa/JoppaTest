@@ -329,11 +329,8 @@ export class LocationCampComponent implements OnInit {
   processClient(client: Client) {
     client.hasAttentionNote = !!(client.admin_notes && client.admin_notes.trim() !== '')
     if (!client.hasAttentionNote) {
-      this.clientService.getClientNotesForClient(client.id).subscribe((notes: Note[]) => {
-        client.hasAttentionNote = notes && Array.isArray(notes) &&
-          notes.some(
-            note => note.source === 'WARNING' || note.source === 'PINNED NOTE'
-          );
+      this.clientService.hasPinnedOrWarningNote(client.id).subscribe((data: { hasPinnedOrWarningNote: boolean }) => {
+        client.hasAttentionNote = data.hasPinnedOrWarningNote;
       }, error => console.log(error));
     }
   }
