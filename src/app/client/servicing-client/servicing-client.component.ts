@@ -111,8 +111,10 @@ export class ServicingClientComponent implements OnInit {
   pinnedNoteString: string = '';
   pipe: DatePipe = new DatePipe("en-us");
   reasonForHomelessnessOptions = [
+    "Addictions",
     "Domestic Violence",
     "Eviction",
+    "Family Conflict",
     "Family Dispute",
     "Family Loss",
     "Financial Hardship",

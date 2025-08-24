@@ -37,8 +37,10 @@ export class AdminClientListingComponent implements OnInit {
       console.log('Number of clients: ' + data.length)
       this.clients = data;
 
-      // Set hasAttentionNote for each client
-      // this.clients.forEach(client => this.processClient(client));
+      // Set hasAttentionNote for each client, throttled in batches of 15
+      (async () => {
+        await this.processClientsInBatches(this.clients, 25);
+      })();
 
       this.dataSource = new MatTableDataSource(this.clients);
       this.dataSource.sort = this.sort;
@@ -87,14 +89,7 @@ export class AdminClientListingComponent implements OnInit {
     this.router.navigate(['/serviceClient']);
   }
 
-  processClient(client: Client) {
-    client.hasAttentionNote = !!(client.admin_notes && client.admin_notes.trim() !== '')
-    if (!client.hasAttentionNote) {
-      this.clientService.hasPinnedOrWarningNote(client.id).subscribe(data => {
-        client.hasAttentionNote = data.hasPinnedOrWarningNote;
-      }, error => console.log(error));
-    }
-  }
+
 
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -107,6 +102,35 @@ export class AdminClientListingComponent implements OnInit {
 
   back() {
     this.router.navigate(['/adminHome']);
+  }
+
+  // Throttle processClient calls in batches
+  async processClientsInBatches(clients: Client[], batchSize: number = 5) {
+    for (let i = 0; i < clients.length; i += batchSize) {
+      const batch = clients.slice(i, i + batchSize);
+      await Promise.all(batch.map(client => this.processClientAsync(client)));
+    }
+  }
+
+  // Promise-based version of processClient
+  processClientAsync(client: Client): Promise<void> {
+    return new Promise((resolve) => {
+      client.hasAttentionNote = !!(client.admin_notes && client.admin_notes.trim() !== '');
+      if (!client.hasAttentionNote) {
+        this.clientService.hasPinnedOrWarningNote(client.id).subscribe(
+          data => {
+            client.hasAttentionNote = data.hasPinnedOrWarningNote;
+            resolve();
+          },
+          error => {
+            console.log(error);
+            resolve();
+          }
+        );
+      } else {
+        resolve();
+      }
+    });
   }
 
 }
