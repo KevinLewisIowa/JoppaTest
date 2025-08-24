@@ -221,12 +221,14 @@ export class ClientEditModalComponent implements OnInit, AfterViewChecked {
       this.extraInfoNeededReasonForDesMoines = true;
     }
 
-    if (this.submitted) {
-      // Handle if user re-visits the modal before page refresh and UTC auto-adjustment
-      this.clientForm.patchValue({ birth_date: this.staticBirthday });
-    } else {
-      this.clientForm.patchValue({ birth_date: formatDate(this.clientForm.get('birth_date').value, 'yyyy-MM-dd', 'en') });
-    }
+    this.clientForm.patchValue({ birth_date: formatDate(this.clientForm.get('birth_date').value, 'MM/dd/yyyy', 'en') });
+
+    // if (this.submitted) {
+    //   // Handle if user re-visits the modal before page refresh and UTC auto-adjustment
+    //   this.clientForm.patchValue({ birth_date: this.clientForm.get('birth_date').value });
+    // } else {
+    //   this.clientForm.patchValue({ birth_date: formatDate(this.clientForm.get('birth_date').value, 'yyyy-MM-dd', 'en') });
+    // }
     this.modalService.open(this.editModal, { size: 'lg', backdrop: 'static' });
   }
 
@@ -324,22 +326,34 @@ export class ClientEditModalComponent implements OnInit, AfterViewChecked {
 
   private processClientSubmission(updatedClient: Client) {
     let now: Date = new Date();
-    if (updatedClient.birth_date.toString() === '') {
+    const birthDateStr = this.clientForm.get('birth_date').value;
+    if (!birthDateStr || birthDateStr.trim() === '') {
       alert('Birthday not fully entered');
       return;
     }
-
-    this.staticBirthday = this.clientForm.get('birth_date').value;
-    let birthday: Date = new Date(Date.parse(this.staticBirthday));
+    // MM/DD/YYYY format check
+    const datePattern = /^(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])\/\d{4}$/;
+    if (!datePattern.test(birthDateStr)) {
+      alert('Birth date must be in MM/DD/YYYY format.');
+      return;
+    }
+    // Parse date
+    const [month, day, year] = birthDateStr.split('/').map(Number);
+    const birthday = new Date(year, month - 1, day);
+    if (isNaN(birthday.getTime())) {
+      alert('Invalid birth date.');
+      return;
+    }
     let pastDate: Date = new Date(now.getFullYear() - 100, now.getMonth(), now.getDate());
-    if (birthday.getTime() > now.getTime()) {
+    if (birthday > now) {
       alert('You cannot select a birth date that is in the future');
       return;
-    } else if (birthday.getTime() < pastDate.getTime()) {
+    } else if (birthday < pastDate) {
       alert('You cannot set a birth date this far back in the past');
       return;
     }
     updatedClient.birth_date = birthday;
+    this.staticBirthday = birthDateStr;
     this.submitted = true;
 
     if (updatedClient.status == 'Inactive') {

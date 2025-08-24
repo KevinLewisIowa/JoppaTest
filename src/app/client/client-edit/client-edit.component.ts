@@ -313,17 +313,31 @@ export class ClientEditComponent implements OnInit, AfterViewChecked {
     this.theClient.what_brought_to_des_moines = reason_for_des_moines;
 
     // Validate that client birth date is not unreasonable
-    if (this.theClient.birth_date) {
-      let now: Date = new Date();
-      let birthday: Date = new Date(this.theClient.birth_date);
-      let pastDate: Date = new Date(now.getFullYear() - 100, now.getMonth(), now.getDate());
-      if (birthday.getTime() > now.getTime()) {
+    const birthDateStr = this.clientForm.get('birth_date').value;
+    if (birthDateStr) {
+      // Check MM/DD/YYYY format
+      const datePattern = /^(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])\/\d{4}$/;
+      if (!datePattern.test(birthDateStr)) {
+        alert('Birth date must be in MM/DD/YYYY format.');
+        return;
+      }
+      // Parse date
+      const [month, day, year] = birthDateStr.split('/').map(Number);
+      const birthday = new Date(year, month - 1, day);
+      if (isNaN(birthday.getTime())) {
+        alert('Invalid birth date.');
+        return;
+      }
+      const now = new Date();
+      const pastDate = new Date(now.getFullYear() - 100, now.getMonth(), now.getDate());
+      if (birthday > now) {
         alert('You cannot select a birth date that is in the future');
         return;
-      } else if (birthday.getTime() < pastDate.getTime()) {
+      } else if (birthday < pastDate) {
         alert('You cannot set a birth date this far back in the past');
         return;
       }
+      this.theClient.birth_date = birthday;
     }
 
 

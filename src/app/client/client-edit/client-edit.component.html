@@ -56,6 +56,7 @@
                 Indigenous</option>
               <option value="Asian or Asian American">Asian or Asian American</option>
               <option value="Black, African American, or African">Black, African American, or African</option>
+              <option value="Mixed">Mixed</option>
               <option value="Native Hawaiian or Pacific Islander">Native Hawaiian or Pacific Islander</option>
               <option value="White">White</option>
               <option value="Client doesn't know">Client doesn't know</option>
@@ -80,7 +81,7 @@
           <label for="birth-date" class="col-6 col-form-label">Birth Date (Date must be MM/DD/YYYY):<font color="red">*
             </font> </label>
           <div class="col-6">
-            <input id="birth-date" type="date" class="form-control" placeholder="mm/dd/yyyy"
+            <input id="birth-date" type="text" class="form-control" placeholder="mm/dd/yyyy"
               formControlName="birth_date" style="float:right;" />
           </div>
         </div>
@@ -145,17 +146,22 @@
               <option value="Broken Down Van">Broken Down Van</option>
               <option value="Camper">Camper</option>
               <option value="Couch Surfing">Couch Surfing</option>
+              <option value="Family">Family</option>
               <option value="Garage">Garage</option>
+              <option value="Halfway House">Halfway House</option>
+              <option value="Hospital">Hospital</option>
               <option value="House">House</option>
               <option value="Mobile Home">Mobile Home</option>
               <option value="Motel">Motel</option>
+              <option value="Nursing Home">Nursing Home</option>
               <option value="Shack">Shack</option>
               <option value="Shelter">Shelter</option>
-              <option value="Tent">Tent</option>
               <option value="Streets">Streets</option>
+              <option value="Tent">Tent</option>
               <option value="Under Bridge">Under Bridge</option>
-              <option value="Vehicle">Vehicle</option>
               <option value="Unknown">Unknown</option>
+              <option value="Vehicle">Vehicle</option>
+              <option value="Other">Other</option>
             </select>
           </div>
         </div>
@@ -173,20 +179,26 @@
               formControlName="where_sleep_last_night">
               <option value="Abandoned Structure">Abandoned Structure</option>
               <option value="Apartment">Apartment</option>
+              <option value="Assisted Living">Assisted Living</option>
               <option value="Broken Down Van">Broken Down Van</option>
               <option value="Camper">Camper</option>
               <option value="Couch Surfing">Couch Surfing</option>
+              <option value="Family">Family</option>
               <option value="Garage">Garage</option>
+              <option value="Halfway House">Halfway House</option>
+              <option value="Hospital">Hospital</option>
               <option value="House">House</option>
               <option value="Mobile Home">Mobile Home</option>
               <option value="Motel">Motel</option>
+              <option value="Nursing Home">Nursing Home</option>
               <option value="Shack">Shack</option>
               <option value="Shelter">Shelter</option>
-              <option value="Tent">Tent</option>
               <option value="Streets">Streets</option>
+              <option value="Tent">Tent</option>
               <option value="Under Bridge">Under Bridge</option>
-              <option value="Vehicle">Vehicle</option>
               <option value="Unknown">Unknown</option>
+              <option value="Vehicle">Vehicle</option>
+              <option value="Other">Other</option>
             </select>
           </div>
         </div>
@@ -206,7 +218,8 @@
         <div class="form-group row" *ngIf="clientForm.get('needs_translation')?.value">
           <label for="translation_language" class="col-6 col-form-label">Language to Translate:</label>
           <div class="col-6">
-            <select id="translation_language" class="form-control" style="float:right;" formControlName="translation_language">
+            <select id="translation_language" class="form-control" style="float:right;"
+              formControlName="translation_language">
               <option value="" disabled selected>Select Language</option>
               <option value="Amharic">Amharic</option>
               <option value="Arabic">Arabic</option>
