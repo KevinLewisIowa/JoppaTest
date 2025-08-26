@@ -1,3 +1,4 @@
+import { formatPhoneNumberValue } from 'app/utils/phone-utils';
 import { Component, ViewChild, Output, OnInit, ElementRef, EventEmitter } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Caseworker } from '../../models/caseworker';
@@ -94,6 +95,14 @@ export class ClientCaseworkerComponent implements OnInit {
     }
     else {
       alert('Please fill in all required fields: Organization, Name, and either Phone or Email.');
+    }
+  }
+
+  formatPhoneNumber() {
+    if (typeof this.phoneNumber !== 'string') return;
+    const formatted = formatPhoneNumberValue(this.phoneNumber);
+    if (this.phoneNumber !== formatted) {
+      this.phoneNumber = formatted;
     }
   }
 }

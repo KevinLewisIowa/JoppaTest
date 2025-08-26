@@ -1,3 +1,4 @@
+import { formatPhoneNumberValue } from 'app/utils/phone-utils';
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { Client } from "app/models/client";
 import { ClientService } from "app/services/client.service";
@@ -1567,5 +1568,29 @@ export class ServicingClientComponent implements OnInit {
     this.service.updateHomelessHistory(item).subscribe(() => {
       // Optionally show a success message
     });
+  }
+
+  formatNextOfKinPhone(nok: any) {
+    if (!nok || typeof nok.phone_number !== 'string') return;
+    const formatted = formatPhoneNumberValue(nok.phone_number);
+    if (nok.phone_number !== formatted) {
+      nok.phone_number = formatted;
+    }
+  }
+
+  formatFriendPhone(friend: any) {
+    if (!friend || typeof friend.phone_number !== 'string') return;
+    const formatted = formatPhoneNumberValue(friend.phone_number);
+    if (friend.phone_number !== formatted) {
+      friend.phone_number = formatted;
+    }
+  }
+
+  formatCaseworkerPhone(caseworker: Caseworker) {
+    if (!caseworker || typeof caseworker.phone !== 'string') return;
+    const formatted = formatPhoneNumberValue(caseworker.phone);
+    if (caseworker.phone !== formatted) {
+      caseworker.phone = formatted;
+    }
   }
 }

@@ -29,7 +29,7 @@
         <div class="row mt-2">
           <div class="col-md-6">
             <label for="caseworker-phone">Phone Number</label>
-            <input id="caseworker-phone" type="text" class="form-control" placeholder="###-###-####" [(ngModel)]="phoneNumber" name="phoneNumber" />
+            <input id="caseworker-phone" type="text" class="form-control" placeholder="###-###-####" [(ngModel)]="phoneNumber" name="phoneNumber" (input)="formatPhoneNumber()" />
           </div>
           <div class="col-md-6">
             <label for="caseworker-email">Email Address</label>

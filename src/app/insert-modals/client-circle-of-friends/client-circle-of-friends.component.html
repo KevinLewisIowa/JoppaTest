@@ -13,7 +13,7 @@
             </div>
             <div class="col-md-6">
               <label for="phone-number">Phone Number</label>
-              <input id="phone-number" type="text" class="form-control" placeholder="###-###-####" [(ngModel)]="phone_number"/>
+              <input id="phone-number" type="text" class="form-control" placeholder="###-###-####" [(ngModel)]="phone_number" (input)="formatPhoneNumber()"/>
             </div>
           </div>
           <div class="row">

@@ -1,3 +1,4 @@
+import { formatPhoneNumberValue } from 'app/utils/phone-utils';
 import { Component, ViewChild, Output, OnInit, ElementRef, EventEmitter } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ClientService } from 'app/services/client.service';
@@ -51,6 +52,14 @@ export class ClientCircleOfFriendsComponent implements OnInit {
           this.friendAdded.emit(data);
         }
       }, error => {console.log(error)});
+    }
+  }
+
+  formatPhoneNumber() {
+    if (typeof this.phone_number !== 'string') return;
+    const formatted = formatPhoneNumberValue(this.phone_number);
+    if (this.phone_number !== formatted) {
+      this.phone_number = formatted;
     }
   }
 

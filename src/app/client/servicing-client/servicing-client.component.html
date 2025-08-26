@@ -194,7 +194,11 @@
           <tbody>
             <tr *ngFor="let friend of circleOfFriends">
               <td>{{ friend.volunteer_name }}</td>
-              <td>{{ friend.phone_number }}</td>
+              <td>
+                <input *ngIf="isAdmin" class="form-control" [(ngModel)]="friend.phone_number"
+                  (input)="formatFriendPhone(friend)" (change)="updateClientFriend(friend)" />
+                <span *ngIf="!isAdmin">{{ friend.phone_number | phoneFormat }}</span>
+              </td>
               <td>{{ friend.email }}</td>
               <td>{{ friend.notes }}</td>
               <td>
@@ -241,7 +245,7 @@
               <td><input type="text" class="form-control" (change)="updateNextOfKin(nok)" [(ngModel)]="nok.name" /></td>
               <td><input type="text" class="form-control" (change)="updateNextOfKin(nok)"
                   [(ngModel)]="nok.relation_to_client" /></td>
-              <td><input type="text" class="form-control" (change)="updateNextOfKin(nok)"
+              <td><input type="text" class="form-control" (input)="formatNextOfKinPhone(nok)" (change)="updateNextOfKin(nok)"
                   [(ngModel)]="nok.phone_number" /></td>
               <td><input type="text" class="form-control" (change)="updateNextOfKin(nok)"
                   [(ngModel)]="nok.street_address" /></td>
@@ -300,8 +304,8 @@
               </td>
               <td>
                 <input *ngIf="isAdmin" class="form-control" [(ngModel)]="caseworker.phone"
-                  (change)="updateCaseworker(caseworker)" />
-                <span *ngIf="!isAdmin">{{ caseworker.phone }}</span>
+                  (input)="formatCaseworkerPhone(caseworker)" (change)="updateCaseworker(caseworker)" />
+                <span *ngIf="!isAdmin">{{ caseworker.phone | phoneFormat }}</span>
               </td>
               <td>
                 <input *ngIf="isAdmin" class="form-control" [(ngModel)]="caseworker.email"

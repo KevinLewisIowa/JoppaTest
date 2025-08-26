@@ -1,4 +1,5 @@
 import { AfterViewChecked, ChangeDetectorRef, Component, Inject, LOCALE_ID, OnInit } from '@angular/core';
+import { formatPhoneNumberValue } from 'app/utils/phone-utils';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from "@angular/router";
 import { ClientService } from "app/services/client.service";
@@ -492,6 +493,16 @@ export class ClientEditComponent implements OnInit, AfterViewChecked {
       this.router.navigate([`/locationCamp/${this.locationCampId}`]);
     } else {
       this.router.navigate(['admin/clientListing']);
+    }
+  }
+
+  formatPhoneNumber() {
+    const ctrl = this.clientForm.get('phone');
+    if (!ctrl) return;
+    let value = ctrl.value || '';
+    const formatted = formatPhoneNumberValue(value);
+    if (ctrl.value !== formatted) {
+      ctrl.setValue(formatted, { emitEvent: false });
     }
   }
 }

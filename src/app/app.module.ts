@@ -97,6 +97,7 @@ import { ClientPastFeloniesComponent } from './insert-modals/client-past-felonie
 import { ClientDebtComponent } from './insert-modals/client-debt/client-debt.component';
 import { ClientSkillComponent } from './insert-modals/client-skill/client-skill.component';
 import { ClientCaseworkerComponent } from './insert-modals/client-caseworker/client-caseworker.component';
+import { PhoneFormatPipe } from './pipes/phone-format.pipe';
 
 const reducers = {
   user: MainReducer,
@@ -174,7 +175,8 @@ const reducers = {
         ClientDebtComponent,
         ClientSkillComponent,
         ClientCaseworkerComponent,
-    ],
+    PhoneFormatPipe
+  ],
     imports: [
         BrowserModule,
         FormsModule,

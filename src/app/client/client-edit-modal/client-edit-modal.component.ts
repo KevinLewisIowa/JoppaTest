@@ -6,6 +6,7 @@ import { Router } from "@angular/router";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { formatDate } from '@angular/common';
 import { CountryStateCityService } from 'app/services/countrystatecity.service';
+import { formatPhoneNumberValue } from 'app/utils/phone-utils';
 
 @Component({
   selector: 'app-client-edit-modal',
@@ -397,4 +398,13 @@ export class ClientEditModalComponent implements OnInit, AfterViewChecked {
     });
   }
 
+  formatPhoneNumber() {
+    const ctrl = this.clientForm.get('phone');
+    if (!ctrl) return;
+    let value = ctrl.value || '';
+    const formatted = formatPhoneNumberValue(value);
+    if (ctrl.value !== formatted) {
+      ctrl.setValue(formatted, { emitEvent: false });
+    }
+  }
 }
