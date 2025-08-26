@@ -13,6 +13,7 @@
             <select id="source" class="form-control" [(ngModel)]="source" style="float:left;">
               <option value="Aftercare">Aftercare</option>
               <option value="Circle of Friends" *ngIf="isAdmin">Circle of Friends</option>
+              <option value="Client Advocate" *ngIf="isAdmin">Client Advocate</option>
               <option value="Email" *ngIf="isAdmin">Email</option>
               <option value="Heat">Heat</option>
               <option value="Meeting" *ngIf="isAdmin">Meeting</option>
@@ -20,9 +21,10 @@
               <option value="Phone" *ngIf="isAdmin">Phone</option>
               <option value="PINNED NOTE" *ngIf="isAdmin">PINNED NOTE</option>
               <option value="Resource Center" *ngIf="isAdmin">Resource Center</option>
-              <option value="Staff: Carrie">Staff: Carrie</option>
-              <option value="Staff: Megan">Staff: Megan</option>
-              <option value="Staff: Pat">Staff: Pat</option>
+              <option value="Staff: Carrie" *ngIf="isAdmin">Staff: Carrie</option>
+              <option value="Staff: Megan" *ngIf="isAdmin">Staff: Megan</option>
+              <option value="Staff: Pat" *ngIf="isAdmin">Staff: Pat</option>
+              <option value="Staff: Sean" *ngIf="isAdmin">Staff: Sean</option>
               <option value="WARNING" *ngIf="isAdmin">WARNING</option>
             </select>
           </div>
