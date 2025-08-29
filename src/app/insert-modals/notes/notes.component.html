@@ -29,8 +29,8 @@
             </select>
           </div>
           <div class="col-md-6">
-            <textarea id="focusMe" class="form-control" rows="4" [(ngModel)]="note" placeholder="Note"
-              name="note"></textarea>
+            <label for="focusMe">Note <span style="color:red">*</span></label>
+            <textarea id="focusMe" class="form-control" rows="4" [(ngModel)]="note" placeholder="Note" name="note" required></textarea>
           </div>
         </div>
       </div>

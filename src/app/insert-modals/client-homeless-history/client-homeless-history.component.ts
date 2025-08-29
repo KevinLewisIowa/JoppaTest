@@ -21,18 +21,19 @@ export class ClientHomelessHistoryComponent implements AfterViewChecked {
   extraInfoNeeded: boolean = false;
   client_id: number;
   reason_for_homelessness: string[] = [
-    'Addictions',
-    'Client Refused',
     'Domestic Violence',
     'Eviction',
     'Family Dispute',
     'Family Loss',
-    'Health Issues',
+    'Health Issue',
     'Job Loss',
-    'Legal Issues',
-    'Lost Income',
+    'Legal Issue',
     'Mental Health',
-    'Prison/Jail',
+    'Natural Disaster',
+    'Released from Prison/Jail',
+    'Released from Hospital',
+    'Released from Treatment',
+    'Substance Abuse',
     'Other'
   ];
 

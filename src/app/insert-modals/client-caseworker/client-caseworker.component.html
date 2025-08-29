@@ -10,7 +10,7 @@
       <div class="form-group">
         <div class="row">
           <div class="col-md-6">
-            <label for="organization">Organization</label>
+            <label for="organization">Organization <span style="color: red;">*</span></label>
             <select id="organization" class="form-control" [(ngModel)]="organization" name="organization" (change)="onOrganizationChange()">
               <option value="" disabled selected>Select organization</option>
               <option *ngFor="let org of organizations" [value]="org">{{ org }}</option>
@@ -22,7 +22,7 @@
               [(ngModel)]="otherOrganization" placeholder="Other Organization" />
           </div>
           <div class="col-md-6" [ngClass]="{'mt-2': extraInfoNeeded}">
-            <label for="caseworker-name">Name</label>
+            <label for="caseworker-name">Name <span style="color: red;">*</span></label>
             <input id="caseworker-name" type="text" class="form-control" [(ngModel)]="name" name="name" />
           </div>
         </div>

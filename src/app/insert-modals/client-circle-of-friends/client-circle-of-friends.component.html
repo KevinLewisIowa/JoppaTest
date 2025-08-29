@@ -8,17 +8,17 @@
         <div class="form-group">
           <div class="row">
             <div class="col-md-6">
-              <label for="volunteer-name">Volunteer Name &nbsp; </label>
+              <label for="volunteer-name">Volunteer Name <span style="color: red;">*</span></label>
               <input id="volunteer-name" type="text" class="form-control" [(ngModel)]="volunteer_name" />
             </div>
             <div class="col-md-6">
-              <label for="phone-number">Phone Number</label>
+              <label for="phone-number">Phone Number <span style="color: red;">*</span> <span style="font-size: 0.9em; color: #888;">(Phone or Email required)</span></label>
               <input id="phone-number" type="text" class="form-control" placeholder="###-###-####" [(ngModel)]="phone_number" (input)="formatPhoneNumber()"/>
             </div>
           </div>
           <div class="row">
             <div class="col-md-6">
-              <label for="email">Email</label>
+              <label for="email">Email <span style="color: red;">*</span> <span style="font-size: 0.9em; color: #888;">(Phone or Email required)</span></label>
               <input id="email" type="text" class="form-control" [(ngModel)]="email"/>
             </div>
             <div class="col-md-6">

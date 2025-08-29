@@ -30,26 +30,20 @@ export class ClientEditComponent implements OnInit, AfterViewChecked {
   extraInfoNeeded: boolean = false;
   extraInfoNeededReasonForDesMoines: boolean = false;
   homelessReasonOptions: string[] = [
-    "Addictions",
-    "Domestic Violence",
-    "Eviction",
-    "Family Conflict",
-    "Family Dispute",
-    "Family Loss",
-    "Financial Hardship",
-    "Health Issues",
-    "Job Loss",
-    "Legal Issues",
-    "Medical Issues",
-    "Mental Health",
-    "Natural Disaster",
-    "Prison/Jail",
-    "Release from Hospital",
-    "Release from Jail",
-    "Release from Treatment",
-    "Substance Abuse",
-    "Unknown",
-    "Other"
+    'Domestic Violence',
+    'Eviction',
+    'Family Dispute',
+    'Family Loss',
+    'Health Issue',
+    'Job Loss',
+    'Legal Issue',
+    'Mental Health',
+    'Natural Disaster',
+    'Released from Prison/Jail',
+    'Released from Hospital',
+    'Released from Treatment',
+    'Substance Abuse',
+    'Other'
   ];
   
   constructor(private router: Router, private clientService: ClientService, private countryStateCityService: CountryStateCityService, private modalService: NgbModal, private fb: UntypedFormBuilder, @Inject(LOCALE_ID) private locale: string, private cdr: ChangeDetectorRef) { }
@@ -493,6 +487,23 @@ export class ClientEditComponent implements OnInit, AfterViewChecked {
       this.router.navigate([`/locationCamp/${this.locationCampId}`]);
     } else {
       this.router.navigate(['admin/clientListing']);
+    }
+  }
+
+  formatBirthDate() {
+    const ctrl = this.clientForm.get('birth_date');
+    if (!ctrl) return;
+    let value = ctrl.value || '';
+    // Remove all non-digits
+    value = value.replace(/\D/g, '');
+    // Insert slashes as needed
+    if (value.length > 2 && value.length <= 4) {
+      value = value.slice(0, 2) + '/' + value.slice(2);
+    } else if (value.length > 4) {
+      value = value.slice(0, 2) + '/' + value.slice(2, 4) + '/' + value.slice(4, 8);
+    }
+    if (ctrl.value !== value) {
+      ctrl.setValue(value, { emitEvent: false });
     }
   }
 

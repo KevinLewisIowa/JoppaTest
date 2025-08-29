@@ -398,6 +398,23 @@ export class ClientEditModalComponent implements OnInit, AfterViewChecked {
     });
   }
 
+  formatBirthDate() {
+    const ctrl = this.clientForm.get('birth_date');
+    if (!ctrl) return;
+    let value = ctrl.value || '';
+    // Remove all non-digits
+    value = value.replace(/\D/g, '');
+    // Insert slashes as needed
+    if (value.length > 2 && value.length <= 4) {
+      value = value.slice(0, 2) + '/' + value.slice(2);
+    } else if (value.length > 4) {
+      value = value.slice(0, 2) + '/' + value.slice(2, 4) + '/' + value.slice(4, 8);
+    }
+    if (ctrl.value !== value) {
+      ctrl.setValue(value, { emitEvent: false });
+    }
+  }
+
   formatPhoneNumber() {
     const ctrl = this.clientForm.get('phone');
     if (!ctrl) return;

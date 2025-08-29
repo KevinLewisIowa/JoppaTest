@@ -69,7 +69,7 @@ export class ClientDwellingComponent implements OnInit, AfterViewChecked {
       return;
     }
 
-    if (this.dwelling !== '' && !isNaN(clientId) && !isNaN(routeInstanceId)) {
+    if (this.dwelling !== '' && this.where_sleep_last_night !== '' && !isNaN(clientId) && !isNaN(routeInstanceId)) {
       if (this.date_moved == null) {
         clientDwelling.date_moved = new Date();
       } else {

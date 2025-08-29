@@ -56,7 +56,7 @@
                 Indigenous</option>
               <option value="Asian or Asian American">Asian or Asian American</option>
               <option value="Black, African American, or African">Black, African American, or African</option>
-              <option value="Mixed">Mixed</option>
+              <option value="Multiracial">Multiracial</option>
               <option value="Native Hawaiian or Pacific Islander">Native Hawaiian or Pacific Islander</option>
               <option value="White">White</option>
               <option value="Client doesn't know">Client doesn't know</option>
@@ -81,8 +81,7 @@
           <label for="birth-date" class="col-6 col-form-label">Birth Date (Date must be MM/DD/YYYY):<font color="red">*
             </font> </label>
           <div class="col-6">
-            <input id="birth-date" type="text" class="form-control" placeholder="mm/dd/yyyy"
-              formControlName="birth_date" style="float:right;" />
+            <input id="birth-date" type="text" class="form-control" placeholder="mm/dd/yyyy" formControlName="birth_date" style="float:right;" (input)="formatBirthDate()" />
           </div>
         </div>
         <div class="form-group row">
@@ -116,8 +115,7 @@
           <label for="dbh" class="col-6 col-form-label"><span style="background-color: yellow;">Date Became Homeless
               (Date must be MM/DD/YYYY):</span> </label>
           <div class="col-6">
-            <input id="dbh" type="date" class="form-control" placeholder="mm/dd/yyyy"
-              formControlName="date_became_homeless" style="float:right;" />
+            <input id="dbh" type="date" class="form-control" placeholder="mm/dd/yyyy" formControlName="date_became_homeless" style="float:right;" />
           </div>
         </div>
         <div class="form-group row">

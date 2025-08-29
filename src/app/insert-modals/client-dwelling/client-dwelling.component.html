@@ -9,8 +9,8 @@
       <div class="form-group">
         <div class="row">
           <div class="col-md-6">
-            <label for="dwelling-location">Dwelling Location</label>
-            <select id="dwelling-location" class="form-control" [(ngModel)]="dwelling" (change)="onChange()">
+            <label for="dwelling-location">Dwelling Location <span style="color:red">*</span></label>
+            <select id="dwelling-location" class="form-control" [(ngModel)]="dwelling" (change)="onChange()" required>
               <option value="Abandoned Structure">Abandoned Structure</option>
               <option value="Apartment">Apartment</option>
               <option value="Broken Down Van">Broken Down Van</option>
@@ -45,9 +45,9 @@
           </div>
           <div class="row">
             <div class="col-md-6">
-              <label for="where_sleep_last_night" class="col-6 col-form-label">Where Did You Sleep Last Night?: </label>
+              <label for="where_sleep_last_night" class="col-6 col-form-label">Where Did You Sleep Last Night? <span style="color:red">*</span></label>
               <select id="where_sleep_last_night" class="form-control" style="float:right;"
-                [(ngModel)]="where_sleep_last_night">
+                [(ngModel)]="where_sleep_last_night" required>
                 <option value="Abandoned Structure">Abandoned Structure</option>
                 <option value="Apartment">Apartment</option>
                 <option value="Assisted Living">Assisted Living</option>
