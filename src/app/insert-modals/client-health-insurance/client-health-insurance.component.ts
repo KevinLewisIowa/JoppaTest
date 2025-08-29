@@ -16,6 +16,7 @@ export class ClientHealthInsuranceComponent implements OnInit, AfterViewChecked 
   has_insurance: string = 'Unknown';
   company: string = '';
   other_company: string = '';
+  note: string = '';
   extraInfoNeeded: boolean = false;
   client_id: number;
   initialOther: boolean = true;
@@ -81,6 +82,7 @@ export class ClientHealthInsuranceComponent implements OnInit, AfterViewChecked 
 
       clientHealthInsurance.has_health_insurance = this.has_insurance;
       clientHealthInsurance.client_id = clientId;
+      clientHealthInsurance.note = this.note;
 
       this.clientService.insertHealthInsurance(clientHealthInsurance).subscribe((insurance) => {
         this.has_insurance = 'Unknown';

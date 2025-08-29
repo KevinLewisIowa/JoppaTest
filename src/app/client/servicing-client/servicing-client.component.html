@@ -1250,6 +1250,7 @@
               <th>Date Added</th>
               <th>Has Insurance</th>
               <th>Company</th>
+              <th>Note</th>
               <th></th>
             </tr>
           </thead>
@@ -1263,6 +1264,10 @@
               </td>
               <td>
                 {{ insurance.company }}
+              </td>
+              <td>
+                <textarea *ngIf="isAdmin" class="form-control" rows="2" [(ngModel)]="insurance.note" (ngModelChange)="updateHealthInsurance(insurance)"></textarea>
+                <span *ngIf="!isAdmin">{{ insurance.note }}</span>
               </td>
               <td>
                 <button type="button" class="btn btn-primary" (click)="removeHealthInsurance(insurance.id)"

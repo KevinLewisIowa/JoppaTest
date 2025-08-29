@@ -3,6 +3,7 @@ export class ClientHealthInsurance {
     client_id: number = undefined;
     has_health_insurance: string = undefined;
     company: string = undefined;
+    note: string = undefined;
     created_at: Date = undefined;
     updated_at: Date = undefined;
 }

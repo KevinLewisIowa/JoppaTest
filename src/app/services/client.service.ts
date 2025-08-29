@@ -467,6 +467,28 @@ export class ClientService {
       );
   }
 
+  updateClientHealthInsurance(healthInsurance: ClientHealthInsurance) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+    return this.http.patch(
+        this.baseUrl + `client_health_insurances/${healthInsurance.id}`,
+        { client_health_insurance: healthInsurance },
+        { headers: myHeader }
+      )
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
   updateCaseworker(caseworker: Caseworker) {
     const myHeader = new HttpHeaders({
       "Content-Type": "application/json",

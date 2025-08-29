@@ -1570,6 +1570,12 @@ export class ServicingClientComponent implements OnInit {
     });
   }
 
+  updateHealthInsurance(item: any) {
+    this.service.updateClientHealthInsurance(item).subscribe(() => {
+      // Optionally show a success message
+    });
+  }
+
   formatNextOfKinPhone(nok: any) {
     if (!nok || typeof nok.phone_number !== 'string') return;
     const formatted = formatPhoneNumberValue(nok.phone_number);

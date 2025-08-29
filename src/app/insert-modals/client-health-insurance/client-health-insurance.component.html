@@ -31,6 +31,11 @@
                             [(ngModel)]="other_company" *ngIf="extraInfoNeeded" placeholder="Other Company" />
                     </div>
                 </div>
+
+            </div>
+            <div class="form-group">
+                <label for="insuranceNote">Note</label>
+                <textarea id="insuranceNote" class="form-control" rows="3" [(ngModel)]="note" name="insuranceNote" placeholder="Enter any notes about this health insurance record"></textarea>
             </div>
         </div>
     </form>
