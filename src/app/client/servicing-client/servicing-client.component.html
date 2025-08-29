@@ -169,8 +169,7 @@
       <div class="col-lg-12 col-md-12">
         <h4>
           Circle of Friends
-          <button type="button" (click)="goToTop(); clientCircleOfFriendsMdl.showModal()" class="btn btn-primary"
-            style="float: right" *ngIf="isAdmin">
+          <button type="button" (click)="goToTop(); clientCircleOfFriendsMdl.showModal()" class="btn btn-primary" style="float: right" *ngIf="isAdmin">
             New Friend
           </button>
         </h4>
@@ -195,11 +194,13 @@
             <tr *ngFor="let friend of circleOfFriends">
               <td>{{ friend.volunteer_name }}</td>
               <td>
-                <input *ngIf="isAdmin" class="form-control" [(ngModel)]="friend.phone_number"
-                  (input)="formatFriendPhone(friend)" (change)="updateClientFriend(friend)" />
+                <input *ngIf="isAdmin" class="form-control" [(ngModel)]="friend.phone_number" (input)="formatFriendPhone(friend)" (change)="updateClientFriend(friend)" />
                 <span *ngIf="!isAdmin">{{ friend.phone_number | phoneFormat }}</span>
               </td>
-              <td>{{ friend.email }}</td>
+              <td>
+                <input *ngIf="isAdmin" class="form-control" [(ngModel)]="friend.email" (change)="updateClientFriend(friend)" />
+                <span *ngIf="!isAdmin">{{ friend.email }}</span>
+              </td>
               <td>{{ friend.notes }}</td>
               <td>
                 <button type="button" class="btn btn-primary" *ngIf="isAdmin" (click)="removeClientFriend(friend.id)">
@@ -243,14 +244,10 @@
           <tbody>
             <tr *ngFor="let nok of clientNextOfKins">
               <td><input type="text" class="form-control" (change)="updateNextOfKin(nok)" [(ngModel)]="nok.name" /></td>
-              <td><input type="text" class="form-control" (change)="updateNextOfKin(nok)"
-                  [(ngModel)]="nok.relation_to_client" /></td>
-              <td><input type="text" class="form-control" (input)="formatNextOfKinPhone(nok)" (change)="updateNextOfKin(nok)"
-                  [(ngModel)]="nok.phone_number" /></td>
-              <td><input type="text" class="form-control" (change)="updateNextOfKin(nok)"
-                  [(ngModel)]="nok.street_address" /></td>
-              <td><input type="text" class="form-control" (change)="updateNextOfKin(nok)" [(ngModel)]="nok.email" />
-              </td>
+              <td><input type="text" class="form-control" (change)="updateNextOfKin(nok)" [(ngModel)]="nok.relation_to_client" /></td>
+              <td><input type="text" class="form-control" (input)="formatNextOfKinPhone(nok)" (change)="updateNextOfKin(nok)" [(ngModel)]="nok.phone_number" /></td>
+              <td><input type="text" class="form-control" (change)="updateNextOfKin(nok)" [(ngModel)]="nok.street_address" /></td>
+              <td><input type="text" class="form-control" (change)="updateNextOfKin(nok)" [(ngModel)]="nok.email" /></td>
               <td><input type="text" class="form-control" (change)="updateNextOfKin(nok)" [(ngModel)]="nok.note" /></td>
               <td>
                 <button type="button" class="btn btn-primary" *ngIf="isAdmin" (click)="removeClientNextOfKin(nok.id)">
@@ -291,11 +288,12 @@
           <tbody>
             <tr *ngFor="let caseworker of clientCaseworkers">
               <td>
-                <select *ngIf="isAdmin" class="form-control" [(ngModel)]="caseworker.organization"
+                <!-- <select *ngIf="isAdmin" class="form-control" [(ngModel)]="caseworker.organization"
                   (change)="updateCaseworker(caseworker)">
                   <option *ngFor="let org of organizations" [value]="org">{{ org }}</option>
                 </select>
-                <span *ngIf="!isAdmin">{{ caseworker.organization }}</span>
+                <span *ngIf="!isAdmin">{{ caseworker.organization }}</span> -->
+                <span>{{ caseworker.organization }}</span>
               </td>
               <td>
                 <input *ngIf="isAdmin" class="form-control" [(ngModel)]="caseworker.name"
@@ -360,7 +358,7 @@
                   <span *ngIf="!isAdmin">{{ item.date_moved | date: "shortDate" }}</span>
                 </td>
                 <td>
-                  <select *ngIf="isAdmin" class="form-control" [(ngModel)]="item.dwelling"
+                  <!-- <select *ngIf="isAdmin" class="form-control" [(ngModel)]="item.dwelling"
                     (ngModelChange)="saveDwelling(item)">
                     <option value="Abandoned Structure">Abandoned Structure</option>
                     <option value="Apartment">Apartment</option>
@@ -383,11 +381,12 @@
                     <option value="Unknown">Unknown</option>
                     <option value="Vehicle">Vehicle</option>
                     <option value="Other">Other</option>
-                  </select>
-                  <span *ngIf="!isAdmin">{{ item.dwelling }}</span>
+                  </select> -->
+                  <!-- <span *ngIf="!isAdmin">{{ item.dwelling }}</span> -->
+                  <span>{{ item.dwelling }}</span>
                 </td>
                 <td>
-                  <select *ngIf="isAdmin" class="form-control" [(ngModel)]="item.where_sleep_last_night"
+                  <!-- <select *ngIf="isAdmin" class="form-control" [(ngModel)]="item.where_sleep_last_night"
                     (ngModelChange)="saveDwelling(item)">
                     <option value="Abandoned Structure">Abandoned Structure</option>
                     <option value="Apartment">Apartment</option>
@@ -411,8 +410,9 @@
                     <option value="Unknown">Unknown</option>
                     <option value="Vehicle">Vehicle</option>
                     <option value="Other">Other</option>
-                  </select>
-                  <span *ngIf="!isAdmin">{{ item.where_sleep_last_night }}</span>
+                  </select> -->
+                  <!-- <span *ngIf="!isAdmin">{{ item.where_sleep_last_night }}</span> -->
+                  <span>{{ item.where_sleep_last_night }}</span>
                 </td>
                 <td>
                   <textarea *ngIf="isAdmin" class="form-control" rows="3" [(ngModel)]="item.notes" (ngModelChange)="saveDwelling(item)"></textarea>
@@ -458,8 +458,7 @@
             <tbody>
               <tr *ngFor="let item of homelessHistories">
                 <td>
-                  <select *ngIf="isAdmin" class="form-control" [(ngModel)]="item.first_time_homeless"
-                    (ngModelChange)="saveHomelessHistory(item)">
+                  <select *ngIf="isAdmin" class="form-control" [(ngModel)]="item.first_time_homeless" (ngModelChange)="saveHomelessHistory(item)">
                     <option [ngValue]="true">Yes</option>
                     <option [ngValue]="false">No</option>
                   </select>
@@ -471,11 +470,12 @@
                   <span *ngIf="!isAdmin">{{ item.date_became_homeless | date: "shortDate" }}</span>
                 </td>
                 <td>
-                  <select *ngIf="isAdmin" class="form-control" [(ngModel)]="item.reason_for_homelessness"
+                  <!-- <select *ngIf="isAdmin" class="form-control" [(ngModel)]="item.reason_for_homelessness"
                     (ngModelChange)="saveHomelessHistory(item)">
                     <option *ngFor="let reason of reasonForHomelessnessOptions" [value]="reason">{{ reason }}</option>
                   </select>
-                  <span *ngIf="!isAdmin">{{ item.reason_for_homelessness }}</span>
+                  <span *ngIf="!isAdmin">{{ item.reason_for_homelessness }}</span> -->
+                  <span>{{ item.reason_for_homelessness }}</span>
                 </td>
                 <td>
                   <textarea *ngIf="isAdmin" class="form-control" rows="3" [(ngModel)]="item.note" (ngModelChange)="saveHomelessHistory(item)"></textarea>
