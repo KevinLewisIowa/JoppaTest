@@ -1,0 +1,40 @@
+<ng-template #authorizedMailAccessMdl let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title">Add Authorized Mail Access</h4>
+    </div>
+    <form>
+        <div class="modal-body">
+            <div class="form-group">
+                <label for="authorizedName">Authorized Name</label>
+                <input id="authorizedName" [(ngModel)]="name" name="authorized_name"
+                    required class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="relationToClient">Relation to Client</label>
+                <select id="relationToClient" class="form-control" [(ngModel)]="relationToClient" name="relation_to_client">
+                    <option value="" disabled>Select your option</option>
+                    <option>Aunt</option>
+                    <option>Boyfriend</option>
+                    <option>Caretaker</option>
+                    <option>Child</option>
+                    <option>Cousin</option>
+                    <option>Girlfriend</option>
+                    <option>Grandparent</option>
+                    <option>Parent</option>
+                    <option>Partner</option>
+                    <option>Sibling</option>
+                    <option>Spouse</option>
+                    <option>Uncle</option>
+                    <option>Other</option>
+                </select>
+                <input *ngIf="isOtherRelationship(relationToClient)" type="text"
+                    class="form-control" style="margin-top: 5px; max-width: 200px" placeholder="Enter relationship"
+                    [(ngModel)]="relationToClient" />
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-outline-primary" (click)="c('Close click')">Don't Save</button>
+            <button type="button" class="btn btn-primary" (click)="submitAuthorizedMailAccess();c('')">Save</button>
+        </div>
+    </form>
+</ng-template>

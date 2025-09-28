@@ -49,6 +49,8 @@ import { ClientFelony } from "app/models/client-felony";
 import { ClientDebt } from "app/models/client-debt";
 import { ClientSkill } from "app/models/client-skill";
 import { Caseworker } from "app/models/caseworker";
+import { ClientMailbox } from 'app/models/client-mailbox';
+import { AuthorizedMailAccesses } from 'app/models/authorized-mail-accesses';
 
 @Component({
   selector: "app-servicing-client",
@@ -75,6 +77,8 @@ export class ServicingClientComponent implements OnInit {
   clientPastEvictions: ClientPastEviction[] = [];
   clientFelonies: ClientFelony[] = [];
   clientDebts: ClientDebt[] = [];
+  clientMailbox: ClientMailbox = new ClientMailbox();
+  authorizedMailAccesses: AuthorizedMailAccesses[] = [];
   pets: ClientPet[] = [];
   tents: Tent[] = [];
   steps: ClientStep[] = [];
@@ -257,7 +261,20 @@ export class ServicingClientComponent implements OnInit {
         this.service.getClientCaseworkers(this.clientId).subscribe((data: Caseworker[]) => {
           this.clientCaseworkers = data;
         }, (error) => console.log(error));
-      });
+
+        this.service.getMailboxForClient(this.clientId).subscribe((data: ClientMailbox) => {
+          this.clientMailbox = data;
+
+          if (this.clientMailbox != null) {
+            console.log('Client Mailbox:', JSON.stringify(this.clientMailbox));
+            this.service.getAuthorizedMailAccessors(this.clientMailbox.id).subscribe((data: AuthorizedMailAccesses[]) => {
+              console.log('Authorized Mail Accessors:', JSON.stringify(data));
+              this.authorizedMailAccesses = data;
+            }, error => console.log(error));
+          }
+        }, error => console.log(error));
+      }, (error) => console.log(error));
+
       if (this.routeInstanceId != null) {
         this.service.getClientNotesForRoute(this.clientId, this.routeInstanceId).subscribe((data: Note[]) => {
           this.notes = data;
@@ -658,6 +675,12 @@ export class ServicingClientComponent implements OnInit {
       });
   }
 
+  updateClientMailbox(mailbox: ClientMailbox) {
+    this.service.updateClientMailbox(mailbox).subscribe((data) => {
+      console.log(JSON.stringify(data));
+    }, error => console.log(error));
+  }
+
   updateNumberTanksHoses(client: Client) {
     this.service.updateClient(client).subscribe(
       (data) => {
@@ -993,6 +1016,18 @@ export class ServicingClientComponent implements OnInit {
     element.scrollIntoView();
   }
 
+  mailboxAdded(mailbox: ClientMailbox) {
+    this.clientMailbox = mailbox;
+    const element = document.querySelector("#client-mailbox");
+    element.scrollIntoView();
+  }
+
+  authorizedMailAccessAdded(accessor: AuthorizedMailAccesses) {
+    this.authorizedMailAccesses.push(accessor);
+    const element = document.querySelector("#authorized-mail-access-users");
+    element.scrollIntoView();
+  }
+
   clientDwellingAdded(dwelling: ClientDwelling) {
     this.dwellings.push(dwelling);
     const element = document.querySelector("#dwellings");
@@ -1133,6 +1168,22 @@ export class ServicingClientComponent implements OnInit {
     this.service.removeClientSkill(id).subscribe((res) => {
       this.clientSkills = this.clientSkills.filter((w) => w.id != id);
     });
+  }
+
+  removeClientMailbox(id: number) {
+    if (confirm("Are you sure you want to remove this mailbox?")) {
+      this.service.removeClientMailbox(id).subscribe((res) => {
+        this.clientMailbox = new ClientMailbox();
+      });
+    }
+  }
+
+  removeAuthorizedMailAccess(id: number) {
+    if (confirm("Are you sure you want to remove this authorized mail access user?")) {
+      this.service.removeAuthorizedMailAccess(id).subscribe((res) => {
+        this.authorizedMailAccesses = this.authorizedMailAccesses.filter((w) => Number(w.id) != id);
+      });
+    }
   }
 
   clientSelected(client: Client) {

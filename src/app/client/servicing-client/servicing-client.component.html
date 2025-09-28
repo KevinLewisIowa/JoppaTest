@@ -165,11 +165,94 @@
             (change)="updateNumberTanksHoses(client)" [(ngModel)]="client.number_hoses" />
         </div>
       </div>
-
+      <div class="col-lg-12 col-md-12">
+        <h4>
+          Client Mailbox
+          <button type="button" (click)="goToTop(); clientMailboxMdl.showModal()" class="btn btn-primary"
+            style="float: right" *ngIf="isAdmin && !clientMailbox.id">
+            New Mailbox
+          </button>
+        </h4>
+        <table class="table" id="client-mailbox">
+          <colgroup>
+            <col span="1" style="width: 33%" />
+            <col span="1" style="width: 33%" />
+            <col span="1" style="width: 33%" />
+          </colgroup>
+          <thead>
+            <tr>
+              <th>Mailbox Number</th>
+              <th>Verification Type</th>
+              <th>Date Added</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="clientMailbox && clientMailbox.mailbox_number; else noMailbox">
+              <td>
+                <input *ngIf="isAdmin" class="form-control" [(ngModel)]="clientMailbox.mailbox_number" (change)="updateClientMailbox(clientMailbox)" />
+                <span *ngIf="!isAdmin">{{ clientMailbox.mailbox_number }}</span>
+              </td>
+              <td>
+                <select *ngIf="isAdmin" class="form-control" [(ngModel)]="clientMailbox.verification_type" (change)="updateClientMailbox(clientMailbox)">
+                  <option value="Show ID">Show ID</option>
+                  <option value="Photo">Photo</option>
+                </select>
+                <span *ngIf="!isAdmin">{{ clientMailbox.verification_type }}</span>
+              </td>
+              <td>{{ clientMailbox.created_at | date:'shortDate' }}</td>
+              <td>
+                <button *ngIf="isAdmin" type="button" class="btn btn-primary" (click)="removeClientMailbox(clientMailbox.id)">Remove</button>
+              </td>
+              
+            </tr>
+          </tbody>
+          <ng-template #noMailbox>
+            <tr>
+              <td colspan="3" class="text-center text-muted">No mailbox assigned</td>
+            </tr>
+          </ng-template>
+        </table>
+      </div>
+      <div class="col-lg-12 col-md-12" *ngIf="isAdmin && clientMailbox.id">
+        <h4>
+          Authorized Mail Access Users
+          <button type="button" (click)="goToTop(); authorizedMailAccessMdl.showModal()" class="btn btn-primary"
+            style="float: right">
+            New User
+          </button>
+        </h4>
+        <table class="table" id="authorized-mail-access-users">
+          <colgroup>
+            <col span="1" style="width: 33%" />
+            <col span="1" style="width: 33%" />
+            <col span="1" style="width: 33%" />
+          </colgroup>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Relation to Client</th>
+              <th>Date Authorized</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let user of authorizedMailAccesses">
+              <td>{{ user.authorized_name }}</td>
+              <td>{{ user.relation_to_client }}</td>
+              <td>{{ user.date_authorized | date:'shortDate' }}</td>
+              <td>
+                <button *ngIf="isAdmin" type="button" class="btn btn-primary" (click)="removeAuthorizedMailAccess(user.id)">Remove</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
       <div class="col-lg-12 col-md-12">
         <h4>
           Circle of Friends
-          <button type="button" (click)="goToTop(); clientCircleOfFriendsMdl.showModal()" class="btn btn-primary" style="float: right" *ngIf="isAdmin">
+          <button type="button" (click)="goToTop(); clientCircleOfFriendsMdl.showModal()" class="btn btn-primary"
+            style="float: right" *ngIf="isAdmin">
             New Friend
           </button>
         </h4>
@@ -194,11 +277,13 @@
             <tr *ngFor="let friend of circleOfFriends">
               <td>{{ friend.volunteer_name }}</td>
               <td>
-                <input *ngIf="isAdmin" class="form-control" [(ngModel)]="friend.phone_number" (input)="formatFriendPhone(friend)" (change)="updateClientFriend(friend)" />
+                <input *ngIf="isAdmin" class="form-control" [(ngModel)]="friend.phone_number"
+                  (input)="formatFriendPhone(friend)" (change)="updateClientFriend(friend)" />
                 <span *ngIf="!isAdmin">{{ friend.phone_number | phoneFormat }}</span>
               </td>
               <td>
-                <input *ngIf="isAdmin" class="form-control" [(ngModel)]="friend.email" (change)="updateClientFriend(friend)" />
+                <input *ngIf="isAdmin" class="form-control" [(ngModel)]="friend.email"
+                  (change)="updateClientFriend(friend)" />
                 <span *ngIf="!isAdmin">{{ friend.email }}</span>
               </td>
               <td>{{ friend.notes }}</td>
@@ -244,10 +329,14 @@
           <tbody>
             <tr *ngFor="let nok of clientNextOfKins">
               <td><input type="text" class="form-control" (change)="updateNextOfKin(nok)" [(ngModel)]="nok.name" /></td>
-              <td><input type="text" class="form-control" (change)="updateNextOfKin(nok)" [(ngModel)]="nok.relation_to_client" /></td>
-              <td><input type="text" class="form-control" (input)="formatNextOfKinPhone(nok)" (change)="updateNextOfKin(nok)" [(ngModel)]="nok.phone_number" /></td>
-              <td><input type="text" class="form-control" (change)="updateNextOfKin(nok)" [(ngModel)]="nok.street_address" /></td>
-              <td><input type="text" class="form-control" (change)="updateNextOfKin(nok)" [(ngModel)]="nok.email" /></td>
+              <td><input type="text" class="form-control" (change)="updateNextOfKin(nok)"
+                  [(ngModel)]="nok.relation_to_client" /></td>
+              <td><input type="text" class="form-control" (input)="formatNextOfKinPhone(nok)"
+                  (change)="updateNextOfKin(nok)" [(ngModel)]="nok.phone_number" /></td>
+              <td><input type="text" class="form-control" (change)="updateNextOfKin(nok)"
+                  [(ngModel)]="nok.street_address" /></td>
+              <td><input type="text" class="form-control" (change)="updateNextOfKin(nok)" [(ngModel)]="nok.email" />
+              </td>
               <td><input type="text" class="form-control" (change)="updateNextOfKin(nok)" [(ngModel)]="nok.note" /></td>
               <td>
                 <button type="button" class="btn btn-primary" *ngIf="isAdmin" (click)="removeClientNextOfKin(nok.id)">
@@ -311,7 +400,8 @@
                 <span *ngIf="!isAdmin">{{ caseworker.email }}</span>
               </td>
               <td>
-                <textarea *ngIf="isAdmin" class="form-control" rows="3" [(ngModel)]="caseworker.notes" (change)="updateCaseworker(caseworker)"></textarea>
+                <textarea *ngIf="isAdmin" class="form-control" rows="3" [(ngModel)]="caseworker.notes"
+                  (change)="updateCaseworker(caseworker)"></textarea>
                 <span *ngIf="!isAdmin">{{ caseworker.notes }}</span>
               </td>
               <td>
@@ -415,7 +505,8 @@
                   <span>{{ item.where_sleep_last_night }}</span>
                 </td>
                 <td>
-                  <textarea *ngIf="isAdmin" class="form-control" rows="3" [(ngModel)]="item.notes" (ngModelChange)="saveDwelling(item)"></textarea>
+                  <textarea *ngIf="isAdmin" class="form-control" rows="3" [(ngModel)]="item.notes"
+                    (ngModelChange)="saveDwelling(item)"></textarea>
                   <span *ngIf="!isAdmin">{{ item.notes }}</span>
                 </td>
                 <td>
@@ -458,7 +549,8 @@
             <tbody>
               <tr *ngFor="let item of homelessHistories">
                 <td>
-                  <select *ngIf="isAdmin" class="form-control" [(ngModel)]="item.first_time_homeless" (ngModelChange)="saveHomelessHistory(item)">
+                  <select *ngIf="isAdmin" class="form-control" [(ngModel)]="item.first_time_homeless"
+                    (ngModelChange)="saveHomelessHistory(item)">
                     <option [ngValue]="true">Yes</option>
                     <option [ngValue]="false">No</option>
                   </select>
@@ -478,7 +570,8 @@
                   <span>{{ item.reason_for_homelessness }}</span>
                 </td>
                 <td>
-                  <textarea *ngIf="isAdmin" class="form-control" rows="3" [(ngModel)]="item.note" (ngModelChange)="saveHomelessHistory(item)"></textarea>
+                  <textarea *ngIf="isAdmin" class="form-control" rows="3" [(ngModel)]="item.note"
+                    (ngModelChange)="saveHomelessHistory(item)"></textarea>
                   <span *ngIf="!isAdmin">{{ item.note }}</span>
                 </td>
                 <td>
@@ -988,7 +1081,8 @@
                   <span *ngIf="!isAdmin">{{ step.date_completed | date: "shortDate" }}</span>
                 </td>
                 <td>
-                  <textarea *ngIf="isAdmin" class="form-control" rows="3" [(ngModel)]="step.notes" (ngModelChange)="saveStep(step)"></textarea>
+                  <textarea *ngIf="isAdmin" class="form-control" rows="3" [(ngModel)]="step.notes"
+                    (ngModelChange)="saveStep(step)"></textarea>
                   <span *ngIf="!isAdmin">{{ step.notes }}</span>
                 </td>
                 <td>
@@ -1266,7 +1360,8 @@
                 {{ insurance.company }}
               </td>
               <td>
-                <textarea *ngIf="isAdmin" class="form-control" rows="2" [(ngModel)]="insurance.note" (ngModelChange)="updateHealthInsurance(insurance)"></textarea>
+                <textarea *ngIf="isAdmin" class="form-control" rows="2" [(ngModel)]="insurance.note"
+                  (ngModelChange)="updateHealthInsurance(insurance)"></textarea>
                 <span *ngIf="!isAdmin">{{ insurance.note }}</span>
               </td>
               <td>
@@ -1494,3 +1589,5 @@
 <app-client-past-felonies #clientFelonyMdl (clientFelonyAdded)="clientFelonyAdded($event)"></app-client-past-felonies>
 <app-client-skill #clientSkillMdl (skillAdded)="skillAdded($event)"></app-client-skill>
 <app-client-caseworker #clientCaseworkerMdl (caseworkerAdded)="caseworkerAdded($event)"></app-client-caseworker>
+<app-client-mailbox #clientMailboxMdl (mailboxAdded)="mailboxAdded($event)"></app-client-mailbox>
+<app-authorized-mail-access #authorizedMailAccessMdl [mailboxId]="clientMailbox.id" (authorizedMailAccessAdded)="authorizedMailAccessAdded($event)"></app-authorized-mail-access>

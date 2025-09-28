@@ -1,0 +1,30 @@
+<ng-template #clientMailboxMdl let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title">Add Client Mailbox</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')"><span aria-hidden="true">&times;</span></button>
+    </div>
+    <form>
+        <div class="modal-body">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="mailboxNumber">Mailbox Number</label>
+                        <input id="mailboxNumber" class="form-control" [(ngModel)]="mailboxNumber" name="mailboxNumber" required />
+                    </div>
+                    <div class="col-md-6">
+                        <label for="verificationType">Verification Type</label>
+                        <select id="verificationType" class="form-control" [(ngModel)]="verificationType" name="verificationType" required>
+                            <option value="" disabled selected>Select verification type</option>
+                            <option value="Show ID">Show ID</option>
+                            <option value="Photo">Photo</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-primary" (click)="c('Close click')">Don't Save</button>
+        <button type="button" class="btn btn-primary" (click)="submitClientMailbox();c('')">Save</button>
+    </div>
+</ng-template>

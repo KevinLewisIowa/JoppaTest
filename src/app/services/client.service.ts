@@ -30,6 +30,8 @@ import { ClientStep } from "app/models/client-step";
 import { ClientSkill } from "app/models/client-skill";
 import { ClientHealthInsurance } from "app/models/client-health-insurance";
 import { Caseworker } from "../models/caseworker";
+import { ClientMailbox } from "app/models/client-mailbox";
+import { AuthorizedMailAccesses } from "app/models/authorized-mail-accesses";
 
 @Injectable()
 export class ClientService {
@@ -2207,6 +2209,143 @@ export class ClientService {
             this.router.navigate(["/application-login"]);
           }
           return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  getMailboxForClient(clientId: number) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+    return this.http
+      .get(this.baseUrl + `getMailboxForClient?clientId=${clientId}`, { headers: myHeader })
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  insertClientMailbox(clientMailbox: ClientMailbox) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+    return this.http
+      .post(
+        this.baseUrl + `client_mailboxes`,
+        { client_mailbox: clientMailbox },
+        { headers: myHeader }
+      )
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  removeClientMailbox(id: number) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+    return this.http
+      .delete(this.baseUrl + `client_mailboxes/${id}`, { headers: myHeader })
+      .pipe(
+        map((res) => {
+          return true;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  updateClientMailbox(theMailbox: ClientMailbox) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+    return this.http
+      .put(
+        this.baseUrl + `client_mailboxes/${theMailbox.id}`,
+        { client_mailbox: theMailbox },
+        { headers: myHeader }
+      )
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  getAuthorizedMailAccessors(mailboxId: number) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+    return this.http
+      .get(this.baseUrl + `getAuthorizedMailAccessors?mailboxId=${mailboxId}`, { headers: myHeader })
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  insertAuthorizedMailAccess(person: AuthorizedMailAccesses) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+    return this.http
+      .post(
+        this.baseUrl + `authorized_mail_accesses`,
+        { authorized_mail_access: person },
+        { headers: myHeader }
+      )
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  removeAuthorizedMailAccess(id: number) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+    return this.http
+      .delete(this.baseUrl + `authorized_mail_accesses/${id}`, { headers: myHeader })
+      .pipe(
+        map((res) => {
+          return true;
         }),
         catchError(this.handleError)
       );

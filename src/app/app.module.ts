@@ -98,6 +98,8 @@ import { ClientDebtComponent } from './insert-modals/client-debt/client-debt.com
 import { ClientSkillComponent } from './insert-modals/client-skill/client-skill.component';
 import { ClientCaseworkerComponent } from './insert-modals/client-caseworker/client-caseworker.component';
 import { PhoneFormatPipe } from './pipes/phone-format.pipe';
+import { ClientMailboxComponent } from './insert-modals/client-mailbox/client-mailbox.component';
+import { AuthorizedMailAccessComponent } from './insert-modals/authorized-mail-access/authorized-mail-access.component';
 
 const reducers = {
   user: MainReducer,
@@ -175,7 +177,9 @@ const reducers = {
         ClientDebtComponent,
         ClientSkillComponent,
         ClientCaseworkerComponent,
-    PhoneFormatPipe
+    PhoneFormatPipe,
+    ClientMailboxComponent,
+    AuthorizedMailAccessComponent
   ],
     imports: [
         BrowserModule,
