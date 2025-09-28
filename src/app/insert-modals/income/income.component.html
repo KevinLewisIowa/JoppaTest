@@ -23,8 +23,18 @@
                 </div>
                 <div class="col-md-6">
                     <label for="what_income_from">What income is from?</label>
-                    <input id="what_income_from" type="text" class="form-control" placeholder="What income is from"
-                        [(ngModel)]="what_income_from" style="float:left;" />
+                    <select id="what_income_from" class="form-control" [(ngModel)]="what_income_from" name="what_income_from" style="float:left;">
+                        <option value="Full-time job">Full-time job</option>
+                        <option value="Part-time job">Part-time job</option>
+                        <option value="SSI">SSI</option>
+                        <option value="Disability">Disability</option>
+                        <option value="Donating">Donating</option>
+                        <option value="Scrapping">Scrapping</option>
+                        <option value="Pension">Pension</option>
+                        <option value="Survivor Benefits">Survivor Benefits</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <input *ngIf="what_income_from === 'Other'" id="other_income_from" type="text" class="form-control mt-2" placeholder="Please specify" [(ngModel)]="other_income_from" name="other_income_from" />
                 </div>
             </div>
         </div>

@@ -15,6 +15,7 @@ export class IncomeComponent implements OnInit {
   has_income: boolean = false;
   monthly_money: string = '';
   what_income_from: string = '';
+  other_income_from: string = '';
 
   constructor(private modalService: NgbModal, private service: ClientService) {
 
@@ -26,9 +27,10 @@ export class IncomeComponent implements OnInit {
 
   showModal() {
     this.modalService.open(this.incomeMdl, { size: 'lg', backdrop: 'static'});
-    this.has_income = false;
-    this.monthly_money = '';
-    this.what_income_from = '';
+  this.has_income = false;
+  this.monthly_money = '';
+  this.what_income_from = '';
+  this.other_income_from = '';
   }
 
   submitIncome() {
@@ -38,8 +40,11 @@ export class IncomeComponent implements OnInit {
       income.client_id = Number(clientId);
       income.has_income = this.has_income;
       income.monthly_money = this.monthly_money;
-      income.what_income_from = this.what_income_from;
-      
+      if (this.what_income_from === 'Other') {
+        income.what_income_from = this.other_income_from;
+      } else {
+        income.what_income_from = this.what_income_from;
+      }
       this.service.insertClientIncome(income).subscribe(income_created => {
         if (income_created != null && income_created.id != null) {
           this.incomeAdded.emit(income_created);

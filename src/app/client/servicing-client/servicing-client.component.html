@@ -219,7 +219,7 @@
           Authorized Mail Access Users
           <button type="button" (click)="goToTop(); authorizedMailAccessMdl.showModal()" class="btn btn-primary"
             style="float: right">
-            New User
+            New Authorized User
           </button>
         </h4>
         <table class="table" id="authorized-mail-access-users">
@@ -1131,7 +1131,7 @@
                 </div>
               </td>
               <td><input type="text" class="form-control" (change)="updateClientIncome(income)"
-                  [(ngModel)]="income.what_income_from" /></td>
+                  [(ngModel)]="income.what_income_from" readonly /></td>
               <td>
                 <button type="button" class="btn btn-primary" *ngIf="isAdmin" (click)="removeClientIncome(income.id)">
                   Delete
