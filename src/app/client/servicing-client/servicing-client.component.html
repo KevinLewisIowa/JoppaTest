@@ -1124,8 +1124,12 @@
               <td>{{ income.created_at | date: "shortDate" }}</td>
               <td><button type="button" class="btn btn-outline-primary" (click)="updateHasClientIncome(income)">{{
                   income.has_income ? 'Yes' : 'No' }}</button></td>
-              <td><input type="text" class="form-control" (change)="updateClientIncome(income)"
-                  [(ngModel)]="income.monthly_money" /></td>
+              <td>
+                <div class="input-group">
+                  <span class="input-group-text">$</span>
+                  <input type="text" class="form-control" (change)="updateClientIncome(income)" [(ngModel)]="income.monthly_money" />
+                </div>
+              </td>
               <td><input type="text" class="form-control" (change)="updateClientIncome(income)"
                   [(ngModel)]="income.what_income_from" /></td>
               <td>
