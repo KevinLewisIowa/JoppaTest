@@ -195,6 +195,7 @@
               </td>
               <td>
                 <select *ngIf="isAdmin" class="form-control" [(ngModel)]="clientMailbox.verification_type" (change)="updateClientMailbox(clientMailbox)">
+                  <option value="Not Selected Yet">Not Selected Yet</option>
                   <option value="Show ID">Show ID</option>
                   <option value="Photo">Photo</option>
                 </select>

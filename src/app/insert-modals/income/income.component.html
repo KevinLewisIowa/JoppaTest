@@ -18,12 +18,16 @@
             <div class="row">
                 <div class="col-md-6">
                     <label for="monthly_money">Monthly income?</label>
-                    <input id="monthly_money" type="text" class="form-control" placeholder="Amount"
-                        [(ngModel)]="monthly_money" style="float:left;" />
+                    <div class="input-group">
+                        <span class="input-group-text">$</span>
+                        <input id="monthly_money" type="text" class="form-control" placeholder="Amount"
+                            [(ngModel)]="monthly_money" style="float:left;" />
+                    </div>
                 </div>
                 <div class="col-md-6">
                     <label for="what_income_from">What income is from?</label>
-                    <select id="what_income_from" class="form-control" [(ngModel)]="what_income_from" name="what_income_from" style="float:left;">
+                    <select id="what_income_from" class="form-control" [(ngModel)]="what_income_from"
+                        name="what_income_from" style="float:left;">
                         <option value="Full-time job">Full-time job</option>
                         <option value="Part-time job">Part-time job</option>
                         <option value="SSI">SSI</option>
@@ -34,7 +38,9 @@
                         <option value="Survivor Benefits">Survivor Benefits</option>
                         <option value="Other">Other</option>
                     </select>
-                    <input *ngIf="what_income_from === 'Other'" id="other_income_from" type="text" class="form-control mt-2" placeholder="Please specify" [(ngModel)]="other_income_from" name="other_income_from" />
+                    <input *ngIf="what_income_from === 'Other'" id="other_income_from" type="text"
+                        class="form-control mt-2" placeholder="Please specify" [(ngModel)]="other_income_from"
+                        name="other_income_from" />
                 </div>
             </div>
         </div>
