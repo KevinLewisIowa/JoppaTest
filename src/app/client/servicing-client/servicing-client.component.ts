@@ -1650,4 +1650,12 @@ export class ServicingClientComponent implements OnInit {
       caseworker.phone = formatted;
     }
   }
+
+  formatNextOfKinPhoneNumber(nok: any) {
+    if (!nok || typeof nok.phone_number !== 'string') return;
+    const formatted = formatPhoneNumberValue(nok.phone_number);
+    if (nok.phone_number !== formatted) {
+      nok.phone_number = formatted;
+    }
+  }
 }

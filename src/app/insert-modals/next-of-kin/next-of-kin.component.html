@@ -9,31 +9,30 @@
           <div class="row">
             <div class="col-md-6">
               <label for="name">Name </label>
-              <input id="name" type="text" class="form-control" [(ngModel)]="name" />
+              <input id="name" name="name" type="text" class="form-control" [(ngModel)]="name" />
             </div>
           </div>
           <div class="row">
             <div class="col-md-6">
                 <label for="relation_to_client">Relation to Client</label>
-                <input id="relation_to_client" type="text" class="form-control" [(ngModel)]="relation_to_client" />
+                <input id="relation_to_client" name="relation_to_client" type="text" class="form-control" [(ngModel)]="relation_to_client" />
               </div>
             <div class="col-md-6">
               <label for="phone_number">Phone Number</label>
-              <input id="phone_number" type="text" class="form-control" placeholder="Phone" [(ngModel)]="phone_number" style="float:left;"/>
+              <input id="phone_number" name="phone_number" type="text" class="form-control" placeholder="Phone" [(ngModel)]="phone_number" style="float:left;"  (input)="formatPhoneNumber()"/>
             </div>
             <div class="row">
               <div class="col-md-6">
                 <label for="street_address">Street Address</label>
-                <input id="street_address" type="text" class="form-control" [(ngModel)]="street_address" />
+                <input id="street_address" name="street_address" type="text" class="form-control" [(ngModel)]="street_address" />
               </div>
             </div>
             <div class="col-md-6">
                 <label for="email">Email</label>
-                <input id="email" type="text" class="form-control" [(ngModel)]="email" />
+                <input id="email" name="email" type="text" class="form-control" [(ngModel)]="email" />
             </div>
             <div class="col-md-6">
-              <textarea id="note" class="form-control" rows="4" [(ngModel)]="note" placeholder="Notes"
-                name="note"></textarea>
+              <textarea id="note" name="note" class="form-control" rows="4" [(ngModel)]="note" placeholder="Notes"></textarea>
             </div>
           </div>
         </div>

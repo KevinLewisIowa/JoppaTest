@@ -333,7 +333,7 @@
               <td><input type="text" class="form-control" (change)="updateNextOfKin(nok)"
                   [(ngModel)]="nok.relation_to_client" /></td>
               <td><input type="text" class="form-control" (input)="formatNextOfKinPhone(nok)"
-                  (change)="updateNextOfKin(nok)" [(ngModel)]="nok.phone_number" /></td>
+                  (change)="updateNextOfKin(nok)" [(ngModel)]="nok.phone_number"  (input)="formatNextOfKinPhoneNumber(nok)" /></td>
               <td><input type="text" class="form-control" (change)="updateNextOfKin(nok)"
                   [(ngModel)]="nok.street_address" /></td>
               <td><input type="text" class="form-control" (change)="updateNextOfKin(nok)" [(ngModel)]="nok.email" />

@@ -2,6 +2,7 @@ import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ClientNextOfKin } from 'app/models/client-next-of-kin';
 import { ClientService } from 'app/services/client.service';
+import { formatPhoneNumberValue } from 'app/utils/phone-utils';
 
 @Component({
   selector: 'app-next-of-kin',
@@ -55,5 +56,9 @@ export class NextOfKinComponent implements OnInit {
         }
       }, error => console.log(error));
     }
+  }
+
+  formatPhoneNumber() {
+    this.phone_number = formatPhoneNumberValue(this.phone_number);
   }
 }
