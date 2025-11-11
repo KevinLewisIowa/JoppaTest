@@ -44,6 +44,7 @@
     "core-js": "^3.19.1",
     "express": "^4.15.4",
     "font-awesome": "^4.7.0",
+    "heic2any": "^0.0.4",
     "ini": "^2.0.0",
     "jquery": "^3.6.0",
     "open-iconic": "^1.1.1",

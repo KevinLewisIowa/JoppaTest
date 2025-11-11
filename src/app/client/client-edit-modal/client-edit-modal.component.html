@@ -308,10 +308,15 @@
       <div class="form-group row">
         <img [src]="url" *ngIf="url != '' && url != null">
         <label for="client-picture" class="col-6 col-form-label">Image:</label>
-        <div class="col-6">
-          <input id="client-picture" type="file" accept="image/*" width="300" height="300" (change)="onAdd($event)"
-            class="form-control" style="float:right;" />
-          <button id="clear-picture" class="btn btn-outline-primary" (click)="clearPicture()" *ngIf="isAdmin">Clear
+        <div class="col-6" style="display:flex; align-items:center; justify-content:flex-end">
+          <div *ngIf="isConverting" style="margin-right:8px">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Converting...</span>
+            </div>
+          </div>
+          <input id="client-picture" type="file" accept="image/*,image/heic,image/heif" width="300" height="300" (change)="onAdd($event)"
+            class="form-control" style="float:right;" [disabled]="isConverting" />
+          <button id="clear-picture" class="btn btn-outline-primary" (click)="clearPicture()" *ngIf="isAdmin" [disabled]="isConverting">Clear
             Photo</button>
         </div>
       </div>
@@ -320,7 +325,7 @@
   <div class="modal-footer">
     <button type="button" class="btn btn-outline-primary" style="float:right;" (click)="c('Close click')">Don't
       Save</button>
-    <button type="button" class="btn btn-primary" style="float:right;" [disabled]="!clientForm.valid"
+    <button type="button" class="btn btn-primary" style="float:right;" [disabled]="!clientForm.valid || isConverting"
       (click)="submitClient(); c('');">Save</button>
   </div>
 </ng-template>

@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter, Inject, LOCALE_ID, AfterViewChecked, ChangeDetectorRef } from '@angular/core';
+import heic2any from 'heic2any';
 import { UntypedFormGroup, UntypedFormBuilder } from "@angular/forms";
 import { Client } from "app/models/client";
 import { ClientService } from "app/services/client.service";
@@ -24,10 +25,12 @@ export class ClientEditModalComponent implements OnInit, AfterViewChecked {
   isAdmin: boolean;
   url: any;
   byteArray: any;
+  private _objectUrl: string | null = null;
   initialOther: boolean = true;
   extraInfoNeededReasonForDesMoines: boolean = false;
   submitted: boolean = false;
   staticBirthday: string = '';
+  isConverting: boolean = false;
   whatbroughtyoutodesmoines: string[] = [
     'Better Homeless Services',
     'Didn’t Share',
@@ -282,22 +285,71 @@ export class ClientEditModalComponent implements OnInit, AfterViewChecked {
     }
   }
 
-  onAdd(event: any) {
-    if (event.target.files && event.target.files[0]) {
-      var reader = new FileReader();
-      reader.onload = (event: any) => {
-        this.url = event.target.result;
-        this.byteArray = event.target.result.split('base64,')[1];
-      }
-      reader.readAsDataURL(event.target.files[0]);
-    } else {
+  async onAdd(event: any) {
+    if (!(event.target.files && event.target.files[0])) {
       this.url = null;
+      this.byteArray = null;
+      return;
+    }
+    const file: File = event.target.files[0];
+
+    const processBlob = (blob: Blob) => {
+      // revoke previous object URL
+      if (this._objectUrl) {
+        try { URL.revokeObjectURL(this._objectUrl); } catch (e) { /* ignore */ }
+        this._objectUrl = null;
+      }
+      try {
+        this._objectUrl = URL.createObjectURL(blob);
+        this.url = this._objectUrl;
+        // ensure Angular picks up the async change
+        try { this.cdr.detectChanges(); } catch (e) { /* ignore */ }
+      } catch (e) {
+        console.warn('client-edit-modal createObjectURL failed, falling back to data URL', e);
+        this.url = null;
+      }
+
+      const reader = new FileReader();
+      reader.onload = (ev: any) => {
+        const result = ev.target.result as string;
+        if (!this.url) this.url = result;
+        const parts = result.split('base64,');
+        this.byteArray = parts.length > 1 ? parts[1] : '';
+        // stop conversion indicator
+        this.isConverting = false;
+        // ensure Angular updates bindings after FileReader completes
+        try { this.cdr.detectChanges(); } catch (e) { /* ignore */ }
+      };
+      reader.readAsDataURL(blob);
+    };
+
+    const name = (file.name || '').toLowerCase();
+    const type = (file.type || '').toLowerCase();
+    const isHeic = type.includes('heic') || type.includes('heif') || name.endsWith('.heic') || name.endsWith('.heif');
+
+    // start conversion indicator
+    this.isConverting = true;
+    if (isHeic) {
+      try {
+        const heicLib: any = (heic2any as any).default || heic2any;
+        const converted: any = await heicLib({ blob: file, toType: 'image/jpeg', quality: 0.9 });
+        const blob = Array.isArray(converted) ? converted[0] : converted;
+        processBlob(blob);
+      } catch (err: any) {
+        processBlob(file);
+      }
+    } else {
+      processBlob(file);
     }
   }
 
   clearPicture() {
     this.byteArray = "";
     this.url = null;
+    if (this._objectUrl) {
+      try { URL.revokeObjectURL(this._objectUrl); } catch (e) { /* ignore */ }
+      this._objectUrl = null;
+    }
   }
 
   submitClient() {

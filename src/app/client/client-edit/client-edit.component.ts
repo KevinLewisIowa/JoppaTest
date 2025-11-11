@@ -1,4 +1,5 @@
 import { AfterViewChecked, ChangeDetectorRef, Component, Inject, LOCALE_ID, OnInit } from '@angular/core';
+import heic2any from 'heic2any';
 import { formatPhoneNumberValue } from 'app/utils/phone-utils';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from "@angular/router";
@@ -22,6 +23,9 @@ export class ClientEditComponent implements OnInit, AfterViewChecked {
   theClient: Client;
   url: any;
   byteArray: any;
+  // store object URL for preview to avoid data URL decoding issues
+  private _objectUrl: string | null = null;
+  isConverting: boolean = false;
   isAdmin: boolean;
   initialOtherReason: boolean = true;
   initialOtherDesMoines: boolean = true;
@@ -144,22 +148,75 @@ export class ClientEditComponent implements OnInit, AfterViewChecked {
     }
   }
 
-  onAdd(event: any) {
-    if (event.target.files && event.target.files[0]) {
-      var reader = new FileReader();
-      reader.onload = (event: any) => {
-        this.url = event.target.result;
-        this.byteArray = event.target.result.split('base64,')[1];
-      }
-      reader.readAsDataURL(event.target.files[0]);
-    } else {
+  async onAdd(event: any) {
+    if (!(event.target.files && event.target.files[0])) {
       this.url = null;
+      this.byteArray = null;
+      return;
+    }
+    const file: File = event.target.files[0];
+
+    const processBlob = (blob: Blob) => {
+      try {
+        // revoke previous object URL
+        if (this._objectUrl) {
+          try { URL.revokeObjectURL(this._objectUrl); } catch (e) { /* ignore */ }
+          this._objectUrl = null;
+        }
+        // create an object URL for reliable preview rendering
+        this._objectUrl = URL.createObjectURL(blob);
+        this.url = this._objectUrl;
+      } catch (e) {
+        // fallback to data URL path if createObjectURL not available
+        console.warn('createObjectURL not available, falling back to data URL', e);
+        this.url = null;
+      }
+
+      // always produce a base64 data payload for upload (async)
+      const reader = new FileReader();
+      reader.onload = (ev: any) => {
+        const result = ev.target.result as string;
+        // if url not set above, set from data URL for preview
+        if (!this.url) {
+          this.url = result;
+        }
+        const parts = result.split('base64,');
+        this.byteArray = parts.length > 1 ? parts[1] : '';
+        // stop conversion indicator
+        this.isConverting = false;
+        try { this.cdr.detectChanges(); } catch (e) { /* ignore */ }
+      };
+      reader.readAsDataURL(blob);
+    };
+
+    const name = (file.name || '').toLowerCase();
+    const type = (file.type || '').toLowerCase();
+    const isHeic = type.includes('heic') || type.includes('heif') || name.endsWith('.heic') || name.endsWith('.heif');
+
+    // start conversion indicator
+    this.isConverting = true;
+    if (isHeic) {
+      try {
+        const heicLib: any = (heic2any as any).default || heic2any;
+        const converted: any = await heicLib({ blob: file, toType: 'image/jpeg', quality: 0.9 });
+        const blob = Array.isArray(converted) ? converted[0] : converted;
+        processBlob(blob);
+      } catch (err: any) {
+        console.error('HEIC conversion failed, falling back to original file', err);
+        processBlob(file);
+      }
+    } else {
+      processBlob(file);
     }
   }
 
   clearPicture() {
     this.byteArray = "";
     this.url = null;
+    if (this._objectUrl) {
+      try { URL.revokeObjectURL(this._objectUrl); } catch (e) { /* ignore */ }
+      this._objectUrl = null;
+    }
   }
 
   onFTHChange(value: string) {
