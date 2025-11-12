@@ -32,6 +32,7 @@ import { ClientHealthInsurance } from "app/models/client-health-insurance";
 import { Caseworker } from "../models/caseworker";
 import { ClientMailbox } from "app/models/client-mailbox";
 import { AuthorizedMailAccesses } from "app/models/authorized-mail-accesses";
+import { ClientBarrier } from "app/models/client-barrier";
 
 @Injectable()
 export class ClientService {
@@ -1981,6 +1982,63 @@ export class ClientService {
         catchError(this.handleError)
       );
   }
+
+    insertBarrier(barrier: ClientBarrier) {
+      const myHeader = new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: window.localStorage.getItem("apiToken"),
+      });
+      return this.http
+        .post(
+          this.baseUrl + `client_barriers`,
+          { client_barrier: barrier },
+          { headers: myHeader }
+        )
+        .pipe(
+          map((res: any) => {
+            if (res.message === "invalid-token") {
+              window.localStorage.removeItem("apiToken");
+              this.router.navigate(["/application-login"]);
+            }
+            return res;
+          }),
+          catchError(this.handleError)
+        );
+    }
+
+    removeBarrier(id: number) {
+      const myHeader = new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: window.localStorage.getItem("apiToken"),
+      });
+      return this.http.delete(this.baseUrl + `client_barriers/${id}`, { headers: myHeader })
+        .pipe(
+          map((res) => {
+            return true;
+          }),
+          catchError(this.handleError)
+        );
+    }
+
+    getClientBarriers(client_id: number) {
+      const myHeader = new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: window.localStorage.getItem("apiToken"),
+      });
+      return this.http.get(this.baseUrl + `getClientBarriers?clientId=${client_id}`, {
+          headers: myHeader,
+        })
+        .pipe(
+          map((res: any) => {
+            if (res.message === "invalid-token") {
+              window.localStorage.removeItem("apiToken");
+              this.router.navigate(["/application-login"]);
+            }
+            return res;
+          }),
+          catchError(this.handleError)
+        );
+    }
 
   getHeatEquipmentNotReturned(clientId: number) {
     const myHeader = new HttpHeaders({

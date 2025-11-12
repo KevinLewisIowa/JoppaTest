@@ -14,6 +14,7 @@ import { MainService } from "../../services/main.service";
 import { Heater } from "app/models/heater";
 import { Note } from "app/models/note";
 import { ClientPet } from "app/models/client-pet";
+import { ClientBarrier } from 'app/models/client-barrier';
 import { Tent } from "app/models/tent";
 import { ClientDwelling } from "app/models/client-dwelling";
 import { ClientCircleOfFriends } from "app/models/client-circle-of-friends";
@@ -67,6 +68,7 @@ export class ServicingClientComponent implements OnInit {
   clientIncomes: ClientIncome[] = [];
   clientNextOfKins: ClientNextOfKin[] = [];
   clientDislikes: ClientDislike[] = [];
+  clientBarriers: ClientBarrier[] = [];
   healthConcerns: HealthConcern[] = [];
   prayerRequestsAndNeeds: PrayerRequestAndNeed[] = [];
   householdClients: Client[] = [];
@@ -414,6 +416,12 @@ export class ServicingClientComponent implements OnInit {
           },
           (error) => console.log(error)
         );
+        this.service.getClientBarriers(this.clientId).subscribe({
+          next: (data: ClientBarrier[]) => {
+            this.clientBarriers = data;
+          },
+          error: (error) => console.log(error)
+        });
         this.service.getHealthConcerns(this.clientId).subscribe(
           (data: HealthConcern[]) => {
             this.healthConcerns = data;
@@ -992,6 +1000,12 @@ export class ServicingClientComponent implements OnInit {
     element.scrollIntoView();
   }
 
+  barrierAdded(barrier: ClientBarrier) {
+    this.clientBarriers.push(barrier);
+    const element = document.querySelector("#barriers");
+    if (element) element.scrollIntoView();
+  }
+
   incomeAdded(income: ClientIncome) {
     this.clientIncomes.push(income);
     const element = document.querySelector("#income");
@@ -1315,6 +1329,14 @@ export class ServicingClientComponent implements OnInit {
     if (confirm("Are you sure you want to remove this dislike?")) {
       this.service.removeDislike(id).subscribe((res) => {
         this.clientDislikes = this.clientDislikes.filter((w) => w.id != id);
+      });
+    }
+  }
+
+  removeClientBarrier(id: number) {
+    if (confirm("Are you sure you want to remove this barrier?")) {
+      this.service.removeBarrier(id).subscribe((res) => {
+        this.clientBarriers = this.clientBarriers.filter((w) => w.id != id);
       });
     }
   }

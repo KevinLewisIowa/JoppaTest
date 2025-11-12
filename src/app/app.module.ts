@@ -100,6 +100,7 @@ import { ClientCaseworkerComponent } from './insert-modals/client-caseworker/cli
 import { PhoneFormatPipe } from './pipes/phone-format.pipe';
 import { ClientMailboxComponent } from './insert-modals/client-mailbox/client-mailbox.component';
 import { AuthorizedMailAccessComponent } from './insert-modals/authorized-mail-access/authorized-mail-access.component';
+import { ClientBarrierComponent } from './insert-modals/client-barrier/client-barrier.component';
 
 const reducers = {
   user: MainReducer,
@@ -179,7 +180,8 @@ const reducers = {
         ClientCaseworkerComponent,
     PhoneFormatPipe,
     ClientMailboxComponent,
-    AuthorizedMailAccessComponent
+    AuthorizedMailAccessComponent,
+    ClientBarrierComponent
   ],
     imports: [
         BrowserModule,

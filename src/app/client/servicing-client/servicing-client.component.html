@@ -1146,6 +1146,43 @@
       </div>
       <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
         <h4>
+          Barriers
+          <button type="button" (click)="goToTop(); clientBarrierMdl.showModal()" class="btn btn-primary"
+            style="float: right">
+            New Barrier
+          </button>
+        </h4>
+        <table class="table" id="barriers">
+          <colgroup>
+            <col span="1" style="width: 30%" />
+            <col span="1" style="width: 50%" />
+            <col span="1" style="width: 10%" />
+            <col span="1" style="width: 10%" />
+          </colgroup>
+          <thead>
+            <tr>
+              <th>Barrier Type</th>
+              <th>Notes</th>
+              <th>Date Added</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let barrier of clientBarriers">
+              <td>{{ barrier.barrier_type }}</td>
+              <td>{{ barrier.note }}</td>
+              <td>{{ barrier.created_at | date: "shortDate" }}</td>
+              <td>
+                <button type="button" class="btn btn-primary" (click)="removeClientBarrier(barrier.id)">
+                  Remove
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
+        <h4>
           Client Debts
           <button type="button" (click)="goToTop(); clientDebtMdl.showModal()" class="btn btn-primary"
             style="float: right">
@@ -1597,4 +1634,5 @@
 <app-client-skill #clientSkillMdl (skillAdded)="skillAdded($event)"></app-client-skill>
 <app-client-caseworker #clientCaseworkerMdl (caseworkerAdded)="caseworkerAdded($event)"></app-client-caseworker>
 <app-client-mailbox #clientMailboxMdl (mailboxAdded)="mailboxAdded($event)"></app-client-mailbox>
+<app-client-barrier #clientBarrierMdl (barrierAdded)="barrierAdded($event)"></app-client-barrier>
 <app-authorized-mail-access #authorizedMailAccessMdl [mailboxId]="clientMailbox.id" (authorizedMailAccessAdded)="authorizedMailAccessAdded($event)"></app-authorized-mail-access>
