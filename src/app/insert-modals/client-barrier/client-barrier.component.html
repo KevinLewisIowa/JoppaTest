@@ -1,0 +1,38 @@
+<ng-template #clientBarrierMdl let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Add Barrier</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <form>
+    <div class="modal-body">
+      <div class="form-group">
+        <div class="row">
+          <div class="col-md-6">
+            <label for="type">Barrier Type <span style="color: red;">*</span></label>
+            <select id="type" class="form-control" [(ngModel)]="barrierType" name="barrierType" (change)="onBarrierTypeChange()">
+              <option value="" disabled selected>Select barrier type</option>
+              <option *ngFor="let type of barrierTypes" [value]="type">{{ type }}</option>
+            </select>
+          </div>
+          <div class="col-md-6" *ngIf="extraInfoNeeded">
+            <label for="extraInfoOrg">Other Barrier</label>
+            <input id="extraInfoOrg" name="extraInfoOrg" class="form-control" type="text"
+              [(ngModel)]="otherBarrier" placeholder="Other Barrier" />
+          </div>
+        </div>
+        <div class="row mt-2">
+          <div class="col-md-12">
+            <label for="barrier-notes">Notes</label>
+            <textarea id="barrier-notes" class="form-control" rows="4" [(ngModel)]="notes" name="notes"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-primary" (click)="c('Close click')">Don't Save</button>
+    <button type="button" class="btn btn-primary" (click)="submitBarrier(c);">Save</button>
+  </div>
+</ng-template>
