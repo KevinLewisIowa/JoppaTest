@@ -178,6 +178,24 @@ export class MainService {
     );
   }
 
+  mergeDuplicateClient(duplicateClientId: number, activeClientId: number) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+
+    return this.http.get(this.apiUrl + `removeDuplicateClient?duplicateClientId=${duplicateClientId}&activeClientId=${activeClientId}`).pipe(
+      map((res: any) => {
+        if (res.message === "invalid-token") {
+          window.localStorage.removeItem("apiToken");
+          this.router.navigate(["/application-login"]);
+        }
+        return res;
+      }),
+      catchError(this.handleError)
+    );
+  }
+
   getNotesForRouteInstance(routeInstanceId: number) {
     const myHeader = new HttpHeaders({
       "Content-Type": "application/json",

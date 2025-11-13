@@ -37,6 +37,7 @@ import { FirstTimeHomelessnessReportComponent } from "./admin-reports/first-time
 import { AdminCampListingComponent } from "./admin-camp-listing/admin-camp-listing.component";
 import { AdminClientInactiveUpdaterComponent } from "./admin-client-inactive-updater/admin-client-inactive-updater.component";
 import { AdminAddPetFoodUtilityComponent } from "./admin-add-pet-food-utility/admin-add-pet-food-utility.component";
+import { AdminMergeDuplicatesComponent } from "./admin-merge-duplicates/admin-merge-duplicates.component";
 
 const routes: Routes = [
   {
@@ -153,6 +154,11 @@ const routes: Routes = [
     path: "admin/checkInAllHeaters",
     canActivate: [IsLoggedInGuard, IsAdminGuard],
     component: AdminCheckInComponent,
+  },
+  {
+    path: "admin/mergeDuplicates",
+    canActivate: [IsLoggedInGuard, IsAdminGuard],
+    component: AdminMergeDuplicatesComponent,
   },
   {
     path: "admin/clientListing",

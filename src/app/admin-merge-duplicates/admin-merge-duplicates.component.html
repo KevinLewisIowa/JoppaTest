@@ -1,0 +1,53 @@
+<div class="container mt-3">
+    <h3>Merge Duplicate Client</h3>
+
+    <p>Select the client record that is the duplicate (the one to remove), then select the client record to keep (the
+        active client). Click Merge to combine them.</p>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">Duplicate Client (to remove)</div>
+                <div class="card-body">
+                    <div *ngIf="duplicateClient; else noDup">
+                        <p><strong>{{duplicateClient.first_name}} {{duplicateClient.last_name}}</strong></p>
+                        <p *ngIf="duplicateClient.preferred_name">Preferred: {{duplicateClient.preferred_name}}</p>
+                        <p>ID: {{duplicateClient.id}}</p>
+                    </div>
+                    <ng-template #noDup>
+                        <p class="text-muted">No duplicate client selected.</p>
+                    </ng-template>
+                    <button class="btn btn-outline-primary" (click)="openSearch('duplicate')">Search Duplicate</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">Active Client (keep this one)</div>
+                <div class="card-body">
+                    <div *ngIf="activeClient; else noActive">
+                        <p><strong>{{activeClient.first_name}} {{activeClient.last_name}}</strong></p>
+                        <p *ngIf="activeClient.preferred_name">Preferred: {{activeClient.preferred_name}}</p>
+                        <p>ID: {{activeClient.id}}</p>
+                    </div>
+                    <ng-template #noActive>
+                        <p class="text-muted">No active client selected.</p>
+                    </ng-template>
+                    <button class="btn btn-outline-primary" (click)="openSearch('active')">Search Active</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-3">
+        <button class="btn btn-primary mr-2" (click)="goBack()" style="float:left"><fa-icon [icon]="backIcon"></fa-icon> Back</button>
+        <button class="btn btn-danger" [disabled]="!duplicateClient || !activeClient" style="float:right" (click)="merge()">Merge</button>
+        <span class="ml-3 text-success" *ngIf="message">{{message}}</span>
+        <span class="ml-3 text-danger" *ngIf="error">{{error}}</span>
+    </div>
+
+    <!-- Include the reusable client-search component. It exposes showModal() and emits clientSelected -->
+    <app-client-search #clientSearch (clientSelected)="clientSelectedHandler($event)"></app-client-search>
+
+</div>

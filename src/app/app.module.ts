@@ -101,6 +101,7 @@ import { PhoneFormatPipe } from './pipes/phone-format.pipe';
 import { ClientMailboxComponent } from './insert-modals/client-mailbox/client-mailbox.component';
 import { AuthorizedMailAccessComponent } from './insert-modals/authorized-mail-access/authorized-mail-access.component';
 import { ClientBarrierComponent } from './insert-modals/client-barrier/client-barrier.component';
+import { AdminMergeDuplicatesComponent } from './admin-merge-duplicates/admin-merge-duplicates.component';
 
 const reducers = {
   user: MainReducer,
@@ -181,7 +182,8 @@ const reducers = {
     PhoneFormatPipe,
     ClientMailboxComponent,
     AuthorizedMailAccessComponent,
-    ClientBarrierComponent
+    ClientBarrierComponent,
+    AdminMergeDuplicatesComponent
   ],
     imports: [
         BrowserModule,

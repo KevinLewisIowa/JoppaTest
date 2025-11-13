@@ -56,6 +56,10 @@ export class AdminHomeComponent implements OnInit {
     this.router.navigate(["/admin/campListing"]);
   }
 
+  openMergeDuplicates() {
+    this.router.navigate(["/admin/mergeDuplicates"]);
+  }
+
   setRouteAttendance() {
     if (JSON.parse(window.localStorage.getItem("RouteAttendance")) == null) {
       let routeAttendanceList: Appearance[] = [];
