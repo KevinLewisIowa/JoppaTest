@@ -103,6 +103,10 @@ export class RequestedItemComponent implements OnInit, AfterViewChecked {
       if (this.extraInfoNeeded && (this.extraInfo === null || this.extraInfo === "")) {
         alert("Need to enter additional info for this item");
       } else {
+        if (this.description.includes("Tent") || this.description.includes("Sleeping Bag") || this.description.includes("Tarp")) {
+          alert("Please let the client know they must come into Joppa and fill out a request form to see if they qualify OR you need to talk with staff about this if the individual cannot do so.");
+        }
+
         let itemDescription: string;
         if (this.extraInfo != null && (this.description === "Socks" || this.description === "Jacket" || this.description === "Winter Coat")) {
           itemDescription = "Size " + this.extraInfo + " " + this.description;

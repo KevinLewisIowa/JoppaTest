@@ -26,6 +26,7 @@ export class ClientCaseworkerComponent implements OnInit {
     'Anawim',
     'Aging Resources',
     'Broadlawns',
+    'Children and Families of Iowa',
     'Community Support Advocate',
     'DHS',
     'Eyerly Ball',

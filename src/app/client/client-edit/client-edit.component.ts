@@ -94,8 +94,8 @@ export class ClientEditComponent implements OnInit, AfterViewChecked {
       highest_level_education: '',
       what_brought_to_des_moines: '',
       otherReasonForDesMoines: '',
-      city_before_homelessness: '',
-      state_before_homelessness: '',
+      city_before_homelessness: 'Des Moines',
+      state_before_homelessness: 'IA',
       homeless_history_note: '',
       where_sleep_last_night: ''
     });
