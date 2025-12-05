@@ -17,4 +17,5 @@ export class LocationCamp {
   all_seen: boolean = undefined;
   number_clients_at_camp: number = undefined;
   remain_on_route: boolean = undefined;
+  heat_route_only: boolean = undefined;
 }

@@ -58,15 +58,12 @@ export class CampEditModalComponent implements OnInit {
 
   submitCamp() {
     console.log(this.campForm.value);
-    this.mainService
-      .updateLocationCamp(this.campForm.value as LocationCamp)
-      .subscribe(
-        (data) => {
-          window.localStorage.setItem("routeId", JSON.stringify(data.route_id));
-          this.editedCamp.emit(this.campForm.value as LocationCamp);
-        },
-        (error) => console.log(error)
-      );
+    this.mainService.updateLocationCamp(this.campForm.value as LocationCamp).subscribe((data) => {
+        window.localStorage.setItem("routeId", JSON.stringify(data.route_id));
+        this.editedCamp.emit(this.campForm.value as LocationCamp);
+      },
+      (error) => console.log(error)
+    );
   }
 
   getCurrentLocation() {

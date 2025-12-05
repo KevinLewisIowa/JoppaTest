@@ -25,13 +25,7 @@
     <div class="card">
       <h3 align="left">Camps</h3>
       <div>
-        <button
-          (click)="newLocationCamp()"
-          class="btn btn-primary"
-          style="float: right"
-          type="button"
-          *ngIf="isAdmin"
-        >
+        <button (click)="newLocationCamp()" class="btn btn-primary" style="float: right" type="button" *ngIf="isAdmin">
           <fa-icon [icon]="createIcon"></fa-icon> Create Camp
         </button>
       </div>
