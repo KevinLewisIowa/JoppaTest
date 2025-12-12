@@ -709,6 +709,29 @@ export class ServicingClientComponent implements OnInit {
     });
   }
 
+  private clearPetsFoodRequests(): void {
+    const updatePets = (pets: ClientPet[]) => {
+      pets.forEach((pet: ClientPet) => {
+        if (pet.food_requested === true) {
+          pet.food_requested = false;
+          this.service.updatePet(pet).subscribe(() => {
+            console.log(`Cleared pet food request for pet id ${pet.id}`);
+          }, (err) => console.log(err));
+        }
+      });
+    };
+
+    if (this.pets && this.pets.length > 0) {
+      updatePets(this.pets);
+    } else if (this.clientId) {
+      // Ensure we have the client's pets before trying to update them
+      this.service.getClientPets(this.clientId).subscribe((pets: ClientPet[]) => {
+        this.pets = pets;
+        updatePets(this.pets);
+      }, (err) => console.log(err));
+    }
+  }
+
   updatePetInfo(pet: ClientPet) {
     this.service.updatePet(pet).subscribe((data) => {
       console.log(JSON.stringify(data));
@@ -891,6 +914,9 @@ export class ServicingClientComponent implements OnInit {
           if (!interaction.still_lives_here) {
             alert('Please add a new dwelling to indicate where they went and any other applicable notes');
             document.getElementById("newDwellingButton").click();
+
+            // If we haven't loaded pets for this client, fetch them then clear requests
+            this.clearPetsFoodRequests();
           }
 
           let dwellingDates = this.dwellings.map(dwelling => dwelling.created_at);
@@ -927,6 +953,9 @@ export class ServicingClientComponent implements OnInit {
           if (!interaction.still_lives_here) {
             alert('Please add a new dwelling to indicate where they went and any other applicable notes');
             document.getElementById("newDwellingButton").click();
+
+            // If we haven't loaded pets for this client, fetch them then clear requests
+            this.clearPetsFoodRequests();
           }
 
           let dwellingDates = this.dwellings.map(dwelling => dwelling.created_at);
