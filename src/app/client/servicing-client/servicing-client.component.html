@@ -190,11 +190,13 @@
           <tbody>
             <tr *ngIf="clientMailbox && clientMailbox.mailbox_number; else noMailbox">
               <td>
-                <input *ngIf="isAdmin" class="form-control" [(ngModel)]="clientMailbox.mailbox_number" (change)="updateClientMailbox(clientMailbox)" />
+                <input *ngIf="isAdmin" class="form-control" [(ngModel)]="clientMailbox.mailbox_number"
+                  (change)="updateClientMailbox(clientMailbox)" />
                 <span *ngIf="!isAdmin">{{ clientMailbox.mailbox_number }}</span>
               </td>
               <td>
-                <select *ngIf="isAdmin" class="form-control" [(ngModel)]="clientMailbox.verification_type" (change)="updateClientMailbox(clientMailbox)">
+                <select *ngIf="isAdmin" class="form-control" [(ngModel)]="clientMailbox.verification_type"
+                  (change)="updateClientMailbox(clientMailbox)">
                   <option value="Not Selected Yet">Not Selected Yet</option>
                   <option value="Show ID">Show ID</option>
                   <option value="Photo">Photo</option>
@@ -203,9 +205,10 @@
               </td>
               <td>{{ clientMailbox.created_at | date:'shortDate' }}</td>
               <td>
-                <button *ngIf="isAdmin" type="button" class="btn btn-primary" (click)="removeClientMailbox(clientMailbox.id)">Remove</button>
+                <button *ngIf="isAdmin" type="button" class="btn btn-primary"
+                  (click)="removeClientMailbox(clientMailbox.id)">Remove</button>
               </td>
-              
+
             </tr>
           </tbody>
           <ng-template #noMailbox>
@@ -243,7 +246,8 @@
               <td>{{ user.relation_to_client }}</td>
               <td>{{ user.date_authorized | date:'shortDate' }}</td>
               <td>
-                <button *ngIf="isAdmin" type="button" class="btn btn-primary" (click)="removeAuthorizedMailAccess(user.id)">Remove</button>
+                <button *ngIf="isAdmin" type="button" class="btn btn-primary"
+                  (click)="removeAuthorizedMailAccess(user.id)">Remove</button>
               </td>
             </tr>
           </tbody>
@@ -302,7 +306,7 @@
         <h4>
           Next of Kin
           <button type="button" (click)="goToTop(); nextOfKinMdl.showModal()" class="btn btn-primary"
-            style="float: right">
+            style="float: right" *ngIf="isAdmin">
             New Next of Kin
           </button>
         </h4>
@@ -329,16 +333,30 @@
           </thead>
           <tbody>
             <tr *ngFor="let nok of clientNextOfKins">
-              <td><input type="text" class="form-control" (change)="updateNextOfKin(nok)" [(ngModel)]="nok.name" /></td>
-              <td><input type="text" class="form-control" (change)="updateNextOfKin(nok)"
-                  [(ngModel)]="nok.relation_to_client" /></td>
-              <td><input type="text" class="form-control" (input)="formatNextOfKinPhone(nok)"
-                  (change)="updateNextOfKin(nok)" [(ngModel)]="nok.phone_number"  (input)="formatNextOfKinPhoneNumber(nok)" /></td>
-              <td><input type="text" class="form-control" (change)="updateNextOfKin(nok)"
-                  [(ngModel)]="nok.street_address" /></td>
-              <td><input type="text" class="form-control" (change)="updateNextOfKin(nok)" [(ngModel)]="nok.email" />
+              <td>
+                <input *ngIf="isAdmin" type="text" class="form-control" (change)="updateNextOfKin(nok)" [(ngModel)]="nok.name" />
+                <span *ngIf="!isAdmin">{{ nok.name }}</span>
               </td>
-              <td><input type="text" class="form-control" (change)="updateNextOfKin(nok)" [(ngModel)]="nok.note" /></td>
+              <td>
+                <input *ngIf="isAdmin" type="text" class="form-control" (change)="updateNextOfKin(nok)" [(ngModel)]="nok.relation_to_client" />
+                <span *ngIf="!isAdmin">{{ nok.relation_to_client }}</span>
+              </td>
+              <td>
+                <input *ngIf="isAdmin" type="text" class="form-control" (input)="formatNextOfKinPhone(nok)" (change)="updateNextOfKin(nok)" [(ngModel)]="nok.phone_number" (input)="formatNextOfKinPhoneNumber(nok)" />
+                <span *ngIf="!isAdmin">{{ nok.phone_number | phoneFormat }}</span>
+              </td>
+              <td>
+                <input *ngIf="isAdmin" type="text" class="form-control" (change)="updateNextOfKin(nok)" [(ngModel)]="nok.street_address" />
+                <span *ngIf="!isAdmin">{{ nok.street_address }}</span>
+              </td>
+              <td>
+                <input *ngIf="isAdmin" type="text" class="form-control" (change)="updateNextOfKin(nok)" [(ngModel)]="nok.email" />
+                <span *ngIf="!isAdmin">{{ nok.email }}</span>
+              </td>
+              <td>
+                <input *ngIf="isAdmin" type="text" class="form-control" (change)="updateNextOfKin(nok)" [(ngModel)]="nok.note" />
+                <span *ngIf="!isAdmin">{{ nok.note }}</span>
+              </td>
               <td>
                 <button type="button" class="btn btn-primary" *ngIf="isAdmin" (click)="removeClientNextOfKin(nok.id)">
                   Delete
@@ -635,8 +653,7 @@
           </tbody>
         </table>
       </div>
-      <div *ngIf="receivedItems.length > 0 && !heatRoute" class="col-lg-12 col-md-12">
-        <!-- added !heatRoute from ngIf to pare down heat screen -->
+      <div *ngIf="receivedItems.length > 0" class="col-lg-12 col-md-12">
         <h4>Recently Received Items</h4>
         <input class="form-control" style="max-width: 15%; margin-bottom: 5px" type="text" placeholder="Filter items"
           (keyup)="filterReceivedItems(receivedFilter.value)" #receivedFilter />
@@ -675,7 +692,7 @@
           Prayer Requests
           <button type="button" (click)="goToTop(); prayerRequestsNeedsMdl.showModal()" class="btn btn-primary"
             style="float: right">
-            New Prayer Request/Need
+            New Prayer Request
           </button>
         </h4>
         <table class="table" id="prayerRequestsNeeds">
@@ -712,7 +729,6 @@
         </table>
       </div>
       <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
-        <!-- removed !heatRoute from ngIf to pare down screen -->
         <div class="background-color">
           <h4>
             Likes
@@ -754,7 +770,6 @@
         </div>
       </div>
       <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
-        <!-- removed !heatRoute from ngIf to pare down screen -->
         <h4>
           Dislikes
           <button type="button" (click)="goToTop(); dislikeMdl.showModal()" class="btn btn-primary"
@@ -899,7 +914,7 @@
           </tbody>
         </table>
       </div>
-      <div class="col-lg-12 col-md-12" *ngIf="!heatRoute">
+      <div class="col-lg-12 col-md-12">
         <div class="background-color">
           <h4>
             Pets
@@ -998,7 +1013,6 @@
         </table>
       </div>
       <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
-        <!-- removed !heatRoute from ngIf to pare down screen -->
         <div class="background-color">
           <h4>
             Goals
@@ -1071,12 +1085,7 @@
             <tbody>
               <tr *ngFor="let step of steps">
                 <td>
-                  <select *ngIf="isAdmin" class="form-control" [(ngModel)]="step.step_type"
-                    (ngModelChange)="saveStep(step)">
-                    <option value="" disabled>Select Step</option>
-                    <option *ngFor="let option of stepOptions" [value]="option">{{ option }}</option>
-                  </select>
-                  <span *ngIf="!isAdmin">{{ step.step_type }}</span>
+                  {{ step.step_type }}
                 </td>
                 <td>
                   <input *ngIf="isAdmin" type="date" class="form-control" [ngModel]="formatDate(step.date_completed)"
@@ -1101,7 +1110,8 @@
       <div class="col-lg-12 col-md-12">
         <h4>
           Client Income
-          <button type="button" (click)="goToTop(); incomeMdl.showModal()" class="btn btn-primary" style="float: right">
+          <button type="button" (click)="goToTop(); incomeMdl.showModal()" class="btn btn-primary" style="float: right"
+            *ngIf="isAdmin">
             New Income Record
           </button>
         </h4>
@@ -1125,16 +1135,21 @@
           <tbody>
             <tr *ngFor="let income of clientIncomes">
               <td>{{ income.created_at | date: "shortDate" }}</td>
-              <td><button type="button" class="btn btn-outline-primary" (click)="updateHasClientIncome(income)">{{
-                  income.has_income ? 'Yes' : 'No' }}</button></td>
               <td>
-                <div class="input-group">
+                <button *ngIf="isAdmin" type="button" class="btn btn-outline-primary" (click)="updateHasClientIncome(income)">{{ income.has_income ? 'Yes' : 'No' }}</button>
+                <span *ngIf="!isAdmin">{{ income.has_income ? 'Yes' : 'No' }}</span>
+              </td>
+              <td>
+                <div *ngIf="isAdmin" class="input-group">
                   <span class="input-group-text">$</span>
                   <input type="text" class="form-control" (change)="updateClientIncome(income)" [(ngModel)]="income.monthly_money" />
                 </div>
+                <div *ngIf="!isAdmin">{{ income.monthly_money | currency }}</div>
               </td>
-              <td><input type="text" class="form-control" (change)="updateClientIncome(income)"
-                  [(ngModel)]="income.what_income_from" readonly /></td>
+              <td>
+                <input *ngIf="isAdmin" type="text" class="form-control" (change)="updateClientIncome(income)" [(ngModel)]="income.what_income_from" readonly />
+                <span *ngIf="!isAdmin">{{ income.what_income_from }}</span>
+              </td>
               <td>
                 <button type="button" class="btn btn-primary" *ngIf="isAdmin" (click)="removeClientIncome(income.id)">
                   Delete
@@ -1327,7 +1342,6 @@
         </table>
       </div>
       <div class="col-lg-12 col-md-12">
-        <!-- removed !heatRoute from ngIf to pare down screen -->
         <h4>
           Health Concerns
           <button type="button" (click)="goToTop(); healthMdl.showModal()" class="btn btn-primary" style="float: right"
@@ -1368,7 +1382,6 @@
         </table>
       </div>
       <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
-        <!-- removed !heatRoute from ngIf to pare down screen -->
         <h4>
           Health Insurance
           <button type="button" (click)="goToTop(); clientHealthInsuranceMdl.showModal()" class="btn btn-primary"
@@ -1450,7 +1463,7 @@
                 <td>
                   <select id="household_relationship_type" class="form-control" style="float: left" #hrt
                     [(ngModel)]="houseclient.household_relationship_type"
-                    *ngIf="houseclient.id != houseclient.household_id" name="household_relationship_type"
+                    *ngIf="isAdmin && houseclient.id != houseclient.household_id" name="household_relationship_type"
                     (change)="onHouseholdRelationshipTypeChange(houseclient)">
                     <option value="" disabled>Select your option</option>
                     <option>Aunt</option>
@@ -1467,10 +1480,11 @@
                     <option>Uncle</option>
                     <option>Other</option>
                   </select>
-                  <input *ngIf="isOtherRelationship(houseclient.household_relationship_type)" type="text"
+                  <input *ngIf="isAdmin && isOtherRelationship(houseclient.household_relationship_type)" type="text"
                     class="form-control" style="margin-top: 5px; max-width: 200px" placeholder="Enter relationship"
                     [(ngModel)]="houseclient.household_relationship_type"
                     (ngModelChange)="onHouseholdRelationshipTypeChange(houseclient)" />
+                  <span *ngIf="!isAdmin">{{ houseclient.household_relationship_type }}</span>
                 </td>
                 <td>
                   <button type="button" class="btn btn-primary" (click)="viewClient(houseclient)"
@@ -1479,8 +1493,7 @@
                   </button>
                 </td>
                 <td>
-                  <button type="button" class="btn btn-primary" (click)="removeHouseholdClient(houseclient)"
-                    *ngIf="houseclient.id != houseclient.household_id">
+                  <button type="button" class="btn btn-primary" *ngIf="isAdmin && houseclient.id != houseclient.household_id" (click)="removeHouseholdClient(houseclient)">
                     Remove
                   </button>
                 </td>
@@ -1635,4 +1648,5 @@
 <app-client-caseworker #clientCaseworkerMdl (caseworkerAdded)="caseworkerAdded($event)"></app-client-caseworker>
 <app-client-mailbox #clientMailboxMdl (mailboxAdded)="mailboxAdded($event)"></app-client-mailbox>
 <app-client-barrier #clientBarrierMdl (barrierAdded)="barrierAdded($event)"></app-client-barrier>
-<app-authorized-mail-access #authorizedMailAccessMdl [mailboxId]="clientMailbox.id" (authorizedMailAccessAdded)="authorizedMailAccessAdded($event)"></app-authorized-mail-access>
+<app-authorized-mail-access #authorizedMailAccessMdl [mailboxId]="clientMailbox.id"
+  (authorizedMailAccessAdded)="authorizedMailAccessAdded($event)"></app-authorized-mail-access>

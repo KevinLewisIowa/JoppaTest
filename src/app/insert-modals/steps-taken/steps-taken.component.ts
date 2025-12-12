@@ -15,6 +15,7 @@ export class StepsTakenComponent implements OnInit {
   step_description: string = '';
   step_date: Date;
   notes: string = '';
+  otherStep: string = '';
   steps: string[] = [
     'Apply for a birth certificate',
     'Apply for a half-price of bus pass',
@@ -43,7 +44,8 @@ export class StepsTakenComponent implements OnInit {
     'Set goals',
     'Set up a budget',
     'Set up a personal email',
-    'Set up your cell phone'
+    'Set up your cell phone',
+    'Other'
   ];
 
   constructor(private modalService: NgbModal, private service: ClientService) { }
@@ -57,13 +59,23 @@ export class StepsTakenComponent implements OnInit {
     this.step_description = '';
     this.step_date = null;
     this.notes = '';
+    this.otherStep = '';
   }
-
-  submitClientStep() {
+  saveClientStep(close: Function) {
     const step = new ClientStep();
     const clientId = JSON.parse(localStorage.getItem('selectedClient'));
-    if (this.step_description != null && !isNaN(clientId)) {
-      step.step_type = this.step_description;
+
+    // Determine final step type: if 'Other' is selected, use the entered otherStep value
+    const finalStepType = this.step_description === 'Other' ? (this.otherStep || '').trim() : (this.step_description || '').trim();
+
+    if (finalStepType === '') {
+      // invalid - do not close modal
+      alert('Please select a step or enter a description for Other.');
+      return;
+    }
+
+    if (!isNaN(clientId)) {
+      step.step_type = finalStepType;
       step.client_id = clientId;
       step.date_completed = this.step_date;
       step.notes = this.notes;
@@ -72,6 +84,7 @@ export class StepsTakenComponent implements OnInit {
         next: (data: ClientStep) => {
           if (data != null && data.id != null) {
             this.stepAdded.emit(data);
+            close('');
           }
         },
         error: (error) => console.log(error)

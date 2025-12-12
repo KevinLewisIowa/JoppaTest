@@ -15,6 +15,7 @@
                             <option value="" disabled selected>Select Step</option>
                             <option *ngFor="let step of steps" [value]="step">{{ step }}</option>
                         </select>
+                        <input id="otherStep" *ngIf="step_description === 'Other'" class="form-control mt-2" type="text" [(ngModel)]="otherStep" name="otherStep" placeholder="Enter step description" />
                     </div>
                     <div class="col-sm-4">
                         <label for="dateCompleted">Date Completed</label>
@@ -30,6 +31,6 @@
     </form>
     <div class="modal-footer">
         <button type="button" class="btn btn-outline-primary" (click)="c('Close click')">Don't Save</button>
-        <button type="button" class="btn btn-primary" (click)="submitClientStep();c('')">Save</button>
+        <button type="button" class="btn btn-primary" (click)="saveClientStep(c)">Save</button>
     </div>
 </ng-template>
