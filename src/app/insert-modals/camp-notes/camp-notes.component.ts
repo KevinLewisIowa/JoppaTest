@@ -29,7 +29,7 @@ export class CampNotesComponent implements OnInit {
 
   goToTop() {
     const element = document.querySelector("#topOfScreen");
-    element.scrollIntoView();
+    if (element) (element as HTMLElement).scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
   showModal() {

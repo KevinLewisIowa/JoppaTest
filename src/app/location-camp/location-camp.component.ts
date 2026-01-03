@@ -400,7 +400,7 @@ export class LocationCampComponent implements OnInit {
   campNoteAdded(note: CampNote) {
     this.campNotes.push(note);
     const element = document.querySelector("#camp-notes");
-    element.scrollIntoView();
+    if (element) (element as HTMLElement).scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
   removeCampNote(id: number) {

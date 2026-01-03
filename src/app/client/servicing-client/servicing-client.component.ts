@@ -1007,8 +1007,7 @@ export class ServicingClientComponent implements OnInit {
   requestedItemAdded(items: RequestedItem[]) {
     items.forEach(i => {
       this.requestedItems.push(i);
-      const element = document.querySelector("#items");
-      element.scrollIntoView();
+      this.safeScrollTo('#new-item-btn');
     });
   }
 
@@ -1025,74 +1024,62 @@ export class ServicingClientComponent implements OnInit {
 
   likeAdded(like: ClientLike) {
     this.clientLikes.push(like);
-    const element = document.querySelector("#likes");
-    element.scrollIntoView();
+    this.safeScrollTo('#new-like-btn');
   }
 
   barrierAdded(barrier: ClientBarrier) {
     this.clientBarriers.push(barrier);
-    const element = document.querySelector("#barriers");
-    if (element) element.scrollIntoView();
+    this.safeScrollTo('#new-barrier-btn');
   }
 
   incomeAdded(income: ClientIncome) {
     this.clientIncomes.push(income);
-    const element = document.querySelector("#income");
-    element.scrollIntoView();
+    this.safeScrollTo('#new-income-btn');
   }
 
   nextOfKinAdded(next_of_kin: ClientNextOfKin) {
     this.clientNextOfKins.push(next_of_kin);
-    const element = document.querySelector("#next_of_kin");
-    element.scrollIntoView();
+    this.safeScrollTo('#new-next-of-kin-btn');
   }
 
   tentAdded(tent: Tent) {
     this.tents.push(tent);
-    const element = document.querySelector("#tents");
-    element.scrollIntoView();
+    this.safeScrollTo('#new-tent-btn');
   }
 
   caseworkerAdded(caseworker: Caseworker) {
     this.clientCaseworkers.push(caseworker);
-    const element = document.querySelector("#caseworkers");
-    element.scrollIntoView();
+    this.safeScrollTo('#new-caseworker-btn');
   }
 
   mailboxAdded(mailbox: ClientMailbox) {
     this.clientMailbox = mailbox;
-    const element = document.querySelector("#client-mailbox");
-    element.scrollIntoView();
+    this.safeScrollTo('#new-mailbox-btn');
   }
 
   authorizedMailAccessAdded(accessor: AuthorizedMailAccesses) {
     this.authorizedMailAccesses.push(accessor);
-    const element = document.querySelector("#authorized-mail-access-users");
-    element.scrollIntoView();
+    this.safeScrollTo('#new-authorized-mail-access-btn');
   }
 
   clientDwellingAdded(dwelling: ClientDwelling) {
     this.dwellings.push(dwelling);
-    const element = document.querySelector("#dwellings");
-    element.scrollIntoView();
+    this.safeScrollTo('#newDwellingButton');
   }
 
   clientHistoryAdded(history: ClientHomelessHistory) {
     this.homelessHistories.push(history);
-    const element = document.querySelector("#histories");
-    element.scrollIntoView();
+    this.safeScrollTo('#newHistoryButton');
   }
 
   referralResourceAdded(referralResource: ReferralsResources) {
     this.referralsResources.push(referralResource);
-    const element = document.querySelector("#referralsResources");
-    element.scrollIntoView();
+    this.safeScrollTo('#new-referral-btn');
   }
 
   dislikeAdded(dislike: ClientDislike) {
     this.clientDislikes.push(dislike);
-    const element = document.querySelector("#dislikes");
-    element.scrollIntoView();
+    this.safeScrollTo('#new-dislike-btn');
   }
 
   editedClient(theClient: Client) {
@@ -1104,20 +1091,17 @@ export class ServicingClientComponent implements OnInit {
 
   healthConcernAdded(concern: HealthConcern) {
     this.healthConcerns.push(concern);
-    const element = document.querySelector("#concerns");
-    element.scrollIntoView();
+    this.safeScrollTo('#new-health-concern-btn');
   }
 
   goalAdded(goal: GoalsNextStep) {
     this.goalsAndSteps.push(goal);
-    const element = document.querySelector("#goals");
-    element.scrollIntoView();
+    this.safeScrollTo('#new-goal-btn');
   }
 
-  prayerRequestNeedAdded(request: PrayerRequestAndNeed) {
+  prayerRequestAdded(request: PrayerRequestAndNeed) {
     this.prayerRequestsAndNeeds.push(request);
-    const element = document.querySelector("#prayerRequestsNeeds");
-    element.scrollIntoView();
+    this.safeScrollTo('#new-prayer-request-btn');
   }
 
   noteAdded(note: Note) {
@@ -1129,58 +1113,49 @@ export class ServicingClientComponent implements OnInit {
         this.pinnedNoteString += '\r\n' + note.note;
       }
     }
-    const element = document.querySelector("#notes");
-    element.scrollIntoView();
+    this.safeScrollTo('#new-note-btn');
   }
 
   petAdded(pet: ClientPet) {
     this.pets.push(pet);
-    const element = document.querySelector("#petList");
-    element.scrollIntoView();
+    this.safeScrollTo('#new-pet-btn');
   }
 
   friendAdded(friend: ClientCircleOfFriends) {
     this.circleOfFriends.push(friend);
-    const element = document.querySelector("#circle-of-friends");
-    element.scrollIntoView();
+    this.safeScrollTo('#new-friend-btn');
   }
 
   clientHealthInsuranceAdded(insurance: ClientHealthInsurance) {
     this.healthInsurances.push(insurance);
-    const element = document.querySelector("#healthInsurance");
-    element.scrollIntoView();
+    this.safeScrollTo('#new-health-insurance-btn');
   }
 
   stepAdded(step: ClientStep) {
     console.log(JSON.stringify(step));
     this.steps.push(step);
 
-    const element = document.querySelector("#steps");
-    element.scrollIntoView();
+    this.safeScrollTo('#new-step-btn');
   }
 
   clientEvictionAdded(eviction: ClientPastEviction) {
     this.clientPastEvictions.push(eviction);
-    const element = document.querySelector("#clientPastEvictions");
-    element.scrollIntoView();
+    this.safeScrollTo('#new-eviction-btn');
   }
 
   clientFelonyAdded(felony: ClientFelony) {
     this.clientFelonies.push(felony);
-    const element = document.querySelector("#clientFelonies");
-    element.scrollIntoView();
+    this.safeScrollTo('#new-felony-btn');
   }
 
   debtAdded(debt: ClientDebt) {
     this.clientDebts.push(debt);
-    const element = document.querySelector("#clientDebts");
-    element.scrollIntoView();
+    this.safeScrollTo('#new-debt-btn');
   }
 
   skillAdded(skill: any) {
     this.clientSkills.push(skill);
-    const element = document.querySelector("#clientSkills");
-    element.scrollIntoView();
+    this.safeScrollTo('#new-skill-btn');
   }
 
   removeClientEviction(id: number) {
@@ -1242,8 +1217,24 @@ export class ServicingClientComponent implements OnInit {
   dateSelected(date_seen: Date) { }
 
   goToTop() {
-    const element = document.querySelector("#topOfScreen");
-    element.scrollIntoView();
+    this.safeScrollTo('#topOfScreen');
+  }
+
+  /**
+   * Safely scroll to an element identified by selector.
+   * - Defaults to smooth behavior and start block
+   * - Supports an optional pixel offset (useful if you have a fixed header)
+   */
+  private safeScrollTo(selector: string, options: ScrollIntoViewOptions = { behavior: 'smooth', block: 'start' }, offset: number = 0): void {
+    const element = document.querySelector(selector) as HTMLElement;
+    if (!element) return;
+
+    if (offset && typeof offset === 'number' && offset !== 0) {
+      const y = element.getBoundingClientRect().top + window.scrollY - offset;
+      window.scrollTo({ top: y, behavior: options?.behavior });
+    } else {
+      element.scrollIntoView(options);
+    }
   }
 
   backToClientListing() {

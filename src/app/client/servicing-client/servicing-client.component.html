@@ -26,13 +26,17 @@
     <div>
       <img [src]="url" width="20%" height="20%"
         *ngIf="url !== 'data:image/png;base64,null' && url != '' && url != null">
+      <button type="button" class="btn btn-primary" style="margin-left: 1%; float: left" (click)="backToClientListing()"
+        *ngIf="isAdmin">
+        <fa-icon [icon]="backIcon"></fa-icon> Back to Client List
+      </button>
+      <button (click)="showMap()" type="button" style="float: right" class="btn btn-primary"
+        *ngIf="client.latitude != null && client.longitude != null">
+        <fa-icon [icon]="mapIcon"></fa-icon> Show Directions
+      </button>
       <button #clientInfo class="btn btn-primary" style="float: right" (click)="clientEditMdl.openModal(client)"
         type="button">
         Client Info <fa-icon [icon]="informationIcon"></fa-icon>
-      </button>
-      <button (click)="showMap()" type="button" style="float: left" class="btn btn-primary"
-        *ngIf="client.latitude != null && client.longitude != null">
-        <fa-icon [icon]="mapIcon"></fa-icon> Show Directions
       </button>
     </div>
   </div>
@@ -41,13 +45,13 @@
       <div class="col-lg-12 col-md-12" *ngIf="heatRoute || isAdmin">
         <h4>
           Heating Equipment
-          <button type="button" (click)="loanHeater()" class="btn btn-primary" style="float: right">
+          <button id="new-heater-btn" type="button" (click)="loanHeater()" class="btn btn-primary" style="float: right">
             New Heater
           </button>
-          <button type="button" (click)="loanTank()" class="btn btn-primary" style="float: right">
+          <button id="new-tank-btn" type="button" (click)="loanTank()" class="btn btn-primary" style="float: right">
             Add Tank
           </button>
-          <button type="button" (click)="loanHose()" class="btn btn-primary" style="float: right">
+          <button id="new-hose-btn" type="button" (click)="loanHose()" class="btn btn-primary" style="float: right">
             Add Hose
           </button>
         </h4>
@@ -168,7 +172,7 @@
       <div class="col-lg-12 col-md-12">
         <h4>
           Client Mailbox
-          <button type="button" (click)="goToTop(); clientMailboxMdl.showModal()" class="btn btn-primary"
+          <button id="new-mailbox-btn" type="button" (click)="goToTop(); clientMailboxMdl.showModal()" class="btn btn-primary"
             style="float: right" *ngIf="isAdmin && !clientMailbox.id">
             New Mailbox
           </button>
@@ -221,7 +225,7 @@
       <div class="col-lg-12 col-md-12" *ngIf="isAdmin && clientMailbox.id">
         <h4>
           Authorized Mail Access Users
-          <button type="button" (click)="goToTop(); authorizedMailAccessMdl.showModal()" class="btn btn-primary"
+          <button id="new-authorized-mail-access-btn" type="button" (click)="goToTop(); authorizedMailAccessMdl.showModal()" class="btn btn-primary"
             style="float: right">
             New Authorized User
           </button>
@@ -256,7 +260,7 @@
       <div class="col-lg-12 col-md-12">
         <h4>
           Circle of Friends
-          <button type="button" (click)="goToTop(); clientCircleOfFriendsMdl.showModal()" class="btn btn-primary"
+          <button id="new-friend-btn" type="button" (click)="goToTop(); clientCircleOfFriendsMdl.showModal()" class="btn btn-primary"
             style="float: right" *ngIf="isAdmin">
             New Friend
           </button>
@@ -305,7 +309,7 @@
       <div class="col-lg-12 col-md-12">
         <h4>
           Next of Kin
-          <button type="button" (click)="goToTop(); nextOfKinMdl.showModal()" class="btn btn-primary"
+          <button id="new-next-of-kin-btn" type="button" (click)="goToTop(); nextOfKinMdl.showModal()" class="btn btn-primary"
             style="float: right" *ngIf="isAdmin">
             New Next of Kin
           </button>
@@ -369,7 +373,7 @@
       <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
         <h4>
           Client Caseworker
-          <button type="button" (click)="goToTop(); clientCaseworkerMdl.showModal()" class="btn btn-primary"
+          <button id="new-caseworker-btn" type="button" (click)="goToTop(); clientCaseworkerMdl.showModal()" class="btn btn-primary"
             style="float: right" *ngIf="isAdmin">
             New Caseworker
           </button>
@@ -608,7 +612,7 @@
       <div class="col-lg-12 col-md-12">
         <h4>
           Requested Items
-          <button type="button" (click)="goToTop(); requestItemMdl.showModal()" class="btn btn-primary"
+          <button id="new-item-btn" type="button" (click)="goToTop(); requestItemMdl.showModal()" class="btn btn-primary"
             style="float: right">
             New Item
           </button>
@@ -732,7 +736,7 @@
         <div class="background-color">
           <h4>
             Likes
-            <button type="button" class="btn btn-primary" style="float: right" (click)="goToTop(); likeMdl.showModal()">
+            <button id="new-like-btn" type="button" class="btn btn-primary" style="float: right" (click)="goToTop(); likeMdl.showModal()">
               New Like
             </button>
           </h4>
@@ -772,7 +776,7 @@
       <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
         <h4>
           Dislikes
-          <button type="button" (click)="goToTop(); dislikeMdl.showModal()" class="btn btn-primary"
+          <button id="new-dislike-btn" type="button" (click)="goToTop(); dislikeMdl.showModal()" class="btn btn-primary"
             style="float: right">
             New Dislike
           </button>
@@ -813,7 +817,7 @@
         <div class="background-color">
           <h4>
             Notes
-            <button type="button" (click)="goToTop(); notesMdl.showModal()" class="btn btn-primary"
+            <button id="new-note-btn" type="button" (click)="goToTop(); notesMdl.showModal()" class="btn btn-primary"
               style="float: right">
               New Note
             </button>
@@ -869,7 +873,7 @@
       <div class="col-lg-12 col-md-12">
         <h4>
           Tent
-          <button type="button" (click)="goToTop(); tentMdl.showModal()" class="btn btn-primary" style="float: right">
+          <button id="new-tent-btn" type="button" (click)="goToTop(); tentMdl.showModal()" class="btn btn-primary" style="float: right">
             New Tent
           </button>
         </h4>
@@ -918,7 +922,7 @@
         <div class="background-color">
           <h4>
             Pets
-            <button type="button" (click)="goToTop(); petsMdl.showModal()" class="btn btn-primary" style="float: right">
+            <button id="new-pet-btn" type="button" (click)="goToTop(); petsMdl.showModal()" class="btn btn-primary" style="float: right">
               New Pet
             </button>
           </h4>
@@ -1016,7 +1020,7 @@
         <div class="background-color">
           <h4>
             Goals
-            <button type="button" (click)="goToTop(); goalMdl.showModal()" class="btn btn-primary" style="float: right">
+            <button id="new-goal-btn" type="button" (click)="goToTop(); goalMdl.showModal()" class="btn btn-primary" style="float: right">
               New Goal
             </button>
           </h4>
@@ -1062,7 +1066,7 @@
         <div class="background-color">
           <h4>
             Steps Taken
-            <button type="button" (click)="goToTop(); clientStepMdl.showModal()" class="btn btn-primary"
+            <button id="new-step-btn" type="button" (click)="goToTop(); clientStepMdl.showModal()" class="btn btn-primary"
               style="float: right" *ngIf="isAdmin">
               New Step
             </button>
@@ -1110,7 +1114,7 @@
       <div class="col-lg-12 col-md-12">
         <h4>
           Client Income
-          <button type="button" (click)="goToTop(); incomeMdl.showModal()" class="btn btn-primary" style="float: right"
+          <button id="new-income-btn" type="button" (click)="goToTop(); incomeMdl.showModal()" class="btn btn-primary" style="float: right"
             *ngIf="isAdmin">
             New Income Record
           </button>
@@ -1162,7 +1166,7 @@
       <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
         <h4>
           Barriers
-          <button type="button" (click)="goToTop(); clientBarrierMdl.showModal()" class="btn btn-primary"
+          <button id="new-barrier-btn" type="button" (click)="goToTop(); clientBarrierMdl.showModal()" class="btn btn-primary"
             style="float: right">
             New Barrier
           </button>
@@ -1199,7 +1203,7 @@
       <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
         <h4>
           Client Debts
-          <button type="button" (click)="goToTop(); clientDebtMdl.showModal()" class="btn btn-primary"
+          <button id="new-debt-btn" type="button" (click)="goToTop(); clientDebtMdl.showModal()" class="btn btn-primary"
             style="float: right">
             New Debt
           </button>
@@ -1236,7 +1240,7 @@
       <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
         <h4>
           Client Felonies
-          <button type="button" (click)="goToTop(); clientFelonyMdl.showModal()" class="btn btn-primary"
+          <button id="new-felony-btn" type="button" (click)="goToTop(); clientFelonyMdl.showModal()" class="btn btn-primary"
             style="float: right">
             New Felony
           </button>
@@ -1273,7 +1277,7 @@
       <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
         <h4>
           Past Evictions
-          <button type="button" (click)="goToTop(); clientEvictionMdl.showModal()" class="btn btn-primary"
+          <button id="new-eviction-btn" type="button" (click)="goToTop(); clientEvictionMdl.showModal()" class="btn btn-primary"
             style="float: right">
             New Eviction
           </button>
@@ -1310,7 +1314,7 @@
       <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
         <h4>
           Client Skills
-          <button type="button" (click)="goToTop(); clientSkillMdl.showModal()" class="btn btn-primary"
+          <button id="new-skill-btn" type="button" (click)="goToTop(); clientSkillMdl.showModal()" class="btn btn-primary"
             style="float: right">
             New Skill
           </button>
@@ -1344,7 +1348,7 @@
       <div class="col-lg-12 col-md-12">
         <h4>
           Health Concerns
-          <button type="button" (click)="goToTop(); healthMdl.showModal()" class="btn btn-primary" style="float: right"
+          <button id="new-health-concern-btn" type="button" (click)="goToTop(); healthMdl.showModal()" class="btn btn-primary" style="float: right"
             *ngIf="isAdmin">
             New Health Concern
           </button>
@@ -1627,7 +1631,7 @@
 <app-client-edit-modal #clientEditMdl (editedClient)="editedClient($event)"></app-client-edit-modal>
 <app-pets #petsMdl (petAdded)="petAdded($event)"></app-pets>
 <app-prayer-requests-and-needs #prayerRequestsNeedsMdl
-  (prayerRequestNeedAdded)="prayerRequestNeedAdded($event)"></app-prayer-requests-and-needs>
+  (prayerRequestNeedAdded)="prayerRequestAdded($event)"></app-prayer-requests-and-needs>
 <app-tents #tentMdl (tentAdded)="tentAdded($event)"></app-tents>
 <app-client-dwellings #clientDwellingMdl (clientDwellingAdded)="clientDwellingAdded($event)"></app-client-dwellings>
 <app-client-homeless-history #clientHomelessHistoryMdl
