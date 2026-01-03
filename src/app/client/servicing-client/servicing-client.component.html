@@ -1063,7 +1063,7 @@
           <h4>
             Steps Taken
             <button type="button" (click)="goToTop(); clientStepMdl.showModal()" class="btn btn-primary"
-              style="float: right">
+              style="float: right" *ngIf="isAdmin">
               New Step
             </button>
           </h4>
