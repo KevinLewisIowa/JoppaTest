@@ -211,7 +211,7 @@ export class ServicingClientComponent implements OnInit {
     attendFromDate.setMonth(attendFromDate.getMonth() - 1);
     this.attendanceFromDate = this.pipe.transform(attendFromDate, "yyyy-MM-dd");
     let routeAttendanceList: Appearance[] = JSON.parse(
-      localStorage.getItem("RouteAttendance")
+      localStorage.getItem("RouteAttendance") || '[]'
     );
     if (routeAttendanceList.length != null) {
       this.appearance = routeAttendanceList.find(
@@ -891,7 +891,7 @@ export class ServicingClientComponent implements OnInit {
 
   private createUpdateInteraction(interaction: Appearance, heatEquipmentAdded: boolean = false) {
     let routeAttendanceList: Appearance[] = JSON.parse(
-      window.localStorage.getItem("RouteAttendance")
+      window.localStorage.getItem("RouteAttendance") || '[]'
     );
     let appearance: Appearance = routeAttendanceList.find(
       (x) => x.client_id == interaction.client_id
@@ -942,11 +942,13 @@ export class ServicingClientComponent implements OnInit {
       this.service.insertClientAppearance(interaction).subscribe(
         (data) => {
           interaction.id = data.id;
-          routeAttendanceList.push(interaction);
-          window.localStorage.setItem(
-            "RouteAttendance",
-            JSON.stringify(routeAttendanceList)
-          );
+          if (!this.isAdmin) {
+            routeAttendanceList.push(interaction);
+            window.localStorage.setItem(
+              "RouteAttendance",
+              JSON.stringify(routeAttendanceList)
+            );
+          }
 
           this.clientInteractions.push(data);
 
@@ -984,7 +986,7 @@ export class ServicingClientComponent implements OnInit {
     this.service.updateClient(this.client).subscribe(
       (data) => {
         let routeAttendanceList: Appearance[] = JSON.parse(
-          localStorage.getItem("RouteAttendance")
+          localStorage.getItem("RouteAttendance") || '[]'
         );
         if (routeAttendanceList.length != null) {
           this.appearance = routeAttendanceList.find(

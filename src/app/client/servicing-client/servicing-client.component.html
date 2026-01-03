@@ -24,20 +24,26 @@
     </div>
     &nbsp;
     <div>
-      <img [src]="url" width="20%" height="20%"
-        *ngIf="url !== 'data:image/png;base64,null' && url != '' && url != null">
-      <button type="button" class="btn btn-primary" style="margin-left: 1%; float: left" (click)="backToClientListing()"
-        *ngIf="isAdmin">
-        <fa-icon [icon]="backIcon"></fa-icon> Back to Client List
-      </button>
-      <button (click)="showMap()" type="button" style="float: right" class="btn btn-primary"
-        *ngIf="client.latitude != null && client.longitude != null">
-        <fa-icon [icon]="mapIcon"></fa-icon> Show Directions
-      </button>
-      <button #clientInfo class="btn btn-primary" style="float: right" (click)="clientEditMdl.openModal(client)"
-        type="button">
-        Client Info <fa-icon [icon]="informationIcon"></fa-icon>
-      </button>
+      <div>
+        <img [src]="url" *ngIf="url !== 'data:image/png;base64,null' && url != '' && url != null"
+          style="max-width:20%; height:auto; display:block; margin-bottom:8px;" alt="Client image" />
+      </div>
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <button type="button" class="btn btn-primary" (click)="backToClientListing()" *ngIf="isAdmin">
+            <fa-icon [icon]="backIcon"></fa-icon> Back to Client List
+          </button>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <button (click)="showMap()" type="button" class="btn btn-primary"
+            *ngIf="client.latitude != null && client.longitude != null">
+            <fa-icon [icon]="mapIcon"></fa-icon> Show Directions
+          </button>
+          <button #clientInfo class="btn btn-primary" (click)="clientEditMdl.openModal(client)" type="button">
+            Client Info <fa-icon [icon]="informationIcon"></fa-icon>
+          </button>
+        </div>
+      </div>
     </div>
   </div>
   <div class="panel-body">
