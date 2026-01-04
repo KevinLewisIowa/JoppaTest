@@ -85,6 +85,10 @@ export class RequestedItemComponent implements OnInit, AfterViewChecked {
         this.placeholderText = "Number"
         this.extraInfoNeeded = true;
         break;
+      case selectedItem === "Package":
+        this.placeholderText = "Number";
+        this.extraInfoNeeded = true;
+        break;
       default:
         this.extraInfoNeeded = false;
         break;
@@ -114,6 +118,8 @@ export class RequestedItemComponent implements OnInit, AfterViewChecked {
           itemDescription = this.extraInfo + " Mail";
           // let numberMails: number = +this.extraInfo;
           // countItemsToAdd = numberMails;
+        } else if (this.extraInfo != null && this.description === "Package") {
+          itemDescription = this.extraInfo + " Package";
         } else if (this.extraInfo != null && this.description !== "Other" && this.description !== "Socks") {
           itemDescription = this.extraInfo + " " + this.description;
         } else if (this.extraInfo != null && this.description === "Other") {
@@ -123,7 +129,7 @@ export class RequestedItemComponent implements OnInit, AfterViewChecked {
         }
 
         item.fulfilled = false;
-        if (itemDescription.includes("Mail")) {
+        if (itemDescription.includes("Mail") || itemDescription.includes("Package")) {
           item.fulfilled = true;
         }
 
