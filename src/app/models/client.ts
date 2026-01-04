@@ -47,4 +47,6 @@ export class Client {
     translation_language: string = undefined;
     has_picture: boolean = false; // not a DB column
     hasAttentionNote: boolean = false; // UI/computed property, not a DB column
-}
+    hasHeatingEquipment: boolean = false; // UI/computed property, not a DB column
+    hasHeatingEquipmentChecked: boolean = false; // UI/computed property to avoid duplicate checks
+} 

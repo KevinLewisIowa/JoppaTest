@@ -28,7 +28,8 @@ import {
   faInfoCircle,
   faUserMinus,
   faFlag,
-  faCamera
+  faCamera,
+  faFire
 } from "@fortawesome/free-solid-svg-icons";
 import { ClientDwelling } from "app/models/client-dwelling";
 import { Note } from "app/models/note";
@@ -53,6 +54,7 @@ export class LocationCampComponent implements OnInit {
   createIcon = faPlus;
   backIcon = faChevronLeft;
   flagIcon = faFlag;
+  fireIcon = faFire;
   erroredClients = '';
   forwardIcon = faChevronRight;
   questionCircleIcon = farQuestionCircle;
@@ -333,6 +335,42 @@ export class LocationCampComponent implements OnInit {
         client.hasAttentionNote = data.hasPinnedOrWarningNote;
       }, error => console.log(error));
     }
+
+    // check whether client has heating equipment (tanks/hoses or heaters)
+    this.checkClientHasHeatingEquipment(client);
+  }
+
+  checkClientHasHeatingEquipment(client: Client) {
+    // avoid running this more than once per client
+    if (client.hasHeatingEquipmentChecked) return;
+    client.hasHeatingEquipmentChecked = true;
+    client.hasHeatingEquipment = false;
+
+    // 1) check heaters
+    this.clientService.getHeatersForClient(client.id).subscribe((heaters: any[]) => {
+      if (Array.isArray(heaters) && heaters.length > 0) {
+        client.hasHeatingEquipment = true;
+        console.log(`Client ${client.first_name} ${client.last_name} has heaters out.`);
+        return;
+      }
+
+      // 2) check tanks
+      this.clientService.getClientLoanedTanks(client.id).subscribe((tanks: any[]) => {
+        if (Array.isArray(tanks) && tanks.length > 0) {
+          client.hasHeatingEquipment = true;
+          console.log(`Client ${client.first_name} ${client.last_name} has tanks out.`);
+          return;
+        }
+
+        // 3) check hoses
+        this.clientService.getClientLoanedHoses(client.id).subscribe((hoses: any[]) => {
+          client.hasHeatingEquipment = Array.isArray(hoses) && hoses.length > 0;
+          if (client.hasHeatingEquipment) {
+            console.log(`Client ${client.first_name} ${client.last_name} has hoses out.`);
+          }
+        }, err => console.log(err));
+      }, err => console.log(err));
+    }, err => console.log(err));
   }
 
   markRemainingNotSeenNotServiced() {

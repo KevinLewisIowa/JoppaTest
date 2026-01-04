@@ -63,6 +63,7 @@
               <fa-icon *ngIf="client.client_picture" [icon]="cameraIcon" style="color: #0d6efd" title="Client has a picture"></fa-icon>&nbsp;
               <fa-icon style="color: #0d6efd" [icon]="mapIcon" *ngIf="client.has_location"></fa-icon>&nbsp;
               <fa-icon *ngIf="client.hasAttentionNote" [icon]="flagIcon" style="color: #0d6efd" title="Attention: Admin note, warning, or pinned note"></fa-icon>&nbsp;
+              <fa-icon *ngIf="client.hasHeatingEquipment" [icon]="fireIcon" style="color: orange" title="Has heating equipment"></fa-icon>&nbsp;
               <span [className]="client.information_missing_or_unknown == 'missing' ? 'missing' : client.information_missing_or_unknown == 'unknown' ? 'unknown': ''">&nbsp;</span>
               {{ client.first_name }}
               <span *ngIf="
