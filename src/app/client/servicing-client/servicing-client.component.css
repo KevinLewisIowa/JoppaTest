@@ -1,3 +1,26 @@
 .background-color {
     background-color: rgba(0, 0, 0, 0.08);
 }
+
+/* Responsive helpers */
+.control-max { max-width: 75%; }
+.small-filter { max-width: 15%; margin-bottom: 5px; }
+.float-right { float: right; }
+.table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+/* Responsive tables: force horizontal scroll and limit min-width to editable controls only */
+.table-responsive table { min-width: 700px; }
+.table-responsive td .form-control, .table-responsive td select.form-control { min-width: 140px; white-space: nowrap; }
+/* reduce header constraints so non-editable text can wrap if needed */
+.table-responsive th.status, .table-responsive td.status { white-space: normal; }
+
+/* Heater table kept for backward compatibility */
+.heater-table { min-width: 700px; }
+
+@media (max-width: 576px) {
+  .control-max { max-width: 100% !important; }
+  .small-filter { max-width: 100% !important; }
+  .float-right { float: none !important; display: block; width: 100% !important; margin-bottom: 8px; }
+  .card-header h2 { font-size: 1.1rem; }
+  .btn { min-height: 44px; }
+}

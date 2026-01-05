@@ -35,8 +35,10 @@ import {
   CustomConfirmationDialogComponent,
 } from "app/custom-confirmation-dialog/custom-confirmation-dialog.component";
 import { MatLegacyDialog as MatDialog } from "@angular/material/legacy-dialog";
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
 import { DateSelectorComponent } from "app/insert-modals/date-selector/date-selector.component";
+import { ClientEditModalComponent } from "app/client/client-edit-modal/client-edit-modal.component";
 import { ClientIncome } from "app/models/client-income";
 import { ClientNextOfKin } from "app/models/client-next-of-kin";
 import { ClientHomelessHistory } from "app/models/client-homeless-histories";
@@ -102,6 +104,7 @@ export class ServicingClientComponent implements OnInit {
   heaters: any[] = [];
   clientInteractions: any[] = [];
   isAdmin: boolean;
+  isHandset: boolean = false;
   attendanceFromDate: string;
   attendanceToDate: string;
   updateTimerSubscription: Subscription;
@@ -186,14 +189,24 @@ export class ServicingClientComponent implements OnInit {
   ];
 
   @ViewChild("clientInfo", { static: false }) clientInfo: ElementRef;
+  @ViewChild('clientEditMdl', { static: false }) clientEditMdlRef: ClientEditModalComponent;
 
   constructor(
     private service: ClientService,
     private mainService: MainService,
     private modalService: NgbModal,
     private router: Router,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private breakpointObserver: BreakpointObserver
   ) { }
+
+  openClientEditModal(client: Client) {
+    if (this.clientEditMdlRef && (this.clientEditMdlRef as any).openModal) {
+      (this.clientEditMdlRef as any).openModal(client);
+    } else {
+      console.warn('clientEditMdlRef not available yet');
+    }
+  }
 
   ngOnInit() {
     this.routeInstanceId = JSON.parse(localStorage.getItem("routeInstance"));
@@ -228,6 +241,11 @@ export class ServicingClientComponent implements OnInit {
     if (this.appearance) {
       this.sentInteraction = true;
     }
+
+    // Observe handset portrait to toggle mobile layout
+    this.breakpointObserver.observe([Breakpoints.HandsetPortrait]).subscribe(result => {
+      this.isHandset = result.matches;
+    });
 
     if (this.clientId !== null) {
       this.service.getClientById(this.clientId).subscribe((data: Client) => {

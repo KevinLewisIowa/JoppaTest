@@ -15,7 +15,7 @@ import { formatPhoneNumberValue } from 'app/utils/phone-utils';
   styleUrls: ['./client-edit-modal.component.css']
 })
 export class ClientEditModalComponent implements OnInit, AfterViewChecked {
-  @ViewChild('editModal', { static: false }) editModal: ElementRef;
+  @ViewChild('clientEditMdl', { static: false }) clientEditMdl: ElementRef;
   @Output() editedClient = new EventEmitter<Client>();
   badDate = false;
   clientForm: UntypedFormGroup;
@@ -233,7 +233,7 @@ export class ClientEditModalComponent implements OnInit, AfterViewChecked {
     // } else {
     //   this.clientForm.patchValue({ birth_date: formatDate(this.clientForm.get('birth_date').value, 'yyyy-MM-dd', 'en') });
     // }
-    this.modalService.open(this.editModal, { size: 'lg', backdrop: 'static' });
+    this.modalService.open(this.clientEditMdl, { size: 'lg', backdrop: 'static' });
   }
 
   toggleEditMode() {
