@@ -33,6 +33,8 @@ export class ClientEditModalComponent implements OnInit, AfterViewChecked {
   isConverting: boolean = false;
   whatbroughtyoutodesmoines: string[] = [
     'Better Homeless Services',
+    'Client Refused',
+    'Data Not Collected',
     'Didn’t Share',
     'Family',
     'Fresh Start',
@@ -41,6 +43,7 @@ export class ClientEditModalComponent implements OnInit, AfterViewChecked {
     'School',
     'Significant Other',
     'Treatment',
+    'Unknown',
     'Work/Job',
     'Other'
   ];
