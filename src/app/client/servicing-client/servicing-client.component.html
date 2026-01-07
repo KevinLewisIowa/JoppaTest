@@ -1,5 +1,8 @@
 <div class="card text-left" style="opacity: 0.93">
   <div class="card-header" id="topOfScreen">
+    <button type="button" class="btn btn-primary" (click)="backToClientListing()" *ngIf="isAdmin">
+      <fa-icon [icon]="backIcon"></fa-icon> Back to Client List
+    </button>
     <h2>
       {{ client.first_name }} {{ client.middle_name }}
       <span *ngIf="client.preferred_name != '' && client.preferred_name != null">({{ client.preferred_name }})</span>
@@ -30,15 +33,12 @@
       </div>
       <div style="display:flex; justify-content:space-between; align-items:center;">
         <div>
-          <button type="button" class="btn btn-primary" (click)="backToClientListing()" *ngIf="isAdmin">
-            <fa-icon [icon]="backIcon"></fa-icon> Back to Client List
-          </button>
-        </div>
-        <div style="display:flex; gap:8px;">
           <button (click)="showMap()" type="button" class="btn btn-primary"
             *ngIf="client.latitude != null && client.longitude != null">
             <fa-icon [icon]="mapIcon"></fa-icon> Show Directions
           </button>
+        </div>
+        <div style="display:flex; gap:8px;">
           <button #clientInfo class="btn btn-primary" (click)="clientEditMdl.openModal(client)" type="button">
             Client Info <fa-icon [icon]="informationIcon"></fa-icon>
           </button>
@@ -178,8 +178,8 @@
       <div class="col-lg-12 col-md-12">
         <h4>
           Client Mailbox
-          <button id="new-mailbox-btn" type="button" (click)="goToTop(); clientMailboxMdl.showModal()" class="btn btn-primary"
-            style="float: right" *ngIf="isAdmin && !clientMailbox.id">
+          <button id="new-mailbox-btn" type="button" (click)="goToTop(); clientMailboxMdl.showModal()"
+            class="btn btn-primary" style="float: right" *ngIf="isAdmin && !clientMailbox.id">
             New Mailbox
           </button>
         </h4>
@@ -231,8 +231,8 @@
       <div class="col-lg-12 col-md-12" *ngIf="isAdmin && clientMailbox.id">
         <h4>
           Authorized Mail Access Users
-          <button id="new-authorized-mail-access-btn" type="button" (click)="goToTop(); authorizedMailAccessMdl.showModal()" class="btn btn-primary"
-            style="float: right">
+          <button id="new-authorized-mail-access-btn" type="button"
+            (click)="goToTop(); authorizedMailAccessMdl.showModal()" class="btn btn-primary" style="float: right">
             New Authorized User
           </button>
         </h4>
@@ -266,8 +266,8 @@
       <div class="col-lg-12 col-md-12">
         <h4>
           Circle of Friends
-          <button id="new-friend-btn" type="button" (click)="goToTop(); clientCircleOfFriendsMdl.showModal()" class="btn btn-primary"
-            style="float: right" *ngIf="isAdmin">
+          <button id="new-friend-btn" type="button" (click)="goToTop(); clientCircleOfFriendsMdl.showModal()"
+            class="btn btn-primary" style="float: right" *ngIf="isAdmin">
             New Friend
           </button>
         </h4>
@@ -315,8 +315,8 @@
       <div class="col-lg-12 col-md-12">
         <h4>
           Next of Kin
-          <button id="new-next-of-kin-btn" type="button" (click)="goToTop(); nextOfKinMdl.showModal()" class="btn btn-primary"
-            style="float: right" *ngIf="isAdmin">
+          <button id="new-next-of-kin-btn" type="button" (click)="goToTop(); nextOfKinMdl.showModal()"
+            class="btn btn-primary" style="float: right" *ngIf="isAdmin">
             New Next of Kin
           </button>
         </h4>
@@ -344,27 +344,34 @@
           <tbody>
             <tr *ngFor="let nok of clientNextOfKins">
               <td>
-                <input *ngIf="isAdmin" type="text" class="form-control" (change)="updateNextOfKin(nok)" [(ngModel)]="nok.name" />
+                <input *ngIf="isAdmin" type="text" class="form-control" (change)="updateNextOfKin(nok)"
+                  [(ngModel)]="nok.name" />
                 <span *ngIf="!isAdmin">{{ nok.name }}</span>
               </td>
               <td>
-                <input *ngIf="isAdmin" type="text" class="form-control" (change)="updateNextOfKin(nok)" [(ngModel)]="nok.relation_to_client" />
+                <input *ngIf="isAdmin" type="text" class="form-control" (change)="updateNextOfKin(nok)"
+                  [(ngModel)]="nok.relation_to_client" />
                 <span *ngIf="!isAdmin">{{ nok.relation_to_client }}</span>
               </td>
               <td>
-                <input *ngIf="isAdmin" type="text" class="form-control" (input)="formatNextOfKinPhone(nok)" (change)="updateNextOfKin(nok)" [(ngModel)]="nok.phone_number" (input)="formatNextOfKinPhoneNumber(nok)" />
+                <input *ngIf="isAdmin" type="text" class="form-control" (input)="formatNextOfKinPhone(nok)"
+                  (change)="updateNextOfKin(nok)" [(ngModel)]="nok.phone_number"
+                  (input)="formatNextOfKinPhoneNumber(nok)" />
                 <span *ngIf="!isAdmin">{{ nok.phone_number | phoneFormat }}</span>
               </td>
               <td>
-                <input *ngIf="isAdmin" type="text" class="form-control" (change)="updateNextOfKin(nok)" [(ngModel)]="nok.street_address" />
+                <input *ngIf="isAdmin" type="text" class="form-control" (change)="updateNextOfKin(nok)"
+                  [(ngModel)]="nok.street_address" />
                 <span *ngIf="!isAdmin">{{ nok.street_address }}</span>
               </td>
               <td>
-                <input *ngIf="isAdmin" type="text" class="form-control" (change)="updateNextOfKin(nok)" [(ngModel)]="nok.email" />
+                <input *ngIf="isAdmin" type="text" class="form-control" (change)="updateNextOfKin(nok)"
+                  [(ngModel)]="nok.email" />
                 <span *ngIf="!isAdmin">{{ nok.email }}</span>
               </td>
               <td>
-                <input *ngIf="isAdmin" type="text" class="form-control" (change)="updateNextOfKin(nok)" [(ngModel)]="nok.note" />
+                <input *ngIf="isAdmin" type="text" class="form-control" (change)="updateNextOfKin(nok)"
+                  [(ngModel)]="nok.note" />
                 <span *ngIf="!isAdmin">{{ nok.note }}</span>
               </td>
               <td>
@@ -379,8 +386,8 @@
       <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
         <h4>
           Client Caseworker
-          <button id="new-caseworker-btn" type="button" (click)="goToTop(); clientCaseworkerMdl.showModal()" class="btn btn-primary"
-            style="float: right" *ngIf="isAdmin">
+          <button id="new-caseworker-btn" type="button" (click)="goToTop(); clientCaseworkerMdl.showModal()"
+            class="btn btn-primary" style="float: right" *ngIf="isAdmin">
             New Caseworker
           </button>
         </h4>
@@ -618,8 +625,8 @@
       <div class="col-lg-12 col-md-12">
         <h4>
           Requested Items
-          <button id="new-item-btn" type="button" (click)="goToTop(); requestItemMdl.showModal()" class="btn btn-primary"
-            style="float: right">
+          <button id="new-item-btn" type="button" (click)="goToTop(); requestItemMdl.showModal()"
+            class="btn btn-primary" style="float: right">
             New Item
           </button>
         </h4>
@@ -742,7 +749,8 @@
         <div class="background-color">
           <h4>
             Likes
-            <button id="new-like-btn" type="button" class="btn btn-primary" style="float: right" (click)="goToTop(); likeMdl.showModal()">
+            <button id="new-like-btn" type="button" class="btn btn-primary" style="float: right"
+              (click)="goToTop(); likeMdl.showModal()">
               New Like
             </button>
           </h4>
@@ -879,7 +887,8 @@
       <div class="col-lg-12 col-md-12">
         <h4>
           Tent
-          <button id="new-tent-btn" type="button" (click)="goToTop(); tentMdl.showModal()" class="btn btn-primary" style="float: right">
+          <button id="new-tent-btn" type="button" (click)="goToTop(); tentMdl.showModal()" class="btn btn-primary"
+            style="float: right">
             New Tent
           </button>
         </h4>
@@ -928,7 +937,8 @@
         <div class="background-color">
           <h4>
             Pets
-            <button id="new-pet-btn" type="button" (click)="goToTop(); petsMdl.showModal()" class="btn btn-primary" style="float: right">
+            <button id="new-pet-btn" type="button" (click)="goToTop(); petsMdl.showModal()" class="btn btn-primary"
+              style="float: right">
               New Pet
             </button>
           </h4>
@@ -1026,7 +1036,8 @@
         <div class="background-color">
           <h4>
             Goals
-            <button id="new-goal-btn" type="button" (click)="goToTop(); goalMdl.showModal()" class="btn btn-primary" style="float: right">
+            <button id="new-goal-btn" type="button" (click)="goToTop(); goalMdl.showModal()" class="btn btn-primary"
+              style="float: right">
               New Goal
             </button>
           </h4>
@@ -1072,8 +1083,8 @@
         <div class="background-color">
           <h4>
             Steps Taken
-            <button id="new-step-btn" type="button" (click)="goToTop(); clientStepMdl.showModal()" class="btn btn-primary"
-              style="float: right" *ngIf="isAdmin">
+            <button id="new-step-btn" type="button" (click)="goToTop(); clientStepMdl.showModal()"
+              class="btn btn-primary" style="float: right" *ngIf="isAdmin">
               New Step
             </button>
           </h4>
@@ -1120,8 +1131,8 @@
       <div class="col-lg-12 col-md-12">
         <h4>
           Client Income
-          <button id="new-income-btn" type="button" (click)="goToTop(); incomeMdl.showModal()" class="btn btn-primary" style="float: right"
-            *ngIf="isAdmin">
+          <button id="new-income-btn" type="button" (click)="goToTop(); incomeMdl.showModal()" class="btn btn-primary"
+            style="float: right" *ngIf="isAdmin">
             New Income Record
           </button>
         </h4>
@@ -1146,18 +1157,21 @@
             <tr *ngFor="let income of clientIncomes">
               <td>{{ income.created_at | date: "shortDate" }}</td>
               <td>
-                <button *ngIf="isAdmin" type="button" class="btn btn-outline-primary" (click)="updateHasClientIncome(income)">{{ income.has_income ? 'Yes' : 'No' }}</button>
+                <button *ngIf="isAdmin" type="button" class="btn btn-outline-primary"
+                  (click)="updateHasClientIncome(income)">{{ income.has_income ? 'Yes' : 'No' }}</button>
                 <span *ngIf="!isAdmin">{{ income.has_income ? 'Yes' : 'No' }}</span>
               </td>
               <td>
                 <div *ngIf="isAdmin" class="input-group">
                   <span class="input-group-text">$</span>
-                  <input type="text" class="form-control" (change)="updateClientIncome(income)" [(ngModel)]="income.monthly_money" />
+                  <input type="text" class="form-control" (change)="updateClientIncome(income)"
+                    [(ngModel)]="income.monthly_money" />
                 </div>
                 <div *ngIf="!isAdmin">{{ income.monthly_money | currency }}</div>
               </td>
               <td>
-                <input *ngIf="isAdmin" type="text" class="form-control" (change)="updateClientIncome(income)" [(ngModel)]="income.what_income_from" readonly />
+                <input *ngIf="isAdmin" type="text" class="form-control" (change)="updateClientIncome(income)"
+                  [(ngModel)]="income.what_income_from" readonly />
                 <span *ngIf="!isAdmin">{{ income.what_income_from }}</span>
               </td>
               <td>
@@ -1172,8 +1186,8 @@
       <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
         <h4>
           Barriers
-          <button id="new-barrier-btn" type="button" (click)="goToTop(); clientBarrierMdl.showModal()" class="btn btn-primary"
-            style="float: right">
+          <button id="new-barrier-btn" type="button" (click)="goToTop(); clientBarrierMdl.showModal()"
+            class="btn btn-primary" style="float: right">
             New Barrier
           </button>
         </h4>
@@ -1246,8 +1260,8 @@
       <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
         <h4>
           Client Felonies
-          <button id="new-felony-btn" type="button" (click)="goToTop(); clientFelonyMdl.showModal()" class="btn btn-primary"
-            style="float: right">
+          <button id="new-felony-btn" type="button" (click)="goToTop(); clientFelonyMdl.showModal()"
+            class="btn btn-primary" style="float: right">
             New Felony
           </button>
         </h4>
@@ -1283,8 +1297,8 @@
       <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
         <h4>
           Past Evictions
-          <button id="new-eviction-btn" type="button" (click)="goToTop(); clientEvictionMdl.showModal()" class="btn btn-primary"
-            style="float: right">
+          <button id="new-eviction-btn" type="button" (click)="goToTop(); clientEvictionMdl.showModal()"
+            class="btn btn-primary" style="float: right">
             New Eviction
           </button>
         </h4>
@@ -1320,8 +1334,8 @@
       <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
         <h4>
           Client Skills
-          <button id="new-skill-btn" type="button" (click)="goToTop(); clientSkillMdl.showModal()" class="btn btn-primary"
-            style="float: right">
+          <button id="new-skill-btn" type="button" (click)="goToTop(); clientSkillMdl.showModal()"
+            class="btn btn-primary" style="float: right">
             New Skill
           </button>
         </h4>
@@ -1354,8 +1368,8 @@
       <div class="col-lg-12 col-md-12">
         <h4>
           Health Concerns
-          <button id="new-health-concern-btn" type="button" (click)="goToTop(); healthMdl.showModal()" class="btn btn-primary" style="float: right"
-            *ngIf="isAdmin">
+          <button id="new-health-concern-btn" type="button" (click)="goToTop(); healthMdl.showModal()"
+            class="btn btn-primary" style="float: right" *ngIf="isAdmin">
             New Health Concern
           </button>
         </h4>
@@ -1394,8 +1408,8 @@
       <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
         <h4>
           Health Insurance
-          <button type="button" (click)="goToTop(); clientHealthInsuranceMdl.showModal()" class="btn btn-primary"
-            style="float: right" *ngIf="isAdmin">
+          <button id="new-health-insurance-btn" type="button" (click)="goToTop(); clientHealthInsuranceMdl.showModal()"
+            class="btn btn-primary" style="float: right" *ngIf="isAdmin">
             New Health Insurance
           </button>
         </h4>
@@ -1445,8 +1459,8 @@
         <div class="background-color">
           <h4>
             Household
-            <button type="button" (click)="goToTop(); clientMdl.showModal()" class="btn btn-primary"
-              style="float: right">New Household Member</button>
+            <button id="new-household-member-button" type="button" (click)="goToTop(); clientMdl.showModal()"
+              class="btn btn-primary" style="float: right">New Household Member</button>
           </h4>
           <table class="table" id="household">
             <colgroup>
@@ -1503,7 +1517,9 @@
                   </button>
                 </td>
                 <td>
-                  <button type="button" class="btn btn-primary" *ngIf="isAdmin && houseclient.id != houseclient.household_id" (click)="removeHouseholdClient(houseclient)">
+                  <button type="button" class="btn btn-primary"
+                    *ngIf="isAdmin && houseclient.id != houseclient.household_id"
+                    (click)="removeHouseholdClient(houseclient)">
                     Remove
                   </button>
                 </td>

@@ -1133,6 +1133,18 @@ export class ServicingClientComponent implements OnInit {
     this.safeScrollTo('#new-health-insurance-btn');
   }
 
+  clientSelected(client: Client) {
+    this.householdClients.push(client);
+
+
+    this.safeScrollTo('#new-household-member-button');
+    client.household_id = this.client.household_id;
+    this.service.updateClient(client).subscribe(
+      (data) => { },
+      (error) => console.log(error)
+    );
+  }
+
   stepAdded(step: ClientStep) {
     console.log(JSON.stringify(step));
     this.steps.push(step);
@@ -1204,16 +1216,6 @@ export class ServicingClientComponent implements OnInit {
         this.authorizedMailAccesses = this.authorizedMailAccesses.filter((w) => Number(w.id) != id);
       });
     }
-  }
-
-  clientSelected(client: Client) {
-    this.householdClients.push(client);
-
-    client.household_id = this.client.household_id;
-    this.service.updateClient(client).subscribe(
-      (data) => { },
-      (error) => console.log(error)
-    );
   }
 
   dateSelected(date_seen: Date) { }
