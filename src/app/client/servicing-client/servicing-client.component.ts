@@ -301,7 +301,8 @@ export class ServicingClientComponent implements OnInit {
             this.notes.sort((a, b) => (a.created_at > b.created_at) ? 1 : -1);
             let warningNotes: Note[] = data.filter(n => n.source === "WARNING");
             if (warningNotes.length > 0) {
-              alert(warningNotes[warningNotes.length - 1].note);
+              let warningNote: Note = warningNotes[warningNotes.length - 1];
+              alert(this.pipe.transform(warningNote.created_at, "shortDate") + " - " + warningNote.note);
             }
           },
           (error) => console.log(error)
@@ -479,8 +480,9 @@ export class ServicingClientComponent implements OnInit {
               }
             });
             let warningNotes: Note[] = data.filter(n => n.source === "WARNING");
+            let warningNote: Note = warningNotes[warningNotes.length - 1];
             if (warningNotes.length > 0) {
-              alert(warningNotes[warningNotes.length - 1].note);
+              alert(this.pipe.transform(warningNote.created_at, "shortDate") + " - " + warningNote.note);
             }
           },
           (error) => console.log(error)
