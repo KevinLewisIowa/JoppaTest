@@ -80,7 +80,7 @@ export class LocationsComponent implements OnInit {
                 // After sortedlocations is created, add this filter
                 sortedlocations = sortedlocations.filter((location: LocationCamp) => {
                   // If heat_route_only is true and this is NOT a heat route, hide it
-                  if (location.heat_route_only && !this.heatRoute) {
+                  if (location.heat_route_only && !this.heatRoute && !this.isAdmin) {
                     return false;
                   }
                   return true;
