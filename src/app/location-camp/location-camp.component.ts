@@ -276,15 +276,30 @@ export class LocationCampComponent implements OnInit {
     this.clients.push(client);
     client.is_aftercare = this.route.is_aftercare;
 
+    // build a new appearance record based on who is adding the client
     let clientInteraction: Appearance = new Appearance();
     clientInteraction.client_id = client.id;
     clientInteraction.location_camp_id = JSON.parse(
       this.activatedRoute.snapshot.params["id"]
     );
+    // everyone who is manually added is assumed to still live here
     clientInteraction.still_lives_here = true;
-    clientInteraction.was_seen = true;
-    clientInteraction.serviced = true;
-    clientInteraction.serviced_date = new Date();
+    // we never want to mark them at a resource center when they are being
+    // added to a stop (this field may be updated elsewhere if needed)
+    clientInteraction.at_homeless_resource_center = false;
+    if (this.isAdmin) {
+      // admins are simply recording that the client belongs at this stop;
+      // they are not "seeing" or "servicing" the person right now.
+      clientInteraction.was_seen = false;
+      clientInteraction.serviced = false;
+      // no serviced_date in this case
+    } else {
+      // volunteers automatically mark the client as seen/serviced
+      clientInteraction.was_seen = true;
+      clientInteraction.serviced = true;
+      clientInteraction.serviced_date = new Date();
+    }
+
     this.clientService.insertClientAppearance(clientInteraction).subscribe((data: Appearance) => {
       if (!this.isAdmin) {
         clientInteraction.id = data.id;
