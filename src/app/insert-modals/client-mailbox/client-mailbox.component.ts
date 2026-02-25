@@ -1,6 +1,7 @@
 import { Component, ViewChild, Output, ElementRef, EventEmitter } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ClientMailbox } from 'app/models/client-mailbox';
+import { ReferralsResources } from 'app/models/referrals-resources';
 import { ClientService } from 'app/services/client.service';
 
 @Component({
@@ -16,7 +17,7 @@ export class ClientMailboxComponent {
   verificationType: string = '';
   verificationOptions: string[] = ['Show ID', 'Photo'];
 
-  constructor(private modalService: NgbModal, private clientService: ClientService) {}
+  constructor(private modalService: NgbModal, private clientService: ClientService) { }
 
   showModal() {
     this.modalService.open(this.clientMailboxMdl, { size: 'lg', backdrop: 'static' });
@@ -34,8 +35,24 @@ export class ClientMailboxComponent {
     if (mailbox.mailbox_number && mailbox.verification_type) {
       this.clientService.insertClientMailbox(mailbox).subscribe((response) => {
         if (response && response.id) {
-          this.mailboxAdded.emit(response);
-          if (close) close();
+          // after adding a mailbox, also insert a "Joppa PO Box" referral entry
+          const referral = new ReferralsResources();
+          referral.client_id = clientId;
+          referral.referral_type = 'Joppa PO Box';
+          referral.quantity = null;
+          referral.notes = '';
+
+          this.clientService.insertClientReferralResource(referral).subscribe(
+            (rr: ReferralsResources) => {
+              // optionally notify or log
+              console.log('Inserted Joppa PO Box referral', rr);
+
+              this.mailboxAdded.emit(response);
+              // close the modal via the component method
+              this.close();
+            },
+            (err) => console.log(err)
+          );
         }
       }, error => { console.log(error); });
     }

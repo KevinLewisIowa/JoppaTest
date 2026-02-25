@@ -1058,6 +1058,15 @@ export class ServicingClientComponent implements OnInit {
 
   mailboxAdded(mailbox: ClientMailbox) {
     this.clientMailbox = mailbox;
+
+    // Re-pull the referrals to see the new Joppa PO Box referral
+    this.service.getClientReferrals(this.clientId).subscribe(
+      (data: ReferralsResources[]) => {
+        this.referralsResources = data;
+      },
+      (error) => console.log(error)
+    );
+
     this.safeScrollTo('#new-mailbox-btn');
   }
 
