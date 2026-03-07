@@ -15,6 +15,7 @@ export class ClientMailboxComponent {
 
   mailboxNumber: string = '';
   verificationType: string = '';
+  notes: string = '';
   verificationOptions: string[] = ['Show ID', 'Photo'];
 
   constructor(private modalService: NgbModal, private clientService: ClientService) { }
@@ -23,12 +24,14 @@ export class ClientMailboxComponent {
     this.modalService.open(this.clientMailboxMdl, { size: 'lg', backdrop: 'static' });
     this.mailboxNumber = '';
     this.verificationType = '';
+    this.notes = '';
   }
 
   submitClientMailbox() {
     const mailbox = new ClientMailbox();
     mailbox.mailbox_number = this.mailboxNumber;
     mailbox.verification_type = this.verificationType;
+    mailbox.notes = this.notes;
     const clientId: number = JSON.parse(localStorage.getItem('selectedClient'));
     mailbox.client_id = clientId;
 
@@ -70,5 +73,6 @@ export class ClientMailboxComponent {
     }
     this.mailboxNumber = '';
     this.verificationType = '';
+    this.notes = '';
   }
 }

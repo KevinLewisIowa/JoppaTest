@@ -175,59 +175,6 @@
             (change)="updateNumberTanksHoses(client)" [(ngModel)]="client.number_hoses" />
         </div>
       </div>
-      <div class="col-lg-12 col-md-12">
-        <h4>
-          Client Mailbox
-          <button id="new-mailbox-btn" type="button" (click)="goToTop(); clientMailboxMdl.showModal()"
-            class="btn btn-primary" style="float: right" *ngIf="isAdmin && !clientMailbox.id">
-            New Mailbox
-          </button>
-        </h4>
-        <table class="table" id="client-mailbox">
-          <colgroup>
-            <col span="1" style="width: 33%" />
-            <col span="1" style="width: 33%" />
-            <col span="1" style="width: 33%" />
-          </colgroup>
-          <thead>
-            <tr>
-              <th>Mailbox Number</th>
-              <th>Verification Type</th>
-              <th>Date Added</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngIf="clientMailbox && clientMailbox.mailbox_number; else noMailbox">
-              <td>
-                <input *ngIf="isAdmin" class="form-control" [(ngModel)]="clientMailbox.mailbox_number"
-                  (change)="updateClientMailbox(clientMailbox)" />
-                <span *ngIf="!isAdmin">{{ clientMailbox.mailbox_number }}</span>
-              </td>
-              <td>
-                <select *ngIf="isAdmin" class="form-control" [(ngModel)]="clientMailbox.verification_type"
-                  (change)="updateClientMailbox(clientMailbox)">
-                  <option value="Not Selected Yet">Not Selected Yet</option>
-                  <option value="Show ID">Show ID</option>
-                  <option value="Photo">Photo</option>
-                </select>
-                <span *ngIf="!isAdmin">{{ clientMailbox.verification_type }}</span>
-              </td>
-              <td>{{ clientMailbox.created_at | date:'shortDate' }}</td>
-              <td>
-                <button *ngIf="isAdmin" type="button" class="btn btn-primary"
-                  (click)="removeClientMailbox(clientMailbox.id)">Remove</button>
-              </td>
-
-            </tr>
-          </tbody>
-          <ng-template #noMailbox>
-            <tr>
-              <td colspan="3" class="text-center text-muted">No mailbox assigned</td>
-            </tr>
-          </ng-template>
-        </table>
-      </div>
       <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
         <h4 [style.color]="isReleaseValid ? 'green' : 'red'">
           Release of Information Acknowledgement
@@ -262,6 +209,66 @@
           </tbody>
         </table>
         <p *ngIf="!isReleaseValid" class="text-danger">Acknowledgement expired or not found. Please re-sign.</p>
+      </div>
+      <div class="col-lg-12 col-md-12">
+        <h4>
+          Client Mailbox
+          <button id="new-mailbox-btn" type="button" (click)="goToTop(); clientMailboxMdl.showModal()"
+            class="btn btn-primary" style="float: right" *ngIf="isAdmin && !clientMailbox.id">
+            New Mailbox
+          </button>
+        </h4>
+        <table class="table" id="client-mailbox">
+          <colgroup>
+            <col span="1" style="width: 25%" />
+            <col span="1" style="width: 25%" />
+            <col span="1" style="width: 25%" />
+            <col span="1" style="width: 25%" />
+          </colgroup>
+          <thead>
+            <tr>
+              <th>Mailbox Number</th>
+              <th>Verification Type</th>
+              <th>Notes</th>
+              <th>Date Added</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="clientMailbox && clientMailbox.mailbox_number; else noMailbox">
+              <td>
+                <input *ngIf="isAdmin" class="form-control" [(ngModel)]="clientMailbox.mailbox_number"
+                  (change)="updateClientMailbox(clientMailbox)" />
+                <span *ngIf="!isAdmin">{{ clientMailbox.mailbox_number }}</span>
+              </td>
+              <td>
+                <select *ngIf="isAdmin" class="form-control" [(ngModel)]="clientMailbox.verification_type"
+                  (change)="updateClientMailbox(clientMailbox)">
+                  <option value="Not Selected Yet">Not Selected Yet</option>
+                  <option value="Show ID">Show ID</option>
+                  <option value="Photo">Photo</option>
+                </select>
+                <span *ngIf="!isAdmin">{{ clientMailbox.verification_type }}</span>
+              </td>
+              <td>
+                <textarea *ngIf="isAdmin" class="form-control" [(ngModel)]="clientMailbox.notes"
+                  (change)="updateClientMailbox(clientMailbox)" rows="2"></textarea>
+                <span *ngIf="!isAdmin">{{ clientMailbox.notes }}</span>
+              </td>
+              <td>{{ clientMailbox.created_at | date:'shortDate' }}</td>
+              <td>
+                <button *ngIf="isAdmin" type="button" class="btn btn-primary"
+                  (click)="removeClientMailbox(clientMailbox.id)">Remove</button>
+              </td>
+
+            </tr>
+          </tbody>
+          <ng-template #noMailbox>
+            <tr>
+              <td colspan="5" class="text-center text-muted">No mailbox assigned</td>
+            </tr>
+          </ng-template>
+        </table>
       </div>
       <div class="col-lg-12 col-md-12" *ngIf="isAdmin && clientMailbox.id">
         <h4>
@@ -1173,11 +1180,12 @@
         </h4>
         <table class="table" id="income">
           <colgroup>
-            <col span="1" style="width: 20%" />
-            <col span="1" style="width: 20%" />
-            <col span="1" style="width: 20%" />
-            <col span="1" style="width: 20%" />
-            <col span="1" style="width: 20%" />
+            <col span="1" style="width: 16.67%" />
+            <col span="1" style="width: 16.67%" />
+            <col span="1" style="width: 16.67%" />
+            <col span="1" style="width: 16.67%" />
+            <col span="1" style="width: 16.67%" />
+            <col span="1" style="width: 16.67%" />
           </colgroup>
           <thead>
             <tr>
@@ -1185,6 +1193,7 @@
               <th>Have Income</th>
               <th>Monthly Money?</th>
               <th>What is your income from?</th>
+              <th>Notes</th>
               <th></th>
             </tr>
           </thead>
@@ -1208,6 +1217,11 @@
                 <input *ngIf="isAdmin" type="text" class="form-control" (change)="updateClientIncome(income)"
                   [(ngModel)]="income.what_income_from" readonly />
                 <span *ngIf="!isAdmin">{{ income.what_income_from }}</span>
+              </td>
+              <td>
+                <textarea *ngIf="isAdmin" class="form-control" (change)="updateClientIncome(income)"
+                  [(ngModel)]="income.notes" rows="2"></textarea>
+                <span *ngIf="!isAdmin">{{ income.notes }}</span>
               </td>
               <td>
                 <button type="button" class="btn btn-primary" *ngIf="isAdmin" (click)="removeClientIncome(income.id)">
