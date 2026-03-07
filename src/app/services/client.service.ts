@@ -33,6 +33,7 @@ import { Caseworker } from "../models/caseworker";
 import { ClientMailbox } from "app/models/client-mailbox";
 import { AuthorizedMailAccesses } from "app/models/authorized-mail-accesses";
 import { ClientBarrier } from "app/models/client-barrier";
+import { ReleaseAcknowledgement } from "app/models/client-release-acknowledgement";
 
 @Injectable()
 export class ClientService {
@@ -257,16 +258,16 @@ export class ClientService {
     return this.http.get(this.baseUrl + `hasPinnedOrWarningNote?clientId=${clientId}`, {
       headers: myHeader,
     })
-    .pipe(
-      map((res: any) => {
-        if (res.message === "invalid-token") {
-          window.localStorage.removeItem("apiToken");
-          this.router.navigate(["/application-login"]);
-        }
-        return res;
-      }),
-      catchError(this.handleError)
-    );
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
   }
 
   insertClientLike(theClientLike: ClientLike) {
@@ -476,10 +477,10 @@ export class ClientService {
       Authorization: window.localStorage.getItem("apiToken"),
     });
     return this.http.patch(
-        this.baseUrl + `client_health_insurances/${healthInsurance.id}`,
-        { client_health_insurance: healthInsurance },
-        { headers: myHeader }
-      )
+      this.baseUrl + `client_health_insurances/${healthInsurance.id}`,
+      { client_health_insurance: healthInsurance },
+      { headers: myHeader }
+    )
       .pipe(
         map((res: any) => {
           if (res.message === "invalid-token") {
@@ -1983,62 +1984,62 @@ export class ClientService {
       );
   }
 
-    insertBarrier(barrier: ClientBarrier) {
-      const myHeader = new HttpHeaders({
-        "Content-Type": "application/json",
-        Authorization: window.localStorage.getItem("apiToken"),
-      });
-      return this.http
-        .post(
-          this.baseUrl + `client_barriers`,
-          { client_barrier: barrier },
-          { headers: myHeader }
-        )
-        .pipe(
-          map((res: any) => {
-            if (res.message === "invalid-token") {
-              window.localStorage.removeItem("apiToken");
-              this.router.navigate(["/application-login"]);
-            }
-            return res;
-          }),
-          catchError(this.handleError)
-        );
-    }
+  insertBarrier(barrier: ClientBarrier) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+    return this.http
+      .post(
+        this.baseUrl + `client_barriers`,
+        { client_barrier: barrier },
+        { headers: myHeader }
+      )
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
 
-    removeBarrier(id: number) {
-      const myHeader = new HttpHeaders({
-        "Content-Type": "application/json",
-        Authorization: window.localStorage.getItem("apiToken"),
-      });
-      return this.http.delete(this.baseUrl + `client_barriers/${id}`, { headers: myHeader })
-        .pipe(
-          map((res) => {
-            return true;
-          }),
-          catchError(this.handleError)
-        );
-    }
+  removeBarrier(id: number) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+    return this.http.delete(this.baseUrl + `client_barriers/${id}`, { headers: myHeader })
+      .pipe(
+        map((res) => {
+          return true;
+        }),
+        catchError(this.handleError)
+      );
+  }
 
-    getClientBarriers(client_id: number) {
-      const myHeader = new HttpHeaders({
-        "Content-Type": "application/json",
-        Authorization: window.localStorage.getItem("apiToken"),
-      });
-      return this.http.get(this.baseUrl + `getClientBarriers?clientId=${client_id}`, {
-          headers: myHeader,
-        })
-        .pipe(
-          map((res: any) => {
-            if (res.message === "invalid-token") {
-              window.localStorage.removeItem("apiToken");
-              this.router.navigate(["/application-login"]);
-            }
-            return res;
-          }),
-          catchError(this.handleError)
-        );
-    }
+  getClientBarriers(client_id: number) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+    return this.http.get(this.baseUrl + `getClientBarriers?clientId=${client_id}`, {
+      headers: myHeader,
+    })
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
 
   getHeatEquipmentNotReturned(clientId: number) {
     const myHeader = new HttpHeaders({
@@ -2401,6 +2402,63 @@ export class ClientService {
     });
     return this.http
       .delete(this.baseUrl + `authorized_mail_accesses/${id}`, { headers: myHeader })
+      .pipe(
+        map((res) => {
+          return true;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  getClientReleaseAcknowledgements(clientId: number) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+    return this.http
+      .get(this.baseUrl + `getClientReleaseAcknowledgements?clientId=${clientId}`, { headers: myHeader })
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  insertReleaseAcknowledgement(acknowledgement: ReleaseAcknowledgement) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+    return this.http
+      .post(
+        this.baseUrl + `client_release_acknowledgements`,
+        { client_release_acknowledgement: acknowledgement },
+        { headers: myHeader }
+      )
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          } else {
+            return res;
+          }
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  removeReleaseAcknowledgement(id: number) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+    return this.http.delete(this.baseUrl + `client_release_acknowledgements/${id}`, { headers: myHeader })
       .pipe(
         map((res) => {
           return true;

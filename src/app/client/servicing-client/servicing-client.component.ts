@@ -52,6 +52,7 @@ import { ClientSkill } from "app/models/client-skill";
 import { Caseworker } from "app/models/caseworker";
 import { ClientMailbox } from 'app/models/client-mailbox';
 import { AuthorizedMailAccesses } from 'app/models/authorized-mail-accesses';
+import { ReleaseAcknowledgement } from 'app/models/client-release-acknowledgement';
 
 @Component({
   selector: "app-servicing-client",
@@ -115,6 +116,8 @@ export class ServicingClientComponent implements OnInit {
   notSeenIcon = faTimesCircle;
   mapIcon = faMap;
   routeInstanceId: number;
+  releaseAcknowledgements: ReleaseAcknowledgement[] = [];
+  isReleaseValid: boolean = false;
   pinnedNoteString: string = '';
   pipe: DatePipe = new DatePipe("en-us");
   reasonForHomelessnessOptions = [
@@ -274,6 +277,12 @@ export class ServicingClientComponent implements OnInit {
               this.authorizedMailAccesses = data;
             }, error => console.log(error));
           }
+        }, error => console.log(error));
+
+        this.service.getClientReleaseAcknowledgements(this.clientId).subscribe((data: ReleaseAcknowledgement[]) => {
+          console.log('Client Release Acknowledgements:', JSON.stringify(data));
+          this.releaseAcknowledgements = data;
+          this.checkReleaseValidity();
         }, error => console.log(error));
       }, (error) => console.log(error));
 
@@ -637,6 +646,17 @@ export class ServicingClientComponent implements OnInit {
     if (this.updateTimerSubscription) {
       this.updateHoseTankMessageVisible = false;
       this.updateTimerSubscription.unsubscribe();
+    }
+  }
+
+  checkReleaseValidity() {
+    if (this.releaseAcknowledgements.length > 0) {
+      const latest = Math.max(...this.releaseAcknowledgements.map(a => new Date(a.date_acknowledged).getTime()));
+      const oneYearAgo = new Date();
+      oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
+      this.isReleaseValid = latest >= oneYearAgo.getTime();
+    } else {
+      this.isReleaseValid = false;
     }
   }
 
@@ -1649,6 +1669,23 @@ export class ServicingClientComponent implements OnInit {
         this.clientCaseworkers = this.clientCaseworkers.filter((w) => w.id != id);
       });
     }
+  }
+
+  addReleaseAcknowledgement() {
+    const releaseAck = new ReleaseAcknowledgement();
+    releaseAck.client_id = this.clientId;
+    releaseAck.date_acknowledged = new Date();
+    this.service.insertReleaseAcknowledgement(releaseAck).subscribe((newAck: ReleaseAcknowledgement) => {
+      this.releaseAcknowledgements.push(newAck);
+      this.checkReleaseValidity();
+    });
+  }
+
+  removeReleaseAcknowledgement(id: number) {
+    this.service.removeReleaseAcknowledgement(id).subscribe(res => {
+      this.releaseAcknowledgements = this.releaseAcknowledgements.filter(a => a.id !== id);
+      this.checkReleaseValidity();
+    });
   }
 
   toggleOnCart(item: any) {
