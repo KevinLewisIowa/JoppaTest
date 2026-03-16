@@ -42,8 +42,8 @@ export class ClientMailboxComponent {
           const referral = new ReferralsResources();
           referral.client_id = clientId;
           referral.referral_type = 'Joppa PO Box';
-          referral.quantity = null;
-          referral.notes = '';
+          referral.quantity = 1;
+          referral.notes = `Mailbox: ${this.mailboxNumber}`;
 
           this.clientService.insertClientReferralResource(referral).subscribe(
             (rr: ReferralsResources) => {

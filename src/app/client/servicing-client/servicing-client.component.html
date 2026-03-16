@@ -175,41 +175,6 @@
             (change)="updateNumberTanksHoses(client)" [(ngModel)]="client.number_hoses" />
         </div>
       </div>
-      <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
-        <h4 [style.color]="isReleaseValid ? 'green' : 'red'">
-          Release of Information Acknowledgement
-          <button id="new-release-btn" type="button" (click)="addReleaseAcknowledgement()" class="btn btn-primary"
-            style="float: right">
-            Add Acknowledgement
-          </button>
-        </h4>
-        <table class="table" id="release-acknowledgements">
-          <colgroup>
-            <col span="1" style="width: 50%" />
-            <col span="1" style="width: 50%" />
-          </colgroup>
-          <thead>
-            <tr>
-              <th>Date Acknowledged</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let ack of releaseAcknowledgements">
-              <td>{{ ack.date_acknowledged | date: 'shortDate' }}</td>
-              <td>
-                <button type="button" class="btn btn-primary" (click)="removeReleaseAcknowledgement(ack.id)">
-                  Remove
-                </button>
-              </td>
-            </tr>
-            <tr *ngIf="releaseAcknowledgements.length === 0">
-              <td colspan="2" class="text-center text-muted">No acknowledgements recorded</td>
-            </tr>
-          </tbody>
-        </table>
-        <p *ngIf="!isReleaseValid" class="text-danger">Acknowledgement expired or not found. Please re-sign.</p>
-      </div>
       <div class="col-lg-12 col-md-12">
         <h4>
           Client Mailbox
@@ -491,6 +456,41 @@
             </tr>
           </tbody>
         </table>
+      </div>
+      <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
+        <h4 [style.color]="isReleaseValid ? 'green' : 'red'">
+          Release of Information Acknowledgement
+          <button id="new-release-btn" type="button" (click)="addReleaseAcknowledgement()" class="btn btn-primary"
+            style="float: right">
+            Add Acknowledgement
+          </button>
+        </h4>
+        <table class="table" id="release-acknowledgements">
+          <colgroup>
+            <col span="1" style="width: 50%" />
+            <col span="1" style="width: 50%" />
+          </colgroup>
+          <thead>
+            <tr>
+              <th>Date Acknowledged</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let ack of releaseAcknowledgements">
+              <td>{{ ack.date_acknowledged | date: 'shortDate' }}</td>
+              <td>
+                <button type="button" class="btn btn-primary" (click)="removeReleaseAcknowledgement(ack.id)">
+                  Remove
+                </button>
+              </td>
+            </tr>
+            <tr *ngIf="releaseAcknowledgements.length === 0">
+              <td colspan="2" class="text-center text-muted">No acknowledgements recorded</td>
+            </tr>
+          </tbody>
+        </table>
+        <p *ngIf="!isReleaseValid" class="text-danger">Acknowledgement expired or not found. Please re-sign.</p>
       </div>
       <div class="col-lg-12 col-md-12" *ngIf="!heatRoute">
         <div class="background-color">
