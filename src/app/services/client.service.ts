@@ -2453,6 +2453,30 @@ export class ClientService {
       );
   }
 
+  updateReleaseAcknowledgement(acknowledgement: ReleaseAcknowledgement) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+    return this.http
+      .put(
+        this.baseUrl + `client_release_acknowledgements/${acknowledgement.id}`,
+        { client_release_acknowledgement: acknowledgement },
+        { headers: myHeader }
+      )
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          } else {
+            return res;
+          }
+        }),
+        catchError(this.handleError)
+      );
+  }
+
   removeReleaseAcknowledgement(id: number) {
     const myHeader = new HttpHeaders({
       "Content-Type": "application/json",

@@ -208,7 +208,7 @@ export class ServicingClientComponent implements OnInit {
     this.clientId = localStorage.getItem("selectedClient");
 
     let attendToDate: Date = new Date();
-    attendToDate.setDate(attendToDate.getDate() + 1);
+    attendToDate.setDate(attendToDate.getDate() + 2);
     this.attendanceToDate = this.pipe.transform(attendToDate, "yyyy-MM-dd");
     let attendFromDate: Date = new Date();
     attendFromDate.setMonth(attendFromDate.getMonth() - 1);
@@ -475,6 +475,8 @@ export class ServicingClientComponent implements OnInit {
             );
           });
 
+          console.log('Client interactions for heat route:', JSON.stringify(this.clientInteractions));
+
           this.goToTop();
         }, (error) => console.log(error));
       } else {
@@ -512,6 +514,7 @@ export class ServicingClientComponent implements OnInit {
 
           this.clientInteractions = this.clientInteractions.filter(ci => new Date(ci.serviced_date) > new Date(oneMonthAgo) && !ci.at_homeless_resource_center)
 
+          console.log('Filtered client interactions for heat route:', JSON.stringify(this.clientInteractions));
           this.goToTop();
         },
           (error) => console.log(error)
@@ -875,24 +878,20 @@ export class ServicingClientComponent implements OnInit {
         }
       );
       modalRef.result.then((selected_date: Date) => {
-        if (!selected_date) {
-          return;
-        } else {
-          interaction.serviced_date = selected_date;
-          if (interaction.serviced) {
-            if (interaction.serviced_date.valueOf() > new Date(this.client.last_interaction_date).valueOf()) {
-              this.client.last_interaction_date = interaction.serviced_date;
-            }
-
-            this.createUpdateInteraction(interaction, heatEquipmentAdded);
-          } else if (!interaction.still_lives_here) {
-            this.client.previous_camp_id = interaction.location_camp_id;
-            this.client.current_camp_id = null;
-
-            this.createUpdateInteraction(interaction, heatEquipmentAdded);
-          } else {
-            this.createUpdateInteraction(interaction, heatEquipmentAdded);
+        interaction.serviced_date = selected_date || new Date();
+        if (interaction.serviced) {
+          if (interaction.serviced_date.valueOf() > new Date(this.client.last_interaction_date).valueOf()) {
+            this.client.last_interaction_date = interaction.serviced_date;
           }
+
+          this.createUpdateInteraction(interaction, heatEquipmentAdded);
+        } else if (!interaction.still_lives_here) {
+          this.client.previous_camp_id = interaction.location_camp_id;
+          this.client.current_camp_id = null;
+
+          this.createUpdateInteraction(interaction, heatEquipmentAdded);
+        } else {
+          this.createUpdateInteraction(interaction, heatEquipmentAdded);
         }
       });
     } else {
@@ -1678,6 +1677,15 @@ export class ServicingClientComponent implements OnInit {
     this.service.insertReleaseAcknowledgement(releaseAck).subscribe((newAck: ReleaseAcknowledgement) => {
       this.releaseAcknowledgements.push(newAck);
       this.checkReleaseValidity();
+    });
+  }
+
+  updateReleaseAcknowledgementNotes(ack: ReleaseAcknowledgement) {
+    this.service.updateReleaseAcknowledgement(ack).subscribe((updated: ReleaseAcknowledgement) => {
+      const index = this.releaseAcknowledgements.findIndex(a => a.id === updated.id);
+      if (index !== -1) {
+        this.releaseAcknowledgements[index] = updated;
+      }
     });
   }
 

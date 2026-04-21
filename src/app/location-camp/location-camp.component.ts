@@ -301,6 +301,7 @@ export class LocationCampComponent implements OnInit {
     }
 
     this.clientService.insertClientAppearance(clientInteraction).subscribe((data: Appearance) => {
+      console.log("Inserted client appearance " + JSON.stringify(data));
       if (!this.isAdmin) {
         clientInteraction.id = data.id;
         // routeAttendanceList.push(clientInteraction);
