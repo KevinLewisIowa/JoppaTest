@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { Route } from "../models/route";
 import { MainService } from "../services/main.service";
@@ -7,6 +7,8 @@ import { Appearance } from "../models/appearance";
 import { Router } from "@angular/router";
 import { Client } from "../models/client";
 import { LocationCamp } from "app/models/location-camp";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 import {
   faChevronLeft,
   faPlus,
@@ -21,7 +23,7 @@ import { ClientDwelling } from "app/models/client-dwelling";
   templateUrl: "./locations.component.html",
   styleUrls: ["./locations.component.css"],
 })
-export class LocationsComponent implements OnInit {
+export class LocationsComponent implements OnInit, OnDestroy {
   routeId: number;
   thisRoute: Route;
   clients: Client[] = [];
@@ -35,6 +37,9 @@ export class LocationsComponent implements OnInit {
   informationIcon = faInfoCircle;
   clientCountForRoute: number;
   routeAttendanceList: Appearance[];
+  totalDogsForRoute: number = 0;
+  totalCatsForRoute: number = 0;
+  private destroy$ = new Subject<void>();
 
   constructor(
     private route: ActivatedRoute,
@@ -87,6 +92,7 @@ export class LocationsComponent implements OnInit {
                 });
 
                 this.locationCamps = sortedlocations;
+                this.calculatePetCounts(sortedlocations);
                 let locationCampIdList: number[] = [];
                 sortedlocations.forEach((loc: LocationCamp) => {
                   locationCampIdList.push(loc.id);
@@ -211,6 +217,11 @@ export class LocationsComponent implements OnInit {
   ngOnInit() {
   }
 
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   editedRoute(theRoute: Route) {
     this.thisRoute = theRoute;
   }
@@ -246,5 +257,30 @@ export class LocationsComponent implements OnInit {
         console.log(routeUrl);
         window.open(routeUrl, "_blank");
       });
+  }
+
+  calculatePetCounts(camps: LocationCamp[]) {
+    this.totalDogsForRoute = 0;
+    this.totalCatsForRoute = 0;
+
+    camps.forEach((camp: LocationCamp) => {
+      this.mainService.getClientsForCamp(camp.id).pipe(
+        takeUntil(this.destroy$)
+      ).subscribe((clients: Client[]) => {
+        clients.forEach((client: Client) => {
+          this.clientService.getClientPets(client.id).pipe(
+            takeUntil(this.destroy$)
+          ).subscribe((pets: any[]) => {
+            pets.forEach((pet: any) => {
+              if (pet.pet_type === "Dog") {
+                this.totalDogsForRoute++;
+              } else if (pet.pet_type === "Cat") {
+                this.totalCatsForRoute++;
+              }
+            });
+          }, error => console.log("Error fetching pets:", error));
+        });
+      }, error => console.log("Error fetching clients:", error));
+    });
   }
 }
