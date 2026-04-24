@@ -1,5 +1,5 @@
 import { throwError as observableThrowError } from "rxjs";
-import { Component, Injectable, OnInit, Renderer2 } from "@angular/core";
+import { Component, Injectable, OnInit, OnDestroy, Renderer2 } from "@angular/core";
 import { HttpHeaders, HttpClient } from "@angular/common/http";
 import { Route } from "../models/route";
 import { ActivatedRoute, Params } from "@angular/router";
@@ -11,6 +11,8 @@ import { CampNote } from "app/models/camp-note";
 import { Appearance } from "app/models/appearance";
 import { ClientService } from "app/services/client.service";
 import { environment } from "environments/environment";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 import {
   faQuestionCircle as farQuestionCircle,
   faCheckCircle as farCheckCircle,
@@ -39,7 +41,7 @@ import { Note } from "app/models/note";
   templateUrl: "./location-camp.component.html",
   styleUrls: ["./location-camp.component.css"],
 })
-export class LocationCampComponent implements OnInit {
+export class LocationCampComponent implements OnInit, OnDestroy {
   route: Route = new Route();
   clients: Client[] = [];
   campNotes: CampNote[] = [];
@@ -75,6 +77,7 @@ export class LocationCampComponent implements OnInit {
   private baseUrl = environment.api_url;
   missing: boolean = false;
   unknown: boolean = false;
+  private destroy$ = new Subject<void>();
 
   constructor(
     private http: HttpClient,
@@ -94,20 +97,26 @@ export class LocationCampComponent implements OnInit {
       this.mainService.showEndRoute.next(true);
     }
 
-    this.activatedRoute.params.subscribe((params: Params) => {
+    this.activatedRoute.params
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((params: Params) => {
       this.locationCampId = this.activatedRoute.snapshot.params["id"];
       localStorage.setItem("locationCampId", JSON.stringify(this.locationCampId));
       this.heatRoute = JSON.parse(window.localStorage.getItem("heatRoute"));
 
       this.routeId = JSON.parse(window.localStorage.getItem("routeId"));
       if (this.routeId) {
-        this.clientService.getClientAttendanceForRoute(this.routeId).subscribe((attendanceInfo: Appearance[]) => {
-          window.localStorage.setItem('RouteAttendance', JSON.stringify(attendanceInfo));
-          this.routeAttendanceList = attendanceInfo;
-          console.log(`Attendance: ${JSON.stringify(attendanceInfo)}`);
-        });
+        this.clientService.getClientAttendanceForRoute(this.routeId)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((attendanceInfo: Appearance[]) => {
+            window.localStorage.setItem('RouteAttendance', JSON.stringify(attendanceInfo));
+            this.routeAttendanceList = attendanceInfo;
+            console.log(`Attendance: ${JSON.stringify(attendanceInfo)}`);
+          });
 
-        this.mainService.getRoute(this.routeId).subscribe((route: Route) => {
+        this.mainService.getRoute(this.routeId)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((route: Route) => {
           this.route = route;
           this.locationCampList = JSON.parse(window.localStorage.getItem("LocationCampIdList"));
 
@@ -267,9 +276,11 @@ export class LocationCampComponent implements OnInit {
   editedCamp(theCamp: LocationCamp) {
     this.locationCamp = theCamp;
     let routeId: number = JSON.parse(window.localStorage.getItem("routeId"));
-    this.mainService.getRoute(routeId).subscribe((data) => {
-      this.route = data;
-    });
+    this.mainService.getRoute(routeId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((data) => {
+        this.route = data;
+      });
   }
 
   clientSelected(client: Client) {
@@ -300,7 +311,9 @@ export class LocationCampComponent implements OnInit {
       clientInteraction.serviced_date = new Date();
     }
 
-    this.clientService.insertClientAppearance(clientInteraction).subscribe((data: Appearance) => {
+    this.clientService.insertClientAppearance(clientInteraction)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((data: Appearance) => {
       console.log("Inserted client appearance " + JSON.stringify(data));
       if (!this.isAdmin) {
         clientInteraction.id = data.id;
@@ -309,20 +322,24 @@ export class LocationCampComponent implements OnInit {
         //   "RouteAttendance",
         //   JSON.stringify(routeAttendanceList)
         // );
-        this.clientService.getClientAttendanceForRoute(this.routeId).subscribe((attendanceInfo: Appearance[]) => {
-          window.localStorage.setItem('RouteAttendance', JSON.stringify(attendanceInfo));
-          this.routeAttendanceList = attendanceInfo;
-          console.log(`Attendance: ${JSON.stringify(attendanceInfo)}`);
+        this.clientService.getClientAttendanceForRoute(this.routeId)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((attendanceInfo: Appearance[]) => {
+            window.localStorage.setItem('RouteAttendance', JSON.stringify(attendanceInfo));
+            this.routeAttendanceList = attendanceInfo;
+            console.log(`Attendance: ${JSON.stringify(attendanceInfo)}`);
 
-          client.previous_camp_id = client.current_camp_id;
-          client.current_camp_id = JSON.parse(
-            window.localStorage.getItem("locationCampId")
-          );
-          client.status = "Active";
-          client.last_interaction_date = new Date();
-          console.log("yooooooo : " + client.last_interaction_date);
+            client.previous_camp_id = client.current_camp_id;
+            client.current_camp_id = JSON.parse(
+              window.localStorage.getItem("locationCampId")
+            );
+            client.status = "Active";
+            client.last_interaction_date = new Date();
+            console.log("yooooooo : " + client.last_interaction_date);
 
-          this.clientService.updateClient(client).subscribe((data) => {
+            this.clientService.updateClient(client)
+              .pipe(takeUntil(this.destroy$))
+              .subscribe((data) => {
             console.log("updated client");
             console.log(data);
           }, error => console.log(error));
@@ -336,10 +353,12 @@ export class LocationCampComponent implements OnInit {
         client.last_interaction_date = new Date();
         console.log("yooooooo : " + client.last_interaction_date);
 
-        this.clientService.updateClient(client).subscribe((data) => {
-          console.log("updated client");
-          console.log(data);
-        }, error => console.log(error));
+        this.clientService.updateClient(client)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((data) => {
+            console.log("updated client");
+            console.log(data);
+          }, error => console.log(error));
       }
     }, error => console.log(error));
   }
@@ -347,9 +366,11 @@ export class LocationCampComponent implements OnInit {
   processClient(client: Client) {
     client.hasAttentionNote = !!(client.admin_notes && client.admin_notes.trim() !== '')
     if (!client.hasAttentionNote) {
-      this.clientService.hasPinnedOrWarningNote(client.id).subscribe((data: { hasPinnedOrWarningNote: boolean }) => {
-        client.hasAttentionNote = data.hasPinnedOrWarningNote;
-      }, error => console.log(error));
+      this.clientService.hasPinnedOrWarningNote(client.id)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((data: { hasPinnedOrWarningNote: boolean }) => {
+          client.hasAttentionNote = data.hasPinnedOrWarningNote;
+        }, error => console.log(error));
     }
 
     // check whether client has heating equipment (tanks/hoses or heaters)
@@ -363,30 +384,36 @@ export class LocationCampComponent implements OnInit {
     client.hasHeatingEquipment = false;
 
     // 1) check heaters
-    this.clientService.getHeatersForClient(client.id).subscribe((heaters: any[]) => {
-      if (Array.isArray(heaters) && heaters.length > 0) {
-        client.hasHeatingEquipment = true;
-        console.log(`Client ${client.first_name} ${client.last_name} has heaters out.`);
-        return;
-      }
-
-      // 2) check tanks
-      this.clientService.getClientLoanedTanks(client.id).subscribe((tanks: any[]) => {
-        if (Array.isArray(tanks) && tanks.length > 0) {
+    this.clientService.getHeatersForClient(client.id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((heaters: any[]) => {
+        if (Array.isArray(heaters) && heaters.length > 0) {
           client.hasHeatingEquipment = true;
-          console.log(`Client ${client.first_name} ${client.last_name} has tanks out.`);
+          console.log(`Client ${client.first_name} ${client.last_name} has heaters out.`);
           return;
         }
 
-        // 3) check hoses
-        this.clientService.getClientLoanedHoses(client.id).subscribe((hoses: any[]) => {
-          client.hasHeatingEquipment = Array.isArray(hoses) && hoses.length > 0;
-          if (client.hasHeatingEquipment) {
-            console.log(`Client ${client.first_name} ${client.last_name} has hoses out.`);
-          }
-        }, err => console.log(err));
+        // 2) check tanks
+        this.clientService.getClientLoanedTanks(client.id)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((tanks: any[]) => {
+            if (Array.isArray(tanks) && tanks.length > 0) {
+              client.hasHeatingEquipment = true;
+              console.log(`Client ${client.first_name} ${client.last_name} has tanks out.`);
+              return;
+            }
+
+            // 3) check hoses
+            this.clientService.getClientLoanedHoses(client.id)
+              .pipe(takeUntil(this.destroy$))
+              .subscribe((hoses: any[]) => {
+                client.hasHeatingEquipment = Array.isArray(hoses) && hoses.length > 0;
+                if (client.hasHeatingEquipment) {
+                  console.log(`Client ${client.first_name} ${client.last_name} has hoses out.`);
+                }
+              }, err => console.log(err));
+          }, err => console.log(err));
       }, err => console.log(err));
-    }, err => console.log(err));
   }
 
   markRemainingNotSeenNotServiced() {
@@ -394,7 +421,9 @@ export class LocationCampComponent implements OnInit {
     // let routeAttendanceList: Appearance[] = JSON.parse(
     //   window.localStorage.getItem("RouteAttendance")
     // );
-    this.clientService.getClientAttendanceForRoute(this.routeId).subscribe((attendanceInfo: Appearance[]) => {
+    this.clientService.getClientAttendanceForRoute(this.routeId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((attendanceInfo: Appearance[]) => {
       this.routeAttendanceList = attendanceInfo;
       console.log(`Attendance: ${JSON.stringify(attendanceInfo)}`);
 
@@ -414,12 +443,16 @@ export class LocationCampComponent implements OnInit {
           if (!clientInteraction.location_camp_id) {
             clientInteraction.location_camp_id = 449;
           }
-          this.clientService.insertClientAppearance(clientInteraction).subscribe(
-            (data) => {
-              clientInteraction.id = data.id;
-              //routeAttendanceList.push(clientInteraction);
-              this.clientService.updateClient(client).subscribe(
-                (data) => {
+          this.clientService.insertClientAppearance(clientInteraction)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe(
+              (data) => {
+                clientInteraction.id = data.id;
+                //routeAttendanceList.push(clientInteraction);
+                this.clientService.updateClient(client)
+                  .pipe(takeUntil(this.destroy$))
+                  .subscribe(
+                    (data) => {
                   // window.localStorage.setItem(
                   //   "RouteAttendance",
                   //   JSON.stringify(routeAttendanceList)
@@ -431,14 +464,16 @@ export class LocationCampComponent implements OnInit {
                   //   routeAttendanceList.length
                   // );
                   // console.log(JSON.stringify(routeAttendanceList));
-                  this.clientService.getClientAttendanceForRoute(this.routeId).subscribe((attendanceInfo: Appearance[]) => {
-                    window.localStorage.setItem('RouteAttendance', JSON.stringify(attendanceInfo));
-                    this.routeAttendanceList = attendanceInfo;
-                    console.log(`Attendance: ${JSON.stringify(attendanceInfo)}`);
-                  });
-                },
-                (error) => console.log(error)
-              );
+                  this.clientService.getClientAttendanceForRoute(this.routeId)
+                    .pipe(takeUntil(this.destroy$))
+                    .subscribe((attendanceInfo: Appearance[]) => {
+                      window.localStorage.setItem('RouteAttendance', JSON.stringify(attendanceInfo));
+                      this.routeAttendanceList = attendanceInfo;
+                      console.log(`Attendance: ${JSON.stringify(attendanceInfo)}`);
+                    });
+                  },
+                  (error) => console.log(error)
+                );
             },
             (error) => console.log(error)
           );
@@ -458,9 +493,11 @@ export class LocationCampComponent implements OnInit {
   }
 
   removeCampNote(id: number) {
-    this.mainService.removeCampNote(id).subscribe((res) => {
-      this.campNotes = this.campNotes.filter((w) => w.id != id);
-    });
+    this.mainService.removeCampNote(id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((res) => {
+        this.campNotes = this.campNotes.filter((w) => w.id != id);
+      });
   }
 
 
@@ -496,7 +533,9 @@ export class LocationCampComponent implements OnInit {
   showParkingMap() {
     let routeUrl: string = `https://www.google.com/maps/dir/`;
     let otherCampCoords = "";
-    this.mainService.getCampListing().subscribe(
+    this.mainService.getCampListing()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(
       (data) => {
         let campsWithSameParkingCoords = data.filter(camp => camp.id !== this.locationCamp.id && this.parkingLotIsInRange(this.locationCamp, camp))
         campsWithSameParkingCoords.forEach(camp => {
@@ -590,14 +629,16 @@ export class LocationCampComponent implements OnInit {
 
   checkClientHasFulfilledItems() {
     this.clients.forEach((client) => {
-      this.mainService.getClientHasFulfilledItems(client.id).subscribe(
-        (count: number) => {
-          if (count > 0) {
-            this.clientsWithFulfilledItems.push(client.id);
-          }
-        },
-        (error) => console.log(error)
-      );
+      this.mainService.getClientHasFulfilledItems(client.id)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(
+          (count: number) => {
+            if (count > 0) {
+              this.clientsWithFulfilledItems.push(client.id);
+            }
+          },
+          (error) => console.log(error)
+        );
     });
   }
 
@@ -628,5 +669,10 @@ export class LocationCampComponent implements OnInit {
     }
     console.log(errMsg);
     return observableThrowError(errMsg);
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { ClientService } from 'app/services/client.service';
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { ClientPet } from 'app/models/client-pet';
 import { RequestedItem } from 'app/models/requested-item';
 import { Client } from 'app/models/client';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-admin-add-pet-food-utility',
@@ -18,13 +20,16 @@ export class AdminAddPetFoodUtilityComponent implements OnInit {
   petFoodAdderRunning: boolean = false;
   processComplete: boolean = false;
   backIcon = faChevronLeft;
+  private destroy$ = new Subject<void>();
 
   constructor(private clientService: ClientService, private router: Router) { }
 
   addPetFood() {
     this.petFoodAdderRunning = true;
     this.processComplete = false;
-    this.clientService.getAllClientPets().subscribe((data: ClientPet[]) => {
+    this.clientService.getAllClientPets()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((data: ClientPet[]) => {
       console.log(JSON.stringify(data));
       this.clientsPets = data.filter(p => p.food_requested == true);
       var numClients = this.clientsPets.length;
@@ -40,7 +45,9 @@ export class AdminAddPetFoodUtilityComponent implements OnInit {
 
           console.log(JSON.stringify(clientPet));
           if (this.clientsPets.find(pet => pet.client_id == clientPet.client_id && pet.pet_type == clientPet.pet_type) == clientPet) {
-            this.clientService.getClientById(clientPet.client_id).subscribe((client: Client) => {
+            this.clientService.getClientById(clientPet.client_id)
+              .pipe(takeUntil(this.destroy$))
+              .subscribe((client: Client) => {
               if (client.status == "Active" && client.current_camp_id != null && client.current_camp_id > 0  && client.current_camp_id != 449 && client.current_camp_id != 704) {
                 console.log(`Is first pet of this type and going to add; client: ${client.first_name} ${client.last_name}; Pet: ${clientPet.pet_type}`);
                 // Create new item request
@@ -51,7 +58,7 @@ export class AdminAddPetFoodUtilityComponent implements OnInit {
                 newItem.has_received = false;
                 newItem.item_description = clientPet.pet_type + " Food";
   
-                this.clientService.insertRequestedItem(newItem).subscribe((data: RequestedItem) => {
+                this.clientService.insertRequestedItem(newItem).pipe(takeUntil(this.destroy$)).subscribe((data: RequestedItem) => {
                   if (data != null && data.id != null) {
                     this.countItemsAdded = this.countItemsAdded + 1;
   
@@ -79,6 +86,11 @@ export class AdminAddPetFoodUtilityComponent implements OnInit {
   }
 
   ngOnInit(): void {
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
 }

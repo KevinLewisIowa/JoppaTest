@@ -1,5 +1,7 @@
-import { AfterViewChecked, ChangeDetectorRef, Component, Inject, LOCALE_ID, OnInit } from '@angular/core';
+import { AfterViewChecked, ChangeDetectorRef, Component, Inject, LOCALE_ID, OnInit, OnDestroy } from '@angular/core';
 import heic2any from 'heic2any';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { formatPhoneNumberValue } from 'app/utils/phone-utils';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from "@angular/router";
@@ -17,8 +19,9 @@ import { DateSelectorComponent } from 'app/insert-modals/date-selector/date-sele
   templateUrl: './client-edit.component.html',
   styleUrls: ['./client-edit.component.css']
 })
-export class ClientEditComponent implements OnInit, AfterViewChecked {
+export class ClientEditComponent implements OnInit, AfterViewChecked, OnDestroy {
   badDate = false;
+  private destroy$ = new Subject<void>();
   clientForm: UntypedFormGroup;
   theClient: Client;
   url: any;
@@ -395,7 +398,9 @@ export class ClientEditComponent implements OnInit, AfterViewChecked {
 
     console.log("Submitting client: " + JSON.stringify(this.theClient));
     // Proceed with the rest of the client submission logic
-    this.clientService.insertClient(this.theClient).subscribe((insertedClient: Client) => {
+    this.clientService.insertClient(this.theClient)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((insertedClient: Client) => {
       if (this.locationCampId == 0) {
         this.locationCampId = 449;
       }
@@ -441,7 +446,9 @@ export class ClientEditComponent implements OnInit, AfterViewChecked {
         theHistory.client_id = insertedClient.id;
         theHistory.note = this.clientForm.get('homeless_history_note').value;
         console.log(JSON.stringify(theHistory));
-        this.clientService.insertClientHomelessHistory(theHistory).subscribe({
+        this.clientService.insertClientHomelessHistory(theHistory)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe({
           next: (data: ClientHomelessHistory) => {
             const theDwelling: ClientDwelling = new ClientDwelling();
             theDwelling.client_id = insertedClient.id;
@@ -453,10 +460,14 @@ export class ClientEditComponent implements OnInit, AfterViewChecked {
               theDwelling.date_moved = new Date(this.clientForm.get('date_moved').value);
             }
             theDwelling.notes = this.clientForm.get('dwelling_note').value;
-            this.clientService.insertClientDwelling(theDwelling).subscribe({
+            this.clientService.insertClientDwelling(theDwelling)
+              .pipe(takeUntil(this.destroy$))
+              .subscribe({
               next: (data: ClientDwelling) => {
                 insertedClient.household_id = insertedClient.id;
-                this.clientService.updateClient(insertedClient).subscribe({
+                this.clientService.updateClient(insertedClient)
+                  .pipe(takeUntil(this.destroy$))
+                  .subscribe({
                   next: updatedClient => {
                     if (this.isAdmin && this.locationCampId === 449) {
                       this.router.navigate(['admin/clientListing']);
@@ -475,15 +486,19 @@ export class ClientEditComponent implements OnInit, AfterViewChecked {
       };
 
       if (this.isAdmin) {
-        this.clientService.insertClientAppearance(clientInteraction).subscribe((data: Appearance) => {
-          clientInteraction.id = data.id;
-          pushRouteAndSaveExtras();
-        }, error => console.log(error));
+        this.clientService.insertClientAppearance(clientInteraction)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((data: Appearance) => {
+            clientInteraction.id = data.id;
+            pushRouteAndSaveExtras();
+          }, error => console.log(error));
       } else {
-        this.clientService.insertClientAppearance(clientInteraction).subscribe((data: Appearance) => {
-          clientInteraction.id = data.id;
-          pushRouteAndSaveExtras();
-        }, error => console.log(error));
+        this.clientService.insertClientAppearance(clientInteraction)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((data: Appearance) => {
+            clientInteraction.id = data.id;
+            pushRouteAndSaveExtras();
+          }, error => console.log(error));
       }
     }, error => {
       console.log(error);
@@ -497,6 +512,11 @@ export class ClientEditComponent implements OnInit, AfterViewChecked {
     } else {
       this.router.navigate(['admin/clientListing']);
     }
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   formatBirthDate() {

@@ -1,21 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UntypedFormBuilder, FormControl, UntypedFormGroup, FormArray, Validators } from '@angular/forms';
 import { Router } from "@angular/router";
 import { MainService } from "app/services/main.service";
 import { LocationCamp } from '../models/location-camp';
 import { Route } from 'app/models/route';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-create-location-camp',
   templateUrl: './create-location-camp.component.html',
   styleUrls: ['./create-location-camp.component.css']
 })
-export class CreateLocationCampComponent implements OnInit {
+export class CreateLocationCampComponent implements OnInit, OnDestroy {
   theLocationCamp: LocationCamp;
   locationCampForm: UntypedFormGroup;
   theRoute: Route;
   routes: Route[];
   isAdmin: boolean;
+  private destroy$ = new Subject<void>();
   constructor(private router: Router, private mainService: MainService,
               private fb: UntypedFormBuilder) { }
 
@@ -23,14 +26,18 @@ export class CreateLocationCampComponent implements OnInit {
     this.theRoute = new Route();
     let routeId: number = JSON.parse(window.localStorage.getItem('routeId'));
     this.isAdmin = JSON.parse(window.localStorage.getItem('isAdmin'));
-    this.mainService.getRoute(routeId).subscribe((route: Route) => {
-      console.log(route);
-      this.theRoute = route;
-    }, error => console.log(error));
+    this.mainService.getRoute(routeId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((route: Route) => {
+        console.log(route);
+        this.theRoute = route;
+      }, error => console.log(error));
 
-    this.mainService.getTheRoutes().subscribe(routes => {
-      this.routes = routes;
-    });
+    this.mainService.getTheRoutes()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(routes => {
+        this.routes = routes;
+      });
 
     this.theLocationCamp = new LocationCamp();
     this.locationCampForm = this.fb.group({
@@ -64,9 +71,16 @@ export class CreateLocationCampComponent implements OnInit {
     this.theLocationCamp.expected_arrival_time = this.locationCampForm.get('expected_arrival_time').value;
     this.theLocationCamp.remain_on_route = this.locationCampForm.get('remain_on_route').value;
     this.theLocationCamp.heat_route_only = this.locationCampForm.get('heat_route_only').value;
-    this.mainService.insertLocationCamp(this.theLocationCamp).subscribe(data => {
-      console.log(data);
-      this.router.navigate([`route/${routeId}`]);
-    }, error => {console.log(error)});
+    this.mainService.insertLocationCamp(this.theLocationCamp)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(data => {
+        console.log(data);
+        this.router.navigate([`route/${routeId}`]);
+      }, error => {console.log(error)});
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

@@ -1,8 +1,10 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ClientService } from "app/services/client.service";
 import { Client } from "app/models/client";
 import { Router } from "@angular/router";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 // tslint:disable-next-line:comment-format
 //Add the clientService in the component.ts file in the constructor and import ClientService
@@ -11,20 +13,23 @@ import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
   templateUrl: "./admin-client-inactive-updater.component.html",
   styleUrls: ["./admin-client-inactive-updater.component.css"],
 })
-export class AdminClientInactiveUpdaterComponent implements OnInit {
+export class AdminClientInactiveUpdaterComponent implements OnInit, OnDestroy {
   clients: any[] = [];
   inactivityLimit = 90;
   countInactivated = 0;
   inactiveUpdaterRunning: boolean = false;
   processComplete: boolean = false;
   backIcon = faChevronLeft;
+  private destroy$ = new Subject<void>();
 
   constructor(private clientService: ClientService, private router: Router) {}
 
   updateInactive() {
     this.inactiveUpdaterRunning = true;
     this.processComplete = false;
-    this.clientService.getClientsByName("").subscribe((data) => {
+    this.clientService.getClientsByName("")
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((data) => {
       this.clients = data;
       var today = new Date();
 
@@ -41,9 +46,11 @@ export class AdminClientInactiveUpdaterComponent implements OnInit {
           console.log(client.first_name + client.preferred_name + client.last_name);
           client.status = "Inactive";
           client.current_camp_id = 0;
-          this.clientService.updateClient(client).subscribe(() => {
-            this.countInactivated++;
-          });
+          this.clientService.updateClient(client)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe(() => {
+              this.countInactivated++;
+            });
         }
 
         if (i == numClients) {
@@ -55,4 +62,9 @@ export class AdminClientInactiveUpdaterComponent implements OnInit {
   }
 
   ngOnInit() {}
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 }

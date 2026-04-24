@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MainService } from '../services/main.service';
 import { RouteInstance } from '../models/route-instance';
 import { Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { RouteInstanceHeaterInteraction } from 'app/models/route-instance-heater-interaction';
 import { Appearance } from 'app/models/appearance';
@@ -17,23 +18,28 @@ import { DateSelectorComponent } from 'app/insert-modals/date-selector/date-sele
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.css']
 })
-export class FooterComponent implements OnInit {
+export class FooterComponent implements OnInit, OnDestroy {
   currentYear: number = new Date().getFullYear();
   routeInstance: RouteInstance = new RouteInstance();
   isAdmin: boolean;
   showEndRoute: boolean = true;
+  private destroy$ = new Subject<void>();
 
   constructor(private mainService: MainService, private clientService:ClientService, private modalService: NgbModal, private router: Router, public dialog: MatDialog) {
     
   }
 
   ngOnInit() {
-    this.mainService.showEndRoute.subscribe(value => {
-      this.showEndRoute = value;
-    });
-    this.mainService.showAdminHome.subscribe(value => {
-      this.isAdmin = value;
-    });
+    this.mainService.showEndRoute
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(value => {
+        this.showEndRoute = value;
+      });
+    this.mainService.showAdminHome
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(value => {
+        this.isAdmin = value;
+      });
 
     if (JSON.parse(window.localStorage.getItem('RouteAttendance')) == null) {
       let routeAttendanceList:Appearance[] = [];
@@ -77,17 +83,19 @@ export class FooterComponent implements OnInit {
     const dialogData = new ConfirmDialogModel(title, message, confirmText, dismissText);
     const dialogRef = this.dialog.open(CustomConfirmationDialogComponent, {data: dialogData, maxWidth:'400px'});
 
-    dialogRef.afterClosed().subscribe(result => {
-      let canContinue: boolean = JSON.parse(result);
+    dialogRef.afterClosed()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(result => {
+        let canContinue: boolean = JSON.parse(result);
 
-      if (canContinue) {
-        this.continueWithEndingRoute(heatRoute, routeInstanceId, primary_device);
-      }
-      else {
-        this.mainService.showEndRoute.next(true);
-        return;
-      }
-    });
+        if (canContinue) {
+          this.continueWithEndingRoute(heatRoute, routeInstanceId, primary_device);
+        }
+        else {
+          this.mainService.showEndRoute.next(true);
+          return;
+        }
+      });
   }
 
   private continueWithEndingRoute(heatRoute: boolean, routeInstanceId: any, primary_device: boolean) {
@@ -101,14 +109,18 @@ export class FooterComponent implements OnInit {
     }
     else {
       if (primary_device) {
-        this.mainService.getRouteInstance(routeInstanceId).subscribe(data => {
-          this.routeInstance = data;
-  
-          if (new Date(this.routeInstance.start_time).getDate() < new Date().getDate()) {
-            this.routeInstance.end_time = new Date(this.routeInstance.start_time);
-            this.routeInstance.end_time.setHours(this.routeInstance.end_time.getHours() + 5);
-              
-              this.mainService.updateRouteInstance(this.routeInstance).subscribe((data) => {
+        this.mainService.getRouteInstance(routeInstanceId)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe(data => {
+            this.routeInstance = data;
+    
+            if (new Date(this.routeInstance.start_time).getDate() < new Date().getDate()) {
+              this.routeInstance.end_time = new Date(this.routeInstance.start_time);
+              this.routeInstance.end_time.setHours(this.routeInstance.end_time.getHours() + 5);
+                
+                this.mainService.updateRouteInstance(this.routeInstance)
+                  .pipe(takeUntil(this.destroy$))
+                  .subscribe((data) => {
                 let apiKey: string = window.localStorage.getItem('apiToken');
                 window.localStorage.clear();
                 window.localStorage.setItem('apiToken', apiKey);
@@ -118,10 +130,12 @@ export class FooterComponent implements OnInit {
               }, error => console.log(error));
           }
           else {
-            this.routeInstance.end_time = new Date();
-  
-            this.mainService.updateRouteInstance(this.routeInstance).subscribe((data) => {
-              let apiKey: string = window.localStorage.getItem('apiToken');
+              this.routeInstance.end_time = new Date();
+    
+              this.mainService.updateRouteInstance(this.routeInstance)
+                .pipe(takeUntil(this.destroy$))
+                .subscribe((data) => {
+                  let apiKey: string = window.localStorage.getItem('apiToken');
               window.localStorage.clear();
               window.localStorage.setItem('apiToken', apiKey);
               window.localStorage.setItem('isAdmin', JSON.stringify(this.isAdmin));
@@ -145,6 +159,11 @@ export class FooterComponent implements OnInit {
     window.localStorage.setItem('apiToken', apiKey);
     window.localStorage.setItem('isAdmin', JSON.stringify(true));
     this.router.navigate(['adminHome']);
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
 }

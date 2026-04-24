@@ -7,7 +7,8 @@ import { MatLegacyTableDataSource as MatTableDataSource, MatLegacyTable as MatTa
 import { faChevronLeft, faPlus, faFlag, faCamera, faFire } from '@fortawesome/free-solid-svg-icons';
 import { Client } from 'app/models/client';
 import { Note } from 'app/models/note';
-import { Subscription, lastValueFrom, take } from 'rxjs';
+import { Subscription, lastValueFrom, take, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-admin-client-listing',
@@ -26,6 +27,7 @@ export class AdminClientListingComponent implements OnInit, AfterViewInit, OnDes
   createIcon = faPlus;
   private heatingCache: Map<number, boolean> = new Map<number, boolean>();
   private concurrency = 5;
+  private destroy$ = new Subject<void>();
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
@@ -37,9 +39,11 @@ export class AdminClientListingComponent implements OnInit, AfterViewInit, OnDes
     //   console.log('seenAndServiced ' + JSON.stringify(data));
     // });
 
-    this.clientService.getClientsByName('').subscribe(data => {
-      console.log('Number of clients: ' + data.length)
-      this.clients = data;
+    this.clientService.getClientsByName('')
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(data => {
+        console.log('Number of clients: ' + data.length)
+        this.clients = data;
 
       // Set hasAttentionNote for each client, throttled in batches of 15
       (async () => {
@@ -124,16 +128,18 @@ export class AdminClientListingComponent implements OnInit, AfterViewInit, OnDes
     return new Promise((resolve) => {
       client.hasAttentionNote = !!(client.admin_notes && client.admin_notes.trim() !== '');
       if (!client.hasAttentionNote) {
-        this.clientService.hasPinnedOrWarningNote(client.id).subscribe(
-          data => {
-            client.hasAttentionNote = data.hasPinnedOrWarningNote;
-            resolve();
-          },
-          error => {
-            console.log(error);
-            resolve();
-          }
-        );
+        this.clientService.hasPinnedOrWarningNote(client.id)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe(
+            data => {
+              client.hasAttentionNote = data.hasPinnedOrWarningNote;
+              resolve();
+            },
+            error => {
+              console.log(error);
+              resolve();
+            }
+          );
       } else {
         resolve();
       }
@@ -288,6 +294,8 @@ export class AdminClientListingComponent implements OnInit, AfterViewInit, OnDes
   ngOnDestroy() {
     if (this.paginatorSub) this.paginatorSub.unsubscribe();
     if (this.sortSub) this.sortSub.unsubscribe();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
 }

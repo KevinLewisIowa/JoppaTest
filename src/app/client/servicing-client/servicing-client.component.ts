@@ -1,5 +1,5 @@
 import { formatPhoneNumberValue } from 'app/utils/phone-utils';
-import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
+import { Component, ElementRef, OnInit, ViewChild, OnDestroy } from "@angular/core";
 import { Client } from "app/models/client";
 import { ClientService } from "app/services/client.service";
 import { Router } from "@angular/router";
@@ -27,7 +27,8 @@ import {
   faTimesCircle,
   faMap,
 } from "@fortawesome/free-solid-svg-icons";
-import { Subscription, timer } from "rxjs";
+import { Subscription, Subject, timer } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 import { DatePipe } from "@angular/common";
 import { PrayerRequestAndNeed } from "app/models/prayer-request";
 import {
@@ -59,7 +60,7 @@ import { ReleaseAcknowledgement } from 'app/models/client-release-acknowledgemen
   templateUrl: "./servicing-client.component.html",
   styleUrls: ["./servicing-client.component.css"],
 })
-export class ServicingClientComponent implements OnInit {
+export class ServicingClientComponent implements OnInit, OnDestroy {
   appearance: Appearance;
   client: Client = new Client();
   locationCampId: number;
@@ -188,6 +189,8 @@ export class ServicingClientComponent implements OnInit {
     'Other'
   ];
 
+  private destroy$ = new Subject<void>();
+
   @ViewChild("clientInfo", { static: false }) clientInfo: ElementRef;
 
   constructor(
@@ -233,61 +236,80 @@ export class ServicingClientComponent implements OnInit {
     }
 
     if (this.clientId !== null) {
-      this.service.getClientById(this.clientId).subscribe((data: Client) => {
-        this.client = data;
-        if (this.client.client_picture != null && this.client.client_picture != '') {
-          this.url = 'data:image/png;base64,' + this.client.client_picture;
-        }
-        console.log(this.url);
-        this.campId = this.client.current_camp_id;
-
-        this.mainService.getLocationCamp(this.campId).subscribe((camp: LocationCamp) => {
-          let route_id = camp.route_id;
-          this.mainService.getRouteById(route_id).subscribe((route: Route) => {
-            this.routeName = route.name;
-          }, error => console.log(error));
-        }, (error) => console.log(error));
-
-        this.service.getClientDwellings(this.clientId).subscribe((data: ClientDwelling[]) => {
-          if (data.length === 0) {
-            alert(
-              "Please ask this client 1) If this is first time homeless? 2) Why they are homeless? and 3) When they became homeless? Please record this under a new 'Dwelling History' entry."
-            );
+        this.service.getClientById(this.clientId)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((data: Client) => {
+          this.client = data;
+          if (this.client.client_picture != null && this.client.client_picture != '') {
+            this.url = 'data:image/png;base64,' + this.client.client_picture;
           }
-        })
+          console.log(this.url);
+          this.campId = this.client.current_camp_id;
 
-        this.service.getClientHousehold(this.client.household_id).subscribe(
-          (data: Client[]) => {
-            this.householdClients = data;
-          },
-          (error) => console.log(error)
-        );
-
-        this.service.getClientCaseworkers(this.clientId).subscribe((data: Caseworker[]) => {
-          this.clientCaseworkers = data;
-        }, (error) => console.log(error));
-
-        this.service.getMailboxForClient(this.clientId).subscribe((data: ClientMailbox) => {
-          this.clientMailbox = data;
-
-          if (this.clientMailbox != null) {
-            console.log('Client Mailbox:', JSON.stringify(this.clientMailbox));
-            this.service.getAuthorizedMailAccessors(this.clientMailbox.id).subscribe((data: AuthorizedMailAccesses[]) => {
-              console.log('Authorized Mail Accessors:', JSON.stringify(data));
-              this.authorizedMailAccesses = data;
+          this.mainService.getLocationCamp(this.campId)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe((camp: LocationCamp) => {
+            let route_id = camp.route_id;
+            this.mainService.getRouteById(route_id)
+              .pipe(takeUntil(this.destroy$))
+              .subscribe((route: Route) => {
+              this.routeName = route.name;
             }, error => console.log(error));
-          }
-        }, error => console.log(error));
+          }, (error) => console.log(error));
 
-        this.service.getClientReleaseAcknowledgements(this.clientId).subscribe((data: ReleaseAcknowledgement[]) => {
-          console.log('Client Release Acknowledgements:', JSON.stringify(data));
+          this.service.getClientDwellings(this.clientId)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe((data: ClientDwelling[]) => {
+            if (data.length === 0) {
+              alert(
+                "Please ask this client 1) If this is first time homeless? 2) Why they are homeless? and 3) When they became homeless? Please record this under a new 'Dwelling History' entry."
+              );
+            }
+          })
+
+          this.service.getClientHousehold(this.client.household_id)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe(
+            (data: Client[]) => {
+              this.householdClients = data;
+            },
+            (error) => console.log(error)
+          );
+
+          this.service.getClientCaseworkers(this.clientId)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe((data: Caseworker[]) => {
+            this.clientCaseworkers = data;
+          }, (error) => console.log(error));
+
+          this.service.getMailboxForClient(this.clientId)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe((data: ClientMailbox) => {
+            this.clientMailbox = data;
+
+            if (this.clientMailbox != null) {
+              console.log('Client Mailbox:', JSON.stringify(this.clientMailbox));
+              this.service.getAuthorizedMailAccessors(this.clientMailbox.id)
+                .pipe(takeUntil(this.destroy$))
+                .subscribe((data: AuthorizedMailAccesses[]) => {
+                console.log('Authorized Mail Accessors:', JSON.stringify(data));
+                this.authorizedMailAccesses = data;
+              }, error => console.log(error));
+            }
+          }, error => console.log(error));
+
+          this.service.getClientReleaseAcknowledgements(this.clientId)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe((data: ReleaseAcknowledgement[]) => {
           this.releaseAcknowledgements = data;
           this.checkReleaseValidity();
         }, error => console.log(error));
       }, (error) => console.log(error));
 
       if (this.routeInstanceId != null) {
-        this.service.getClientNotesForRoute(this.clientId, this.routeInstanceId).subscribe((data: Note[]) => {
+        this.service.getClientNotesForRoute(this.clientId, this.routeInstanceId)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((data: Note[]) => {
           this.notes = data;
           this.notes.sort((a, b) => (a.created_at > b.created_at) ? 1 : -1);
           this.goToTop();
@@ -295,7 +317,9 @@ export class ServicingClientComponent implements OnInit {
       }
 
       if (this.isAdmin) {
-        this.service.getClientNotesForClient(this.clientId).subscribe(
+        this.service.getClientNotesForClient(this.clientId)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe(
           (data: Note[]) => {
             this.notes = data;
             let pinnedNotes: Note[] = data.filter(n => n.source == "PINNED NOTE");
@@ -317,148 +341,196 @@ export class ServicingClientComponent implements OnInit {
           (error) => console.log(error)
         );
 
-        this.service.getClientHealthInsurance(this.clientId).subscribe({
+        this.service.getClientHealthInsurance(this.clientId)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe({
           next: (data: ClientHealthInsurance[]) => {
             this.healthInsurances = data;
           },
           error: (error) => console.log(error)
         });
 
-        this.service.getClientSteps(this.clientId).subscribe({
+        this.service.getClientSteps(this.clientId)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe({
           next: (data: ClientStep[]) => {
             this.steps = data;
           },
           error: (error) => console.log(error)
         });
 
-        this.service.getClientDebt(this.clientId).subscribe({
+        this.service.getClientDebt(this.clientId)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe({
           next: (data: ClientDebt[]) => {
             this.clientDebts = data;
           },
           error: (error) => console.log(error)
         });
 
-        this.service.getClientFelonies(this.clientId).subscribe({
+        this.service.getClientFelonies(this.clientId)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe({
           next: (data: ClientFelony[]) => {
             this.clientFelonies = data;
           },
           error: (error) => console.log(error)
         });
 
-        this.service.getPastEvictions(this.clientId).subscribe({
+        this.service.getPastEvictions(this.clientId)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe({
           next: (data: ClientPastEviction[]) => {
             this.clientPastEvictions = data;
           },
           error: (error) => console.log(error)
         });
 
-        this.service.getClientSkills(this.clientId).subscribe({
+        this.service.getClientSkills(this.clientId)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe({
           next: (data: ClientSkill[]) => {
             this.clientSkills = data;
           },
           error: (error) => console.log(error)
         });
 
-        this.service.getRecentReceivedItems(this.clientId).subscribe(
+        this.service.getRecentReceivedItems(this.clientId)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe(
           (data: RequestedItem[]) => {
             this.receivedItems = data;
             this.filteredReceivedItems = this.receivedItems.slice(0, 10);
           },
           (error) => console.log(error)
         );
-        this.service.getRequestedItems(this.clientId).subscribe(
+        this.service.getRequestedItems(this.clientId)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe(
           (data: RequestedItem[]) => {
             this.requestedItems = data.filter((w) => w.has_received != true);
           },
           (error) => console.log(error)
         );
-        this.service.getClientPets(this.clientId).subscribe(
+        this.service.getClientPets(this.clientId)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe(
           (data: ClientPet[]) => {
             this.pets = data;
           },
           (error) => console.log(error)
         );
-        this.service.getClientCircleOfFriends(this.clientId).subscribe(
+        this.service.getClientCircleOfFriends(this.clientId)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe(
           (data: ClientCircleOfFriends[]) => {
             this.circleOfFriends = data;
           },
           (error) => console.log(error)
         );
-        this.service.getTentsForClient(this.clientId).subscribe(
+        this.service.getTentsForClient(this.clientId)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe(
           (data: Tent[]) => {
             this.tents = data;
           },
           (error) => console.log(error)
         );
-        this.service.getClientDwellings(this.clientId).subscribe(
+        this.service.getClientDwellings(this.clientId)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe(
           (data: ClientDwelling[]) => {
             this.dwellings = data;
           },
           (error) => console.log(error)
         );
-        this.service.getClientHomelessHistory(this.clientId).subscribe(
+        this.service.getClientHomelessHistory(this.clientId)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe(
           (data: ClientHomelessHistory[]) => {
             this.homelessHistories = data;
           },
           (error) => console.log(error)
         );
-        this.service.getClientReferrals(this.clientId).subscribe(
+        this.service.getClientReferrals(this.clientId)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe(
           (data: ReferralsResources[]) => {
             this.referralsResources = data;
           },
           (error) => console.log(error)
         );
-        this.service.getGoalsAndNextSteps(this.clientId).subscribe(
+        this.service.getGoalsAndNextSteps(this.clientId)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe(
           (data: GoalsNextStep[]) => {
             this.goalsAndSteps = data;
           },
           (error) => console.log(error)
         );
-        this.service.getClientLikes(this.clientId).subscribe(
+        this.service.getClientLikes(this.clientId)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe(
           (data: ClientLike[]) => {
             this.clientLikes = data;
           },
           (error) => console.log(error)
         );
-        this.service.getClientDislikes(this.clientId).subscribe(
+        this.service.getClientDislikes(this.clientId)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe(
           (data: ClientDislike[]) => {
             this.clientDislikes = data;
           },
           (error) => console.log(error)
         );
-        this.service.getClientBarriers(this.clientId).subscribe({
+        this.service.getClientBarriers(this.clientId)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe({
           next: (data: ClientBarrier[]) => {
             this.clientBarriers = data;
           },
           error: (error) => console.log(error)
         });
-        this.service.getHealthConcerns(this.clientId).subscribe(
+        this.service.getHealthConcerns(this.clientId)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe(
           (data: HealthConcern[]) => {
             this.healthConcerns = data;
           },
           (error) => console.log(error)
         );
-        this.service.getHeatersForClient(this.clientId).subscribe(
+        this.service.getHeatersForClient(this.clientId)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe(
           (data: Heater[]) => {
             this.heaters = data;
           },
           (error) => console.log(error)
         );
-        this.service.getClientPrayerRequests(this.clientId).subscribe(
+        this.service.getClientPrayerRequests(this.clientId)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe(
           (data: PrayerRequestAndNeed[]) => {
             this.prayerRequestsAndNeeds = data;
           },
           (error) => console.log(error)
         );
-        this.service.getClientLoanedTanks(this.clientId).subscribe((tankInteractions: any[]) => {
+        this.service.getClientLoanedTanks(this.clientId)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((tankInteractions: any[]) => {
           // now get the tank info
           this.tankInteractions = tankInteractions;
         });
-        this.service.getClientLoanedHoses(this.clientId).subscribe((hoseInteractions: any[]) => {
+        this.service.getClientLoanedHoses(this.clientId)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((hoseInteractions: any[]) => {
           // now get the Hose info
           this.hoseInteractions = hoseInteractions;
         });
-        this.service.getHeatEquipmentNotReturned(this.clientId).subscribe(
+        this.service.getHeatEquipmentNotReturned(this.clientId)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe(
           (data: any[]) => {
             this.heatEquipmentNotReturned = data;
           },
@@ -466,7 +538,9 @@ export class ServicingClientComponent implements OnInit {
         );
         this.getHeaterStatuses();
 
-        this.mainService.getClientAttendanceHistory(this.clientId, this.pipe.transform(this.attendanceFromDate, "yyyy-MM-dd"), this.pipe.transform(this.attendanceToDate, "yyyy-MM-dd")).subscribe((data: any[]) => {
+        this.mainService.getClientAttendanceHistory(this.clientId, this.pipe.transform(this.attendanceFromDate, "yyyy-MM-dd"), this.pipe.transform(this.attendanceToDate, "yyyy-MM-dd"))
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((data: any[]) => {
           this.clientInteractions = data;
           this.clientInteractions.sort(function (a, b) {
             return (
@@ -480,7 +554,9 @@ export class ServicingClientComponent implements OnInit {
           this.goToTop();
         }, (error) => console.log(error));
       } else {
-        this.service.getClientNotesForClient(this.clientId).subscribe(
+        this.service.getClientNotesForClient(this.clientId)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe(
           (data: Note[]) => {
             let pinnedNotes: Note[] = data.filter(n => n.source === "PINNED NOTE");
             pinnedNotes.forEach(n => {
@@ -499,7 +575,9 @@ export class ServicingClientComponent implements OnInit {
           (error) => console.log(error)
         );
 
-        this.mainService.getClientAttendanceHistory(this.clientId, this.pipe.transform(this.attendanceFromDate, "yyyy-MM-dd"), this.pipe.transform(this.attendanceToDate, "yyyy-MM-dd")).subscribe((data: any[]) => {
+        this.mainService.getClientAttendanceHistory(this.clientId, this.pipe.transform(this.attendanceFromDate, "yyyy-MM-dd"), this.pipe.transform(this.attendanceToDate, "yyyy-MM-dd"))
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((data: any[]) => {
           this.clientInteractions = data;
           this.clientInteractions.sort(function (a, b) {
             return (
@@ -525,19 +603,21 @@ export class ServicingClientComponent implements OnInit {
         // get heating equipment for this person
         this.service
           .getHeatersForClient(this.clientId)
+          .pipe(takeUntil(this.destroy$))
           .subscribe((data: Heater[]) => {
             this.heaters = data;
           });
-        // this.service.getClientLoanedTanks(this.clientId).subscribe((tankInteractions: any[]) => {
+        // this.service.getClientLoanedTanks(this.clientId).pipe(takeUntil(this.destroy$)).subscribe((tankInteractions: any[]) => {
         //   // now get the tank info
         //   this.tankInteractions = tankInteractions;
         // });
-        // this.service.getClientLoanedHoses(this.clientId).subscribe((hoseInteractions: any[]) => {
+        // this.service.getClientLoanedHoses(this.clientId).pipe(takeUntil(this.destroy$)).subscribe((hoseInteractions: any[]) => {
         //   // now get the Hose info
         //   this.hoseInteractions = hoseInteractions;
         // });
         this.service
           .getHeatEquipmentNotReturned(this.clientId)
+          .pipe(takeUntil(this.destroy$))
           .subscribe((data: any[]) => {
             this.heatEquipmentNotReturned = data;
             this.goToTop();
@@ -552,61 +632,78 @@ export class ServicingClientComponent implements OnInit {
         this.getHeaterStatuses();
       }
 
-      this.service.getRecentReceivedItems(this.clientId).subscribe((data: RequestedItem[]) => {
+      this.service.getRecentReceivedItems(this.clientId)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((data: RequestedItem[]) => {
         this.receivedItems = data;
         this.filteredReceivedItems = this.receivedItems.slice(0, 10);
       });
-      this.service.getRequestedItems(this.clientId).subscribe((data: RequestedItem[]) => {
+      this.service.getRequestedItems(this.clientId)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((data: RequestedItem[]) => {
         this.requestedItems = data.filter((w) => w.has_received != true);
       });
       this.service
         .getClientPets(this.clientId)
+        .pipe(takeUntil(this.destroy$))
         .subscribe((data: ClientPet[]) => {
           this.pets = data;
         });
-      this.service.getClientIncomes(this.clientId).subscribe((data: ClientIncome[]) => {
+      this.service.getClientIncomes(this.clientId)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((data: ClientIncome[]) => {
         this.clientIncomes = data;
       }, error => console.log(error));
-      this.service.getClientNextOfKins(this.clientId).subscribe((data: ClientNextOfKin[]) => {
+      this.service.getClientNextOfKins(this.clientId)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((data: ClientNextOfKin[]) => {
         this.clientNextOfKins = data;
       }, error => console.log(error));
       this.service
         .getClientCircleOfFriends(this.clientId)
+        .pipe(takeUntil(this.destroy$))
         .subscribe((data: ClientCircleOfFriends[]) => {
           this.circleOfFriends = data;
         });
       this.service
         .getTentsForClient(this.clientId)
+        .pipe(takeUntil(this.destroy$))
         .subscribe((data: Tent[]) => {
           this.tents = data;
         });
       this.service
         .getClientDwellings(this.clientId)
+        .pipe(takeUntil(this.destroy$))
         .subscribe((data: ClientDwelling[]) => {
           this.dwellings = data;
         });
       this.service
         .getClientReferrals(this.clientId)
+        .pipe(takeUntil(this.destroy$))
         .subscribe((data: ReferralsResources[]) => {
           this.referralsResources = data;
         });
       this.service
         .getGoalsAndNextSteps(this.clientId)
+        .pipe(takeUntil(this.destroy$))
         .subscribe((data: GoalsNextStep[]) => {
           this.goalsAndSteps = data;
         });
       this.service
         .getClientLikes(this.clientId)
+        .pipe(takeUntil(this.destroy$))
         .subscribe((data: ClientLike[]) => {
           this.clientLikes = data;
         });
       this.service
         .getClientDislikes(this.clientId)
+        .pipe(takeUntil(this.destroy$))
         .subscribe((data: ClientDislike[]) => {
           this.clientDislikes = data;
         });
       this.service
         .getHealthConcerns(this.clientId)
+        .pipe(takeUntil(this.destroy$))
         .subscribe((data: HealthConcern[]) => {
           this.healthConcerns = data;
           this.goToTop();
@@ -631,6 +728,7 @@ export class ServicingClientComponent implements OnInit {
         this.pipe.transform(this.attendanceFromDate, "yyyy-MM-dd"),
         this.pipe.transform(this.attendanceToDate, "yyyy-MM-dd")
       )
+      .pipe(takeUntil(this.destroy$))
       .subscribe(
         (data: any[]) => {
           this.clientInteractions = data;
@@ -646,6 +744,8 @@ export class ServicingClientComponent implements OnInit {
   }
 
   ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
     if (this.updateTimerSubscription) {
       this.updateHoseTankMessageVisible = false;
       this.updateTimerSubscription.unsubscribe();
@@ -664,7 +764,9 @@ export class ServicingClientComponent implements OnInit {
   }
 
   getHeaterStatuses(): void {
-    this.mainService.getHeaterStatuses().subscribe(
+    this.mainService.getHeaterStatuses()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(
       (heaterStatuses) => {
         this.heaterStatuses = heaterStatuses.filter(
           (w: { id: number }) => w.id !== 1
@@ -693,15 +795,19 @@ export class ServicingClientComponent implements OnInit {
   updateHeaterEntry(heaterId: number, statusId: number) {
     this.service
       .updateHeaterClient(this.client.id, heaterId, statusId)
+      .pipe(takeUntil(this.destroy$))
       .subscribe((response) => {
-        this.service.getHeatersForClient(this.client.id).subscribe(
-          (data: any[]) => {
-            this.heaters = data;
-          },
-          (error) => console.log(error)
-        );
+        this.service.getHeatersForClient(this.client.id)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe(
+            (data: any[]) => {
+              this.heaters = data;
+            },
+            (error) => console.log(error)
+          );
         this.service
           .getHeatEquipmentNotReturned(this.clientId)
+          .pipe(takeUntil(this.destroy$))
           .subscribe((data1: any[]) => {
             this.heatEquipmentNotReturned = data1;
           });
@@ -709,22 +815,26 @@ export class ServicingClientComponent implements OnInit {
   }
 
   updateClientMailbox(mailbox: ClientMailbox) {
-    this.service.updateClientMailbox(mailbox).subscribe((data) => {
-      console.log(JSON.stringify(data));
-    }, error => console.log(error));
+    this.service.updateClientMailbox(mailbox)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((data) => {
+        console.log(JSON.stringify(data));
+      }, error => console.log(error));
   }
 
   updateNumberTanksHoses(client: Client) {
-    this.service.updateClient(client).subscribe(
-      (data) => {
-        let updateTimer = timer(2000, 2000);
-        this.updateTimerSubscription = updateTimer.subscribe((data) => {
-          this.hideConfirmationMessage();
-        });
-        this.updateHoseTankMessageVisible = true;
-      },
-      (error) => console.log(error)
-    );
+    this.service.updateClient(client)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(
+        (data) => {
+          let updateTimer = timer(2000, 2000);
+          this.updateTimerSubscription = updateTimer.pipe(takeUntil(this.destroy$)).subscribe((data) => {
+            this.hideConfirmationMessage();
+          });
+          this.updateHoseTankMessageVisible = true;
+        },
+        (error) => console.log(error)
+      );
   }
 
   updateNeedPetFood(pet: ClientPet) {

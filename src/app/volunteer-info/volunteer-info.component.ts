@@ -1,17 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MainService } from 'app/services/main.service';
 import { RouteInstance } from 'app/models/route-instance';
 import { Appearance } from 'app/models/appearance';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-volunteer-info',
   templateUrl: './volunteer-info.component.html',
   styleUrls: ['./volunteer-info.component.css']
 })
-export class VolunteerInfoComponent implements OnInit {
+export class VolunteerInfoComponent implements OnInit, OnDestroy {
   routeInstanceId: number;
   routeId: number;
   volunteerForm: UntypedFormGroup;
@@ -19,6 +21,7 @@ export class VolunteerInfoComponent implements OnInit {
   routeInstance: RouteInstance = new RouteInstance();
   backIcon = faChevronLeft;
   forwardIcon = faChevronRight;
+  private destroy$ = new Subject<void>();
 
   constructor(private router: Router, private mainService: MainService,private fb: UntypedFormBuilder) { }
 
@@ -38,7 +41,9 @@ export class VolunteerInfoComponent implements OnInit {
   addNumberRouteMembers() {
     this.routeInstance.id = this.routeInstanceId;
     this.routeInstance.number_route_members = this.volunteerForm.get('number_route_members').value;
-    this.mainService.updateRouteInstance(this.routeInstance).subscribe((response) => { 
+    this.mainService.updateRouteInstance(this.routeInstance)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((response) => { 
 
     }, (error) => { console.log(error); });
 
@@ -54,5 +59,10 @@ export class VolunteerInfoComponent implements OnInit {
 
   back() {
     this.router.navigate(['checkoutHeaters']);
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
