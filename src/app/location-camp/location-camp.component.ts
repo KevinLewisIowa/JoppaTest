@@ -1,6 +1,6 @@
-import { throwError as observableThrowError } from "rxjs";
-import { Component, Injectable, OnInit, Renderer2 } from "@angular/core";
-import { HttpHeaders, HttpClient } from "@angular/common/http";
+import { throwError as observableThrowError, forkJoin, of, Subject } from "rxjs";
+import { Component, OnInit, OnDestroy } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
 import { Route } from "../models/route";
 import { ActivatedRoute, Params } from "@angular/router";
 import { MainService } from "../services/main.service";
@@ -33,13 +33,14 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { ClientDwelling } from "app/models/client-dwelling";
 import { Note } from "app/models/note";
+import { takeUntil, catchError, map } from "rxjs/operators";
 
 @Component({
   selector: "app-location-camp",
   templateUrl: "./location-camp.component.html",
   styleUrls: ["./location-camp.component.css"],
 })
-export class LocationCampComponent implements OnInit {
+export class LocationCampComponent implements OnInit, OnDestroy {
   route: Route = new Route();
   clients: Client[] = [];
   campNotes: CampNote[] = [];
@@ -48,9 +49,10 @@ export class LocationCampComponent implements OnInit {
   heatRoute: boolean = false;
   locationCampId: number;
   routeId: number;
-  numPeopleWithTanksAtCamp: number;
-  numberTanksAtCamp: number;
+  numPeopleWithTanksAtCamp: number = 0;
+  numberTanksAtCamp: number = 0;
   searchIcon = faSearch;
+  private destroy$ = new Subject<void>();
   createIcon = faPlus;
   backIcon = faChevronLeft;
   flagIcon = faFlag;
@@ -94,174 +96,189 @@ export class LocationCampComponent implements OnInit {
       this.mainService.showEndRoute.next(true);
     }
 
-    this.activatedRoute.params.subscribe((params: Params) => {
-      this.locationCampId = this.activatedRoute.snapshot.params["id"];
+    this.routeAttendanceList = JSON.parse(window.localStorage.getItem("RouteAttendance")) || [];
+
+    this.activatedRoute.params.pipe(takeUntil(this.destroy$)).subscribe((params: Params) => {
+      this.locationCampId = +params["id"];
       localStorage.setItem("locationCampId", JSON.stringify(this.locationCampId));
       this.heatRoute = JSON.parse(window.localStorage.getItem("heatRoute"));
-
       this.routeId = JSON.parse(window.localStorage.getItem("routeId"));
+
       if (this.routeId) {
-        this.clientService.getClientAttendanceForRoute(this.routeId).subscribe((attendanceInfo: Appearance[]) => {
-          window.localStorage.setItem('RouteAttendance', JSON.stringify(attendanceInfo));
-          this.routeAttendanceList = attendanceInfo;
-          console.log(`Attendance: ${JSON.stringify(attendanceInfo)}`);
+        this.loadRouteAttendance();
+      }
+
+      this.loadLocationCamp();
+    });
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  private loadLocationCamp(): void {
+    this.resetCampState();
+
+    this.mainService.getLocationCamp(this.locationCampId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((data) => {
+        this.locationCamp = data;
+        this.setExpectedArrivalTime();
+
+        if (!this.routeId) {
+          this.routeId = this.locationCamp.route_id;
+          window.localStorage.setItem("routeId", JSON.stringify(this.routeId));
+        }
+
+        this.mainService.getRoute(this.routeId)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((route: Route) => {
+            this.route = route;
+            this.setLocationCampList();
+            this.loadRouteAttendance();
+            this.loadClientsForCamp();
+          }, error => console.log(error));
+      }, error => console.log(error));
+  }
+
+  private resetCampState(): void {
+    this.clients = [];
+    this.campNotes = [];
+    this.clientsWithFulfilledItems = [];
+    this.numPeopleWithTanksAtCamp = 0;
+    this.numberTanksAtCamp = 0;
+    this.erroredClients = '';
+  }
+
+  private setExpectedArrivalTime(): void {
+    if (this.locationCamp.expected_arrival_time && this.locationCamp.expected_arrival_time !== "") {
+      const timeArray = this.locationCamp.expected_arrival_time.split(":");
+      this.expectedArrivalTime = new Date();
+      this.expectedArrivalTime.setHours(parseInt(timeArray[0]), parseInt(timeArray[1]), 0, 0);
+    }
+  }
+
+  private setLocationCampList(): void {
+    this.locationCampList = JSON.parse(window.localStorage.getItem("LocationCampIdList"));
+    if (this.locationCampList) {
+      const indexCurrCamp: number = this.locationCampList.findIndex(
+        (campId) => campId == this.locationCampId
+      );
+      this.currentStopNumber = indexCurrCamp + 1;
+      this.totalStopsAmount = this.locationCampList.length;
+    }
+  }
+
+  private loadClientsForCamp(): void {
+    this.mainService.getClientsForCamp(this.locationCampId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((data: Client[]) => {
+        if (!data || data.length === 0) {
+          this.clients = [];
+          this.loadCampNotes();
+          return;
+        }
+
+        if (this.heatRoute) {
+          this.loadHeatRouteClients(data);
+        } else {
+          this.clients = data.sort((a, b) => (a.first_name > b.first_name) ? 1 : -1);
+          this.loadClientDetails(this.clients);
+        }
+
+        this.loadCampNotes();
+      }, error => console.log(error));
+  }
+
+  private loadCampNotes(): void {
+    this.mainService.getCampNotes(this.locationCampId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((data: CampNote[]) => {
+        this.campNotes = data.sort((a, b) => (a.created_at > b.created_at) ? 1 : -1);
+      }, error => console.log(error));
+  }
+
+  private loadHeatRouteClients(campClients: Client[]): void {
+    const clientDetailRequests = campClients.map((client) =>
+      this.clientService.getClientDwellings(client.id).pipe(
+        map((data: ClientDwelling[]) => ({ client, dwellings: data })),
+        catchError((error) => {
+          console.log(error);
+          return of({ client, dwellings: [] });
+        })
+      )
+    );
+
+    forkJoin(clientDetailRequests)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((results) => {
+        const heatClients: Client[] = [];
+
+        results.forEach(({ client, dwellings }) => {
+          const dwelling = this.findLatestDwelling(dwellings);
+          if (dwelling) {
+            client.dwelling = dwelling;
+          }
+
+          if (this.isHeatRouteDwelling(client.dwelling)) {
+            heatClients.push(client);
+            this.numberTanksAtCamp += client.number_tanks || 0;
+            if (client.number_tanks > 0) {
+              this.numPeopleWithTanksAtCamp += 1;
+            }
+          }
+
+          if (!dwelling) {
+            if (this.erroredClients === '') {
+              this.erroredClients = `${client.first_name} ${client.last_name}`;
+            } else {
+              this.erroredClients += `, ${client.first_name} ${client.last_name}`;
+            }
+          }
         });
 
-        this.mainService.getRoute(this.routeId).subscribe((route: Route) => {
-          this.route = route;
-          this.locationCampList = JSON.parse(window.localStorage.getItem("LocationCampIdList"));
+        this.clients = heatClients.sort((a, b) => (a.first_name > b.first_name) ? 1 : -1);
+        this.loadClientDetails(this.clients);
+      }, error => console.log(error));
+  }
 
-          if (this.locationCampList) {
-            let indexCurrCamp: number = this.locationCampList.findIndex(
-              (campId) => campId == this.locationCampId
-            );
-            this.currentStopNumber = indexCurrCamp + 1;
-            this.totalStopsAmount = this.locationCampList.length;
-          }
+  private findLatestDwelling(dwellings: ClientDwelling[]): string {
+    if (!Array.isArray(dwellings) || dwellings.length === 0) {
+      return undefined;
+    }
 
-          this.mainService.getLocationCamp(this.locationCampId).subscribe((data) => {
-            this.locationCamp = data;
-            if (this.locationCamp.expected_arrival_time && this.locationCamp.expected_arrival_time != "") {
-              let timeArray: string[] = this.locationCamp.expected_arrival_time.split(":");
-              this.expectedArrivalTime = new Date(null, null, null, parseInt(timeArray[0]), parseInt(timeArray[1]));
-            }
-
-            this.mainService.getClientsForCamp(this.locationCampId).subscribe((data: Client[]) => {
-              data.forEach(client => {
-                this.processClient(client);
-                this.clientService.getClientDwellings(client.id).subscribe((data: ClientDwelling[]) => {
-                  console.log(`${client.first_name} ${client.last_name}`);
-                  let pushClient: boolean = true;
-                  try {
-                    let dwellingDates = data.map(dwelling => dwelling.created_at);
-                    let dwelling: string = data.filter(dwelling => dwelling.created_at === dwellingDates.reduce((a, b) => a > b ? a : b))[0].dwelling;
-                    console.log(`Client: ${client.first_name} ${client.last_name}; Dwelling: ${dwelling}`);
-                    client.dwelling = data.filter(dwelling => dwelling.created_at === dwellingDates.reduce((a, b) => a > b ? a : b))[0].dwelling;
-                  } catch (e) {
-                    if (this.erroredClients == '') {
-                      this.erroredClients = `${client.first_name} ${client.last_name}`;
-                    } else {
-                      this.erroredClients += `,${client.first_name} ${client.last_name}`;
-                    }
-                    pushClient = false;
-                  }
-
-                  if (client.race == null || client.ethnicity == null || client.gender == "" || client.birth_date == null) {
-                    client.information_missing_or_unknown = "missing";
-                  } else if (client.race == "Data not collected" || client.ethnicity == "Data not collected") {
-                    client.information_missing_or_unknown = "unknown";
-                  } else {
-                    client.information_missing_or_unknown = "";
-                  }
-
-                  if (client.longitude != null && client.latitude != null) client.has_location = true;
-
-                  if (this.heatRoute) {
-                    if (client.dwelling == "Tent" || client.dwelling == "Garage" || client.dwelling == "Shack" || client.dwelling == "Camper" || client.dwelling == "Broken Down Van" && pushClient) {
-                      this.clients.push(client);
-                    }
-                    this.numberTanksAtCamp += client.number_tanks;
-                    if (client.number_tanks > 1) this.numPeopleWithTanksAtCamp += 1;
-                  }
-                  else {
-                    if (pushClient) this.clients.push(client);
-                  }
-
-                  this.clients.sort((a, b) => (a.first_name > b.first_name) ? 1 : -1)
-
-                  this.mainService.getClientHasFulfilledItems(client.id).subscribe((count: number) => {
-                    if (count > 0) {
-                      this.clientsWithFulfilledItems.push(client.id);
-                    }
-                  }, (error) => console.log(error));
-                }, (error) => console.log(error));
-              });
-
-              this.mainService.getCampNotes(this.locationCampId).subscribe((data: CampNote[]) => {
-                this.campNotes = data;
-                this.campNotes.sort((a, b) => (a.created_at > b.created_at) ? 1 : -1);
-              }, (error) => console.log(error));
-            }, (error) => console.log(error));
-          }, (error) => console.log(error));
-        }, (error) => console.log(error));
+    const latest = dwellings.reduce((latestDwelling, current) => {
+      if (!latestDwelling || current.created_at > latestDwelling.created_at) {
+        return current;
       }
-      else {
-        this.mainService.getLocationCamp(this.locationCampId).subscribe((data) => {
-          this.locationCamp = data;
+      return latestDwelling;
+    }, null as ClientDwelling);
 
-          this.locationCampList = JSON.parse(window.localStorage.getItem("LocationCampIdList"));
-          if (this.locationCampList) {
-            let indexCurrCamp: number = this.locationCampList.findIndex(
-              (campId) => campId == this.locationCampId
-            );
-            this.currentStopNumber = indexCurrCamp + 1;
-            this.totalStopsAmount = this.locationCampList.length;
-          }
+    return latest?.dwelling;
+  }
 
-          if (this.locationCamp.expected_arrival_time && this.locationCamp.expected_arrival_time != "") {
-            let timeArray: string[] = this.locationCamp.expected_arrival_time.split(":");
-            this.expectedArrivalTime = new Date(null, null, null, parseInt(timeArray[0]), parseInt(timeArray[1]));
-          }
+  private isHeatRouteDwelling(dwelling: string): boolean {
+    return ["Tent", "Garage", "Shack", "Camper", "Broken Down Van"].includes(dwelling);
+  }
 
-          window.localStorage.setItem("routeId", JSON.stringify(this.locationCamp.route_id));
-          this.mainService.getRoute(this.locationCamp.route_id).subscribe((data: Route) => {
-            this.route = data;
-            this.mainService.getClientsForCamp(this.locationCampId).subscribe((data: Client[]) => {
-              data.forEach(client => {
-                this.clientService.getClientDwellings(client.id).subscribe((data: ClientDwelling[]) => {
-                  let dwellingDates = data.map(dwelling => dwelling.created_at);
-                  client.dwelling = data.filter(dwelling => dwelling.created_at === dwellingDates.reduce((a, b) => a > b ? a : b))[0].dwelling;
+  private loadClientDetails(clients: Client[]): void {
+    clients.forEach((client) => this.processClient(client));
+    this.checkClientHasFulfilledItems();
+  }
 
-                  if (this.heatRoute) {
-                    if (client.dwelling == "Tent" || client.dwelling == "Garage" || client.dwelling == "Shack" || client.dwelling == "Camper" || client.dwelling == "Broken Down Van") {
-                      console.log(JSON.stringify(client));
-                      this.clients.push(client);
-                    }
-                    this.numberTanksAtCamp += client.number_tanks;
-                    if (client.number_tanks > 0) this.numPeopleWithTanksAtCamp += 1;
-                  }
-                  else {
-                    this.clients.push(client);
-                  }
+  private loadRouteAttendance(): void {
+    if (!this.routeId) {
+      return;
+    }
 
-                  this.clients = this.clients.sort((a, b) => (a.first_name > b.first_name) ? 1 : -1);
-                  this.campNotes.sort((a, b) => (a.created_at > b.created_at) ? 1 : -1);
-
-                  this.mainService.getClientHasFulfilledItems(client.id).subscribe((count: number) => {
-                    if (count > 0) {
-                      this.clientsWithFulfilledItems.push(client.id);
-                    }
-                  }, (error) => console.log(error));
-                }, (error) => console.log(error));
-              });
-
-              this.mainService.getCampNotes(this.locationCampId).subscribe((data: CampNote[]) => {
-                this.campNotes = data;
-              }, (error) => console.log(error));
-
-              //   if (this.heatRoute) {
-              //     this.clients = data.filter((client) => client.dwelling == "Tent" || client.dwelling == "Garage" || client.dwelling == "Shack" || client.dwelling == "Camper");
-              //     this.numberTanksAtCamp = this.clients.reduce(function (prevValue, currClient) {
-              //       return prevValue + currClient.number_tanks;
-              //     }, 0);
-              //     this.numPeopleWithTanksAtCamp = this.clients.filter(
-              //       (client) => client.number_tanks > 0
-              //     ).length;
-
-              //     this.checkClientHasFulfilledItems();
-              //   }
-              //   else {
-              //     this.clients = data;
-
-              //     this.checkClientHasFulfilledItems();
-              //   }
-              // });
-
-            }, (error) => console.log(error));
-          }, (error) => console.log(error));
-        }, (error) => console.log(error));
-      }
-    }, (error) => console.log(error));
+    this.clientService.getClientAttendanceForRoute(this.routeId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((attendanceInfo: Appearance[]) => {
+        window.localStorage.setItem('RouteAttendance', JSON.stringify(attendanceInfo));
+        this.routeAttendanceList = attendanceInfo;
+        console.log(`Attendance: ${JSON.stringify(attendanceInfo)}`);
+      }, error => console.log(error));
   }
 
   editedCamp(theCamp: LocationCamp) {
