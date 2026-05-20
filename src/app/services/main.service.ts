@@ -776,6 +776,29 @@ export class MainService {
       );
   }
 
+  /**
+   * Fetch aggregated pet counts for a route.
+   * Expected backend JSON: { dogs: number, cats: number, per_camp: { [campId]: { dogs: n, cats: m } } }
+   */
+  getRoutePetCounts(routeId: number) {
+    const myHeader = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: window.localStorage.getItem("apiToken"),
+    });
+    return this.http
+      .get(this.apiUrl + `getRoutePetCounts?routeId=${routeId}`, { headers: myHeader })
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
   getRouteInstance(id: number) {
     const myHeader = new HttpHeaders({
       "Content-Type": "application/json",

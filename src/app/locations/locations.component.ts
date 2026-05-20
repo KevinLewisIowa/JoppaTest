@@ -16,7 +16,6 @@ import {
   faInfoCircle,
   faCheckCircle,
 } from "@fortawesome/free-solid-svg-icons";
-import { ClientDwelling } from "app/models/client-dwelling";
 
 @Component({
   selector: "app-locations",
@@ -40,6 +39,7 @@ export class LocationsComponent implements OnInit, OnDestroy {
   totalDogsForRoute: number = 0;
   totalCatsForRoute: number = 0;
   private destroy$ = new Subject<void>();
+  private _destroyed: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -92,7 +92,11 @@ export class LocationsComponent implements OnInit, OnDestroy {
                 });
 
                 this.locationCamps = sortedlocations;
-                this.calculatePetCounts(sortedlocations);
+                this.mainService.getRoutePetCounts(this.routeId).pipe(takeUntil(this.destroy$)).subscribe((counts: any) => {
+                  this.totalDogsForRoute = counts?.totals?.dogs ?? 0;
+                  this.totalCatsForRoute = counts?.totals?.cats ?? 0;
+                }, error => console.log("Error fetching route pet counts:", error));
+
                 let locationCampIdList: number[] = [];
                 sortedlocations.forEach((loc: LocationCamp) => {
                   locationCampIdList.push(loc.id);
@@ -102,106 +106,24 @@ export class LocationsComponent implements OnInit, OnDestroy {
                 this.clientCountForRoute = 0;
                 sortedlocations.forEach((location: LocationCamp) => {
                   location.all_seen = false;
-                  this.mainService.getClientsForCamp(location.id).subscribe((data: Client[]) => {
-                    let clientsAtCamp = 0;
-                    let clientsSorted = 0;
+                  // Only fetch the client list to get a count; avoid per-client dwelling requests here.
+                  this.mainService.getClientsForCamp(location.id).pipe(takeUntil(this.destroy$)).subscribe((data: Client[]) => {
+                    const clientsAtCamp = Array.isArray(data) ? data.length : 0;
 
-                    data.forEach(client => {
-                      this.clientService.getClientDwellings(client.id).subscribe((dwellings: ClientDwelling[]) => {
-                        let dwellingDates = dwellings.map(dwelling => dwelling.created_at);
-                        client.dwelling = dwellings.filter(dwelling => dwelling.created_at === dwellingDates.reduce((a, b) => a > b ? a : b))[0].dwelling;
-
-                        // If heat route, then filter down client list to only those that would show up
-                        if (this.heatRoute) {
-                          if (client.dwelling == "Tent" || client.dwelling == "Garage" || client.dwelling == "Shack" || client.dwelling == "Camper" || client.dwelling == "Broken Down Van") {
-                            clientsAtCamp += 1;
-                          }
-                          // data = data.filter((client) => client.dwelling == "Tent" || client.dwelling == "Garage" || client.dwelling == "Shack" || client.dwelling == "Camper" || client.dwelling == "Broken Down Van");
-                        }
-                        else {
-                          clientsAtCamp += 1;
-                        }
-
-                        clientsSorted += 1;
-
-                        if (clientsSorted == data.length) {
-                          if (clientsAtCamp == 0) {
-                            console.log("location has no people: " + location.name);
-                            let index: number = sortedlocations.findIndex((camp) => camp.id == location.id);
-                            if (index < sortedlocations.length - 1) {
-                              this.locationCamps.splice(index, 1);
-                            } else {
-                              this.locationCamps.pop();
-                            }
-                            //console.log(JSON.stringify(this.locationCamps));
-
-                            locationCampIdList.forEach(
-                              (id: number, index: number) => {
-                                if (id == location.id) {
-                                  console.log("remove id: " + id);
-                                  if (index < locationCampIdList.length - 1) {
-                                    locationCampIdList.splice(index, 1);
-                                  } else {
-                                    locationCampIdList.pop();
-                                  }
-                                  console.log(JSON.stringify(locationCampIdList));
-                                }
-                              }
-                            );
-
-                            window.localStorage.setItem("LocationCampIdList", JSON.stringify(locationCampIdList));
-                          }
-
-                          location.number_clients_at_camp = clientsAtCamp;
-
-                          this.clientCountForRoute += clientsAtCamp;
-                          const clientsToCheck = this.routeAttendanceList.filter((client) => Number(client.location_camp_id) === location.id);
-                          location.all_seen = clientsToCheck.length === clientsAtCamp && clientsAtCamp > 0;
-                        }
-                      });
-                    }, error => console.log(error));
-
-                    // Remove camp if there are no clients at the site
-                    if (clientsSorted == data.length) {
-                      if (!this.isAdmin) {
-                        console.log(clientsAtCamp);
-                        if (clientsAtCamp == 0) {
-                          console.log("location has no people: " + location.name);
-                          let index: number = sortedlocations.findIndex((camp) => camp.id == location.id);
-                          if (index < sortedlocations.length - 1) {
-                            this.locationCamps.splice(index, 1);
-                          } else {
-                            this.locationCamps.pop();
-                          }
-                          //console.log(JSON.stringify(this.locationCamps));
-
-                          locationCampIdList.forEach(
-                            (id: number, index: number) => {
-                              if (id == location.id) {
-                                console.log("remove id: " + id);
-                                if (index < locationCampIdList.length - 1) {
-                                  locationCampIdList.splice(index, 1);
-                                } else {
-                                  locationCampIdList.pop();
-                                }
-                                console.log(
-                                  JSON.stringify(locationCampIdList)
-                                );
-                              }
-                            }
-                          );
-
-                          window.localStorage.setItem("LocationCampIdList", JSON.stringify(locationCampIdList));
-                        }
-                      }
-
-                      console.log(JSON.stringify(clientsAtCamp));
+                    if (clientsAtCamp === 0 && !this.isAdmin) {
+                      // remove empty camps for non-admins
+                      const index = this.locationCamps.findIndex((camp) => camp.id == location.id);
+                      if (index > -1) this.locationCamps.splice(index, 1);
+                    } else {
                       location.number_clients_at_camp = clientsAtCamp;
-
+                      this.clientCountForRoute += clientsAtCamp;
                       const clientsToCheck = this.routeAttendanceList.filter((client) => Number(client.location_camp_id) === location.id);
                       location.all_seen = clientsToCheck.length === clientsAtCamp && clientsAtCamp > 0;
                     }
-                  });
+
+                    // keep LocationCampIdList in sync with visible camps
+                    window.localStorage.setItem("LocationCampIdList", JSON.stringify(this.locationCamps.map(c => c.id)));
+                  }, error => console.log(error));
                 });
               }
             });
@@ -218,6 +140,7 @@ export class LocationsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this._destroyed = true;
     this.destroy$.next();
     this.destroy$.complete();
   }
@@ -257,30 +180,5 @@ export class LocationsComponent implements OnInit, OnDestroy {
         console.log(routeUrl);
         window.open(routeUrl, "_blank");
       });
-  }
-
-  calculatePetCounts(camps: LocationCamp[]) {
-    this.totalDogsForRoute = 0;
-    this.totalCatsForRoute = 0;
-
-    camps.forEach((camp: LocationCamp) => {
-      this.mainService.getClientsForCamp(camp.id).pipe(
-        takeUntil(this.destroy$)
-      ).subscribe((clients: Client[]) => {
-        clients.forEach((client: Client) => {
-          this.clientService.getClientPets(client.id).pipe(
-            takeUntil(this.destroy$)
-          ).subscribe((pets: any[]) => {
-            pets.forEach((pet: any) => {
-              if (pet.pet_type === "Dog") {
-                this.totalDogsForRoute++;
-              } else if (pet.pet_type === "Cat") {
-                this.totalCatsForRoute++;
-              }
-            });
-          }, error => console.log("Error fetching pets:", error));
-        });
-      }, error => console.log("Error fetching clients:", error));
-    });
   }
 }
