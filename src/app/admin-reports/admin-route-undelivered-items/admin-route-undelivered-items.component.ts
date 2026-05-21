@@ -1,10 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MainService } from 'app/services/main.service';
+import { ClientService } from 'app/services/client.service';
 import { Router } from '@angular/router';
 import { MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
-import { Observable } from 'rxjs';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { RequestedItem } from 'app/models/requested-item';
 
@@ -14,17 +14,20 @@ import { RequestedItem } from 'app/models/requested-item';
   styleUrls: ['./admin-route-undelivered-items.component.css']
 })
 export class AdminRouteUndeliveredItemsComponent implements OnInit {
-  displayedColumns = ['preferred_name', 'name', 'item_description', 'date_requested', 'fulfilled'];
+  adminColumns = ['select', 'preferred_name', 'name', 'item_description', 'date_requested', 'fulfilled'];
   volunteerColumns = ['preferred_name', 'name', 'item_description', 'date_requested'];
+  displayedColumns = this.adminColumns;
   undeliveredItems: any[] = [];
   dataSource: MatTableDataSource<any>;
+  selectedItemIds: Set<number> = new Set<number>();
+  selectAllChecked = false;
   backIcon = faChevronLeft;
   isAdmin: boolean = false;
 
   @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: false}) sort: MatSort;
 
-  constructor(private mainService: MainService, private router: Router) { 
+  constructor(private mainService: MainService, private clientService: ClientService, private router: Router) { 
     this.isAdmin = JSON.parse(window.localStorage.getItem('isAdmin'));
 
     this.mainService.getAdminRouteUndeliveredItems().subscribe(data => {
@@ -34,14 +37,48 @@ export class AdminRouteUndeliveredItemsComponent implements OnInit {
       } else {
         this.undeliveredItems = data;
       }
-      this.dataSource = new MatTableDataSource(this.undeliveredItems);
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
+      this.setDataSource(this.undeliveredItems);
     }, error => console.log(error));
   }
 
   ngOnInit() {
 
+  }
+
+  setDataSource(items: any[]) {
+    this.dataSource = new MatTableDataSource(items);
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
+  }
+
+  allSelected(): boolean {
+    return (
+      this.dataSource &&
+      this.dataSource.filteredData.length > 0 &&
+      this.dataSource.filteredData.every((item) => this.selectedItemIds.has(item.id))
+    );
+  }
+
+  toggleSelectAll(checked: boolean) {
+    this.selectedItemIds.clear();
+
+    if (checked && this.dataSource) {
+      this.dataSource.filteredData.forEach((item) => this.selectedItemIds.add(item.id));
+    }
+    this.selectAllChecked = checked;
+  }
+
+  isSelected(item: any): boolean {
+    return this.selectedItemIds.has(item.id);
+  }
+
+  toggleItemSelection(item: any, checked: boolean) {
+    if (checked) {
+      this.selectedItemIds.add(item.id);
+    } else {
+      this.selectedItemIds.delete(item.id);
+    }
+    this.selectAllChecked = this.allSelected();
   }
 
   applyFilter(filterValue: string) {
@@ -50,6 +87,8 @@ export class AdminRouteUndeliveredItemsComponent implements OnInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+
+    this.selectAllChecked = this.allSelected();
   }
 
   back() {
@@ -88,6 +127,49 @@ export class AdminRouteUndeliveredItemsComponent implements OnInit {
           window.location.reload();
         }
       }
+      );
+    });
+  }
+
+  deleteSelectedItems() {
+    if (this.selectedItemIds.size === 0) {
+      return;
+    }
+
+    if (!confirm('Delete the selected request(s)? This cannot be undone.')) {
+      return;
+    }
+
+    const selectedIds = Array.from(this.selectedItemIds);
+    let completed = 0;
+    const deletedIds: number[] = [];
+
+    selectedIds.forEach((id) => {
+      this.clientService.deletedRequestedItem(id).subscribe(
+        () => {
+          deletedIds.push(id);
+          completed++;
+          if (completed >= selectedIds.length) {
+            this.undeliveredItems = this.undeliveredItems.filter(
+              (item) => !deletedIds.includes(item.id)
+            );
+            this.selectedItemIds.clear();
+            this.selectAllChecked = false;
+            this.setDataSource(this.undeliveredItems);
+          }
+        },
+        (error) => {
+          console.log(error);
+          completed++;
+          if (completed >= selectedIds.length) {
+            this.undeliveredItems = this.undeliveredItems.filter(
+              (item) => !deletedIds.includes(item.id)
+            );
+            this.selectedItemIds.clear();
+            this.selectAllChecked = false;
+            this.setDataSource(this.undeliveredItems);
+          }
+        }
       );
     });
   }
