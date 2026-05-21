@@ -18,7 +18,7 @@ export class AdminRouteUndeliveredItemsComponent implements OnInit {
   volunteerColumns = ['preferred_name', 'name', 'item_description', 'date_requested'];
   displayedColumns = this.adminColumns;
   undeliveredItems: any[] = [];
-  dataSource: MatTableDataSource<any>;
+  dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   selectedItemIds: Set<number> = new Set<number>();
   selectAllChecked = false;
   backIcon = faChevronLeft;

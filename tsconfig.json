@@ -18,5 +18,7 @@
       "dom"
     ],
     "module": "ES2022"
+    ,
+    "skipLibCheck": true
   }
 }
