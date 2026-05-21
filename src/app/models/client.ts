@@ -41,6 +41,9 @@ export class Client {
     highest_level_education:string = undefined;
     city_before_homelessness:string = undefined;
     state_before_homelessness:string = undefined;
+    hometown:string = undefined;
+    city_grew_up_in:string = undefined;
+    family_currently_lives_in:string = undefined;
     what_brought_to_des_moines:string = undefined;
     information_missing_or_unknown: string = undefined;
     needs_translation: boolean = false;

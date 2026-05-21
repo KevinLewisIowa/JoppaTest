@@ -96,6 +96,9 @@ export class ClientEditComponent implements OnInit, AfterViewChecked {
       otherReasonForDesMoines: '',
       city_before_homelessness: 'Des Moines',
       state_before_homelessness: 'IA',
+      hometown: '',
+      city_grew_up_in: '',
+      family_currently_lives_in: '',
       homeless_history_note: '',
       where_sleep_last_night: ''
     });
@@ -311,6 +314,9 @@ export class ClientEditComponent implements OnInit, AfterViewChecked {
     this.theClient.race = this.clientForm.get('race').value;
     this.theClient.ethnicity = this.clientForm.get('ethnicity').value;
     this.theClient.admin_notes = String(this.clientForm.get('admin_notes').value).trim();
+    this.theClient.hometown = String(this.clientForm.get('hometown').value).trim();
+    this.theClient.city_grew_up_in = String(this.clientForm.get('city_grew_up_in').value).trim();
+    this.theClient.family_currently_lives_in = String(this.clientForm.get('family_currently_lives_in').value).trim();
     this.theClient.last_interaction_date = new Date();
     this.theClient.client_picture = this.byteArray;
     this.theClient.diagnosed_mental_physical_disability = this.clientForm.get('diagnosed_mental_physical_disability').value;
