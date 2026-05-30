@@ -286,37 +286,30 @@ export class ServicingClientComponent implements OnInit {
         }, error => console.log(error));
       }, (error) => console.log(error));
 
-      if (this.routeInstanceId != null) {
-        this.service.getClientNotesForRoute(this.clientId, this.routeInstanceId).subscribe((data: Note[]) => {
-          this.notes = data;
-          this.notes.sort((a, b) => (a.created_at > b.created_at) ? 1 : -1);
-          this.goToTop();
-        }, (error) => console.log(error));
-      }
+      this.service.getClientNotesForClient(this.clientId).subscribe((data: Note[]) => {
+        this.notes = data;
+
+        let pinnedNotes: Note[] = data.filter(n => n.source === "PINNED NOTE");
+        pinnedNotes.forEach(n => {
+          if (this.pinnedNoteString === "") {
+            this.pinnedNoteString = n.note;
+          } else {
+            this.pinnedNoteString += '\r\n' + n.note;
+          }
+        });
+
+        this.notes.sort((a, b) => (a.created_at > b.created_at) ? 1 : -1);
+
+        let warningNotes: Note[] = data.filter(n => n.source === "WARNING");
+        if (warningNotes.length > 0) {
+          let warningNote: Note = warningNotes[warningNotes.length - 1];
+          alert(this.pipe.transform(warningNote.created_at, "shortDate") + " - " + warningNote.note);
+        }
+
+        this.goToTop();
+      }, (error) => console.log(error));
 
       if (this.isAdmin) {
-        this.service.getClientNotesForClient(this.clientId).subscribe(
-          (data: Note[]) => {
-            this.notes = data;
-            let pinnedNotes: Note[] = data.filter(n => n.source == "PINNED NOTE");
-            pinnedNotes.forEach(n => {
-              if (this.pinnedNoteString === "") {
-                this.pinnedNoteString = n.note;
-              } else {
-                this.pinnedNoteString += '\r\n' + n.note;
-              }
-            });
-
-            this.notes.sort((a, b) => (a.created_at > b.created_at) ? 1 : -1);
-            let warningNotes: Note[] = data.filter(n => n.source === "WARNING");
-            if (warningNotes.length > 0) {
-              let warningNote: Note = warningNotes[warningNotes.length - 1];
-              alert(this.pipe.transform(warningNote.created_at, "shortDate") + " - " + warningNote.note);
-            }
-          },
-          (error) => console.log(error)
-        );
-
         this.service.getClientHealthInsurance(this.clientId).subscribe({
           next: (data: ClientHealthInsurance[]) => {
             this.healthInsurances = data;
@@ -480,25 +473,6 @@ export class ServicingClientComponent implements OnInit {
           this.goToTop();
         }, (error) => console.log(error));
       } else {
-        this.service.getClientNotesForClient(this.clientId).subscribe(
-          (data: Note[]) => {
-            let pinnedNotes: Note[] = data.filter(n => n.source === "PINNED NOTE");
-            pinnedNotes.forEach(n => {
-              if (this.pinnedNoteString === '') {
-                this.pinnedNoteString = n.note;
-              } else {
-                this.pinnedNoteString += '\r\n' + n.note;
-              }
-            });
-            let warningNotes: Note[] = data.filter(n => n.source === "WARNING");
-            let warningNote: Note = warningNotes[warningNotes.length - 1];
-            if (warningNotes.length > 0) {
-              alert(this.pipe.transform(warningNote.created_at, "shortDate") + " - " + warningNote.note);
-            }
-          },
-          (error) => console.log(error)
-        );
-
         this.mainService.getClientAttendanceHistory(this.clientId, this.pipe.transform(this.attendanceFromDate, "yyyy-MM-dd"), this.pipe.transform(this.attendanceToDate, "yyyy-MM-dd")).subscribe((data: any[]) => {
           this.clientInteractions = data;
           this.clientInteractions.sort(function (a, b) {
