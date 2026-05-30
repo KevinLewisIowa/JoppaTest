@@ -60,9 +60,9 @@ import { ReleaseAcknowledgement } from 'app/models/client-release-acknowledgemen
   styleUrls: ["./servicing-client.component.css"],
 })
 export class ServicingClientComponent implements OnInit {
-  appearance: Appearance;
+  appearance?: Appearance;
   client: Client = new Client();
-  locationCampId: number;
+  locationCampId: number | null = null;
   requestedItems: RequestedItem[] = [];
   goalsAndSteps: GoalsNextStep[] = [];
   clientLikes: ClientLike[] = [];
@@ -96,18 +96,18 @@ export class ServicingClientComponent implements OnInit {
   tankInteractions: any[] = [];
   hoseInteractions: any[] = [];
   heatEquipmentNotReturned: any[] = [];
-  clientId = null;
+  clientId: number = 0;
   clientCaseworkers: Caseworker[] = [];
   heaterStatuses: HeaterStatus[] = [];
   currentStatus: number = 2;
   heaters: any[] = [];
   clientInteractions: any[] = [];
-  isAdmin: boolean;
-  attendanceFromDate: string;
-  attendanceToDate: string;
-  updateTimerSubscription: Subscription;
+  isAdmin = false;
+  attendanceFromDate = '';
+  attendanceToDate = '';
+  updateTimerSubscription?: Subscription;
   updateHoseTankMessageVisible: boolean = false;
-  campId: number;
+  campId: number = 0;
   url: any;
   backIcon = faChevronLeft;
   informationIcon = faInfoCircle;
@@ -115,7 +115,7 @@ export class ServicingClientComponent implements OnInit {
   notSeenAndServicedIcon = farCheckCircle;
   notSeenIcon = faTimesCircle;
   mapIcon = faMap;
-  routeInstanceId: number;
+  routeInstanceId: number | null = null;
   releaseAcknowledgements: ReleaseAcknowledgement[] = [];
   isReleaseValid: boolean = false;
   pinnedNoteString: string = '';
@@ -188,7 +188,7 @@ export class ServicingClientComponent implements OnInit {
     'Other'
   ];
 
-  @ViewChild("clientInfo", { static: false }) clientInfo: ElementRef;
+  @ViewChild("clientInfo", { static: false }) clientInfo!: ElementRef;
 
   constructor(
     private service: ClientService,
@@ -199,20 +199,20 @@ export class ServicingClientComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.routeInstanceId = JSON.parse(localStorage.getItem("routeInstance"));
-    this.heatRoute = JSON.parse(window.localStorage.getItem("heatRoute"));
-    this.isAdmin = JSON.parse(window.localStorage.getItem("isAdmin"));
+    this.routeInstanceId = JSON.parse(localStorage.getItem("routeInstance") || "null");
+    this.heatRoute = JSON.parse(window.localStorage.getItem("heatRoute") || "false");
+    this.isAdmin = JSON.parse(window.localStorage.getItem("isAdmin") || "false");
     this.locationCampId = JSON.parse(
-      window.localStorage.getItem("locationCampId")
+      window.localStorage.getItem("locationCampId") || "null"
     );
-    this.clientId = localStorage.getItem("selectedClient");
+    this.clientId = JSON.parse(localStorage.getItem("selectedClient") || "0");
 
     let attendToDate: Date = new Date();
     attendToDate.setDate(attendToDate.getDate() + 2);
-    this.attendanceToDate = this.pipe.transform(attendToDate, "yyyy-MM-dd");
+    this.attendanceToDate = this.pipe.transform(attendToDate, "yyyy-MM-dd") || '';
     let attendFromDate: Date = new Date();
     attendFromDate.setMonth(attendFromDate.getMonth() - 1);
-    this.attendanceFromDate = this.pipe.transform(attendFromDate, "yyyy-MM-dd");
+    this.attendanceFromDate = this.pipe.transform(attendFromDate, "yyyy-MM-dd") || '';
     let routeAttendanceList: Appearance[] = JSON.parse(
       localStorage.getItem("RouteAttendance") || '[]'
     );
@@ -232,21 +232,23 @@ export class ServicingClientComponent implements OnInit {
       this.sentInteraction = true;
     }
 
-    if (this.clientId !== null) {
+    if (this.clientId > 0) {
       this.service.getClientById(this.clientId).subscribe((data: Client) => {
         this.client = data;
         if (this.client.client_picture != null && this.client.client_picture != '') {
           this.url = 'data:image/png;base64,' + this.client.client_picture;
         }
         console.log(this.url);
-        this.campId = this.client.current_camp_id;
+        this.campId = this.client.current_camp_id ?? 0;
 
-        this.mainService.getLocationCamp(this.campId).subscribe((camp: LocationCamp) => {
+        if (this.campId > 0) {
+          this.mainService.getLocationCamp(this.campId).subscribe((camp: LocationCamp) => {
           let route_id = camp.route_id;
           this.mainService.getRouteById(route_id).subscribe((route: Route) => {
             this.routeName = route.name;
           }, error => console.log(error));
         }, (error) => console.log(error));
+        }
 
         this.service.getClientDwellings(this.clientId).subscribe((data: ClientDwelling[]) => {
           if (data.length === 0) {
@@ -459,7 +461,7 @@ export class ServicingClientComponent implements OnInit {
         );
         this.getHeaterStatuses();
 
-        this.mainService.getClientAttendanceHistory(this.clientId, this.pipe.transform(this.attendanceFromDate, "yyyy-MM-dd"), this.pipe.transform(this.attendanceToDate, "yyyy-MM-dd")).subscribe((data: any[]) => {
+        this.mainService.getClientAttendanceHistory(this.clientId, this.pipe.transform(this.attendanceFromDate, "yyyy-MM-dd") || '', this.pipe.transform(this.attendanceToDate, "yyyy-MM-dd") || '').subscribe((data: any[]) => {
           this.clientInteractions = data;
           this.clientInteractions.sort(function (a, b) {
             return (
@@ -473,7 +475,7 @@ export class ServicingClientComponent implements OnInit {
           this.goToTop();
         }, (error) => console.log(error));
       } else {
-        this.mainService.getClientAttendanceHistory(this.clientId, this.pipe.transform(this.attendanceFromDate, "yyyy-MM-dd"), this.pipe.transform(this.attendanceToDate, "yyyy-MM-dd")).subscribe((data: any[]) => {
+        this.mainService.getClientAttendanceHistory(this.clientId, this.pipe.transform(this.attendanceFromDate, "yyyy-MM-dd") || '', this.pipe.transform(this.attendanceToDate, "yyyy-MM-dd") || '').subscribe((data: any[]) => {
           this.clientInteractions = data;
           this.clientInteractions.sort(function (a, b) {
             return (
@@ -602,8 +604,8 @@ export class ServicingClientComponent implements OnInit {
     this.mainService
       .getClientAttendanceHistory(
         this.clientId,
-        this.pipe.transform(this.attendanceFromDate, "yyyy-MM-dd"),
-        this.pipe.transform(this.attendanceToDate, "yyyy-MM-dd")
+        this.pipe.transform(this.attendanceFromDate, "yyyy-MM-dd") || '',
+        this.pipe.transform(this.attendanceToDate, "yyyy-MM-dd") || ''
       )
       .subscribe(
         (data: any[]) => {
@@ -795,7 +797,7 @@ export class ServicingClientComponent implements OnInit {
 
   hideConfirmationMessage(): any {
     this.updateHoseTankMessageVisible = false;
-    this.updateTimerSubscription.unsubscribe();
+    this.updateTimerSubscription?.unsubscribe();
   }
 
   sendInteraction(interactionType: number, heatEquipmentAdded: boolean = false) {
@@ -805,7 +807,7 @@ export class ServicingClientComponent implements OnInit {
 
     const interaction: Appearance = new Appearance();
     interaction.client_id = this.client.id;
-    interaction.location_camp_id = this.locationCampId ? this.locationCampId : this.client.current_camp_id;
+    interaction.location_camp_id = this.locationCampId ?? this.client.current_camp_id ?? 0;
     if (interactionType === 1) {
       interaction.serviced = true;
       interaction.was_seen = true;
@@ -888,7 +890,7 @@ export class ServicingClientComponent implements OnInit {
     let routeAttendanceList: Appearance[] = JSON.parse(
       window.localStorage.getItem("RouteAttendance") || '[]'
     );
-    let appearance: Appearance = routeAttendanceList.find(
+    const appearance = routeAttendanceList.find(
       (x) => x.client_id == interaction.client_id
     );
 
@@ -908,7 +910,8 @@ export class ServicingClientComponent implements OnInit {
 
           if (!interaction.still_lives_here) {
             alert('Please add a new dwelling to indicate where they went and any other applicable notes');
-            document.getElementById("newDwellingButton").click();
+            const newDwellingButton = document.getElementById("newDwellingButton");
+            newDwellingButton?.click();
 
             // If we haven't loaded pets for this client, fetch them then clear requests
             this.clearPetsFoodRequests();
@@ -949,7 +952,8 @@ export class ServicingClientComponent implements OnInit {
 
           if (!interaction.still_lives_here) {
             alert('Please add a new dwelling to indicate where they went and any other applicable notes');
-            document.getElementById("newDwellingButton").click();
+            const newDwellingButton = document.getElementById("newDwellingButton");
+            newDwellingButton?.click();
 
             // If we haven't loaded pets for this client, fetch them then clear requests
             this.clearPetsFoodRequests();
@@ -1249,7 +1253,7 @@ export class ServicingClientComponent implements OnInit {
     this.router.navigate(["/admin/clientListing"]);
   }
 
-  viewClient(theClient) {
+  viewClient(theClient: Client) {
     localStorage.setItem('selectedClient', JSON.stringify(theClient.id));
     this.router.navigate(['/serviceClient']);
     window.location.reload();
@@ -1265,7 +1269,7 @@ export class ServicingClientComponent implements OnInit {
       this.router.navigate([`/locationCamp/${this.campId}`]);
     } else {
       let routeAttendanceList: Appearance[] = JSON.parse(
-        localStorage.getItem("RouteAttendance")
+        localStorage.getItem("RouteAttendance") || '[]'
       );
       if (routeAttendanceList.length != null) {
         this.appearance = routeAttendanceList.find(
@@ -1628,12 +1632,12 @@ export class ServicingClientComponent implements OnInit {
     );
   }
 
-  isOtherRelationship(value: string): boolean {
+  isOtherRelationship(value: string | null | undefined): boolean {
     const standard = [
       "Aunt", "Boyfriend", "Caretaker", "Child", "Cousin", "Girlfriend",
       "Grandparent", "Parent", "Sibling", "Spouse/Partner", "Uncle"
     ];
-    return value && !standard.includes(value);
+    return !!value && !standard.includes(value);
   }
 
   removeClientCaseworker(id: number) {
@@ -1645,6 +1649,10 @@ export class ServicingClientComponent implements OnInit {
   }
 
   addReleaseAcknowledgement() {
+    if (this.clientId === null) {
+      return;
+    }
+
     const releaseAck = new ReleaseAcknowledgement();
     releaseAck.client_id = this.clientId;
     releaseAck.date_acknowledged = new Date();

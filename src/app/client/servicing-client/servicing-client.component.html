@@ -76,8 +76,10 @@
               <td>{{ heater.type_description }}</td>
               <td>{{ heater.serial_number }}</td>
               <td>
-                <input type="date" class="form-control" style="max-width: 75%" (focusout)="updateHeaterInfo(heater)"
-                  [(ngModel)]="heater.updated_at" [ngModel]="heater.updated_at | date:'yyyy-MM-dd'" />
+                <input type="date" class="form-control" style="max-width: 75%"
+                  [ngModel]="heater.updated_at | date:'yyyy-MM-dd'"
+                  (ngModelChange)="heater.updated_at = $event"
+                  (focusout)="updateHeaterInfo(heater)" />
               </td>
               <td>
                 <select class="form-control" #heaterStatus (change)="heaterStatusChanged(heaterStatus.value)">
@@ -97,8 +99,10 @@
               <td>Tank</td>
               <td>N/A</td>
               <td>
-                <input type="date" class="form-control" style="max-width: 75%" (blur)="updateTankInfo(tank)"
-                  [(ngModel)]="tank.updated_at" [ngModel]="tank.updated_at | date: 'yyyy-MM-dd'" />
+                <input type="date" class="form-control" style="max-width: 75%"
+                  [ngModel]="tank.updated_at | date:'yyyy-MM-dd'"
+                  (ngModelChange)="tank.updated_at = $event"
+                  (blur)="updateTankInfo(tank)" />
               </td>
               <td><select class="form-control" #tankStatus>
                   <option *ngFor="let option of heaterStatuses" value="{{option.id}}">{{option.status_name}}</option>
@@ -110,8 +114,10 @@
               <td>Hose</td>
               <td>N/A</td>
               <td>
-                <input type="date" class="form-control" style="max-width: 75%" (blur)="updateHoseInfo(hose)"
-                  [(ngModel)]="hose.updated_at" [ngModel]="hose.updated_at | date: 'yyyy-MM-dd'" />
+                <input type="date" class="form-control" style="max-width: 75%"
+                  [ngModel]="hose.updated_at | date:'yyyy-MM-dd'"
+                  (ngModelChange)="hose.updated_at = $event"
+                  (blur)="updateHoseInfo(hose)" />
               </td>
               <td>
                 <select class="form-control" #hoseStatus>
