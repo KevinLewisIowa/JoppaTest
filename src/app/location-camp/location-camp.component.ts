@@ -309,7 +309,8 @@ export class LocationCampComponent implements OnInit, OnDestroy {
       // they are not "seeing" or "servicing" the person right now.
       clientInteraction.was_seen = false;
       clientInteraction.serviced = false;
-      // no serviced_date in this case
+      // give it a serviced_date so it shows in attendance history
+      clientInteraction.serviced_date = new Date();
     } else {
       // volunteers automatically mark the client as seen/serviced
       clientInteraction.was_seen = true;
