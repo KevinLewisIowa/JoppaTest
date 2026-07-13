@@ -289,9 +289,12 @@ export class ServicingClientComponent implements OnInit {
       }, (error) => console.log(error));
 
       this.service.getClientNotesForClient(this.clientId).subscribe((data: Note[]) => {
-        this.notes = data;
+        this.notes = data.filter((note: Note) => this.shouldDisplayNote(note));
 
-        let pinnedNotes: Note[] = data.filter(n => n.source === "PINNED NOTE");
+        this.notes.sort((a, b) => (a.created_at > b.created_at) ? 1 : -1);
+
+        this.pinnedNoteString = '';
+        let pinnedNotes: Note[] = this.notes.filter(n => n.source === "PINNED NOTE");
         pinnedNotes.forEach(n => {
           if (this.pinnedNoteString === "") {
             this.pinnedNoteString = n.note;
@@ -300,9 +303,7 @@ export class ServicingClientComponent implements OnInit {
           }
         });
 
-        this.notes.sort((a, b) => (a.created_at > b.created_at) ? 1 : -1);
-
-        let warningNotes: Note[] = data.filter(n => n.source === "WARNING");
+        let warningNotes: Note[] = this.notes.filter(n => n.source === "WARNING");
         if (warningNotes.length > 0) {
           let warningNote: Note = warningNotes[warningNotes.length - 1];
           alert(this.pipe.transform(warningNote.created_at, "shortDate") + " - " + warningNote.note);
@@ -637,6 +638,18 @@ export class ServicingClientComponent implements OnInit {
     } else {
       this.isReleaseValid = false;
     }
+  }
+
+  private shouldDisplayNote(note: Note): boolean {
+    if (this.isAdmin) {
+      return true;
+    }
+
+    if (this.heatRoute) {
+      return note.source !== 'Outreach';
+    }
+
+    return note.source !== 'Heat';
   }
 
   getHeaterStatuses(): void {
@@ -1115,12 +1128,14 @@ export class ServicingClientComponent implements OnInit {
   }
 
   noteAdded(note: Note) {
-    this.notes.push(note);
-    if (note.source === "PINNED NOTE") {
-      if (this.pinnedNoteString === "") {
-        this.pinnedNoteString = note.note;
-      } else {
-        this.pinnedNoteString += '\r\n' + note.note;
+    if (this.shouldDisplayNote(note)) {
+      this.notes.push(note);
+      if (note.source === "PINNED NOTE") {
+        if (this.pinnedNoteString === "") {
+          this.pinnedNoteString = note.note;
+        } else {
+          this.pinnedNoteString += '\r\n' + note.note;
+        }
       }
     }
     this.safeScrollTo('#new-note-btn');
