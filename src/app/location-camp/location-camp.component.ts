@@ -29,7 +29,10 @@ import {
   faUserMinus,
   faFlag,
   faCamera,
-  faFire
+  faFire,
+  faSort,
+  faSortUp,
+  faSortDown
 } from "@fortawesome/free-solid-svg-icons";
 import { ClientDwelling } from "app/models/client-dwelling";
 import { Note } from "app/models/note";
@@ -69,6 +72,8 @@ export class LocationCampComponent implements OnInit, OnDestroy {
   cameraIcon = faCamera;
   informationIcon = faInfoCircle;
   isAdmin: boolean = false;
+  currentSortColumn: "name" | "lastInteraction" = "name";
+  currentSortDirection: "asc" | "desc" = "asc";
   clientsWithFulfilledItems: number[] = [];
   locationCampList: number[] = [];
   currentStopNumber: number;
@@ -183,7 +188,8 @@ export class LocationCampComponent implements OnInit, OnDestroy {
         if (this.heatRoute) {
           this.loadHeatRouteClients(data);
         } else {
-          this.clients = data.sort((a, b) => (a.first_name > b.first_name) ? 1 : -1);
+          this.clients = data;
+          this.applyCurrentClientSort();
           this.loadClientDetails(this.clients);
         }
 
@@ -238,9 +244,45 @@ export class LocationCampComponent implements OnInit, OnDestroy {
           }
         });
 
-        this.clients = heatClients.sort((a, b) => (a.first_name > b.first_name) ? 1 : -1);
+        this.clients = heatClients;
+        this.applyCurrentClientSort();
         this.loadClientDetails(this.clients);
       }, error => console.log(error));
+  }
+
+  sortClients(column: "name" | "lastInteraction"): void {
+    if (this.currentSortColumn === column) {
+      this.currentSortDirection = this.currentSortDirection === "asc" ? "desc" : "asc";
+    } else {
+      this.currentSortColumn = column;
+      this.currentSortDirection = column === "lastInteraction" ? "desc" : "asc";
+    }
+
+    this.applyCurrentClientSort();
+  }
+
+  getSortIcon(column: "name" | "lastInteraction"): IconDefinition {
+    if (this.currentSortColumn !== column) {
+      return faSort;
+    }
+
+    return this.currentSortDirection === "asc" ? faSortUp : faSortDown;
+  }
+
+  private applyCurrentClientSort(): void {
+    this.clients = [...this.clients].sort((a, b) => {
+      const direction = this.currentSortDirection === "asc" ? 1 : -1;
+
+      if (this.currentSortColumn === "name") {
+        const leftName = `${a.first_name || ""} ${a.last_name || ""}`.trim().toLowerCase();
+        const rightName = `${b.first_name || ""} ${b.last_name || ""}`.trim().toLowerCase();
+        return leftName.localeCompare(rightName) * direction;
+      }
+
+      const leftDate = a.last_interaction_date ? new Date(a.last_interaction_date).getTime() : 0;
+      const rightDate = b.last_interaction_date ? new Date(b.last_interaction_date).getTime() : 0;
+      return (leftDate - rightDate) * direction;
+    });
   }
 
   private findLatestDwelling(dwellings: ClientDwelling[]): string {
@@ -291,6 +333,7 @@ export class LocationCampComponent implements OnInit, OnDestroy {
 
   clientSelected(client: Client) {
     this.clients.push(client);
+    this.applyCurrentClientSort();
     client.is_aftercare = this.route.is_aftercare;
 
     // build a new appearance record based on who is adding the client

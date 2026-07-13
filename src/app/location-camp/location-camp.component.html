@@ -49,12 +49,20 @@
       <table class="table">
         <thead>
           <tr>
-            <th class="text-left">Name</th>
+            <th class="text-left">
+              <button type="button" class="btn btn-link p-0 text-left text-dark" (click)="sortClients('name')">
+                Name <fa-icon [icon]="getSortIcon('name')"></fa-icon>
+              </button>
+            </th>
             <th class="text-left">Dwelling</th>
             <th class="text-left">Mailbox</th>
             <th class="text-left">Phone</th>
             <th class="text-left">Admin Notes</th>
-            <th class="text-left">Last Interaction</th>
+            <th class="text-left">
+              <button type="button" class="btn btn-link p-0 text-left text-dark" (click)="sortClients('lastInteraction')">
+                Last Interaction <fa-icon [icon]="getSortIcon('lastInteraction')"></fa-icon>
+              </button>
+            </th>
           </tr>
         </thead>
         <tbody>
