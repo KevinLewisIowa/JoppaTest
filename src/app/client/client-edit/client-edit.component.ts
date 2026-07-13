@@ -292,6 +292,11 @@ export class ClientEditComponent implements OnInit, AfterViewChecked {
     });
   }
 
+  private navigateToCreatedClient(clientId: number) {
+    localStorage.setItem('selectedClient', JSON.stringify(clientId));
+    this.router.navigate(['/serviceClient']);
+  }
+
   submitClient() {
     this.theClient.first_name = String(this.clientForm.get('first_name').value).trim();
     this.theClient.middle_name = String(this.clientForm.get('middle_name').value).trim();
@@ -464,7 +469,9 @@ export class ClientEditComponent implements OnInit, AfterViewChecked {
                 insertedClient.household_id = insertedClient.id;
                 this.clientService.updateClient(insertedClient).subscribe({
                   next: updatedClient => {
-                    if (this.isAdmin && this.locationCampId === 449) {
+                    if (this.isAdmin) {
+                      this.navigateToCreatedClient(insertedClient.id);
+                    } else if (this.isAdmin && this.locationCampId === 449) {
                       this.router.navigate(['admin/clientListing']);
                     } else {
                       this.router.navigate([`/locationCamp/${this.locationCampId}`]);
