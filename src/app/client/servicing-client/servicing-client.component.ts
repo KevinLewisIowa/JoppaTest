@@ -303,11 +303,7 @@ export class ServicingClientComponent implements OnInit {
           }
         });
 
-        let warningNotes: Note[] = this.notes.filter(n => n.source === "WARNING");
-        if (warningNotes.length > 0) {
-          let warningNote: Note = warningNotes[warningNotes.length - 1];
-          alert(this.pipe.transform(warningNote.created_at, "shortDate") + " - " + warningNote.note);
-        }
+        this.showWarningAndResourceCenterAlerts();
 
         this.goToTop();
       }, (error) => console.log(error));
@@ -640,7 +636,24 @@ export class ServicingClientComponent implements OnInit {
     }
   }
 
+  private showWarningAndResourceCenterAlerts(): void {
+    const warningNotes: Note[] = this.notes
+      .filter(n => n.source === "WARNING")
+      .sort((a, b) => (a.created_at > b.created_at ? 1 : -1));
+    const resourceCenterAlertNotes: Note[] = this.notes
+      .filter(n => n.source === "RESOURCE CENTER ALERT")
+      .sort((a, b) => (a.created_at > b.created_at ? 1 : -1));
+
+    [...warningNotes, ...resourceCenterAlertNotes].forEach((note: Note) => {
+      alert(this.pipe.transform(note.created_at, "shortDate") + " - " + note.note);
+    });
+  }
+
   private shouldDisplayNote(note: Note): boolean {
+    if (note.source === 'RESOURCE CENTER ALERT' && !this.isAdmin) {
+      return false;
+    }
+
     if (this.isAdmin) {
       return true;
     }
