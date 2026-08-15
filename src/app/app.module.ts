@@ -63,6 +63,7 @@ import { AdminReportsComponent } from "./admin-reports/admin-reports.component";
 import { NewClientsReportComponent } from "./admin-reports/new-clients-report/new-clients-report.component";
 import { ClientLocationModalComponent } from "./client-location-modal/client-location-modal.component";
 import { MainLoginComponent } from "./main-login/main-login.component";
+import { ChangePasswordComponent } from "./change-password/change-password.component";
 import { RouteMapComponent } from "./route-map/route-map.component";
 import { NotesComponent } from "./insert-modals/notes/notes.component";
 import { RouteSummaryReportComponent } from "./admin-reports/route-summary-report/route-summary-report.component";
@@ -147,6 +148,7 @@ const reducers = {
         NewClientsReportComponent,
         ClientLocationModalComponent,
         MainLoginComponent,
+        ChangePasswordComponent,
         RouteMapComponent,
         NotesComponent,
         RouteSummaryReportComponent,

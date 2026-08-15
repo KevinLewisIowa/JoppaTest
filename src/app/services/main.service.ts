@@ -1115,6 +1115,78 @@ export class MainService {
       );
   }
 
+  // NEW ADMIN LOGIN METHODS
+  
+  /**
+   * Attempt admin login with email and password
+   */
+  attemptAdminLogin(email: string, password: string) {
+    return this.http
+      .post(this.apiUrl + `admin_login`, { email, password })
+      .pipe(
+        map((response: any) => {
+          if (response.message === "invalid-token" || response.message === "token-expired") {
+            window.localStorage.removeItem("apiToken");
+            window.localStorage.removeItem("tokenExpires");
+            this.router.navigate(["/application-login"]);
+          }
+          return response;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  /**
+   * Change admin password
+   */
+  changeAdminPassword(passwordData: { current_password: string; new_password: string; confirm_password: string }) {
+    const myHeader = this.buildAuthHeaders();
+    return this.http
+      .patch(this.apiUrl + `admin_profile/change_password`, passwordData, { headers: myHeader })
+      .pipe(
+        map((response: any) => {
+          if (response.message === "invalid-token" || response.message === "token-expired") {
+            window.localStorage.removeItem("apiToken");
+            window.localStorage.removeItem("tokenExpires");
+            this.router.navigate(["/application-login"]);
+          }
+          return response;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  /**
+   * Get current admin profile information
+   */
+  getAdminProfile() {
+    const myHeader = this.buildAuthHeaders();
+    return this.http
+      .get(this.apiUrl + `admin_profile`, { headers: myHeader })
+      .pipe(
+        map((response: any) => {
+          if (response.message === "invalid-token" || response.message === "token-expired") {
+            window.localStorage.removeItem("apiToken");
+            window.localStorage.removeItem("tokenExpires");
+            this.router.navigate(["/application-login"]);
+          }
+          return response;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  /**
+   * Check if admin token is expired
+   */
+  isTokenExpired(): boolean {
+    const expiresAt = window.localStorage.getItem("tokenExpires");
+    if (!expiresAt) {
+      return true;
+    }
+    return new Date().getTime() >= parseInt(expiresAt, 10);
+  }
+
   private handleError(error: any): Promise<any> {
     console.error("An error occurred", error); // for demo purposes only
     return Promise.reject(error.message || error);

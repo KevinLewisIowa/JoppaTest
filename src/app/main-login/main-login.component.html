@@ -1,19 +1,95 @@
-<form [formGroup]="passwordForm">
-  <div class="card" style="opacity:0.93">
-    <div class="card-header text-center" id="topOfScreen">
-      <h2>Login</h2>
-    </div>
-    <div class="panel-body" style="opacity: 0.93;">
-      <div class="entry-box" style="margin:0 auto; max-width:50%;">
-        <div class="form-group">
-          <label for="pwd">Password: </label>
-          <input id="pwd" class="form-control" type="password" formControlName="the_password" />
-        </div>
-        <p style="color:red; text-align: center;" *ngIf="invalidText">Login Not Valid</p>
-      </div>
-    </div>
-    <div class="card-footer text-center">
-      <button type="submit" (click)="login()" style="float:right;" class="btn btn-primary">Login <fa-icon [icon]="forwardIcon"></fa-icon></button>
-    </div>
+<div class="card" style="opacity:0.93">
+  <div class="card-header text-center" id="topOfScreen">
+    <h2>Login</h2>
   </div>
-</form>
+  <div class="panel-body" style="opacity: 0.93;">
+    <!-- Tab buttons to switch between login modes -->
+    <div class="login-mode-tabs" style="text-align: center; margin-bottom: 20px;">
+      <button 
+        type="button" 
+        (click)="toggleLoginMode()" 
+        class="btn"
+        [class.btn-primary]="isAdminLogin"
+        [class.btn-secondary]="!isAdminLogin"
+        style="margin-right: 10px;">
+        Admin Login
+      </button>
+      <button 
+        type="button" 
+        (click)="toggleLoginMode()" 
+        class="btn"
+        [class.btn-primary]="!isAdminLogin"
+        [class.btn-secondary]="isAdminLogin">
+        Volunteer Login
+      </button>
+    </div>
+
+    <!-- Admin Login Form (Email + Password) -->
+    <form *ngIf="isAdminLogin" [formGroup]="adminLoginForm" style="margin: 0 auto; max-width: 50%;">
+      <div class="form-group">
+        <label for="email">Email: </label>
+        <input 
+          id="email" 
+          class="form-control" 
+          type="email" 
+          formControlName="email"
+          placeholder="admin@example.com" />
+        <small class="text-danger" *ngIf="adminLoginForm.get('email').hasError('required') && adminLoginForm.get('email').touched">
+          Email is required
+        </small>
+        <small class="text-danger" *ngIf="adminLoginForm.get('email').hasError('email') && adminLoginForm.get('email').touched">
+          Invalid email format
+        </small>
+      </div>
+      <div class="form-group">
+        <label for="password">Password: </label>
+        <input 
+          id="password" 
+          class="form-control" 
+          type="password" 
+          formControlName="password"
+          placeholder="Enter your password" />
+        <small class="text-danger" *ngIf="adminLoginForm.get('password').hasError('required') && adminLoginForm.get('password').touched">
+          Password is required
+        </small>
+      </div>
+      <div class="alert alert-danger" *ngIf="invalidText" role="alert">
+        {{ errorMessage || 'Login failed. Please check your credentials.' }}
+      </div>
+      <div *ngIf="isLoading" class="alert alert-info" role="alert">
+        Logging in...
+      </div>
+    </form>
+
+    <!-- Legacy Login Form (Password Only) -->
+    <form *ngIf="!isAdminLogin" [formGroup]="legacyLoginForm" style="margin: 0 auto; max-width: 50%;">
+      <div class="form-group">
+        <label for="pwd">Password: </label>
+        <input 
+          id="pwd" 
+          class="form-control" 
+          type="password" 
+          formControlName="the_password"
+          placeholder="Enter password" />
+      </div>
+      <div class="alert alert-danger" *ngIf="invalidText" role="alert">
+        {{ errorMessage || 'Login failed. Please check your password.' }}
+      </div>
+      <div *ngIf="isLoading" class="alert alert-info" role="alert">
+        Logging in...
+      </div>
+    </form>
+  </div>
+
+  <div class="card-footer text-center">
+    <button 
+      type="button" 
+      (click)="login()" 
+      [disabled]="isLoading || (isAdminLogin && !adminLoginForm.valid) || (!isAdminLogin && !legacyLoginForm.valid)"
+      style="float:right;" 
+      class="btn btn-primary">
+      Login 
+      <fa-icon [icon]="forwardIcon"></fa-icon>
+    </button>
+  </div>
+</div>

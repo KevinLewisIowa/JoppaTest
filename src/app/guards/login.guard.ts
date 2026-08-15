@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
+import { MainService } from 'app/services/main.service';
 
 
 @Injectable()
 export class IsLoggedInGuard  {
 
   constructor(
-    private router: Router
+    private router: Router,
+    private mainService: MainService
   ) {}
 
   canActivate(
@@ -15,11 +17,23 @@ export class IsLoggedInGuard  {
   ): boolean {
     const currentToken = window.localStorage.getItem('apiToken');
     let isAuth = false;
+    
     if (currentToken == null) {
       this.router.navigate(['application-login']);
-    } else {
-        isAuth = true;
+      return false;
     }
+
+    // Check if token is expired (new admin token system)
+    if (this.mainService.isTokenExpired()) {
+      window.localStorage.removeItem('apiToken');
+      window.localStorage.removeItem('tokenExpires');
+      window.localStorage.removeItem('adminEmail');
+      window.localStorage.removeItem('adminRole');
+      this.router.navigate(['application-login']);
+      return false;
+    }
+
+    isAuth = true;
     return isAuth;
   }
 }
@@ -28,7 +42,8 @@ export class IsLoggedInGuard  {
 export class IsAdminGuard  {
 
   constructor(
-    private router: Router
+    private router: Router,
+    private mainService: MainService
   ) {}
 
   canActivate(
@@ -36,12 +51,29 @@ export class IsAdminGuard  {
     state: RouterStateSnapshot
   ): boolean {
     const isAdmin = window.localStorage.getItem('isAdmin');
+    const adminRole = window.localStorage.getItem('adminRole');
     let isAuth = false;
-    if (isAdmin != 'true') {
-      this.router.navigate(['application-login']);
+    
+    // Check new admin system first (adminRole), then fallback to old system (isAdmin)
+    if (adminRole) {
+      // New admin token system
+      if (this.mainService.isTokenExpired()) {
+        window.localStorage.removeItem('apiToken');
+        window.localStorage.removeItem('tokenExpires');
+        window.localStorage.removeItem('adminEmail');
+        window.localStorage.removeItem('adminRole');
+        this.router.navigate(['application-login']);
+        return false;
+      }
+      isAuth = true;
+    } else if (isAdmin === 'true') {
+      // Legacy system
+      isAuth = true;
     } else {
-        isAuth = true;
+      this.router.navigate(['application-login']);
+      return false;
     }
+    
     return isAuth;
   }
 }
