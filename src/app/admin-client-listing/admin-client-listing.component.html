@@ -11,7 +11,7 @@
     </mat-form-field>
   </div>
   <div class="panel-body">
-    <div>
+    <div class="mobile-scroll-table">
       <mat-table #table [dataSource]="dataSource" matSort>
 
         <ng-container matColumnDef="first_name">
@@ -81,6 +81,7 @@
       </mat-table>
 
       <mat-paginator [pageSizeOptions]="[50, 25, 75, 100]"></mat-paginator>
+    </div>
     </div>
   </div>
   <div class="card-footer">
