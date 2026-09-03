@@ -31,19 +31,17 @@
         <img [src]="url" *ngIf="url !== 'data:image/png;base64,null' && url != '' && url != null"
           style="max-width:20%; height:auto; display:block; margin-bottom:8px;" alt="Client image" />
       </div>
-      <div style="display:flex; justify-content:space-between; align-items:center;">
-        <div>
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap;">
+        <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+          <button #clientInfo class="btn btn-primary" (click)="clientEditMdl.openModal(client)" type="button">
+            Client Info <fa-icon [icon]="informationIcon"></fa-icon>
+          </button>
           <button (click)="showMap()" type="button" class="btn btn-primary"
             *ngIf="client.latitude != null && client.longitude != null">
             <fa-icon [icon]="mapIcon"></fa-icon> Show Directions
           </button>
         </div>
-        <div style="display:flex; gap:8px;">
-          <button #clientInfo class="btn btn-primary" (click)="clientEditMdl.openModal(client)" type="button">
-            Client Info <fa-icon [icon]="informationIcon"></fa-icon>
-          </button>
-        </div>
-        <div style="display:flex; gap:8px;">
+        <div style="display:flex; gap:8px; margin-left:auto;">
           <button type="button" *ngIf="isAdmin" [className]="
             appearance &&
             appearance.was_seen == false &&

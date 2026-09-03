@@ -14,10 +14,12 @@ export class AdminHomeComponent implements OnInit {
 
   signOutIcon = faSignOutAlt;
   isAdmin: boolean;
+  adminEmail: string;
   routeInstanceId: number;
 
   ngOnInit() {
     this.isAdmin = JSON.parse(window.localStorage.getItem("isAdmin"));
+    this.adminEmail = window.localStorage.getItem("adminEmail");
     this.mainService.showAdminHome.next(this.isAdmin);
     this.routeInstanceId = JSON.parse(
       window.localStorage.getItem("routeInstance")
@@ -45,6 +47,10 @@ export class AdminHomeComponent implements OnInit {
 
   openChangeRegularPassword() {
     this.router.navigate(["changeRegularPassword"]);
+  }
+
+  openChangeAdminPassword() {
+    this.router.navigate(["change-password"]);
   }
 
   goToClientListing() {

@@ -56,8 +56,11 @@ export class MainLoginComponent implements OnInit {
     const email = this.adminLoginForm.get('email').value;
     const password = this.adminLoginForm.get('password').value;
 
+    console.log('[AdminLogin] submitting login', { email });
+
     this.service.attemptAdminLogin(email, password).subscribe(
       (data: any) => {
+        console.log('[AdminLogin] success response', data);
         this.isLoading = false;
         if (data.token) {
           // Store token and expiration
@@ -65,6 +68,7 @@ export class MainLoginComponent implements OnInit {
           window.localStorage.setItem('tokenExpires', new Date(data.expires_at).getTime().toString());
           window.localStorage.setItem('adminEmail', data.email);
           window.localStorage.setItem('adminRole', data.role);
+          window.localStorage.setItem('isAdmin', JSON.stringify(true));
 
           // Check if password change is required
           if (data.requires_password_change) {
@@ -79,6 +83,7 @@ export class MainLoginComponent implements OnInit {
         }
       },
       error => {
+        console.log('[AdminLogin] error response', error);
         this.isLoading = false;
         this.invalidText = true;
         if (error.status === 401) {
@@ -107,7 +112,7 @@ export class MainLoginComponent implements OnInit {
           this.router.navigate(['adminHome']);
         }
         else if (data.volunteer) {
-          this.router.navigate(['admin/reports/routeUndeliveredItems']);
+          this.router.navigate(['login']);
         }
         else {
           this.router.navigate(['login']);

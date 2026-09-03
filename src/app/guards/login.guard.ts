@@ -23,8 +23,8 @@ export class IsLoggedInGuard  {
       return false;
     }
 
-    // Check if token is expired (new admin token system)
-    if (this.mainService.isTokenExpired()) {
+    // Check expiry only for sessions created by the new admin token system.
+    if (window.localStorage.getItem('tokenExpires') && this.mainService.isTokenExpired()) {
       window.localStorage.removeItem('apiToken');
       window.localStorage.removeItem('tokenExpires');
       window.localStorage.removeItem('adminEmail');
@@ -57,7 +57,7 @@ export class IsAdminGuard  {
     // Check new admin system first (adminRole), then fallback to old system (isAdmin)
     if (adminRole) {
       // New admin token system
-      if (this.mainService.isTokenExpired()) {
+      if (window.localStorage.getItem('tokenExpires') && this.mainService.isTokenExpired()) {
         window.localStorage.removeItem('apiToken');
         window.localStorage.removeItem('tokenExpires');
         window.localStorage.removeItem('adminEmail');

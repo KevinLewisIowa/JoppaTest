@@ -102,6 +102,7 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
         (response: any) => {
           this.isLoading = false;
           this.successMessage = 'Password changed successfully!';
+          this.service.showAdminHome.next(true);
           setTimeout(() => {
             this.router.navigate(['/adminHome']);
           }, 2000);

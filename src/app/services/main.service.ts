@@ -22,7 +22,13 @@ export class MainService {
   public showAdminHome: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
     false
   );
-  private apiUrl = environment.api_url;
+  private apiUrl = (environment.api_url || '').replace(/\/+$/, '/') || '/';
+
+  private buildApiUrl(path: string): string {
+    const normalizedBase = (environment.api_url || '').replace(/\/+$/, '');
+    const normalizedPath = path.replace(/^\/+/, '');
+    return `${normalizedBase}/${normalizedPath}`;
+  }
 
   constructor(private http: HttpClient, private router: Router) {
     console.log(this.apiUrl);
@@ -98,7 +104,8 @@ export class MainService {
 
     return this.http
       .get(
-        this.apiUrl + `getRouteInstancesForDate?date=${date}&routeId=${routeId}`
+        this.apiUrl + `getRouteInstancesForDate?date=${date}&routeId=${routeId}`,
+        { headers: myHeader }
       )
       .pipe(
         map((res: any) => {
@@ -117,7 +124,8 @@ export class MainService {
 
     return this.http
       .get(
-        this.apiUrl + `getActiveRouteInstanceForRoute?routeId=${routeId}&heatRoute=${heatRoute}`
+        this.apiUrl + `getActiveRouteInstanceForRoute?routeId=${routeId}&heatRoute=${heatRoute}`,
+        { headers: myHeader }
       )
       .pipe(
         map((res: any) => {
@@ -1121,10 +1129,17 @@ export class MainService {
    * Attempt admin login with email and password
    */
   attemptAdminLogin(email: string, password: string) {
+    const loginUrl = this.buildApiUrl('admin_login');
+    console.log('[MainService] admin login request', {
+      url: loginUrl,
+      email
+    });
+
     return this.http
-      .post(this.apiUrl + `admin_login`, { email, password })
+      .post(loginUrl, { email, password })
       .pipe(
         map((response: any) => {
+          console.log('[MainService] admin login response', response);
           if (response.message === "invalid-token" || response.message === "token-expired") {
             window.localStorage.removeItem("apiToken");
             window.localStorage.removeItem("tokenExpires");
@@ -1132,7 +1147,10 @@ export class MainService {
           }
           return response;
         }),
-        catchError(this.handleError)
+        catchError((error) => {
+          console.log('[MainService] admin login http error', error);
+          return this.handleError(error);
+        })
       );
   }
 
@@ -1141,8 +1159,14 @@ export class MainService {
    */
   changeAdminPassword(passwordData: { current_password: string; new_password: string; confirm_password: string }) {
     const myHeader = this.buildAuthHeaders();
+    const changePasswordUrl = this.buildApiUrl('admin_profile/change_password');
+    console.log('[MainService] change password request', {
+      url: changePasswordUrl,
+      hasToken: !!window.localStorage.getItem('apiToken')
+    });
+
     return this.http
-      .patch(this.apiUrl + `admin_profile/change_password`, passwordData, { headers: myHeader })
+      .patch(changePasswordUrl, passwordData, { headers: myHeader })
       .pipe(
         map((response: any) => {
           if (response.message === "invalid-token" || response.message === "token-expired") {
@@ -1152,7 +1176,14 @@ export class MainService {
           }
           return response;
         }),
-        catchError(this.handleError)
+        catchError((error) => {
+          console.log('[MainService] change password http error', {
+            status: error.status,
+            url: error.url,
+            body: error.error
+          });
+          return this.handleError(error);
+        })
       );
   }
 
