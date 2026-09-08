@@ -89,7 +89,8 @@ export class ClientService {
             this.router.navigate(["/application-login"]);
           }
           return res;
-        }, catchError(this.handleError))
+        }),
+        catchError(this.handleError)
       );
   }
 
@@ -1802,7 +1803,7 @@ export class ClientService {
   getAllRequestedItems() {
     const myHeader = this.buildAuthHeaders();
     return this.http
-      .get(this.baseUrl + `getAllRequestedItems`, { headers: myHeader })
+      .get(this.baseUrl + `requested_items`, { headers: myHeader })
       .pipe(
         map((res: any) => {
           if (res.message === "invalid-token") {
@@ -2201,6 +2202,14 @@ export class ClientService {
   }
 
   private handleError(error: Response | any) {
+    if (error.status === 401 || error.error?.type === "invalid-token" || error.error?.type === "token-expired") {
+      window.localStorage.removeItem("apiToken");
+      window.localStorage.removeItem("tokenExpires");
+      window.localStorage.removeItem("adminEmail");
+      window.localStorage.removeItem("adminRole");
+      window.localStorage.removeItem("isAdmin");
+      this.router.navigate(["/application-login"]);
+    }
     let errMsg: string;
     if (error instanceof Response) {
       const body = error.json() || "";

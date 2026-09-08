@@ -948,10 +948,10 @@ export class ServicingClientComponent implements OnInit {
           let clientDwelling: ClientDwelling = this.dwellings.filter(dwelling => dwelling.created_at === dwellingDates.reduce((a, b) => a > b ? a : b))[0];
           let clientHistory: ClientHomelessHistory = this.homelessHistories.filter(history => history.created_at === historyDates.reduce((a, b) => a > b ? a : b))[0];
 
-          var difference = new Date().getTime() - new Date(clientDwelling.created_at).getTime();
-          difference = Math.ceil(difference / (1000 * 3600 * 24));
-          if (interaction.serviced && (clientDwelling.dwelling == "House" || clientDwelling.dwelling == "Apartment" || clientDwelling.dwelling == "Shelter" || clientDwelling.dwelling == "Motel" || clientDwelling.dwelling == "Motel") && difference > 90 && clientHistory != null) {
-
+          const difference = clientDwelling
+            ? Math.ceil((new Date().getTime() - new Date(clientDwelling.created_at).getTime()) / (1000 * 3600 * 24))
+            : 0;
+          if (interaction.serviced && clientDwelling && (clientDwelling.dwelling == "House" || clientDwelling.dwelling == "Apartment" || clientDwelling.dwelling == "Shelter" || clientDwelling.dwelling == "Motel" || clientDwelling.dwelling == "Motel") && difference > 90 && clientHistory != null) {
             clientHistory.first_time_homeless = false;
             this.service.updateHomelessHistory(clientHistory).subscribe(data => {
 
@@ -990,9 +990,10 @@ export class ServicingClientComponent implements OnInit {
           let clientDwelling: ClientDwelling = this.dwellings.filter(dwelling => dwelling.created_at === dwellingDates.reduce((a, b) => a > b ? a : b))[0];
           let clientHistory: ClientHomelessHistory = this.homelessHistories.filter(history => history.created_at === historyDates.reduce((a, b) => a > b ? a : b))[0];
 
-          var difference = new Date().getTime() - new Date(clientDwelling.created_at).getTime();
-          difference = Math.ceil(difference / (1000 * 3600 * 24));
-          if (interaction.serviced && (clientDwelling.dwelling == "House" || clientDwelling.dwelling == "Apartment" || clientDwelling.dwelling == "Shelter" || clientDwelling.dwelling == "Motel" || clientDwelling.dwelling == "Camper") && difference > 90) {
+          const difference = clientDwelling
+            ? Math.ceil((new Date().getTime() - new Date(clientDwelling.created_at).getTime()) / (1000 * 3600 * 24))
+            : 0;
+          if (interaction.serviced && clientDwelling && (clientDwelling.dwelling == "House" || clientDwelling.dwelling == "Apartment" || clientDwelling.dwelling == "Shelter" || clientDwelling.dwelling == "Motel" || clientDwelling.dwelling == "Camper") && difference > 90 && clientHistory != null) {
             clientHistory.first_time_homeless = false;
             this.service.updateHomelessHistory(clientHistory).subscribe(data => {
 

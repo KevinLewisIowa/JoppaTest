@@ -145,7 +145,8 @@ export class MainService {
     return this.http
       .get(
         this.apiUrl +
-        `getRouteSummaryInfoForRoute?routeInstanceId=${routeInstanceId}`
+        `getRouteSummaryInfoForRoute?routeInstanceId=${routeInstanceId}`,
+        { headers: myHeader }
       )
       .pipe(
         map((res: any) => {
@@ -162,7 +163,7 @@ export class MainService {
   getInventorySummary() {
     const myHeader = this.buildAuthHeaders();
 
-    return this.http.get(this.apiUrl + `getAdminInventoryReport?`).pipe(
+    return this.http.get(this.apiUrl + `getAdminInventoryReport?`, { headers: myHeader }).pipe(
       map((res: any) => {
         if (res.message === "invalid-token") {
           window.localStorage.removeItem("apiToken");
@@ -177,7 +178,7 @@ export class MainService {
   mergeDuplicateClient(duplicateClientId: number, activeClientId: number) {
     const myHeader = this.buildAuthHeaders();
 
-    return this.http.get(this.apiUrl + `removeDuplicateClient?duplicateClientId=${duplicateClientId}&activeClientId=${activeClientId}`).pipe(
+    return this.http.get(this.apiUrl + `removeDuplicateClient?duplicateClientId=${duplicateClientId}&activeClientId=${activeClientId}`, { headers: myHeader }).pipe(
       map((res: any) => {
         if (res.message === "invalid-token") {
           window.localStorage.removeItem("apiToken");
@@ -195,7 +196,8 @@ export class MainService {
     return this.http
       .get(
         this.apiUrl +
-        `getNotesForRouteInstance?routeInstanceId=${routeInstanceId}`
+        `getNotesForRouteInstance?routeInstanceId=${routeInstanceId}`,
+        { headers: myHeader }
       )
       .pipe(
         map((res: any) => {
@@ -212,7 +214,7 @@ export class MainService {
   getHeatEquipmentPerRoute() {
     const myHeader = this.buildAuthHeaders();
 
-    return this.http.get(this.apiUrl + `getHeatEquipmentPerRoute`).pipe(
+    return this.http.get(this.apiUrl + `getHeatEquipmentPerRoute`, { headers: myHeader }).pipe(
       map((res: any) => {
         if (res.message === "invalid-token") {
           window.localStorage.removeItem("apiToken");
@@ -1219,6 +1221,14 @@ export class MainService {
   }
 
   private handleError(error: any): Promise<any> {
+    if (error.status === 401 || error.error?.type === "invalid-token" || error.error?.type === "token-expired") {
+      window.localStorage.removeItem("apiToken");
+      window.localStorage.removeItem("tokenExpires");
+      window.localStorage.removeItem("adminEmail");
+      window.localStorage.removeItem("adminRole");
+      window.localStorage.removeItem("isAdmin");
+      this.router.navigate(["/application-login"]);
+    }
     console.error("An error occurred", error); // for demo purposes only
     return Promise.reject(error.message || error);
   }
