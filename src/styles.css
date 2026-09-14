@@ -4,6 +4,7 @@
 html {
   position: relative;
   min-height: 100%;
+  overflow-x: hidden;
 }
 
 body {
@@ -14,6 +15,30 @@ body {
   background-attachment: fixed;
   background-size: cover;
   background-color: #999;
+  overflow-x: hidden;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.app-shell {
+  width: 100%;
+  max-width: 100%;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.mobile-scroll-table {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.mobile-scroll-table table,
+.mobile-scroll-table .mat-table {
+  min-width: 720px;
 }
 
 footer {
@@ -62,5 +87,54 @@ footer {
 @media (min-width: 768px) {
   .container {
     max-width: 600px;
+  }
+}
+
+@media (max-width: 767px) {
+  body {
+    padding: 12px 10px 40px;
+  }
+
+  .container-fluid {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .card {
+    margin-bottom: 12px;
+  }
+
+  .mobile-scroll-table {
+    padding-bottom: 4px;
+  }
+
+  .mobile-scroll-table table,
+  .mobile-scroll-table .mat-table {
+    min-width: 640px;
+  }
+
+  .mat-form-field {
+    width: 100%;
+  }
+
+  .mobile-login-form {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .login-mode-tabs {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .login-mode-tabs .btn {
+    width: 100%;
+    margin: 0;
+  }
+
+  .mobile-login-button {
+    float: none !important;
+    width: 100%;
   }
 }
