@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MainService } from 'app/services/main.service';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-change-regular-password',
@@ -12,6 +12,10 @@ import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 export class ChangeRegularPasswordComponent implements OnInit {
   passwordForm: UntypedFormGroup;
   backIcon = faChevronLeft;
+  eyeIcon = faEye;
+  eyeSlashIcon = faEyeSlash;
+  showNewPassword = false;
+  showConfirmPassword = false;
   constructor(private mainService: MainService, private fb: UntypedFormBuilder,
     private router: Router) { }
 

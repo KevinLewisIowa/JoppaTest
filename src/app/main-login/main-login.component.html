@@ -43,12 +43,22 @@
       </div>
       <div class="form-group">
         <label for="password">Password: </label>
-        <input 
-          id="password" 
-          class="form-control" 
-          type="password" 
-          formControlName="password"
-          placeholder="Enter your password" />
+        <div class="input-group">
+          <input
+            id="password"
+            class="form-control"
+            [type]="showAdminPassword ? 'text' : 'password'"
+            formControlName="password"
+            placeholder="Enter your password" />
+          <button
+            type="button"
+            class="btn btn-outline-secondary"
+            (click)="showAdminPassword = !showAdminPassword"
+            [attr.aria-label]="showAdminPassword ? 'Hide password' : 'Show password'"
+            [title]="showAdminPassword ? 'Hide password' : 'Show password'">
+            <fa-icon [icon]="showAdminPassword ? eyeSlashIcon : eyeIcon"></fa-icon>
+          </button>
+        </div>
         <small class="text-danger" *ngIf="adminLoginForm.get('password').hasError('required') && adminLoginForm.get('password').touched">
           Password is required
         </small>
@@ -65,12 +75,22 @@
     <form *ngIf="!isAdminLogin" [formGroup]="legacyLoginForm" style="margin: 0 auto; max-width: 50%;">
       <div class="form-group">
         <label for="pwd">Password: </label>
-        <input 
-          id="pwd" 
-          class="form-control" 
-          type="password" 
-          formControlName="the_password"
-          placeholder="Enter password" />
+        <div class="input-group">
+          <input
+            id="pwd"
+            class="form-control"
+            [type]="showLegacyPassword ? 'text' : 'password'"
+            formControlName="the_password"
+            placeholder="Enter password" />
+          <button
+            type="button"
+            class="btn btn-outline-secondary"
+            (click)="showLegacyPassword = !showLegacyPassword"
+            [attr.aria-label]="showLegacyPassword ? 'Hide password' : 'Show password'"
+            [title]="showLegacyPassword ? 'Hide password' : 'Show password'">
+            <fa-icon [icon]="showLegacyPassword ? eyeSlashIcon : eyeIcon"></fa-icon>
+          </button>
+        </div>
       </div>
       <div class="alert alert-danger" *ngIf="invalidText" role="alert">
         {{ errorMessage || 'Login failed. Please check your password.' }}

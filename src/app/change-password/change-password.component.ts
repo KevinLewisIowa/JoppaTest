@@ -4,6 +4,7 @@ import { UntypedFormGroup, UntypedFormBuilder, Validators, AbstractControl, Vali
 import { MainService } from 'app/services/main.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { faChevronLeft, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-change-password',
@@ -18,6 +19,9 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
   showPassword = false;
   showNewPassword = false;
   showConfirmPassword = false;
+  eyeIcon = faEye;
+  eyeSlashIcon = faEyeSlash;
+  backIcon = faChevronLeft;
   private destroy$ = new Subject<void>();
 
   // Password strength requirements
@@ -78,6 +82,10 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
            this.passwordRequirements.hasUppercase &&
            this.passwordRequirements.hasNumber &&
            this.passwordRequirements.hasSpecialChar;
+  }
+
+  back() {
+    this.router.navigate(['adminHome']);
   }
 
   changePassword() {

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { MainService } from 'app/services/main.service';
-import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { faChevronRight, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-main-login',
@@ -17,6 +17,10 @@ export class MainLoginComponent implements OnInit {
   errorMessage = '';
   isLoading = false;
   forwardIcon = faChevronRight;
+  eyeIcon = faEye;
+  eyeSlashIcon = faEyeSlash;
+  showAdminPassword = false;
+  showLegacyPassword = false;
 
   constructor(private fb: UntypedFormBuilder, private router: Router, private service: MainService) { }
 
