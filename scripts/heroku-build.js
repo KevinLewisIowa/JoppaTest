@@ -1,10 +1,9 @@
 const { execFileSync } = require('child_process');
 
-const buildTarget = process.env.JOPPA_BUILD_TARGET ||
-  (process.env.HEROKU_APP_NAME === 'joppa-ui-prod' ? 'prod' : 'test');
+const buildTarget = process.env.JOPPA_BUILD_TARGET;
 
 if (!['prod', 'test'].includes(buildTarget)) {
-  throw new Error(`Unsupported JOPPA_BUILD_TARGET: ${buildTarget}`);
+  throw new Error('JOPPA_BUILD_TARGET must be set to "test" or "prod"');
 }
 
 execFileSync('npm', ['run', `build:${buildTarget}`], {
