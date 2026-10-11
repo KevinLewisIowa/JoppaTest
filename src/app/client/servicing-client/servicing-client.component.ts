@@ -862,7 +862,6 @@ export class ServicingClientComponent implements OnInit {
       // if neither locationCampId nor current_camp_id have a value, set it to HRC camp
       if (!interaction.location_camp_id || interaction.location_camp_id == 0) {
         interaction.location_camp_id = 449;
-        this.client.current_camp_id = 449;
       }
     }
 
