@@ -465,11 +465,7 @@ export class ClientEditComponent implements OnInit, AfterViewChecked {
             theDwelling.client_id = insertedClient.id;
             theDwelling.dwelling = String(this.clientForm.get('dwelling').value).trim();
             theDwelling.where_sleep_last_night = this.clientForm.get('where_sleep_last_night').value;
-            if (this.clientForm.get('date_moved').value == '') {
-              theDwelling.date_moved = new Date();
-            } else {
-              theDwelling.date_moved = new Date(this.clientForm.get('date_moved').value);
-            }
+            theDwelling.date_moved = theHistory.date_became_homeless;
             theDwelling.notes = this.clientForm.get('dwelling_note').value;
             this.clientService.insertClientDwelling(theDwelling).subscribe({
               next: (data: ClientDwelling) => {
