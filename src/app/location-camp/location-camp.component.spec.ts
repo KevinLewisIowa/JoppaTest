@@ -52,4 +52,19 @@ describe('LocationCampComponent', () => {
     component.sortClients('lastInteraction');
     expect(component.clients[0].first_name).toBe('Mia');
   });
+
+  it('should use the latest dwelling history instead of the legacy client dwelling', () => {
+    const client = { id: 7, dwelling: 'Tent' } as Client;
+    const clientService = TestBed.inject(ClientService) as any;
+    clientService.getClientDwellings = jasmine.createSpy().and.returnValue(of([
+      { dwelling: 'Apartment', created_at: new Date('2025-01-01') }
+    ]));
+    spyOn<any>(component, 'loadClientDetails');
+
+    component.heatRoute = false;
+    component['loadClientsWithDwellings']([client]);
+
+    expect(client.dwelling).toBe('Apartment');
+    expect(component.clients).toEqual([client]);
+  });
 });

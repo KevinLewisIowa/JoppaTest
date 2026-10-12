@@ -185,13 +185,7 @@ export class LocationCampComponent implements OnInit, OnDestroy {
           return;
         }
 
-        if (this.heatRoute) {
-          this.loadHeatRouteClients(data);
-        } else {
-          this.clients = data;
-          this.applyCurrentClientSort();
-          this.loadClientDetails(this.clients);
-        }
+        this.loadClientsWithDwellings(data);
 
         this.loadCampNotes();
       }, error => console.log(error));
@@ -205,7 +199,7 @@ export class LocationCampComponent implements OnInit, OnDestroy {
       }, error => console.log(error));
   }
 
-  private loadHeatRouteClients(campClients: Client[]): void {
+  private loadClientsWithDwellings(campClients: Client[]): void {
     const clientDetailRequests = campClients.map((client) =>
       this.clientService.getClientDwellings(client.id).pipe(
         map((data: ClientDwelling[]) => ({ client, dwellings: data })),
@@ -219,19 +213,19 @@ export class LocationCampComponent implements OnInit, OnDestroy {
     forkJoin(clientDetailRequests)
       .pipe(takeUntil(this.destroy$))
       .subscribe((results) => {
-        const heatClients: Client[] = [];
+        const displayedClients: Client[] = [];
 
         results.forEach(({ client, dwellings }) => {
           const dwelling = this.findLatestDwelling(dwellings);
-          if (dwelling) {
-            client.dwelling = dwelling;
-          }
+          client.dwelling = dwelling;
 
-          if (this.isHeatRouteDwelling(client.dwelling)) {
-            heatClients.push(client);
-            this.numberTanksAtCamp += client.number_tanks || 0;
-            if (client.number_tanks > 0) {
-              this.numPeopleWithTanksAtCamp += 1;
+          if (!this.heatRoute || this.isHeatRouteDwelling(dwelling)) {
+            displayedClients.push(client);
+            if (this.heatRoute) {
+              this.numberTanksAtCamp += client.number_tanks || 0;
+              if (client.number_tanks > 0) {
+                this.numPeopleWithTanksAtCamp += 1;
+              }
             }
           }
 
@@ -244,7 +238,7 @@ export class LocationCampComponent implements OnInit, OnDestroy {
           }
         });
 
-        this.clients = heatClients;
+        this.clients = displayedClients;
         this.applyCurrentClientSort();
         this.loadClientDetails(this.clients);
       }, error => console.log(error));
