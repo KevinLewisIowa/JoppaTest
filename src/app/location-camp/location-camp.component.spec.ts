@@ -20,7 +20,7 @@ describe('LocationCampComponent', () => {
         { provide: MainService, useValue: {} },
         { provide: ClientService, useValue: {} },
         { provide: Router, useValue: {} },
-        { provide: ActivatedRoute, useValue: { params: of({}) } }
+        { provide: ActivatedRoute, useValue: { params: of({}), snapshot: { params: { id: 2 } } } }
       ],
       schemas: [NO_ERRORS_SCHEMA]
     })
@@ -66,5 +66,56 @@ describe('LocationCampComponent', () => {
 
     expect(client.dwelling).toBe('Apartment');
     expect(component.clients).toEqual([client]);
+  });
+
+  it('should automatically record weekend Outreach attendance as yes, yes, no', () => {
+    spyOn(Date.prototype, 'getDay').and.returnValue(6);
+    const clientService = TestBed.inject(ClientService) as any;
+    clientService.insertClientAppearance = jasmine.createSpy().and.returnValue(of({ id: 10 }));
+    clientService.getClientAttendanceForRoute = jasmine.createSpy().and.returnValue(of([]));
+    clientService.updateClient = jasmine.createSpy().and.returnValue(of({}));
+    component.route = { is_aftercare: false } as any;
+    component.heatRoute = false;
+    component.isAdmin = true;
+    component.routeId = 1;
+
+    component.clientSelected({ id: 7 } as Client);
+
+    const attendance = clientService.insertClientAppearance.calls.mostRecent().args[0];
+    expect(attendance.was_seen).toBe(true);
+    expect(attendance.serviced).toBe(true);
+    expect(attendance.still_lives_here).toBe(false);
+    expect(clientService.getClientAttendanceForRoute).toHaveBeenCalledWith(1);
+  });
+
+  it('should preserve weekday attendance behavior when adding a client', () => {
+    spyOn(Date.prototype, 'getDay').and.returnValue(1);
+    const clientService = TestBed.inject(ClientService) as any;
+    clientService.insertClientAppearance = jasmine.createSpy().and.returnValue(of({ id: 10 }));
+    clientService.updateClient = jasmine.createSpy().and.returnValue(of({}));
+    component.route = { is_aftercare: false } as any;
+    component.heatRoute = false;
+    component.isAdmin = true;
+
+    component.clientSelected({ id: 7 } as Client);
+
+    const attendance = clientService.insertClientAppearance.calls.mostRecent().args[0];
+    expect(attendance.was_seen).toBe(false);
+    expect(attendance.serviced).toBe(false);
+    expect(attendance.still_lives_here).toBe(true);
+  });
+
+  it('should pass weekend Outreach context when creating a client from a stop', () => {
+    spyOn(Date.prototype, 'getDay').and.returnValue(0);
+    const router = TestBed.inject(Router) as any;
+    router.navigate = jasmine.createSpy('navigate');
+    component.route = { is_aftercare: false } as any;
+    component.heatRoute = false;
+
+    component.createClient();
+
+    expect(router.navigate).toHaveBeenCalledWith(['/createClient'], {
+      state: { isWeekendOutreach: true }
+    });
   });
 });

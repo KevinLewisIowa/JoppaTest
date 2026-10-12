@@ -297,6 +297,22 @@ export class ClientEditComponent implements OnInit, AfterViewChecked {
     this.router.navigate(['/serviceClient']);
   }
 
+  private setClientAttendance(clientInteraction: Appearance, isWeekendOutreach: boolean): void {
+    clientInteraction.still_lives_here = !isWeekendOutreach;
+    if (isWeekendOutreach) {
+      clientInteraction.was_seen = true;
+      clientInteraction.serviced = true;
+      clientInteraction.serviced_date = new Date();
+    } else if (this.isAdmin) {
+      clientInteraction.was_seen = false;
+      clientInteraction.serviced = false;
+    } else {
+      clientInteraction.was_seen = true;
+      clientInteraction.serviced = true;
+      clientInteraction.serviced_date = new Date();
+    }
+  }
+
   submitClient() {
     this.theClient.first_name = String(this.clientForm.get('first_name').value).trim();
     this.theClient.middle_name = String(this.clientForm.get('middle_name').value).trim();
@@ -414,21 +430,12 @@ export class ClientEditComponent implements OnInit, AfterViewChecked {
       const clientInteraction: Appearance = new Appearance();
       clientInteraction.client_id = insertedClient.id;
       clientInteraction.location_camp_id = this.locationCampId;
-      clientInteraction.still_lives_here = true;
       // never mark a newly‑created client as being at a resource center
       clientInteraction.at_homeless_resource_center = false;
-
-      if (this.isAdmin) {
-        // admin-created appearances are placeholders only; they should not be
-        // marked as seen or serviced and we don't set a serviced_date here.
-        clientInteraction.was_seen = false;
-        clientInteraction.serviced = false;
-      } else {
-        // volunteers immediately record sighting/service
-        clientInteraction.was_seen = true;
-        clientInteraction.serviced = true;
-        clientInteraction.serviced_date = new Date();
-      }
+      this.setClientAttendance(
+        clientInteraction,
+        window.history.state && window.history.state.isWeekendOutreach === true
+      );
 
       const pushRouteAndSaveExtras = () => {
         let routeAttendanceList: Appearance[] = JSON.parse(window.localStorage.getItem('RouteAttendance'));

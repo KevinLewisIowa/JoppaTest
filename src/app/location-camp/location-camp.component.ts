@@ -336,12 +336,18 @@ export class LocationCampComponent implements OnInit, OnDestroy {
     clientInteraction.location_camp_id = JSON.parse(
       this.activatedRoute.snapshot.params["id"]
     );
+    const isWeekendOutreach = this.isWeekendOutreach();
     // everyone who is manually added is assumed to still live here
     clientInteraction.still_lives_here = true;
     // we never want to mark them at a resource center when they are being
     // added to a stop (this field may be updated elsewhere if needed)
     clientInteraction.at_homeless_resource_center = false;
-    if (this.isAdmin) {
+    if (isWeekendOutreach) {
+      clientInteraction.was_seen = true;
+      clientInteraction.serviced = true;
+      clientInteraction.still_lives_here = false;
+      clientInteraction.serviced_date = new Date();
+    } else if (this.isAdmin) {
       // admins are simply recording that the client belongs at this stop;
       // they are not "seeing" or "servicing" the person right now.
       clientInteraction.was_seen = false;
@@ -357,7 +363,7 @@ export class LocationCampComponent implements OnInit, OnDestroy {
 
     this.clientService.insertClientAppearance(clientInteraction).subscribe((data: Appearance) => {
       console.log("Inserted client appearance " + JSON.stringify(data));
-      if (!this.isAdmin) {
+      if (!this.isAdmin || isWeekendOutreach) {
         clientInteraction.id = data.id;
         // routeAttendanceList.push(clientInteraction);
         // window.localStorage.setItem(
@@ -503,7 +509,15 @@ export class LocationCampComponent implements OnInit, OnDestroy {
   }
 
   createClient() {
-    this.router.navigate(["/createClient"]);
+    this.router.navigate(["/createClient"], {
+      state: { isWeekendOutreach: this.isWeekendOutreach() }
+    });
+  }
+
+  private isWeekendOutreach(): boolean {
+    const dayOfWeek = new Date().getDay();
+    return !this.heatRoute && !this.route.is_aftercare &&
+      (dayOfWeek === 0 || dayOfWeek === 6);
   }
 
   campNoteAdded(note: CampNote) {

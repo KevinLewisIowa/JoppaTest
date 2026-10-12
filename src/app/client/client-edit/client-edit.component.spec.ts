@@ -1,4 +1,5 @@
 import { UntypedFormBuilder } from '@angular/forms';
+import { Appearance } from 'app/models/appearance';
 
 import { ClientEditComponent } from './client-edit.component';
 
@@ -30,5 +31,17 @@ describe('ClientEditComponent', () => {
 
     expect(localStorage.getItem('selectedClient')).toBe(JSON.stringify(42));
     expect(router.navigate).toHaveBeenCalledWith(['/serviceClient']);
+  });
+
+  it('should record weekend Outreach attendance as yes, yes, no for admins', () => {
+    component.isAdmin = true;
+    const attendance = new Appearance();
+
+    component['setClientAttendance'](attendance, true);
+
+    expect(attendance.was_seen).toBe(true);
+    expect(attendance.serviced).toBe(true);
+    expect(attendance.still_lives_here).toBe(false);
+    expect(attendance.serviced_date).toEqual(jasmine.any(Date));
   });
 });
