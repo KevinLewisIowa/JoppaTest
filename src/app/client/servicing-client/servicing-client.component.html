@@ -1471,7 +1471,12 @@
     </div>
   </div>
   <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
-    <h4>Physical Disability</h4>
+    <h4>
+      Physical Disability
+      <button type="button" class="btn btn-primary float-right" (click)="openDisabilityModal('physical_disability')">
+        Add Physical Disability
+      </button>
+    </h4>
     <div class="table-responsive mb-3">
       <table class="table">
         <thead>
@@ -1500,13 +1505,15 @@
         </tbody>
       </table>
     </div>
-    <div class="d-flex justify-content-end mb-3">
-      <button type="button" class="btn btn-primary" (click)="openDisabilityModal('physical_disability')">Add Physical Disability</button>
-    </div>
   </div>
 
   <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
-    <h4>Mental Disability</h4>
+    <h4>
+      Mental Disability
+      <button type="button" class="btn btn-primary float-right" (click)="openDisabilityModal('mental_disability')">
+        Add Mental Disability
+      </button>
+    </h4>
     <div class="table-responsive mb-3">
       <table class="table">
         <thead>
@@ -1535,13 +1542,15 @@
         </tbody>
       </table>
     </div>
-    <div class="d-flex justify-content-end mb-3">
-      <button type="button" class="btn btn-primary" (click)="openDisabilityModal('mental_disability')">Add Mental Disability</button>
-    </div>
   </div>
 
   <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
-    <h4>Substance Use Disorder</h4>
+    <h4>
+      Substance Use Disorder
+      <button type="button" class="btn btn-primary float-right" (click)="openDisabilityModal('substance_use_disorder')">
+        Add Substance Use Disorder
+      </button>
+    </h4>
     <div class="table-responsive mb-3">
       <table class="table">
         <thead>
@@ -1569,9 +1578,6 @@
           </tr>
         </tbody>
       </table>
-    </div>
-    <div class="d-flex justify-content-end mb-3">
-      <button type="button" class="btn btn-primary" (click)="openDisabilityModal('substance_use_disorder')">Add Substance Use Disorder</button>
     </div>
   </div>
 
