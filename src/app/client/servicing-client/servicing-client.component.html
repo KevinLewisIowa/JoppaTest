@@ -1472,162 +1472,106 @@
   </div>
   <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
     <h4>Physical Disability</h4>
-    <div class="card mb-3" *ngFor="let entry of getDisabilityEntries('physical_disability'); let i = index">
-      <div class="card-body">
-        <div class="row mb-3">
-          <div class="col-md-6">
-            <label>Do you have a clinically diagnosed physical disability?</label>
-            <select class="form-control" [ngModel]="entry.diagnosis_status"
-              (ngModelChange)="setDisabilityEntryValue('physical_disability', i, 'diagnosis_status', $event)">
-              <option value="">Select an option</option>
-              <option *ngFor="let option of disabilityStatusOptions" [value]="option">{{ option }}</option>
-            </select>
-          </div>
-          <div class="col-md-6">
-            <label>Type</label>
-            <select class="form-control" [ngModel]="entry.type_name"
-              (ngModelChange)="setDisabilityEntryValue('physical_disability', i, 'type_name', $event)">
-              <option value="">Select an option</option>
-              <option *ngFor="let option of physicalDisabilityTypes" [value]="option">{{ option }}</option>
-            </select>
-          </div>
-        </div>
-        <div class="row mb-3">
-          <div class="col-md-6">
-            <label>Year diagnosed</label>
-            <select class="form-control" [ngModel]="entry.year_diagnosed"
-              (ngModelChange)="setDisabilityEntryValue('physical_disability', i, 'year_diagnosed', $event)">
-              <option value="">Select a year</option>
-              <option *ngFor="let year of yearDiagnosedOptions" [ngValue]="year">{{ year }}</option>
-            </select>
-          </div>
-        </div>
-        <div class="row mb-3">
-          <div class="col-md-12">
-            <label>Note</label>
-            <textarea class="form-control" rows="3" [ngModel]="entry.note"
-              (ngModelChange)="setDisabilityEntryValue('physical_disability', i, 'note', $event)"></textarea>
-          </div>
-        </div>
-        <div class="d-flex justify-content-end gap-2">
-          <button type="button" class="btn btn-outline-secondary" (click)="removeDisabilityEntry('physical_disability', i)">Remove</button>
-          <button type="button" class="btn btn-primary" (click)="saveDisabilityEntry('physical_disability', i)">Save</button>
-        </div>
-      </div>
+    <div class="table-responsive mb-3">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Diagnosis Status</th>
+            <th>Type</th>
+            <th>Year Diagnosed</th>
+            <th>Note</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let entry of getDisabilityEntries('physical_disability'); let i = index">
+            <td>{{ entry.diagnosis_status || '—' }}</td>
+            <td>{{ entry.type_name || '—' }}</td>
+            <td>{{ entry.year_diagnosed || '—' }}</td>
+            <td>{{ entry.note || '—' }}</td>
+            <td>
+              <button type="button" class="btn btn-sm btn-primary mr-2" (click)="openDisabilityModal('physical_disability', entry, i)">Edit</button>
+              <button type="button" class="btn btn-sm btn-outline-secondary" (click)="removeDisabilityEntry('physical_disability', i)">Remove</button>
+            </td>
+          </tr>
+          <tr *ngIf="getDisabilityEntries('physical_disability').length === 0">
+            <td colspan="5" class="text-muted">No physical disabilities recorded.</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
     <div class="d-flex justify-content-end mb-3">
-      <button type="button" class="btn btn-primary" (click)="addDisabilityEntry('physical_disability')">Add Physical Disability</button>
+      <button type="button" class="btn btn-primary" (click)="openDisabilityModal('physical_disability')">Add Physical Disability</button>
     </div>
   </div>
 
   <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
     <h4>Mental Disability</h4>
-    <div class="card mb-3" *ngFor="let entry of getDisabilityEntries('mental_disability'); let i = index">
-      <div class="card-body">
-        <div class="row mb-3">
-          <div class="col-md-6">
-            <label>Do you have a clinically diagnosed mental disability?</label>
-            <select class="form-control" [ngModel]="entry.diagnosis_status"
-              (ngModelChange)="setDisabilityEntryValue('mental_disability', i, 'diagnosis_status', $event)">
-              <option value="">Select an option</option>
-              <option *ngFor="let option of disabilityStatusOptions" [value]="option">{{ option }}</option>
-            </select>
-          </div>
-          <div class="col-md-6">
-            <label>Type</label>
-            <select class="form-control" [ngModel]="entry.type_name"
-              (ngModelChange)="setDisabilityEntryValue('mental_disability', i, 'type_name', $event)">
-              <option value="">Select an option</option>
-              <option *ngFor="let option of mentalDisabilityTypes" [value]="option">{{ option }}</option>
-            </select>
-          </div>
-        </div>
-        <div class="row mb-3">
-          <div class="col-md-6">
-            <label>Year diagnosed</label>
-            <select class="form-control" [ngModel]="entry.year_diagnosed"
-              (ngModelChange)="setDisabilityEntryValue('mental_disability', i, 'year_diagnosed', $event)">
-              <option value="">Select a year</option>
-              <option *ngFor="let year of yearDiagnosedOptions" [ngValue]="year">{{ year }}</option>
-            </select>
-          </div>
-        </div>
-        <div class="row mb-3">
-          <div class="col-md-12">
-            <label>Note</label>
-            <textarea class="form-control" rows="3" [ngModel]="entry.note"
-              (ngModelChange)="setDisabilityEntryValue('mental_disability', i, 'note', $event)"></textarea>
-          </div>
-        </div>
-        <div class="d-flex justify-content-end gap-2">
-          <button type="button" class="btn btn-outline-secondary" (click)="removeDisabilityEntry('mental_disability', i)">Remove</button>
-          <button type="button" class="btn btn-primary" (click)="saveDisabilityEntry('mental_disability', i)">Save</button>
-        </div>
-      </div>
+    <div class="table-responsive mb-3">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Diagnosis Status</th>
+            <th>Type</th>
+            <th>Year Diagnosed</th>
+            <th>Note</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let entry of getDisabilityEntries('mental_disability'); let i = index">
+            <td>{{ entry.diagnosis_status || '—' }}</td>
+            <td>{{ entry.type_name || '—' }}</td>
+            <td>{{ entry.year_diagnosed || '—' }}</td>
+            <td>{{ entry.note || '—' }}</td>
+            <td>
+              <button type="button" class="btn btn-sm btn-primary mr-2" (click)="openDisabilityModal('mental_disability', entry, i)">Edit</button>
+              <button type="button" class="btn btn-sm btn-outline-secondary" (click)="removeDisabilityEntry('mental_disability', i)">Remove</button>
+            </td>
+          </tr>
+          <tr *ngIf="getDisabilityEntries('mental_disability').length === 0">
+            <td colspan="5" class="text-muted">No mental disabilities recorded.</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
     <div class="d-flex justify-content-end mb-3">
-      <button type="button" class="btn btn-primary" (click)="addDisabilityEntry('mental_disability')">Add Mental Disability</button>
+      <button type="button" class="btn btn-primary" (click)="openDisabilityModal('mental_disability')">Add Mental Disability</button>
     </div>
   </div>
 
   <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
     <h4>Substance Use Disorder</h4>
-    <div class="card mb-3" *ngFor="let entry of getDisabilityEntries('substance_use_disorder'); let i = index">
-      <div class="card-body">
-        <div class="row mb-3">
-          <div class="col-md-6">
-            <label>Do you have a long-term alcohol or drug use issue that makes it difficult to live independently or complete daily activities?</label>
-            <select class="form-control" [ngModel]="entry.diagnosis_status"
-              (ngModelChange)="setDisabilityEntryValue('substance_use_disorder', i, 'diagnosis_status', $event)">
-              <option value="">Select an option</option>
-              <option value="Yes">Yes</option>
-              <option value="No">No</option>
-              <option value="Preferred not to share">Preferred not to share</option>
-              <option value="Unknown">Unknown</option>
-            </select>
-          </div>
-          <div class="col-md-6">
-            <label>Type</label>
-            <select class="form-control" [ngModel]="entry.type_name"
-              (ngModelChange)="setDisabilityEntryValue('substance_use_disorder', i, 'type_name', $event)">
-              <option value="">Select an option</option>
-              <option *ngFor="let option of substanceUseDisorderTypes" [value]="option">{{ option }}</option>
-            </select>
-          </div>
-        </div>
-        <div class="row mb-3">
-          <div class="col-md-6">
-            <label>Has this been clinically diagnosed?</label>
-            <select class="form-control" [ngModel]="entry.clinically_diagnosed"
-              (ngModelChange)="setDisabilityEntryValue('substance_use_disorder', i, 'clinically_diagnosed', $event)">
-              <option value="">Select an option</option>
-              <option *ngFor="let option of clinicalDiagnosisOptions" [value]="option">{{ option }}</option>
-            </select>
-          </div>
-          <div class="col-md-6">
-            <label>Year diagnosed</label>
-            <select class="form-control" [ngModel]="entry.year_diagnosed"
-              (ngModelChange)="setDisabilityEntryValue('substance_use_disorder', i, 'year_diagnosed', $event)">
-              <option value="">Select a year</option>
-              <option *ngFor="let year of yearDiagnosedOptions" [ngValue]="year">{{ year }}</option>
-            </select>
-          </div>
-        </div>
-        <div class="row mb-3">
-          <div class="col-md-12">
-            <label>Note</label>
-            <textarea class="form-control" rows="3" [ngModel]="entry.note"
-              (ngModelChange)="setDisabilityEntryValue('substance_use_disorder', i, 'note', $event)"></textarea>
-          </div>
-        </div>
-        <div class="d-flex justify-content-end gap-2">
-          <button type="button" class="btn btn-outline-secondary" (click)="removeDisabilityEntry('substance_use_disorder', i)">Remove</button>
-          <button type="button" class="btn btn-primary" (click)="saveDisabilityEntry('substance_use_disorder', i)">Save</button>
-        </div>
-      </div>
+    <div class="table-responsive mb-3">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Diagnosis Status</th>
+            <th>Type</th>
+            <th>Year Diagnosed</th>
+            <th>Note</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let entry of getDisabilityEntries('substance_use_disorder'); let i = index">
+            <td>{{ entry.diagnosis_status || '—' }}</td>
+            <td>{{ entry.type_name || '—' }}</td>
+            <td>{{ entry.year_diagnosed || '—' }}</td>
+            <td>{{ entry.note || '—' }}</td>
+            <td>
+              <button type="button" class="btn btn-sm btn-primary mr-2" (click)="openDisabilityModal('substance_use_disorder', entry, i)">Edit</button>
+              <button type="button" class="btn btn-sm btn-outline-secondary" (click)="removeDisabilityEntry('substance_use_disorder', i)">Remove</button>
+            </td>
+          </tr>
+          <tr *ngIf="getDisabilityEntries('substance_use_disorder').length === 0">
+            <td colspan="5" class="text-muted">No substance use disorders recorded.</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
     <div class="d-flex justify-content-end mb-3">
-      <button type="button" class="btn btn-primary" (click)="addDisabilityEntry('substance_use_disorder')">Add Substance Use Disorder</button>
+      <button type="button" class="btn btn-primary" (click)="openDisabilityModal('substance_use_disorder')">Add Substance Use Disorder</button>
     </div>
   </div>
 
@@ -1906,3 +1850,85 @@
 <app-client-barrier #clientBarrierMdl (barrierAdded)="barrierAdded($event)"></app-client-barrier>
 <app-authorized-mail-access #authorizedMailAccessMdl [mailboxId]="clientMailbox.id"
   (authorizedMailAccessAdded)="authorizedMailAccessAdded($event)"></app-authorized-mail-access>
+
+<ng-template #disabilityModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">{{ disabilityModalCategory === 'physical_disability' ? 'Physical Disability' : disabilityModalCategory === 'mental_disability' ? 'Mental Disability' : 'Substance Use Disorder' }}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row mb-3">
+      <div class="col-md-6" *ngIf="disabilityModalCategory !== 'substance_use_disorder'">
+        <label>Diagnosis status</label>
+        <select class="form-control" [(ngModel)]="disabilityDraft.diagnosis_status">
+          <option value="">Select an option</option>
+          <option *ngFor="let option of disabilityStatusOptions" [value]="option">{{ option }}</option>
+        </select>
+      </div>
+      <div class="col-md-6" *ngIf="disabilityModalCategory === 'substance_use_disorder'">
+        <label>Diagnosis status</label>
+        <select class="form-control" [(ngModel)]="disabilityDraft.diagnosis_status">
+          <option value="">Select an option</option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+          <option value="Preferred not to share">Preferred not to share</option>
+          <option value="Unknown">Unknown</option>
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label>Type</label>
+        <ng-container [ngSwitch]="disabilityModalCategory">
+          <select *ngSwitchCase="'physical_disability'" class="form-control" [(ngModel)]="disabilityDraft.type_name">
+            <option value="">Select an option</option>
+            <option *ngFor="let option of physicalDisabilityTypes" [value]="option">{{ option }}</option>
+          </select>
+          <select *ngSwitchCase="'mental_disability'" class="form-control" [(ngModel)]="disabilityDraft.type_name">
+            <option value="">Select an option</option>
+            <option *ngFor="let option of mentalDisabilityTypes" [value]="option">{{ option }}</option>
+          </select>
+          <select *ngSwitchDefault class="form-control" [(ngModel)]="disabilityDraft.type_name">
+            <option value="">Select an option</option>
+            <option *ngFor="let option of substanceUseDisorderTypes" [value]="option">{{ option }}</option>
+          </select>
+        </ng-container>
+      </div>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col-md-6" *ngIf="disabilityModalCategory !== 'substance_use_disorder'">
+        <label>Year diagnosed</label>
+        <select class="form-control" [(ngModel)]="disabilityDraft.year_diagnosed">
+          <option [ngValue]="null">Select a year</option>
+          <option *ngFor="let year of yearDiagnosedOptions" [ngValue]="year">{{ year }}</option>
+        </select>
+      </div>
+      <div class="col-md-6" *ngIf="disabilityModalCategory === 'substance_use_disorder'">
+        <label>Has this been clinically diagnosed?</label>
+        <select class="form-control" [(ngModel)]="disabilityDraft.clinically_diagnosed">
+          <option value="">Select an option</option>
+          <option *ngFor="let option of clinicalDiagnosisOptions" [value]="option">{{ option }}</option>
+        </select>
+      </div>
+      <div class="col-md-6" *ngIf="disabilityModalCategory === 'substance_use_disorder'">
+        <label>Year diagnosed</label>
+        <select class="form-control" [(ngModel)]="disabilityDraft.year_diagnosed">
+          <option [ngValue]="null">Select a year</option>
+          <option *ngFor="let year of yearDiagnosedOptions" [ngValue]="year">{{ year }}</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col-md-12">
+        <label>Note</label>
+        <textarea class="form-control" rows="3" [(ngModel)]="disabilityDraft.note"></textarea>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel')">Cancel</button>
+    <button type="button" class="btn btn-primary" (click)="modal.close('save')">Save</button>
+  </div>
+</ng-template>

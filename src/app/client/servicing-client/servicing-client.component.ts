@@ -74,6 +74,9 @@ export class ServicingClientComponent implements OnInit {
   healthConcerns: HealthConcern[] = [];
   disabilityAndDisorders: { [category: string]: ClientDisabilityAndDisorder[] } = {};
   prayerRequestsAndNeeds: PrayerRequestAndNeed[] = [];
+  disabilityModalCategory: string = '';
+  disabilityModalIndex: number = -1;
+  disabilityDraft: ClientDisabilityAndDisorder = new ClientDisabilityAndDisorder();
   householdClients: Client[] = [];
   healthInsurances: ClientHealthInsurance[] = [];
   clientSkills: ClientSkill[] = [];
@@ -210,6 +213,7 @@ export class ServicingClientComponent implements OnInit {
   yearDiagnosedOptions: number[] = Array.from({ length: 70 }, (_, index) => new Date().getFullYear() - index);
 
   @ViewChild("clientInfo", { static: false }) clientInfo!: ElementRef;
+  @ViewChild('disabilityModal') disabilityModalContent: any;
 
   constructor(
     private service: ClientService,
@@ -458,10 +462,6 @@ export class ServicingClientComponent implements OnInit {
               this.disabilityAndDisorders[category] = data
                 .filter((record) => record.category === category)
                 .map((record) => ({ ...record }));
-
-              if (this.disabilityAndDisorders[category].length === 0) {
-                this.disabilityAndDisorders[category].push(this.buildDefaultDisabilitySection(category));
-              }
             });
           },
           (error) => console.log(error)
@@ -653,13 +653,41 @@ export class ServicingClientComponent implements OnInit {
     return this.disabilityAndDisorders[category];
   }
 
-  addDisabilityEntry(category: string) {
-    this.getDisabilityEntries(category).push(this.buildDefaultDisabilitySection(category));
-  }
+  openDisabilityModal(category: string, entry?: ClientDisabilityAndDisorder, index: number = -1) {
+    this.disabilityModalCategory = category;
+    this.disabilityModalIndex = index;
+    this.disabilityDraft = entry ? { ...entry } : this.buildDefaultDisabilitySection(category);
+    this.disabilityDraft.client_id = this.clientId;
+    this.disabilityDraft.category = category;
 
-  setDisabilityEntryValue(category: string, index: number, field: string, value: any) {
-    const entry = this.getDisabilityEntries(category)[index] as any;
-    entry[field] = value;
+    const modalRef = this.modalService.open(this.disabilityModalContent, {
+      size: 'lg',
+      backdrop: 'static'
+    });
+
+    modalRef.result.then(() => {
+      if (!this.disabilityDraft) {
+        return;
+      }
+
+      const list = this.getDisabilityEntries(category);
+      const draft = {
+        ...this.disabilityDraft,
+        client_id: this.clientId,
+        category
+      };
+
+      if (index >= 0 && list[index]) {
+        list[index] = { ...list[index], ...draft };
+        this.saveDisabilityEntry(category, index);
+        return;
+      }
+
+      list.push(draft);
+      this.saveDisabilityEntry(category, list.length - 1);
+    }, () => {
+      // modal dismissed, no action
+    });
   }
 
   saveDisabilityEntry(category: string, index: number) {
@@ -690,17 +718,11 @@ export class ServicingClientComponent implements OnInit {
     if (entry.id > 0) {
       this.service.removeDisabilityAndDisorder(entry.id).subscribe(() => {
         this.disabilityAndDisorders[category].splice(index, 1);
-        if (this.disabilityAndDisorders[category].length === 0) {
-          this.disabilityAndDisorders[category].push(this.buildDefaultDisabilitySection(category));
-        }
       }, (error) => console.log(error));
       return;
     }
 
     this.disabilityAndDisorders[category].splice(index, 1);
-    if (this.disabilityAndDisorders[category].length === 0) {
-      this.disabilityAndDisorders[category].push(this.buildDefaultDisabilitySection(category));
-    }
   }
 
   searchWeeklyAttendance() {
