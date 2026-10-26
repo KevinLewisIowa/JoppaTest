@@ -29,6 +29,7 @@ import { ClientPastEviction } from "app/models/client-past-eviction";
 import { ClientStep } from "app/models/client-step";
 import { ClientSkill } from "app/models/client-skill";
 import { ClientHealthInsurance } from "app/models/client-health-insurance";
+import { ClientDisabilityAndDisorder } from "app/models/client-disability-and-disorder";
 import { Caseworker } from "../models/caseworker";
 import { ClientMailbox } from "app/models/client-mailbox";
 import { AuthorizedMailAccesses } from "app/models/authorized-mail-accesses";
@@ -817,6 +818,71 @@ export class ClientService {
         }),
         catchError(this.handleError)
       );
+  }
+
+  insertDisabilityAndDisorder(record: ClientDisabilityAndDisorder) {
+    const myHeader = this.buildAuthHeaders();
+    return this.http
+      .post(
+        this.baseUrl + `client_disability_and_disorders`,
+        { client_disability_and_disorder: record },
+        { headers: myHeader }
+      )
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  updateDisabilityAndDisorder(record: ClientDisabilityAndDisorder) {
+    const myHeader = this.buildAuthHeaders();
+    return this.http
+      .patch(
+        this.baseUrl + `client_disability_and_disorders/${record.id}`,
+        { client_disability_and_disorder: record },
+        { headers: myHeader }
+      )
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  getClientDisabilityAndDisorders(id: number) {
+    const myHeader = this.buildAuthHeaders();
+    return this.http
+      .get(this.baseUrl + `getClientDisabilityAndDisorders?clientId=${id}`, {
+        headers: myHeader,
+      })
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  removeDisabilityAndDisorder(id: number) {
+    const myHeader = this.buildAuthHeaders();
+    return this.http
+      .delete(this.baseUrl + `client_disability_and_disorders/${id}`, { headers: myHeader })
+      .pipe(map((res) => true), catchError(this.handleError));
   }
 
   getHealthConcerns(id: number) {

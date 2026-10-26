@@ -9,6 +9,7 @@ import { GoalsNextStep } from "app/models/goals-next-steps";
 import { ClientLike } from "app/models/client-like";
 import { ClientDislike } from "app/models/client-dislike";
 import { HealthConcern } from "app/models/health-concern";
+import { ClientDisabilityAndDisorder } from "app/models/client-disability-and-disorder";
 import { HeaterStatus } from "../../models/heater-status";
 import { MainService } from "../../services/main.service";
 import { Heater } from "app/models/heater";
@@ -71,6 +72,7 @@ export class ServicingClientComponent implements OnInit {
   clientDislikes: ClientDislike[] = [];
   clientBarriers: ClientBarrier[] = [];
   healthConcerns: HealthConcern[] = [];
+  disabilityAndDisorders: { [category: string]: ClientDisabilityAndDisorder[] } = {};
   prayerRequestsAndNeeds: PrayerRequestAndNeed[] = [];
   householdClients: Client[] = [];
   healthInsurances: ClientHealthInsurance[] = [];
@@ -187,6 +189,25 @@ export class ServicingClientComponent implements OnInit {
     'YMCA Supportive Housing',
     'Other'
   ];
+  disabilityStatusOptions: string[] = ['Yes', 'No', 'Unknown', 'Preferred not to share'];
+  clinicalDiagnosisOptions: string[] = ['Yes', 'No', 'Unknown', 'Didn’t want to share'];
+  physicalDisabilityTypes: string[] = [
+    'None', 'Amputation', 'Arthritis', 'Asthma', 'Back pain', 'Blood disorder', 'Bone marrow failure',
+    'Brain Injury', 'Cancer', 'Cerebral palsy', 'Chronic kidney disease', 'Chronic liver disease',
+    'Chronic skin condition', 'Congenital heart defects', 'Coronary disease', 'COPD', 'Cystic fibrosis',
+    'Diabetes', 'Down Syndrome', 'Epilepsy', 'Heart Failure', 'Hearing Loss', 'HIV/AIDS',
+    'Inflammatory bowel disease', 'Lung failure', 'Lupus', 'Malignant tumors', 'Multiple sclerosis',
+    'Thyroid Imbalance', 'Parkinson’s disease', 'Severe Back Injury', 'Sickle cell disease',
+    'Skin Disorder', 'Spinal disorder', 'Speech impairment', 'Vision Loss', 'Other'
+  ];
+  mentalDisabilityTypes: string[] = [
+    'None', 'Anxiety', 'Autism spectrum', 'Bipolar', 'Depressive disorders', 'PTSD', 'Schizophrenia', 'OCD', 'Other'
+  ];
+  substanceUseDisorderTypes: string[] = [
+    'None', 'Adderall', 'Alcohol', 'Cocaine', 'Hallucinogens', 'Heroin', 'Inhalant', 'LSD', 'Marijuana',
+    'Methamphetamine', 'Opioid', 'Oxycodone', 'Nicotine/Tobacco', 'Other'
+  ];
+  yearDiagnosedOptions: number[] = Array.from({ length: 70 }, (_, index) => new Date().getFullYear() - index);
 
   @ViewChild("clientInfo", { static: false }) clientInfo!: ElementRef;
 
@@ -430,6 +451,21 @@ export class ServicingClientComponent implements OnInit {
           },
           (error) => console.log(error)
         );
+        this.service.getClientDisabilityAndDisorders(this.clientId).subscribe(
+          (data: ClientDisabilityAndDisorder[]) => {
+            this.disabilityAndDisorders = {};
+            ['physical_disability', 'mental_disability', 'substance_use_disorder'].forEach((category) => {
+              this.disabilityAndDisorders[category] = data
+                .filter((record) => record.category === category)
+                .map((record) => ({ ...record }));
+
+              if (this.disabilityAndDisorders[category].length === 0) {
+                this.disabilityAndDisorders[category].push(this.buildDefaultDisabilitySection(category));
+              }
+            });
+          },
+          (error) => console.log(error)
+        );
         this.service.getHeatersForClient(this.clientId).subscribe(
           (data: Heater[]) => {
             this.heaters = data;
@@ -594,6 +630,76 @@ export class ServicingClientComponent implements OnInit {
         });
     } else {
       this.router.navigate(["/routes"]);
+    }
+  }
+
+  buildDefaultDisabilitySection(category: string): ClientDisabilityAndDisorder {
+    return {
+      id: 0,
+      client_id: this.clientId,
+      category,
+      diagnosis_status: '',
+      type_name: 'None',
+      year_diagnosed: null,
+      clinically_diagnosed: '',
+      note: ''
+    };
+  }
+
+  getDisabilityEntries(category: string): ClientDisabilityAndDisorder[] {
+    if (!this.disabilityAndDisorders[category]) {
+      this.disabilityAndDisorders[category] = [];
+    }
+    return this.disabilityAndDisorders[category];
+  }
+
+  addDisabilityEntry(category: string) {
+    this.getDisabilityEntries(category).push(this.buildDefaultDisabilitySection(category));
+  }
+
+  setDisabilityEntryValue(category: string, index: number, field: string, value: any) {
+    const entry = this.getDisabilityEntries(category)[index] as any;
+    entry[field] = value;
+  }
+
+  saveDisabilityEntry(category: string, index: number) {
+    const entry = this.getDisabilityEntries(category)[index];
+    if (!entry) {
+      return;
+    }
+
+    entry.client_id = this.clientId;
+    const request = entry.id > 0
+      ? this.service.updateDisabilityAndDisorder(entry)
+      : this.service.insertDisabilityAndDisorder(entry);
+
+    request.subscribe({
+      next: (saved: ClientDisabilityAndDisorder) => {
+        this.disabilityAndDisorders[category][index] = saved;
+      },
+      error: (error) => console.log(error)
+    });
+  }
+
+  removeDisabilityEntry(category: string, index: number) {
+    const entry = this.getDisabilityEntries(category)[index];
+    if (!entry) {
+      return;
+    }
+
+    if (entry.id > 0) {
+      this.service.removeDisabilityAndDisorder(entry.id).subscribe(() => {
+        this.disabilityAndDisorders[category].splice(index, 1);
+        if (this.disabilityAndDisorders[category].length === 0) {
+          this.disabilityAndDisorders[category].push(this.buildDefaultDisabilitySection(category));
+        }
+      }, (error) => console.log(error));
+      return;
+    }
+
+    this.disabilityAndDisorders[category].splice(index, 1);
+    if (this.disabilityAndDisorders[category].length === 0) {
+      this.disabilityAndDisorders[category].push(this.buildDefaultDisabilitySection(category));
     }
   }
 
