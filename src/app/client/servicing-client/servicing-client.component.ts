@@ -74,9 +74,7 @@ export class ServicingClientComponent implements OnInit {
   healthConcerns: HealthConcern[] = [];
   disabilityAndDisorders: { [category: string]: ClientDisabilityAndDisorder[] } = {};
   prayerRequestsAndNeeds: PrayerRequestAndNeed[] = [];
-  disabilityModalCategory: string = '';
-  disabilityModalIndex: number = -1;
-  disabilityDraft: ClientDisabilityAndDisorder = new ClientDisabilityAndDisorder();
+  @ViewChild('disabilityMdl') disabilityMdl: any;
   householdClients: Client[] = [];
   healthInsurances: ClientHealthInsurance[] = [];
   clientSkills: ClientSkill[] = [];
@@ -213,7 +211,6 @@ export class ServicingClientComponent implements OnInit {
   yearDiagnosedOptions: number[] = Array.from({ length: 70 }, (_, index) => new Date().getFullYear() - index);
 
   @ViewChild("clientInfo", { static: false }) clientInfo!: ElementRef;
-  @ViewChild('disabilityModal') disabilityModalContent: any;
 
   constructor(
     private service: ClientService,
@@ -654,40 +651,20 @@ export class ServicingClientComponent implements OnInit {
   }
 
   openDisabilityModal(category: string, entry?: ClientDisabilityAndDisorder, index: number = -1) {
-    this.disabilityModalCategory = category;
-    this.disabilityModalIndex = index;
-    this.disabilityDraft = entry ? { ...entry } : this.buildDefaultDisabilitySection(category);
-    this.disabilityDraft.client_id = this.clientId;
-    this.disabilityDraft.category = category;
+    this.disabilityMdl.showModal(category, entry);
+  }
 
-    const modalRef = this.modalService.open(this.disabilityModalContent, {
-      size: 'lg',
-      backdrop: 'static'
-    });
+  disabilityAdded(event: ClientDisabilityAndDisorder) {
+    const category = event.category;
+    const list = this.getDisabilityEntries(category);
+    const existingIndex = list.findIndex((entry) => entry.id === event.id);
 
-    modalRef.result.then(() => {
-      if (!this.disabilityDraft) {
-        return;
-      }
+    if (existingIndex >= 0) {
+      list[existingIndex] = event;
+      return;
+    }
 
-      const list = this.getDisabilityEntries(category);
-      const draft = {
-        ...this.disabilityDraft,
-        client_id: this.clientId,
-        category
-      };
-
-      if (index >= 0 && list[index]) {
-        list[index] = { ...list[index], ...draft };
-        this.saveDisabilityEntry(category, index);
-        return;
-      }
-
-      list.push(draft);
-      this.saveDisabilityEntry(category, list.length - 1);
-    }, () => {
-      // modal dismissed, no action
-    });
+    list.push(event);
   }
 
   saveDisabilityEntry(category: string, index: number) {
