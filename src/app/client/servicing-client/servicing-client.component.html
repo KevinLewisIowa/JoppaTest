@@ -1080,6 +1080,79 @@
     </div>
   </div>
   <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
+    <h4>
+      Vital Records
+      <button type="button" class="btn btn-primary float-right" (click)="goToTop(); vitalRecordMdl.showModal()">
+        Add Vital Record
+      </button>
+    </h4>
+    <h5>Documents Stored</h5>
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Type</th>
+            <th>Notes</th>
+            <th>Date Entered</th>
+            <th>Agreement Signed</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let record of activeVitalRecords">
+            <td>{{ record.document_type }}</td>
+            <td>{{ record.notes }}</td>
+            <td>{{ record.entered_on | date: 'shortDate' }}</td>
+            <td>{{ record.signed_agreement ? 'Yes' : 'No' }}</td>
+            <td>
+              <button type="button" class="btn btn-outline-primary mr-2" (click)="vitalRecordMdl.showModal(record)">
+                Edit
+              </button>
+              <button type="button" class="btn btn-primary" (click)="retrieveVitalRecord(record)">
+                Mark Retrieved
+              </button>
+            </td>
+          </tr>
+          <tr *ngIf="activeVitalRecords.length === 0">
+            <td colspan="5">No documents currently stored.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <h5>Recently Retrieved</h5>
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Type</th>
+            <th>Notes</th>
+            <th>Date Entered</th>
+            <th>Date Retrieved</th>
+            <th>Agreement Signed</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let record of recentlyRetrievedVitalRecords">
+            <td>{{ record.document_type }}</td>
+            <td>{{ record.notes }}</td>
+            <td>{{ record.entered_on | date: 'shortDate' }}</td>
+            <td>{{ record.retrieved_on | date: 'shortDate' }}</td>
+            <td>{{ record.signed_agreement ? 'Yes' : 'No' }}</td>
+            <td>
+              <button type="button" class="btn btn-outline-primary" (click)="vitalRecordMdl.showModal(record)">
+                Edit
+              </button>
+            </td>
+          </tr>
+          <tr *ngIf="recentlyRetrievedVitalRecords.length === 0">
+            <td colspan="6">No recently retrieved documents.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
     <div class="background-color">
       <h4>
         Goals
@@ -1857,3 +1930,4 @@
 <app-authorized-mail-access #authorizedMailAccessMdl [mailboxId]="clientMailbox.id"
   (authorizedMailAccessAdded)="authorizedMailAccessAdded($event)"></app-authorized-mail-access>
 <app-client-disability-and-disorder #disabilityMdl (disabilityAdded)="disabilityAdded($event)"></app-client-disability-and-disorder>
+<app-vital-record #vitalRecordMdl (recordSaved)="vitalRecordSaved($event)"></app-vital-record>

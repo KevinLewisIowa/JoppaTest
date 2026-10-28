@@ -54,6 +54,8 @@ import { Caseworker } from "app/models/caseworker";
 import { ClientMailbox } from 'app/models/client-mailbox';
 import { AuthorizedMailAccesses } from 'app/models/authorized-mail-accesses';
 import { ReleaseAcknowledgement } from 'app/models/client-release-acknowledgement';
+import { ClientVitalRecord } from 'app/models/client-vital-record';
+import { VitalRecordComponent } from 'app/insert-modals/vital-record/vital-record.component';
 
 @Component({
   selector: "app-servicing-client",
@@ -120,8 +122,18 @@ export class ServicingClientComponent implements OnInit {
   mapIcon = faMap;
   routeInstanceId: number | null = null;
   releaseAcknowledgements: ReleaseAcknowledgement[] = [];
+  clientVitalRecords: ClientVitalRecord[] = [];
   isReleaseValid: boolean = false;
   pinnedNoteString: string = '';
+
+  get activeVitalRecords(): ClientVitalRecord[] {
+    return this.clientVitalRecords.filter(record => !record.retrieved_on);
+  }
+
+  get recentlyRetrievedVitalRecords(): ClientVitalRecord[] {
+    return this.clientVitalRecords.filter(record => !!record.retrieved_on);
+  }
+
   pipe: DatePipe = new DatePipe("en-us");
   reasonForHomelessnessOptions = [
     "Addictions",
@@ -211,6 +223,7 @@ export class ServicingClientComponent implements OnInit {
   yearDiagnosedOptions: number[] = Array.from({ length: 70 }, (_, index) => new Date().getFullYear() - index);
 
   @ViewChild("clientInfo", { static: false }) clientInfo!: ElementRef;
+  @ViewChild('vitalRecordMdl') vitalRecordMdl!: VitalRecordComponent;
 
   constructor(
     private service: ClientService,
@@ -307,6 +320,10 @@ export class ServicingClientComponent implements OnInit {
           console.log('Client Release Acknowledgements:', JSON.stringify(data));
           this.releaseAcknowledgements = data;
           this.checkReleaseValidity();
+        }, error => console.log(error));
+
+        this.service.getClientVitalRecords(this.clientId).subscribe((data: ClientVitalRecord[]) => {
+          this.clientVitalRecords = data;
         }, error => console.log(error));
       }, (error) => console.log(error));
 
@@ -1809,6 +1826,24 @@ export class ServicingClientComponent implements OnInit {
       this.releaseAcknowledgements = this.releaseAcknowledgements.filter(a => a.id !== id);
       this.checkReleaseValidity();
     });
+  }
+
+  vitalRecordSaved(record: ClientVitalRecord) {
+    const index = this.clientVitalRecords.findIndex(existing => existing.id === record.id);
+    if (index === -1) {
+      this.clientVitalRecords.push(record);
+    } else {
+      this.clientVitalRecords[index] = record;
+    }
+  }
+
+  retrieveVitalRecord(record: ClientVitalRecord) {
+    this.service.retrieveClientVitalRecord(record.id).subscribe((updated: ClientVitalRecord) => {
+      const index = this.clientVitalRecords.findIndex(existing => existing.id === updated.id);
+      if (index !== -1) {
+        this.clientVitalRecords[index] = updated;
+      }
+    }, error => console.log(error));
   }
 
   toggleOnCart(item: any) {

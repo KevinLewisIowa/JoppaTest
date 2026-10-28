@@ -104,6 +104,7 @@ import { AuthorizedMailAccessComponent } from './insert-modals/authorized-mail-a
 import { ClientBarrierComponent } from './insert-modals/client-barrier/client-barrier.component';
 import { ClientDisabilityAndDisorderComponent } from './insert-modals/client-disability-and-disorder/client-disability-and-disorder.component';
 import { AdminMergeDuplicatesComponent } from './admin-merge-duplicates/admin-merge-duplicates.component';
+import { VitalRecordComponent } from './insert-modals/vital-record/vital-record.component';
 
 const reducers = {
   user: MainReducer,
@@ -187,7 +188,8 @@ const reducers = {
     AuthorizedMailAccessComponent,
     ClientBarrierComponent,
     ClientDisabilityAndDisorderComponent,
-    AdminMergeDuplicatesComponent
+    AdminMergeDuplicatesComponent,
+    VitalRecordComponent
   ],
     imports: [
         BrowserModule,

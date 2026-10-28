@@ -35,6 +35,7 @@ import { ClientMailbox } from "app/models/client-mailbox";
 import { AuthorizedMailAccesses } from "app/models/authorized-mail-accesses";
 import { ClientBarrier } from "app/models/client-barrier";
 import { ReleaseAcknowledgement } from "app/models/client-release-acknowledgement";
+import { ClientVitalRecord } from "app/models/client-vital-record";
 
 @Injectable()
 export class ClientService {
@@ -2203,6 +2204,34 @@ export class ClientService {
         }),
         catchError(this.handleError)
       );
+  }
+
+  getClientVitalRecords(clientId: number) {
+    const myHeader = this.buildAuthHeaders();
+    return this.http
+      .get<ClientVitalRecord[]>(this.baseUrl + `getClientVitalRecords?clientId=${clientId}`, { headers: myHeader })
+      .pipe(catchError(this.handleError));
+  }
+
+  insertClientVitalRecord(record: ClientVitalRecord): Observable<ClientVitalRecord> {
+    const myHeader = this.buildAuthHeaders();
+    return this.http
+      .post<ClientVitalRecord>(this.baseUrl + 'client_vital_records', { client_vital_record: record }, { headers: myHeader })
+        .pipe(catchError(this.handleError)) as Observable<ClientVitalRecord>;
+  }
+
+      updateClientVitalRecord(record: ClientVitalRecord): Observable<ClientVitalRecord> {
+    const myHeader = this.buildAuthHeaders();
+    return this.http
+      .put<ClientVitalRecord>(this.baseUrl + `client_vital_records/${record.id}`, { client_vital_record: record }, { headers: myHeader })
+      .pipe(catchError(this.handleError)) as Observable<ClientVitalRecord>;
+  }
+
+  retrieveClientVitalRecord(id: number) {
+    const myHeader = this.buildAuthHeaders();
+    return this.http
+      .patch<ClientVitalRecord>(this.baseUrl + `client_vital_records/${id}/retrieve`, {}, { headers: myHeader })
+      .pipe(catchError(this.handleError));
   }
 
   insertCaseworker(caseworker: Caseworker) {
