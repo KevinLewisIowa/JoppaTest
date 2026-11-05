@@ -113,6 +113,14 @@ export class ServicingClientComponent implements OnInit, OnDestroy {
   attendanceToDate = '';
   updateTimerSubscription?: Subscription;
   updateHoseTankMessageVisible: boolean = false;
+  weeklyAttendanceLoaded = false;
+  weeklyAttendanceLoading = false;
+  householdLoaded = false;
+  householdLoading = false;
+  documentsLoaded = false;
+  documentsLoading = false;
+  releaseAcknowledgementsLoaded = false;
+  vitalRecordsLoaded = false;
   campId: number = 0;
   url: any;
   backIcon = faChevronLeft;
@@ -303,15 +311,6 @@ export class ServicingClientComponent implements OnInit, OnDestroy {
             }
           })
 
-          this.service.getClientHousehold(this.client.household_id)
-            .pipe(takeUntil(this.destroy$))
-            .subscribe(
-            (data: Client[]) => {
-              this.householdClients = data;
-            },
-            (error) => console.log(error)
-          );
-
           this.service.getClientCaseworkers(this.clientId)
             .pipe(takeUntil(this.destroy$))
             .subscribe((data: Caseworker[]) => {
@@ -334,18 +333,6 @@ export class ServicingClientComponent implements OnInit, OnDestroy {
             }
           }, error => console.log(error));
 
-          this.service.getClientReleaseAcknowledgements(this.clientId)
-            .pipe(takeUntil(this.destroy$))
-            .subscribe((data: ReleaseAcknowledgement[]) => {
-          this.releaseAcknowledgements = data;
-          this.checkReleaseValidity();
-        }, error => console.log(error));
-
-        this.service.getClientVitalRecords(this.clientId)
-          .pipe(takeUntil(this.destroy$))
-          .subscribe((data: ClientVitalRecord[]) => {
-            this.clientVitalRecords = data;
-          }, error => console.log(error));
       }, (error) => console.log(error));
 
       const notesRequest = this.routeInstanceId != null
@@ -584,44 +571,7 @@ export class ServicingClientComponent implements OnInit, OnDestroy {
         );
         this.getHeaterStatuses();
 
-        this.mainService.getClientAttendanceHistory(this.clientId, this.pipe.transform(this.attendanceFromDate, "yyyy-MM-dd") || '', this.pipe.transform(this.attendanceToDate, "yyyy-MM-dd") || '')
-          .pipe(takeUntil(this.destroy$))
-          .subscribe((data: any[]) => {
-          this.clientInteractions = data;
-          this.clientInteractions.sort(function (a, b) {
-            return (
-              new Date(b.serviced_date).valueOf() -
-              new Date(a.serviced_date).valueOf()
-            );
-          });
-
-          console.log('Client interactions for heat route:', JSON.stringify(this.clientInteractions));
-
-          this.goToTop();
-        }, (error) => console.log(error));
       } else {
-        this.mainService.getClientAttendanceHistory(this.clientId, this.pipe.transform(this.attendanceFromDate, "yyyy-MM-dd") || '', this.pipe.transform(this.attendanceToDate, "yyyy-MM-dd") || '')
-          .pipe(takeUntil(this.destroy$))
-          .subscribe((data: any[]) => {
-          this.clientInteractions = data;
-          this.clientInteractions.sort(function (a, b) {
-            return (
-              new Date(b.serviced_date).valueOf() -
-              new Date(a.serviced_date).valueOf()
-            );
-          });
-
-          const now = new Date();
-          const oneMonthAgo = new Date();
-          oneMonthAgo.setMonth(now.getMonth() - 1);
-
-          this.clientInteractions = this.clientInteractions.filter(ci => new Date(ci.serviced_date) > new Date(oneMonthAgo) && !ci.at_homeless_resource_center)
-
-          console.log('Filtered client interactions for heat route:', JSON.stringify(this.clientInteractions));
-          this.goToTop();
-        },
-          (error) => console.log(error)
-        );
       }
 
       if (this.heatRoute) {
@@ -819,6 +769,7 @@ export class ServicingClientComponent implements OnInit, OnDestroy {
   }
 
   searchWeeklyAttendance() {
+    this.weeklyAttendanceLoading = true;
     this.mainService
       .getClientAttendanceHistory(
         this.clientId,
@@ -829,6 +780,8 @@ export class ServicingClientComponent implements OnInit, OnDestroy {
       .subscribe(
         (data: any[]) => {
           this.clientInteractions = data;
+          this.weeklyAttendanceLoaded = true;
+          this.weeklyAttendanceLoading = false;
           this.clientInteractions.sort(function (a, b) {
             return (
               new Date(b.serviced_date).valueOf() -
@@ -836,8 +789,115 @@ export class ServicingClientComponent implements OnInit, OnDestroy {
             );
           });
         },
-        (error) => console.log(error)
+        (error) => {
+          this.weeklyAttendanceLoading = false;
+          console.error('Unable to load client attendance history', error);
+        }
       );
+  }
+
+  onWeeklyAttendanceToggle(event: Event) {
+    const section = event.target as HTMLDetailsElement;
+    if (section.open && !this.weeklyAttendanceLoaded && !this.weeklyAttendanceLoading) {
+      this.weeklyAttendanceLoading = true;
+      this.mainService
+        .getClientAttendanceHistory(
+          this.clientId,
+          this.pipe.transform(this.attendanceFromDate, "yyyy-MM-dd") || '',
+          this.pipe.transform(this.attendanceToDate, "yyyy-MM-dd") || ''
+        )
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(
+          (data: any[]) => {
+            this.clientInteractions = data.sort((a, b) =>
+              new Date(b.serviced_date).valueOf() - new Date(a.serviced_date).valueOf()
+            );
+            if (!this.isAdmin) {
+              const oneMonthAgo = new Date();
+              oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+              this.clientInteractions = this.clientInteractions.filter(
+                interaction => new Date(interaction.serviced_date) > oneMonthAgo &&
+                  !interaction.at_homeless_resource_center
+              );
+            }
+            this.weeklyAttendanceLoaded = true;
+            this.weeklyAttendanceLoading = false;
+          },
+          error => {
+            this.weeklyAttendanceLoading = false;
+            console.error('Unable to load client attendance history', error);
+          }
+        );
+    }
+  }
+
+  onHouseholdToggle(event: Event) {
+    const section = event.target as HTMLDetailsElement;
+    if (!section.open || this.householdLoaded || this.householdLoading) {
+      return;
+    }
+
+    this.householdLoading = true;
+    this.service.getClientHousehold(this.client.household_id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(
+        (data: Client[]) => {
+          this.householdClients = data;
+          this.householdLoaded = true;
+          this.householdLoading = false;
+        },
+        error => {
+          this.householdLoading = false;
+          console.error('Unable to load household members', error);
+        }
+      );
+  }
+
+  onVitalRecordsToggle(event: Event) {
+    const section = event.target as HTMLDetailsElement;
+    if (!section.open || this.documentsLoaded || this.documentsLoading) {
+      return;
+    }
+
+    this.documentsLoading = true;
+    if (!this.releaseAcknowledgementsLoaded) {
+      this.service.getClientReleaseAcknowledgements(this.clientId)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(
+          (data: ReleaseAcknowledgement[]) => {
+            this.releaseAcknowledgements = data;
+            this.releaseAcknowledgementsLoaded = true;
+            this.checkReleaseValidity();
+            this.finishLoadingDocuments();
+          },
+          error => {
+            this.documentsLoading = false;
+            console.error('Unable to load release acknowledgements', error);
+          }
+        );
+    }
+    if (!this.vitalRecordsLoaded) {
+      this.service.getClientVitalRecords(this.clientId)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(
+          (data: ClientVitalRecord[]) => {
+            this.clientVitalRecords = data;
+            this.vitalRecordsLoaded = true;
+            this.finishLoadingDocuments();
+          },
+          error => {
+            this.documentsLoading = false;
+            console.error('Unable to load client vital records', error);
+          }
+        );
+    }
+  }
+
+  private finishLoadingDocuments() {
+    this.documentsLoaded = this.releaseAcknowledgementsLoaded && this.vitalRecordsLoaded;
+    if (this.documentsLoaded) {
+      this.documentsLoading = false;
+    }
   }
 
   ngOnDestroy() {

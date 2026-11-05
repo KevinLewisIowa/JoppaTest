@@ -1080,13 +1080,13 @@
     </div>
   </div>
   <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
-    <h4>
-      Vital Records
+    <details (toggle)="onVitalRecordsToggle($event)">
+      <summary><h4 class="d-inline">Vital Records</h4></summary>
+      <div *ngIf="documentsLoading" class="text-muted">Loading vital records...</div>
       <button type="button" class="btn btn-primary float-right" (click)="goToTop(); vitalRecordMdl.showModal()">
         Add Vital Record
       </button>
-    </h4>
-    <h5>Documents Stored</h5>
+      <h5>Documents Stored</h5>
     <div class="table-responsive">
       <table class="table">
         <thead>
@@ -1151,6 +1151,7 @@
         </tbody>
       </table>
     </div>
+    </details>
   </div>
   <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
     <div class="background-color">
@@ -1708,11 +1709,11 @@
   </div>
   <div class="col-lg-12 col-md-12">
     <div class="background-color">
-      <h4>
-        Household
+      <details (toggle)="onHouseholdToggle($event)">
+        <summary><h4 class="d-inline">Household</h4></summary>
+        <div *ngIf="householdLoading" class="text-muted">Loading household members...</div>
         <button type="button" (click)="goToTop(); clientMdl.showModal()" class="btn btn-primary float-right">New
           Household Member</button>
-      </h4>
       <div class="table-responsive">
         <table class="table" id="household">
           <colgroup>
@@ -1779,64 +1780,58 @@
           </tbody>
         </table>
       </div>
+      </details>
     </div>
   </div>
   <div class="col-lg-12 col-md-12">
-    <h4>Weekly Attendance</h4>
-    <div>
-      From Date:
-      <input type="date" name="attendanceFromDate" [(ngModel)]="attendanceFromDate" />
-      To Date:
-      <input type="date" name="attendanceToDate" [(ngModel)]="attendanceToDate" />
-      <button type="button" class="btn btn-primary" style="margin-left: 5px" (click)="searchWeeklyAttendance()">
-        Search
-      </button>
-    </div>
-    <div class="table-responsive">
-      <table class="table" id="weeklyAttendance">
-        <colgroup>
-          <col span="1" style="width: 20%" />
-          <col span="1" style="width: 20%" />
-          <col span="1" style="width: 20%" />
-          <col span="1" style="width: 20%" />
-          <col span="1" style="width: 20%" />
-        </colgroup>
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Seen</th>
-            <th>Serviced</th>
-            <th>Resource Center</th>
-            <th>Route</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let interaction of clientInteractions">
-            <td>
-              {{ interaction.serviced_date | date: "short" }}
-            </td>
-            <td>
-              {{ interaction.was_seen ? 'Yes' : 'No' }}
-            </td>
-            <td>
-              {{ interaction.serviced ? 'Yes' : 'No' }}
-            </td>
-            <td>
-              {{ interaction.at_homeless_resource_center ? 'Yes' : 'No' }}
-            </td>
-            <td>
-              {{ interaction.name }} - {{ interaction.camp_name }}
-            </td>
-            <td>
-              <button type="button" class="btn btn-primary" (click)="removeAppearance(interaction.id)" *ngIf="isAdmin">
-                Remove
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <details (toggle)="onWeeklyAttendanceToggle($event)">
+      <summary><h4 class="d-inline">Weekly Attendance History</h4></summary>
+      <div *ngIf="weeklyAttendanceLoading" class="text-muted">Loading attendance history...</div>
+      <div>
+        From Date:
+        <input type="date" name="attendanceFromDate" [(ngModel)]="attendanceFromDate" />
+        To Date:
+        <input type="date" name="attendanceToDate" [(ngModel)]="attendanceToDate" />
+        <button type="button" class="btn btn-primary" style="margin-left: 5px" (click)="searchWeeklyAttendance()">
+          Search
+        </button>
+      </div>
+      <div class="table-responsive">
+        <table class="table" id="weeklyAttendance">
+          <colgroup>
+            <col span="1" style="width: 20%" />
+            <col span="1" style="width: 20%" />
+            <col span="1" style="width: 20%" />
+            <col span="1" style="width: 20%" />
+            <col span="1" style="width: 20%" />
+          </colgroup>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Seen</th>
+              <th>Serviced</th>
+              <th>Resource Center</th>
+              <th>Route</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let interaction of clientInteractions">
+              <td>{{ interaction.serviced_date | date: "short" }}</td>
+              <td>{{ interaction.was_seen ? 'Yes' : 'No' }}</td>
+              <td>{{ interaction.serviced ? 'Yes' : 'No' }}</td>
+              <td>{{ interaction.at_homeless_resource_center ? 'Yes' : 'No' }}</td>
+              <td>{{ interaction.name }} - {{ interaction.camp_name }}</td>
+              <td>
+                <button type="button" class="btn btn-primary" (click)="removeAppearance(interaction.id)" *ngIf="isAdmin">
+                  Remove
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </details>
   </div>
   <div class="col-lg-12 col-md-12">
     <div class="col-md-12 text-left">
