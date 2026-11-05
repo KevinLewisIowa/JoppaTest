@@ -29,7 +29,7 @@ import {
   faMap,
 } from "@fortawesome/free-solid-svg-icons";
 import { forkJoin, Observable, Subscription, Subject, timer, of } from "rxjs";
-import { map, switchMap, takeUntil } from "rxjs/operators";
+import { catchError, map, switchMap, takeUntil } from "rxjs/operators";
 import { DatePipe } from "@angular/common";
 import { PrayerRequestAndNeed } from "app/models/prayer-request";
 import {
@@ -480,11 +480,17 @@ export class ServicingClientComponent implements OnInit, OnDestroy {
       return;
     }
 
-    forkJoin(requests)
+    forkJoin(requests.map(request => request.pipe(
+      catchError(error => {
+        state.error = true;
+        console.error(`Unable to load ${key} profile data`, error);
+        return of(undefined);
+      })
+    )))
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {
-          state.loaded = true;
+          state.loaded = !state.error;
           state.loading = false;
         },
         error: error => {

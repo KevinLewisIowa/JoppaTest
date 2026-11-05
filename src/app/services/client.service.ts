@@ -1,4 +1,4 @@
-import { throwError as observableThrowError, Observable, forkJoin } from "rxjs";
+import { throwError as observableThrowError, Observable, forkJoin, of } from "rxjs";
 import { Injectable } from "@angular/core";
 import { HttpHeaders, HttpClient, HttpParams } from "@angular/common/http";
 import { ClientLike } from "../models/client-like";
@@ -2053,7 +2053,7 @@ export class ClientService {
       );
   }
 
-  getMailboxForClient(clientId: number) {
+  getMailboxForClient(clientId: number): Observable<ClientMailbox | null> {
     const myHeader = this.buildAuthHeaders();
     return this.http
       .get(this.baseUrl + `getMailboxForClient?clientId=${clientId}`, { headers: myHeader })
@@ -2065,7 +2065,7 @@ export class ClientService {
           }
           return res;
         }),
-        catchError(this.handleError)
+        catchError(error => error.status === 404 ? of(null) : this.handleError(error))
       );
   }
 
