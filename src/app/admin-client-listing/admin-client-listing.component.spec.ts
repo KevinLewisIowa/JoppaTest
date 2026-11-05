@@ -14,10 +14,6 @@ describe('AdminClientListingComponent', () => {
   beforeEach(waitForAsync(() => {
     mockClientService = {
       getPaginatedClients: jasmine.createSpy('getPaginatedClients').and.returnValue(of({ clients: [], total: 0 })),
-      hasPinnedOrWarningNote: jasmine.createSpy('hasPinnedOrWarningNote').and.returnValue(of({ hasPinnedOrWarningNote: false })),
-      getHeatersForClient: jasmine.createSpy('getHeatersForClient'),
-      getClientLoanedTanks: jasmine.createSpy('getClientLoanedTanks'),
-      getClientLoanedHoses: jasmine.createSpy('getClientLoanedHoses')
     };
 
     TestBed.configureTestingModule({
@@ -50,40 +46,18 @@ describe('AdminClientListingComponent', () => {
     );
   }));
 
-  it('should detect heaters and cache result (getHeatersForClient positive)', async () => {
-    const client = new Client();
-    client.id = 42;
-    mockClientService.getHeatersForClient.and.returnValue(of([ { id: 1 } ]));
-    mockClientService.getClientLoanedTanks.and.returnValue(of([]));
-    mockClientService.getClientLoanedHoses.and.returnValue(of([]));
-
-    const result = await component.checkClientHasHeatingEquipmentCached(client);
-    expect(result).toBeTrue();
-    expect(client.hasHeatingEquipment).toBeTrue();
-    expect(mockClientService.getHeatersForClient).toHaveBeenCalledTimes(1);
-    expect(mockClientService.getClientLoanedTanks).not.toHaveBeenCalled();
-    expect(mockClientService.getClientLoanedHoses).not.toHaveBeenCalled();
-
-    // calling again should use cache and not call service again
-    const result2 = await component.checkClientHasHeatingEquipmentCached(client);
-    expect(result2).toBeTrue();
-    expect(mockClientService.getHeatersForClient).toHaveBeenCalledTimes(1);
-  });
-
-  it('should detect absence of equipment when all checks return empty', async () => {
+  it('should use the heating equipment indicator from the paginated response', fakeAsync(() => {
     const client = new Client();
     client.id = 99;
-    mockClientService.getHeatersForClient.and.returnValue(of([]));
-    mockClientService.getClientLoanedTanks.and.returnValue(of([]));
-    mockClientService.getClientLoanedHoses.and.returnValue(of([]));
+    client.has_heating_equipment = true;
+    mockClientService.getPaginatedClients.and.returnValue(of({ clients: [client], total: 1 }));
 
-    const result = await component.checkClientHasHeatingEquipmentCached(client);
-    expect(result).toBeFalse();
-    expect(client.hasHeatingEquipment).toBeFalse();
-    expect(mockClientService.getHeatersForClient).toHaveBeenCalledTimes(1);
-    expect(mockClientService.getClientLoanedTanks).toHaveBeenCalledTimes(1);
-    expect(mockClientService.getClientLoanedHoses).toHaveBeenCalledTimes(1);
-  });
+    component.applyFilter('client');
+    tick(300);
+
+    expect(component.clients[0].hasHeatingEquipment).toBeTrue();
+    expect(component.clients[0].hasHeatingEquipmentChecked).toBeTrue();
+  }));
 
   it('should render the fire icon in the template when client.hasHeatingEquipment is true', () => {
     const client = new Client();

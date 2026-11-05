@@ -50,6 +50,7 @@ export class Client {
     translation_language: string | undefined = undefined;
     has_picture: boolean = false; // not a DB column
     has_attention_note: boolean = false; // computed for the client listing
+    has_heating_equipment: boolean = false; // computed for the client listing
     hasAttentionNote: boolean = false; // UI/computed property, not a DB column
     hasHeatingEquipment: boolean = false; // UI/computed property, not a DB column
     hasHeatingEquipmentChecked: boolean = false; // UI/computed property to avoid duplicate checks
