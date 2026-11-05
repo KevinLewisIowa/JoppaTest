@@ -6,3 +6,58 @@
     float: right !important;
     margin-left: 8px;
 }
+
+:host .profile-accordion {
+    margin-bottom: 12px;
+    border: 1px solid #d5d9dc;
+    border-radius: 4px;
+    background-color: #fff;
+}
+
+:host .profile-accordion > summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background-color: #f5f6f7;
+    cursor: pointer;
+    list-style: none;
+}
+
+:host .profile-accordion > summary::-webkit-details-marker {
+    display: none;
+}
+
+:host .profile-accordion > summary::marker {
+    content: "";
+}
+
+:host .profile-accordion > summary h4 {
+    margin: 0;
+}
+
+:host .profile-accordion > summary::after {
+    content: "+";
+    display: inline-flex;
+    width: 24px;
+    height: 24px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid currentColor;
+    border-radius: 50%;
+    font-size: 18px;
+    line-height: 1;
+}
+
+:host .profile-accordion[open] > summary {
+    border-bottom: 1px solid #d5d9dc;
+}
+
+:host .profile-accordion[open] > summary::after {
+    content: "\2212";
+}
+
+:host .profile-accordion > :not(summary) {
+    padding-right: 16px;
+    padding-left: 16px;
+}

@@ -121,6 +121,9 @@ export class ServicingClientComponent implements OnInit, OnDestroy {
   documentsLoading = false;
   releaseAcknowledgementsLoaded = false;
   vitalRecordsLoaded = false;
+  requestsLoaded = false;
+  requestsLoading = false;
+  requestsError = false;
   campId: number = 0;
   url: any;
   backIcon = faChevronLeft;
@@ -415,23 +418,6 @@ export class ServicingClientComponent implements OnInit, OnDestroy {
           error: (error) => console.log(error)
         });
 
-        this.service.getRecentReceivedItems(this.clientId)
-          .pipe(takeUntil(this.destroy$))
-          .subscribe(
-          (data: RequestedItem[]) => {
-            this.receivedItems = data;
-            this.filteredReceivedItems = this.receivedItems.slice(0, 10);
-          },
-          (error) => console.log(error)
-        );
-        this.service.getRequestedItems(this.clientId)
-          .pipe(takeUntil(this.destroy$))
-          .subscribe(
-          (data: RequestedItem[]) => {
-            this.requestedItems = data.filter((w) => w.has_received != true);
-          },
-          (error) => console.log(error)
-        );
         this.service.getClientPets(this.clientId)
           .pipe(takeUntil(this.destroy$))
           .subscribe(
@@ -488,22 +474,6 @@ export class ServicingClientComponent implements OnInit, OnDestroy {
           },
           (error) => console.log(error)
         );
-        this.service.getClientLikes(this.clientId)
-          .pipe(takeUntil(this.destroy$))
-          .subscribe(
-          (data: ClientLike[]) => {
-            this.clientLikes = data;
-          },
-          (error) => console.log(error)
-        );
-        this.service.getClientDislikes(this.clientId)
-          .pipe(takeUntil(this.destroy$))
-          .subscribe(
-          (data: ClientDislike[]) => {
-            this.clientDislikes = data;
-          },
-          (error) => console.log(error)
-        );
         this.service.getClientBarriers(this.clientId)
           .pipe(takeUntil(this.destroy$))
           .subscribe({
@@ -538,14 +508,6 @@ export class ServicingClientComponent implements OnInit, OnDestroy {
           .subscribe(
           (data: Heater[]) => {
             this.heaters = data;
-          },
-          (error) => console.log(error)
-        );
-        this.service.getClientPrayerRequests(this.clientId)
-          .pipe(takeUntil(this.destroy$))
-          .subscribe(
-          (data: PrayerRequestAndNeed[]) => {
-            this.prayerRequestsAndNeeds = data;
           },
           (error) => console.log(error)
         );
@@ -607,17 +569,6 @@ export class ServicingClientComponent implements OnInit, OnDestroy {
         this.getHeaterStatuses();
       }
 
-      this.service.getRecentReceivedItems(this.clientId)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe((data: RequestedItem[]) => {
-        this.receivedItems = data;
-        this.filteredReceivedItems = this.receivedItems.slice(0, 10);
-      });
-      this.service.getRequestedItems(this.clientId)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe((data: RequestedItem[]) => {
-        this.requestedItems = data.filter((w) => w.has_received != true);
-      });
       this.service
         .getClientPets(this.clientId)
         .pipe(takeUntil(this.destroy$))
@@ -663,18 +614,6 @@ export class ServicingClientComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.destroy$))
         .subscribe((data: GoalsNextStep[]) => {
           this.goalsAndSteps = data;
-        });
-      this.service
-        .getClientLikes(this.clientId)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe((data: ClientLike[]) => {
-          this.clientLikes = data;
-        });
-      this.service
-        .getClientDislikes(this.clientId)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe((data: ClientDislike[]) => {
-          this.clientDislikes = data;
         });
       this.service
         .getHealthConcerns(this.clientId)
@@ -828,6 +767,103 @@ export class ServicingClientComponent implements OnInit, OnDestroy {
             console.error('Unable to load client attendance history', error);
           }
         );
+    }
+  }
+
+  onRequestsToggle(event: Event) {
+    const section = event.target as HTMLDetailsElement;
+    if (!section.open || this.requestsLoaded || this.requestsLoading) {
+      return;
+    }
+
+    this.requestsLoading = true;
+    this.requestsError = false;
+    let remainingRequests = this.isAdmin ? 5 : 2;
+    let hasRequestError = false;
+    const completeRequest = () => {
+      remainingRequests--;
+      if (remainingRequests === 0) {
+        this.requestsLoading = false;
+        this.requestsLoaded = !hasRequestError;
+      }
+    };
+
+    this.service.getRequestedItems(this.clientId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: data => {
+          this.requestedItems = data.filter(item => item.has_received != true);
+          completeRequest();
+        },
+        error: error => {
+          hasRequestError = true;
+          this.requestsError = true;
+          console.error('Unable to load requested items', error);
+          completeRequest();
+        }
+      });
+
+    this.service.getRecentReceivedItems(this.clientId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: data => {
+          this.receivedItems = data;
+          this.filteredReceivedItems = data.slice(0, 10);
+          completeRequest();
+        },
+        error: error => {
+          hasRequestError = true;
+          this.requestsError = true;
+          console.error('Unable to load recently received items', error);
+          completeRequest();
+        }
+      });
+
+    if (this.isAdmin) {
+      this.service.getClientPrayerRequests(this.clientId)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: data => {
+            this.prayerRequestsAndNeeds = data;
+            completeRequest();
+          },
+          error: error => {
+            hasRequestError = true;
+            this.requestsError = true;
+            console.error('Unable to load prayer requests', error);
+            completeRequest();
+          }
+        });
+
+      this.service.getClientLikes(this.clientId)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: data => {
+            this.clientLikes = data;
+            completeRequest();
+          },
+          error: error => {
+            hasRequestError = true;
+            this.requestsError = true;
+            console.error('Unable to load client likes', error);
+            completeRequest();
+          }
+        });
+
+      this.service.getClientDislikes(this.clientId)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: data => {
+            this.clientDislikes = data;
+            completeRequest();
+          },
+          error: error => {
+            hasRequestError = true;
+            this.requestsError = true;
+            console.error('Unable to load client dislikes', error);
+            completeRequest();
+          }
+        });
     }
   }
 

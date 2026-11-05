@@ -651,6 +651,12 @@
       </div>
     </div>
 
+    <details class="profile-accordion" (toggle)="onRequestsToggle($event)">
+      <summary><h4 class="d-inline">Requests and Preferences</h4></summary>
+      <div *ngIf="requestsLoading" class="text-muted">Loading requests...</div>
+      <div *ngIf="requestsError" class="text-danger">
+        Some requests could not be loaded. Close and reopen this section to retry.
+      </div>
     <div class="col-lg-12 col-md-12">
       <h4>
         Requested Items
@@ -779,7 +785,6 @@
         </tbody>
       </table>
     </div>
-  </div>
   <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
     <div class="background-color">
       <h4>
@@ -865,6 +870,8 @@
         </tbody>
       </table>
     </div>
+  </div>
+    </details>
   </div>
   <div class="col-lg-12 col-md-12">
     <div class="background-color">
@@ -1080,7 +1087,7 @@
     </div>
   </div>
   <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
-    <details (toggle)="onVitalRecordsToggle($event)">
+    <details class="profile-accordion" (toggle)="onVitalRecordsToggle($event)">
       <summary><h4 class="d-inline">Vital Records</h4></summary>
       <div *ngIf="documentsLoading" class="text-muted">Loading vital records...</div>
       <button type="button" class="btn btn-primary float-right" (click)="goToTop(); vitalRecordMdl.showModal()">
@@ -1709,7 +1716,7 @@
   </div>
   <div class="col-lg-12 col-md-12">
     <div class="background-color">
-      <details (toggle)="onHouseholdToggle($event)">
+      <details class="profile-accordion" (toggle)="onHouseholdToggle($event)">
         <summary><h4 class="d-inline">Household</h4></summary>
         <div *ngIf="householdLoading" class="text-muted">Loading household members...</div>
         <button type="button" (click)="goToTop(); clientMdl.showModal()" class="btn btn-primary float-right">New
@@ -1784,7 +1791,7 @@
     </div>
   </div>
   <div class="col-lg-12 col-md-12">
-    <details (toggle)="onWeeklyAttendanceToggle($event)">
+    <details class="profile-accordion" (toggle)="onWeeklyAttendanceToggle($event)">
       <summary><h4 class="d-inline">Weekly Attendance History</h4></summary>
       <div *ngIf="weeklyAttendanceLoading" class="text-muted">Loading attendance history...</div>
       <div>
