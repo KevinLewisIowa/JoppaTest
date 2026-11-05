@@ -3,12 +3,11 @@ import { ClientService } from 'app/services/client.service';
 import { Router } from '@angular/router';
 import { MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-paginator';
 import { MatSort } from '@angular/material/sort';
-import { MatLegacyTableDataSource as MatTableDataSource, MatLegacyTable as MatTable } from '@angular/material/legacy-table';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { faChevronLeft, faPlus, faFlag, faCamera, faFire } from '@fortawesome/free-solid-svg-icons';
 import { Client } from 'app/models/client';
-import { Note } from 'app/models/note';
-import { Subscription, lastValueFrom, take, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Subscription, lastValueFrom, Subject, EMPTY } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, switchMap, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-admin-client-listing',
@@ -17,8 +16,11 @@ import { takeUntil } from 'rxjs/operators';
 })
 export class AdminClientListingComponent implements OnInit, AfterViewInit, OnDestroy {
   displayedColumns = ['id', 'first_name', 'middle_name', 'last_name', 'preferred_name', 'phone', 'birth_date', 'route_name', 'camp_name', 'status', 'household_id', 'updated_at'];
-  clients: any[] = [];
-  dataSource: MatTableDataSource<any>;
+  clients: Client[] = [];
+  dataSource = new MatTableDataSource<Client>([]);
+  totalClients = 0;
+  isLoading = false;
+  loadError = '';
   backIcon = faChevronLeft;
   flagIcon = faFlag;
   fireIcon = faFire;
@@ -28,66 +30,63 @@ export class AdminClientListingComponent implements OnInit, AfterViewInit, OnDes
   private heatingCache: Map<number, boolean> = new Map<number, boolean>();
   private concurrency = 5;
   private destroy$ = new Subject<void>();
+  private filterInput$ = new Subject<string>();
+  private loadRequests$ = new Subject<void>();
+  private filterValue = '';
+  private sortBy = 'updated_at';
+  private sortDirection = 'desc';
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
 
   constructor(private clientService: ClientService, private router: Router, private cd: ChangeDetectorRef) {
     window.localStorage.removeItem('routeId');
-
-    // this.clientService.seenAndServicedReport('2024-01-01', '2024-11-17').subscribe(data => {
-    //   console.log('seenAndServiced ' + JSON.stringify(data));
-    // });
-
-    this.clientService.getClientsByName('')
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(data => {
-        console.log('Number of clients: ' + data.length)
-        this.clients = data;
-
-      // Set hasAttentionNote for each client, throttled in batches of 15
-      (async () => {
-        await this.processClientsInBatches(this.clients, 25);
-      })();
-
-      this.dataSource = new MatTableDataSource(this.clients);
-      this.dataSource.sort = this.sort;
-      this.sort.active = "updated_at";
-      this.sort.direction = "desc";
-      this.dataSource.sortingDataAccessor = (item, property) => {
-        switch (property) {
-          case 'updated_at':
-            return new Date(item.last_interaction_date);
-          default: return item[property];
-        }
-      };
-      this.dataSource.paginator = this.paginator;
-      // Trigger initial checks for the visible page
-      this.triggerChecksForCurrentPage();
-
-      // displayedColumns = ['first_name', 'last_name', 'preferred_name', 'phone', 'birth_date', 'route_name', 'camp_name', 'status', 'household_id', 'updated_at'];
-      this.dataSource.filterPredicate = (data, filter: string) => {
-        const filterValue = filter.trim().toLowerCase();
-        const firstLastName = `${data.first_name} ${data.last_name}`.toLowerCase();
-        const firstMiddleLastName = `${data.first_name} ${data.middle_name} ${data.last_name}`.toLowerCase();
-        const preferredLastName = `${data.preferred_name} ${data.last_name}`.toLowerCase();
-        return firstLastName.includes(filterValue) ||
-          firstMiddleLastName.includes(filterValue) ||
-          preferredLastName.includes(filterValue) ||
-          (data.phone != null && data.phone.toLowerCase().includes(filterValue)) ||
-          (data.birth_date != null && data.birth_date.toLowerCase().includes(filterValue)) ||
-          (data.route_name != null && data.route_name.toLowerCase().includes(filterValue)) ||
-          (data.camp_name != null && data.camp_name.toLowerCase().includes(filterValue)) ||
-          (data.status != null && data.status.toLowerCase().includes(filterValue)) ||
-          (data.updated_at != null && data.updated_at.toLowerCase().includes(filterValue)) ||
-          (data.last_name != null && data.last_name.toLowerCase().includes(filterValue)) ||
-          (data.middle_name != null && data.middle_name.toLowerCase().includes(filterValue))
-      };
-    }, error => console.log(error));
   }
 
   ngOnInit() {
     this.pastDate.setDate(this.pastDate.getDate() - 60);
+
+    this.filterInput$
+      .pipe(debounceTime(300), distinctUntilChanged(), takeUntil(this.destroy$))
+      .subscribe(filterValue => {
+        this.filterValue = filterValue;
+        if (this.paginator) this.paginator.pageIndex = 0;
+        this.loadRequests$.next();
+      });
+
+    this.loadRequests$
+      .pipe(
+        switchMap(() => {
+          this.isLoading = true;
+          this.loadError = '';
+          return this.clientService.getPaginatedClients(
+            this.filterValue,
+            (this.paginator ? this.paginator.pageIndex : 0) + 1,
+            this.paginator ? this.paginator.pageSize : 50,
+            this.sortBy,
+            this.sortDirection
+          ).pipe(
+            catchError(error => {
+              console.error('Unable to load clients', error);
+              this.loadError = 'Unable to load clients. Please try again.';
+              this.isLoading = false;
+              return EMPTY;
+            })
+          );
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(response => {
+        this.clients = response.clients;
+        this.clients.forEach(client => {
+          client.hasAttentionNote = !!client.has_attention_note;
+        });
+        this.dataSource.data = this.clients;
+        this.totalClients = response.total;
+        if (this.paginator) this.paginator.length = response.total;
+        this.isLoading = false;
+        this.triggerChecksForCurrentPage();
+      });
   }
 
   isOverMonthOld(date: string) {
@@ -100,10 +99,7 @@ export class AdminClientListingComponent implements OnInit, AfterViewInit, OnDes
   }
 
   applyFilter(filterValue: string) {
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-    // Reset to first page when filter changes and trigger visible checks
-    if (this.dataSource.paginator) this.dataSource.paginator.firstPage();
-    this.triggerChecksForCurrentPage();
+    this.filterInput$.next(filterValue.trim());
   }
 
   createClient() {
@@ -113,37 +109,6 @@ export class AdminClientListingComponent implements OnInit, AfterViewInit, OnDes
 
   back() {
     this.router.navigate(['/adminHome']);
-  }
-
-  // Throttle processClient calls in batches
-  async processClientsInBatches(clients: Client[], batchSize: number = 5) {
-    for (let i = 0; i < clients.length; i += batchSize) {
-      const batch = clients.slice(i, i + batchSize);
-      await Promise.all(batch.map(client => this.processClientAsync(client)));
-    }
-  }
-
-  // Promise-based version of processClient
-  processClientAsync(client: Client): Promise<void> {
-    return new Promise((resolve) => {
-      client.hasAttentionNote = !!(client.admin_notes && client.admin_notes.trim() !== '');
-      if (!client.hasAttentionNote) {
-        this.clientService.hasPinnedOrWarningNote(client.id)
-          .pipe(takeUntil(this.destroy$))
-          .subscribe(
-            data => {
-              client.hasAttentionNote = data.hasPinnedOrWarningNote;
-              resolve();
-            },
-            error => {
-              console.log(error);
-              resolve();
-            }
-          );
-      } else {
-        resolve();
-      }
-    });
   }
 
   // --- Heating equipment cached checks with limited concurrency ---
@@ -242,53 +207,33 @@ export class AdminClientListingComponent implements OnInit, AfterViewInit, OnDes
 
   // Trigger checks for the currently visible page rows (respecting current filter/sort)
   private triggerChecksForCurrentPage() {
-    if (!this.dataSource || !this.dataSource.paginator) return;
-    const pageIndex = this.dataSource.paginator.pageIndex || 0;
-    const pageSize = this.dataSource.paginator.pageSize || 50;
-
-    // // Use the dataSource's filteredData so that filter/sort are respected
-    // const sourceData = (this.dataSource as any).filteredData || this.clients;
-    // const start = pageIndex * pageSize;
-    // const end = Math.min(start + pageSize, sourceData.length);
-    // const pageClients = sourceData.slice(start, end);
-    // console.log(`triggerChecksForCurrentPage: pageIndex=${JSON.stringify(sourceData)}`);
-    // pageClients.forEach(client => {
-    //   // Fire and forget; UI will update when promise resolves
-    //   this.checkClientHasHeatingEquipmentCached(client).catch(err => { console.log(err); });
-    // });
-
-    // connect() emits the rows actually rendered by the table (after filter, sort, pagination).
-    // take(1) subscribes once and auto-unsubscribes.
-    (this.dataSource.connect() as any).pipe(take(1)).subscribe((renderedRows: any[]) => {
-      console.log('triggerChecksForCurrentPage: rendered rows', renderedRows.map(r => r.id));
-      renderedRows.forEach(client => {
-        // Fire and forget; UI will update when promise resolves
-        this.checkClientHasHeatingEquipmentCached(client).catch(err => { console.log(err); });
-      });
+    this.clients.forEach(client => {
+      this.checkClientHasHeatingEquipmentCached(client).catch(err => console.error(err));
     });
   }
 
   private sortSub: Subscription;
 
   ngAfterViewInit() {
-    // subscribe to paginator events to trigger checks for new pages
+    this.sort.active = this.sortBy;
+    this.sort.direction = this.sortDirection as 'asc' | 'desc';
+
     if (this.paginator) {
       this.paginatorSub = this.paginator.page.subscribe(() => {
-        // Wait one macrotask so MatTable has updated its rendered rows
-        setTimeout(() => this.triggerChecksForCurrentPage(), 0);
+        this.loadRequests$.next();
       });
     }
- 
-    // subscribe to sort events to re-trigger checks when sort changes
+
     if (this.sort) {
       this.sortSub = this.sort.sortChange.subscribe(() => {
-        // Sorting also updates rendered rows asynchronously
-        setTimeout(() => this.triggerChecksForCurrentPage(), 0);
+        this.sortBy = this.sort.active;
+        this.sortDirection = this.sort.direction || 'asc';
+        if (this.paginator) this.paginator.pageIndex = 0;
+        this.loadRequests$.next();
       });
     }
- 
-    // initial trigger now that view is initialized
-    this.triggerChecksForCurrentPage();
+
+    this.loadRequests$.next();
   }
 
   ngOnDestroy() {

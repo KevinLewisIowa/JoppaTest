@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick, waitForAsync } from '@angular/core/testing';
 import { of } from 'rxjs';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 
@@ -13,7 +13,7 @@ describe('AdminClientListingComponent', () => {
 
   beforeEach(waitForAsync(() => {
     mockClientService = {
-      getClientsByName: jasmine.createSpy('getClientsByName').and.returnValue(of([])),
+      getPaginatedClients: jasmine.createSpy('getPaginatedClients').and.returnValue(of({ clients: [], total: 0 })),
       hasPinnedOrWarningNote: jasmine.createSpy('hasPinnedOrWarningNote').and.returnValue(of({ hasPinnedOrWarningNote: false })),
       getHeatersForClient: jasmine.createSpy('getHeatersForClient'),
       getClientLoanedTanks: jasmine.createSpy('getClientLoanedTanks'),
@@ -36,6 +36,19 @@ describe('AdminClientListingComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should search across clients using server pagination', fakeAsync(() => {
+    component.applyFilter(' Alice ');
+    tick(300);
+
+    expect(mockClientService.getPaginatedClients).toHaveBeenCalledWith(
+      'Alice',
+      1,
+      50,
+      'updated_at',
+      'desc'
+    );
+  }));
 
   it('should detect heaters and cache result (getHeatersForClient positive)', async () => {
     const client = new Client();

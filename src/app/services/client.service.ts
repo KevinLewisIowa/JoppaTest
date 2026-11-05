@@ -1,6 +1,6 @@
 import { throwError as observableThrowError, Observable, forkJoin } from "rxjs";
 import { Injectable } from "@angular/core";
-import { HttpHeaders, HttpClient } from "@angular/common/http";
+import { HttpHeaders, HttpClient, HttpParams } from "@angular/common/http";
 import { ClientLike } from "../models/client-like";
 import { ClientDislike } from "../models/client-dislike";
 import { Client } from "../models/client";
@@ -36,6 +36,12 @@ import { AuthorizedMailAccesses } from "app/models/authorized-mail-accesses";
 import { ClientBarrier } from "app/models/client-barrier";
 import { ReleaseAcknowledgement } from "app/models/client-release-acknowledgement";
 import { ClientVitalRecord } from "app/models/client-vital-record";
+
+export interface PaginatedClientsResponse {
+  clients: Client[];
+  total: number;
+  message?: string;
+}
 
 @Injectable()
 export class ClientService {
@@ -651,6 +657,32 @@ export class ClientService {
       })
       .pipe(
         map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  getPaginatedClients(query: string, page: number, pageSize: number, sortBy: string, sortDirection: string) {
+    const myHeader = this.buildAuthHeaders();
+    const params = new HttpParams()
+      .set("query", query)
+      .set("page", page.toString())
+      .set("page_size", pageSize.toString())
+      .set("sort_by", sortBy)
+      .set("sort_direction", sortDirection);
+
+    return this.http
+      .get<PaginatedClientsResponse>(this.baseUrl + "getPaginatedClients", {
+        headers: myHeader,
+        params
+      })
+      .pipe(
+        map((res: PaginatedClientsResponse) => {
           if (res.message === "invalid-token") {
             window.localStorage.removeItem("apiToken");
             this.router.navigate(["/application-login"]);

@@ -7,8 +7,10 @@
   </div>
   <div class="panel-body">
     <mat-form-field appearance="standard">
-      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter" #input>
+      <input matInput (input)="applyFilter($event.target.value)" placeholder="Filter" #input>
     </mat-form-field>
+    <div *ngIf="isLoading">Loading clients...</div>
+    <div *ngIf="loadError" class="alert alert-danger" role="alert">{{loadError}}</div>
   </div>
   <div class="panel-body">
     <div>
@@ -87,7 +89,7 @@
         <mat-row (click)="viewClient(client)" *matRowDef="let client; columns: displayedColumns;"></mat-row>
       </mat-table>
 
-      <mat-paginator [pageSizeOptions]="[50, 25, 75, 100]"></mat-paginator>
+      <mat-paginator [length]="totalClients" [pageSize]="50" [pageSizeOptions]="[25, 50, 75, 100]"></mat-paginator>
     </div>
   </div>
   <div class="card-footer">
