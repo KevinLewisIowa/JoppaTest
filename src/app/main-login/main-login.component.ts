@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { MainService } from 'app/services/main.service';
-import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { faChevronRight, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -12,30 +12,108 @@ import { takeUntil } from 'rxjs/operators';
   styleUrls: ['./main-login.component.css']
 })
 export class MainLoginComponent implements OnInit, OnDestroy {
-  passwordForm: UntypedFormGroup;
+  adminLoginForm: UntypedFormGroup;
+  legacyLoginForm: UntypedFormGroup;
+  isAdminLogin = false;
   invalidText = false;
+  errorMessage = '';
+  isLoading = false;
   forwardIcon = faChevronRight;
   private destroy$ = new Subject<void>();
+  eyeIcon = faEye;
+  eyeSlashIcon = faEyeSlash;
+  showAdminPassword = false;
+  showLegacyPassword = false;
 
   constructor(private fb: UntypedFormBuilder, private router: Router, private service: MainService) { }
 
   ngOnInit() {
-    this.passwordForm = this.fb.group({
+    // New admin login form (email + password)
+    this.adminLoginForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.required]
+    });
+
+    // Legacy login form (password only)
+    this.legacyLoginForm = this.fb.group({
       the_password: ''
     });
 
-    this.passwordForm.get('the_password').setValidators(Validators.required);
+    this.legacyLoginForm.get('the_password').setValidators(Validators.required);
     this.service.showEndRoute.next(false);
     this.service.showAdminHome.next(false);
   }
 
-  login() {
-    const passwordAttempt: string = this.passwordForm.get('the_password').value;
+  toggleLoginMode() {
+    this.isAdminLogin = !this.isAdminLogin;
     this.invalidText = false;
+    this.errorMessage = '';
+  }
+
+  adminLogin() {
+    if (!this.adminLoginForm.valid) {
+      this.errorMessage = 'Please enter valid email and password';
+      return;
+    }
+
+    this.isLoading = true;
+    this.invalidText = false;
+    this.errorMessage = '';
+
+    const email = this.adminLoginForm.get('email').value;
+    const password = this.adminLoginForm.get('password').value;
+
+    console.log('[AdminLogin] submitting login', { email });
+
+    this.service.attemptAdminLogin(email, password)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(
+      (data: any) => {
+        console.log('[AdminLogin] success response', data);
+        this.isLoading = false;
+        if (data.token) {
+          // Store token and expiration
+          window.localStorage.setItem('apiToken', data.token);
+          window.localStorage.setItem('tokenExpires', new Date(data.expires_at).getTime().toString());
+          window.localStorage.setItem('adminEmail', data.email);
+          window.localStorage.setItem('adminRole', data.role);
+          window.localStorage.setItem('isAdmin', JSON.stringify(true));
+
+          // Check if password change is required
+          if (data.requires_password_change) {
+            this.router.navigate(['change-password']);
+          } else {
+            this.service.showAdminHome.next(true);
+            this.router.navigate(['adminHome']);
+          }
+        } else {
+          this.invalidText = true;
+          this.errorMessage = 'Invalid email or password';
+        }
+      },
+      error => {
+        console.log('[AdminLogin] error response', error);
+        this.isLoading = false;
+        this.invalidText = true;
+        if (error.status === 401) {
+          this.errorMessage = 'Invalid email or password';
+        } else {
+          this.errorMessage = 'Login failed. Please try again.';
+        }
+      }
+    );
+  }
+
+  legacyLogin() {
+    const passwordAttempt: string = this.legacyLoginForm.get('the_password').value;
+    this.isLoading = true;
+    this.invalidText = false;
+    this.errorMessage = '';
+
     this.service.attemptLogin(passwordAttempt)
       .pipe(takeUntil(this.destroy$))
       .subscribe((data: any) => {
-      console.log(data);
+      this.isLoading = false;
       if (data.token != null && data.token !== 'failedLogin') {
         window.localStorage.setItem('apiToken', data.token);
         window.localStorage.setItem('isAdmin', JSON.stringify(data.admin));
@@ -45,23 +123,33 @@ export class MainLoginComponent implements OnInit, OnDestroy {
           this.router.navigate(['adminHome']);
         }
         else if (data.volunteer) {
-          console.log('volunteer detected')
-          this.router.navigate(['admin/reports/routeUndeliveredItems']);
+          this.router.navigate(['login']);
         }
         else {
           this.router.navigate(['login']);
         }
       } else {
         this.invalidText = true;
+        this.errorMessage = 'Invalid password';
       }
     }, error => {
+      this.isLoading = false;
       this.invalidText = true;
+      this.errorMessage = 'Login failed. Please try again.';
     });
   }
 
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  login() {
+    if (this.isAdminLogin) {
+      this.adminLogin();
+    } else {
+      this.legacyLogin();
+    }
   }
 
 }

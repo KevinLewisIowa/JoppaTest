@@ -1,3 +1,8 @@
 .background-color {
     background-color: rgba(0, 0, 0, 0.08);
 }
+
+:host .float-right {
+    float: right !important;
+    margin-left: 8px;
+}

@@ -1,6 +1,6 @@
-import { throwError as observableThrowError } from "rxjs";
-import { Component, Injectable, OnInit, OnDestroy, Renderer2 } from "@angular/core";
-import { HttpHeaders, HttpClient } from "@angular/common/http";
+import { throwError as observableThrowError, forkJoin, of, Subject } from "rxjs";
+import { Component, OnInit, OnDestroy } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
 import { Route } from "../models/route";
 import { ActivatedRoute, Params } from "@angular/router";
 import { MainService } from "../services/main.service";
@@ -11,8 +11,6 @@ import { CampNote } from "app/models/camp-note";
 import { Appearance } from "app/models/appearance";
 import { ClientService } from "app/services/client.service";
 import { environment } from "environments/environment";
-import { Subject } from "rxjs";
-import { takeUntil } from "rxjs/operators";
 import {
   faQuestionCircle as farQuestionCircle,
   faCheckCircle as farCheckCircle,
@@ -31,10 +29,14 @@ import {
   faUserMinus,
   faFlag,
   faCamera,
-  faFire
+  faFire,
+  faSort,
+  faSortUp,
+  faSortDown
 } from "@fortawesome/free-solid-svg-icons";
 import { ClientDwelling } from "app/models/client-dwelling";
 import { Note } from "app/models/note";
+import { takeUntil, catchError, map } from "rxjs/operators";
 
 @Component({
   selector: "app-location-camp",
@@ -50,8 +52,8 @@ export class LocationCampComponent implements OnInit, OnDestroy {
   heatRoute: boolean = false;
   locationCampId: number;
   routeId: number;
-  numPeopleWithTanksAtCamp: number;
-  numberTanksAtCamp: number;
+  numPeopleWithTanksAtCamp: number = 0;
+  numberTanksAtCamp: number = 0;
   searchIcon = faSearch;
   createIcon = faPlus;
   backIcon = faChevronLeft;
@@ -69,6 +71,8 @@ export class LocationCampComponent implements OnInit, OnDestroy {
   cameraIcon = faCamera;
   informationIcon = faInfoCircle;
   isAdmin: boolean = false;
+  currentSortColumn: "name" | "lastInteraction" = "name";
+  currentSortDirection: "asc" | "desc" = "asc";
   clientsWithFulfilledItems: number[] = [];
   locationCampList: number[] = [];
   currentStopNumber: number;
@@ -97,180 +101,221 @@ export class LocationCampComponent implements OnInit, OnDestroy {
       this.mainService.showEndRoute.next(true);
     }
 
-    this.activatedRoute.params
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((params: Params) => {
-      this.locationCampId = this.activatedRoute.snapshot.params["id"];
+    this.routeAttendanceList = JSON.parse(window.localStorage.getItem("RouteAttendance")) || [];
+
+    this.activatedRoute.params.pipe(takeUntil(this.destroy$)).subscribe((params: Params) => {
+      this.locationCampId = +params["id"];
       localStorage.setItem("locationCampId", JSON.stringify(this.locationCampId));
       this.heatRoute = JSON.parse(window.localStorage.getItem("heatRoute"));
-
       this.routeId = JSON.parse(window.localStorage.getItem("routeId"));
+
       if (this.routeId) {
-        this.clientService.getClientAttendanceForRoute(this.routeId)
-          .pipe(takeUntil(this.destroy$))
-          .subscribe((attendanceInfo: Appearance[]) => {
-            window.localStorage.setItem('RouteAttendance', JSON.stringify(attendanceInfo));
-            this.routeAttendanceList = attendanceInfo;
-            console.log(`Attendance: ${JSON.stringify(attendanceInfo)}`);
-          });
+        this.loadRouteAttendance();
+      }
+
+      this.loadLocationCamp();
+    });
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  private loadLocationCamp(): void {
+    this.resetCampState();
+
+    this.mainService.getLocationCamp(this.locationCampId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((data) => {
+        this.locationCamp = data;
+        this.setExpectedArrivalTime();
+
+        if (!this.routeId) {
+          this.routeId = this.locationCamp.route_id;
+          window.localStorage.setItem("routeId", JSON.stringify(this.routeId));
+        }
 
         this.mainService.getRoute(this.routeId)
           .pipe(takeUntil(this.destroy$))
           .subscribe((route: Route) => {
-          this.route = route;
-          this.locationCampList = JSON.parse(window.localStorage.getItem("LocationCampIdList"));
+            this.route = route;
+            this.setLocationCampList();
+            this.loadRouteAttendance();
+            this.loadClientsForCamp();
+          }, error => console.log(error));
+      }, error => console.log(error));
+  }
 
-          if (this.locationCampList) {
-            let indexCurrCamp: number = this.locationCampList.findIndex(
-              (campId) => campId == this.locationCampId
-            );
-            this.currentStopNumber = indexCurrCamp + 1;
-            this.totalStopsAmount = this.locationCampList.length;
-          }
+  private resetCampState(): void {
+    this.clients = [];
+    this.campNotes = [];
+    this.clientsWithFulfilledItems = [];
+    this.numPeopleWithTanksAtCamp = 0;
+    this.numberTanksAtCamp = 0;
+    this.erroredClients = '';
+  }
 
-          this.mainService.getLocationCamp(this.locationCampId).subscribe((data) => {
-            this.locationCamp = data;
-            if (this.locationCamp.expected_arrival_time && this.locationCamp.expected_arrival_time != "") {
-              let timeArray: string[] = this.locationCamp.expected_arrival_time.split(":");
-              this.expectedArrivalTime = new Date(null, null, null, parseInt(timeArray[0]), parseInt(timeArray[1]));
+  private setExpectedArrivalTime(): void {
+    if (this.locationCamp.expected_arrival_time && this.locationCamp.expected_arrival_time !== "") {
+      const timeArray = this.locationCamp.expected_arrival_time.split(":");
+      this.expectedArrivalTime = new Date();
+      this.expectedArrivalTime.setHours(parseInt(timeArray[0]), parseInt(timeArray[1]), 0, 0);
+    }
+  }
+
+  private setLocationCampList(): void {
+    this.locationCampList = JSON.parse(window.localStorage.getItem("LocationCampIdList"));
+    if (this.locationCampList) {
+      const indexCurrCamp: number = this.locationCampList.findIndex(
+        (campId) => campId == this.locationCampId
+      );
+      this.currentStopNumber = indexCurrCamp + 1;
+      this.totalStopsAmount = this.locationCampList.length;
+    }
+  }
+
+  private loadClientsForCamp(): void {
+    this.mainService.getClientsForCamp(this.locationCampId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((data: Client[]) => {
+        if (!data || data.length === 0) {
+          this.clients = [];
+          this.loadCampNotes();
+          return;
+        }
+
+        this.loadClientsWithDwellings(data);
+
+        this.loadCampNotes();
+      }, error => console.log(error));
+  }
+
+  private loadCampNotes(): void {
+    this.mainService.getCampNotes(this.locationCampId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((data: CampNote[]) => {
+        this.campNotes = data.sort((a, b) => (a.created_at > b.created_at) ? 1 : -1);
+      }, error => console.log(error));
+  }
+
+  private loadClientsWithDwellings(campClients: Client[]): void {
+    const clientDetailRequests = campClients.map((client) =>
+      this.clientService.getClientDwellings(client.id).pipe(
+        map((data: ClientDwelling[]) => ({ client, dwellings: data })),
+        catchError((error) => {
+          console.log(error);
+          return of({ client, dwellings: [] });
+        })
+      )
+    );
+
+    forkJoin(clientDetailRequests)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((results) => {
+        const displayedClients: Client[] = [];
+
+        results.forEach(({ client, dwellings }) => {
+          const dwelling = this.findLatestDwelling(dwellings);
+          client.dwelling = dwelling;
+
+          if (!this.heatRoute || this.isHeatRouteDwelling(dwelling)) {
+            displayedClients.push(client);
+            if (this.heatRoute) {
+              this.numberTanksAtCamp += client.number_tanks || 0;
+              if (client.number_tanks > 0) {
+                this.numPeopleWithTanksAtCamp += 1;
+              }
             }
-
-            this.mainService.getClientsForCamp(this.locationCampId).subscribe((data: Client[]) => {
-              data.forEach(client => {
-                this.processClient(client);
-                this.clientService.getClientDwellings(client.id).subscribe((data: ClientDwelling[]) => {
-                  console.log(`${client.first_name} ${client.last_name}`);
-                  let pushClient: boolean = true;
-                  try {
-                    let dwellingDates = data.map(dwelling => dwelling.created_at);
-                    let dwelling: string = data.filter(dwelling => dwelling.created_at === dwellingDates.reduce((a, b) => a > b ? a : b))[0].dwelling;
-                    console.log(`Client: ${client.first_name} ${client.last_name}; Dwelling: ${dwelling}`);
-                    client.dwelling = data.filter(dwelling => dwelling.created_at === dwellingDates.reduce((a, b) => a > b ? a : b))[0].dwelling;
-                  } catch (e) {
-                    if (this.erroredClients == '') {
-                      this.erroredClients = `${client.first_name} ${client.last_name}`;
-                    } else {
-                      this.erroredClients += `,${client.first_name} ${client.last_name}`;
-                    }
-                    pushClient = false;
-                  }
-
-                  if (client.race == null || client.ethnicity == null || client.gender == "" || client.birth_date == null) {
-                    client.information_missing_or_unknown = "missing";
-                  } else if (client.race == "Data not collected" || client.ethnicity == "Data not collected") {
-                    client.information_missing_or_unknown = "unknown";
-                  } else {
-                    client.information_missing_or_unknown = "";
-                  }
-
-                  if (client.longitude != null && client.latitude != null) client.has_location = true;
-
-                  if (this.heatRoute) {
-                    if (client.dwelling == "Tent" || client.dwelling == "Garage" || client.dwelling == "Shack" || client.dwelling == "Camper" || client.dwelling == "Broken Down Van" && pushClient) {
-                      this.clients.push(client);
-                    }
-                    this.numberTanksAtCamp += client.number_tanks;
-                    if (client.number_tanks > 1) this.numPeopleWithTanksAtCamp += 1;
-                  }
-                  else {
-                    if (pushClient) this.clients.push(client);
-                  }
-
-                  this.clients.sort((a, b) => (a.first_name > b.first_name) ? 1 : -1)
-
-                  this.mainService.getClientHasFulfilledItems(client.id).subscribe((count: number) => {
-                    if (count > 0) {
-                      this.clientsWithFulfilledItems.push(client.id);
-                    }
-                  }, (error) => console.log(error));
-                }, (error) => console.log(error));
-              });
-
-              this.mainService.getCampNotes(this.locationCampId).subscribe((data: CampNote[]) => {
-                this.campNotes = data;
-                this.campNotes.sort((a, b) => (a.created_at > b.created_at) ? 1 : -1);
-              }, (error) => console.log(error));
-            }, (error) => console.log(error));
-          }, (error) => console.log(error));
-        }, (error) => console.log(error));
-      }
-      else {
-        this.mainService.getLocationCamp(this.locationCampId).subscribe((data) => {
-          this.locationCamp = data;
-
-          this.locationCampList = JSON.parse(window.localStorage.getItem("LocationCampIdList"));
-          if (this.locationCampList) {
-            let indexCurrCamp: number = this.locationCampList.findIndex(
-              (campId) => campId == this.locationCampId
-            );
-            this.currentStopNumber = indexCurrCamp + 1;
-            this.totalStopsAmount = this.locationCampList.length;
           }
 
-          if (this.locationCamp.expected_arrival_time && this.locationCamp.expected_arrival_time != "") {
-            let timeArray: string[] = this.locationCamp.expected_arrival_time.split(":");
-            this.expectedArrivalTime = new Date(null, null, null, parseInt(timeArray[0]), parseInt(timeArray[1]));
+          if (!dwelling) {
+            if (this.erroredClients === '') {
+              this.erroredClients = `${client.first_name} ${client.last_name}`;
+            } else {
+              this.erroredClients += `, ${client.first_name} ${client.last_name}`;
+            }
           }
+        });
 
-          window.localStorage.setItem("routeId", JSON.stringify(this.locationCamp.route_id));
-          this.mainService.getRoute(this.locationCamp.route_id).subscribe((data: Route) => {
-            this.route = data;
-            this.mainService.getClientsForCamp(this.locationCampId).subscribe((data: Client[]) => {
-              data.forEach(client => {
-                this.clientService.getClientDwellings(client.id).subscribe((data: ClientDwelling[]) => {
-                  let dwellingDates = data.map(dwelling => dwelling.created_at);
-                  client.dwelling = data.filter(dwelling => dwelling.created_at === dwellingDates.reduce((a, b) => a > b ? a : b))[0].dwelling;
+        this.clients = displayedClients;
+        this.applyCurrentClientSort();
+        this.loadClientDetails(this.clients);
+      }, error => console.log(error));
+  }
 
-                  if (this.heatRoute) {
-                    if (client.dwelling == "Tent" || client.dwelling == "Garage" || client.dwelling == "Shack" || client.dwelling == "Camper" || client.dwelling == "Broken Down Van") {
-                      console.log(JSON.stringify(client));
-                      this.clients.push(client);
-                    }
-                    this.numberTanksAtCamp += client.number_tanks;
-                    if (client.number_tanks > 0) this.numPeopleWithTanksAtCamp += 1;
-                  }
-                  else {
-                    this.clients.push(client);
-                  }
 
-                  this.clients = this.clients.sort((a, b) => (a.first_name > b.first_name) ? 1 : -1);
-                  this.campNotes.sort((a, b) => (a.created_at > b.created_at) ? 1 : -1);
+  sortClients(column: "name" | "lastInteraction"): void {
+    if (this.currentSortColumn === column) {
+      this.currentSortDirection = this.currentSortDirection === "asc" ? "desc" : "asc";
+    } else {
+      this.currentSortColumn = column;
+      this.currentSortDirection = column === "lastInteraction" ? "desc" : "asc";
+    }
 
-                  this.mainService.getClientHasFulfilledItems(client.id).subscribe((count: number) => {
-                    if (count > 0) {
-                      this.clientsWithFulfilledItems.push(client.id);
-                    }
-                  }, (error) => console.log(error));
-                }, (error) => console.log(error));
-              });
+    this.applyCurrentClientSort();
+  }
 
-              this.mainService.getCampNotes(this.locationCampId).subscribe((data: CampNote[]) => {
-                this.campNotes = data;
-              }, (error) => console.log(error));
+  getSortIcon(column: "name" | "lastInteraction"): IconDefinition {
+    if (this.currentSortColumn !== column) {
+      return faSort;
+    }
 
-              //   if (this.heatRoute) {
-              //     this.clients = data.filter((client) => client.dwelling == "Tent" || client.dwelling == "Garage" || client.dwelling == "Shack" || client.dwelling == "Camper");
-              //     this.numberTanksAtCamp = this.clients.reduce(function (prevValue, currClient) {
-              //       return prevValue + currClient.number_tanks;
-              //     }, 0);
-              //     this.numPeopleWithTanksAtCamp = this.clients.filter(
-              //       (client) => client.number_tanks > 0
-              //     ).length;
+    return this.currentSortDirection === "asc" ? faSortUp : faSortDown;
+  }
 
-              //     this.checkClientHasFulfilledItems();
-              //   }
-              //   else {
-              //     this.clients = data;
+  private applyCurrentClientSort(): void {
+    this.clients = [...this.clients].sort((a, b) => {
+      const direction = this.currentSortDirection === "asc" ? 1 : -1;
 
-              //     this.checkClientHasFulfilledItems();
-              //   }
-              // });
-
-            }, (error) => console.log(error));
-          }, (error) => console.log(error));
-        }, (error) => console.log(error));
+      if (this.currentSortColumn === "name") {
+        const leftName = `${a.first_name || ""} ${a.last_name || ""}`.trim().toLowerCase();
+        const rightName = `${b.first_name || ""} ${b.last_name || ""}`.trim().toLowerCase();
+        return leftName.localeCompare(rightName) * direction;
       }
-    }, (error) => console.log(error));
+
+      const leftDate = a.last_interaction_date ? new Date(a.last_interaction_date).getTime() : 0;
+      const rightDate = b.last_interaction_date ? new Date(b.last_interaction_date).getTime() : 0;
+      return (leftDate - rightDate) * direction;
+    });
+  }
+
+  private findLatestDwelling(dwellings: ClientDwelling[]): string {
+    if (!Array.isArray(dwellings) || dwellings.length === 0) {
+      return undefined;
+    }
+
+    const latest = dwellings.reduce((latestDwelling, current) => {
+      if (!latestDwelling || current.created_at > latestDwelling.created_at) {
+        return current;
+      }
+      return latestDwelling;
+    }, null as ClientDwelling);
+
+    return latest?.dwelling;
+  }
+
+  private isHeatRouteDwelling(dwelling: string): boolean {
+    return ["Tent", "Garage", "Shack", "Camper", "Broken Down Van"].includes(dwelling);
+  }
+
+  private loadClientDetails(clients: Client[]): void {
+    clients.forEach((client) => this.processClient(client));
+    this.checkClientHasFulfilledItems();
+  }
+
+  private loadRouteAttendance(): void {
+    if (!this.routeId) {
+      return;
+    }
+
+    this.clientService.getClientAttendanceForRoute(this.routeId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((attendanceInfo: Appearance[]) => {
+        window.localStorage.setItem('RouteAttendance', JSON.stringify(attendanceInfo));
+        this.routeAttendanceList = attendanceInfo;
+        console.log(`Attendance: ${JSON.stringify(attendanceInfo)}`);
+      }, error => console.log(error));
   }
 
   editedCamp(theCamp: LocationCamp) {
@@ -285,6 +330,7 @@ export class LocationCampComponent implements OnInit, OnDestroy {
 
   clientSelected(client: Client) {
     this.clients.push(client);
+    this.applyCurrentClientSort();
     client.is_aftercare = this.route.is_aftercare;
 
     // build a new appearance record based on who is adding the client
@@ -293,17 +339,24 @@ export class LocationCampComponent implements OnInit, OnDestroy {
     clientInteraction.location_camp_id = JSON.parse(
       this.activatedRoute.snapshot.params["id"]
     );
+    const isWeekendOutreach = this.isWeekendOutreach();
     // everyone who is manually added is assumed to still live here
     clientInteraction.still_lives_here = true;
     // we never want to mark them at a resource center when they are being
     // added to a stop (this field may be updated elsewhere if needed)
     clientInteraction.at_homeless_resource_center = false;
-    if (this.isAdmin) {
+    if (isWeekendOutreach) {
+      clientInteraction.was_seen = true;
+      clientInteraction.serviced = true;
+      clientInteraction.still_lives_here = false;
+      clientInteraction.serviced_date = new Date();
+    } else if (this.isAdmin) {
       // admins are simply recording that the client belongs at this stop;
       // they are not "seeing" or "servicing" the person right now.
       clientInteraction.was_seen = false;
       clientInteraction.serviced = false;
-      // no serviced_date in this case
+      // give it a serviced_date so it shows in attendance history
+      clientInteraction.serviced_date = new Date();
     } else {
       // volunteers automatically mark the client as seen/serviced
       clientInteraction.was_seen = true;
@@ -315,7 +368,7 @@ export class LocationCampComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe((data: Appearance) => {
       console.log("Inserted client appearance " + JSON.stringify(data));
-      if (!this.isAdmin) {
+      if (!this.isAdmin || isWeekendOutreach) {
         clientInteraction.id = data.id;
         // routeAttendanceList.push(clientInteraction);
         // window.localStorage.setItem(
@@ -483,7 +536,15 @@ export class LocationCampComponent implements OnInit, OnDestroy {
   }
 
   createClient() {
-    this.router.navigate(["/createClient"]);
+    this.router.navigate(["/createClient"], {
+      state: { isWeekendOutreach: this.isWeekendOutreach() }
+    });
+  }
+
+  private isWeekendOutreach(): boolean {
+    const dayOfWeek = new Date().getDay();
+    return !this.heatRoute && !this.route.is_aftercare &&
+      (dayOfWeek === 0 || dayOfWeek === 6);
   }
 
   campNoteAdded(note: CampNote) {
@@ -671,8 +732,4 @@ export class LocationCampComponent implements OnInit, OnDestroy {
     return observableThrowError(errMsg);
   }
 
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
 }

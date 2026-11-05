@@ -2,10 +2,13 @@
   <div class="card-header">
     <h2>Undelivered Items</h2>
   </div>
-  <div class="panel-body">
-    <mat-form-field appearance="standard">
+  <div class="panel-body" style="display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap;">
+    <mat-form-field appearance="standard" style="flex:1; min-width:220px;">
       <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter" #input>
     </mat-form-field>
+    <button *ngIf="isAdmin" class="btn btn-danger" [disabled]="selectedItemIds.size === 0" type="button" (click)="deleteSelectedItems()">
+      Delete Selected
+    </button>
   </div>
   <div class="panel-body">
     <div>
@@ -14,6 +17,15 @@
         <ng-container matColumnDef="name">
           <mat-header-cell *matHeaderCellDef mat-sort-header>Route</mat-header-cell>
           <mat-cell *matCellDef="let row">{{row.name}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="select" *ngIf="isAdmin">
+          <mat-header-cell *matHeaderCellDef>
+            <input type="checkbox" [checked]="allSelected()" (change)="toggleSelectAll($event.target.checked)" />
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            <input type="checkbox" [checked]="isSelected(row)" (change)="toggleItemSelection(row, $event.target.checked)" />
+          </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="preferred_name">

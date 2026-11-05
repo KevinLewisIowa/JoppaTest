@@ -6,6 +6,7 @@ import { ClientService } from "../services/client.service";
 import { Appearance } from "../models/appearance";
 import { Router } from "@angular/router";
 import { Client } from "../models/client";
+import { ClientDwelling } from "app/models/client-dwelling";
 import { LocationCamp } from "app/models/location-camp";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
@@ -16,7 +17,6 @@ import {
   faInfoCircle,
   faCheckCircle,
 } from "@fortawesome/free-solid-svg-icons";
-import { ClientDwelling } from "app/models/client-dwelling";
 
 @Component({
   selector: "app-locations",
@@ -40,6 +40,7 @@ export class LocationsComponent implements OnInit, OnDestroy {
   totalDogsForRoute: number = 0;
   totalCatsForRoute: number = 0;
   private destroy$ = new Subject<void>();
+  private _destroyed: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -100,7 +101,12 @@ export class LocationsComponent implements OnInit, OnDestroy {
                         });
 
                         this.locationCamps = sortedlocations;
-                        this.calculatePetCounts(sortedlocations);
+                        this.mainService.getRoutePetCounts(this.routeId)
+                          .pipe(takeUntil(this.destroy$))
+                          .subscribe((counts: any) => {
+                            this.totalDogsForRoute = counts?.totals?.dogs ?? 0;
+                            this.totalCatsForRoute = counts?.totals?.cats ?? 0;
+                          }, error => console.log("Error fetching route pet counts:", error));
                         let locationCampIdList: number[] = [];
                         sortedlocations.forEach((loc: LocationCamp) => {
                           locationCampIdList.push(loc.id);
@@ -230,6 +236,7 @@ export class LocationsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this._destroyed = true;
     this.destroy$.next();
     this.destroy$.complete();
   }
@@ -270,30 +277,5 @@ export class LocationsComponent implements OnInit, OnDestroy {
         console.log(routeUrl);
         window.open(routeUrl, "_blank");
       });
-  }
-
-  calculatePetCounts(camps: LocationCamp[]) {
-    this.totalDogsForRoute = 0;
-    this.totalCatsForRoute = 0;
-
-    camps.forEach((camp: LocationCamp) => {
-      this.mainService.getClientsForCamp(camp.id).pipe(
-        takeUntil(this.destroy$)
-      ).subscribe((clients: Client[]) => {
-        clients.forEach((client: Client) => {
-          this.clientService.getClientPets(client.id).pipe(
-            takeUntil(this.destroy$)
-          ).subscribe((pets: any[]) => {
-            pets.forEach((pet: any) => {
-              if (pet.pet_type === "Dog") {
-                this.totalDogsForRoute++;
-              } else if (pet.pet_type === "Cat") {
-                this.totalCatsForRoute++;
-              }
-            });
-          }, error => console.log("Error fetching pets:", error));
-        });
-      }, error => console.log("Error fetching clients:", error));
-    });
   }
 }

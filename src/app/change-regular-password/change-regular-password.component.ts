@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MainService } from 'app/services/main.service';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -15,6 +15,10 @@ export class ChangeRegularPasswordComponent implements OnInit, OnDestroy {
   passwordForm: UntypedFormGroup;
   backIcon = faChevronLeft;
   private destroy$ = new Subject<void>();
+  eyeIcon = faEye;
+  eyeSlashIcon = faEyeSlash;
+  showNewPassword = false;
+  showConfirmPassword = false;
   constructor(private mainService: MainService, private fb: UntypedFormBuilder,
     private router: Router) { }
 

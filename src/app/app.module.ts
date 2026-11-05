@@ -63,6 +63,7 @@ import { AdminReportsComponent } from "./admin-reports/admin-reports.component";
 import { NewClientsReportComponent } from "./admin-reports/new-clients-report/new-clients-report.component";
 import { ClientLocationModalComponent } from "./client-location-modal/client-location-modal.component";
 import { MainLoginComponent } from "./main-login/main-login.component";
+import { ChangePasswordComponent } from "./change-password/change-password.component";
 import { RouteMapComponent } from "./route-map/route-map.component";
 import { NotesComponent } from "./insert-modals/notes/notes.component";
 import { RouteSummaryReportComponent } from "./admin-reports/route-summary-report/route-summary-report.component";
@@ -101,7 +102,9 @@ import { PhoneFormatPipe } from './pipes/phone-format.pipe';
 import { ClientMailboxComponent } from './insert-modals/client-mailbox/client-mailbox.component';
 import { AuthorizedMailAccessComponent } from './insert-modals/authorized-mail-access/authorized-mail-access.component';
 import { ClientBarrierComponent } from './insert-modals/client-barrier/client-barrier.component';
+import { ClientDisabilityAndDisorderComponent } from './insert-modals/client-disability-and-disorder/client-disability-and-disorder.component';
 import { AdminMergeDuplicatesComponent } from './admin-merge-duplicates/admin-merge-duplicates.component';
+import { VitalRecordComponent } from './insert-modals/vital-record/vital-record.component';
 
 const reducers = {
   user: MainReducer,
@@ -147,6 +150,7 @@ const reducers = {
         NewClientsReportComponent,
         ClientLocationModalComponent,
         MainLoginComponent,
+        ChangePasswordComponent,
         RouteMapComponent,
         NotesComponent,
         RouteSummaryReportComponent,
@@ -183,7 +187,9 @@ const reducers = {
     ClientMailboxComponent,
     AuthorizedMailAccessComponent,
     ClientBarrierComponent,
-    AdminMergeDuplicatesComponent
+    ClientDisabilityAndDisorderComponent,
+    AdminMergeDuplicatesComponent,
+    VitalRecordComponent
   ],
     imports: [
         BrowserModule,

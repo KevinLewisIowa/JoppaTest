@@ -22,16 +22,31 @@ export class MainService {
   public showAdminHome: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
     false
   );
-  private apiUrl = environment.api_url;
+  private apiUrl = (environment.api_url || '').replace(/\/+$/, '/') || '/';
+
+  private buildApiUrl(path: string): string {
+    const normalizedBase = (environment.api_url || '').replace(/\/+$/, '');
+    const normalizedPath = path.replace(/^\/+/, '');
+    return `${normalizedBase}/${normalizedPath}`;
+  }
 
   constructor(private http: HttpClient, private router: Router) {
     console.log(this.apiUrl);
   }
-  getRoutes() {
-    const myHeader = new HttpHeaders({
+  private buildAuthHeaders(): HttpHeaders {
+    const token = window.localStorage.getItem("apiToken");
+    if (token) {
+      return new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: token,
+      });
+    }
+    return new HttpHeaders({
       "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
     });
+  }
+  getRoutes() {
+    const myHeader = this.buildAuthHeaders();
     return this.http.get(this.apiUrl + `routes`, { headers: myHeader }).pipe(
       map((res: any) => {
         if (res.message === "invalid-token") {
@@ -45,10 +60,7 @@ export class MainService {
   }
 
   getRouteById(id: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http.get(this.apiUrl + `routes/${id}`, { headers: myHeader }).pipe(
       map((res: any) => {
         if (res.message === "invalid-token") {
@@ -62,10 +74,7 @@ export class MainService {
   }
 
   attemptLogin(thePassword: string) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .get(this.apiUrl + `attemptLogin?passWrd=${thePassword}`)
       .pipe(
@@ -77,10 +86,7 @@ export class MainService {
   }
 
   getTheRoutes() {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http.get(this.apiUrl + `routes`, { headers: myHeader }).pipe(
       map((res: any) => {
         if (res.message === "invalid-token") {
@@ -94,14 +100,12 @@ export class MainService {
   }
 
   getRouteInstancesForDate(date: Date, routeId: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
 
     return this.http
       .get(
-        this.apiUrl + `getRouteInstancesForDate?date=${date}&routeId=${routeId}`
+        this.apiUrl + `getRouteInstancesForDate?date=${date}&routeId=${routeId}`,
+        { headers: myHeader }
       )
       .pipe(
         map((res: any) => {
@@ -116,14 +120,12 @@ export class MainService {
   }
 
   getActiveRouteInstanceForRoute(routeId: number, heatRoute: boolean) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
 
     return this.http
       .get(
-        this.apiUrl + `getActiveRouteInstanceForRoute?routeId=${routeId}&heatRoute=${heatRoute}`
+        this.apiUrl + `getActiveRouteInstanceForRoute?routeId=${routeId}&heatRoute=${heatRoute}`,
+        { headers: myHeader }
       )
       .pipe(
         map((res: any) => {
@@ -138,15 +140,13 @@ export class MainService {
   }
 
   getLatestRouteInstanceInfoForRoute(routeInstanceId: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
 
     return this.http
       .get(
         this.apiUrl +
-        `getRouteSummaryInfoForRoute?routeInstanceId=${routeInstanceId}`
+        `getRouteSummaryInfoForRoute?routeInstanceId=${routeInstanceId}`,
+        { headers: myHeader }
       )
       .pipe(
         map((res: any) => {
@@ -161,12 +161,9 @@ export class MainService {
   }
 
   getInventorySummary() {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
 
-    return this.http.get(this.apiUrl + `getAdminInventoryReport?`).pipe(
+    return this.http.get(this.apiUrl + `getAdminInventoryReport?`, { headers: myHeader }).pipe(
       map((res: any) => {
         if (res.message === "invalid-token") {
           window.localStorage.removeItem("apiToken");
@@ -179,12 +176,9 @@ export class MainService {
   }
 
   mergeDuplicateClient(duplicateClientId: number, activeClientId: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
 
-    return this.http.get(this.apiUrl + `removeDuplicateClient?duplicateClientId=${duplicateClientId}&activeClientId=${activeClientId}`).pipe(
+    return this.http.get(this.apiUrl + `removeDuplicateClient?duplicateClientId=${duplicateClientId}&activeClientId=${activeClientId}`, { headers: myHeader }).pipe(
       map((res: any) => {
         if (res.message === "invalid-token") {
           window.localStorage.removeItem("apiToken");
@@ -197,15 +191,13 @@ export class MainService {
   }
 
   getNotesForRouteInstance(routeInstanceId: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
 
     return this.http
       .get(
         this.apiUrl +
-        `getNotesForRouteInstance?routeInstanceId=${routeInstanceId}`
+        `getNotesForRouteInstance?routeInstanceId=${routeInstanceId}`,
+        { headers: myHeader }
       )
       .pipe(
         map((res: any) => {
@@ -220,12 +212,9 @@ export class MainService {
   }
 
   getHeatEquipmentPerRoute() {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
 
-    return this.http.get(this.apiUrl + `getHeatEquipmentPerRoute`).pipe(
+    return this.http.get(this.apiUrl + `getHeatEquipmentPerRoute`, { headers: myHeader }).pipe(
       map((res: any) => {
         if (res.message === "invalid-token") {
           window.localStorage.removeItem("apiToken");
@@ -238,10 +227,7 @@ export class MainService {
   }
 
   insertRoute(theRoute: Route) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .post(this.apiUrl + `routes`, { route: theRoute }, { headers: myHeader })
       .pipe(
@@ -257,10 +243,7 @@ export class MainService {
   }
 
   insertCampNote(theNote: CampNote) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .post(
         this.apiUrl + `location_camp_notes`,
@@ -280,10 +263,7 @@ export class MainService {
   }
 
   updateCampNote(note: CampNote) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .patch(
         this.apiUrl + `location_camp_notes/${note.id}`,
@@ -303,10 +283,7 @@ export class MainService {
   }
 
   getCampNotes(id: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .get(this.apiUrl + `getCampNotes?locationCampId=${id}`, {
         headers: myHeader,
@@ -324,10 +301,7 @@ export class MainService {
   }
 
   removeCampNote(id: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .delete(this.apiUrl + `location_camp_notes/${id}`, { headers: myHeader })
       .pipe(
@@ -339,10 +313,7 @@ export class MainService {
   }
 
   setNewPassword(thePassword: string) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .get(this.apiUrl + `setNewPassword?pswrd=${thePassword}`, {
         headers: myHeader,
@@ -362,10 +333,7 @@ export class MainService {
   insertRouteInstanceTankHoseInteraction(
     theRouteInstanceTanksHoses: RouteInstanceTankHoseInteraction
   ) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .post(
         this.apiUrl + `route_instance_tank_hose_interactions`,
@@ -385,10 +353,7 @@ export class MainService {
   }
 
   insertRouteInstance(routeInstance: RouteInstance): any {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .post(
         this.apiUrl + `route_instances`,
@@ -408,10 +373,7 @@ export class MainService {
   }
 
   insertLocationCamp(theLocationCamp: LocationCamp) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .post(
         this.apiUrl + `location_camps`,
@@ -433,10 +395,7 @@ export class MainService {
   checkoutHeater(
     theRouteInstanceHeaterInteraction: RouteInstanceHeaterInteraction
   ) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .post(
         this.apiUrl + `route_instance_heater_interactions`,
@@ -458,10 +417,7 @@ export class MainService {
   }
 
   updateCampRoutePosition(campId: number, routeId: number, position: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http.get(this.apiUrl + `updateCampRoutePosition?campId=${campId}&routeId=${routeId}&position=${position}`, { headers: myHeader }).pipe(map((res: any) => {
       if (res.message === "invalid-token") {
         window.localStorage.removeItem("apiToken");
@@ -474,10 +430,7 @@ export class MainService {
   }
 
   updateLocationCamp(theLocationCamp: LocationCamp) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .patch(
         this.apiUrl + `location_camps/${theLocationCamp.id}`,
@@ -498,10 +451,7 @@ export class MainService {
 
   updateRequestedItem(theItem: RequestedItem) {
     console.log("requestedItem to update: " + JSON.stringify(theItem));
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .patch(
         this.apiUrl + `requested_items/${theItem.id}`,
@@ -521,10 +471,7 @@ export class MainService {
   }
 
   updateRoute(theRoute: Route) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .patch(
         this.apiUrl + `routes/${theRoute.id}`,
@@ -544,10 +491,7 @@ export class MainService {
   }
 
   updateRouteInstance(theRouteInstance: RouteInstance) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .patch(
         this.apiUrl + `route_instances/${theRouteInstance.id}`,
@@ -569,10 +513,7 @@ export class MainService {
   updateRouteInstanceTankHoseInteraction(
     theRouteInstanceTanksHoses: RouteInstanceTankHoseInteraction
   ) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .patch(
         this.apiUrl +
@@ -601,10 +542,7 @@ export class MainService {
   updateRouteInstanceHeaterInteraction(
     theRouteInstanceHeaterInteraction: RouteInstanceHeaterInteraction
   ) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .patch(
         this.apiUrl +
@@ -631,10 +569,7 @@ export class MainService {
   }
 
   getClientHasFulfilledItems(clientId: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .get(this.apiUrl + `getClientHasFulfilledItems?clientId=${clientId}`, {
         headers: myHeader,
@@ -652,10 +587,7 @@ export class MainService {
   }
 
   isHeaterCheckedOutOnOtherRoute(heaterId: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .get(
         this.apiUrl + `isHeaterCheckedOutOnOtherRoute?heaterId=${heaterId}`,
@@ -674,10 +606,7 @@ export class MainService {
   }
 
   insertHeater(theHeater: Heater) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .post(
         this.apiUrl + `heaters`,
@@ -696,11 +625,8 @@ export class MainService {
       );
   }
 
-  getRoute(id) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+  getRoute(id: number) {
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .get(this.apiUrl + `routes/${id}`, { headers: myHeader })
       .pipe(
@@ -716,10 +642,7 @@ export class MainService {
   }
 
   getCampListing() {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .get(this.apiUrl + `getCampListing`, { headers: myHeader })
       .pipe(
@@ -735,10 +658,7 @@ export class MainService {
   }
 
   getCampsForRoute(id: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .get(this.apiUrl + `getCampsForRoute?routeId=${id}`, {
         headers: myHeader,
@@ -756,10 +676,7 @@ export class MainService {
   }
 
   getClientCountForRoute(id: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .get(this.apiUrl + `getClientCountForRoute?routeId=${id}`, {
         headers: myHeader,
@@ -776,11 +693,28 @@ export class MainService {
       );
   }
 
+  /**
+   * Fetch aggregated pet counts for a route.
+   * Expected backend JSON: { dogs: number, cats: number, per_camp: { [campId]: { dogs: n, cats: m } } }
+   */
+  getRoutePetCounts(routeId: number) {
+    const myHeader = this.buildAuthHeaders();
+    return this.http
+      .get(this.apiUrl + `getRoutePetCounts?routeId=${routeId}`, { headers: myHeader })
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
   getRouteInstance(id: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .get(this.apiUrl + `route_instances/${id}`, { headers: myHeader })
       .pipe(
@@ -796,10 +730,7 @@ export class MainService {
   }
 
   getCheckedOutHeaters(id: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .get(this.apiUrl + `getCheckedOutHeaters?routeInstanceId=${id}`, {
         headers: myHeader,
@@ -817,10 +748,7 @@ export class MainService {
   }
 
   getClientsForCamp(id: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .get(this.apiUrl + `getClientsForCamp?locationCampId=${id}`, {
         headers: myHeader,
@@ -838,10 +766,7 @@ export class MainService {
   }
 
   getRouteCampsLongLat(id: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .get(this.apiUrl + `getRouteCampsLongLat?routeId=${id}`, {
         headers: myHeader,
@@ -859,10 +784,7 @@ export class MainService {
   }
 
   getLocationCamp(id: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .get(this.apiUrl + `location_camps/${id}`, { headers: myHeader })
       .pipe(
@@ -878,10 +800,7 @@ export class MainService {
   }
 
   getAdminRouteNumberMeals() {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .get(this.apiUrl + `getAdminRouteNumberMeals`, { headers: myHeader })
       .pipe(
@@ -897,10 +816,7 @@ export class MainService {
   }
 
   getAdminRouteUndeliveredItems() {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .get(this.apiUrl + `getAdminRouteUndeliveredItems`, { headers: myHeader })
       .pipe(
@@ -916,10 +832,7 @@ export class MainService {
   }
 
   getAdminRouteUnfulfilledGoalsNextSteps() {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .get(this.apiUrl + `getAdminRouteUnfulfilledGoalsNextSteps`, {
         headers: myHeader,
@@ -937,10 +850,7 @@ export class MainService {
   }
 
   getAdminRouteUnfulfilledPrayerRequestsNeeds(filterDate: string) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
 
     // Pass the filterDate as a query parameter
     return this.http
@@ -960,10 +870,7 @@ export class MainService {
   }
 
   getHeaterListing() {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .get(this.apiUrl + `getHeaterListing`, { headers: myHeader })
       .pipe(
@@ -979,10 +886,7 @@ export class MainService {
   }
 
   getTankListing() {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .get(this.apiUrl + `getTankListing`, { headers: myHeader })
       .pipe(
@@ -998,10 +902,7 @@ export class MainService {
   }
 
   getHoseListing() {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .get(this.apiUrl + `getHoseListing`, { headers: myHeader })
       .pipe(
@@ -1017,10 +918,7 @@ export class MainService {
   }
 
   getHeaterTypes() {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .get(this.apiUrl + `getHeaterTypes`, { headers: myHeader })
       .pipe(
@@ -1036,10 +934,7 @@ export class MainService {
   }
 
   getHeaterStatuses() {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .get(this.apiUrl + `getHeaterStatuses`, { headers: myHeader })
       .pipe(
@@ -1055,10 +950,7 @@ export class MainService {
   }
 
   getSeenServicedReport(fromDate: Date, toDate: Date) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .get(
         this.apiUrl +
@@ -1078,10 +970,7 @@ export class MainService {
   }
 
   getFirstTimeHomelessnessReport() {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .get(this.apiUrl + `getFirstTimeHomelessnessReport`, {
         headers: myHeader,
@@ -1103,10 +992,7 @@ export class MainService {
     fromDate: string,
     toDate: string
   ) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .get(
         this.apiUrl +
@@ -1126,10 +1012,7 @@ export class MainService {
   }
 
   checkInAllHeaters() {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .get(this.apiUrl + `checkInAllHeaters`, { headers: myHeader })
       .pipe(
@@ -1145,10 +1028,7 @@ export class MainService {
   }
 
   getAvailableHeaters(routeInstanceId: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .get(
         this.apiUrl + `getAvailableHeaters?routeInstanceId=${routeInstanceId}`,
@@ -1169,10 +1049,7 @@ export class MainService {
   getRouteInstanceHeaterInteractions(): Observable<
     RouteInstanceHeaterInteraction[]
   > {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .get(this.apiUrl + `route_instance_heater_interactions`, {
         headers: myHeader,
@@ -1190,10 +1067,7 @@ export class MainService {
   }
 
   removeRouteInstanceHeaterInteraction(id: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .delete(this.apiUrl + `route_instance_heater_interactions/${id}`, {
         headers: myHeader,
@@ -1209,10 +1083,7 @@ export class MainService {
   checkInHeater(
     theRouteInstanceHeaterInteraction: RouteInstanceHeaterInteraction
   ) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .patch(
         this.apiUrl +
@@ -1235,10 +1106,7 @@ export class MainService {
   }
 
   getOverallAttendanceReport(startDate: string, endDate: string) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .get(
         this.apiUrl +
@@ -1257,7 +1125,110 @@ export class MainService {
       );
   }
 
+  // NEW ADMIN LOGIN METHODS
+  
+  /**
+   * Attempt admin login with email and password
+   */
+  attemptAdminLogin(email: string, password: string) {
+    const loginUrl = this.buildApiUrl('admin_login');
+    console.log('[MainService] admin login request', {
+      url: loginUrl,
+      email
+    });
+
+    return this.http
+      .post(loginUrl, { email, password })
+      .pipe(
+        map((response: any) => {
+          console.log('[MainService] admin login response', response);
+          if (response.message === "invalid-token" || response.message === "token-expired") {
+            window.localStorage.removeItem("apiToken");
+            window.localStorage.removeItem("tokenExpires");
+            this.router.navigate(["/application-login"]);
+          }
+          return response;
+        }),
+        catchError((error) => {
+          console.log('[MainService] admin login http error', error);
+          return this.handleError(error);
+        })
+      );
+  }
+
+  /**
+   * Change admin password
+   */
+  changeAdminPassword(passwordData: { current_password: string; new_password: string; confirm_password: string }) {
+    const myHeader = this.buildAuthHeaders();
+    const changePasswordUrl = this.buildApiUrl('admin_profile/change_password');
+    console.log('[MainService] change password request', {
+      url: changePasswordUrl,
+      hasToken: !!window.localStorage.getItem('apiToken')
+    });
+
+    return this.http
+      .patch(changePasswordUrl, passwordData, { headers: myHeader })
+      .pipe(
+        map((response: any) => {
+          if (response.message === "invalid-token" || response.message === "token-expired") {
+            window.localStorage.removeItem("apiToken");
+            window.localStorage.removeItem("tokenExpires");
+            this.router.navigate(["/application-login"]);
+          }
+          return response;
+        }),
+        catchError((error) => {
+          console.log('[MainService] change password http error', {
+            status: error.status,
+            url: error.url,
+            body: error.error
+          });
+          return this.handleError(error);
+        })
+      );
+  }
+
+  /**
+   * Get current admin profile information
+   */
+  getAdminProfile() {
+    const myHeader = this.buildAuthHeaders();
+    return this.http
+      .get(this.apiUrl + `admin_profile`, { headers: myHeader })
+      .pipe(
+        map((response: any) => {
+          if (response.message === "invalid-token" || response.message === "token-expired") {
+            window.localStorage.removeItem("apiToken");
+            window.localStorage.removeItem("tokenExpires");
+            this.router.navigate(["/application-login"]);
+          }
+          return response;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  /**
+   * Check if admin token is expired
+   */
+  isTokenExpired(): boolean {
+    const expiresAt = window.localStorage.getItem("tokenExpires");
+    if (!expiresAt) {
+      return true;
+    }
+    return new Date().getTime() >= parseInt(expiresAt, 10);
+  }
+
   private handleError(error: any): Promise<any> {
+    if (error.status === 401 || error.error?.type === "invalid-token" || error.error?.type === "token-expired") {
+      window.localStorage.removeItem("apiToken");
+      window.localStorage.removeItem("tokenExpires");
+      window.localStorage.removeItem("adminEmail");
+      window.localStorage.removeItem("adminRole");
+      window.localStorage.removeItem("isAdmin");
+      this.router.navigate(["/application-login"]);
+    }
     console.error("An error occurred", error); // for demo purposes only
     return Promise.reject(error.message || error);
   }

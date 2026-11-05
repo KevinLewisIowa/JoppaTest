@@ -99,6 +99,9 @@ export class ClientEditComponent implements OnInit, AfterViewChecked, OnDestroy 
       otherReasonForDesMoines: '',
       city_before_homelessness: 'Des Moines',
       state_before_homelessness: 'IA',
+      hometown: '',
+      city_grew_up_in: '',
+      family_currently_lives_in: '',
       homeless_history_note: '',
       where_sleep_last_night: ''
     });
@@ -292,6 +295,27 @@ export class ClientEditComponent implements OnInit, AfterViewChecked, OnDestroy 
     });
   }
 
+  private navigateToCreatedClient(clientId: number) {
+    localStorage.setItem('selectedClient', JSON.stringify(clientId));
+    this.router.navigate(['/serviceClient']);
+  }
+
+  private setClientAttendance(clientInteraction: Appearance, isWeekendOutreach: boolean): void {
+    clientInteraction.still_lives_here = !isWeekendOutreach;
+    if (isWeekendOutreach) {
+      clientInteraction.was_seen = true;
+      clientInteraction.serviced = true;
+      clientInteraction.serviced_date = new Date();
+    } else if (this.isAdmin) {
+      clientInteraction.was_seen = false;
+      clientInteraction.serviced = false;
+    } else {
+      clientInteraction.was_seen = true;
+      clientInteraction.serviced = true;
+      clientInteraction.serviced_date = new Date();
+    }
+  }
+
   submitClient() {
     this.theClient.first_name = String(this.clientForm.get('first_name').value).trim();
     this.theClient.middle_name = String(this.clientForm.get('middle_name').value).trim();
@@ -314,6 +338,9 @@ export class ClientEditComponent implements OnInit, AfterViewChecked, OnDestroy 
     this.theClient.race = this.clientForm.get('race').value;
     this.theClient.ethnicity = this.clientForm.get('ethnicity').value;
     this.theClient.admin_notes = String(this.clientForm.get('admin_notes').value).trim();
+    this.theClient.hometown = String(this.clientForm.get('hometown').value).trim();
+    this.theClient.city_grew_up_in = String(this.clientForm.get('city_grew_up_in').value).trim();
+    this.theClient.family_currently_lives_in = String(this.clientForm.get('family_currently_lives_in').value).trim();
     this.theClient.last_interaction_date = new Date();
     this.theClient.client_picture = this.byteArray;
     this.theClient.diagnosed_mental_physical_disability = this.clientForm.get('diagnosed_mental_physical_disability').value;
@@ -408,21 +435,12 @@ export class ClientEditComponent implements OnInit, AfterViewChecked, OnDestroy 
       const clientInteraction: Appearance = new Appearance();
       clientInteraction.client_id = insertedClient.id;
       clientInteraction.location_camp_id = this.locationCampId;
-      clientInteraction.still_lives_here = true;
       // never mark a newly‑created client as being at a resource center
       clientInteraction.at_homeless_resource_center = false;
-
-      if (this.isAdmin) {
-        // admin-created appearances are placeholders only; they should not be
-        // marked as seen or serviced and we don't set a serviced_date here.
-        clientInteraction.was_seen = false;
-        clientInteraction.serviced = false;
-      } else {
-        // volunteers immediately record sighting/service
-        clientInteraction.was_seen = true;
-        clientInteraction.serviced = true;
-        clientInteraction.serviced_date = new Date();
-      }
+      this.setClientAttendance(
+        clientInteraction,
+        window.history.state && window.history.state.isWeekendOutreach === true
+      );
 
       const pushRouteAndSaveExtras = () => {
         let routeAttendanceList: Appearance[] = JSON.parse(window.localStorage.getItem('RouteAttendance'));
@@ -454,11 +472,7 @@ export class ClientEditComponent implements OnInit, AfterViewChecked, OnDestroy 
             theDwelling.client_id = insertedClient.id;
             theDwelling.dwelling = String(this.clientForm.get('dwelling').value).trim();
             theDwelling.where_sleep_last_night = this.clientForm.get('where_sleep_last_night').value;
-            if (this.clientForm.get('date_moved').value == '') {
-              theDwelling.date_moved = new Date();
-            } else {
-              theDwelling.date_moved = new Date(this.clientForm.get('date_moved').value);
-            }
+            theDwelling.date_moved = theHistory.date_became_homeless;
             theDwelling.notes = this.clientForm.get('dwelling_note').value;
             this.clientService.insertClientDwelling(theDwelling)
               .pipe(takeUntil(this.destroy$))
@@ -469,7 +483,9 @@ export class ClientEditComponent implements OnInit, AfterViewChecked, OnDestroy 
                   .pipe(takeUntil(this.destroy$))
                   .subscribe({
                   next: updatedClient => {
-                    if (this.isAdmin && this.locationCampId === 449) {
+                    if (this.isAdmin) {
+                      this.navigateToCreatedClient(insertedClient.id);
+                    } else if (this.isAdmin && this.locationCampId === 449) {
                       this.router.navigate(['admin/clientListing']);
                     } else {
                       this.router.navigate([`/locationCamp/${this.locationCampId}`]);

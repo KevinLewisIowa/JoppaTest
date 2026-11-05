@@ -9,6 +9,7 @@ import { GoalsNextStep } from "app/models/goals-next-steps";
 import { ClientLike } from "app/models/client-like";
 import { ClientDislike } from "app/models/client-dislike";
 import { HealthConcern } from "app/models/health-concern";
+import { ClientDisabilityAndDisorder } from "app/models/client-disability-and-disorder";
 import { HeaterStatus } from "../../models/heater-status";
 import { MainService } from "../../services/main.service";
 import { Heater } from "app/models/heater";
@@ -54,6 +55,8 @@ import { Caseworker } from "app/models/caseworker";
 import { ClientMailbox } from 'app/models/client-mailbox';
 import { AuthorizedMailAccesses } from 'app/models/authorized-mail-accesses';
 import { ReleaseAcknowledgement } from 'app/models/client-release-acknowledgement';
+import { ClientVitalRecord } from 'app/models/client-vital-record';
+import { VitalRecordComponent } from 'app/insert-modals/vital-record/vital-record.component';
 
 @Component({
   selector: "app-servicing-client",
@@ -61,9 +64,9 @@ import { ReleaseAcknowledgement } from 'app/models/client-release-acknowledgemen
   styleUrls: ["./servicing-client.component.css"],
 })
 export class ServicingClientComponent implements OnInit, OnDestroy {
-  appearance: Appearance;
+  appearance?: Appearance;
   client: Client = new Client();
-  locationCampId: number;
+  locationCampId: number | null = null;
   requestedItems: RequestedItem[] = [];
   goalsAndSteps: GoalsNextStep[] = [];
   clientLikes: ClientLike[] = [];
@@ -72,7 +75,9 @@ export class ServicingClientComponent implements OnInit, OnDestroy {
   clientDislikes: ClientDislike[] = [];
   clientBarriers: ClientBarrier[] = [];
   healthConcerns: HealthConcern[] = [];
+  disabilityAndDisorders: { [category: string]: ClientDisabilityAndDisorder[] } = {};
   prayerRequestsAndNeeds: PrayerRequestAndNeed[] = [];
+  @ViewChild('disabilityMdl') disabilityMdl: any;
   householdClients: Client[] = [];
   healthInsurances: ClientHealthInsurance[] = [];
   clientSkills: ClientSkill[] = [];
@@ -97,18 +102,18 @@ export class ServicingClientComponent implements OnInit, OnDestroy {
   tankInteractions: any[] = [];
   hoseInteractions: any[] = [];
   heatEquipmentNotReturned: any[] = [];
-  clientId = null;
+  clientId: number = 0;
   clientCaseworkers: Caseworker[] = [];
   heaterStatuses: HeaterStatus[] = [];
   currentStatus: number = 2;
   heaters: any[] = [];
   clientInteractions: any[] = [];
-  isAdmin: boolean;
-  attendanceFromDate: string;
-  attendanceToDate: string;
-  updateTimerSubscription: Subscription;
+  isAdmin = false;
+  attendanceFromDate = '';
+  attendanceToDate = '';
+  updateTimerSubscription?: Subscription;
   updateHoseTankMessageVisible: boolean = false;
-  campId: number;
+  campId: number = 0;
   url: any;
   backIcon = faChevronLeft;
   informationIcon = faInfoCircle;
@@ -116,10 +121,20 @@ export class ServicingClientComponent implements OnInit, OnDestroy {
   notSeenAndServicedIcon = farCheckCircle;
   notSeenIcon = faTimesCircle;
   mapIcon = faMap;
-  routeInstanceId: number;
+  routeInstanceId: number | null = null;
   releaseAcknowledgements: ReleaseAcknowledgement[] = [];
+  clientVitalRecords: ClientVitalRecord[] = [];
   isReleaseValid: boolean = false;
   pinnedNoteString: string = '';
+
+  get activeVitalRecords(): ClientVitalRecord[] {
+    return this.clientVitalRecords.filter(record => !record.retrieved_on);
+  }
+
+  get recentlyRetrievedVitalRecords(): ClientVitalRecord[] {
+    return this.clientVitalRecords.filter(record => !!record.retrieved_on);
+  }
+
   pipe: DatePipe = new DatePipe("en-us");
   reasonForHomelessnessOptions = [
     "Addictions",
@@ -188,10 +203,30 @@ export class ServicingClientComponent implements OnInit, OnDestroy {
     'YMCA Supportive Housing',
     'Other'
   ];
+  disabilityStatusOptions: string[] = ['Yes', 'No', 'Unknown', 'Preferred not to share'];
+  clinicalDiagnosisOptions: string[] = ['Yes', 'No', 'Unknown', 'Didn’t want to share'];
+  physicalDisabilityTypes: string[] = [
+    'None', 'Amputation', 'Arthritis', 'Asthma', 'Back pain', 'Blood disorder', 'Bone marrow failure',
+    'Brain Injury', 'Cancer', 'Cerebral palsy', 'Chronic kidney disease', 'Chronic liver disease',
+    'Chronic skin condition', 'Congenital heart defects', 'Coronary disease', 'COPD', 'Cystic fibrosis',
+    'Diabetes', 'Down Syndrome', 'Epilepsy', 'Heart Failure', 'Hearing Loss', 'HIV/AIDS',
+    'Inflammatory bowel disease', 'Lung failure', 'Lupus', 'Malignant tumors', 'Multiple sclerosis',
+    'Thyroid Imbalance', 'Parkinson’s disease', 'Severe Back Injury', 'Sickle cell disease',
+    'Skin Disorder', 'Spinal disorder', 'Speech impairment', 'Vision Loss', 'Other'
+  ];
+  mentalDisabilityTypes: string[] = [
+    'None', 'Anxiety', 'Autism spectrum', 'Bipolar', 'Depressive disorders', 'PTSD', 'Schizophrenia', 'OCD', 'Other'
+  ];
+  substanceUseDisorderTypes: string[] = [
+    'None', 'Adderall', 'Alcohol', 'Cocaine', 'Hallucinogens', 'Heroin', 'Inhalant', 'LSD', 'Marijuana',
+    'Methamphetamine', 'Opioid', 'Oxycodone', 'Nicotine/Tobacco', 'Other'
+  ];
+  yearDiagnosedOptions: number[] = Array.from({ length: 70 }, (_, index) => new Date().getFullYear() - index);
 
   private destroy$ = new Subject<void>();
 
-  @ViewChild("clientInfo", { static: false }) clientInfo: ElementRef;
+  @ViewChild("clientInfo", { static: false }) clientInfo!: ElementRef;
+  @ViewChild('vitalRecordMdl') vitalRecordMdl!: VitalRecordComponent;
 
   constructor(
     private service: ClientService,
@@ -202,20 +237,20 @@ export class ServicingClientComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.routeInstanceId = JSON.parse(localStorage.getItem("routeInstance"));
-    this.heatRoute = JSON.parse(window.localStorage.getItem("heatRoute"));
-    this.isAdmin = JSON.parse(window.localStorage.getItem("isAdmin"));
+    this.routeInstanceId = JSON.parse(localStorage.getItem("routeInstance") || "null");
+    this.heatRoute = JSON.parse(window.localStorage.getItem("heatRoute") || "false");
+    this.isAdmin = JSON.parse(window.localStorage.getItem("isAdmin") || "false");
     this.locationCampId = JSON.parse(
-      window.localStorage.getItem("locationCampId")
+      window.localStorage.getItem("locationCampId") || "null"
     );
-    this.clientId = localStorage.getItem("selectedClient");
+    this.clientId = JSON.parse(localStorage.getItem("selectedClient") || "0");
 
     let attendToDate: Date = new Date();
     attendToDate.setDate(attendToDate.getDate() + 2);
-    this.attendanceToDate = this.pipe.transform(attendToDate, "yyyy-MM-dd");
+    this.attendanceToDate = this.pipe.transform(attendToDate, "yyyy-MM-dd") || '';
     let attendFromDate: Date = new Date();
     attendFromDate.setMonth(attendFromDate.getMonth() - 1);
-    this.attendanceFromDate = this.pipe.transform(attendFromDate, "yyyy-MM-dd");
+    this.attendanceFromDate = this.pipe.transform(attendFromDate, "yyyy-MM-dd") || '';
     let routeAttendanceList: Appearance[] = JSON.parse(
       localStorage.getItem("RouteAttendance") || '[]'
     );
@@ -235,7 +270,7 @@ export class ServicingClientComponent implements OnInit, OnDestroy {
       this.sentInteraction = true;
     }
 
-    if (this.clientId !== null) {
+    if (this.clientId > 0) {
         this.service.getClientById(this.clientId)
           .pipe(takeUntil(this.destroy$))
           .subscribe((data: Client) => {
@@ -244,18 +279,19 @@ export class ServicingClientComponent implements OnInit, OnDestroy {
             this.url = 'data:image/png;base64,' + this.client.client_picture;
           }
           console.log(this.url);
-          this.campId = this.client.current_camp_id;
+          this.campId = this.client.current_camp_id ?? 0;
 
-          this.mainService.getLocationCamp(this.campId)
-            .pipe(takeUntil(this.destroy$))
-            .subscribe((camp: LocationCamp) => {
-            let route_id = camp.route_id;
-            this.mainService.getRouteById(route_id)
+          if (this.campId > 0) {
+            this.mainService.getLocationCamp(this.campId)
               .pipe(takeUntil(this.destroy$))
-              .subscribe((route: Route) => {
-              this.routeName = route.name;
-            }, error => console.log(error));
-          }, (error) => console.log(error));
+              .subscribe((camp: LocationCamp) => {
+                this.mainService.getRouteById(camp.route_id)
+                  .pipe(takeUntil(this.destroy$))
+                  .subscribe((route: Route) => {
+                    this.routeName = route.name;
+                  }, error => console.log(error));
+              }, error => console.log(error));
+          }
 
           this.service.getClientDwellings(this.clientId)
             .pipe(takeUntil(this.destroy$))
@@ -304,43 +340,40 @@ export class ServicingClientComponent implements OnInit, OnDestroy {
           this.releaseAcknowledgements = data;
           this.checkReleaseValidity();
         }, error => console.log(error));
+
+        this.service.getClientVitalRecords(this.clientId)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((data: ClientVitalRecord[]) => {
+            this.clientVitalRecords = data;
+          }, error => console.log(error));
       }, (error) => console.log(error));
 
-      if (this.routeInstanceId != null) {
-        this.service.getClientNotesForRoute(this.clientId, this.routeInstanceId)
-          .pipe(takeUntil(this.destroy$))
-          .subscribe((data: Note[]) => {
-          this.notes = data;
-          this.notes.sort((a, b) => (a.created_at > b.created_at) ? 1 : -1);
-          this.goToTop();
-        }, (error) => console.log(error));
-      }
+      const notesRequest = this.routeInstanceId != null
+        ? this.service.getClientNotesForRoute(this.clientId, this.routeInstanceId)
+        : this.service.getClientNotesForClient(this.clientId);
+      notesRequest
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((data: Note[]) => {
+        this.notes = data.filter((note: Note) => this.shouldDisplayNote(note));
+
+        this.notes.sort((a, b) => (a.created_at > b.created_at) ? 1 : -1);
+
+        this.pinnedNoteString = '';
+        let pinnedNotes: Note[] = this.notes.filter(n => n.source === "PINNED NOTE");
+        pinnedNotes.forEach(n => {
+          if (this.pinnedNoteString === "") {
+            this.pinnedNoteString = n.note;
+          } else {
+            this.pinnedNoteString += '\r\n' + n.note;
+          }
+        });
+
+        this.showWarningAndResourceCenterAlerts();
+
+        this.goToTop();
+      }, (error) => console.log(error));
 
       if (this.isAdmin) {
-        this.service.getClientNotesForClient(this.clientId)
-          .pipe(takeUntil(this.destroy$))
-          .subscribe(
-          (data: Note[]) => {
-            this.notes = data;
-            let pinnedNotes: Note[] = data.filter(n => n.source == "PINNED NOTE");
-            pinnedNotes.forEach(n => {
-              if (this.pinnedNoteString === "") {
-                this.pinnedNoteString = n.note;
-              } else {
-                this.pinnedNoteString += '\r\n' + n.note;
-              }
-            });
-
-            this.notes.sort((a, b) => (a.created_at > b.created_at) ? 1 : -1);
-            let warningNotes: Note[] = data.filter(n => n.source === "WARNING");
-            if (warningNotes.length > 0) {
-              let warningNote: Note = warningNotes[warningNotes.length - 1];
-              alert(this.pipe.transform(warningNote.created_at, "shortDate") + " - " + warningNote.note);
-            }
-          },
-          (error) => console.log(error)
-        );
-
         this.service.getClientHealthInsurance(this.clientId)
           .pipe(takeUntil(this.destroy$))
           .subscribe({
@@ -500,6 +533,19 @@ export class ServicingClientComponent implements OnInit, OnDestroy {
           },
           (error) => console.log(error)
         );
+        this.service.getClientDisabilityAndDisorders(this.clientId)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe(
+            (data: ClientDisabilityAndDisorder[]) => {
+              this.disabilityAndDisorders = {};
+              ['physical_disability', 'mental_disability', 'substance_use_disorder'].forEach((category) => {
+                this.disabilityAndDisorders[category] = data
+                  .filter((record) => record.category === category)
+                  .map((record) => ({ ...record }));
+              });
+            },
+            (error) => console.log(error)
+          );
         this.service.getHeatersForClient(this.clientId)
           .pipe(takeUntil(this.destroy$))
           .subscribe(
@@ -538,7 +584,7 @@ export class ServicingClientComponent implements OnInit, OnDestroy {
         );
         this.getHeaterStatuses();
 
-        this.mainService.getClientAttendanceHistory(this.clientId, this.pipe.transform(this.attendanceFromDate, "yyyy-MM-dd"), this.pipe.transform(this.attendanceToDate, "yyyy-MM-dd"))
+        this.mainService.getClientAttendanceHistory(this.clientId, this.pipe.transform(this.attendanceFromDate, "yyyy-MM-dd") || '', this.pipe.transform(this.attendanceToDate, "yyyy-MM-dd") || '')
           .pipe(takeUntil(this.destroy$))
           .subscribe((data: any[]) => {
           this.clientInteractions = data;
@@ -554,28 +600,7 @@ export class ServicingClientComponent implements OnInit, OnDestroy {
           this.goToTop();
         }, (error) => console.log(error));
       } else {
-        this.service.getClientNotesForClient(this.clientId)
-          .pipe(takeUntil(this.destroy$))
-          .subscribe(
-          (data: Note[]) => {
-            let pinnedNotes: Note[] = data.filter(n => n.source === "PINNED NOTE");
-            pinnedNotes.forEach(n => {
-              if (this.pinnedNoteString === '') {
-                this.pinnedNoteString = n.note;
-              } else {
-                this.pinnedNoteString += '\r\n' + n.note;
-              }
-            });
-            let warningNotes: Note[] = data.filter(n => n.source === "WARNING");
-            let warningNote: Note = warningNotes[warningNotes.length - 1];
-            if (warningNotes.length > 0) {
-              alert(this.pipe.transform(warningNote.created_at, "shortDate") + " - " + warningNote.note);
-            }
-          },
-          (error) => console.log(error)
-        );
-
-        this.mainService.getClientAttendanceHistory(this.clientId, this.pipe.transform(this.attendanceFromDate, "yyyy-MM-dd"), this.pipe.transform(this.attendanceToDate, "yyyy-MM-dd"))
+        this.mainService.getClientAttendanceHistory(this.clientId, this.pipe.transform(this.attendanceFromDate, "yyyy-MM-dd") || '', this.pipe.transform(this.attendanceToDate, "yyyy-MM-dd") || '')
           .pipe(takeUntil(this.destroy$))
           .subscribe((data: any[]) => {
           this.clientInteractions = data;
@@ -721,12 +746,84 @@ export class ServicingClientComponent implements OnInit, OnDestroy {
     }
   }
 
+  buildDefaultDisabilitySection(category: string): ClientDisabilityAndDisorder {
+    return {
+      id: 0,
+      client_id: this.clientId,
+      category,
+      diagnosis_status: '',
+      type_name: 'None',
+      year_diagnosed: null,
+      clinically_diagnosed: '',
+      note: ''
+    };
+  }
+
+  getDisabilityEntries(category: string): ClientDisabilityAndDisorder[] {
+    if (!this.disabilityAndDisorders[category]) {
+      this.disabilityAndDisorders[category] = [];
+    }
+    return this.disabilityAndDisorders[category];
+  }
+
+  openDisabilityModal(category: string, entry?: ClientDisabilityAndDisorder, index: number = -1) {
+    this.disabilityMdl.showModal(category, entry);
+  }
+
+  disabilityAdded(event: ClientDisabilityAndDisorder) {
+    const category = event.category;
+    const list = this.getDisabilityEntries(category);
+    const existingIndex = list.findIndex((entry) => entry.id === event.id);
+
+    if (existingIndex >= 0) {
+      list[existingIndex] = event;
+      return;
+    }
+
+    list.push(event);
+  }
+
+  saveDisabilityEntry(category: string, index: number) {
+    const entry = this.getDisabilityEntries(category)[index];
+    if (!entry) {
+      return;
+    }
+
+    entry.client_id = this.clientId;
+    const request = entry.id > 0
+      ? this.service.updateDisabilityAndDisorder(entry)
+      : this.service.insertDisabilityAndDisorder(entry);
+
+    request.subscribe({
+      next: (saved: ClientDisabilityAndDisorder) => {
+        this.disabilityAndDisorders[category][index] = saved;
+      },
+      error: (error) => console.log(error)
+    });
+  }
+
+  removeDisabilityEntry(category: string, index: number) {
+    const entry = this.getDisabilityEntries(category)[index];
+    if (!entry) {
+      return;
+    }
+
+    if (entry.id > 0) {
+      this.service.removeDisabilityAndDisorder(entry.id).subscribe(() => {
+        this.disabilityAndDisorders[category].splice(index, 1);
+      }, (error) => console.log(error));
+      return;
+    }
+
+    this.disabilityAndDisorders[category].splice(index, 1);
+  }
+
   searchWeeklyAttendance() {
     this.mainService
       .getClientAttendanceHistory(
         this.clientId,
-        this.pipe.transform(this.attendanceFromDate, "yyyy-MM-dd"),
-        this.pipe.transform(this.attendanceToDate, "yyyy-MM-dd")
+        this.pipe.transform(this.attendanceFromDate, "yyyy-MM-dd") || '',
+        this.pipe.transform(this.attendanceToDate, "yyyy-MM-dd") || ''
       )
       .pipe(takeUntil(this.destroy$))
       .subscribe(
@@ -761,6 +858,35 @@ export class ServicingClientComponent implements OnInit, OnDestroy {
     } else {
       this.isReleaseValid = false;
     }
+  }
+
+  private showWarningAndResourceCenterAlerts(): void {
+    const warningNotes: Note[] = this.notes
+      .filter(n => n.source === "WARNING")
+      .sort((a, b) => (a.created_at > b.created_at ? 1 : -1));
+    const resourceCenterAlertNotes: Note[] = this.notes
+      .filter(n => n.source === "RESOURCE CENTER ALERT")
+      .sort((a, b) => (a.created_at > b.created_at ? 1 : -1));
+
+    [...warningNotes, ...resourceCenterAlertNotes].forEach((note: Note) => {
+      alert(this.pipe.transform(note.created_at, "shortDate") + " - " + note.note);
+    });
+  }
+
+  private shouldDisplayNote(note: Note): boolean {
+    if (note.source === 'RESOURCE CENTER ALERT' && !this.isAdmin) {
+      return false;
+    }
+
+    if (this.isAdmin) {
+      return true;
+    }
+
+    if (this.heatRoute) {
+      return note.source !== 'Outreach';
+    }
+
+    return note.source !== 'Heat';
   }
 
   getHeaterStatuses(): void {
@@ -931,7 +1057,7 @@ export class ServicingClientComponent implements OnInit, OnDestroy {
 
   hideConfirmationMessage(): any {
     this.updateHoseTankMessageVisible = false;
-    this.updateTimerSubscription.unsubscribe();
+    this.updateTimerSubscription?.unsubscribe();
   }
 
   sendInteraction(interactionType: number, heatEquipmentAdded: boolean = false) {
@@ -941,7 +1067,7 @@ export class ServicingClientComponent implements OnInit, OnDestroy {
 
     const interaction: Appearance = new Appearance();
     interaction.client_id = this.client.id;
-    interaction.location_camp_id = this.locationCampId ? this.locationCampId : this.client.current_camp_id;
+    interaction.location_camp_id = this.locationCampId ?? this.client.current_camp_id ?? 0;
     if (interactionType === 1) {
       interaction.serviced = true;
       interaction.was_seen = true;
@@ -970,7 +1096,6 @@ export class ServicingClientComponent implements OnInit, OnDestroy {
       // if neither locationCampId nor current_camp_id have a value, set it to HRC camp
       if (!interaction.location_camp_id || interaction.location_camp_id == 0) {
         interaction.location_camp_id = 449;
-        this.client.current_camp_id = 449;
       }
     }
 
@@ -1024,7 +1149,7 @@ export class ServicingClientComponent implements OnInit, OnDestroy {
     let routeAttendanceList: Appearance[] = JSON.parse(
       window.localStorage.getItem("RouteAttendance") || '[]'
     );
-    let appearance: Appearance = routeAttendanceList.find(
+    const appearance = routeAttendanceList.find(
       (x) => x.client_id == interaction.client_id
     );
 
@@ -1044,7 +1169,8 @@ export class ServicingClientComponent implements OnInit, OnDestroy {
 
           if (!interaction.still_lives_here) {
             alert('Please add a new dwelling to indicate where they went and any other applicable notes');
-            document.getElementById("newDwellingButton").click();
+            const newDwellingButton = document.getElementById("newDwellingButton");
+            newDwellingButton?.click();
 
             // If we haven't loaded pets for this client, fetch them then clear requests
             this.clearPetsFoodRequests();
@@ -1055,10 +1181,10 @@ export class ServicingClientComponent implements OnInit, OnDestroy {
           let clientDwelling: ClientDwelling = this.dwellings.filter(dwelling => dwelling.created_at === dwellingDates.reduce((a, b) => a > b ? a : b))[0];
           let clientHistory: ClientHomelessHistory = this.homelessHistories.filter(history => history.created_at === historyDates.reduce((a, b) => a > b ? a : b))[0];
 
-          var difference = new Date().getTime() - new Date(clientDwelling.created_at).getTime();
-          difference = Math.ceil(difference / (1000 * 3600 * 24));
-          if (interaction.serviced && (clientDwelling.dwelling == "House" || clientDwelling.dwelling == "Apartment" || clientDwelling.dwelling == "Shelter" || clientDwelling.dwelling == "Motel" || clientDwelling.dwelling == "Motel") && difference > 90 && clientHistory != null) {
-
+          const difference = clientDwelling
+            ? Math.ceil((new Date().getTime() - new Date(clientDwelling.created_at).getTime()) / (1000 * 3600 * 24))
+            : 0;
+          if (interaction.serviced && clientDwelling && (clientDwelling.dwelling == "House" || clientDwelling.dwelling == "Apartment" || clientDwelling.dwelling == "Shelter" || clientDwelling.dwelling == "Motel" || clientDwelling.dwelling == "Motel") && difference > 90 && clientHistory != null) {
             clientHistory.first_time_homeless = false;
             this.service.updateHomelessHistory(clientHistory).subscribe(data => {
 
@@ -1085,7 +1211,8 @@ export class ServicingClientComponent implements OnInit, OnDestroy {
 
           if (!interaction.still_lives_here) {
             alert('Please add a new dwelling to indicate where they went and any other applicable notes');
-            document.getElementById("newDwellingButton").click();
+            const newDwellingButton = document.getElementById("newDwellingButton");
+            newDwellingButton?.click();
 
             // If we haven't loaded pets for this client, fetch them then clear requests
             this.clearPetsFoodRequests();
@@ -1096,9 +1223,10 @@ export class ServicingClientComponent implements OnInit, OnDestroy {
           let clientDwelling: ClientDwelling = this.dwellings.filter(dwelling => dwelling.created_at === dwellingDates.reduce((a, b) => a > b ? a : b))[0];
           let clientHistory: ClientHomelessHistory = this.homelessHistories.filter(history => history.created_at === historyDates.reduce((a, b) => a > b ? a : b))[0];
 
-          var difference = new Date().getTime() - new Date(clientDwelling.created_at).getTime();
-          difference = Math.ceil(difference / (1000 * 3600 * 24));
-          if (interaction.serviced && (clientDwelling.dwelling == "House" || clientDwelling.dwelling == "Apartment" || clientDwelling.dwelling == "Shelter" || clientDwelling.dwelling == "Motel" || clientDwelling.dwelling == "Camper") && difference > 90) {
+          const difference = clientDwelling
+            ? Math.ceil((new Date().getTime() - new Date(clientDwelling.created_at).getTime()) / (1000 * 3600 * 24))
+            : 0;
+          if (interaction.serviced && clientDwelling && (clientDwelling.dwelling == "House" || clientDwelling.dwelling == "Apartment" || clientDwelling.dwelling == "Shelter" || clientDwelling.dwelling == "Motel" || clientDwelling.dwelling == "Camper") && difference > 90 && clientHistory != null) {
             clientHistory.first_time_homeless = false;
             this.service.updateHomelessHistory(clientHistory).subscribe(data => {
 
@@ -1247,12 +1375,14 @@ export class ServicingClientComponent implements OnInit, OnDestroy {
   }
 
   noteAdded(note: Note) {
-    this.notes.push(note);
-    if (note.source === "PINNED NOTE") {
-      if (this.pinnedNoteString === "") {
-        this.pinnedNoteString = note.note;
-      } else {
-        this.pinnedNoteString += '\r\n' + note.note;
+    if (this.shouldDisplayNote(note)) {
+      this.notes.push(note);
+      if (note.source === "PINNED NOTE") {
+        if (this.pinnedNoteString === "") {
+          this.pinnedNoteString = note.note;
+        } else {
+          this.pinnedNoteString += '\r\n' + note.note;
+        }
       }
     }
     this.safeScrollTo('#new-note-btn');
@@ -1385,7 +1515,7 @@ export class ServicingClientComponent implements OnInit, OnDestroy {
     this.router.navigate(["/admin/clientListing"]);
   }
 
-  viewClient(theClient) {
+  viewClient(theClient: Client) {
     localStorage.setItem('selectedClient', JSON.stringify(theClient.id));
     this.router.navigate(['/serviceClient']);
     window.location.reload();
@@ -1401,7 +1531,7 @@ export class ServicingClientComponent implements OnInit, OnDestroy {
       this.router.navigate([`/locationCamp/${this.campId}`]);
     } else {
       let routeAttendanceList: Appearance[] = JSON.parse(
-        localStorage.getItem("RouteAttendance")
+        localStorage.getItem("RouteAttendance") || '[]'
       );
       if (routeAttendanceList.length != null) {
         this.appearance = routeAttendanceList.find(
@@ -1764,12 +1894,12 @@ export class ServicingClientComponent implements OnInit, OnDestroy {
     );
   }
 
-  isOtherRelationship(value: string): boolean {
+  isOtherRelationship(value: string | null | undefined): boolean {
     const standard = [
       "Aunt", "Boyfriend", "Caretaker", "Child", "Cousin", "Girlfriend",
       "Grandparent", "Parent", "Sibling", "Spouse/Partner", "Uncle"
     ];
-    return value && !standard.includes(value);
+    return !!value && !standard.includes(value);
   }
 
   removeClientCaseworker(id: number) {
@@ -1781,6 +1911,10 @@ export class ServicingClientComponent implements OnInit, OnDestroy {
   }
 
   addReleaseAcknowledgement() {
+    if (this.clientId === null) {
+      return;
+    }
+
     const releaseAck = new ReleaseAcknowledgement();
     releaseAck.client_id = this.clientId;
     releaseAck.date_acknowledged = new Date();
@@ -1804,6 +1938,24 @@ export class ServicingClientComponent implements OnInit, OnDestroy {
       this.releaseAcknowledgements = this.releaseAcknowledgements.filter(a => a.id !== id);
       this.checkReleaseValidity();
     });
+  }
+
+  vitalRecordSaved(record: ClientVitalRecord) {
+    const index = this.clientVitalRecords.findIndex(existing => existing.id === record.id);
+    if (index === -1) {
+      this.clientVitalRecords.push(record);
+    } else {
+      this.clientVitalRecords[index] = record;
+    }
+  }
+
+  retrieveVitalRecord(record: ClientVitalRecord) {
+    this.service.retrieveClientVitalRecord(record.id).subscribe((updated: ClientVitalRecord) => {
+      const index = this.clientVitalRecords.findIndex(existing => existing.id === updated.id);
+      if (index !== -1) {
+        this.clientVitalRecords[index] = updated;
+      }
+    }, error => console.log(error));
   }
 
   toggleOnCart(item: any) {

@@ -154,10 +154,8 @@ export class FooterComponent implements OnInit, OnDestroy {
   }
 
   goToAdminHome() {
-    let apiKey: string = window.localStorage.getItem('apiToken');
-    window.localStorage.clear();
-    window.localStorage.setItem('apiToken', apiKey);
     window.localStorage.setItem('isAdmin', JSON.stringify(true));
+    this.mainService.showAdminHome.next(true);
     this.router.navigate(['adminHome']);
   }
 

@@ -22,6 +22,7 @@ import { VolunteerInfoComponent } from "./volunteer-info/volunteer-info.componen
 import { AdminReportsComponent } from "./admin-reports/admin-reports.component";
 import { NewClientsReportComponent } from "./admin-reports/new-clients-report/new-clients-report.component";
 import { MainLoginComponent } from "./main-login/main-login.component";
+import { ChangePasswordComponent } from "./change-password/change-password.component";
 import { IsLoggedInGuard, IsAdminGuard } from "app/guards/login.guard";
 import { RouteMapComponent } from "./route-map/route-map.component";
 import { RouteSummaryReportComponent } from "./admin-reports/route-summary-report/route-summary-report.component";
@@ -211,6 +212,11 @@ const routes: Routes = [
     component: VolunteerInfoComponent,
   },
   { path: "application-login", component: MainLoginComponent },
+  {
+    path: "change-password",
+    canActivate: [IsLoggedInGuard],
+    component: ChangePasswordComponent,
+  },
   {
     path: "changeRegularPassword",
     canActivate: [IsLoggedInGuard, IsAdminGuard],

@@ -1,6 +1,7 @@
 <div class="card" style="opacity: 0.93">
   <div class="card-header">
     <h2>Admin</h2>
+    <div *ngIf="adminEmail">Signed in as {{ adminEmail }}</div>
   </div>
   <div class="panel-body" style="opacity: 0.93">
     <table class="table">
@@ -25,6 +26,9 @@
         </tr> -->
         <tr>
           <td style="height: 75px" (click)="openChangeRegularPassword()">Change Regular Password</td>
+        </tr>
+        <tr>
+          <td style="height: 75px" (click)="openChangeAdminPassword()">Change Admin Password</td>
         </tr>
         <tr>
           <td style="height: 75px" (click)="openMergeDuplicates()">Merge Duplicate Clients</td>

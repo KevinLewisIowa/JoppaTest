@@ -42,7 +42,11 @@ export class AdminClientInactiveUpdaterComponent implements OnInit, OnDestroy {
         difference = Math.ceil(difference / (1000 * 3600 * 24));
         console.log(`${client.first_name} ${client.last_name} difference: ${difference}; inactivity limit: ${this.inactivityLimit}`);
         
-        if ((difference > this.inactivityLimit) && (client.status == "Active")) {
+        if (
+          difference > this.inactivityLimit &&
+          client.status == "Active" &&
+          client.is_aftercare !== true
+        ) {
           console.log(client.first_name + client.preferred_name + client.last_name);
           client.status = "Inactive";
           client.current_camp_id = 0;
