@@ -58,10 +58,15 @@
   </div>
 
   <div class="panel-body">
+    <details class="profile-accordion" (toggle)="onHeatingToggle($event)" *ngIf="heatRoute || isAdmin">
+      <summary><h4 class="d-inline">Heating Equipment</h4></summary>
+      <div *ngIf="profileSectionStates.heating.loading" class="text-muted">Loading heating equipment...</div>
+      <div *ngIf="profileSectionStates.heating.error" class="text-danger">
+        Heating equipment could not be loaded. Close and reopen this section to retry.
+      </div>
     <div class="row">
       <div class="col-lg-12 col-md-12" *ngIf="heatRoute || isAdmin">
         <h4>
-          Heating Equipment
           <button id="new-heater-btn" type="button" (click)="loanHeater()" class="btn btn-primary float-right">
             New Heater
           </button>
@@ -193,6 +198,18 @@
         </div>
       </div>
     </div>
+    </details>
+    <details class="profile-accordion" (toggle)="onContactsToggle($event)">
+      <summary>
+        <div>
+          <h4>Contacts and Mailbox</h4>
+          <small>Caseworkers, next of kin, friends, and authorized mailbox users</small>
+        </div>
+      </summary>
+      <div *ngIf="profileSectionStates.contacts.loading" class="text-muted">Loading contacts and mailbox...</div>
+      <div *ngIf="profileSectionStates.contacts.error" class="text-danger">
+        Contacts and mailbox could not be loaded. Close and reopen this section to retry.
+      </div>
     <div class="col-lg-12 col-md-12">
       <h4>
         Client Mailbox
@@ -478,6 +495,18 @@
         </table>
       </div>
     </div>
+    </details>
+    <details class="profile-accordion" (toggle)="onHousingToggle($event)" *ngIf="!heatRoute">
+      <summary>
+        <div>
+          <h4>Housing and Homeless History</h4>
+          <small>Dwelling history and homelessness details</small>
+        </div>
+      </summary>
+      <div *ngIf="profileSectionStates.housing.loading" class="text-muted">Loading housing history...</div>
+      <div *ngIf="profileSectionStates.housing.error" class="text-danger">
+        Housing history could not be loaded. Close and reopen this section to retry.
+      </div>
     <div class="col-lg-12 col-md-12" *ngIf="!heatRoute">
       <div class="background-color">
         <h4>
@@ -650,6 +679,7 @@
         </table>
       </div>
     </div>
+    </details>
 
     <details class="profile-accordion" (toggle)="onRequestsToggle($event)">
       <summary><h4 class="d-inline">Requests and Preferences</h4></summary>
@@ -873,10 +903,11 @@
   </div>
     </details>
   </div>
+  <details class="profile-accordion">
+    <summary><h4 class="d-inline">Notes</h4></summary>
   <div class="col-lg-12 col-md-12">
     <div class="background-color">
       <h4>
-        Notes
         <button id="new-note-btn" type="button" (click)="goToTop(); notesMdl.showModal()"
           class="btn btn-primary float-right" style="float: right">
           New Note
@@ -933,6 +964,18 @@
       </div>
     </div>
   </div>
+  </details>
+  <details class="profile-accordion" (toggle)="onAssetsToggle($event)">
+    <summary>
+      <div>
+        <h4>Tents, Pets, and Referrals</h4>
+        <small>Equipment, pet information, and services provided</small>
+      </div>
+    </summary>
+    <div *ngIf="profileSectionStates.assets.loading" class="text-muted">Loading tents, pets, and referrals...</div>
+    <div *ngIf="profileSectionStates.assets.error" class="text-danger">
+      Tents, pets, and referrals could not be loaded. Close and reopen this section to retry.
+    </div>
   <div class="col-lg-12 col-md-12">
     <h4>
       Tent
@@ -1086,10 +1129,14 @@
       </table>
     </div>
   </div>
+  </details>
   <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
     <details class="profile-accordion" (toggle)="onVitalRecordsToggle($event)">
       <summary><h4 class="d-inline">Vital Records</h4></summary>
       <div *ngIf="documentsLoading" class="text-muted">Loading vital records...</div>
+      <div *ngIf="documentsError" class="text-danger">
+        Some vital records could not be loaded. Close and reopen this section to retry.
+      </div>
       <button type="button" class="btn btn-primary float-right" (click)="goToTop(); vitalRecordMdl.showModal()">
         Add Vital Record
       </button>
@@ -1160,6 +1207,12 @@
     </div>
     </details>
   </div>
+  <details class="profile-accordion" (toggle)="onGoalsToggle($event)">
+    <summary><h4 class="d-inline">Goals and Steps</h4></summary>
+    <div *ngIf="profileSectionStates.goals.loading" class="text-muted">Loading goals and steps...</div>
+    <div *ngIf="profileSectionStates.goals.error" class="text-danger">
+      Goals and steps could not be loaded. Close and reopen this section to retry.
+    </div>
   <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
     <div class="background-color">
       <h4>
@@ -1260,6 +1313,18 @@
       </div>
     </div>
   </div>
+  </details>
+  <details class="profile-accordion" (toggle)="onStabilityToggle($event)">
+    <summary>
+      <div>
+        <h4>Income, Barriers, Skills, and Legal History</h4>
+        <small>Income, debts, barriers, skills, felonies, and evictions</small>
+      </div>
+    </summary>
+    <div *ngIf="profileSectionStates.stability.loading" class="text-muted">Loading income and support records...</div>
+    <div *ngIf="profileSectionStates.stability.error" class="text-danger">
+      These records could not be loaded. Close and reopen this section to retry.
+    </div>
   <div class="col-lg-12 col-md-12">
     <h4>
       Client Income
@@ -1509,6 +1574,13 @@
       </table>
     </div>
   </div>
+  </details>
+  <details class="profile-accordion" (toggle)="onHealthToggle($event)">
+    <summary><h4 class="d-inline">Health and Insurance</h4></summary>
+    <div *ngIf="profileSectionStates.health.loading" class="text-muted">Loading health information...</div>
+    <div *ngIf="profileSectionStates.health.error" class="text-danger">
+      Health information could not be loaded. Close and reopen this section to retry.
+    </div>
   <div class="col-lg-12 col-md-12">
     <h4>
       Health Concerns
@@ -1714,11 +1786,15 @@
       </table>
     </div>
   </div>
+  </details>
   <div class="col-lg-12 col-md-12">
     <div class="background-color">
       <details class="profile-accordion" (toggle)="onHouseholdToggle($event)">
         <summary><h4 class="d-inline">Household</h4></summary>
         <div *ngIf="householdLoading" class="text-muted">Loading household members...</div>
+        <div *ngIf="householdError" class="text-danger">
+          Household members could not be loaded. Close and reopen this section to retry.
+        </div>
         <button type="button" (click)="goToTop(); clientMdl.showModal()" class="btn btn-primary float-right">New
           Household Member</button>
       <div class="table-responsive">
@@ -1794,6 +1870,9 @@
     <details class="profile-accordion" (toggle)="onWeeklyAttendanceToggle($event)">
       <summary><h4 class="d-inline">Weekly Attendance History</h4></summary>
       <div *ngIf="weeklyAttendanceLoading" class="text-muted">Loading attendance history...</div>
+      <div *ngIf="weeklyAttendanceError" class="text-danger">
+        Attendance history could not be loaded. Close and reopen this section to retry.
+      </div>
       <div>
         From Date:
         <input type="date" name="attendanceFromDate" [(ngModel)]="attendanceFromDate" />

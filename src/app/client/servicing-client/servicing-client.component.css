@@ -36,6 +36,13 @@
     margin: 0;
 }
 
+:host .profile-accordion > summary small {
+    display: block;
+    margin-top: 3px;
+    color: #5f666d;
+    font-weight: 400;
+}
+
 :host .profile-accordion > summary::after {
     content: "+";
     display: inline-flex;

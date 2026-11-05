@@ -28,8 +28,8 @@ import {
   faTimesCircle,
   faMap,
 } from "@fortawesome/free-solid-svg-icons";
-import { Subscription, Subject, timer } from "rxjs";
-import { takeUntil } from "rxjs/operators";
+import { forkJoin, Observable, Subscription, Subject, timer, of } from "rxjs";
+import { map, switchMap, takeUntil } from "rxjs/operators";
 import { DatePipe } from "@angular/common";
 import { PrayerRequestAndNeed } from "app/models/prayer-request";
 import {
@@ -115,15 +115,28 @@ export class ServicingClientComponent implements OnInit, OnDestroy {
   updateHoseTankMessageVisible: boolean = false;
   weeklyAttendanceLoaded = false;
   weeklyAttendanceLoading = false;
+  weeklyAttendanceError = false;
   householdLoaded = false;
   householdLoading = false;
+  householdError = false;
   documentsLoaded = false;
   documentsLoading = false;
+  documentsError = false;
   releaseAcknowledgementsLoaded = false;
   vitalRecordsLoaded = false;
   requestsLoaded = false;
   requestsLoading = false;
   requestsError = false;
+  newClientPetsPromptShown = false;
+  profileSectionStates: Record<string, { loaded: boolean; loading: boolean; error: boolean }> = {
+    heating: { loaded: false, loading: false, error: false },
+    contacts: { loaded: false, loading: false, error: false },
+    housing: { loaded: false, loading: false, error: false },
+    assets: { loaded: false, loading: false, error: false },
+    goals: { loaded: false, loading: false, error: false },
+    stability: { loaded: false, loading: false, error: false },
+    health: { loaded: false, loading: false, error: false }
+  };
   campId: number = 0;
   url: any;
   backIcon = faChevronLeft;
@@ -304,37 +317,15 @@ export class ServicingClientComponent implements OnInit, OnDestroy {
               }, error => console.log(error));
           }
 
-          this.service.getClientDwellings(this.clientId)
-            .pipe(takeUntil(this.destroy$))
-            .subscribe((data: ClientDwelling[]) => {
-            if (data.length === 0) {
-              alert(
-                "Please ask this client 1) If this is first time homeless? 2) Why they are homeless? and 3) When they became homeless? Please record this under a new 'Dwelling History' entry."
-              );
-            }
-          })
-
-          this.service.getClientCaseworkers(this.clientId)
-            .pipe(takeUntil(this.destroy$))
-            .subscribe((data: Caseworker[]) => {
-            this.clientCaseworkers = data;
-          }, (error) => console.log(error));
-
-          this.service.getMailboxForClient(this.clientId)
-            .pipe(takeUntil(this.destroy$))
-            .subscribe((data: ClientMailbox) => {
-            this.clientMailbox = data;
-
-            if (this.clientMailbox != null) {
-              console.log('Client Mailbox:', JSON.stringify(this.clientMailbox));
-              this.service.getAuthorizedMailAccessors(this.clientMailbox.id)
-                .pipe(takeUntil(this.destroy$))
-                .subscribe((data: AuthorizedMailAccesses[]) => {
-                console.log('Authorized Mail Accessors:', JSON.stringify(data));
-                this.authorizedMailAccesses = data;
-              }, error => console.log(error));
-            }
-          }, error => console.log(error));
+          if (this.heatRoute) {
+            this.service.getClientDwellings(this.clientId)
+              .pipe(takeUntil(this.destroy$))
+              .subscribe(data => {
+                if (data.length === 0) {
+                  alert("Please ask this client 1) If this is first time homeless? 2) Why they are homeless? and 3) When they became homeless? Please record this under a new 'Dwelling History' entry.");
+                }
+              }, error => console.error('Unable to check client dwelling history', error));
+          }
 
       }, (error) => console.log(error));
 
@@ -363,273 +354,9 @@ export class ServicingClientComponent implements OnInit, OnDestroy {
         this.goToTop();
       }, (error) => console.log(error));
 
-      if (this.isAdmin) {
-        this.service.getClientHealthInsurance(this.clientId)
-          .pipe(takeUntil(this.destroy$))
-          .subscribe({
-          next: (data: ClientHealthInsurance[]) => {
-            this.healthInsurances = data;
-          },
-          error: (error) => console.log(error)
-        });
-
-        this.service.getClientSteps(this.clientId)
-          .pipe(takeUntil(this.destroy$))
-          .subscribe({
-          next: (data: ClientStep[]) => {
-            this.steps = data;
-          },
-          error: (error) => console.log(error)
-        });
-
-        this.service.getClientDebt(this.clientId)
-          .pipe(takeUntil(this.destroy$))
-          .subscribe({
-          next: (data: ClientDebt[]) => {
-            this.clientDebts = data;
-          },
-          error: (error) => console.log(error)
-        });
-
-        this.service.getClientFelonies(this.clientId)
-          .pipe(takeUntil(this.destroy$))
-          .subscribe({
-          next: (data: ClientFelony[]) => {
-            this.clientFelonies = data;
-          },
-          error: (error) => console.log(error)
-        });
-
-        this.service.getPastEvictions(this.clientId)
-          .pipe(takeUntil(this.destroy$))
-          .subscribe({
-          next: (data: ClientPastEviction[]) => {
-            this.clientPastEvictions = data;
-          },
-          error: (error) => console.log(error)
-        });
-
-        this.service.getClientSkills(this.clientId)
-          .pipe(takeUntil(this.destroy$))
-          .subscribe({
-          next: (data: ClientSkill[]) => {
-            this.clientSkills = data;
-          },
-          error: (error) => console.log(error)
-        });
-
-        this.service.getClientPets(this.clientId)
-          .pipe(takeUntil(this.destroy$))
-          .subscribe(
-          (data: ClientPet[]) => {
-            this.pets = data;
-          },
-          (error) => console.log(error)
-        );
-        this.service.getClientCircleOfFriends(this.clientId)
-          .pipe(takeUntil(this.destroy$))
-          .subscribe(
-          (data: ClientCircleOfFriends[]) => {
-            this.circleOfFriends = data;
-          },
-          (error) => console.log(error)
-        );
-        this.service.getTentsForClient(this.clientId)
-          .pipe(takeUntil(this.destroy$))
-          .subscribe(
-          (data: Tent[]) => {
-            this.tents = data;
-          },
-          (error) => console.log(error)
-        );
-        this.service.getClientDwellings(this.clientId)
-          .pipe(takeUntil(this.destroy$))
-          .subscribe(
-          (data: ClientDwelling[]) => {
-            this.dwellings = data;
-          },
-          (error) => console.log(error)
-        );
-        this.service.getClientHomelessHistory(this.clientId)
-          .pipe(takeUntil(this.destroy$))
-          .subscribe(
-          (data: ClientHomelessHistory[]) => {
-            this.homelessHistories = data;
-          },
-          (error) => console.log(error)
-        );
-        this.service.getClientReferrals(this.clientId)
-          .pipe(takeUntil(this.destroy$))
-          .subscribe(
-          (data: ReferralsResources[]) => {
-            this.referralsResources = data;
-          },
-          (error) => console.log(error)
-        );
-        this.service.getGoalsAndNextSteps(this.clientId)
-          .pipe(takeUntil(this.destroy$))
-          .subscribe(
-          (data: GoalsNextStep[]) => {
-            this.goalsAndSteps = data;
-          },
-          (error) => console.log(error)
-        );
-        this.service.getClientBarriers(this.clientId)
-          .pipe(takeUntil(this.destroy$))
-          .subscribe({
-          next: (data: ClientBarrier[]) => {
-            this.clientBarriers = data;
-          },
-          error: (error) => console.log(error)
-        });
-        this.service.getHealthConcerns(this.clientId)
-          .pipe(takeUntil(this.destroy$))
-          .subscribe(
-          (data: HealthConcern[]) => {
-            this.healthConcerns = data;
-          },
-          (error) => console.log(error)
-        );
-        this.service.getClientDisabilityAndDisorders(this.clientId)
-          .pipe(takeUntil(this.destroy$))
-          .subscribe(
-            (data: ClientDisabilityAndDisorder[]) => {
-              this.disabilityAndDisorders = {};
-              ['physical_disability', 'mental_disability', 'substance_use_disorder'].forEach((category) => {
-                this.disabilityAndDisorders[category] = data
-                  .filter((record) => record.category === category)
-                  .map((record) => ({ ...record }));
-              });
-            },
-            (error) => console.log(error)
-          );
-        this.service.getHeatersForClient(this.clientId)
-          .pipe(takeUntil(this.destroy$))
-          .subscribe(
-          (data: Heater[]) => {
-            this.heaters = data;
-          },
-          (error) => console.log(error)
-        );
-        this.service.getClientLoanedTanks(this.clientId)
-          .pipe(takeUntil(this.destroy$))
-          .subscribe((tankInteractions: any[]) => {
-          // now get the tank info
-          this.tankInteractions = tankInteractions;
-        });
-        this.service.getClientLoanedHoses(this.clientId)
-          .pipe(takeUntil(this.destroy$))
-          .subscribe((hoseInteractions: any[]) => {
-          // now get the Hose info
-          this.hoseInteractions = hoseInteractions;
-        });
-        this.service.getHeatEquipmentNotReturned(this.clientId)
-          .pipe(takeUntil(this.destroy$))
-          .subscribe(
-          (data: any[]) => {
-            this.heatEquipmentNotReturned = data;
-          },
-          (error) => console.log(error)
-        );
-        this.getHeaterStatuses();
-
-      } else {
+      if (this.heatRoute && !this.isAdmin) {
+        this.goToTop();
       }
-
-      if (this.heatRoute) {
-        // get heating equipment for this person
-        this.service
-          .getHeatersForClient(this.clientId)
-          .pipe(takeUntil(this.destroy$))
-          .subscribe((data: Heater[]) => {
-            this.heaters = data;
-          });
-        // this.service.getClientLoanedTanks(this.clientId).pipe(takeUntil(this.destroy$)).subscribe((tankInteractions: any[]) => {
-        //   // now get the tank info
-        //   this.tankInteractions = tankInteractions;
-        // });
-        // this.service.getClientLoanedHoses(this.clientId).pipe(takeUntil(this.destroy$)).subscribe((hoseInteractions: any[]) => {
-        //   // now get the Hose info
-        //   this.hoseInteractions = hoseInteractions;
-        // });
-        this.service
-          .getHeatEquipmentNotReturned(this.clientId)
-          .pipe(takeUntil(this.destroy$))
-          .subscribe((data: any[]) => {
-            this.heatEquipmentNotReturned = data;
-            this.goToTop();
-            if (!this.isAdmin) {
-              let difference = new Date().getTime() - new Date(this.client.created_at).getTime();
-              difference = difference / (1000 * 3600 * 24)
-              if (difference < 7) {
-                alert('Please ask if the client has any pets and get the type (dog or cat), name, breed, age, and if they want monthly pet food in the Pets section.');
-              }
-            }
-          });
-        this.getHeaterStatuses();
-      }
-
-      this.service
-        .getClientPets(this.clientId)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe((data: ClientPet[]) => {
-          this.pets = data;
-        });
-      this.service.getClientIncomes(this.clientId)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe((data: ClientIncome[]) => {
-        this.clientIncomes = data;
-      }, error => console.log(error));
-      this.service.getClientNextOfKins(this.clientId)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe((data: ClientNextOfKin[]) => {
-        this.clientNextOfKins = data;
-      }, error => console.log(error));
-      this.service
-        .getClientCircleOfFriends(this.clientId)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe((data: ClientCircleOfFriends[]) => {
-          this.circleOfFriends = data;
-        });
-      this.service
-        .getTentsForClient(this.clientId)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe((data: Tent[]) => {
-          this.tents = data;
-        });
-      this.service
-        .getClientDwellings(this.clientId)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe((data: ClientDwelling[]) => {
-          this.dwellings = data;
-        });
-      this.service
-        .getClientReferrals(this.clientId)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe((data: ReferralsResources[]) => {
-          this.referralsResources = data;
-        });
-      this.service
-        .getGoalsAndNextSteps(this.clientId)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe((data: GoalsNextStep[]) => {
-          this.goalsAndSteps = data;
-        });
-      this.service
-        .getHealthConcerns(this.clientId)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe((data: HealthConcern[]) => {
-          this.healthConcerns = data;
-          this.goToTop();
-
-          if (!this.isAdmin) {
-            let difference = new Date().getTime() - new Date(this.client.created_at).getTime();
-            difference = difference / (1000 * 3600 * 24)
-            if (difference < 7) {
-              alert('Please ask if the client has any pets and get the type (dog or cat), name, breed, age, and if they want monthly pet food in the Pets section.');
-            }
-          }
-        });
     } else {
       this.router.navigate(["/routes"]);
     }
@@ -709,6 +436,7 @@ export class ServicingClientComponent implements OnInit, OnDestroy {
 
   searchWeeklyAttendance() {
     this.weeklyAttendanceLoading = true;
+    this.weeklyAttendanceError = false;
     this.mainService
       .getClientAttendanceHistory(
         this.clientId,
@@ -730,15 +458,171 @@ export class ServicingClientComponent implements OnInit, OnDestroy {
         },
         (error) => {
           this.weeklyAttendanceLoading = false;
+          this.weeklyAttendanceLoaded = false;
+          this.weeklyAttendanceError = true;
           console.error('Unable to load client attendance history', error);
         }
       );
+  }
+
+  private loadProfileSection(key: string, event: Event, requests: Observable<void>[]) {
+    const section = event.target as HTMLDetailsElement;
+    const state = this.profileSectionStates[key];
+    if (!section.open || state.loaded || state.loading) {
+      return;
+    }
+
+    state.loading = true;
+    state.error = false;
+    if (requests.length === 0) {
+      state.loaded = true;
+      state.loading = false;
+      return;
+    }
+
+    forkJoin(requests)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          state.loaded = true;
+          state.loading = false;
+        },
+        error: error => {
+          state.loading = false;
+          state.error = true;
+          console.error(`Unable to load ${key} profile data`, error);
+        }
+      });
+  }
+
+  onHeatingToggle(event: Event) {
+    const requests: Observable<void>[] = [
+      this.service.getHeatersForClient(this.clientId).pipe(map(data => { this.heaters = data; })),
+      this.service.getHeatEquipmentNotReturned(this.clientId).pipe(map(data => { this.heatEquipmentNotReturned = data; })),
+      this.mainService.getHeaterStatuses().pipe(map(data => {
+        this.heaterStatuses = data.filter(status => status.id !== 1);
+      }))
+    ];
+
+    if (this.isAdmin) {
+      requests.push(
+        this.service.getClientLoanedTanks(this.clientId).pipe(map(data => { this.tankInteractions = data; })),
+        this.service.getClientLoanedHoses(this.clientId).pipe(map(data => { this.hoseInteractions = data; }))
+      );
+    }
+    this.loadProfileSection('heating', event, requests);
+  }
+
+  onContactsToggle(event: Event) {
+    const mailboxRequest = this.service.getMailboxForClient(this.clientId).pipe(
+      switchMap(mailbox => {
+        this.clientMailbox = mailbox || new ClientMailbox();
+        return mailbox && mailbox.id
+          ? this.service.getAuthorizedMailAccessors(mailbox.id)
+          : of<AuthorizedMailAccesses[]>([]);
+      }),
+      map(accessors => { this.authorizedMailAccesses = accessors; })
+    );
+    const requests: Observable<void>[] = [
+      mailboxRequest,
+      this.service.getClientCaseworkers(this.clientId).pipe(map(data => { this.clientCaseworkers = data; })),
+      this.service.getClientCircleOfFriends(this.clientId).pipe(map(data => { this.circleOfFriends = data; })),
+      this.service.getClientNextOfKins(this.clientId).pipe(map(data => { this.clientNextOfKins = data; }))
+    ];
+
+    this.loadProfileSection('contacts', event, requests);
+  }
+
+  onHousingToggle(event: Event) {
+    const requests: Observable<void>[] = [
+      this.service.getClientDwellings(this.clientId).pipe(map(data => {
+        this.dwellings = data;
+        if (data.length === 0) {
+          alert("Please ask this client 1) If this is first time homeless? 2) Why they are homeless? and 3) When they became homeless? Please record this under a new 'Dwelling History' entry.");
+        }
+      }))
+    ];
+    if (this.isAdmin) {
+      requests.push(
+        this.service.getClientHomelessHistory(this.clientId).pipe(map(data => { this.homelessHistories = data; }))
+      );
+    }
+    this.loadProfileSection('housing', event, requests);
+  }
+
+  onAssetsToggle(event: Event) {
+    const section = event.target as HTMLDetailsElement;
+    const state = this.profileSectionStates.assets;
+    const shouldCheckNewClient = section.open && !state.loaded && !state.loading &&
+      !this.isAdmin && !this.newClientPetsPromptShown;
+    const requests: Observable<void>[] = [
+      this.service.getClientPets(this.clientId).pipe(map(data => { this.pets = data; })),
+      this.service.getTentsForClient(this.clientId).pipe(map(data => { this.tents = data; })),
+      this.service.getClientReferrals(this.clientId).pipe(map(data => { this.referralsResources = data; }))
+    ];
+    this.loadProfileSection('assets', event, requests);
+
+    if (shouldCheckNewClient) {
+      const ageInDays = (Date.now() - new Date(this.client.created_at).getTime()) / (1000 * 3600 * 24);
+      if (ageInDays < 7) {
+        this.newClientPetsPromptShown = true;
+        alert('Please ask if the client has any pets and get the type (dog or cat), name, breed, age, and if they want monthly pet food in the Pets section.');
+      }
+    }
+  }
+
+  onGoalsToggle(event: Event) {
+    const requests: Observable<void>[] = [];
+    if (this.isAdmin) {
+      requests.push(
+        this.service.getGoalsAndNextSteps(this.clientId).pipe(map(data => { this.goalsAndSteps = data; })),
+        this.service.getClientSteps(this.clientId).pipe(map(data => { this.steps = data; }))
+      );
+    }
+    this.loadProfileSection('goals', event, requests);
+  }
+
+  onStabilityToggle(event: Event) {
+    const requests: Observable<void>[] = [
+      this.service.getClientIncomes(this.clientId).pipe(map(data => { this.clientIncomes = data; }))
+    ];
+    if (this.isAdmin) {
+      requests.push(
+        this.service.getClientBarriers(this.clientId).pipe(map(data => { this.clientBarriers = data; })),
+        this.service.getClientDebt(this.clientId).pipe(map(data => { this.clientDebts = data; })),
+        this.service.getClientFelonies(this.clientId).pipe(map(data => { this.clientFelonies = data; })),
+        this.service.getPastEvictions(this.clientId).pipe(map(data => { this.clientPastEvictions = data; })),
+        this.service.getClientSkills(this.clientId).pipe(map(data => { this.clientSkills = data; }))
+      );
+    }
+    this.loadProfileSection('stability', event, requests);
+  }
+
+  onHealthToggle(event: Event) {
+    const requests: Observable<void>[] = [
+      this.service.getHealthConcerns(this.clientId).pipe(map(data => { this.healthConcerns = data; }))
+    ];
+    if (this.isAdmin) {
+      requests.push(
+        this.service.getClientHealthInsurance(this.clientId).pipe(map(data => { this.healthInsurances = data; })),
+        this.service.getClientDisabilityAndDisorders(this.clientId).pipe(map(data => {
+          this.disabilityAndDisorders = {};
+          ['physical_disability', 'mental_disability', 'substance_use_disorder'].forEach(category => {
+            this.disabilityAndDisorders[category] = data
+              .filter(record => record.category === category)
+              .map(record => ({ ...record }));
+          });
+        }))
+      );
+    }
+    this.loadProfileSection('health', event, requests);
   }
 
   onWeeklyAttendanceToggle(event: Event) {
     const section = event.target as HTMLDetailsElement;
     if (section.open && !this.weeklyAttendanceLoaded && !this.weeklyAttendanceLoading) {
       this.weeklyAttendanceLoading = true;
+      this.weeklyAttendanceError = false;
       this.mainService
         .getClientAttendanceHistory(
           this.clientId,
@@ -764,6 +648,8 @@ export class ServicingClientComponent implements OnInit, OnDestroy {
           },
           error => {
             this.weeklyAttendanceLoading = false;
+            this.weeklyAttendanceLoaded = false;
+            this.weeklyAttendanceError = true;
             console.error('Unable to load client attendance history', error);
           }
         );
@@ -874,6 +760,7 @@ export class ServicingClientComponent implements OnInit, OnDestroy {
     }
 
     this.householdLoading = true;
+    this.householdError = false;
     this.service.getClientHousehold(this.client.household_id)
       .pipe(takeUntil(this.destroy$))
       .subscribe(
@@ -884,6 +771,7 @@ export class ServicingClientComponent implements OnInit, OnDestroy {
         },
         error => {
           this.householdLoading = false;
+          this.householdError = true;
           console.error('Unable to load household members', error);
         }
       );
@@ -896,6 +784,7 @@ export class ServicingClientComponent implements OnInit, OnDestroy {
     }
 
     this.documentsLoading = true;
+    this.documentsError = false;
     if (!this.releaseAcknowledgementsLoaded) {
       this.service.getClientReleaseAcknowledgements(this.clientId)
         .pipe(takeUntil(this.destroy$))
@@ -908,6 +797,7 @@ export class ServicingClientComponent implements OnInit, OnDestroy {
           },
           error => {
             this.documentsLoading = false;
+            this.documentsError = true;
             console.error('Unable to load release acknowledgements', error);
           }
         );
@@ -923,6 +813,7 @@ export class ServicingClientComponent implements OnInit, OnDestroy {
           },
           error => {
             this.documentsLoading = false;
+            this.documentsError = true;
             console.error('Unable to load client vital records', error);
           }
         );
