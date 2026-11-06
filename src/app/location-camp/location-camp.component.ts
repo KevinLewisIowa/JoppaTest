@@ -183,7 +183,7 @@ export class LocationCampComponent implements OnInit, OnDestroy {
           client.hasAttentionNote = !!client.has_attention_note;
           client.hasHeatingEquipment = !!client.has_heating_equipment;
 
-          if (!this.heatRoute || this.isHeatRouteDwelling(client.dwelling)) {
+          if (!this.heatRoute || this.isHeatRouteDwelling(client.current_dwelling)) {
             displayedClients.push(client);
             if (this.heatRoute) {
               this.numberTanksAtCamp += client.number_tanks || 0;
@@ -193,7 +193,7 @@ export class LocationCampComponent implements OnInit, OnDestroy {
             }
           }
 
-          if (!client.dwelling) {
+          if (!client.current_dwelling) {
             const clientName = `${client.first_name} ${client.last_name}`;
             this.erroredClients = this.erroredClients
               ? `${this.erroredClients}, ${clientName}`

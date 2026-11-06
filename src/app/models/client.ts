@@ -15,7 +15,7 @@ export class Client {
     inactive_description: string | undefined = undefined;
     number_meals: number | undefined = undefined;
     joppa_apartment_number: string | undefined = undefined;
-    dwelling: string | undefined = undefined;
+    current_dwelling: string | undefined = undefined; // computed from client dwelling history
     created_at: Date = new Date();
     updated_at: Date | undefined = undefined;
     last_interaction_date: Date = new Date();

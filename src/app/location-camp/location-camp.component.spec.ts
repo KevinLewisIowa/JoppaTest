@@ -53,18 +53,16 @@ describe('LocationCampComponent', () => {
     expect(component.clients[0].first_name).toBe('Mia');
   });
 
-  it('should use the latest dwelling history instead of the legacy client dwelling', () => {
-    const client = { id: 7, dwelling: 'Tent' } as Client;
-    const clientService = TestBed.inject(ClientService) as any;
-    clientService.getClientDwellings = jasmine.createSpy().and.returnValue(of([
-      { dwelling: 'Apartment', created_at: new Date('2025-01-01') }
-    ]));
-    spyOn<any>(component, 'loadClientDetails');
-
+  it('should use the dwelling summary returned from dwelling history', () => {
+    const client = { id: 7, current_dwelling: 'Apartment' } as Client;
+    const mainService = TestBed.inject(MainService) as any;
+    mainService.getClientsForCampSummary = jasmine.createSpy().and.returnValue(of([client]));
+    spyOn<any>(component, 'loadCampNotes');
     component.heatRoute = false;
-    component['loadClientsWithDwellings']([client]);
+    component['loadClientsForCamp']();
 
-    expect(client.dwelling).toBe('Apartment');
+    expect(mainService.getClientsForCampSummary).toHaveBeenCalledWith(component.locationCampId);
+    expect(client.current_dwelling).toBe('Apartment');
     expect(component.clients).toEqual([client]);
   });
 

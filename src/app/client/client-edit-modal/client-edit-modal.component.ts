@@ -191,7 +191,6 @@ export class ClientEditModalComponent implements OnInit, AfterViewChecked {
       inactive_description: [this.theClient.inactive_description || ''],
       number_meals: [this.theClient.number_meals || undefined],
       joppa_apartment_number: [this.theClient.joppa_apartment_number || ''],
-      dwelling: [this.theClient.dwelling || ''],
       created_at: [this.theClient.created_at || undefined],
       updated_at: [this.theClient.updated_at || undefined],
       last_interaction_date: [this.theClient.last_interaction_date || undefined],
