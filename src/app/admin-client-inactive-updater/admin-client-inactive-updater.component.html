@@ -4,7 +4,7 @@
   </div>
   <div class="panel-body" style="opacity: 0.93">
     <div class="col-md-12 col-lg-12">
-      <button class="btn btn-primary mt-3 mb-3" (click)="updateInactive()">
+      <button class="btn btn-primary mt-3 mb-3" (click)="updateInactive()" [disabled]="inactiveUpdaterRunning">
         Run Updater
       </button>
       <p *ngIf="countInactivated > 0 || processComplete">
@@ -13,6 +13,7 @@
       <p *ngIf="inactiveUpdaterRunning">
         Running...
       </p>
+      <div *ngIf="processError" class="alert alert-danger">{{processError}}</div>
     </div>
   </div>
   <div class="card-footer">

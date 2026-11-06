@@ -1,71 +1,47 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnDestroy } from "@angular/core";
 import { ClientService } from "app/services/client.service";
-import { Client } from "app/models/client";
-import { Router } from "@angular/router";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 
-// tslint:disable-next-line:comment-format
-//Add the clientService in the component.ts file in the constructor and import ClientService
 @Component({
   selector: "app-admin-client-inactive-updater",
   templateUrl: "./admin-client-inactive-updater.component.html",
   styleUrls: ["./admin-client-inactive-updater.component.css"],
 })
-export class AdminClientInactiveUpdaterComponent implements OnInit, OnDestroy {
-  clients: any[] = [];
+export class AdminClientInactiveUpdaterComponent implements OnDestroy {
   inactivityLimit = 90;
   countInactivated = 0;
   inactiveUpdaterRunning: boolean = false;
   processComplete: boolean = false;
+  processError = "";
   backIcon = faChevronLeft;
   private destroy$ = new Subject<void>();
 
-  constructor(private clientService: ClientService, private router: Router) {}
+  constructor(private clientService: ClientService) {}
 
   updateInactive() {
+    if (this.inactiveUpdaterRunning) return;
+
     this.inactiveUpdaterRunning = true;
     this.processComplete = false;
-    this.clientService.getClientsByName("")
+    this.processError = "";
+    this.countInactivated = 0;
+    this.clientService.updateInactiveClients(this.inactivityLimit)
       .pipe(takeUntil(this.destroy$))
-      .subscribe((data) => {
-      this.clients = data;
-      var today = new Date();
-
-      var numClients = this.clients.length;
-
-      var i = 0;
-      this.clients.forEach((client: Client) => {
-        i++;        
-        var difference = today.getTime() - new Date(client.last_interaction_date).getTime();
-        difference = Math.ceil(difference / (1000 * 3600 * 24));
-        console.log(`${client.first_name} ${client.last_name} difference: ${difference}; inactivity limit: ${this.inactivityLimit}`);
-        
-        if (
-          difference > this.inactivityLimit &&
-          client.status == "Active" &&
-          client.is_aftercare !== true
-        ) {
-          console.log(client.first_name + client.preferred_name + client.last_name);
-          client.status = "Inactive";
-          client.current_camp_id = 0;
-          this.clientService.updateClient(client)
-            .pipe(takeUntil(this.destroy$))
-            .subscribe(() => {
-              this.countInactivated++;
-            });
-        }
-
-        if (i == numClients) {
-          this.inactiveUpdaterRunning = false;
+      .subscribe({
+        next: response => {
+          this.countInactivated = response.updated_count;
           this.processComplete = true;
+          this.inactiveUpdaterRunning = false;
+        },
+        error: error => {
+          console.error("Unable to update inactive clients", error);
+          this.processError = "Unable to update inactive clients. Please try again.";
+          this.inactiveUpdaterRunning = false;
         }
       });
-    });
   }
-
-  ngOnInit() {}
 
   ngOnDestroy() {
     this.destroy$.next();

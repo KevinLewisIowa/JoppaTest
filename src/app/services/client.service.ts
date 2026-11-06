@@ -48,6 +48,11 @@ export interface PetFoodRequestsResponse {
   message?: string;
 }
 
+export interface InactiveClientsUpdateResponse {
+  updated_count: number;
+  message?: string;
+}
+
 @Injectable()
 export class ClientService {
   theHeader = new HttpHeaders().set("Content-Type", "application/json");
@@ -662,6 +667,26 @@ export class ClientService {
       })
       .pipe(
         map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  updateInactiveClients(inactivityLimit: number): Observable<InactiveClientsUpdateResponse> {
+    const myHeader = this.buildAuthHeaders();
+    return this.http
+      .post<InactiveClientsUpdateResponse>(
+        this.baseUrl + "updateInactiveClients",
+        { inactivityLimit },
+        { headers: myHeader }
+      )
+      .pipe(
+        map((res: InactiveClientsUpdateResponse) => {
           if (res.message === "invalid-token") {
             window.localStorage.removeItem("apiToken");
             this.router.navigate(["/application-login"]);

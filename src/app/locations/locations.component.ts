@@ -47,7 +47,7 @@ export class LocationsComponent implements OnInit, OnDestroy {
     this.thisRoute = new Route();
     this.locationCamps = [];
     this.routeId = this.route.snapshot.params["id"];
-    this.heatRoute = JSON.parse(window.localStorage.getItem("heatRoute"));
+    this.heatRoute = JSON.parse(window.localStorage.getItem("heatRoute")) === true;
     this.isAdmin = JSON.parse(window.localStorage.getItem("isAdmin"));
     window.localStorage.setItem("routeId", this.routeId.toString());
   }

@@ -660,8 +660,8 @@ export class MainService {
   getRouteOverviewSummary(routeId: number, heatRoute: boolean) {
     const myHeader = this.buildAuthHeaders();
     const params = new HttpParams()
-      .set("routeId", routeId.toString())
-      .set("heatRoute", heatRoute.toString());
+      .set("routeId", String(routeId ?? ""))
+      .set("heatRoute", String(heatRoute ?? false));
 
     return this.http
       .get<RouteOverviewSummary>(this.apiUrl + "getRouteOverviewSummary", {
