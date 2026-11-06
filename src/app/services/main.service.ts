@@ -21,6 +21,15 @@ export interface PaginatedCampListingResponse {
   message?: string;
 }
 
+export interface RouteOverviewSummary {
+  route: Route;
+  camps: LocationCamp[];
+  pet_counts: {
+    totals: { [petType: string]: number };
+  };
+  message?: string;
+}
+
 @Injectable()
 export class MainService {
   public showEndRoute: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
@@ -638,6 +647,29 @@ export class MainService {
       .get(this.apiUrl + `routes/${id}`, { headers: myHeader })
       .pipe(
         map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  getRouteOverviewSummary(routeId: number, heatRoute: boolean) {
+    const myHeader = this.buildAuthHeaders();
+    const params = new HttpParams()
+      .set("routeId", routeId.toString())
+      .set("heatRoute", heatRoute.toString());
+
+    return this.http
+      .get<RouteOverviewSummary>(this.apiUrl + "getRouteOverviewSummary", {
+        headers: myHeader,
+        params
+      })
+      .pipe(
+        map((res: RouteOverviewSummary) => {
           if (res.message === "invalid-token") {
             window.localStorage.removeItem("apiToken");
             this.router.navigate(["/application-login"]);

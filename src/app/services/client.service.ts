@@ -43,6 +43,11 @@ export interface PaginatedClientsResponse {
   message?: string;
 }
 
+export interface PetFoodRequestsResponse {
+  created_count: number;
+  message?: string;
+}
+
 @Injectable()
 export class ClientService {
   theHeader = new HttpHeaders().set("Content-Type", "application/json");
@@ -1350,6 +1355,26 @@ export class ClientService {
       .get(this.baseUrl + `client_pets`, { headers: myHeader })
       .pipe(
         map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  addPetFoodRequestedItems(): Observable<PetFoodRequestsResponse> {
+    const myHeader = this.buildAuthHeaders();
+    return this.http
+      .post<PetFoodRequestsResponse>(
+        this.baseUrl + "addPetFoodRequestedItems",
+        {},
+        { headers: myHeader }
+      )
+      .pipe(
+        map((res: PetFoodRequestsResponse) => {
           if (res.message === "invalid-token") {
             window.localStorage.removeItem("apiToken");
             this.router.navigate(["/application-login"]);

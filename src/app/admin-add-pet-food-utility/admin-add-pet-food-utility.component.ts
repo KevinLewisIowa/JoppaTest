@@ -1,10 +1,6 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnDestroy } from '@angular/core';
 import { ClientService } from 'app/services/client.service';
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
-import { ClientPet } from 'app/models/client-pet';
-import { RequestedItem } from 'app/models/requested-item';
-import { Client } from 'app/models/client';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -13,79 +9,38 @@ import { takeUntil } from 'rxjs/operators';
   templateUrl: './admin-add-pet-food-utility.component.html',
   styleUrls: ['./admin-add-pet-food-utility.component.css']
 })
-export class AdminAddPetFoodUtilityComponent implements OnInit {
+export class AdminAddPetFoodUtilityComponent implements OnDestroy {
 
-  clientsPets: any[] = [];
   countItemsAdded = 0;
   petFoodAdderRunning: boolean = false;
   processComplete: boolean = false;
+  processError = '';
   backIcon = faChevronLeft;
   private destroy$ = new Subject<void>();
 
-  constructor(private clientService: ClientService, private router: Router) { }
+  constructor(private clientService: ClientService) { }
 
   addPetFood() {
+    if (this.petFoodAdderRunning) return;
+
     this.petFoodAdderRunning = true;
     this.processComplete = false;
-    this.clientService.getAllClientPets()
+    this.processError = '';
+    this.countItemsAdded = 0;
+    this.clientService.addPetFoodRequestedItems()
       .pipe(takeUntil(this.destroy$))
-      .subscribe((data: ClientPet[]) => {
-      console.log(JSON.stringify(data));
-      this.clientsPets = data.filter(p => p.food_requested == true);
-      var numClients = this.clientsPets.length;
-      console.log(`Number of pets requesting food: ${numClients}`);
-
-      var i = 0;
-      if (numClients == 0) {
-        this.petFoodAdderRunning = false;
-        this.processComplete = true;
-      } else {
-        this.clientsPets.forEach((clientPet: ClientPet) => {
-          i++;
-
-          console.log(JSON.stringify(clientPet));
-          if (this.clientsPets.find(pet => pet.client_id == clientPet.client_id && pet.pet_type == clientPet.pet_type) == clientPet) {
-            this.clientService.getClientById(clientPet.client_id)
-              .pipe(takeUntil(this.destroy$))
-              .subscribe((client: Client) => {
-              if (client.status == "Active" && client.current_camp_id != null && client.current_camp_id > 0  && client.current_camp_id != 449 && client.current_camp_id != 704) {
-                console.log(`Is first pet of this type and going to add; client: ${client.first_name} ${client.last_name}; Pet: ${clientPet.pet_type}`);
-                // Create new item request
-                let newItem: RequestedItem = new RequestedItem();
-                newItem.client_id = clientPet.client_id;
-                newItem.date_requested = new Date();
-                newItem.fulfilled = false;
-                newItem.has_received = false;
-                newItem.item_description = clientPet.pet_type + " Food";
-  
-                this.clientService.insertRequestedItem(newItem).pipe(takeUntil(this.destroy$)).subscribe((data: RequestedItem) => {
-                  if (data != null && data.id != null) {
-                    this.countItemsAdded = this.countItemsAdded + 1;
-  
-                    console.log(`Client Active. Number items added: ${this.countItemsAdded}`);
-  
-                    if (i == numClients) {
-                      this.petFoodAdderRunning = false;
-                      this.processComplete = true;
-                    }
-                  }
-                });
-              } else {
-                console.log(`Client not active. Number items added: ${this.countItemsAdded}`);
-  
-                if (i == numClients) {
-                  this.petFoodAdderRunning = false;
-                  this.processComplete = true;
-                }
-              }
-            })
-          }
-        });
-      }
-    });
-  }
-
-  ngOnInit(): void {
+      .subscribe({
+        next: response => {
+          this.countItemsAdded = response.created_count;
+          this.processComplete = true;
+          this.petFoodAdderRunning = false;
+        },
+        error: error => {
+          console.error("Unable to add pet food items", error);
+          this.processError = "Unable to add pet food items. Please try again.";
+          this.petFoodAdderRunning = false;
+        }
+      });
   }
 
   ngOnDestroy() {
