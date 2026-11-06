@@ -5,7 +5,6 @@ import { Router } from '@angular/router';
 import { RouteInstance } from '../models/route-instance';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
-import { LocationCamp } from 'app/models/location-camp';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -28,27 +27,12 @@ export class RoutesComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.mainService.getTheRoutes()
+    this.mainService.getRouteListing()
       .pipe(takeUntil(this.destroy$))
-      .subscribe(theRoutes => {
-        this.routes = theRoutes;
-        this.routes = this.routes.filter(r => r.is_active == true);
-        this.routes.sort((a, b) => (a.name > b.name) ? 1 : -1);
-
-        this.routes.forEach((route: Route) => {
-          this.mainService.getClientCountForRoute(route.id)
-            .pipe(takeUntil(this.destroy$))
-            .subscribe((client_count: number) => {
-              route.number_clients = client_count;
-
-              this.mainService.getCampsForRoute(route.id)
-                .pipe(takeUntil(this.destroy$))
-                .subscribe((locations: LocationCamp[]) => {
-                  route.number_stops = locations.length;
-                });
-            });
-        });
-      });
+      .subscribe(
+        routes => this.routes = routes,
+        error => console.error('Unable to load routes and their counts', error)
+      );
   }
 
   openRoute(id) {

@@ -1,4 +1,4 @@
-import { throwError as observableThrowError, forkJoin, of, Subject } from "rxjs";
+import { throwError as observableThrowError, Subject } from "rxjs";
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Route } from "../models/route";
@@ -34,9 +34,8 @@ import {
   faSortUp,
   faSortDown
 } from "@fortawesome/free-solid-svg-icons";
-import { ClientDwelling } from "app/models/client-dwelling";
 import { Note } from "app/models/note";
-import { takeUntil, catchError, map } from "rxjs/operators";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
   selector: "app-location-camp",
@@ -73,7 +72,6 @@ export class LocationCampComponent implements OnInit, OnDestroy {
   isAdmin: boolean = false;
   currentSortColumn: "name" | "lastInteraction" = "name";
   currentSortDirection: "asc" | "desc" = "asc";
-  clientsWithFulfilledItems: number[] = [];
   locationCampList: number[] = [];
   currentStopNumber: number;
   totalStopsAmount: number;
@@ -108,10 +106,6 @@ export class LocationCampComponent implements OnInit, OnDestroy {
       localStorage.setItem("locationCampId", JSON.stringify(this.locationCampId));
       this.heatRoute = JSON.parse(window.localStorage.getItem("heatRoute"));
       this.routeId = JSON.parse(window.localStorage.getItem("routeId"));
-
-      if (this.routeId) {
-        this.loadRouteAttendance();
-      }
 
       this.loadLocationCamp();
     });
@@ -150,7 +144,6 @@ export class LocationCampComponent implements OnInit, OnDestroy {
   private resetCampState(): void {
     this.clients = [];
     this.campNotes = [];
-    this.clientsWithFulfilledItems = [];
     this.numPeopleWithTanksAtCamp = 0;
     this.numberTanksAtCamp = 0;
     this.erroredClients = '';
@@ -176,7 +169,7 @@ export class LocationCampComponent implements OnInit, OnDestroy {
   }
 
   private loadClientsForCamp(): void {
-    this.mainService.getClientsForCamp(this.locationCampId)
+    this.mainService.getClientsForCampSummary(this.locationCampId)
       .pipe(takeUntil(this.destroy$))
       .subscribe((data: Client[]) => {
         if (!data || data.length === 0) {
@@ -185,7 +178,31 @@ export class LocationCampComponent implements OnInit, OnDestroy {
           return;
         }
 
-        this.loadClientsWithDwellings(data);
+        const displayedClients: Client[] = [];
+        data.forEach(client => {
+          client.hasAttentionNote = !!client.has_attention_note;
+          client.hasHeatingEquipment = !!client.has_heating_equipment;
+
+          if (!this.heatRoute || this.isHeatRouteDwelling(client.dwelling)) {
+            displayedClients.push(client);
+            if (this.heatRoute) {
+              this.numberTanksAtCamp += client.number_tanks || 0;
+              if (client.number_tanks > 0) {
+                this.numPeopleWithTanksAtCamp += 1;
+              }
+            }
+          }
+
+          if (!client.dwelling) {
+            const clientName = `${client.first_name} ${client.last_name}`;
+            this.erroredClients = this.erroredClients
+              ? `${this.erroredClients}, ${clientName}`
+              : clientName;
+          }
+        });
+
+        this.clients = displayedClients;
+        this.applyCurrentClientSort();
 
         this.loadCampNotes();
       }, error => console.log(error));
@@ -198,52 +215,6 @@ export class LocationCampComponent implements OnInit, OnDestroy {
         this.campNotes = data.sort((a, b) => (a.created_at > b.created_at) ? 1 : -1);
       }, error => console.log(error));
   }
-
-  private loadClientsWithDwellings(campClients: Client[]): void {
-    const clientDetailRequests = campClients.map((client) =>
-      this.clientService.getClientDwellings(client.id).pipe(
-        map((data: ClientDwelling[]) => ({ client, dwellings: data })),
-        catchError((error) => {
-          console.log(error);
-          return of({ client, dwellings: [] });
-        })
-      )
-    );
-
-    forkJoin(clientDetailRequests)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((results) => {
-        const displayedClients: Client[] = [];
-
-        results.forEach(({ client, dwellings }) => {
-          const dwelling = this.findLatestDwelling(dwellings);
-          client.dwelling = dwelling;
-
-          if (!this.heatRoute || this.isHeatRouteDwelling(dwelling)) {
-            displayedClients.push(client);
-            if (this.heatRoute) {
-              this.numberTanksAtCamp += client.number_tanks || 0;
-              if (client.number_tanks > 0) {
-                this.numPeopleWithTanksAtCamp += 1;
-              }
-            }
-          }
-
-          if (!dwelling) {
-            if (this.erroredClients === '') {
-              this.erroredClients = `${client.first_name} ${client.last_name}`;
-            } else {
-              this.erroredClients += `, ${client.first_name} ${client.last_name}`;
-            }
-          }
-        });
-
-        this.clients = displayedClients;
-        this.applyCurrentClientSort();
-        this.loadClientDetails(this.clients);
-      }, error => console.log(error));
-  }
-
 
   sortClients(column: "name" | "lastInteraction"): void {
     if (this.currentSortColumn === column) {
@@ -280,28 +251,8 @@ export class LocationCampComponent implements OnInit, OnDestroy {
     });
   }
 
-  private findLatestDwelling(dwellings: ClientDwelling[]): string {
-    if (!Array.isArray(dwellings) || dwellings.length === 0) {
-      return undefined;
-    }
-
-    const latest = dwellings.reduce((latestDwelling, current) => {
-      if (!latestDwelling || current.created_at > latestDwelling.created_at) {
-        return current;
-      }
-      return latestDwelling;
-    }, null as ClientDwelling);
-
-    return latest?.dwelling;
-  }
-
   private isHeatRouteDwelling(dwelling: string): boolean {
     return ["Tent", "Garage", "Shack", "Camper", "Broken Down Van"].includes(dwelling);
-  }
-
-  private loadClientDetails(clients: Client[]): void {
-    clients.forEach((client) => this.processClient(client));
-    this.checkClientHasFulfilledItems();
   }
 
   private loadRouteAttendance(): void {
@@ -416,58 +367,6 @@ export class LocationCampComponent implements OnInit, OnDestroy {
     }, error => console.log(error));
   }
 
-  processClient(client: Client) {
-    client.hasAttentionNote = !!(client.admin_notes && client.admin_notes.trim() !== '')
-    if (!client.hasAttentionNote) {
-      this.clientService.hasPinnedOrWarningNote(client.id)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe((data: { hasPinnedOrWarningNote: boolean }) => {
-          client.hasAttentionNote = data.hasPinnedOrWarningNote;
-        }, error => console.log(error));
-    }
-
-    // check whether client has heating equipment (tanks/hoses or heaters)
-    this.checkClientHasHeatingEquipment(client);
-  }
-
-  checkClientHasHeatingEquipment(client: Client) {
-    // avoid running this more than once per client
-    if (client.hasHeatingEquipmentChecked) return;
-    client.hasHeatingEquipmentChecked = true;
-    client.hasHeatingEquipment = false;
-
-    // 1) check heaters
-    this.clientService.getHeatersForClient(client.id)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((heaters: any[]) => {
-        if (Array.isArray(heaters) && heaters.length > 0) {
-          client.hasHeatingEquipment = true;
-          console.log(`Client ${client.first_name} ${client.last_name} has heaters out.`);
-          return;
-        }
-
-        // 2) check tanks
-        this.clientService.getClientLoanedTanks(client.id)
-          .pipe(takeUntil(this.destroy$))
-          .subscribe((tanks: any[]) => {
-            if (Array.isArray(tanks) && tanks.length > 0) {
-              client.hasHeatingEquipment = true;
-              console.log(`Client ${client.first_name} ${client.last_name} has tanks out.`);
-              return;
-            }
-
-            // 3) check hoses
-            this.clientService.getClientLoanedHoses(client.id)
-              .pipe(takeUntil(this.destroy$))
-              .subscribe((hoses: any[]) => {
-                client.hasHeatingEquipment = Array.isArray(hoses) && hoses.length > 0;
-                if (client.hasHeatingEquipment) {
-                  console.log(`Client ${client.first_name} ${client.last_name} has hoses out.`);
-                }
-              }, err => console.log(err));
-          }, err => console.log(err));
-      }, err => console.log(err));
-  }
 
   markRemainingNotSeenNotServiced() {
     // build list of client ids from routeAttendance
@@ -678,29 +577,6 @@ export class LocationCampComponent implements OnInit, OnDestroy {
   viewClient(theClient: Client) {
     localStorage.setItem("selectedClient", theClient.id.toString());
     this.router.navigate(["/serviceClient"]);
-  }
-
-  clientHasFulfilledItems(id: number): boolean {
-    if (this.clientsWithFulfilledItems.find((c) => c == id) >= 0) {
-      return true;
-    }
-
-    return false;
-  }
-
-  checkClientHasFulfilledItems() {
-    this.clients.forEach((client) => {
-      this.mainService.getClientHasFulfilledItems(client.id)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe(
-          (count: number) => {
-            if (count > 0) {
-              this.clientsWithFulfilledItems.push(client.id);
-            }
-          },
-          (error) => console.log(error)
-        );
-    });
   }
 
   back() {

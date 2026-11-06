@@ -54,4 +54,5 @@ export class Client {
     hasAttentionNote: boolean = false; // UI/computed property, not a DB column
     hasHeatingEquipment: boolean = false; // UI/computed property, not a DB column
     hasHeatingEquipmentChecked: boolean = false; // UI/computed property to avoid duplicate checks
-} 
+    has_fulfilled_items: boolean = false; // computed for the location camp client list
+}

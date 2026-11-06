@@ -1,7 +1,8 @@
 import { Injectable } from "@angular/core";
-import { HttpHeaders, HttpClient } from "@angular/common/http";
+import { HttpHeaders, HttpClient, HttpParams } from "@angular/common/http";
 import { Observable, BehaviorSubject } from "rxjs";
 import { Route } from "../models/route";
+import { Client } from "../models/client";
 import { Heater } from "../models/heater";
 import { LocationCamp } from "app/models/location-camp";
 import { RouteInstance } from "../models/route-instance";
@@ -13,6 +14,12 @@ import { environment } from "environments/environment";
 import { catchError, map } from "rxjs/operators";
 import { RequestedItem } from "app/models/requested-item";
 import { CampNote } from "app/models/camp-note";
+
+export interface PaginatedCampListingResponse {
+  camps: LocationCamp[];
+  total: number;
+  message?: string;
+}
 
 @Injectable()
 export class MainService {
@@ -657,6 +664,46 @@ export class MainService {
       );
   }
 
+  getPaginatedCampListing(query: string, page: number, pageSize: number, sortBy: string, sortDirection: string) {
+    const myHeader = this.buildAuthHeaders();
+    const params = new HttpParams()
+      .set("query", query)
+      .set("page", page.toString())
+      .set("page_size", pageSize.toString())
+      .set("sort_by", sortBy)
+      .set("sort_direction", sortDirection);
+
+    return this.http
+      .get<PaginatedCampListingResponse>(this.apiUrl + "getPaginatedCampListing", {
+        headers: myHeader,
+        params
+      })
+      .pipe(
+        map((res: PaginatedCampListingResponse) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  getRouteListing() {
+    const myHeader = this.buildAuthHeaders();
+    return this.http.get(this.apiUrl + "getRouteListing", { headers: myHeader }).pipe(
+      map((res: any) => {
+        if (res.message === "invalid-token") {
+          window.localStorage.removeItem("apiToken");
+          this.router.navigate(["/application-login"]);
+        }
+        return res as Route[];
+      }),
+      catchError(this.handleError)
+    );
+  }
+
   getCampsForRoute(id: number) {
     const myHeader = this.buildAuthHeaders();
     return this.http
@@ -760,6 +807,22 @@ export class MainService {
             this.router.navigate(["/application-login"]);
           }
           return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  getClientsForCampSummary(id: number) {
+    const myHeader = this.buildAuthHeaders();
+    return this.http
+      .get(this.apiUrl + `getClientsForCampSummary?locationCampId=${id}`, { headers: myHeader })
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res as Client[];
         }),
         catchError(this.handleError)
       );

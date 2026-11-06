@@ -68,7 +68,7 @@
         <tbody>
           <tr *ngFor="let client of clients" (click)="viewClient(client)" class="client-row">
             <td class="text-left">
-              <fa-icon *ngIf="client.client_picture" [icon]="cameraIcon" style="color: #0d6efd" title="Client has a picture"></fa-icon>&nbsp;
+              <fa-icon *ngIf="client.has_picture" [icon]="cameraIcon" style="color: #0d6efd" title="Client has a picture"></fa-icon>&nbsp;
               <fa-icon style="color: #0d6efd" [icon]="mapIcon" *ngIf="client.has_location"></fa-icon>&nbsp;
               <fa-icon *ngIf="client.hasAttentionNote" [icon]="flagIcon" style="color: #0d6efd" title="Attention: Admin note, warning, or pinned note"></fa-icon>&nbsp;
               <fa-icon *ngIf="client.hasHeatingEquipment" [icon]="fireIcon" style="color: orange" title="Has heating equipment"></fa-icon>&nbsp;
@@ -79,7 +79,7 @@
                 ">({{ client.preferred_name }})</span>
               {{ client.last_name }}
               <fa-icon id="star" style="color: #0d6efd" [icon]="starIcon"
-                *ngIf="clientHasFulfilledItems(client.id)"></fa-icon>
+                *ngIf="client.has_fulfilled_items"></fa-icon>
             </td>
             <td class="text-left">{{ client.dwelling }}</td>
             <td class="text-left">{{ client.joppa_apartment_number }}</td>
