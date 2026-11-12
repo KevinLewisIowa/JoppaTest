@@ -58,7 +58,7 @@
   </div>
 
   <div class="panel-body">
-    <details class="profile-accordion" (toggle)="onHeatingToggle($event)" *ngIf="heatRoute || isAdmin">
+    <details class="profile-accordion" [open]="heatRoute" (toggle)="onHeatingToggle($event)" *ngIf="heatRoute || isAdmin">
       <summary><h4 class="d-inline">Heating Equipment</h4></summary>
       <div *ngIf="profileSectionStates.heating.loading" class="text-muted">Loading heating equipment...</div>
       <div *ngIf="profileSectionStates.heating.error" class="text-danger">
@@ -1867,7 +1867,7 @@
     </div>
   </div>
   <div class="col-lg-12 col-md-12">
-    <details class="profile-accordion" (toggle)="onWeeklyAttendanceToggle($event)">
+    <details class="profile-accordion" [open]="heatRoute" (toggle)="onWeeklyAttendanceToggle($event)">
       <summary><h4 class="d-inline">Weekly Attendance History</h4></summary>
       <div *ngIf="weeklyAttendanceLoading" class="text-muted">Loading attendance history...</div>
       <div *ngIf="weeklyAttendanceError" class="text-danger">
