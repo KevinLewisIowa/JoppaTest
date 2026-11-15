@@ -89,7 +89,6 @@ export class ClientEditComponent implements OnInit, AfterViewChecked, OnDestroy 
       date_became_homeless: '',
       dwelling: 'Tent',
       dwelling_note: '',
-      date_moved: '',
       client_picture: '',
       latitude: 0,
       longitude: 0,
