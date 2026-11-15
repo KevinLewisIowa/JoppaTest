@@ -42,6 +42,8 @@ export interface AdminCreationResponse {
   message: string;
 }
 
+export type AdminRole = "admin" | "super_admin";
+
 @Injectable()
 export class MainService {
   public showEndRoute: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
@@ -1316,11 +1318,16 @@ export class MainService {
       );
   }
 
-  createAdmin(admin: { email: string; first_name: string; last_name: string }) {
+  createAdmin(admin: {
+    email: string;
+    first_name: string;
+    last_name: string;
+    role: AdminRole;
+  }) {
     return this.http
       .post<AdminCreationResponse>(
         this.buildApiUrl("admins"),
-        { admin: { ...admin, role: "admin" } },
+        { admin },
         { headers: this.buildAuthHeaders() }
       )
       .pipe(

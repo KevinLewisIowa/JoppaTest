@@ -1,7 +1,7 @@
 <div class="card">
   <div class="card-header">
     <h2>Create Admin User</h2>
-    <p class="mb-0">Create a standard admin account. Only super admins can access this page.</p>
+    <p class="mb-0">Only super admins can access this page.</p>
   </div>
 
   <div class="card-body">
@@ -10,7 +10,10 @@
     </div>
 
     <div *ngIf="createdAdmin" class="alert alert-success" role="status">
-      <p>Admin account created for {{ createdAdmin.admin.email }}.</p>
+      <p>
+        {{ createdAdmin.admin.role === "super_admin" ? "Super admin" : "Admin" }}
+        account created for {{ createdAdmin.admin.email }}.
+      </p>
       <p class="mb-1"><strong>Temporary password (shown only on this page):</strong></p>
       <code class="temporary-password">{{ createdAdmin.temp_password }}</code>
       <p class="mt-2 mb-0">Share this password through an approved secure channel. The admin must change it at first login.</p>
@@ -42,6 +45,14 @@
         <small class="text-danger" *ngIf="adminForm.get('email').hasError('email') && adminForm.get('email').touched">
           Enter a valid email address.
         </small>
+      </div>
+
+      <div class="form-group mb-3">
+        <label for="role">Role</label>
+        <select id="role" class="form-control" formControlName="role">
+          <option value="admin">Admin</option>
+          <option value="super_admin">Super Admin</option>
+        </select>
       </div>
 
       <button type="submit" class="btn btn-primary" [disabled]="isSubmitting || adminForm.invalid">

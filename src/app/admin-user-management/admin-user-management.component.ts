@@ -1,7 +1,10 @@
 import { Component } from "@angular/core";
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { HttpErrorResponse } from "@angular/common/http";
-import { AdminCreationResponse, MainService } from "app/services/main.service";
+import {
+  AdminCreationResponse,
+  MainService,
+} from "app/services/main.service";
 
 @Component({
   selector: "app-admin-user-management",
@@ -22,6 +25,7 @@ export class AdminUserManagementComponent {
       first_name: ["", Validators.required],
       last_name: ["", Validators.required],
       email: ["", [Validators.required, Validators.email]],
+      role: ["admin", Validators.required],
     });
   }
 
@@ -35,12 +39,19 @@ export class AdminUserManagementComponent {
     this.createdAdmin = null;
     this.isSubmitting = true;
     const formValue = this.adminForm.getRawValue();
+    const role = formValue.role;
+    if (role !== "admin" && role !== "super_admin") {
+      this.errorMessage = "Select a valid admin role.";
+      this.isSubmitting = false;
+      return;
+    }
 
     this.mainService
       .createAdmin({
         first_name: formValue.first_name.trim(),
         last_name: formValue.last_name.trim(),
         email: formValue.email.trim().toLowerCase(),
+        role,
       })
       .subscribe(
         (response) => {
@@ -49,6 +60,7 @@ export class AdminUserManagementComponent {
             first_name: "",
             last_name: "",
             email: "",
+            role: "admin",
           });
           this.isSubmitting = false;
         },

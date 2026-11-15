@@ -43,6 +43,7 @@ describe("AdminUserManagementComponent", () => {
       first_name: " Regina ",
       last_name: " Sarmento ",
       email: " REGINA.SARMENTO@JOPPA.ORG ",
+      role: "admin",
     });
 
     component.createAdmin();
@@ -51,10 +52,41 @@ describe("AdminUserManagementComponent", () => {
       first_name: "Regina",
       last_name: "Sarmento",
       email: "regina.sarmento@joppa.org",
+      role: "admin",
     });
     expect(component.createdAdmin).toEqual(response);
     fixture.detectChanges();
     expect(fixture.nativeElement.textContent).toContain("one-time-password");
+  });
+
+  it("submits super-admin role when selected", () => {
+    const response: AdminCreationResponse = {
+      admin: {
+        id: 6,
+        email: "regina.sarmento@joppa.org",
+        first_name: "Regina",
+        last_name: "Sarmento",
+        role: "super_admin",
+      },
+      temp_password: "one-time-password",
+      message: "Admin created successfully.",
+    };
+    mainService.createAdmin.and.returnValue(of(response));
+    component.adminForm.setValue({
+      first_name: "Regina",
+      last_name: "Sarmento",
+      email: "regina.sarmento@joppa.org",
+      role: "super_admin",
+    });
+
+    component.createAdmin();
+
+    expect(mainService.createAdmin).toHaveBeenCalledWith({
+      first_name: "Regina",
+      last_name: "Sarmento",
+      email: "regina.sarmento@joppa.org",
+      role: "super_admin",
+    });
   });
 
   it("shows API validation errors when account creation fails", () => {
@@ -71,6 +103,7 @@ describe("AdminUserManagementComponent", () => {
       first_name: "Regina",
       last_name: "Sarmento",
       email: "regina.sarmento@joppa.org",
+      role: "admin",
     });
 
     component.createAdmin();
