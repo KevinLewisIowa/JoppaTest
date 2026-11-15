@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
-import { HttpHeaders, HttpClient, HttpParams } from "@angular/common/http";
-import { Observable, BehaviorSubject } from "rxjs";
+import { HttpHeaders, HttpClient, HttpParams, HttpErrorResponse } from "@angular/common/http";
+import { Observable, BehaviorSubject, throwError } from "rxjs";
 import { Route } from "../models/route";
 import { Client } from "../models/client";
 import { Heater } from "../models/heater";
@@ -28,6 +28,18 @@ export interface RouteOverviewSummary {
     totals: { [petType: string]: number };
   };
   message?: string;
+}
+
+export interface AdminCreationResponse {
+  admin: {
+    id: number;
+    email: string;
+    first_name: string;
+    last_name: string;
+    role: string;
+  };
+  temp_password: string;
+  message: string;
 }
 
 @Injectable()
@@ -1301,6 +1313,28 @@ export class MainService {
           return response;
         }),
         catchError(this.handleError)
+      );
+  }
+
+  createAdmin(admin: { email: string; first_name: string; last_name: string }) {
+    return this.http
+      .post<AdminCreationResponse>(
+        this.buildApiUrl("admins"),
+        { admin: { ...admin, role: "admin" } },
+        { headers: this.buildAuthHeaders() }
+      )
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === 401) {
+            window.localStorage.removeItem("apiToken");
+            window.localStorage.removeItem("tokenExpires");
+            window.localStorage.removeItem("adminEmail");
+            window.localStorage.removeItem("adminRole");
+            window.localStorage.removeItem("isAdmin");
+            this.router.navigate(["/application-login"]);
+          }
+          return throwError(() => error);
+        })
       );
   }
 

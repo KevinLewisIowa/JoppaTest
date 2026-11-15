@@ -105,6 +105,7 @@ import { ClientBarrierComponent } from './insert-modals/client-barrier/client-ba
 import { ClientDisabilityAndDisorderComponent } from './insert-modals/client-disability-and-disorder/client-disability-and-disorder.component';
 import { AdminMergeDuplicatesComponent } from './admin-merge-duplicates/admin-merge-duplicates.component';
 import { VitalRecordComponent } from './insert-modals/vital-record/vital-record.component';
+import { AdminUserManagementComponent } from './admin-user-management/admin-user-management.component';
 
 const reducers = {
   user: MainReducer,
@@ -189,7 +190,8 @@ const reducers = {
     ClientBarrierComponent,
     ClientDisabilityAndDisorderComponent,
     AdminMergeDuplicatesComponent,
-    VitalRecordComponent
+    VitalRecordComponent,
+    AdminUserManagementComponent
   ],
     imports: [
         BrowserModule,

@@ -1,0 +1,53 @@
+<div class="card">
+  <div class="card-header">
+    <h2>Create Admin User</h2>
+    <p class="mb-0">Create a standard admin account. Only super admins can access this page.</p>
+  </div>
+
+  <div class="card-body">
+    <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+      {{ errorMessage }}
+    </div>
+
+    <div *ngIf="createdAdmin" class="alert alert-success" role="status">
+      <p>Admin account created for {{ createdAdmin.admin.email }}.</p>
+      <p class="mb-1"><strong>Temporary password (shown only on this page):</strong></p>
+      <code class="temporary-password">{{ createdAdmin.temp_password }}</code>
+      <p class="mt-2 mb-0">Share this password through an approved secure channel. The admin must change it at first login.</p>
+    </div>
+
+    <form [formGroup]="adminForm" (ngSubmit)="createAdmin()" novalidate>
+      <div class="form-group mb-3">
+        <label for="first-name">First name</label>
+        <input id="first-name" class="form-control" formControlName="first_name" autocomplete="given-name">
+        <small class="text-danger" *ngIf="adminForm.get('first_name').hasError('required') && adminForm.get('first_name').touched">
+          First name is required.
+        </small>
+      </div>
+
+      <div class="form-group mb-3">
+        <label for="last-name">Last name</label>
+        <input id="last-name" class="form-control" formControlName="last_name" autocomplete="family-name">
+        <small class="text-danger" *ngIf="adminForm.get('last_name').hasError('required') && adminForm.get('last_name').touched">
+          Last name is required.
+        </small>
+      </div>
+
+      <div class="form-group mb-3">
+        <label for="email">Email</label>
+        <input id="email" type="email" class="form-control" formControlName="email" autocomplete="email">
+        <small class="text-danger" *ngIf="adminForm.get('email').hasError('required') && adminForm.get('email').touched">
+          Email is required.
+        </small>
+        <small class="text-danger" *ngIf="adminForm.get('email').hasError('email') && adminForm.get('email').touched">
+          Enter a valid email address.
+        </small>
+      </div>
+
+      <button type="submit" class="btn btn-primary" [disabled]="isSubmitting || adminForm.invalid">
+        {{ isSubmitting ? "Creating..." : "Create Admin" }}
+      </button>
+      <button type="button" class="btn btn-secondary ms-2" routerLink="/adminHome">Back</button>
+    </form>
+  </div>
+</div>

@@ -77,3 +77,20 @@ export class IsAdminGuard  {
     return isAuth;
   }
 }
+
+@Injectable()
+export class IsSuperAdminGuard {
+  constructor(private router: Router) {}
+
+  canActivate(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ): boolean {
+    if (window.localStorage.getItem('adminRole') === 'super_admin') {
+      return true;
+    }
+
+    this.router.navigate(['adminHome']);
+    return false;
+  }
+}

@@ -23,7 +23,7 @@ import { AdminReportsComponent } from "./admin-reports/admin-reports.component";
 import { NewClientsReportComponent } from "./admin-reports/new-clients-report/new-clients-report.component";
 import { MainLoginComponent } from "./main-login/main-login.component";
 import { ChangePasswordComponent } from "./change-password/change-password.component";
-import { IsLoggedInGuard, IsAdminGuard } from "app/guards/login.guard";
+import { IsLoggedInGuard, IsAdminGuard, IsSuperAdminGuard } from "app/guards/login.guard";
 import { RouteMapComponent } from "./route-map/route-map.component";
 import { RouteSummaryReportComponent } from "./admin-reports/route-summary-report/route-summary-report.component";
 import { ChangeRegularPasswordComponent } from "app/change-regular-password/change-regular-password.component";
@@ -39,6 +39,7 @@ import { AdminCampListingComponent } from "./admin-camp-listing/admin-camp-listi
 import { AdminClientInactiveUpdaterComponent } from "./admin-client-inactive-updater/admin-client-inactive-updater.component";
 import { AdminAddPetFoodUtilityComponent } from "./admin-add-pet-food-utility/admin-add-pet-food-utility.component";
 import { AdminMergeDuplicatesComponent } from "./admin-merge-duplicates/admin-merge-duplicates.component";
+import { AdminUserManagementComponent } from "./admin-user-management/admin-user-management.component";
 
 const routes: Routes = [
   {
@@ -192,6 +193,11 @@ const routes: Routes = [
     component: ServicingClientComponent,
   },
   {
+    path: "admin/users",
+    canActivate: [IsLoggedInGuard, IsSuperAdminGuard],
+    component: AdminUserManagementComponent,
+  },
+  {
     path: "adminHome",
     canActivate: [IsLoggedInGuard, IsAdminGuard],
     component: AdminHomeComponent,
@@ -228,6 +234,6 @@ const routes: Routes = [
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
-  providers: [IsLoggedInGuard, IsAdminGuard],
+  providers: [IsLoggedInGuard, IsAdminGuard, IsSuperAdminGuard],
 })
 export class AppRoutingModule {}
