@@ -4,7 +4,7 @@ export class ClientDisabilityAndDisorder {
   category: string = '';
   diagnosis_status: string = '';
   type_name: string = '';
-  year_diagnosed: number | null = null;
+  year_diagnosed: string | null = null;
   clinically_diagnosed: string = '';
   note: string = '';
   created_at?: Date;

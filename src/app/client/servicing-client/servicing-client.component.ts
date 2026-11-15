@@ -318,13 +318,7 @@ export class ServicingClientComponent implements OnInit, OnDestroy {
           }
 
           if (this.heatRoute) {
-            this.service.getClientDwellings(this.clientId)
-              .pipe(takeUntil(this.destroy$))
-              .subscribe(data => {
-                if (data.length === 0) {
-                  alert("Please ask this client 1) If this is first time homeless? 2) Why they are homeless? and 3) When they became homeless? Please record this under a new 'Dwelling History' entry.");
-                }
-              }, error => console.error('Unable to check client dwelling history', error));
+            this.onHousingToggle();
           }
 
       }, (error) => console.log(error));
@@ -465,10 +459,10 @@ export class ServicingClientComponent implements OnInit, OnDestroy {
       );
   }
 
-  private loadProfileSection(key: string, event: Event, requests: Observable<void>[]) {
-    const section = event.target as HTMLDetailsElement;
+  private loadProfileSection(key: string, event: Event | undefined, requests: Observable<void>[]) {
+    const isOpen = event === undefined || (event.target as HTMLDetailsElement).open;
     const state = this.profileSectionStates[key];
-    if (!section.open || state.loaded || state.loading) {
+    if (!isOpen || state.loaded || state.loading) {
       return;
     }
 
@@ -539,7 +533,7 @@ export class ServicingClientComponent implements OnInit, OnDestroy {
     this.loadProfileSection('contacts', event, requests);
   }
 
-  onHousingToggle(event: Event) {
+  onHousingToggle(event?: Event) {
     const requests: Observable<void>[] = [
       this.service.getClientDwellings(this.clientId).pipe(map(data => {
         this.dwellings = data;
@@ -548,7 +542,7 @@ export class ServicingClientComponent implements OnInit, OnDestroy {
         }
       }))
     ];
-    if (this.isAdmin) {
+    if (this.isAdmin && !this.heatRoute) {
       requests.push(
         this.service.getClientHomelessHistory(this.clientId).pipe(map(data => { this.homelessHistories = data; }))
       );

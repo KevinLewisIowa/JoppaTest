@@ -20,10 +20,7 @@
         <label>Diagnosis status</label>
         <select class="form-control" [(ngModel)]="record.diagnosis_status" name="diagnosis_status">
           <option value="">Select an option</option>
-          <option value="Yes">Yes</option>
-          <option value="No">No</option>
-          <option value="Preferred not to share">Preferred not to share</option>
-          <option value="Unknown">Unknown</option>
+          <option *ngFor="let option of disabilityStatusOptions" [value]="option">{{ option }}</option>
         </select>
       </div>
       <div class="col-md-6">

@@ -496,18 +496,18 @@
       </div>
     </div>
     </details>
-    <details class="profile-accordion" (toggle)="onHousingToggle($event)" *ngIf="!heatRoute">
+    <details class="profile-accordion" [open]="heatRoute" (toggle)="onHousingToggle($event)">
       <summary>
         <div>
-          <h4>Housing and Homeless History</h4>
-          <small>Dwelling history and homelessness details</small>
+          <h4>{{ heatRoute ? 'Dwelling History' : 'Housing and Homeless History' }}</h4>
+          <small *ngIf="!heatRoute">Dwelling history and homelessness details</small>
         </div>
       </summary>
       <div *ngIf="profileSectionStates.housing.loading" class="text-muted">Loading housing history...</div>
       <div *ngIf="profileSectionStates.housing.error" class="text-danger">
         Housing history could not be loaded. Close and reopen this section to retry.
       </div>
-    <div class="col-lg-12 col-md-12" *ngIf="!heatRoute">
+    <div class="col-lg-12 col-md-12">
       <div class="background-color">
         <h4>
           Dwelling History

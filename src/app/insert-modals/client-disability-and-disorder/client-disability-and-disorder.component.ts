@@ -14,7 +14,7 @@ export class ClientDisabilityAndDisorderComponent {
 
   category: string = '';
   record: ClientDisabilityAndDisorder = new ClientDisabilityAndDisorder();
-  disabilityStatusOptions: string[] = ['Yes', 'No', 'Unknown', 'Preferred not to share'];
+  disabilityStatusOptions: string[] = ['Yes', 'No', 'Unknown', 'In Progress', 'Preferred not to share'];
   clinicalDiagnosisOptions: string[] = ['Yes', 'No', 'Unknown', 'Didn’t want to share'];
   physicalDisabilityTypes: string[] = [
     'None', 'Amputation', 'Arthritis', 'Asthma', 'Back pain', 'Blood disorder', 'Bone marrow failure',
@@ -32,7 +32,10 @@ export class ClientDisabilityAndDisorderComponent {
     'None', 'Adderall', 'Alcohol', 'Cocaine', 'Hallucinogens', 'Heroin', 'Inhalant', 'LSD', 'Marijuana',
     'Methamphetamine', 'Opioid', 'Oxycodone', 'Nicotine/Tobacco', 'Other'
   ];
-  yearDiagnosedOptions: number[] = Array.from({ length: 70 }, (_, index) => new Date().getFullYear() - index);
+  yearDiagnosedOptions: string[] = [
+    'Unknown',
+    ...Array.from({ length: 70 }, (_, index) => String(new Date().getFullYear() - index))
+  ];
 
   constructor(private modalService: NgbModal, private clientService: ClientService) { }
 
