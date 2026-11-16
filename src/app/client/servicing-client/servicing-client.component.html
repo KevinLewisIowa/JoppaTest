@@ -1980,7 +1980,7 @@
 <app-next-of-kin #nextOfKinMdl (nextOfKinAdded)="nextOfKinAdded($event)"></app-next-of-kin>
 <app-client-like #likeMdl (likeAdded)="likeAdded($event)"></app-client-like>
 <app-client-dislike #dislikeMdl (dislikeAdded)="dislikeAdded($event)"></app-client-dislike>
-<app-requested-item #requestItemMdl (requestedItemAdded)="requestedItemAdded($event)"></app-requested-item>
+<app-requested-item #requestItemMdl [isAdmin]="isAdmin" (requestedItemAdded)="requestedItemAdded($event)"></app-requested-item>
 <app-goals-steps #goalMdl (goalAdded)="goalAdded($event)"></app-goals-steps>
 <app-health-concern #healthMdl (healthConcernAdded)="healthConcernAdded($event)"></app-health-concern>
 <app-notes #notesMdl (noteAdded)="noteAdded($event)"></app-notes>
