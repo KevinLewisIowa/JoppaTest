@@ -20,6 +20,7 @@ import { DateSelectorComponent } from 'app/insert-modals/date-selector/date-sele
 })
 export class FooterComponent implements OnInit, OnDestroy {
   currentYear: number = new Date().getFullYear();
+  appVersion: string = '26.11.15.0';
   routeInstance: RouteInstance = new RouteInstance();
   isAdmin: boolean;
   showEndRoute: boolean = true;
