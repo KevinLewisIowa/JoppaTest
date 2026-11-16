@@ -129,7 +129,7 @@ export class RequestedItemComponent implements OnInit, AfterViewChecked {
         }
 
         item.fulfilled = false;
-        if (itemDescription.includes("Mail") || itemDescription.includes("Package")) {
+        if (itemDescription.includes("Mail") || itemDescription.includes("Package") || itemDescription.includes("Birthday Card")) {
           item.fulfilled = true;
         }
 
