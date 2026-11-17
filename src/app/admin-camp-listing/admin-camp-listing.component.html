@@ -10,7 +10,7 @@
     <div *ngIf="isLoading" class="text-muted">Loading camps...</div>
   </div>
   <div class="panel-body">
-    <div>
+    <div class="mobile-scroll-table">
       <mat-table #table [dataSource]="dataSource" matSort matSortActive="camp_name" matSortDirection="asc">
         <ng-container matColumnDef="route_name">
           <mat-header-cell *matHeaderCellDef mat-sort-header>Route</mat-header-cell>
@@ -52,7 +52,7 @@
       <mat-paginator [length]="totalCamps" [pageSize]="50" [pageSizeOptions]="[25, 50, 75, 100]"></mat-paginator>
     </div>
   </div>
-  <div class="card-footer">
+  <div class="card-footer mobile-action-footer">
     <button routerLink="/adminHome" class="btn btn-primary" style="float: left" (click)="back()">
       <fa-icon [icon]="backIcon"></fa-icon> Don't Save
     </button>

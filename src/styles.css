@@ -8,7 +8,7 @@ html {
 }
 
 body {
-  margin: 0 0 30px; /* bottom = footer height */
+  margin: 0 0 48px; /* Reserve space for the desktop footer. */
   padding: 25px;
   background-position: center center;
   background-repeat: no-repeat;
@@ -34,12 +34,14 @@ body {
   width: 100%;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
 }
 
 .table-responsive {
   width: 100%;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
 }
 
 .mobile-scroll-table table,
@@ -50,13 +52,22 @@ body {
 }
 
 footer {
-  background-color: orange;
+  background-color: white;
   position: absolute;
   left: 0;
   bottom: 0;
-  height: 30px;
   width: 100%;
-  overflow: hidden;
+  min-height: 48px;
+  opacity: 0.8;
+}
+
+.app-footer-info {
+  text-align: center;
+  font-size: 0.75em;
+}
+
+.app-footer-actions {
+  text-align: center;
 }
 
 .card .panel-body {
@@ -100,7 +111,8 @@ footer {
 
 @media (max-width: 767px) {
   body {
-    padding: 12px 10px 40px;
+    margin-bottom: 0;
+    padding: 12px 10px 16px;
   }
 
   .container-fluid {
@@ -125,6 +137,60 @@ footer {
 
   .mat-form-field {
     width: 100%;
+  }
+
+  input:not([type="checkbox"]):not([type="radio"]),
+  select,
+  textarea {
+    max-width: 100%;
+  }
+
+  .card-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .mobile-action-header {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .mobile-action-header .btn {
+    width: 100%;
+    margin: 0;
+  }
+
+  .mobile-action-footer {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .mobile-action-footer > * {
+    float: none !important;
+    width: 100%;
+    margin: 0 !important;
+  }
+
+  footer {
+    position: static;
+    min-height: 0;
+    margin-top: 12px;
+    overflow: visible;
+  }
+
+  .app-footer-info {
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+    padding: 6px;
+  }
+
+  .app-footer-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    padding: 6px;
   }
 
   .mobile-login-form {

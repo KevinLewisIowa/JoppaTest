@@ -22,3 +22,29 @@
 .unknown {
     background-color: orange;
 }
+
+.camp-header-actions,
+.camp-list-actions,
+.camp-footer-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+}
+
+.camp-header-actions {
+    margin-top: 10px;
+}
+
+.camp-list-actions,
+.camp-footer-actions {
+    justify-content: space-between;
+}
+
+@media (max-width: 767px) {
+    .camp-header-actions .btn,
+    .camp-list-actions .btn,
+    .camp-footer-actions .btn {
+        flex: 1 1 100%;
+    }
+}

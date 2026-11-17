@@ -6,3 +6,31 @@
     border-left-width: 15px;
     cursor:pointer;
 }
+.location-div {
+    min-height: 60px;
+    height: auto;
+    overflow-wrap: anywhere;
+}
+
+.route-header-actions,
+.location-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+}
+
+.route-header-actions {
+    justify-content: space-between;
+}
+
+.location-actions {
+    justify-content: flex-end;
+}
+
+@media (max-width: 767px) {
+    .route-header-actions .btn,
+    .location-actions .btn {
+        flex: 1 1 100%;
+    }
+}

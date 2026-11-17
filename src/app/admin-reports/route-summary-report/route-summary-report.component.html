@@ -10,7 +10,9 @@
           <label for="routeDate">Route Date:</label>
           <input type="date" [(ngModel)]="routeDate" name="routeDate"/>
         </div>
-        <button *ngFor="let route of routes" type="button" class="btn btn-primary" style="margin:10px 5px;" (click)="loadRouteInstance(route.id)">{{route.name}}</button>&nbsp;
+        <div class="route-summary-actions">
+          <button *ngFor="let route of routes" type="button" class="btn btn-primary" (click)="loadRouteInstance(route.id)">{{route.name}}</button>
+        </div>
       </div>
     </div>
     <br />
@@ -18,7 +20,7 @@
       <div class="col-lg-12 col-md-12" *ngIf="routeInstances && routeInstances.length == 0">
         <span>There were no routes for this day</span>
       </div>
-      <div class="col-lg-12 col-md-12" *ngIf="routeInstances && routeInstances.length > 0">
+      <div class="col-lg-12 col-md-12 table-responsive" *ngIf="routeInstances && routeInstances.length > 0">
         <table class="table">
           <thead>
             <tr>
@@ -55,7 +57,7 @@
         </dl>
       </div>
       <br />
-      <div class="col-lg-12 col-md-12" *ngIf="notes">
+      <div class="col-lg-12 col-md-12 table-responsive" *ngIf="notes">
         <h4>Notes</h4>
         <table class="table">
           <thead>

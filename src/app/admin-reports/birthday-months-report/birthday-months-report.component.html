@@ -21,6 +21,7 @@
     <div class="row text-center" style="margin-left:20px;">
       {{resultMessage}}
     </div>
+      <div class="table-responsive">
       <table class="table" id="birthdayInfo">
           <thead>
             <tr>
@@ -38,7 +39,8 @@
               <td>{{client.birth_date | date: 'longDate'}}</td>
             </tr>
           </tbody>
-        </table>          
+        </table>
+      </div>
   </div>
   <div class="card-footer">
     <button routerLink="/admin/reports" class="btn btn-primary" style="float: left"><fa-icon [icon]="backIcon"></fa-icon> Back</button>

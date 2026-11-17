@@ -1,8 +1,28 @@
 .route-div {
-    height: 60px;
+    min-height: 60px;
+    height: auto;
     padding: 5px;
     margin: 5px;
     background-color: lightsalmon;
     border-left-width: 15px;
     cursor:pointer;
+    overflow-wrap: anywhere;
+}
+
+.route-list-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+@media (max-width: 767px) {
+    .route-list-header {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .route-list-header .btn {
+        width: 100%;
+    }
 }

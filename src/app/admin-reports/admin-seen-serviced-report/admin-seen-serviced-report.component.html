@@ -3,12 +3,13 @@
     <h2>Seen and Serviced Report</h2>
   </div>
   <div class="panel-body">
-    <div>
-      From Date: <input type="date" value="fromDate" [(ngModel)]="fromDate" />
-      To Date: <input type="date" value="toDate" [(ngModel)]="toDate" />
+    <div class="report-date-filters">
+      <label>From Date: <input type="date" value="fromDate" [(ngModel)]="fromDate" /></label>
+      <label>To Date: <input type="date" value="toDate" [(ngModel)]="toDate" /></label>
       <button type="button" class="btn btn-primary" (click)="searchSeenAndServiced()">Search</button>
     </div>
-    <table class="table" id="seenServiced" *ngIf=seenServicedRecords>
+    <div class="table-responsive" *ngIf="seenServicedRecords">
+    <table class="table" id="seenServiced">
       <thead>
         <tr>
           <th>Route</th>
@@ -30,6 +31,7 @@
         </tr>
       </tbody>
     </table>
+    </div>
   </div>
   <div class="card-footer">
     <button routerLink="/admin/reports" class="btn btn-primary" style="float: left"><fa-icon [icon]="backIcon"></fa-icon> Back</button>

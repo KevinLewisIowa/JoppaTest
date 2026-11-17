@@ -11,7 +11,7 @@
     </button>
   </div>
   <div class="panel-body">
-    <div>
+    <div class="mobile-scroll-table">
       <mat-table #table [dataSource]="dataSource" matSort>
 
         <ng-container matColumnDef="name">
@@ -57,7 +57,7 @@
       <mat-paginator [pageSizeOptions]="[25, 10, 50, 100]"></mat-paginator>
     </div>
   </div>
-  <div class="card-footer">
+  <div class="card-footer mobile-action-footer">
     <button (click)="back()" style="float: left" class="btn btn-primary" type="button">
       <fa-icon [icon]="backIcon"></fa-icon> Don't Save
     </button>

@@ -1,12 +1,12 @@
-<footer style="background:white;width:100%;opacity:0.8;height:3em;">
-    <div id="basic-info" style="text-align:center;font-size:0.75em">
+<footer class="app-footer">
+    <div id="basic-info" class="app-footer-info">
         <b>Joppa Phone #:</b><span> 515-288-5699 ext 0 </span>
         <b>Address:</b><span> 2326 Euclid Ave, Des Moines, IA 50310 </span>
         <b>Website:</b><span>&nbsp;<a href="http://www.joppa.org" target="_blank">www.joppa.org</a>&nbsp;</span>
         <span> &copy;Joppa {{ currentYear }}</span>
         <span>&nbsp;Version {{ appVersion }}</span>
     </div>
-    <div style="text-align:center;">
+    <div class="app-footer-actions">
         <button type="button" *ngIf="showEndRoute" style="line-height:1em" class="btn btn-primary" (click)="endRoute()">End Route</button>
         <button type="button" *ngIf="isAdmin" style="line-height:1em" class="btn btn-primary" (click)="goToAdminHome()">Admin Home</button>
     </div>

@@ -1,0 +1,15 @@
+.route-summary-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.route-summary-actions .btn {
+    margin: 0;
+}
+
+@media (max-width: 767px) {
+    .route-summary-actions .btn {
+        flex: 1 1 100%;
+    }
+}

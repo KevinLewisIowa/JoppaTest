@@ -1,7 +1,7 @@
 <div class="card" style="opacity:0.93">
-  <div class="card-header">
+  <div class="card-header mobile-action-header">
     <h2>Prayer Requests List</h2>
-    <button type="button" (click)="exportToCSV()" class="btn btn-primary" style="float: right; margin-right: 10px;">
+    <button type="button" (click)="exportToCSV()" class="btn btn-primary">
       <fa-icon [icon]="'file-csv'"></fa-icon> Export to CSV
     </button>
   </div>
@@ -9,6 +9,7 @@
     <input id="filterDate" type="date" [(ngModel)]="filterDate" (change)="onDateChange()" class="form-control" />
   </div>
   <div class="panel-body">
+    <div class="mobile-scroll-table">
     <table mat-table [dataSource]="dataSource" matSort>
 
       <!-- First Name Column -->
@@ -44,6 +45,7 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
+    </div>
   </div>
 </div>
 <div class="card-footer">

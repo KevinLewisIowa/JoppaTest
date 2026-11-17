@@ -1,0 +1,23 @@
+.report-date-filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 8px;
+}
+
+.report-date-filters label {
+    display: flex;
+    flex: 1 1 160px;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.report-date-filters .btn {
+    flex: 0 1 auto;
+}
+
+@media (max-width: 767px) {
+    .report-date-filters .btn {
+        flex: 1 1 100%;
+    }
+}
