@@ -100,6 +100,7 @@ import { ClientSkillComponent } from './insert-modals/client-skill/client-skill.
 import { ClientCaseworkerComponent } from './insert-modals/client-caseworker/client-caseworker.component';
 import { PhoneFormatPipe } from './pipes/phone-format.pipe';
 import { ClientMailboxComponent } from './insert-modals/client-mailbox/client-mailbox.component';
+import { ClientRentDetailsComponent } from './insert-modals/client-rent-details/client-rent-details.component';
 import { AuthorizedMailAccessComponent } from './insert-modals/authorized-mail-access/authorized-mail-access.component';
 import { ClientBarrierComponent } from './insert-modals/client-barrier/client-barrier.component';
 import { ClientDisabilityAndDisorderComponent } from './insert-modals/client-disability-and-disorder/client-disability-and-disorder.component';
@@ -191,7 +192,8 @@ const reducers = {
     ClientDisabilityAndDisorderComponent,
     AdminMergeDuplicatesComponent,
     VitalRecordComponent,
-    AdminUserManagementComponent
+    AdminUserManagementComponent,
+    ClientRentDetailsComponent
   ],
     imports: [
         BrowserModule,

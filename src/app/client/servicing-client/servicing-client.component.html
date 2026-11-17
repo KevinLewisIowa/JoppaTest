@@ -1321,7 +1321,7 @@
         <small>Income, debts, barriers, skills, felonies, and evictions</small>
       </div>
     </summary>
-    <div *ngIf="profileSectionStates.stability.loading" class="text-muted">Loading income and support records...</div>
+    <div *ngIf="profileSectionStates.stability.loading" class="text-muted">Loading income, rent, and support records...</div>
     <div *ngIf="profileSectionStates.stability.error" class="text-danger">
       These records could not be loaded. Close and reopen this section to retry.
     </div>
@@ -1379,6 +1379,43 @@
             </td>
           </tr>
         </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
+    <h4>
+      Rent Details
+      <button id="rent-details-btn" type="button"
+        (click)="goToTop(); clientRentDetailsMdl.showModal(clientId, clientRentDetail)"
+        class="btn btn-primary float-right">
+        {{ clientRentDetail ? 'Edit Rent Details' : 'Add Rent Details' }}
+      </button>
+    </h4>
+    <div class="table-responsive">
+      <table class="table" id="rent-details">
+        <thead>
+          <tr>
+            <th>Rent Cost</th>
+            <th>Utilities Cost</th>
+            <th>Who is Paying?</th>
+            <th>Note</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngIf="clientRentDetail; else noRentDetails">
+            <td>{{ clientRentDetail.rent_cost | currency }}</td>
+            <td>
+              {{ clientRentDetail.utilities_included ? 'Included' : (clientRentDetail.utilities_cost | currency) }}
+            </td>
+            <td>{{ clientRentDetail.who_is_paying }}</td>
+            <td>{{ clientRentDetail.note }}</td>
+          </tr>
+        </tbody>
+        <ng-template #noRentDetails>
+          <tr>
+            <td colspan="4" class="text-center text-muted">No rent details recorded</td>
+          </tr>
+        </ng-template>
       </table>
     </div>
   </div>
@@ -2007,6 +2044,8 @@
 <app-client-skill #clientSkillMdl (skillAdded)="skillAdded($event)"></app-client-skill>
 <app-client-caseworker #clientCaseworkerMdl (caseworkerAdded)="caseworkerAdded($event)"></app-client-caseworker>
 <app-client-mailbox #clientMailboxMdl (mailboxAdded)="mailboxAdded($event)"></app-client-mailbox>
+<app-client-rent-details #clientRentDetailsMdl
+  (rentDetailsSaved)="rentDetailsSaved($event)"></app-client-rent-details>
 <app-client-barrier #clientBarrierMdl (barrierAdded)="barrierAdded($event)"></app-client-barrier>
 <app-authorized-mail-access #authorizedMailAccessMdl [mailboxId]="clientMailbox.id"
   (authorizedMailAccessAdded)="authorizedMailAccessAdded($event)"></app-authorized-mail-access>

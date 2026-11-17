@@ -36,6 +36,7 @@ import { AuthorizedMailAccesses } from "app/models/authorized-mail-accesses";
 import { ClientBarrier } from "app/models/client-barrier";
 import { ReleaseAcknowledgement } from "app/models/client-release-acknowledgement";
 import { ClientVitalRecord } from "app/models/client-vital-record";
+import { ClientRentDetail } from "app/models/client-rent-detail";
 
 export interface PaginatedClientsResponse {
   clients: Client[];
@@ -2116,6 +2117,62 @@ export class ClientService {
           return res;
         }),
         catchError(error => error.status === 404 ? of(null) : this.handleError(error))
+      );
+  }
+
+  getClientRentDetails(clientId: number): Observable<ClientRentDetail | null> {
+    const myHeader = this.buildAuthHeaders();
+    return this.http
+      .get<ClientRentDetail>(this.baseUrl + `getClientRentDetails?clientId=${clientId}`, { headers: myHeader })
+      .pipe(
+        map((res: any) => {
+          if (res && res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(error => error.status === 404 ? of(null) : this.handleError(error))
+      );
+  }
+
+  createClientRentDetail(rentDetail: ClientRentDetail) {
+    const myHeader = this.buildAuthHeaders();
+    return this.http
+      .post<ClientRentDetail>(
+        this.baseUrl + "client_rent_details",
+        { client_rent_detail: rentDetail },
+        { headers: myHeader }
+      )
+      .pipe(
+        map((res: any) => {
+          if (res && res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  updateClientRentDetail(rentDetail: ClientRentDetail) {
+    const myHeader = this.buildAuthHeaders();
+    return this.http
+      .patch<ClientRentDetail>(
+        this.baseUrl + `client_rent_details/${rentDetail.id}`,
+        { client_rent_detail: rentDetail },
+        { headers: myHeader }
+      )
+      .pipe(
+        map((res: any) => {
+          if (res && res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
       );
   }
 

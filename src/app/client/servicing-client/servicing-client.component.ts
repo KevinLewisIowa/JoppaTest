@@ -53,6 +53,8 @@ import { ClientDebt } from "app/models/client-debt";
 import { ClientSkill } from "app/models/client-skill";
 import { Caseworker } from "app/models/caseworker";
 import { ClientMailbox } from 'app/models/client-mailbox';
+import { ClientRentDetail } from 'app/models/client-rent-detail';
+import { ClientRentDetailsComponent } from 'app/insert-modals/client-rent-details/client-rent-details.component';
 import { AuthorizedMailAccesses } from 'app/models/authorized-mail-accesses';
 import { ReleaseAcknowledgement } from 'app/models/client-release-acknowledgement';
 import { ClientVitalRecord } from 'app/models/client-vital-record';
@@ -87,6 +89,7 @@ export class ServicingClientComponent implements OnInit, OnDestroy {
   clientFelonies: ClientFelony[] = [];
   clientDebts: ClientDebt[] = [];
   clientMailbox: ClientMailbox = new ClientMailbox();
+  clientRentDetail: ClientRentDetail | null = null;
   authorizedMailAccesses: AuthorizedMailAccesses[] = [];
   pets: ClientPet[] = [];
   tents: Tent[] = [];
@@ -251,6 +254,7 @@ export class ServicingClientComponent implements OnInit, OnDestroy {
 
   @ViewChild("clientInfo", { static: false }) clientInfo!: ElementRef;
   @ViewChild('vitalRecordMdl') vitalRecordMdl!: VitalRecordComponent;
+  @ViewChild('clientRentDetailsMdl') clientRentDetailsMdl!: ClientRentDetailsComponent;
 
   constructor(
     private service: ClientService,
@@ -588,6 +592,7 @@ export class ServicingClientComponent implements OnInit, OnDestroy {
     ];
     if (this.isAdmin) {
       requests.push(
+        this.service.getClientRentDetails(this.clientId).pipe(map(data => { this.clientRentDetail = data; })),
         this.service.getClientBarriers(this.clientId).pipe(map(data => { this.clientBarriers = data; })),
         this.service.getClientDebt(this.clientId).pipe(map(data => { this.clientDebts = data; })),
         this.service.getClientFelonies(this.clientId).pipe(map(data => { this.clientFelonies = data; })),
@@ -933,6 +938,10 @@ export class ServicingClientComponent implements OnInit, OnDestroy {
       .subscribe((data) => {
         console.log(JSON.stringify(data));
       }, error => console.log(error));
+  }
+
+  rentDetailsSaved(rentDetail: ClientRentDetail) {
+    this.clientRentDetail = rentDetail;
   }
 
   updateNumberTanksHoses(client: Client) {
