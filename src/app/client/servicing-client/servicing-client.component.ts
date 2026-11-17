@@ -1,5 +1,5 @@
 import { formatPhoneNumberValue } from 'app/utils/phone-utils';
-import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
+import { Component, ElementRef, OnInit, ViewChild, OnDestroy } from "@angular/core";
 import { Client } from "app/models/client";
 import { ClientService } from "app/services/client.service";
 import { Router } from "@angular/router";
@@ -9,6 +9,7 @@ import { GoalsNextStep } from "app/models/goals-next-steps";
 import { ClientLike } from "app/models/client-like";
 import { ClientDislike } from "app/models/client-dislike";
 import { HealthConcern } from "app/models/health-concern";
+import { ClientDisabilityAndDisorder } from "app/models/client-disability-and-disorder";
 import { HeaterStatus } from "../../models/heater-status";
 import { MainService } from "../../services/main.service";
 import { Heater } from "app/models/heater";
@@ -27,7 +28,8 @@ import {
   faTimesCircle,
   faMap,
 } from "@fortawesome/free-solid-svg-icons";
-import { Subscription, timer } from "rxjs";
+import { forkJoin, Observable, Subscription, Subject, timer, of } from "rxjs";
+import { catchError, map, switchMap, takeUntil } from "rxjs/operators";
 import { DatePipe } from "@angular/common";
 import { PrayerRequestAndNeed } from "app/models/prayer-request";
 import {
@@ -35,10 +37,8 @@ import {
   CustomConfirmationDialogComponent,
 } from "app/custom-confirmation-dialog/custom-confirmation-dialog.component";
 import { MatLegacyDialog as MatDialog } from "@angular/material/legacy-dialog";
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
 import { DateSelectorComponent } from "app/insert-modals/date-selector/date-selector.component";
-import { ClientEditModalComponent } from "app/client/client-edit-modal/client-edit-modal.component";
 import { ClientIncome } from "app/models/client-income";
 import { ClientNextOfKin } from "app/models/client-next-of-kin";
 import { ClientHomelessHistory } from "app/models/client-homeless-histories";
@@ -53,17 +53,22 @@ import { ClientDebt } from "app/models/client-debt";
 import { ClientSkill } from "app/models/client-skill";
 import { Caseworker } from "app/models/caseworker";
 import { ClientMailbox } from 'app/models/client-mailbox';
+import { ClientRentDetail } from 'app/models/client-rent-detail';
+import { ClientRentDetailsComponent } from 'app/insert-modals/client-rent-details/client-rent-details.component';
 import { AuthorizedMailAccesses } from 'app/models/authorized-mail-accesses';
+import { ReleaseAcknowledgement } from 'app/models/client-release-acknowledgement';
+import { ClientVitalRecord } from 'app/models/client-vital-record';
+import { VitalRecordComponent } from 'app/insert-modals/vital-record/vital-record.component';
 
 @Component({
   selector: "app-servicing-client",
   templateUrl: "./servicing-client.component.html",
   styleUrls: ["./servicing-client.component.css"],
 })
-export class ServicingClientComponent implements OnInit {
-  appearance: Appearance;
+export class ServicingClientComponent implements OnInit, OnDestroy {
+  appearance?: Appearance;
   client: Client = new Client();
-  locationCampId: number;
+  locationCampId: number | null = null;
   requestedItems: RequestedItem[] = [];
   goalsAndSteps: GoalsNextStep[] = [];
   clientLikes: ClientLike[] = [];
@@ -72,7 +77,9 @@ export class ServicingClientComponent implements OnInit {
   clientDislikes: ClientDislike[] = [];
   clientBarriers: ClientBarrier[] = [];
   healthConcerns: HealthConcern[] = [];
+  disabilityAndDisorders: { [category: string]: ClientDisabilityAndDisorder[] } = {};
   prayerRequestsAndNeeds: PrayerRequestAndNeed[] = [];
+  @ViewChild('disabilityMdl') disabilityMdl: any;
   householdClients: Client[] = [];
   healthInsurances: ClientHealthInsurance[] = [];
   clientSkills: ClientSkill[] = [];
@@ -82,6 +89,7 @@ export class ServicingClientComponent implements OnInit {
   clientFelonies: ClientFelony[] = [];
   clientDebts: ClientDebt[] = [];
   clientMailbox: ClientMailbox = new ClientMailbox();
+  clientRentDetail: ClientRentDetail | null = null;
   authorizedMailAccesses: AuthorizedMailAccesses[] = [];
   pets: ClientPet[] = [];
   tents: Tent[] = [];
@@ -97,19 +105,42 @@ export class ServicingClientComponent implements OnInit {
   tankInteractions: any[] = [];
   hoseInteractions: any[] = [];
   heatEquipmentNotReturned: any[] = [];
-  clientId = null;
+  clientId: number = 0;
   clientCaseworkers: Caseworker[] = [];
   heaterStatuses: HeaterStatus[] = [];
   currentStatus: number = 2;
   heaters: any[] = [];
   clientInteractions: any[] = [];
-  isAdmin: boolean;
-  isHandset: boolean = false;
-  attendanceFromDate: string;
-  attendanceToDate: string;
-  updateTimerSubscription: Subscription;
+  isAdmin = false;
+  attendanceFromDate = '';
+  attendanceToDate = '';
+  updateTimerSubscription?: Subscription;
   updateHoseTankMessageVisible: boolean = false;
-  campId: number;
+  weeklyAttendanceLoaded = false;
+  weeklyAttendanceLoading = false;
+  weeklyAttendanceError = false;
+  householdLoaded = false;
+  householdLoading = false;
+  householdError = false;
+  documentsLoaded = false;
+  documentsLoading = false;
+  documentsError = false;
+  releaseAcknowledgementsLoaded = false;
+  vitalRecordsLoaded = false;
+  requestsLoaded = false;
+  requestsLoading = false;
+  requestsError = false;
+  newClientPetsPromptShown = false;
+  profileSectionStates: Record<string, { loaded: boolean; loading: boolean; error: boolean }> = {
+    heating: { loaded: false, loading: false, error: false },
+    contacts: { loaded: false, loading: false, error: false },
+    housing: { loaded: false, loading: false, error: false },
+    assets: { loaded: false, loading: false, error: false },
+    goals: { loaded: false, loading: false, error: false },
+    stability: { loaded: false, loading: false, error: false },
+    health: { loaded: false, loading: false, error: false }
+  };
+  campId: number = 0;
   url: any;
   backIcon = faChevronLeft;
   informationIcon = faInfoCircle;
@@ -117,8 +148,20 @@ export class ServicingClientComponent implements OnInit {
   notSeenAndServicedIcon = farCheckCircle;
   notSeenIcon = faTimesCircle;
   mapIcon = faMap;
-  routeInstanceId: number;
+  routeInstanceId: number | null = null;
+  releaseAcknowledgements: ReleaseAcknowledgement[] = [];
+  clientVitalRecords: ClientVitalRecord[] = [];
+  isReleaseValid: boolean = false;
   pinnedNoteString: string = '';
+
+  get activeVitalRecords(): ClientVitalRecord[] {
+    return this.clientVitalRecords.filter(record => !record.retrieved_on);
+  }
+
+  get recentlyRetrievedVitalRecords(): ClientVitalRecord[] {
+    return this.clientVitalRecords.filter(record => !!record.retrieved_on);
+  }
+
   pipe: DatePipe = new DatePipe("en-us");
   reasonForHomelessnessOptions = [
     "Addictions",
@@ -187,42 +230,55 @@ export class ServicingClientComponent implements OnInit {
     'YMCA Supportive Housing',
     'Other'
   ];
+  disabilityStatusOptions: string[] = ['Yes', 'No', 'Unknown', 'Preferred not to share'];
+  clinicalDiagnosisOptions: string[] = ['Yes', 'No', 'Unknown', 'Didn’t want to share'];
+  physicalDisabilityTypes: string[] = [
+    'None', 'Amputation', 'Arthritis', 'Asthma', 'Back pain', 'Blood disorder', 'Bone marrow failure',
+    'Brain Injury', 'Cancer', 'Cerebral palsy', 'Chronic kidney disease', 'Chronic liver disease',
+    'Chronic skin condition', 'Congenital heart defects', 'Coronary disease', 'COPD', 'Cystic fibrosis',
+    'Diabetes', 'Down Syndrome', 'Epilepsy', 'Heart Failure', 'Hearing Loss', 'HIV/AIDS',
+    'Inflammatory bowel disease', 'Lung failure', 'Lupus', 'Malignant tumors', 'Multiple sclerosis',
+    'Thyroid Imbalance', 'Parkinson’s disease', 'Severe Back Injury', 'Sickle cell disease',
+    'Skin Disorder', 'Spinal disorder', 'Speech impairment', 'Vision Loss', 'Other'
+  ];
+  mentalDisabilityTypes: string[] = [
+    'None', 'Anxiety', 'Autism spectrum', 'Bipolar', 'Depressive disorders', 'PTSD', 'Schizophrenia', 'OCD', 'Other'
+  ];
+  substanceUseDisorderTypes: string[] = [
+    'None', 'Adderall', 'Alcohol', 'Cocaine', 'Hallucinogens', 'Heroin', 'Inhalant', 'LSD', 'Marijuana',
+    'Methamphetamine', 'Opioid', 'Oxycodone', 'Nicotine/Tobacco', 'Other'
+  ];
+  yearDiagnosedOptions: number[] = Array.from({ length: 70 }, (_, index) => new Date().getFullYear() - index);
 
-  @ViewChild("clientInfo", { static: false }) clientInfo: ElementRef;
-  @ViewChild('clientEditMdl', { static: false }) clientEditMdlRef: ClientEditModalComponent;
+  private destroy$ = new Subject<void>();
+
+  @ViewChild("clientInfo", { static: false }) clientInfo!: ElementRef;
+  @ViewChild('vitalRecordMdl') vitalRecordMdl!: VitalRecordComponent;
+  @ViewChild('clientRentDetailsMdl') clientRentDetailsMdl!: ClientRentDetailsComponent;
 
   constructor(
     private service: ClientService,
     private mainService: MainService,
     private modalService: NgbModal,
     private router: Router,
-    public dialog: MatDialog,
-    private breakpointObserver: BreakpointObserver
+    public dialog: MatDialog
   ) { }
 
-  openClientEditModal(client: Client) {
-    if (this.clientEditMdlRef && (this.clientEditMdlRef as any).openModal) {
-      (this.clientEditMdlRef as any).openModal(client);
-    } else {
-      console.warn('clientEditMdlRef not available yet');
-    }
-  }
-
   ngOnInit() {
-    this.routeInstanceId = JSON.parse(localStorage.getItem("routeInstance"));
-    this.heatRoute = JSON.parse(window.localStorage.getItem("heatRoute"));
-    this.isAdmin = JSON.parse(window.localStorage.getItem("isAdmin"));
+    this.routeInstanceId = JSON.parse(localStorage.getItem("routeInstance") || "null");
+    this.heatRoute = JSON.parse(window.localStorage.getItem("heatRoute") || "false");
+    this.isAdmin = JSON.parse(window.localStorage.getItem("isAdmin") || "false");
     this.locationCampId = JSON.parse(
-      window.localStorage.getItem("locationCampId")
+      window.localStorage.getItem("locationCampId") || "null"
     );
-    this.clientId = localStorage.getItem("selectedClient");
+    this.clientId = JSON.parse(localStorage.getItem("selectedClient") || "0");
 
     let attendToDate: Date = new Date();
-    attendToDate.setDate(attendToDate.getDate() + 1);
-    this.attendanceToDate = this.pipe.transform(attendToDate, "yyyy-MM-dd");
+    attendToDate.setDate(attendToDate.getDate() + 2);
+    this.attendanceToDate = this.pipe.transform(attendToDate, "yyyy-MM-dd") || '';
     let attendFromDate: Date = new Date();
     attendFromDate.setMonth(attendFromDate.getMonth() - 1);
-    this.attendanceFromDate = this.pipe.transform(attendFromDate, "yyyy-MM-dd");
+    this.attendanceFromDate = this.pipe.transform(attendFromDate, "yyyy-MM-dd") || '';
     let routeAttendanceList: Appearance[] = JSON.parse(
       localStorage.getItem("RouteAttendance") || '[]'
     );
@@ -242,402 +298,155 @@ export class ServicingClientComponent implements OnInit {
       this.sentInteraction = true;
     }
 
-    // Observe handset portrait to toggle mobile layout
-    this.breakpointObserver.observe([Breakpoints.HandsetPortrait]).subscribe(result => {
-      this.isHandset = result.matches;
-    });
-
-    if (this.clientId !== null) {
-      this.service.getClientById(this.clientId).subscribe((data: Client) => {
-        this.client = data;
-        if (this.client.client_picture != null && this.client.client_picture != '') {
-          this.url = 'data:image/png;base64,' + this.client.client_picture;
-        }
-        console.log(this.url);
-        this.campId = this.client.current_camp_id;
-
-        this.mainService.getLocationCamp(this.campId).subscribe((camp: LocationCamp) => {
-          let route_id = camp.route_id;
-          this.mainService.getRouteById(route_id).subscribe((route: Route) => {
-            this.routeName = route.name;
-          }, error => console.log(error));
-        }, (error) => console.log(error));
-
-        this.service.getClientDwellings(this.clientId).subscribe((data: ClientDwelling[]) => {
-          if (data.length === 0) {
-            alert(
-              "Please ask this client 1) If this is first time homeless? 2) Why they are homeless? and 3) When they became homeless? Please record this under a new 'Dwelling History' entry."
-            );
+    if (this.clientId > 0) {
+        this.service.getClientById(this.clientId)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((data: Client) => {
+          this.client = data;
+          if (this.client.client_picture != null && this.client.client_picture != '') {
+            this.url = 'data:image/png;base64,' + this.client.client_picture;
           }
-        })
+          console.log(this.url);
+          this.campId = this.client.current_camp_id ?? 0;
 
-        this.service.getClientHousehold(this.client.household_id).subscribe(
-          (data: Client[]) => {
-            this.householdClients = data;
-          },
-          (error) => console.log(error)
-        );
-
-        this.service.getClientCaseworkers(this.clientId).subscribe((data: Caseworker[]) => {
-          this.clientCaseworkers = data;
-        }, (error) => console.log(error));
-
-        this.service.getMailboxForClient(this.clientId).subscribe((data: ClientMailbox) => {
-          this.clientMailbox = data;
-
-          if (this.clientMailbox != null) {
-            console.log('Client Mailbox:', JSON.stringify(this.clientMailbox));
-            this.service.getAuthorizedMailAccessors(this.clientMailbox.id).subscribe((data: AuthorizedMailAccesses[]) => {
-              console.log('Authorized Mail Accessors:', JSON.stringify(data));
-              this.authorizedMailAccesses = data;
-            }, error => console.log(error));
+          if (this.campId > 0) {
+            this.mainService.getLocationCamp(this.campId)
+              .pipe(takeUntil(this.destroy$))
+              .subscribe((camp: LocationCamp) => {
+                this.mainService.getRouteById(camp.route_id)
+                  .pipe(takeUntil(this.destroy$))
+                  .subscribe((route: Route) => {
+                    this.routeName = route.name;
+                  }, error => console.log(error));
+              }, error => console.log(error));
           }
-        }, error => console.log(error));
+
+          if (this.heatRoute) {
+            this.onHousingToggle();
+          }
+
       }, (error) => console.log(error));
 
-      if (this.routeInstanceId != null) {
-        this.service.getClientNotesForRoute(this.clientId, this.routeInstanceId).subscribe((data: Note[]) => {
-          this.notes = data;
-          this.notes.sort((a, b) => (a.created_at > b.created_at) ? 1 : -1);
-          this.goToTop();
-        }, (error) => console.log(error));
-      }
+      const notesRequest = this.routeInstanceId != null
+        ? this.service.getClientNotesForRoute(this.clientId, this.routeInstanceId)
+        : this.service.getClientNotesForClient(this.clientId);
+      notesRequest
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((data: Note[]) => {
+        this.notes = data.filter((note: Note) => this.shouldDisplayNote(note));
 
-      if (this.isAdmin) {
-        this.service.getClientNotesForClient(this.clientId).subscribe(
-          (data: Note[]) => {
-            this.notes = data;
-            let pinnedNotes: Note[] = data.filter(n => n.source == "PINNED NOTE");
-            pinnedNotes.forEach(n => {
-              if (this.pinnedNoteString === "") {
-                this.pinnedNoteString = n.note;
-              } else {
-                this.pinnedNoteString += '\r\n' + n.note;
-              }
-            });
+        this.notes.sort((a, b) => (a.created_at > b.created_at) ? 1 : -1);
 
-            this.notes.sort((a, b) => (a.created_at > b.created_at) ? 1 : -1);
-            let warningNotes: Note[] = data.filter(n => n.source === "WARNING");
-            if (warningNotes.length > 0) {
-              alert(warningNotes[warningNotes.length - 1].note);
-            }
-          },
-          (error) => console.log(error)
-        );
-
-        this.service.getClientHealthInsurance(this.clientId).subscribe({
-          next: (data: ClientHealthInsurance[]) => {
-            this.healthInsurances = data;
-          },
-          error: (error) => console.log(error)
-        });
-
-        this.service.getClientSteps(this.clientId).subscribe({
-          next: (data: ClientStep[]) => {
-            this.steps = data;
-          },
-          error: (error) => console.log(error)
-        });
-
-        this.service.getClientDebt(this.clientId).subscribe({
-          next: (data: ClientDebt[]) => {
-            this.clientDebts = data;
-          },
-          error: (error) => console.log(error)
-        });
-
-        this.service.getClientFelonies(this.clientId).subscribe({
-          next: (data: ClientFelony[]) => {
-            this.clientFelonies = data;
-          },
-          error: (error) => console.log(error)
-        });
-
-        this.service.getPastEvictions(this.clientId).subscribe({
-          next: (data: ClientPastEviction[]) => {
-            this.clientPastEvictions = data;
-          },
-          error: (error) => console.log(error)
-        });
-
-        this.service.getClientSkills(this.clientId).subscribe({
-          next: (data: ClientSkill[]) => {
-            this.clientSkills = data;
-          },
-          error: (error) => console.log(error)
-        });
-
-        this.service.getRecentReceivedItems(this.clientId).subscribe(
-          (data: RequestedItem[]) => {
-            this.receivedItems = data;
-            this.filteredReceivedItems = this.receivedItems.slice(0, 10);
-          },
-          (error) => console.log(error)
-        );
-        this.service.getRequestedItems(this.clientId).subscribe(
-          (data: RequestedItem[]) => {
-            this.requestedItems = data.filter((w) => w.has_received != true);
-          },
-          (error) => console.log(error)
-        );
-        this.service.getClientPets(this.clientId).subscribe(
-          (data: ClientPet[]) => {
-            this.pets = data;
-          },
-          (error) => console.log(error)
-        );
-        this.service.getClientCircleOfFriends(this.clientId).subscribe(
-          (data: ClientCircleOfFriends[]) => {
-            this.circleOfFriends = data;
-          },
-          (error) => console.log(error)
-        );
-        this.service.getTentsForClient(this.clientId).subscribe(
-          (data: Tent[]) => {
-            this.tents = data;
-          },
-          (error) => console.log(error)
-        );
-        this.service.getClientDwellings(this.clientId).subscribe(
-          (data: ClientDwelling[]) => {
-            this.dwellings = data;
-          },
-          (error) => console.log(error)
-        );
-        this.service.getClientHomelessHistory(this.clientId).subscribe(
-          (data: ClientHomelessHistory[]) => {
-            this.homelessHistories = data;
-          },
-          (error) => console.log(error)
-        );
-        this.service.getClientReferrals(this.clientId).subscribe(
-          (data: ReferralsResources[]) => {
-            this.referralsResources = data;
-          },
-          (error) => console.log(error)
-        );
-        this.service.getGoalsAndNextSteps(this.clientId).subscribe(
-          (data: GoalsNextStep[]) => {
-            this.goalsAndSteps = data;
-          },
-          (error) => console.log(error)
-        );
-        this.service.getClientLikes(this.clientId).subscribe(
-          (data: ClientLike[]) => {
-            this.clientLikes = data;
-          },
-          (error) => console.log(error)
-        );
-        this.service.getClientDislikes(this.clientId).subscribe(
-          (data: ClientDislike[]) => {
-            this.clientDislikes = data;
-          },
-          (error) => console.log(error)
-        );
-        this.service.getClientBarriers(this.clientId).subscribe({
-          next: (data: ClientBarrier[]) => {
-            this.clientBarriers = data;
-          },
-          error: (error) => console.log(error)
-        });
-        this.service.getHealthConcerns(this.clientId).subscribe(
-          (data: HealthConcern[]) => {
-            this.healthConcerns = data;
-          },
-          (error) => console.log(error)
-        );
-        this.service.getHeatersForClient(this.clientId).subscribe(
-          (data: Heater[]) => {
-            this.heaters = data;
-          },
-          (error) => console.log(error)
-        );
-        this.service.getClientPrayerRequests(this.clientId).subscribe(
-          (data: PrayerRequestAndNeed[]) => {
-            this.prayerRequestsAndNeeds = data;
-          },
-          (error) => console.log(error)
-        );
-        this.service.getClientLoanedTanks(this.clientId).subscribe((tankInteractions: any[]) => {
-          // now get the tank info
-          this.tankInteractions = tankInteractions;
-        });
-        this.service.getClientLoanedHoses(this.clientId).subscribe((hoseInteractions: any[]) => {
-          // now get the Hose info
-          this.hoseInteractions = hoseInteractions;
-        });
-        this.service.getHeatEquipmentNotReturned(this.clientId).subscribe(
-          (data: any[]) => {
-            this.heatEquipmentNotReturned = data;
-          },
-          (error) => console.log(error)
-        );
-        this.getHeaterStatuses();
-
-        this.mainService.getClientAttendanceHistory(this.clientId, this.pipe.transform(this.attendanceFromDate, "yyyy-MM-dd"), this.pipe.transform(this.attendanceToDate, "yyyy-MM-dd")).subscribe((data: any[]) => {
-          this.clientInteractions = data;
-          this.clientInteractions.sort(function (a, b) {
-            return (
-              new Date(b.serviced_date).valueOf() -
-              new Date(a.serviced_date).valueOf()
-            );
-          });
-
-          this.goToTop();
-        }, (error) => console.log(error));
-      } else {
-        this.service.getClientNotesForClient(this.clientId).subscribe(
-          (data: Note[]) => {
-            let pinnedNotes: Note[] = data.filter(n => n.source === "PINNED NOTE");
-            pinnedNotes.forEach(n => {
-              if (this.pinnedNoteString === '') {
-                this.pinnedNoteString = n.note;
-              } else {
-                this.pinnedNoteString += '\r\n' + n.note;
-              }
-            });
-            let warningNotes: Note[] = data.filter(n => n.source === "WARNING");
-            if (warningNotes.length > 0) {
-              alert(warningNotes[warningNotes.length - 1].note);
-            }
-          },
-          (error) => console.log(error)
-        );
-
-        this.mainService.getClientAttendanceHistory(this.clientId, this.pipe.transform(this.attendanceFromDate, "yyyy-MM-dd"), this.pipe.transform(this.attendanceToDate, "yyyy-MM-dd")).subscribe((data: any[]) => {
-          this.clientInteractions = data;
-          this.clientInteractions.sort(function (a, b) {
-            return (
-              new Date(b.serviced_date).valueOf() -
-              new Date(a.serviced_date).valueOf()
-            );
-          });
-
-          const now = new Date();
-          const oneMonthAgo = new Date();
-          oneMonthAgo.setMonth(now.getMonth() - 1);
-
-          this.clientInteractions = this.clientInteractions.filter(ci => new Date(ci.serviced_date) > new Date(oneMonthAgo) && !ci.at_homeless_resource_center)
-
-          this.goToTop();
-        },
-          (error) => console.log(error)
-        );
-      }
-
-      if (this.heatRoute) {
-        // get heating equipment for this person
-        this.service
-          .getHeatersForClient(this.clientId)
-          .subscribe((data: Heater[]) => {
-            this.heaters = data;
-          });
-        // this.service.getClientLoanedTanks(this.clientId).subscribe((tankInteractions: any[]) => {
-        //   // now get the tank info
-        //   this.tankInteractions = tankInteractions;
-        // });
-        // this.service.getClientLoanedHoses(this.clientId).subscribe((hoseInteractions: any[]) => {
-        //   // now get the Hose info
-        //   this.hoseInteractions = hoseInteractions;
-        // });
-        this.service
-          .getHeatEquipmentNotReturned(this.clientId)
-          .subscribe((data: any[]) => {
-            this.heatEquipmentNotReturned = data;
-            this.goToTop();
-            if (!this.isAdmin) {
-              let difference = new Date().getTime() - new Date(this.client.created_at).getTime();
-              difference = difference / (1000 * 3600 * 24)
-              if (difference < 7) {
-                alert('Please ask if the client has any pets and get the type (dog or cat), name, breed, age, and if they want monthly pet food in the Pets section.');
-              }
-            }
-          });
-        this.getHeaterStatuses();
-      }
-
-      this.service.getRecentReceivedItems(this.clientId).subscribe((data: RequestedItem[]) => {
-        this.receivedItems = data;
-        this.filteredReceivedItems = this.receivedItems.slice(0, 10);
-      });
-      this.service.getRequestedItems(this.clientId).subscribe((data: RequestedItem[]) => {
-        this.requestedItems = data.filter((w) => w.has_received != true);
-      });
-      this.service
-        .getClientPets(this.clientId)
-        .subscribe((data: ClientPet[]) => {
-          this.pets = data;
-        });
-      this.service.getClientIncomes(this.clientId).subscribe((data: ClientIncome[]) => {
-        this.clientIncomes = data;
-      }, error => console.log(error));
-      this.service.getClientNextOfKins(this.clientId).subscribe((data: ClientNextOfKin[]) => {
-        this.clientNextOfKins = data;
-      }, error => console.log(error));
-      this.service
-        .getClientCircleOfFriends(this.clientId)
-        .subscribe((data: ClientCircleOfFriends[]) => {
-          this.circleOfFriends = data;
-        });
-      this.service
-        .getTentsForClient(this.clientId)
-        .subscribe((data: Tent[]) => {
-          this.tents = data;
-        });
-      this.service
-        .getClientDwellings(this.clientId)
-        .subscribe((data: ClientDwelling[]) => {
-          this.dwellings = data;
-        });
-      this.service
-        .getClientReferrals(this.clientId)
-        .subscribe((data: ReferralsResources[]) => {
-          this.referralsResources = data;
-        });
-      this.service
-        .getGoalsAndNextSteps(this.clientId)
-        .subscribe((data: GoalsNextStep[]) => {
-          this.goalsAndSteps = data;
-        });
-      this.service
-        .getClientLikes(this.clientId)
-        .subscribe((data: ClientLike[]) => {
-          this.clientLikes = data;
-        });
-      this.service
-        .getClientDislikes(this.clientId)
-        .subscribe((data: ClientDislike[]) => {
-          this.clientDislikes = data;
-        });
-      this.service
-        .getHealthConcerns(this.clientId)
-        .subscribe((data: HealthConcern[]) => {
-          this.healthConcerns = data;
-          this.goToTop();
-
-          if (!this.isAdmin) {
-            let difference = new Date().getTime() - new Date(this.client.created_at).getTime();
-            difference = difference / (1000 * 3600 * 24)
-            if (difference < 7) {
-              alert('Please ask if the client has any pets and get the type (dog or cat), name, breed, age, and if they want monthly pet food in the Pets section.');
-            }
+        this.pinnedNoteString = '';
+        let pinnedNotes: Note[] = this.notes.filter(n => n.source === "PINNED NOTE");
+        pinnedNotes.forEach(n => {
+          if (this.pinnedNoteString === "") {
+            this.pinnedNoteString = n.note;
+          } else {
+            this.pinnedNoteString += '\r\n' + n.note;
           }
         });
+
+        this.showWarningAndResourceCenterAlerts();
+
+        this.goToTop();
+      }, (error) => console.log(error));
+
+      if (this.heatRoute && !this.isAdmin) {
+        this.goToTop();
+      }
     } else {
       this.router.navigate(["/routes"]);
     }
   }
 
+  buildDefaultDisabilitySection(category: string): ClientDisabilityAndDisorder {
+    return {
+      id: 0,
+      client_id: this.clientId,
+      category,
+      diagnosis_status: '',
+      type_name: 'None',
+      year_diagnosed: null,
+      clinically_diagnosed: '',
+      note: ''
+    };
+  }
+
+  getDisabilityEntries(category: string): ClientDisabilityAndDisorder[] {
+    if (!this.disabilityAndDisorders[category]) {
+      this.disabilityAndDisorders[category] = [];
+    }
+    return this.disabilityAndDisorders[category];
+  }
+
+  openDisabilityModal(category: string, entry?: ClientDisabilityAndDisorder, index: number = -1) {
+    this.disabilityMdl.showModal(category, entry);
+  }
+
+  disabilityAdded(event: ClientDisabilityAndDisorder) {
+    const category = event.category;
+    const list = this.getDisabilityEntries(category);
+    const existingIndex = list.findIndex((entry) => entry.id === event.id);
+
+    if (existingIndex >= 0) {
+      list[existingIndex] = event;
+      return;
+    }
+
+    list.push(event);
+  }
+
+  saveDisabilityEntry(category: string, index: number) {
+    const entry = this.getDisabilityEntries(category)[index];
+    if (!entry) {
+      return;
+    }
+
+    entry.client_id = this.clientId;
+    const request = entry.id > 0
+      ? this.service.updateDisabilityAndDisorder(entry)
+      : this.service.insertDisabilityAndDisorder(entry);
+
+    request.subscribe({
+      next: (saved: ClientDisabilityAndDisorder) => {
+        this.disabilityAndDisorders[category][index] = saved;
+      },
+      error: (error) => console.log(error)
+    });
+  }
+
+  removeDisabilityEntry(category: string, index: number) {
+    const entry = this.getDisabilityEntries(category)[index];
+    if (!entry) {
+      return;
+    }
+
+    if (entry.id > 0) {
+      this.service.removeDisabilityAndDisorder(entry.id).subscribe(() => {
+        this.disabilityAndDisorders[category].splice(index, 1);
+      }, (error) => console.log(error));
+      return;
+    }
+
+    this.disabilityAndDisorders[category].splice(index, 1);
+  }
+
   searchWeeklyAttendance() {
+    this.weeklyAttendanceLoading = true;
+    this.weeklyAttendanceError = false;
     this.mainService
       .getClientAttendanceHistory(
         this.clientId,
-        this.pipe.transform(this.attendanceFromDate, "yyyy-MM-dd"),
-        this.pipe.transform(this.attendanceToDate, "yyyy-MM-dd")
+        this.pipe.transform(this.attendanceFromDate, "yyyy-MM-dd") || '',
+        this.pipe.transform(this.attendanceToDate, "yyyy-MM-dd") || ''
       )
+      .pipe(takeUntil(this.destroy$))
       .subscribe(
         (data: any[]) => {
           this.clientInteractions = data;
+          this.weeklyAttendanceLoaded = true;
+          this.weeklyAttendanceLoading = false;
           this.clientInteractions.sort(function (a, b) {
             return (
               new Date(b.serviced_date).valueOf() -
@@ -645,19 +454,437 @@ export class ServicingClientComponent implements OnInit {
             );
           });
         },
-        (error) => console.log(error)
+        (error) => {
+          this.weeklyAttendanceLoading = false;
+          this.weeklyAttendanceLoaded = false;
+          this.weeklyAttendanceError = true;
+          console.error('Unable to load client attendance history', error);
+        }
       );
   }
 
+  private loadProfileSection(key: string, event: Event | undefined, requests: Observable<void>[]) {
+    const isOpen = event === undefined || (event.target as HTMLDetailsElement).open;
+    const state = this.profileSectionStates[key];
+    if (!isOpen || state.loaded || state.loading) {
+      return;
+    }
+
+    state.loading = true;
+    state.error = false;
+    if (requests.length === 0) {
+      state.loaded = true;
+      state.loading = false;
+      return;
+    }
+
+    forkJoin(requests.map(request => request.pipe(
+      catchError(error => {
+        state.error = true;
+        console.error(`Unable to load ${key} profile data`, error);
+        return of(undefined);
+      })
+    )))
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          state.loaded = !state.error;
+          state.loading = false;
+        },
+        error: error => {
+          state.loading = false;
+          state.error = true;
+          console.error(`Unable to load ${key} profile data`, error);
+        }
+      });
+  }
+
+  onHeatingToggle(event: Event) {
+    const requests: Observable<void>[] = [
+      this.service.getHeatersForClient(this.clientId).pipe(map(data => { this.heaters = data; })),
+      this.service.getHeatEquipmentNotReturned(this.clientId).pipe(map(data => { this.heatEquipmentNotReturned = data; })),
+      this.mainService.getHeaterStatuses().pipe(map(data => {
+        this.heaterStatuses = data.filter(status => status.id !== 1);
+      }))
+    ];
+
+    if (this.isAdmin) {
+      requests.push(
+        this.service.getClientLoanedTanks(this.clientId).pipe(map(data => { this.tankInteractions = data; })),
+        this.service.getClientLoanedHoses(this.clientId).pipe(map(data => { this.hoseInteractions = data; }))
+      );
+    }
+    this.loadProfileSection('heating', event, requests);
+  }
+
+  onContactsToggle(event: Event) {
+    const mailboxRequest = this.service.getMailboxForClient(this.clientId).pipe(
+      switchMap(mailbox => {
+        this.clientMailbox = mailbox || new ClientMailbox();
+        return mailbox && mailbox.id
+          ? this.service.getAuthorizedMailAccessors(mailbox.id)
+          : of<AuthorizedMailAccesses[]>([]);
+      }),
+      map(accessors => { this.authorizedMailAccesses = accessors; })
+    );
+    const requests: Observable<void>[] = [
+      mailboxRequest,
+      this.service.getClientCaseworkers(this.clientId).pipe(map(data => { this.clientCaseworkers = data; })),
+      this.service.getClientCircleOfFriends(this.clientId).pipe(map(data => { this.circleOfFriends = data; })),
+      this.service.getClientNextOfKins(this.clientId).pipe(map(data => { this.clientNextOfKins = data; }))
+    ];
+
+    this.loadProfileSection('contacts', event, requests);
+  }
+
+  onHousingToggle(event?: Event) {
+    const requests: Observable<void>[] = [
+      this.service.getClientDwellings(this.clientId).pipe(map(data => {
+        this.dwellings = data;
+        if (data.length === 0) {
+          alert("Please ask this client 1) If this is first time homeless? 2) Why they are homeless? and 3) When they became homeless? Please record this under a new 'Dwelling History' entry.");
+        }
+      }))
+    ];
+    if (this.isAdmin && !this.heatRoute) {
+      requests.push(
+        this.service.getClientHomelessHistory(this.clientId).pipe(map(data => { this.homelessHistories = data; }))
+      );
+    }
+    this.loadProfileSection('housing', event, requests);
+  }
+
+  onAssetsToggle(event: Event) {
+    const section = event.target as HTMLDetailsElement;
+    const state = this.profileSectionStates.assets;
+    const shouldCheckNewClient = section.open && !state.loaded && !state.loading &&
+      !this.isAdmin && !this.newClientPetsPromptShown;
+    const requests: Observable<void>[] = [
+      this.service.getClientPets(this.clientId).pipe(map(data => { this.pets = data; })),
+      this.service.getTentsForClient(this.clientId).pipe(map(data => { this.tents = data; })),
+      this.service.getClientReferrals(this.clientId).pipe(map(data => { this.referralsResources = data; }))
+    ];
+    this.loadProfileSection('assets', event, requests);
+
+    if (shouldCheckNewClient) {
+      const ageInDays = (Date.now() - new Date(this.client.created_at).getTime()) / (1000 * 3600 * 24);
+      if (ageInDays < 7) {
+        this.newClientPetsPromptShown = true;
+        alert('Please ask if the client has any pets and get the type (dog or cat), name, breed, age, and if they want monthly pet food in the Pets section.');
+      }
+    }
+  }
+
+  onGoalsToggle(event: Event) {
+    const requests: Observable<void>[] = [];
+    if (this.isAdmin) {
+      requests.push(
+        this.service.getGoalsAndNextSteps(this.clientId).pipe(map(data => { this.goalsAndSteps = data; })),
+        this.service.getClientSteps(this.clientId).pipe(map(data => { this.steps = data; }))
+      );
+    }
+    this.loadProfileSection('goals', event, requests);
+  }
+
+  onStabilityToggle(event: Event) {
+    const requests: Observable<void>[] = [
+      this.service.getClientIncomes(this.clientId).pipe(map(data => { this.clientIncomes = data; }))
+    ];
+    if (this.isAdmin) {
+      requests.push(
+        this.service.getClientRentDetails(this.clientId).pipe(map(data => { this.clientRentDetail = data; })),
+        this.service.getClientBarriers(this.clientId).pipe(map(data => { this.clientBarriers = data; })),
+        this.service.getClientDebt(this.clientId).pipe(map(data => { this.clientDebts = data; })),
+        this.service.getClientFelonies(this.clientId).pipe(map(data => { this.clientFelonies = data; })),
+        this.service.getPastEvictions(this.clientId).pipe(map(data => { this.clientPastEvictions = data; })),
+        this.service.getClientSkills(this.clientId).pipe(map(data => { this.clientSkills = data; }))
+      );
+    }
+    this.loadProfileSection('stability', event, requests);
+  }
+
+  onHealthToggle(event: Event) {
+    const requests: Observable<void>[] = [
+      this.service.getHealthConcerns(this.clientId).pipe(map(data => { this.healthConcerns = data; }))
+    ];
+    if (this.isAdmin) {
+      requests.push(
+        this.service.getClientHealthInsurance(this.clientId).pipe(map(data => { this.healthInsurances = data; })),
+        this.service.getClientDisabilityAndDisorders(this.clientId).pipe(map(data => {
+          this.disabilityAndDisorders = {};
+          ['physical_disability', 'mental_disability', 'substance_use_disorder'].forEach(category => {
+            this.disabilityAndDisorders[category] = data
+              .filter(record => record.category === category)
+              .map(record => ({ ...record }));
+          });
+        }))
+      );
+    }
+    this.loadProfileSection('health', event, requests);
+  }
+
+  onWeeklyAttendanceToggle(event: Event) {
+    const section = event.target as HTMLDetailsElement;
+    if (section.open && !this.weeklyAttendanceLoaded && !this.weeklyAttendanceLoading) {
+      this.weeklyAttendanceLoading = true;
+      this.weeklyAttendanceError = false;
+      this.mainService
+        .getClientAttendanceHistory(
+          this.clientId,
+          this.pipe.transform(this.attendanceFromDate, "yyyy-MM-dd") || '',
+          this.pipe.transform(this.attendanceToDate, "yyyy-MM-dd") || ''
+        )
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(
+          (data: any[]) => {
+            this.clientInteractions = data.sort((a, b) =>
+              new Date(b.serviced_date).valueOf() - new Date(a.serviced_date).valueOf()
+            );
+            if (!this.isAdmin) {
+              const oneMonthAgo = new Date();
+              oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+              this.clientInteractions = this.clientInteractions.filter(
+                interaction => new Date(interaction.serviced_date) > oneMonthAgo &&
+                  !interaction.at_homeless_resource_center
+              );
+            }
+            this.weeklyAttendanceLoaded = true;
+            this.weeklyAttendanceLoading = false;
+          },
+          error => {
+            this.weeklyAttendanceLoading = false;
+            this.weeklyAttendanceLoaded = false;
+            this.weeklyAttendanceError = true;
+            console.error('Unable to load client attendance history', error);
+          }
+        );
+    }
+  }
+
+  onRequestsToggle(event: Event) {
+    const section = event.target as HTMLDetailsElement;
+    if (!section.open || this.requestsLoaded || this.requestsLoading) {
+      return;
+    }
+
+    this.requestsLoading = true;
+    this.requestsError = false;
+    let remainingRequests = this.isAdmin ? 5 : 2;
+    let hasRequestError = false;
+    const completeRequest = () => {
+      remainingRequests--;
+      if (remainingRequests === 0) {
+        this.requestsLoading = false;
+        this.requestsLoaded = !hasRequestError;
+      }
+    };
+
+    this.service.getRequestedItems(this.clientId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: data => {
+          this.requestedItems = data.filter(item => item.has_received != true);
+          completeRequest();
+        },
+        error: error => {
+          hasRequestError = true;
+          this.requestsError = true;
+          console.error('Unable to load requested items', error);
+          completeRequest();
+        }
+      });
+
+    this.service.getRecentReceivedItems(this.clientId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: data => {
+          this.receivedItems = data;
+          this.filteredReceivedItems = data.slice(0, 10);
+          completeRequest();
+        },
+        error: error => {
+          hasRequestError = true;
+          this.requestsError = true;
+          console.error('Unable to load recently received items', error);
+          completeRequest();
+        }
+      });
+
+    if (this.isAdmin) {
+      this.service.getClientPrayerRequests(this.clientId)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: data => {
+            this.prayerRequestsAndNeeds = data;
+            completeRequest();
+          },
+          error: error => {
+            hasRequestError = true;
+            this.requestsError = true;
+            console.error('Unable to load prayer requests', error);
+            completeRequest();
+          }
+        });
+
+      this.service.getClientLikes(this.clientId)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: data => {
+            this.clientLikes = data;
+            completeRequest();
+          },
+          error: error => {
+            hasRequestError = true;
+            this.requestsError = true;
+            console.error('Unable to load client likes', error);
+            completeRequest();
+          }
+        });
+
+      this.service.getClientDislikes(this.clientId)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: data => {
+            this.clientDislikes = data;
+            completeRequest();
+          },
+          error: error => {
+            hasRequestError = true;
+            this.requestsError = true;
+            console.error('Unable to load client dislikes', error);
+            completeRequest();
+          }
+        });
+    }
+  }
+
+  onHouseholdToggle(event: Event) {
+    const section = event.target as HTMLDetailsElement;
+    if (!section.open || this.householdLoaded || this.householdLoading) {
+      return;
+    }
+
+    this.householdLoading = true;
+    this.householdError = false;
+    this.service.getClientHousehold(this.client.household_id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(
+        (data: Client[]) => {
+          this.householdClients = data;
+          this.householdLoaded = true;
+          this.householdLoading = false;
+        },
+        error => {
+          this.householdLoading = false;
+          this.householdError = true;
+          console.error('Unable to load household members', error);
+        }
+      );
+  }
+
+  onVitalRecordsToggle(event: Event) {
+    const section = event.target as HTMLDetailsElement;
+    if (!section.open || this.documentsLoaded || this.documentsLoading) {
+      return;
+    }
+
+    this.documentsLoading = true;
+    this.documentsError = false;
+    if (!this.releaseAcknowledgementsLoaded) {
+      this.service.getClientReleaseAcknowledgements(this.clientId)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(
+          (data: ReleaseAcknowledgement[]) => {
+            this.releaseAcknowledgements = data;
+            this.releaseAcknowledgementsLoaded = true;
+            this.checkReleaseValidity();
+            this.finishLoadingDocuments();
+          },
+          error => {
+            this.documentsLoading = false;
+            this.documentsError = true;
+            console.error('Unable to load release acknowledgements', error);
+          }
+        );
+    }
+    if (!this.vitalRecordsLoaded) {
+      this.service.getClientVitalRecords(this.clientId)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(
+          (data: ClientVitalRecord[]) => {
+            this.clientVitalRecords = data;
+            this.vitalRecordsLoaded = true;
+            this.finishLoadingDocuments();
+          },
+          error => {
+            this.documentsLoading = false;
+            this.documentsError = true;
+            console.error('Unable to load client vital records', error);
+          }
+        );
+    }
+  }
+
+  private finishLoadingDocuments() {
+    this.documentsLoaded = this.releaseAcknowledgementsLoaded && this.vitalRecordsLoaded;
+    if (this.documentsLoaded) {
+      this.documentsLoading = false;
+    }
+  }
+
   ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
     if (this.updateTimerSubscription) {
       this.updateHoseTankMessageVisible = false;
       this.updateTimerSubscription.unsubscribe();
     }
   }
 
+  checkReleaseValidity() {
+    if (this.releaseAcknowledgements.length > 0) {
+      const latest = Math.max(...this.releaseAcknowledgements.map(a => new Date(a.date_acknowledged).getTime()));
+      const oneYearAgo = new Date();
+      oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
+      this.isReleaseValid = latest >= oneYearAgo.getTime();
+    } else {
+      this.isReleaseValid = false;
+    }
+  }
+
+  private showWarningAndResourceCenterAlerts(): void {
+    const warningNotes: Note[] = this.notes
+      .filter(n => n.source === "WARNING")
+      .sort((a, b) => (a.created_at > b.created_at ? 1 : -1));
+    const resourceCenterAlertNotes: Note[] = this.notes
+      .filter(n => n.source === "RESOURCE CENTER ALERT")
+      .sort((a, b) => (a.created_at > b.created_at ? 1 : -1));
+
+    [...warningNotes, ...resourceCenterAlertNotes].forEach((note: Note) => {
+      alert(this.pipe.transform(note.created_at, "shortDate") + " - " + note.note);
+    });
+  }
+
+  private shouldDisplayNote(note: Note): boolean {
+    if (note.source === 'RESOURCE CENTER ALERT' && !this.isAdmin) {
+      return false;
+    }
+
+    if (this.isAdmin) {
+      return true;
+    }
+
+    if (this.heatRoute) {
+      return note.source !== 'Outreach';
+    }
+
+    return note.source !== 'Heat';
+  }
+
   getHeaterStatuses(): void {
-    this.mainService.getHeaterStatuses().subscribe(
+    this.mainService.getHeaterStatuses()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(
       (heaterStatuses) => {
         this.heaterStatuses = heaterStatuses.filter(
           (w: { id: number }) => w.id !== 1
@@ -686,15 +913,19 @@ export class ServicingClientComponent implements OnInit {
   updateHeaterEntry(heaterId: number, statusId: number) {
     this.service
       .updateHeaterClient(this.client.id, heaterId, statusId)
+      .pipe(takeUntil(this.destroy$))
       .subscribe((response) => {
-        this.service.getHeatersForClient(this.client.id).subscribe(
-          (data: any[]) => {
-            this.heaters = data;
-          },
-          (error) => console.log(error)
-        );
+        this.service.getHeatersForClient(this.client.id)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe(
+            (data: any[]) => {
+              this.heaters = data;
+            },
+            (error) => console.log(error)
+          );
         this.service
           .getHeatEquipmentNotReturned(this.clientId)
+          .pipe(takeUntil(this.destroy$))
           .subscribe((data1: any[]) => {
             this.heatEquipmentNotReturned = data1;
           });
@@ -702,22 +933,30 @@ export class ServicingClientComponent implements OnInit {
   }
 
   updateClientMailbox(mailbox: ClientMailbox) {
-    this.service.updateClientMailbox(mailbox).subscribe((data) => {
-      console.log(JSON.stringify(data));
-    }, error => console.log(error));
+    this.service.updateClientMailbox(mailbox)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((data) => {
+        console.log(JSON.stringify(data));
+      }, error => console.log(error));
+  }
+
+  rentDetailsSaved(rentDetail: ClientRentDetail) {
+    this.clientRentDetail = rentDetail;
   }
 
   updateNumberTanksHoses(client: Client) {
-    this.service.updateClient(client).subscribe(
-      (data) => {
-        let updateTimer = timer(2000, 2000);
-        this.updateTimerSubscription = updateTimer.subscribe((data) => {
-          this.hideConfirmationMessage();
-        });
-        this.updateHoseTankMessageVisible = true;
-      },
-      (error) => console.log(error)
-    );
+    this.service.updateClient(client)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(
+        (data) => {
+          let updateTimer = timer(2000, 2000);
+          this.updateTimerSubscription = updateTimer.pipe(takeUntil(this.destroy$)).subscribe((data) => {
+            this.hideConfirmationMessage();
+          });
+          this.updateHoseTankMessageVisible = true;
+        },
+        (error) => console.log(error)
+      );
   }
 
   updateNeedPetFood(pet: ClientPet) {
@@ -814,7 +1053,7 @@ export class ServicingClientComponent implements OnInit {
 
   hideConfirmationMessage(): any {
     this.updateHoseTankMessageVisible = false;
-    this.updateTimerSubscription.unsubscribe();
+    this.updateTimerSubscription?.unsubscribe();
   }
 
   sendInteraction(interactionType: number, heatEquipmentAdded: boolean = false) {
@@ -824,7 +1063,7 @@ export class ServicingClientComponent implements OnInit {
 
     const interaction: Appearance = new Appearance();
     interaction.client_id = this.client.id;
-    interaction.location_camp_id = this.locationCampId ? this.locationCampId : this.client.current_camp_id;
+    interaction.location_camp_id = this.locationCampId ?? this.client.current_camp_id ?? 0;
     if (interactionType === 1) {
       interaction.serviced = true;
       interaction.was_seen = true;
@@ -853,7 +1092,6 @@ export class ServicingClientComponent implements OnInit {
       // if neither locationCampId nor current_camp_id have a value, set it to HRC camp
       if (!interaction.location_camp_id || interaction.location_camp_id == 0) {
         interaction.location_camp_id = 449;
-        this.client.current_camp_id = 449;
       }
     }
 
@@ -871,24 +1109,20 @@ export class ServicingClientComponent implements OnInit {
         }
       );
       modalRef.result.then((selected_date: Date) => {
-        if (!selected_date) {
-          return;
-        } else {
-          interaction.serviced_date = selected_date;
-          if (interaction.serviced) {
-            if (interaction.serviced_date.valueOf() > new Date(this.client.last_interaction_date).valueOf()) {
-              this.client.last_interaction_date = interaction.serviced_date;
-            }
-
-            this.createUpdateInteraction(interaction, heatEquipmentAdded);
-          } else if (!interaction.still_lives_here) {
-            this.client.previous_camp_id = interaction.location_camp_id;
-            this.client.current_camp_id = null;
-
-            this.createUpdateInteraction(interaction, heatEquipmentAdded);
-          } else {
-            this.createUpdateInteraction(interaction, heatEquipmentAdded);
+        interaction.serviced_date = selected_date || new Date();
+        if (interaction.serviced) {
+          if (interaction.serviced_date.valueOf() > new Date(this.client.last_interaction_date).valueOf()) {
+            this.client.last_interaction_date = interaction.serviced_date;
           }
+
+          this.createUpdateInteraction(interaction, heatEquipmentAdded);
+        } else if (!interaction.still_lives_here) {
+          this.client.previous_camp_id = interaction.location_camp_id;
+          this.client.current_camp_id = null;
+
+          this.createUpdateInteraction(interaction, heatEquipmentAdded);
+        } else {
+          this.createUpdateInteraction(interaction, heatEquipmentAdded);
         }
       });
     } else {
@@ -911,7 +1145,7 @@ export class ServicingClientComponent implements OnInit {
     let routeAttendanceList: Appearance[] = JSON.parse(
       window.localStorage.getItem("RouteAttendance") || '[]'
     );
-    let appearance: Appearance = routeAttendanceList.find(
+    const appearance = routeAttendanceList.find(
       (x) => x.client_id == interaction.client_id
     );
 
@@ -931,7 +1165,8 @@ export class ServicingClientComponent implements OnInit {
 
           if (!interaction.still_lives_here) {
             alert('Please add a new dwelling to indicate where they went and any other applicable notes');
-            document.getElementById("newDwellingButton").click();
+            const newDwellingButton = document.getElementById("newDwellingButton");
+            newDwellingButton?.click();
 
             // If we haven't loaded pets for this client, fetch them then clear requests
             this.clearPetsFoodRequests();
@@ -942,10 +1177,10 @@ export class ServicingClientComponent implements OnInit {
           let clientDwelling: ClientDwelling = this.dwellings.filter(dwelling => dwelling.created_at === dwellingDates.reduce((a, b) => a > b ? a : b))[0];
           let clientHistory: ClientHomelessHistory = this.homelessHistories.filter(history => history.created_at === historyDates.reduce((a, b) => a > b ? a : b))[0];
 
-          var difference = new Date().getTime() - new Date(clientDwelling.created_at).getTime();
-          difference = Math.ceil(difference / (1000 * 3600 * 24));
-          if (interaction.serviced && (clientDwelling.dwelling == "House" || clientDwelling.dwelling == "Apartment" || clientDwelling.dwelling == "Shelter" || clientDwelling.dwelling == "Motel" || clientDwelling.dwelling == "Motel") && difference > 90 && clientHistory != null) {
-
+          const difference = clientDwelling
+            ? Math.ceil((new Date().getTime() - new Date(clientDwelling.created_at).getTime()) / (1000 * 3600 * 24))
+            : 0;
+          if (interaction.serviced && clientDwelling && (clientDwelling.dwelling == "House" || clientDwelling.dwelling == "Apartment" || clientDwelling.dwelling == "Shelter" || clientDwelling.dwelling == "Motel" || clientDwelling.dwelling == "Motel") && difference > 90 && clientHistory != null) {
             clientHistory.first_time_homeless = false;
             this.service.updateHomelessHistory(clientHistory).subscribe(data => {
 
@@ -972,7 +1207,8 @@ export class ServicingClientComponent implements OnInit {
 
           if (!interaction.still_lives_here) {
             alert('Please add a new dwelling to indicate where they went and any other applicable notes');
-            document.getElementById("newDwellingButton").click();
+            const newDwellingButton = document.getElementById("newDwellingButton");
+            newDwellingButton?.click();
 
             // If we haven't loaded pets for this client, fetch them then clear requests
             this.clearPetsFoodRequests();
@@ -983,9 +1219,10 @@ export class ServicingClientComponent implements OnInit {
           let clientDwelling: ClientDwelling = this.dwellings.filter(dwelling => dwelling.created_at === dwellingDates.reduce((a, b) => a > b ? a : b))[0];
           let clientHistory: ClientHomelessHistory = this.homelessHistories.filter(history => history.created_at === historyDates.reduce((a, b) => a > b ? a : b))[0];
 
-          var difference = new Date().getTime() - new Date(clientDwelling.created_at).getTime();
-          difference = Math.ceil(difference / (1000 * 3600 * 24));
-          if (interaction.serviced && (clientDwelling.dwelling == "House" || clientDwelling.dwelling == "Apartment" || clientDwelling.dwelling == "Shelter" || clientDwelling.dwelling == "Motel" || clientDwelling.dwelling == "Camper") && difference > 90) {
+          const difference = clientDwelling
+            ? Math.ceil((new Date().getTime() - new Date(clientDwelling.created_at).getTime()) / (1000 * 3600 * 24))
+            : 0;
+          if (interaction.serviced && clientDwelling && (clientDwelling.dwelling == "House" || clientDwelling.dwelling == "Apartment" || clientDwelling.dwelling == "Shelter" || clientDwelling.dwelling == "Motel" || clientDwelling.dwelling == "Camper") && difference > 90 && clientHistory != null) {
             clientHistory.first_time_homeless = false;
             this.service.updateHomelessHistory(clientHistory).subscribe(data => {
 
@@ -1074,6 +1311,15 @@ export class ServicingClientComponent implements OnInit {
 
   mailboxAdded(mailbox: ClientMailbox) {
     this.clientMailbox = mailbox;
+
+    // Re-pull the referrals to see the new Joppa PO Box referral
+    this.service.getClientReferrals(this.clientId).subscribe(
+      (data: ReferralsResources[]) => {
+        this.referralsResources = data;
+      },
+      (error) => console.log(error)
+    );
+
     this.safeScrollTo('#new-mailbox-btn');
   }
 
@@ -1125,12 +1371,14 @@ export class ServicingClientComponent implements OnInit {
   }
 
   noteAdded(note: Note) {
-    this.notes.push(note);
-    if (note.source === "PINNED NOTE") {
-      if (this.pinnedNoteString === "") {
-        this.pinnedNoteString = note.note;
-      } else {
-        this.pinnedNoteString += '\r\n' + note.note;
+    if (this.shouldDisplayNote(note)) {
+      this.notes.push(note);
+      if (note.source === "PINNED NOTE") {
+        if (this.pinnedNoteString === "") {
+          this.pinnedNoteString = note.note;
+        } else {
+          this.pinnedNoteString += '\r\n' + note.note;
+        }
       }
     }
     this.safeScrollTo('#new-note-btn');
@@ -1149,6 +1397,18 @@ export class ServicingClientComponent implements OnInit {
   clientHealthInsuranceAdded(insurance: ClientHealthInsurance) {
     this.healthInsurances.push(insurance);
     this.safeScrollTo('#new-health-insurance-btn');
+  }
+
+  clientSelected(client: Client) {
+    this.householdClients.push(client);
+
+
+    this.safeScrollTo('#new-household-member-button');
+    client.household_id = this.client.household_id;
+    this.service.updateClient(client).subscribe(
+      (data) => { },
+      (error) => console.log(error)
+    );
   }
 
   stepAdded(step: ClientStep) {
@@ -1224,16 +1484,6 @@ export class ServicingClientComponent implements OnInit {
     }
   }
 
-  clientSelected(client: Client) {
-    this.householdClients.push(client);
-
-    client.household_id = this.client.household_id;
-    this.service.updateClient(client).subscribe(
-      (data) => { },
-      (error) => console.log(error)
-    );
-  }
-
   dateSelected(date_seen: Date) { }
 
   goToTop() {
@@ -1261,7 +1511,7 @@ export class ServicingClientComponent implements OnInit {
     this.router.navigate(["/admin/clientListing"]);
   }
 
-  viewClient(theClient) {
+  viewClient(theClient: Client) {
     localStorage.setItem('selectedClient', JSON.stringify(theClient.id));
     this.router.navigate(['/serviceClient']);
     window.location.reload();
@@ -1277,7 +1527,7 @@ export class ServicingClientComponent implements OnInit {
       this.router.navigate([`/locationCamp/${this.campId}`]);
     } else {
       let routeAttendanceList: Appearance[] = JSON.parse(
-        localStorage.getItem("RouteAttendance")
+        localStorage.getItem("RouteAttendance") || '[]'
       );
       if (routeAttendanceList.length != null) {
         this.appearance = routeAttendanceList.find(
@@ -1640,12 +1890,12 @@ export class ServicingClientComponent implements OnInit {
     );
   }
 
-  isOtherRelationship(value: string): boolean {
+  isOtherRelationship(value: string | null | undefined): boolean {
     const standard = [
       "Aunt", "Boyfriend", "Caretaker", "Child", "Cousin", "Girlfriend",
       "Grandparent", "Parent", "Sibling", "Spouse/Partner", "Uncle"
     ];
-    return value && !standard.includes(value);
+    return !!value && !standard.includes(value);
   }
 
   removeClientCaseworker(id: number) {
@@ -1654,6 +1904,54 @@ export class ServicingClientComponent implements OnInit {
         this.clientCaseworkers = this.clientCaseworkers.filter((w) => w.id != id);
       });
     }
+  }
+
+  addReleaseAcknowledgement() {
+    if (this.clientId === null) {
+      return;
+    }
+
+    const releaseAck = new ReleaseAcknowledgement();
+    releaseAck.client_id = this.clientId;
+    releaseAck.date_acknowledged = new Date();
+    this.service.insertReleaseAcknowledgement(releaseAck).subscribe((newAck: ReleaseAcknowledgement) => {
+      this.releaseAcknowledgements.push(newAck);
+      this.checkReleaseValidity();
+    });
+  }
+
+  updateReleaseAcknowledgementNotes(ack: ReleaseAcknowledgement) {
+    this.service.updateReleaseAcknowledgement(ack).subscribe((updated: ReleaseAcknowledgement) => {
+      const index = this.releaseAcknowledgements.findIndex(a => a.id === updated.id);
+      if (index !== -1) {
+        this.releaseAcknowledgements[index] = updated;
+      }
+    });
+  }
+
+  removeReleaseAcknowledgement(id: number) {
+    this.service.removeReleaseAcknowledgement(id).subscribe(res => {
+      this.releaseAcknowledgements = this.releaseAcknowledgements.filter(a => a.id !== id);
+      this.checkReleaseValidity();
+    });
+  }
+
+  vitalRecordSaved(record: ClientVitalRecord) {
+    const index = this.clientVitalRecords.findIndex(existing => existing.id === record.id);
+    if (index === -1) {
+      this.clientVitalRecords.push(record);
+    } else {
+      this.clientVitalRecords[index] = record;
+    }
+  }
+
+  retrieveVitalRecord(record: ClientVitalRecord) {
+    this.service.retrieveClientVitalRecord(record.id).subscribe((updated: ClientVitalRecord) => {
+      const index = this.clientVitalRecords.findIndex(existing => existing.id === updated.id);
+      if (index !== -1) {
+        this.clientVitalRecords[index] = updated;
+      }
+    }, error => console.log(error));
   }
 
   toggleOnCart(item: any) {

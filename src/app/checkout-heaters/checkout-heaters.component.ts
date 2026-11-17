@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Heater } from '../models/heater';
 import { MainService } from '../services/main.service';
 import { Router } from '@angular/router';
@@ -9,13 +9,15 @@ import { Appearance } from 'app/models/appearance';
 import { ClientService } from 'app/services/client.service';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { Client } from 'app/models/client';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-checkout-heaters',
   templateUrl: './checkout-heaters.component.html',
   styleUrls: ['./checkout-heaters.component.css']
 })
-export class CheckoutHeatersComponent implements OnInit {
+export class CheckoutHeatersComponent implements OnInit, OnDestroy {
   routeInstanceHeaterInteraction: RouteInstanceHeaterInteraction;
   checkedOutRouteInstanceHeaters: RouteInstanceHeaterInteraction[] = [];
   isEndOfRoute: boolean = false;
@@ -23,6 +25,7 @@ export class CheckoutHeatersComponent implements OnInit {
   routeInstanceTankHoseForm : UntypedFormGroup;
   isAdmin: boolean;
   forwardIcon = faChevronRight;
+  private destroy$ = new Subject<void>();
 
   constructor(private fb:UntypedFormBuilder, private mainService: MainService, private clientService: ClientService, private router: Router) { 
     
@@ -110,9 +113,11 @@ export class CheckoutHeatersComponent implements OnInit {
       routeInstanceTankHoseInteraction.number_tanks_out = this.routeInstanceTankHoseForm.get('number_tanks_out').value;
       routeInstanceTankHoseInteraction.number_heaters_out = this.routeInstanceTankHoseForm.get('number_heaters_out').value;
 
-      this.mainService.insertRouteInstanceTankHoseInteraction(routeInstanceTankHoseInteraction).subscribe((data: RouteInstanceTankHoseInteraction) => {
-        window.localStorage.setItem('tankHoseInteractionId', JSON.stringify(data.id))
-      }, error => console.log(error));
+      this.mainService.insertRouteInstanceTankHoseInteraction(routeInstanceTankHoseInteraction)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((data: RouteInstanceTankHoseInteraction) => {
+          window.localStorage.setItem('tankHoseInteractionId', JSON.stringify(data.id))
+        }, error => console.log(error));
 
       this.router.navigate(['volunteerInfo']);
     }
@@ -135,5 +140,10 @@ export class CheckoutHeatersComponent implements OnInit {
     window.localStorage.setItem('apiToken', apiKey);
     window.localStorage.setItem('isAdmin', JSON.stringify(this.isAdmin));
     this.router.navigate(['login']);
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

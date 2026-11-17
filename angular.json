@@ -28,6 +28,22 @@
             "scripts": []
           },
           "configurations": {
+            "test": {
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.test.ts"
+                }
+              ]
+            },
             "production": {
               "optimization": true,
               "outputHashing": "all",
@@ -52,6 +68,9 @@
             "browserTarget": "joppa:build"
           },
           "configurations": {
+            "test": {
+              "browserTarget": "joppa:build:test"
+            },
             "production": {
               "browserTarget": "joppa:build:production"
             }

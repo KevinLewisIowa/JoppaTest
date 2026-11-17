@@ -2,6 +2,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Client } from 'app/models/client';
 import { ClientService } from '../../services/client.service';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-birthday-months-report',
@@ -11,8 +13,8 @@ import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 export class BirthdayMonthsReportComponent implements OnInit, OnDestroy {
   monthBirthdays: Client[] = [];
   monthInt = 1;
-  subscriptions: any[] = [];
   resultMessage = '';
+  private destroy$ = new Subject<void>();
   constructor(private service: ClientService) { };
   backIcon = faChevronLeft;
 
@@ -22,19 +24,20 @@ export class BirthdayMonthsReportComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach(item => {
-      item.unsubscribe();
-    })
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   monthChanged(val) {
-    this.subscriptions.push(this.service.getBirthdaysByMonth(this.monthInt).subscribe((data: Client[]) => {
+    this.service.getBirthdaysByMonth(this.monthInt)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((data: Client[]) => {
       this.monthBirthdays = data;
       this.resultMessage = 'There are ' + data.length + ' total birthdays in the selected month.';
     }, error => {
       this.monthBirthdays = [];
       this.resultMessage = 'Error getting results';
-    }));
+    });
   }
 
 }

@@ -1,0 +1,39 @@
+<ng-template #vitalRecordModal let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">{{ editing ? 'Edit Vital Record' : 'Add Vital Record' }}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Close')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <form (ngSubmit)="submit()">
+    <div class="modal-body">
+      <div class="form-group">
+        <label for="vital-document-type">Type</label>
+        <select id="vital-document-type" name="document_type" class="form-control" required
+          [(ngModel)]="record.document_type">
+          <option value="" disabled>Select a document type</option>
+          <option *ngFor="let type of documentTypes" [value]="type">{{ type }}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="vital-record-notes">Notes</label>
+        <textarea id="vital-record-notes" name="notes" class="form-control" rows="3"
+          [(ngModel)]="record.notes"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="vital-entered-on">Date Entered</label>
+        <input id="vital-entered-on" name="entered_on" type="date" class="form-control" required
+          [(ngModel)]="record.entered_on" />
+      </div>
+      <div class="form-check">
+        <input id="vital-signed-agreement" name="signed_agreement" type="checkbox" class="form-check-input"
+          [(ngModel)]="record.signed_agreement" />
+        <label class="form-check-label" for="vital-signed-agreement">Signed the vital record agreement</label>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-primary" (click)="c('Cancel')">Cancel</button>
+      <button type="submit" class="btn btn-primary">{{ editing ? 'Save Changes' : 'Save' }}</button>
+    </div>
+  </form>
+</ng-template>

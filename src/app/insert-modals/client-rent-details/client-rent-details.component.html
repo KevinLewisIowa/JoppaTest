@@ -1,0 +1,59 @@
+<ng-template #rentDetailsMdl let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">{{ rentDetail.id ? 'Edit' : 'Add' }} Rent Details</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cancel')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <form #rentDetailsForm="ngForm" (ngSubmit)="saveRentDetails()">
+    <div class="modal-body">
+      <div class="form-group">
+        <label for="rentCost">Rent Cost</label>
+        <div class="input-group">
+          <span class="input-group-text">$</span>
+          <input id="rentCost" name="rentCost" type="number" class="form-control" min="0" step="0.01"
+            [(ngModel)]="rentDetail.rent_cost" required />
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="utilitiesIncluded">Utilities Cost</label>
+        <select id="utilitiesIncluded" name="utilitiesIncluded" class="form-control"
+          [(ngModel)]="rentDetail.utilities_included" required>
+          <option [ngValue]="true">Included</option>
+          <option [ngValue]="false">Enter a cost</option>
+        </select>
+      </div>
+      <div class="form-group" *ngIf="rentDetail.utilities_included === false">
+        <label for="utilitiesCost">Utilities Cost</label>
+        <div class="input-group">
+          <span class="input-group-text">$</span>
+          <input id="utilitiesCost" name="utilitiesCost" type="number" class="form-control" min="0" step="0.01"
+            [(ngModel)]="rentDetail.utilities_cost" required />
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="whoIsPaying">Who is Paying?</label>
+        <select id="whoIsPaying" name="whoIsPaying" class="form-control"
+          [(ngModel)]="rentDetail.who_is_paying" required>
+          <option value="" disabled>Select who is paying</option>
+          <option value="Self">Self</option>
+          <option value="Other Organization">Other Organization</option>
+          <option value="Family Member">Family Member</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="rentNote">Note</label>
+        <textarea id="rentNote" name="rentNote" class="form-control" rows="3"
+          [(ngModel)]="rentDetail.note"></textarea>
+      </div>
+      <div *ngIf="errorMessage" class="alert alert-danger" role="alert">{{ errorMessage }}</div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-primary" (click)="d('Cancel')">Cancel</button>
+      <button type="submit" class="btn btn-primary" [disabled]="rentDetailsForm.invalid || saving">
+        {{ saving ? 'Saving...' : 'Save' }}
+      </button>
+    </div>
+  </form>
+</ng-template>

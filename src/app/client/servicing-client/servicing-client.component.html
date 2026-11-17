@@ -34,24 +34,39 @@
             <fa-icon [icon]="backIcon"></fa-icon> Back to Client List
           </button>
         </div>
-        <div style="display:flex; gap:8px;">
-          <button (click)="showMap()" type="button" class="btn btn-primary"
-            *ngIf="client.latitude != null && client.longitude != null">
-            <fa-icon [icon]="mapIcon"></fa-icon> Show Directions
-          </button>
-          <button #clientInfo class="btn btn-primary" (click)="openClientEditModal(client)" type="button">
-            Client Info <fa-icon [icon]="informationIcon"></fa-icon>
-          </button>
-        </div>
+        <button #clientInfo class="btn btn-primary" (click)="clientEditMdl.openModal(client)" type="button">
+          Client Info <fa-icon [icon]="informationIcon"></fa-icon>
+        </button>
+      </div>
+      <div style="display:flex; justify-content:flex-start; margin-top:8px;">
+        <button type="button" *ngIf="isAdmin" [className]="
+              appearance &&
+              appearance.was_seen == false &&
+              appearance.serviced == false &&
+              appearance.at_homeless_resource_center == true
+                ? 'btn btn-success'
+                : 'btn btn-primary'
+            " (click)="sendInteraction(5)">
+          Homeless Resource Center
+        </button>
+        <button (click)="showMap()" type="button" class="btn btn-primary" style="margin-left:8px;"
+          *ngIf="client.latitude != null && client.longitude != null">
+          <fa-icon [icon]="mapIcon"></fa-icon> Show Directions
+        </button>
       </div>
     </div>
   </div>
 
   <div class="panel-body">
+    <details class="profile-accordion" [open]="heatRoute" (toggle)="onHeatingToggle($event)" *ngIf="heatRoute || isAdmin">
+      <summary><h4 class="d-inline">Heating Equipment</h4></summary>
+      <div *ngIf="profileSectionStates.heating.loading" class="text-muted">Loading heating equipment...</div>
+      <div *ngIf="profileSectionStates.heating.error" class="text-danger">
+        Heating equipment could not be loaded. Close and reopen this section to retry.
+      </div>
     <div class="row">
       <div class="col-lg-12 col-md-12" *ngIf="heatRoute || isAdmin">
         <h4>
-          Heating Equipment
           <button id="new-heater-btn" type="button" (click)="loanHeater()" class="btn btn-primary float-right">
             New Heater
           </button>
@@ -183,6 +198,18 @@
         </div>
       </div>
     </div>
+    </details>
+    <details class="profile-accordion" (toggle)="onContactsToggle($event)">
+      <summary>
+        <div>
+          <h4>Contacts and Mailbox</h4>
+          <small>Caseworkers, next of kin, friends, and authorized mailbox users</small>
+        </div>
+      </summary>
+      <div *ngIf="profileSectionStates.contacts.loading" class="text-muted">Loading contacts and mailbox...</div>
+      <div *ngIf="profileSectionStates.contacts.error" class="text-danger">
+        Some contact details could not be loaded. Other records may still be available; close and reopen to retry.
+      </div>
     <div class="col-lg-12 col-md-12">
       <h4>
         Client Mailbox
@@ -468,7 +495,19 @@
         </table>
       </div>
     </div>
-    <div class="col-lg-12 col-md-12" *ngIf="!heatRoute">
+    </details>
+    <details class="profile-accordion" [open]="heatRoute" (toggle)="onHousingToggle($event)">
+      <summary>
+        <div>
+          <h4>{{ heatRoute ? 'Dwelling History' : 'Housing and Homeless History' }}</h4>
+          <small *ngIf="!heatRoute">Dwelling history and homelessness details</small>
+        </div>
+      </summary>
+      <div *ngIf="profileSectionStates.housing.loading" class="text-muted">Loading housing history...</div>
+      <div *ngIf="profileSectionStates.housing.error" class="text-danger">
+        Housing history could not be loaded. Close and reopen this section to retry.
+      </div>
+    <div class="col-lg-12 col-md-12">
       <div class="background-color">
         <h4>
           Dwelling History
@@ -584,65 +623,70 @@
             New History
           </button>
         </h4>
-        <div class="table-responsive">
-          <table class="table" id="histories">
-            <colgroup>
-              <col span="1" style="width: 20%" />
-              <col span="1" style="width: 20%" />
-              <col span="1" style="width: 20%" />
-              <col span="1" style="width: 20%" />
-              <col span="1" style="width: 20%" />
-            </colgroup>
-            <thead>
-              <tr>
-                <th>First Time Homeless?</th>
-                <th>Date Became Homeless</th>
-                <th>Reason for Homelessness</th>
-                <th>Notes</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let item of homelessHistories">
-                <td>
-                  <select *ngIf="isAdmin" class="form-control" [(ngModel)]="item.first_time_homeless"
+        <table class="table" id="histories">
+          <colgroup>
+            <col span="1" style="width: 20%" />
+            <col span="1" style="width: 20%" />
+            <col span="1" style="width: 20%" />
+            <col span="1" style="width: 20%" />
+            <col span="1" style="width: 20%" />
+          </colgroup>
+          <thead>
+            <tr>
+              <th>First Time Homeless?</th>
+              <th>Date Became Homeless</th>
+              <th>Reason for Homelessness</th>
+              <th>Notes</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of homelessHistories">
+              <td>
+                <select *ngIf="isAdmin" class="form-control" [(ngModel)]="item.first_time_homeless"
+                  (ngModelChange)="saveHomelessHistory(item)">
+                  <option [ngValue]="true">Yes</option>
+                  <option [ngValue]="false">No</option>
+                </select>
+                <span *ngIf="!isAdmin">{{ item.first_time_homeless ? 'Yes' : 'No' }}</span>
+              </td>
+              <td>
+                <input *ngIf="isAdmin" type="date" class="form-control" [(ngModel)]="item.date_became_homeless"
+                  (ngModelChange)="saveHomelessHistory(item)" />
+                <span *ngIf="!isAdmin">{{ item.date_became_homeless | date: "shortDate" }}</span>
+              </td>
+              <td>
+                <!-- <select *ngIf="isAdmin" class="form-control" [(ngModel)]="item.reason_for_homelessness"
                     (ngModelChange)="saveHomelessHistory(item)">
-                    <option [ngValue]="true">Yes</option>
-                    <option [ngValue]="false">No</option>
+                    <option *ngFor="let reason of reasonForHomelessnessOptions" [value]="reason">{{ reason }}</option>
                   </select>
-                  <span *ngIf="!isAdmin">{{ item.first_time_homeless ? 'Yes' : 'No' }}</span>
-                </td>
-                <td>
-                  <input *ngIf="isAdmin" type="date" class="form-control" [(ngModel)]="item.date_became_homeless"
-                    (ngModelChange)="saveHomelessHistory(item)" />
-                  <span *ngIf="!isAdmin">{{ item.date_became_homeless | date: "shortDate" }}</span>
-                </td>
-                <td>
-                  <!-- <select *ngIf="isAdmin" class="form-control" [(ngModel)]="item.reason_for_homelessness"
-                      (ngModelChange)="saveHomelessHistory(item)">
-                      <option *ngFor="let reason of reasonForHomelessnessOptions" [value]="reason">{{ reason }}</option>
-                    </select>
-                    <span *ngIf="!isAdmin">{{ item.reason_for_homelessness }}</span> -->
-                  <span>{{ item.reason_for_homelessness }}</span>
-                </td>
-                <td>
-                  <textarea *ngIf="isAdmin" class="form-control" rows="3" [(ngModel)]="item.note"
-                    (ngModelChange)="saveHomelessHistory(item)"></textarea>
-                  <span *ngIf="!isAdmin">{{ item.note }}</span>
-                </td>
-                <td>
-                  <button type="button" class="btn btn-primary" (click)="removeClientHomelessHistory(item.id)"
-                    *ngIf="isAdmin">
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+                  <span *ngIf="!isAdmin">{{ item.reason_for_homelessness }}</span> -->
+                <span>{{ item.reason_for_homelessness }}</span>
+              </td>
+              <td>
+                <textarea *ngIf="isAdmin" class="form-control" rows="3" [(ngModel)]="item.note"
+                  (ngModelChange)="saveHomelessHistory(item)"></textarea>
+                <span *ngIf="!isAdmin">{{ item.note }}</span>
+              </td>
+              <td>
+                <button type="button" class="btn btn-primary" (click)="removeClientHomelessHistory(item.id)"
+                  *ngIf="isAdmin">
+                  Delete
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
+    </details>
 
+    <details class="profile-accordion" (toggle)="onRequestsToggle($event)">
+      <summary><h4 class="d-inline">Requests and Preferences</h4></summary>
+      <div *ngIf="requestsLoading" class="text-muted">Loading requests...</div>
+      <div *ngIf="requestsError" class="text-danger">
+        Some requests could not be loaded. Close and reopen this section to retry.
+      </div>
     <div class="col-lg-12 col-md-12">
       <h4>
         Requested Items
@@ -737,42 +781,40 @@
           New Prayer Request
         </button>
       </h4>
-      <div class="table-responsive">
-        <table class="table" id="prayerRequestsNeeds">
-          <colgroup>
-            <col span="1" style="width: 25%" />
-            <col span="1" style="width: 25%" />
-            <col span="1" style="width: 25%" />
-            <col span="1" style="width: 25%" />
-          </colgroup>
-          <thead>
-            <tr>
-              <th>Description</th>
-              <th>Created At</th>
-              <th></th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let request of prayerRequestsAndNeeds">
-              <td>
-                {{ request.detail }}
-              </td>
-              <td>
-                {{ request.created_at | date: "shortDate" }}
-              </td>
-              <td>
-                <button type="button" class="btn btn-primary" (click)="removePrayerRequestNeed(request.id)">
-                  Remove
-                </button>
-              </td>
-              <td></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <div class="table-responsive"></div>
+      <table class="table" id="prayerRequestsNeeds">
+        <colgroup>
+          <col span="1" style="width: 25%" />
+          <col span="1" style="width: 25%" />
+          <col span="1" style="width: 25%" />
+          <col span="1" style="width: 25%" />
+        </colgroup>
+        <thead>
+          <tr>
+            <th>Description</th>
+            <th>Created At</th>
+            <th></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let request of prayerRequestsAndNeeds">
+            <td>
+              {{ request.detail }}
+            </td>
+            <td>
+              {{ request.created_at | date: "shortDate" }}
+            </td>
+            <td>
+              <button type="button" class="btn btn-primary" (click)="removePrayerRequestNeed(request.id)">
+                Remove
+              </button>
+            </td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-  </div>
   <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
     <div class="background-color">
       <h4>
@@ -859,10 +901,13 @@
       </table>
     </div>
   </div>
+    </details>
+  </div>
+  <details class="profile-accordion">
+    <summary><h4 class="d-inline">Notes</h4></summary>
   <div class="col-lg-12 col-md-12">
     <div class="background-color">
       <h4>
-        Notes
         <button id="new-note-btn" type="button" (click)="goToTop(); notesMdl.showModal()"
           class="btn btn-primary float-right" style="float: right">
           New Note
@@ -900,6 +945,7 @@
                   <option value="Phone" *ngIf="isAdmin">Phone</option>
                   <option value="PINNED NOTE" *ngIf="isAdmin">PINNED NOTE</option>
                   <option value="Resource Center" *ngIf="isAdmin">Resource Center</option>
+                  <option value="RESOURCE CENTER ALERT" *ngIf="isAdmin">RESOURCE CENTER ALERT</option>
                   <option value="Staff: Carrie">Staff: Carrie</option>
                   <option value="Staff: Megan">Staff: Megan</option>
                   <option value="Staff: Pat">Staff: Pat</option>
@@ -918,6 +964,18 @@
       </div>
     </div>
   </div>
+  </details>
+  <details class="profile-accordion" (toggle)="onAssetsToggle($event)">
+    <summary>
+      <div>
+        <h4>Tents, Pets, and Referrals</h4>
+        <small>Equipment, pet information, and services provided</small>
+      </div>
+    </summary>
+    <div *ngIf="profileSectionStates.assets.loading" class="text-muted">Loading tents, pets, and referrals...</div>
+    <div *ngIf="profileSectionStates.assets.error" class="text-danger">
+      Tents, pets, and referrals could not be loaded. Close and reopen this section to retry.
+    </div>
   <div class="col-lg-12 col-md-12">
     <h4>
       Tent
@@ -1071,6 +1129,90 @@
       </table>
     </div>
   </div>
+  </details>
+  <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
+    <details class="profile-accordion" (toggle)="onVitalRecordsToggle($event)">
+      <summary><h4 class="d-inline">Vital Records</h4></summary>
+      <div *ngIf="documentsLoading" class="text-muted">Loading vital records...</div>
+      <div *ngIf="documentsError" class="text-danger">
+        Some vital records could not be loaded. Close and reopen this section to retry.
+      </div>
+      <button type="button" class="btn btn-primary float-right" (click)="goToTop(); vitalRecordMdl.showModal()">
+        Add Vital Record
+      </button>
+      <h5>Documents Stored</h5>
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Type</th>
+            <th>Notes</th>
+            <th>Date Entered</th>
+            <th>Agreement Signed</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let record of activeVitalRecords">
+            <td>{{ record.document_type }}</td>
+            <td>{{ record.notes }}</td>
+            <td>{{ record.entered_on | date: 'shortDate' }}</td>
+            <td>{{ record.signed_agreement ? 'Yes' : 'No' }}</td>
+            <td>
+              <button type="button" class="btn btn-outline-primary mr-2" (click)="vitalRecordMdl.showModal(record)">
+                Edit
+              </button>
+              <button type="button" class="btn btn-primary" (click)="retrieveVitalRecord(record)">
+                Mark Retrieved
+              </button>
+            </td>
+          </tr>
+          <tr *ngIf="activeVitalRecords.length === 0">
+            <td colspan="5">No documents currently stored.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <h5>Recently Retrieved</h5>
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Type</th>
+            <th>Notes</th>
+            <th>Date Entered</th>
+            <th>Date Retrieved</th>
+            <th>Agreement Signed</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let record of recentlyRetrievedVitalRecords">
+            <td>{{ record.document_type }}</td>
+            <td>{{ record.notes }}</td>
+            <td>{{ record.entered_on | date: 'shortDate' }}</td>
+            <td>{{ record.retrieved_on | date: 'shortDate' }}</td>
+            <td>{{ record.signed_agreement ? 'Yes' : 'No' }}</td>
+            <td>
+              <button type="button" class="btn btn-outline-primary" (click)="vitalRecordMdl.showModal(record)">
+                Edit
+              </button>
+            </td>
+          </tr>
+          <tr *ngIf="recentlyRetrievedVitalRecords.length === 0">
+            <td colspan="6">No recently retrieved documents.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    </details>
+  </div>
+  <details class="profile-accordion" (toggle)="onGoalsToggle($event)">
+    <summary><h4 class="d-inline">Goals and Steps</h4></summary>
+    <div *ngIf="profileSectionStates.goals.loading" class="text-muted">Loading goals and steps...</div>
+    <div *ngIf="profileSectionStates.goals.error" class="text-danger">
+      Goals and steps could not be loaded. Close and reopen this section to retry.
+    </div>
   <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
     <div class="background-color">
       <h4>
@@ -1171,6 +1313,18 @@
       </div>
     </div>
   </div>
+  </details>
+  <details class="profile-accordion" (toggle)="onStabilityToggle($event)">
+    <summary>
+      <div>
+        <h4>Income, Barriers, Skills, and Legal History</h4>
+        <small>Income, debts, barriers, skills, felonies, and evictions</small>
+      </div>
+    </summary>
+    <div *ngIf="profileSectionStates.stability.loading" class="text-muted">Loading income, rent, and support records...</div>
+    <div *ngIf="profileSectionStates.stability.error" class="text-danger">
+      These records could not be loaded. Close and reopen this section to retry.
+    </div>
   <div class="col-lg-12 col-md-12">
     <h4>
       Client Income
@@ -1225,6 +1379,43 @@
             </td>
           </tr>
         </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
+    <h4>
+      Rent Details
+      <button id="rent-details-btn" type="button"
+        (click)="goToTop(); clientRentDetailsMdl.showModal(clientId, clientRentDetail)"
+        class="btn btn-primary float-right">
+        {{ clientRentDetail ? 'Edit Rent Details' : 'Add Rent Details' }}
+      </button>
+    </h4>
+    <div class="table-responsive">
+      <table class="table" id="rent-details">
+        <thead>
+          <tr>
+            <th>Rent Cost</th>
+            <th>Utilities Cost</th>
+            <th>Who is Paying?</th>
+            <th>Note</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngIf="clientRentDetail; else noRentDetails">
+            <td>{{ clientRentDetail.rent_cost | currency }}</td>
+            <td>
+              {{ clientRentDetail.utilities_included ? 'Included' : (clientRentDetail.utilities_cost | currency) }}
+            </td>
+            <td>{{ clientRentDetail.who_is_paying }}</td>
+            <td>{{ clientRentDetail.note }}</td>
+          </tr>
+        </tbody>
+        <ng-template #noRentDetails>
+          <tr>
+            <td colspan="4" class="text-center text-muted">No rent details recorded</td>
+          </tr>
+        </ng-template>
       </table>
     </div>
   </div>
@@ -1420,6 +1611,13 @@
       </table>
     </div>
   </div>
+  </details>
+  <details class="profile-accordion" (toggle)="onHealthToggle($event)">
+    <summary><h4 class="d-inline">Health and Insurance</h4></summary>
+    <div *ngIf="profileSectionStates.health.loading" class="text-muted">Loading health information...</div>
+    <div *ngIf="profileSectionStates.health.error" class="text-danger">
+      Health information could not be loaded. Close and reopen this section to retry.
+    </div>
   <div class="col-lg-12 col-md-12">
     <h4>
       Health Concerns
@@ -1462,6 +1660,117 @@
       </table>
     </div>
   </div>
+  <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
+    <h4>
+      Physical Disability
+      <button type="button" class="btn btn-primary float-right" (click)="openDisabilityModal('physical_disability')">
+        Add Physical Disability
+      </button>
+    </h4>
+    <div class="table-responsive mb-3">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Diagnosis Status</th>
+            <th>Type</th>
+            <th>Year Diagnosed</th>
+            <th>Note</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let entry of getDisabilityEntries('physical_disability'); let i = index">
+            <td>{{ entry.diagnosis_status || '—' }}</td>
+            <td>{{ entry.type_name || '—' }}</td>
+            <td>{{ entry.year_diagnosed || '—' }}</td>
+            <td>{{ entry.note || '—' }}</td>
+            <td>
+              <button type="button" class="btn btn-sm btn-primary mr-2" (click)="openDisabilityModal('physical_disability', entry, i)">Edit</button>
+              <button type="button" class="btn btn-sm btn-outline-secondary" (click)="removeDisabilityEntry('physical_disability', i)">Remove</button>
+            </td>
+          </tr>
+          <tr *ngIf="getDisabilityEntries('physical_disability').length === 0">
+            <td colspan="5" class="text-muted">No physical disabilities recorded.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
+    <h4>
+      Mental Disability
+      <button type="button" class="btn btn-primary float-right" (click)="openDisabilityModal('mental_disability')">
+        Add Mental Disability
+      </button>
+    </h4>
+    <div class="table-responsive mb-3">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Diagnosis Status</th>
+            <th>Type</th>
+            <th>Year Diagnosed</th>
+            <th>Note</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let entry of getDisabilityEntries('mental_disability'); let i = index">
+            <td>{{ entry.diagnosis_status || '—' }}</td>
+            <td>{{ entry.type_name || '—' }}</td>
+            <td>{{ entry.year_diagnosed || '—' }}</td>
+            <td>{{ entry.note || '—' }}</td>
+            <td>
+              <button type="button" class="btn btn-sm btn-primary mr-2" (click)="openDisabilityModal('mental_disability', entry, i)">Edit</button>
+              <button type="button" class="btn btn-sm btn-outline-secondary" (click)="removeDisabilityEntry('mental_disability', i)">Remove</button>
+            </td>
+          </tr>
+          <tr *ngIf="getDisabilityEntries('mental_disability').length === 0">
+            <td colspan="5" class="text-muted">No mental disabilities recorded.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
+    <h4>
+      Substance Use Disorder
+      <button type="button" class="btn btn-primary float-right" (click)="openDisabilityModal('substance_use_disorder')">
+        Add Substance Use Disorder
+      </button>
+    </h4>
+    <div class="table-responsive mb-3">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Diagnosis Status</th>
+            <th>Type</th>
+            <th>Year Diagnosed</th>
+            <th>Note</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let entry of getDisabilityEntries('substance_use_disorder'); let i = index">
+            <td>{{ entry.diagnosis_status || '—' }}</td>
+            <td>{{ entry.type_name || '—' }}</td>
+            <td>{{ entry.year_diagnosed || '—' }}</td>
+            <td>{{ entry.note || '—' }}</td>
+            <td>
+              <button type="button" class="btn btn-sm btn-primary mr-2" (click)="openDisabilityModal('substance_use_disorder', entry, i)">Edit</button>
+              <button type="button" class="btn btn-sm btn-outline-secondary" (click)="removeDisabilityEntry('substance_use_disorder', i)">Remove</button>
+            </td>
+          </tr>
+          <tr *ngIf="getDisabilityEntries('substance_use_disorder').length === 0">
+            <td colspan="5" class="text-muted">No substance use disorders recorded.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
   <div class="col-lg-12 col-md-12" *ngIf="isAdmin">
     <h4>
       Health Insurance
@@ -1514,13 +1823,17 @@
       </table>
     </div>
   </div>
+  </details>
   <div class="col-lg-12 col-md-12">
     <div class="background-color">
-      <h4>
-        Household
+      <details class="profile-accordion" (toggle)="onHouseholdToggle($event)">
+        <summary><h4 class="d-inline">Household</h4></summary>
+        <div *ngIf="householdLoading" class="text-muted">Loading household members...</div>
+        <div *ngIf="householdError" class="text-danger">
+          Household members could not be loaded. Close and reopen this section to retry.
+        </div>
         <button type="button" (click)="goToTop(); clientMdl.showModal()" class="btn btn-primary float-right">New
           Household Member</button>
-      </h4>
       <div class="table-responsive">
         <table class="table" id="household">
           <colgroup>
@@ -1587,64 +1900,61 @@
           </tbody>
         </table>
       </div>
+      </details>
     </div>
   </div>
   <div class="col-lg-12 col-md-12">
-    <h4>Weekly Attendance</h4>
-    <div>
-      From Date:
-      <input type="date" name="attendanceFromDate" [(ngModel)]="attendanceFromDate" />
-      To Date:
-      <input type="date" name="attendanceToDate" [(ngModel)]="attendanceToDate" />
-      <button type="button" class="btn btn-primary" style="margin-left: 5px" (click)="searchWeeklyAttendance()">
-        Search
-      </button>
-    </div>
-    <div class="table-responsive">
-      <table class="table" id="weeklyAttendance">
-        <colgroup>
-          <col span="1" style="width: 20%" />
-          <col span="1" style="width: 20%" />
-          <col span="1" style="width: 20%" />
-          <col span="1" style="width: 20%" />
-          <col span="1" style="width: 20%" />
-        </colgroup>
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Seen</th>
-            <th>Serviced</th>
-            <th>Resource Center</th>
-            <th>Route</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let interaction of clientInteractions">
-            <td>
-              {{ interaction.serviced_date | date: "short" }}
-            </td>
-            <td>
-              {{ interaction.was_seen ? 'Yes' : 'No' }}
-            </td>
-            <td>
-              {{ interaction.serviced ? 'Yes' : 'No' }}
-            </td>
-            <td>
-              {{ interaction.at_homeless_resource_center ? 'Yes' : 'No' }}
-            </td>
-            <td>
-              {{ interaction.name }} - {{ interaction.camp_name }}
-            </td>
-            <td>
-              <button type="button" class="btn btn-primary" (click)="removeAppearance(interaction.id)" *ngIf="isAdmin">
-                Remove
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <details class="profile-accordion" [open]="heatRoute" (toggle)="onWeeklyAttendanceToggle($event)">
+      <summary><h4 class="d-inline">Weekly Attendance History</h4></summary>
+      <div *ngIf="weeklyAttendanceLoading" class="text-muted">Loading attendance history...</div>
+      <div *ngIf="weeklyAttendanceError" class="text-danger">
+        Attendance history could not be loaded. Close and reopen this section to retry.
+      </div>
+      <div>
+        From Date:
+        <input type="date" name="attendanceFromDate" [(ngModel)]="attendanceFromDate" />
+        To Date:
+        <input type="date" name="attendanceToDate" [(ngModel)]="attendanceToDate" />
+        <button type="button" class="btn btn-primary" style="margin-left: 5px" (click)="searchWeeklyAttendance()">
+          Search
+        </button>
+      </div>
+      <div class="table-responsive">
+        <table class="table" id="weeklyAttendance">
+          <colgroup>
+            <col span="1" style="width: 20%" />
+            <col span="1" style="width: 20%" />
+            <col span="1" style="width: 20%" />
+            <col span="1" style="width: 20%" />
+            <col span="1" style="width: 20%" />
+          </colgroup>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Seen</th>
+              <th>Serviced</th>
+              <th>Resource Center</th>
+              <th>Route</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let interaction of clientInteractions">
+              <td>{{ interaction.serviced_date | date: "short" }}</td>
+              <td>{{ interaction.was_seen ? 'Yes' : 'No' }}</td>
+              <td>{{ interaction.serviced ? 'Yes' : 'No' }}</td>
+              <td>{{ interaction.at_homeless_resource_center ? 'Yes' : 'No' }}</td>
+              <td>{{ interaction.name }} - {{ interaction.camp_name }}</td>
+              <td>
+                <button type="button" class="btn btn-primary" (click)="removeAppearance(interaction.id)" *ngIf="isAdmin">
+                  Remove
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </details>
   </div>
   <div class="col-lg-12 col-md-12">
     <div class="col-md-12 text-left">
@@ -1707,7 +2017,7 @@
 <app-next-of-kin #nextOfKinMdl (nextOfKinAdded)="nextOfKinAdded($event)"></app-next-of-kin>
 <app-client-like #likeMdl (likeAdded)="likeAdded($event)"></app-client-like>
 <app-client-dislike #dislikeMdl (dislikeAdded)="dislikeAdded($event)"></app-client-dislike>
-<app-requested-item #requestItemMdl (requestedItemAdded)="requestedItemAdded($event)"></app-requested-item>
+<app-requested-item #requestItemMdl [isAdmin]="isAdmin" (requestedItemAdded)="requestedItemAdded($event)"></app-requested-item>
 <app-goals-steps #goalMdl (goalAdded)="goalAdded($event)"></app-goals-steps>
 <app-health-concern #healthMdl (healthConcernAdded)="healthConcernAdded($event)"></app-health-concern>
 <app-notes #notesMdl (noteAdded)="noteAdded($event)"></app-notes>
@@ -1734,6 +2044,10 @@
 <app-client-skill #clientSkillMdl (skillAdded)="skillAdded($event)"></app-client-skill>
 <app-client-caseworker #clientCaseworkerMdl (caseworkerAdded)="caseworkerAdded($event)"></app-client-caseworker>
 <app-client-mailbox #clientMailboxMdl (mailboxAdded)="mailboxAdded($event)"></app-client-mailbox>
+<app-client-rent-details #clientRentDetailsMdl
+  (rentDetailsSaved)="rentDetailsSaved($event)"></app-client-rent-details>
 <app-client-barrier #clientBarrierMdl (barrierAdded)="barrierAdded($event)"></app-client-barrier>
 <app-authorized-mail-access #authorizedMailAccessMdl [mailboxId]="clientMailbox.id"
   (authorizedMailAccessAdded)="authorizedMailAccessAdded($event)"></app-authorized-mail-access>
+<app-client-disability-and-disorder #disabilityMdl (disabilityAdded)="disabilityAdded($event)"></app-client-disability-and-disorder>
+<app-vital-record #vitalRecordMdl (recordSaved)="vitalRecordSaved($event)"></app-vital-record>

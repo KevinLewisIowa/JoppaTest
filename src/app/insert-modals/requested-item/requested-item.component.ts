@@ -1,10 +1,11 @@
 import {
   Component,
   OnInit,
-  ElementRef,
+  TemplateRef,
   ViewChild,
   Output,
   EventEmitter,
+  Input,
   ChangeDetectorRef,
   AfterViewChecked,
 } from "@angular/core";
@@ -18,8 +19,9 @@ import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
   styleUrls: ["./requested-item.component.css"],
 })
 export class RequestedItemComponent implements OnInit, AfterViewChecked {
-  @ViewChild("requestedItemMdl", { static: false }) requestedItemMdl: ElementRef;
+  @ViewChild("requestedItemMdl", { static: false }) requestedItemMdl: TemplateRef<unknown>;
   @Output() requestedItemAdded = new EventEmitter<RequestedItem[]>();
+  @Input() isAdmin = false;
   description: string = "";
   placeholderText: string = "Test";
   intialOther: boolean = true;
@@ -107,7 +109,7 @@ export class RequestedItemComponent implements OnInit, AfterViewChecked {
       if (this.extraInfoNeeded && (this.extraInfo === null || this.extraInfo === "")) {
         alert("Need to enter additional info for this item");
       } else {
-        if (this.description.includes("Tent") || this.description.includes("Sleeping Bag") || this.description.includes("Tarp")) {
+        if (!this.isAdmin && (this.description.includes("Tent") || this.description.includes("Sleeping Bag") || this.description.includes("Tarp"))) {
           alert("NEEDS STAFF APPROVAL\nPlease let the client know they must come into Joppa and fill out a request form to see if they qualify OR you need to talk with staff about this if the individual cannot do so.");
         }
 
@@ -129,7 +131,7 @@ export class RequestedItemComponent implements OnInit, AfterViewChecked {
         }
 
         item.fulfilled = false;
-        if (itemDescription.includes("Mail") || itemDescription.includes("Package")) {
+        if (itemDescription.includes("Mail") || itemDescription.includes("Package") || itemDescription.includes("Birthday Card")) {
           item.fulfilled = true;
         }
 

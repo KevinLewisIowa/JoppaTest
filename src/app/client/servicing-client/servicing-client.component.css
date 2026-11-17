@@ -2,25 +2,126 @@
     background-color: rgba(0, 0, 0, 0.08);
 }
 
-/* Responsive helpers */
-.control-max { max-width: 75%; }
-.small-filter { max-width: 15%; margin-bottom: 5px; }
-.float-right { float: right; }
-.table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+:host .float-right {
+    float: right !important;
+    margin-left: 8px;
+}
 
-/* Responsive tables: force horizontal scroll and limit min-width to editable controls only */
-.table-responsive table { min-width: 700px; }
-.table-responsive td .form-control, .table-responsive td select.form-control { min-width: 140px; white-space: nowrap; }
-/* reduce header constraints so non-editable text can wrap if needed */
-.table-responsive th.status, .table-responsive td.status { white-space: normal; }
+:host .profile-accordion {
+    margin-bottom: 12px;
+    border: 1px solid #d5d9dc;
+    border-radius: 4px;
+    background-color: #fff;
+}
 
-/* Heater table kept for backward compatibility */
-.heater-table { min-width: 700px; }
+:host .profile-accordion > summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background-color: #f5f6f7;
+    cursor: pointer;
+    list-style: none;
+}
 
-@media (max-width: 576px) {
-  .control-max { max-width: 100% !important; }
-  .small-filter { max-width: 100% !important; }
-  .float-right { float: none !important; display: block; width: 100% !important; margin-bottom: 8px; }
-  .card-header h2 { font-size: 1.1rem; }
-  .btn { min-height: 44px; }
+:host .profile-accordion > summary::-webkit-details-marker {
+    display: none;
+}
+
+:host .profile-accordion > summary::marker {
+    content: "";
+}
+
+:host .profile-accordion > summary h4 {
+    margin: 0;
+}
+
+:host .profile-accordion > summary small {
+    display: block;
+    margin-top: 3px;
+    color: #5f666d;
+    font-weight: 400;
+}
+
+:host .profile-accordion > summary::after {
+    content: "+";
+    display: inline-flex;
+    width: 24px;
+    height: 24px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid currentColor;
+    border-radius: 50%;
+    font-size: 18px;
+    line-height: 1;
+}
+
+:host .profile-accordion[open] > summary {
+    border-bottom: 1px solid #d5d9dc;
+}
+
+:host .profile-accordion[open] > summary::after {
+    content: "\2212";
+}
+
+:host .profile-accordion > :not(summary) {
+    padding-right: 16px;
+    padding-left: 16px;
+}
+
+.control-max {
+    max-width: 75%;
+}
+
+.small-filter {
+    max-width: 15%;
+    margin-bottom: 5px;
+}
+
+.table-responsive table,
+.table-responsive .table {
+    min-width: 720px;
+}
+
+.table-responsive td .form-control,
+.table-responsive td select.form-control {
+    min-width: 140px;
+    white-space: nowrap;
+}
+
+.table-responsive th.status,
+.table-responsive td.status {
+    white-space: normal;
+}
+
+.heater-table {
+    min-width: 720px;
+}
+
+@media (max-width: 767px) {
+    .control-max,
+    .small-filter {
+        max-width: 100% !important;
+    }
+
+    :host .float-right {
+        float: none !important;
+        display: block;
+        width: 100%;
+        margin: 0 0 8px;
+    }
+
+    .card-header h2 {
+        font-size: 1.1rem;
+    }
+
+    .btn {
+        min-height: 44px;
+    }
+
+    .table-responsive table,
+    .table-responsive .table,
+    .heater-table {
+        min-width: 640px;
+    }
 }

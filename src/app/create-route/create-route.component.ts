@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UntypedFormBuilder, FormControl, UntypedFormGroup, FormArray, Validators } from '@angular/forms';
 import { Router } from "@angular/router";
 import { MainService } from "app/services/main.service";
 import { Route } from "app/models/route";
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 
 @Component({
@@ -11,11 +13,12 @@ import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
   templateUrl: './create-route.component.html',
   styleUrls: ['./create-route.component.css']
 })
-export class CreateRouteComponent implements OnInit {
+export class CreateRouteComponent implements OnInit, OnDestroy {
   routeForm: UntypedFormGroup;
   theRoute = new Route();
   backIcon = faChevronLeft;
   isAdmin: boolean;
+  private destroy$ = new Subject<void>();
 
   constructor(private router: Router, private mainService: MainService,
               private fb: UntypedFormBuilder) { }
@@ -41,9 +44,11 @@ export class CreateRouteComponent implements OnInit {
     this.theRoute.name = this.routeForm.get('name').value;
     this.theRoute.is_aftercare = this.routeForm.get('is_aftercare').value;
 
-    this.mainService.insertRoute(this.theRoute).subscribe(data => {
-      this.router.navigate(['/routes']);
-    }, error => { console.log(error) });
+    this.mainService.insertRoute(this.theRoute)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(data => {
+        this.router.navigate(['/routes']);
+      }, error => { console.log(error) });
   }
 
   back() {
@@ -51,5 +56,10 @@ export class CreateRouteComponent implements OnInit {
       window.localStorage.removeItem('routeId');
     }
     this.router.navigate(['/routes']);
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

@@ -5,6 +5,7 @@ import {
   EventEmitter,
   Output,
   ViewChild,
+  OnDestroy,
 } from "@angular/core";
 import { LocationCamp } from "app/models/location-camp";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
@@ -12,13 +13,15 @@ import { UntypedFormBuilder, UntypedFormGroup } from "@angular/forms";
 import { Router } from "@angular/router";
 import { MainService } from "app/services/main.service";
 import { Route } from "app/models/route";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
   selector: "app-camp-edit-modal",
   templateUrl: "./camp-edit-modal.component.html",
   styleUrls: ["./camp-edit-modal.component.css"],
 })
-export class CampEditModalComponent implements OnInit {
+export class CampEditModalComponent implements OnInit, OnDestroy {
   @ViewChild("editModal", { static: false }) editModal: ElementRef;
   @Output() editedCamp = new EventEmitter<LocationCamp>();
   badDate = false;
@@ -27,6 +30,7 @@ export class CampEditModalComponent implements OnInit {
   theCamp: LocationCamp;
   editing = false;
   isAdmin: boolean;
+  private destroy$ = new Subject<void>();
 
   constructor(
     private router: Router,
@@ -40,9 +44,11 @@ export class CampEditModalComponent implements OnInit {
     this.campForm = this.fb.group(this.theCamp);
     this.isAdmin = JSON.parse(window.localStorage.getItem("isAdmin"));
 
-    this.mainService.getTheRoutes().subscribe((routes) => {
-      this.routes = routes;
-    });
+    this.mainService.getTheRoutes()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((routes) => {
+        this.routes = routes;
+      });
   }
 
   showModal(camp: LocationCamp) {
@@ -58,7 +64,9 @@ export class CampEditModalComponent implements OnInit {
 
   submitCamp() {
     console.log(this.campForm.value);
-    this.mainService.updateLocationCamp(this.campForm.value as LocationCamp).subscribe((data) => {
+    this.mainService.updateLocationCamp(this.campForm.value as LocationCamp)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((data) => {
         window.localStorage.setItem("routeId", JSON.stringify(data.route_id));
         this.editedCamp.emit(this.campForm.value as LocationCamp);
       },
@@ -82,5 +90,10 @@ export class CampEditModalComponent implements OnInit {
         parking_longitude: position.coords.longitude,
       });
     });
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

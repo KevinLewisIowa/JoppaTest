@@ -33,6 +33,8 @@ export class ClientEditModalComponent implements OnInit, AfterViewChecked {
   isConverting: boolean = false;
   whatbroughtyoutodesmoines: string[] = [
     'Better Homeless Services',
+    'Client Refused',
+    'Data Not Collected',
     'Didn’t Share',
     'Family',
     'Fresh Start',
@@ -41,6 +43,7 @@ export class ClientEditModalComponent implements OnInit, AfterViewChecked {
     'School',
     'Significant Other',
     'Treatment',
+    'Unknown',
     'Work/Job',
     'Other'
   ];
@@ -188,7 +191,6 @@ export class ClientEditModalComponent implements OnInit, AfterViewChecked {
       inactive_description: [this.theClient.inactive_description || ''],
       number_meals: [this.theClient.number_meals || undefined],
       joppa_apartment_number: [this.theClient.joppa_apartment_number || ''],
-      dwelling: [this.theClient.dwelling || ''],
       created_at: [this.theClient.created_at || undefined],
       updated_at: [this.theClient.updated_at || undefined],
       last_interaction_date: [this.theClient.last_interaction_date || undefined],
@@ -214,6 +216,9 @@ export class ClientEditModalComponent implements OnInit, AfterViewChecked {
       highest_level_education: [this.theClient.highest_level_education || ''],
       city_before_homelessness: [this.theClient.city_before_homelessness || ''],
       state_before_homelessness: [this.theClient.state_before_homelessness || ''],
+      hometown: [this.theClient.hometown || ''],
+      city_grew_up_in: [this.theClient.city_grew_up_in || ''],
+      family_currently_lives_in: [this.theClient.family_currently_lives_in || ''],
       what_brought_to_des_moines: [whatBroughtToDesMoines === '' ? '' : (isKnownReason ? whatBroughtToDesMoines : 'Other')],
       otherReasonForDesMoines: [whatBroughtToDesMoines !== '' && !isKnownReason ? whatBroughtToDesMoines : ''],
       needs_translation: [this.theClient.needs_translation || false],

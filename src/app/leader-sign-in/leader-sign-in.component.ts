@@ -1,17 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Route } from '../models/route';
 import { MainService } from '../services/main.service';
 import { RouteInstance } from '../models/route-instance';
 import { faChevronRight, faChevronLeft, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-leader-sign-in',
   templateUrl: './leader-sign-in.component.html',
   styleUrls: ['./leader-sign-in.component.css']
 })
-export class LeaderSignInComponent implements OnInit {
+export class LeaderSignInComponent implements OnInit, OnDestroy {
   routeInstanceForm: UntypedFormGroup;
   routes: Route[] = [];
   routeInstance: RouteInstance;
@@ -19,6 +21,7 @@ export class LeaderSignInComponent implements OnInit {
   backIcon = faChevronLeft;
   forwardIcon = faChevronRight;
   signOutIcon = faSignOutAlt;
+  private destroy$ = new Subject<void>();
 
   constructor(private fb: UntypedFormBuilder, private mainService: MainService, private router: Router) { }
 
@@ -71,9 +74,11 @@ export class LeaderSignInComponent implements OnInit {
     this.routeInstanceForm.get('scribe_name').setValidators(Validators.required);
     this.routeInstanceForm.get('scribe_phone').setValidators(Validators.compose([Validators.required, Validators.pattern(phoneRegEx)]));
 
-    this.mainService.getTheRoutes().subscribe(routes => {
-      this.routes = routes;
-    });
+    this.mainService.getTheRoutes()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(routes => {
+        this.routes = routes;
+      });
   }
 
   signOut() {
@@ -83,7 +88,9 @@ export class LeaderSignInComponent implements OnInit {
   }
 
   insertRouteInstance() {
-    this.mainService.getActiveRouteInstanceForRoute(this.routeInstanceForm.get('route_id').value, this.routeInstanceForm.get('heat_route').value).subscribe(data => {
+    this.mainService.getActiveRouteInstanceForRoute(this.routeInstanceForm.get('route_id').value, this.routeInstanceForm.get('heat_route').value)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(data => {
       console.log(JSON.stringify(data));
 
       // Calculate when it is a day after the last route started. If current date and time is before a day, then use the existing route.  Otherwise, create a new route.
@@ -114,9 +121,11 @@ export class LeaderSignInComponent implements OnInit {
           let route_end_time: Date = new Date(route_instance_to_update.start_time);
           route_end_time = new Date(route_end_time.setHours(route_end_time.getHours() + 7));
           route_instance_to_update.end_time = route_end_time;
-          this.mainService.updateRouteInstance(route_instance_to_update).subscribe(updatedRouteInstance => {
-            // the route instance is now closed
-          }, error => console.log(error));
+          this.mainService.updateRouteInstance(route_instance_to_update)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe(updatedRouteInstance => {
+              // the route instance is now closed
+            }, error => console.log(error));
         }
 
         this.routeInstance = new RouteInstance();
@@ -127,26 +136,33 @@ export class LeaderSignInComponent implements OnInit {
         this.routeInstance.scribe_phone = this.routeInstanceForm.get('scribe_phone').value;
         this.routeInstance.route_id = this.routeInstanceForm.get('route_id').value;
         this.routeInstance.start_time = new Date();
-        this.mainService.insertRouteInstance(this.routeInstance).subscribe(new_data => {
-          window.localStorage.setItem('routeInstance', new_data.id);
-          window.localStorage.setItem('heatRoute', this.routeInstanceForm.get('heat_route').value);
-          window.localStorage.setItem('routeId', this.routeInstanceForm.get('route_id').value);
-          window.localStorage.setItem('primary_device', this.routeInstanceForm.get('primary_device').value)
+        this.mainService.insertRouteInstance(this.routeInstance)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe(new_data => {
+            window.localStorage.setItem('routeInstance', new_data.id);
+            window.localStorage.setItem('heatRoute', this.routeInstanceForm.get('heat_route').value);
+            window.localStorage.setItem('routeId', this.routeInstanceForm.get('route_id').value);
+            window.localStorage.setItem('primary_device', this.routeInstanceForm.get('primary_device').value)
 
-          // if (this.routeInstanceForm.get('heat_route').value) {
-          //   this.router.navigate(['checkoutHeaters']);
-          // }
-          // else {
-          //   this.router.navigate(['volunteerInfo']);
-          // }
-          // if (this.routeInstanceForm.get('heat_route').value) {
-          //   this.router.navigate(['checkoutHeaters']);
-          // }
-          // else {
-          this.router.navigate(['volunteerInfo']);
-          //}
-        }, error => { console.log(error) });
+            // if (this.routeInstanceForm.get('heat_route').value) {
+            //   this.router.navigate(['checkoutHeaters']);
+            // }
+            // else {
+            //   this.router.navigate(['volunteerInfo']);
+            // }
+            // if (this.routeInstanceForm.get('heat_route').value) {
+            //   this.router.navigate(['checkoutHeaters']);
+            // }
+            // else {
+            this.router.navigate(['volunteerInfo']);
+            //}
+          }, error => { console.log(error) });
       }
     }, error => console.log(error));
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

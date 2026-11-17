@@ -1,6 +1,6 @@
-import { throwError as observableThrowError, Observable, forkJoin } from "rxjs";
+import { throwError as observableThrowError, Observable, forkJoin, of } from "rxjs";
 import { Injectable } from "@angular/core";
-import { HttpHeaders, HttpClient } from "@angular/common/http";
+import { HttpHeaders, HttpClient, HttpParams } from "@angular/common/http";
 import { ClientLike } from "../models/client-like";
 import { ClientDislike } from "../models/client-dislike";
 import { Client } from "../models/client";
@@ -29,10 +29,30 @@ import { ClientPastEviction } from "app/models/client-past-eviction";
 import { ClientStep } from "app/models/client-step";
 import { ClientSkill } from "app/models/client-skill";
 import { ClientHealthInsurance } from "app/models/client-health-insurance";
+import { ClientDisabilityAndDisorder } from "app/models/client-disability-and-disorder";
 import { Caseworker } from "../models/caseworker";
 import { ClientMailbox } from "app/models/client-mailbox";
 import { AuthorizedMailAccesses } from "app/models/authorized-mail-accesses";
 import { ClientBarrier } from "app/models/client-barrier";
+import { ReleaseAcknowledgement } from "app/models/client-release-acknowledgement";
+import { ClientVitalRecord } from "app/models/client-vital-record";
+import { ClientRentDetail } from "app/models/client-rent-detail";
+
+export interface PaginatedClientsResponse {
+  clients: Client[];
+  total: number;
+  message?: string;
+}
+
+export interface PetFoodRequestsResponse {
+  created_count: number;
+  message?: string;
+}
+
+export interface InactiveClientsUpdateResponse {
+  updated_count: number;
+  message?: string;
+}
 
 @Injectable()
 export class ClientService {
@@ -44,11 +64,21 @@ export class ClientService {
     console.log(this.baseUrl);
   }
 
-  getClientLikes(id) {
-    const myHeader = new HttpHeaders({
+  private buildAuthHeaders(): HttpHeaders {
+    const token = window.localStorage.getItem("apiToken");
+    if (token) {
+      return new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: token,
+      });
+    }
+    return new HttpHeaders({
       "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
     });
+  }
+
+  getClientLikes(id: number) {
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .get(this.baseUrl + `likesForClient?clientId=${id}`, {
         headers: myHeader,
@@ -65,11 +95,8 @@ export class ClientService {
       );
   }
 
-  getClientDislikes(id) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+  getClientDislikes(id: number) {
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .get(this.baseUrl + `dislikesForClient?clientId=${id}`, {
         headers: myHeader,
@@ -81,15 +108,13 @@ export class ClientService {
             this.router.navigate(["/application-login"]);
           }
           return res;
-        }, catchError(this.handleError))
+        }),
+        catchError(this.handleError)
       );
   }
 
-  getClientById(id) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+  getClientById(id: number) {
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .get(this.baseUrl + `clients/${id}`, { headers: myHeader })
       .pipe(
@@ -105,10 +130,7 @@ export class ClientService {
   }
 
   seenAndServicedReport(fromDate: string, toDate: string) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .get(this.baseUrl + `seen_and_serviced_report?fromDate=${fromDate}&toDate=${toDate}`, {
         headers: myHeader,
@@ -126,10 +148,7 @@ export class ClientService {
   }
 
   getClientAttendanceForRoute(route_id: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .get(this.baseUrl + `getClientAttendanceForRoute?routeId=${route_id}`, {
         headers: myHeader,
@@ -147,10 +166,7 @@ export class ClientService {
   }
 
   getBirthdaysByMonth(monthInt: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .get(this.baseUrl + `getClientsByBirthMonth?monthInt=${monthInt}`, {
         headers: myHeader,
@@ -168,10 +184,7 @@ export class ClientService {
   }
 
   getNewClients() {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .get(this.baseUrl + `getNewClients`, { headers: myHeader })
       .pipe(
@@ -187,10 +200,7 @@ export class ClientService {
   }
 
   getClientsNewToCamps() {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .get(this.baseUrl + `getClientsNewToCamps`, { headers: myHeader })
       .pipe(
@@ -206,10 +216,7 @@ export class ClientService {
   }
 
   getClientNotesForRoute(clientId: number, routeInstanceId: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .get(
         this.baseUrl +
@@ -229,10 +236,7 @@ export class ClientService {
   }
 
   getClientNotesForClient(clientId: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .get(this.baseUrl + `getClientNotesForClient?clientId=${clientId}`, {
         headers: myHeader,
@@ -250,30 +254,24 @@ export class ClientService {
   }
 
   hasPinnedOrWarningNote(clientId: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http.get(this.baseUrl + `hasPinnedOrWarningNote?clientId=${clientId}`, {
       headers: myHeader,
     })
-    .pipe(
-      map((res: any) => {
-        if (res.message === "invalid-token") {
-          window.localStorage.removeItem("apiToken");
-          this.router.navigate(["/application-login"]);
-        }
-        return res;
-      }),
-      catchError(this.handleError)
-    );
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
   }
 
   insertClientLike(theClientLike: ClientLike) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .post(
         this.baseUrl + `client_likes`,
@@ -293,10 +291,7 @@ export class ClientService {
   }
 
   insertClientDislike(theClientDislike: ClientDislike) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .post(
         this.baseUrl + `client_dislikes`,
@@ -316,10 +311,7 @@ export class ClientService {
   }
 
   insertNote(theNote: Note) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .post(
         this.baseUrl + `client_notes`,
@@ -339,10 +331,7 @@ export class ClientService {
   }
 
   insertClientDwelling(theDwelling: ClientDwelling) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .post(
         this.baseUrl + `client_dwellings`,
@@ -361,11 +350,8 @@ export class ClientService {
       );
   }
 
-  getClientDwellings(id) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+  getClientDwellings(id: number) {
+    const myHeader = this.buildAuthHeaders();
 
     return this.http
       .get(this.baseUrl + `getDwellingsForClient?clientId=${id}`, { headers: myHeader })
@@ -382,10 +368,7 @@ export class ClientService {
   }
 
   updateClientDwelling(theDwelling: ClientDwelling) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .patch(
         this.baseUrl + `client_dwellings/${theDwelling.id}`,
@@ -404,11 +387,8 @@ export class ClientService {
       );
   }
 
-  getClientHomelessHistory(id) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+  getClientHomelessHistory(id: number) {
+    const myHeader = this.buildAuthHeaders();
 
     return this.http
       .get(this.baseUrl + `getDwellingHistoriesForClient?clientId=${id}`, { headers: myHeader })
@@ -425,10 +405,7 @@ export class ClientService {
   }
 
   insertClientHomelessHistory(theHistory: ClientHomelessHistory) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .post(
         this.baseUrl + `client_homeless_histories`,
@@ -442,16 +419,13 @@ export class ClientService {
             this.router.navigate(["/application-login"]);
           }
           return res;
-        }),
-        catchError(this.handleError)
-      );
+          }),
+          catchError(this.handleError)
+        );
   }
 
   updateHomelessHistory(theHistory: ClientHomelessHistory) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .patch(
         this.baseUrl + `client_homeless_histories/${theHistory.id}`,
@@ -471,15 +445,12 @@ export class ClientService {
   }
 
   updateClientHealthInsurance(healthInsurance: ClientHealthInsurance) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http.patch(
-        this.baseUrl + `client_health_insurances/${healthInsurance.id}`,
-        { client_health_insurance: healthInsurance },
-        { headers: myHeader }
-      )
+      this.baseUrl + `client_health_insurances/${healthInsurance.id}`,
+      { client_health_insurance: healthInsurance },
+      { headers: myHeader }
+    )
       .pipe(
         map((res: any) => {
           if (res.message === "invalid-token") {
@@ -493,10 +464,7 @@ export class ClientService {
   }
 
   updateCaseworker(caseworker: Caseworker) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .patch(
         this.baseUrl + `client_caseworkers/${caseworker.id}`,
@@ -516,10 +484,7 @@ export class ClientService {
   }
 
   updateClientNote(theNote: Note) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .patch(
         this.baseUrl + `client_notes/${theNote.id}`,
@@ -539,10 +504,7 @@ export class ClientService {
   }
 
   removeClientDwelling(id: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http.delete(this.baseUrl + `client_dwellings/${id}`, { headers: myHeader })
       .pipe(map((res) => {
         return true;
@@ -550,10 +512,7 @@ export class ClientService {
   }
 
   removeClientHomelessHistory(id: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http.delete(this.baseUrl + `client_homeless_histories/${id}`, { headers: myHeader })
       .pipe(map((res) => {
         return true;
@@ -561,10 +520,7 @@ export class ClientService {
   }
 
   getTentsForClient(client_id: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .get(this.baseUrl + `getTentsForClient?clientId=${client_id}`, {
         headers: myHeader,
@@ -583,10 +539,7 @@ export class ClientService {
   }
 
   insertClientTent(theTent: Tent) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .post(
         this.baseUrl + `client_tents`,
@@ -606,10 +559,7 @@ export class ClientService {
   }
 
   insertClientAppearance(clientAppearance: Appearance) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .post(
         this.baseUrl + `client_interactions`,
@@ -629,10 +579,7 @@ export class ClientService {
   }
 
   updateClientAppearance(clientAppearance: Appearance) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .patch(
         this.baseUrl + `client_interactions/${clientAppearance.id}`,
@@ -651,11 +598,8 @@ export class ClientService {
       );
   }
 
-  getHeatersForClient(theClientId) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+  getHeatersForClient(theClientId: number) {
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .get(
         this.baseUrl + `getCurrentHeatersForClient?clientId=${theClientId}`,
@@ -675,11 +619,8 @@ export class ClientService {
 
 
 
-  updateHeaterClient(theClientId, theHeaterId, theStatusId) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+  updateHeaterClient(theClientId: number, theHeaterId: number, theStatusId: number) {
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .get(
         this.baseUrl +
@@ -699,10 +640,7 @@ export class ClientService {
   }
 
   getCheckedOutHeaters(id: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .get(this.baseUrl + `getCheckedOutHeaters?routeInstanceId=${id}`, {
         headers: myHeader,
@@ -719,11 +657,8 @@ export class ClientService {
       );
   }
 
-  getClientsByName(name) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+  getClientsByName(name: string) {
+    const myHeader = this.buildAuthHeaders();
     if (name == "") {
       name = "ALLCLIENTS";
     }
@@ -743,11 +678,54 @@ export class ClientService {
       );
   }
 
+  updateInactiveClients(inactivityLimit: number): Observable<InactiveClientsUpdateResponse> {
+    const myHeader = this.buildAuthHeaders();
+    return this.http
+      .post<InactiveClientsUpdateResponse>(
+        this.baseUrl + "updateInactiveClients",
+        { inactivityLimit },
+        { headers: myHeader }
+      )
+      .pipe(
+        map((res: InactiveClientsUpdateResponse) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  getPaginatedClients(query: string, page: number, pageSize: number, sortBy: string, sortDirection: string) {
+    const myHeader = this.buildAuthHeaders();
+    const params = new HttpParams()
+      .set("query", query)
+      .set("page", page.toString())
+      .set("page_size", pageSize.toString())
+      .set("sort_by", sortBy)
+      .set("sort_direction", sortDirection);
+
+    return this.http
+      .get<PaginatedClientsResponse>(this.baseUrl + "getPaginatedClients", {
+        headers: myHeader,
+        params
+      })
+      .pipe(
+        map((res: PaginatedClientsResponse) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
   insertClient(theClient: Client) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .post(
         this.baseUrl + `clients`,
@@ -767,10 +745,7 @@ export class ClientService {
   }
 
   updateClient(theClient: Client) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .patch(
         this.baseUrl + `clients/${theClient.id}`,
@@ -790,10 +765,7 @@ export class ClientService {
   }
 
   updatePet(thePet: ClientPet) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .patch(
         this.baseUrl + `client_pets/${thePet.id}`,
@@ -813,10 +785,7 @@ export class ClientService {
   }
 
   updateHeater(theHeater: Heater) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .patch(
         this.baseUrl + `heaters/${theHeater.id}`,
@@ -836,10 +805,7 @@ export class ClientService {
   }
 
   updateTank(theTank: any) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .patch(
         this.baseUrl + `client_tank_interactions/${theTank.id}`,
@@ -859,10 +825,7 @@ export class ClientService {
   }
 
   updateHose(theHose: any) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .patch(
         this.baseUrl + `client_hose_interactions/${theHose.id}`,
@@ -882,10 +845,7 @@ export class ClientService {
   }
 
   updateCircleOfFriends(theFriend: ClientCircleOfFriends) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .patch(
         this.baseUrl + `client_circle_of_friends/${theFriend.id}`,
@@ -905,10 +865,7 @@ export class ClientService {
   }
 
   insertHealthConcern(concern: HealthConcern) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .post(
         this.baseUrl + `health_concerns`,
@@ -927,11 +884,73 @@ export class ClientService {
       );
   }
 
-  getHealthConcerns(id) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+  insertDisabilityAndDisorder(record: ClientDisabilityAndDisorder) {
+    const myHeader = this.buildAuthHeaders();
+    return this.http
+      .post(
+        this.baseUrl + `client_disability_and_disorders`,
+        { client_disability_and_disorder: record },
+        { headers: myHeader }
+      )
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  updateDisabilityAndDisorder(record: ClientDisabilityAndDisorder) {
+    const myHeader = this.buildAuthHeaders();
+    return this.http
+      .patch(
+        this.baseUrl + `client_disability_and_disorders/${record.id}`,
+        { client_disability_and_disorder: record },
+        { headers: myHeader }
+      )
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  getClientDisabilityAndDisorders(id: number) {
+    const myHeader = this.buildAuthHeaders();
+    return this.http
+      .get(this.baseUrl + `getClientDisabilityAndDisorders?clientId=${id}`, {
+        headers: myHeader,
+      })
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  removeDisabilityAndDisorder(id: number) {
+    const myHeader = this.buildAuthHeaders();
+    return this.http
+      .delete(this.baseUrl + `client_disability_and_disorders/${id}`, { headers: myHeader })
+      .pipe(map((res) => true), catchError(this.handleError));
+  }
+
+  getHealthConcerns(id: number) {
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .get(this.baseUrl + `getClientHealthConcerns?clientId=${id}`, {
         headers: myHeader,
@@ -949,10 +968,7 @@ export class ClientService {
   }
 
   insertRequestedItem(item: RequestedItem) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     item.has_received = false;
     return this.http
       .post(
@@ -972,11 +988,8 @@ export class ClientService {
       );
   }
 
-  getRequestedItems(id) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+  getRequestedItems(id: number) {
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .get(this.baseUrl + `getClientRequestedItem?clientId=${id}`, {
         headers: myHeader,
@@ -994,10 +1007,7 @@ export class ClientService {
   }
 
   insertPet(pet: ClientPet) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
 
     return this.http
       .post(
@@ -1018,10 +1028,7 @@ export class ClientService {
   }
 
   insertFriend(friend: ClientCircleOfFriends) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
 
     return this.http
       .post(
@@ -1042,10 +1049,7 @@ export class ClientService {
   }
 
   insertDebt(debt: ClientDebt) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
 
     return this.http
       .post(
@@ -1065,11 +1069,8 @@ export class ClientService {
       );
   }
 
-  getClientDebt(id) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+  getClientDebt(id: number) {
+    const myHeader = this.buildAuthHeaders();
 
     return this.http
       .get(this.baseUrl + `getClientDebt?clientId=${id}`, { headers: myHeader })
@@ -1086,10 +1087,7 @@ export class ClientService {
   }
 
   removeDebt(id: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
 
     return this.http.delete(this.baseUrl + `client_debts/${id}`, { headers: myHeader }).pipe(
       map((res) => {
@@ -1099,10 +1097,7 @@ export class ClientService {
   }
 
   insertFelony(felony: ClientFelony) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
 
     return this.http
       .post(
@@ -1122,11 +1117,8 @@ export class ClientService {
       );
   }
 
-  getClientFelonies(id) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+  getClientFelonies(id: number) {
+    const myHeader = this.buildAuthHeaders();
 
     return this.http
       .get(this.baseUrl + `getClientFelonies?clientId=${id}`, { headers: myHeader })
@@ -1143,10 +1135,7 @@ export class ClientService {
   }
 
   removeClientFelony(id: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
 
     return this.http.delete(this.baseUrl + `client_felonies/${id}`, { headers: myHeader }).pipe(
       map((res) => {
@@ -1156,10 +1145,7 @@ export class ClientService {
   }
 
   insertPastEviction(eviction: ClientPastEviction) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
 
     return this.http
       .post(
@@ -1179,11 +1165,8 @@ export class ClientService {
       );
   }
 
-  getPastEvictions(id) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+  getPastEvictions(id: number) {
+    const myHeader = this.buildAuthHeaders();
 
     return this.http
       .get(this.baseUrl + `getPastEvictions?clientId=${id}`, { headers: myHeader })
@@ -1200,10 +1183,7 @@ export class ClientService {
   }
 
   removePastEviction(id: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
 
     return this.http.delete(this.baseUrl + `client_past_evictions/${id}`, { headers: myHeader }).pipe(
       map((res) => {
@@ -1214,10 +1194,7 @@ export class ClientService {
   }
 
   insertStep(step: ClientStep) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
 
     return this.http
       .post(
@@ -1237,11 +1214,8 @@ export class ClientService {
       );
   }
 
-  getClientSteps(id) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+  getClientSteps(id: number) {
+    const myHeader = this.buildAuthHeaders();
 
     return this.http
       .get(this.baseUrl + `getClientSteps?clientId=${id}`, { headers: myHeader })
@@ -1258,10 +1232,7 @@ export class ClientService {
   }
 
   removeClientStep(id: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http.delete(this.baseUrl + `client_steps/${id}`, { headers: myHeader })
       .pipe(map((res) => {
         return true;
@@ -1269,10 +1240,7 @@ export class ClientService {
   }
 
   updateClientStep(step: ClientStep) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http.put(this.baseUrl + `client_steps/${step.id}`, { client_step: step }, { headers: myHeader })
       .pipe(
         map((res: any) => {
@@ -1287,10 +1255,7 @@ export class ClientService {
   }
 
   insertSkill(skill: ClientSkill) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
 
     return this.http
       .post(
@@ -1310,11 +1275,8 @@ export class ClientService {
       );
   }
 
-  getClientSkills(id) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+  getClientSkills(id: number) {
+    const myHeader = this.buildAuthHeaders();
 
     return this.http
       .get(this.baseUrl + `getClientSkills?clientId=${id}`, { headers: myHeader })
@@ -1331,10 +1293,7 @@ export class ClientService {
   }
 
   removeClientSkill(id: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
 
     return this.http.delete(this.baseUrl + `client_skills/${id}`, { headers: myHeader }).pipe(
       map((res) => {
@@ -1344,10 +1303,7 @@ export class ClientService {
   }
 
   insertHealthInsurance(insurance: ClientHealthInsurance) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
 
     return this.http
       .post(
@@ -1367,11 +1323,8 @@ export class ClientService {
       );
   }
 
-  getClientHealthInsurance(id) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+  getClientHealthInsurance(id: number) {
+    const myHeader = this.buildAuthHeaders();
 
     return this.http
       .get(this.baseUrl + `getClientHealthInsurance?clientId=${id}`, { headers: myHeader })
@@ -1387,11 +1340,8 @@ export class ClientService {
       );
   }
 
-  getClientPets(id) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+  getClientPets(id: number) {
+    const myHeader = this.buildAuthHeaders();
 
     return this.http
       .get(this.baseUrl + `getClientPets?clientId=${id}`, { headers: myHeader })
@@ -1407,11 +1357,8 @@ export class ClientService {
       );
   }
 
-  getClientCircleOfFriends(id) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+  getClientCircleOfFriends(id: number) {
+    const myHeader = this.buildAuthHeaders();
 
     return this.http
       .get(this.baseUrl + `getFriendsForClient?clientId=${id}`, { headers: myHeader })
@@ -1428,10 +1375,7 @@ export class ClientService {
   }
 
   getAllClientPets() {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
 
     return this.http
       .get(this.baseUrl + `client_pets`, { headers: myHeader })
@@ -1447,11 +1391,28 @@ export class ClientService {
       );
   }
 
-  getClientHousehold(household_id) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+  addPetFoodRequestedItems(): Observable<PetFoodRequestsResponse> {
+    const myHeader = this.buildAuthHeaders();
+    return this.http
+      .post<PetFoodRequestsResponse>(
+        this.baseUrl + "addPetFoodRequestedItems",
+        {},
+        { headers: myHeader }
+      )
+      .pipe(
+        map((res: PetFoodRequestsResponse) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  getClientHousehold(household_id: number) {
+    const myHeader = this.buildAuthHeaders();
 
     return this.http
       .get(this.baseUrl + `getHousehold?householdId=${household_id}`, {
@@ -1470,10 +1431,7 @@ export class ClientService {
   }
 
   removeReferralResource(id: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http.delete(this.baseUrl + `client_referrals/${id}`, { headers: myHeader, })
       .pipe(map((res) => {
         return true;
@@ -1481,10 +1439,7 @@ export class ClientService {
   }
 
   removeClientFriend(id: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http.delete(this.baseUrl + `client_circle_of_friends/${id}`, { headers: myHeader, })
       .pipe(map((res) => {
         return true;
@@ -1492,10 +1447,7 @@ export class ClientService {
   }
 
   deletedRequestedItem(id: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http.delete(this.baseUrl + `requested_items/${id}`, { headers: myHeader })
       .pipe(map((res) => {
         return true;
@@ -1503,10 +1455,7 @@ export class ClientService {
   }
 
   removeLike(id: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http.delete(this.baseUrl + `client_likes/${id}`, { headers: myHeader })
       .pipe(map((res) => {
         return true;
@@ -1514,10 +1463,7 @@ export class ClientService {
   }
 
   removeHealthInsurance(id: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http.delete(this.baseUrl + `client_health_insurances/${id}`, { headers: myHeader })
       .pipe(map((res) => {
         return true;
@@ -1525,10 +1471,7 @@ export class ClientService {
   }
 
   removeIncome(id: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http.delete(this.baseUrl + `client_incomes/${id}`, { headers: myHeader })
       .pipe(map((res) => {
         return true;
@@ -1536,10 +1479,7 @@ export class ClientService {
   }
 
   removeNextOfKin(id: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http.delete(this.baseUrl + `client_next_of_kins/${id}`, { headers: myHeader })
       .pipe(map((res) => {
         return true;
@@ -1547,10 +1487,7 @@ export class ClientService {
   }
 
   removeAppearance(id: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http.delete(this.baseUrl + `client_interactions/${id}`, { headers: myHeader })
       .pipe(map((res) => {
         return true;
@@ -1558,10 +1495,7 @@ export class ClientService {
   }
 
   removeDislike(id: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http.delete(this.baseUrl + `client_dislikes/${id}`, { headers: myHeader })
       .pipe(map((res) => {
         return true;
@@ -1569,10 +1503,7 @@ export class ClientService {
   }
 
   removeTent(id: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http.delete(this.baseUrl + `client_tents/${id}`, { headers: myHeader })
       .pipe(map((res) => {
         return true;
@@ -1580,10 +1511,7 @@ export class ClientService {
   }
 
   removePet(id: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http.delete(this.baseUrl + `client_pets/${id}`, { headers: myHeader })
       .pipe(map((res) => {
         return true;
@@ -1591,10 +1519,7 @@ export class ClientService {
   }
 
   removeHealthConcern(id: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http.delete(this.baseUrl + `health_concerns/${id}`, { headers: myHeader })
       .pipe(map((res) => {
         return true;
@@ -1602,10 +1527,7 @@ export class ClientService {
   }
 
   removeNote(id: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http.delete(this.baseUrl + `client_notes/${id}`, { headers: myHeader })
       .pipe(map((res) => {
         return true;
@@ -1613,10 +1535,7 @@ export class ClientService {
   }
 
   removePrayerRequestNeed(id: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http.delete(this.baseUrl + `prayer_request_and_needs/${id}`, { headers: myHeader })
       .pipe(map((res) => {
         return true;
@@ -1624,10 +1543,7 @@ export class ClientService {
   }
 
   completePrayerRequestNeed(thePrayerRequestNeed: PrayerRequestAndNeed) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .patch(
         this.baseUrl + `prayer_request_and_needs/${thePrayerRequestNeed.id}`,
@@ -1647,10 +1563,7 @@ export class ClientService {
   }
 
   deleteGoalAndNextStep(id: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http.delete(this.baseUrl + `goals_and_next_steps/${id}`, { headers: myHeader })
       .pipe(map((res) => {
         return true;
@@ -1658,10 +1571,7 @@ export class ClientService {
   }
 
   completeGoalAndNextStep(theGoal: GoalsNextStep) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .patch(
         this.baseUrl + `goals_and_next_steps/${theGoal.id}`,
@@ -1681,10 +1591,7 @@ export class ClientService {
   }
 
   receivedRequestedItem(id: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .get(this.baseUrl + `receivedRequestedItem/?requestId=${id}`, {
         headers: myHeader,
@@ -1702,10 +1609,7 @@ export class ClientService {
   }
 
   getRecentReceivedItems(id: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .get(this.baseUrl + `recentReceivedItems?clientId=${id}`, {
         headers: myHeader,
@@ -1723,10 +1627,7 @@ export class ClientService {
   }
 
   insertClientReferralResource(referralsResources: ReferralsResources) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http.post(this.baseUrl + `client_referrals`, { client_referral: referralsResources }, { headers: myHeader })
       .pipe(
         map((res: any) => {
@@ -1741,10 +1642,7 @@ export class ClientService {
   }
 
   getGoalsAndNextSteps(id: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .get(this.baseUrl + `goalsForClient?clientId=${id}`, {
         headers: myHeader,
@@ -1762,10 +1660,7 @@ export class ClientService {
   }
 
   insertGoalAndStep(goal: GoalsNextStep) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .post(
         this.baseUrl + `goals_and_next_steps`,
@@ -1785,10 +1680,7 @@ export class ClientService {
   }
 
   insertClientIncome(income: ClientIncome) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .post(
         this.baseUrl + `client_incomes`,
@@ -1808,10 +1700,7 @@ export class ClientService {
   }
 
   updateClientIncome(theIncome: ClientIncome) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .patch(
         this.baseUrl + `client_incomes/${theIncome.id}`,
@@ -1831,10 +1720,7 @@ export class ClientService {
   }
 
   getClientIncomes(id: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .get(this.baseUrl + `getClientIncomes?clientId=${id}`, {
         headers: myHeader,
@@ -1852,10 +1738,7 @@ export class ClientService {
   }
 
   updateNextOfKin(theNextOfKin: ClientNextOfKin) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .patch(
         this.baseUrl + `client_next_of_kins/${theNextOfKin.id}`,
@@ -1875,10 +1758,7 @@ export class ClientService {
   }
 
   insertClientNextOfKin(nextOfKin: ClientNextOfKin) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .post(
         this.baseUrl + `client_next_of_kins`,
@@ -1898,10 +1778,7 @@ export class ClientService {
   }
 
   getClientNextOfKins(id: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .get(this.baseUrl + `getClientNextOfKins?clientId=${id}`, {
         headers: myHeader,
@@ -1919,10 +1796,7 @@ export class ClientService {
   }
 
   getClientPrayerRequests(id: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .get(this.baseUrl + `prayerRequestsForClient?clientId=${id}`, {
         headers: myHeader,
@@ -1940,10 +1814,7 @@ export class ClientService {
   }
 
   getClientReferrals(client_id: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .get(this.baseUrl + `getClientReferrals?clientId=${client_id}`, {
         headers: myHeader,
@@ -1961,10 +1832,7 @@ export class ClientService {
   }
 
   insertClientPrayerRequest(prayerRequest: PrayerRequestAndNeed) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .post(
         this.baseUrl + `prayer_request_and_needs`,
@@ -1983,68 +1851,56 @@ export class ClientService {
       );
   }
 
-    insertBarrier(barrier: ClientBarrier) {
-      const myHeader = new HttpHeaders({
-        "Content-Type": "application/json",
-        Authorization: window.localStorage.getItem("apiToken"),
-      });
-      return this.http
-        .post(
-          this.baseUrl + `client_barriers`,
-          { client_barrier: barrier },
-          { headers: myHeader }
-        )
-        .pipe(
-          map((res: any) => {
-            if (res.message === "invalid-token") {
-              window.localStorage.removeItem("apiToken");
-              this.router.navigate(["/application-login"]);
-            }
-            return res;
-          }),
-          catchError(this.handleError)
-        );
-    }
+  insertBarrier(barrier: ClientBarrier) {
+    const myHeader = this.buildAuthHeaders();
+    return this.http
+      .post(
+        this.baseUrl + `client_barriers`,
+        { client_barrier: barrier },
+        { headers: myHeader }
+      )
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
 
-    removeBarrier(id: number) {
-      const myHeader = new HttpHeaders({
-        "Content-Type": "application/json",
-        Authorization: window.localStorage.getItem("apiToken"),
-      });
-      return this.http.delete(this.baseUrl + `client_barriers/${id}`, { headers: myHeader })
-        .pipe(
-          map((res) => {
-            return true;
-          }),
-          catchError(this.handleError)
-        );
-    }
+  removeBarrier(id: number) {
+    const myHeader = this.buildAuthHeaders();
+    return this.http.delete(this.baseUrl + `client_barriers/${id}`, { headers: myHeader })
+      .pipe(
+        map((res) => {
+          return true;
+        }),
+        catchError(this.handleError)
+      );
+  }
 
-    getClientBarriers(client_id: number) {
-      const myHeader = new HttpHeaders({
-        "Content-Type": "application/json",
-        Authorization: window.localStorage.getItem("apiToken"),
-      });
-      return this.http.get(this.baseUrl + `getClientBarriers?clientId=${client_id}`, {
-          headers: myHeader,
-        })
-        .pipe(
-          map((res: any) => {
-            if (res.message === "invalid-token") {
-              window.localStorage.removeItem("apiToken");
-              this.router.navigate(["/application-login"]);
-            }
-            return res;
-          }),
-          catchError(this.handleError)
-        );
-    }
+  getClientBarriers(client_id: number) {
+    const myHeader = this.buildAuthHeaders();
+    return this.http.get(this.baseUrl + `getClientBarriers?clientId=${client_id}`, {
+      headers: myHeader,
+    })
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
 
   getHeatEquipmentNotReturned(clientId: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return forkJoin([
       this.http.get(
         this.baseUrl + `getHeatersNotReturnedForClient?clientId=${clientId}`,
@@ -2060,7 +1916,7 @@ export class ClientService {
       ),
     ]).pipe(
       map((data) => {
-        const resultArray = [];
+      const resultArray: any[] = [];
         const heaters = data[0] as any[];
         const hoses = data[1] as any[];
         const tanks = data[2] as any[];
@@ -2095,12 +1951,9 @@ export class ClientService {
   }
 
   getAllRequestedItems() {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
-      .get(this.baseUrl + `getAllRequestedItems`, { headers: myHeader })
+      .get(this.baseUrl + `requested_items`, { headers: myHeader })
       .pipe(
         map((res: any) => {
           if (res.message === "invalid-token") {
@@ -2114,10 +1967,7 @@ export class ClientService {
   }
 
   getClientLoanedTanks(clientId: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .get(this.baseUrl + `getTanksLoanedToClient?clientId=${clientId}`, {
         headers: myHeader,
@@ -2135,10 +1985,7 @@ export class ClientService {
   }
 
   getClientLoanedHoses(clientId: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .get(this.baseUrl + `getHosesLoanedToClient?clientId=${clientId}`, {
         headers: myHeader,
@@ -2156,10 +2003,7 @@ export class ClientService {
   }
 
   loanTank(clientId: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .post(
         this.baseUrl + `client_tank_interactions`,
@@ -2179,10 +2023,7 @@ export class ClientService {
   }
 
   loanHose(clientId: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .post(
         this.baseUrl + `client_hose_interactions`,
@@ -2203,11 +2044,8 @@ export class ClientService {
       );
   }
 
-  updateTankInteraction(interactionId, statusId) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+  updateTankInteraction(interactionId: number, statusId: number) {
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .get(
         this.baseUrl +
@@ -2226,11 +2064,8 @@ export class ClientService {
       );
   }
 
-  updateHoseInteraction(interactionId, statusId) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+  updateHoseInteraction(interactionId: number, statusId: number) {
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .get(
         this.baseUrl +
@@ -2249,11 +2084,8 @@ export class ClientService {
       );
   }
 
-  updateHeaterInteraction(interactionId, statusId) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+  updateHeaterInteraction(interactionId: number, statusId: number) {
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .get(
         this.baseUrl +
@@ -2272,11 +2104,8 @@ export class ClientService {
       );
   }
 
-  getMailboxForClient(clientId: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+  getMailboxForClient(clientId: number): Observable<ClientMailbox | null> {
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .get(this.baseUrl + `getMailboxForClient?clientId=${clientId}`, { headers: myHeader })
       .pipe(
@@ -2287,15 +2116,68 @@ export class ClientService {
           }
           return res;
         }),
+        catchError(error => error.status === 404 ? of(null) : this.handleError(error))
+      );
+  }
+
+  getClientRentDetails(clientId: number): Observable<ClientRentDetail | null> {
+    const myHeader = this.buildAuthHeaders();
+    return this.http
+      .get<ClientRentDetail>(this.baseUrl + `getClientRentDetails?clientId=${clientId}`, { headers: myHeader })
+      .pipe(
+        map((res: any) => {
+          if (res && res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(error => error.status === 404 ? of(null) : this.handleError(error))
+      );
+  }
+
+  createClientRentDetail(rentDetail: ClientRentDetail) {
+    const myHeader = this.buildAuthHeaders();
+    return this.http
+      .post<ClientRentDetail>(
+        this.baseUrl + "client_rent_details",
+        { client_rent_detail: rentDetail },
+        { headers: myHeader }
+      )
+      .pipe(
+        map((res: any) => {
+          if (res && res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  updateClientRentDetail(rentDetail: ClientRentDetail) {
+    const myHeader = this.buildAuthHeaders();
+    return this.http
+      .patch<ClientRentDetail>(
+        this.baseUrl + `client_rent_details/${rentDetail.id}`,
+        { client_rent_detail: rentDetail },
+        { headers: myHeader }
+      )
+      .pipe(
+        map((res: any) => {
+          if (res && res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
         catchError(this.handleError)
       );
   }
 
   insertClientMailbox(clientMailbox: ClientMailbox) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .post(
         this.baseUrl + `client_mailboxes`,
@@ -2315,10 +2197,7 @@ export class ClientService {
   }
 
   removeClientMailbox(id: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .delete(this.baseUrl + `client_mailboxes/${id}`, { headers: myHeader })
       .pipe(
@@ -2330,10 +2209,7 @@ export class ClientService {
   }
 
   updateClientMailbox(theMailbox: ClientMailbox) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .put(
         this.baseUrl + `client_mailboxes/${theMailbox.id}`,
@@ -2353,10 +2229,7 @@ export class ClientService {
   }
 
   getAuthorizedMailAccessors(mailboxId: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .get(this.baseUrl + `getAuthorizedMailAccessors?mailboxId=${mailboxId}`, { headers: myHeader })
       .pipe(
@@ -2372,10 +2245,7 @@ export class ClientService {
   }
 
   insertAuthorizedMailAccess(person: AuthorizedMailAccesses) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .post(
         this.baseUrl + `authorized_mail_accesses`,
@@ -2395,10 +2265,7 @@ export class ClientService {
   }
 
   removeAuthorizedMailAccess(id: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .delete(this.baseUrl + `authorized_mail_accesses/${id}`, { headers: myHeader })
       .pipe(
@@ -2409,11 +2276,105 @@ export class ClientService {
       );
   }
 
+  getClientReleaseAcknowledgements(clientId: number) {
+    const myHeader = this.buildAuthHeaders();
+    return this.http
+      .get(this.baseUrl + `getClientReleaseAcknowledgements?clientId=${clientId}`, { headers: myHeader })
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          }
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  insertReleaseAcknowledgement(acknowledgement: ReleaseAcknowledgement) {
+    const myHeader = this.buildAuthHeaders();
+    return this.http
+      .post(
+        this.baseUrl + `client_release_acknowledgements`,
+        { client_release_acknowledgement: acknowledgement },
+        { headers: myHeader }
+      )
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          } else {
+            return res;
+          }
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  updateReleaseAcknowledgement(acknowledgement: ReleaseAcknowledgement) {
+    const myHeader = this.buildAuthHeaders();
+    return this.http
+      .put(
+        this.baseUrl + `client_release_acknowledgements/${acknowledgement.id}`,
+        { client_release_acknowledgement: acknowledgement },
+        { headers: myHeader }
+      )
+      .pipe(
+        map((res: any) => {
+          if (res.message === "invalid-token") {
+            window.localStorage.removeItem("apiToken");
+            this.router.navigate(["/application-login"]);
+          } else {
+            return res;
+          }
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  removeReleaseAcknowledgement(id: number) {
+    const myHeader = this.buildAuthHeaders();
+    return this.http.delete(this.baseUrl + `client_release_acknowledgements/${id}`, { headers: myHeader })
+      .pipe(
+        map((res) => {
+          return true;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  getClientVitalRecords(clientId: number) {
+    const myHeader = this.buildAuthHeaders();
+    return this.http
+      .get<ClientVitalRecord[]>(this.baseUrl + `getClientVitalRecords?clientId=${clientId}`, { headers: myHeader })
+      .pipe(catchError(this.handleError));
+  }
+
+  insertClientVitalRecord(record: ClientVitalRecord): Observable<ClientVitalRecord> {
+    const myHeader = this.buildAuthHeaders();
+    return this.http
+      .post<ClientVitalRecord>(this.baseUrl + 'client_vital_records', { client_vital_record: record }, { headers: myHeader })
+        .pipe(catchError(this.handleError)) as Observable<ClientVitalRecord>;
+  }
+
+      updateClientVitalRecord(record: ClientVitalRecord): Observable<ClientVitalRecord> {
+    const myHeader = this.buildAuthHeaders();
+    return this.http
+      .put<ClientVitalRecord>(this.baseUrl + `client_vital_records/${record.id}`, { client_vital_record: record }, { headers: myHeader })
+      .pipe(catchError(this.handleError)) as Observable<ClientVitalRecord>;
+  }
+
+  retrieveClientVitalRecord(id: number) {
+    const myHeader = this.buildAuthHeaders();
+    return this.http
+      .patch<ClientVitalRecord>(this.baseUrl + `client_vital_records/${id}/retrieve`, {}, { headers: myHeader })
+      .pipe(catchError(this.handleError));
+  }
+
   insertCaseworker(caseworker: Caseworker) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .post(
         this.baseUrl + `client_caseworkers`,
@@ -2433,10 +2394,7 @@ export class ClientService {
   }
 
   removeClientCaseworker(id: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http.delete(this.baseUrl + `client_caseworkers/${id}`, { headers: myHeader })
       .pipe(
         map((res) => {
@@ -2447,10 +2405,7 @@ export class ClientService {
   }
 
   getClientCaseworkers(clientId: number) {
-    const myHeader = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: window.localStorage.getItem("apiToken"),
-    });
+    const myHeader = this.buildAuthHeaders();
     return this.http
       .get(this.baseUrl + `getClientCaseworkers?clientId=${clientId}`, { headers: myHeader })
       .pipe(
@@ -2481,6 +2436,14 @@ export class ClientService {
   }
 
   private handleError(error: Response | any) {
+    if (error.status === 401 || error.error?.type === "invalid-token" || error.error?.type === "token-expired") {
+      window.localStorage.removeItem("apiToken");
+      window.localStorage.removeItem("tokenExpires");
+      window.localStorage.removeItem("adminEmail");
+      window.localStorage.removeItem("adminRole");
+      window.localStorage.removeItem("isAdmin");
+      this.router.navigate(["/application-login"]);
+    }
     let errMsg: string;
     if (error instanceof Response) {
       const body = error.json() || "";

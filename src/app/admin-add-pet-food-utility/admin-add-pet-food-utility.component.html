@@ -4,13 +4,14 @@
     </div>
     <div class="panel-body" style="opacity: 0.93">
         <div class="col-md-12 col-lg-12">
-            <button class="btn btn-primary mt-3 mb-3" (click)="addPetFood()">Add Pet Food Items</button>
+            <button class="btn btn-primary mt-3 mb-3" (click)="addPetFood()" [disabled]="petFoodAdderRunning">Add Pet Food Items</button>
             <p *ngIf="countItemsAdded > 0 || processComplete">
                 Items Added: {{countItemsAdded}}
             </p>
             <p *ngIf="petFoodAdderRunning">
                 Running...
             </p>
+            <div *ngIf="processError" class="alert alert-danger">{{processError}}</div>
         </div>
     </div>
     <div class="card-footer">

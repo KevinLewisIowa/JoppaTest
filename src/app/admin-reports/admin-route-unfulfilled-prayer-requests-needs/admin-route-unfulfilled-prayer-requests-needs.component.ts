@@ -1,15 +1,17 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MainService } from 'app/services/main.service';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-admin-route-unfulfilled-prayer-requests-needs',
   templateUrl: './admin-route-unfulfilled-prayer-requests-needs.component.html',
   styleUrls: ['./admin-route-unfulfilled-prayer-requests-needs.component.css']
 })
-export class AdminRouteUnfulfilledPrayerRequestsNeedsComponent implements OnInit {
+export class AdminRouteUnfulfilledPrayerRequestsNeedsComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = ['first_name', 'preferred_name', 'last_name', 'request_or_note', 'created_at'];
   dataSource: MatTableDataSource<any>;
 
@@ -17,6 +19,7 @@ export class AdminRouteUnfulfilledPrayerRequestsNeedsComponent implements OnInit
 
   unfulfilledPrayerRequestsNeeds = [];
   filterDate: string;
+  private destroy$ = new Subject<void>();
 
   constructor(private service: MainService) { };
 
@@ -44,14 +47,16 @@ export class AdminRouteUnfulfilledPrayerRequestsNeedsComponent implements OnInit
   }
 
   fetchData(date: string) {
-    this.service.getAdminRouteUnfulfilledPrayerRequestsNeeds(date).subscribe(data => {
-      console.log(JSON.stringify(data));
-      this.unfulfilledPrayerRequestsNeeds = data;
-      this.dataSource = new MatTableDataSource(this.unfulfilledPrayerRequestsNeeds);
-      if (this.sort) {
-        this.dataSource.sort = this.sort;
-      }
-    }, error => console.log(error));
+    this.service.getAdminRouteUnfulfilledPrayerRequestsNeeds(date)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(data => {
+        console.log(JSON.stringify(data));
+        this.unfulfilledPrayerRequestsNeeds = data;
+        this.dataSource = new MatTableDataSource(this.unfulfilledPrayerRequestsNeeds);
+        if (this.sort) {
+          this.dataSource.sort = this.sort;
+        }
+      }, error => console.log(error));
   }
 
   formatDate(date: Date): string {
@@ -86,5 +91,10 @@ export class AdminRouteUnfulfilledPrayerRequestsNeedsComponent implements OnInit
     );
 
     return [headers.join(','), ...csvRows].join('\r\n');
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

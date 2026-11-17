@@ -1,4 +1,5 @@
 <div class="card panel-info" style="opacity: 0.92">
+  <div *ngIf="loadError" class="alert alert-danger">{{ loadError }}</div>
   <div class="card-header text-center" style="opacity: 0.93">
     <h2 align="left">{{ thisRoute.name }}</h2>
     <h4 align="left">

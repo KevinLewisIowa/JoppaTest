@@ -16,6 +16,7 @@ export class IncomeComponent implements OnInit {
   monthly_money: string = '';
   what_income_from: string = '';
   other_income_from: string = '';
+  notes: string = '';
 
   constructor(private modalService: NgbModal, private service: ClientService) {
 
@@ -31,6 +32,7 @@ export class IncomeComponent implements OnInit {
   this.monthly_money = '';
   this.what_income_from = '';
   this.other_income_from = '';
+  this.notes = '';
   }
 
   submitIncome() {
@@ -45,6 +47,7 @@ export class IncomeComponent implements OnInit {
       } else {
         income.what_income_from = this.what_income_from;
       }
+      income.notes = this.notes;
       this.service.insertClientIncome(income).subscribe(income_created => {
         if (income_created != null && income_created.id != null) {
           this.incomeAdded.emit(income_created);

@@ -4,16 +4,19 @@
   </div>
   <div class="panel-body">
     <mat-form-field appearance="standard">
-      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter" #input/>
+      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter camps or routes" #input/>
     </mat-form-field>
+    <div *ngIf="loadError" class="alert alert-danger">{{ loadError }}</div>
+    <div *ngIf="isLoading" class="text-muted">Loading camps...</div>
   </div>
   <div class="panel-body">
     <div>
-      <mat-table #table [dataSource]="dataSource" matSort matSortActive="is_active" matSortDirection="desc">
+      <mat-table #table [dataSource]="dataSource" matSort matSortActive="camp_name" matSortDirection="asc">
         <ng-container matColumnDef="route_name">
           <mat-header-cell *matHeaderCellDef mat-sort-header>Route</mat-header-cell>
           <mat-cell *matCellDef="let camp">
-            <select type="string" placeholder="route" style="max-width: 75%;" [(ngModel)]="camp.route_id">
+            <select type="string" placeholder="route" style="max-width: 75%;" [(ngModel)]="camp.route_id"
+              (ngModelChange)="onCampChanged(camp)">
               <option *ngFor="let route of routes" [value]="route.id">{{route.name}}</option>
             </select>
           </mat-cell>
@@ -26,7 +29,8 @@
 
         <ng-container matColumnDef="position">
           <mat-header-cell *matHeaderCellDef mat-sort-header>Position</mat-header-cell>
-          <mat-cell *matCellDef="let camp"><input type="number" placeholder="position" style="max-width: 75%;" [(ngModel)]="camp.position" /></mat-cell>
+          <mat-cell *matCellDef="let camp"><input type="number" placeholder="position" style="max-width: 75%;"
+            [(ngModel)]="camp.position" (ngModelChange)="onCampChanged(camp)" /></mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="is_active">
@@ -37,7 +41,7 @@
         <ng-container matColumnDef="remain_on_route">
           <mat-header-cell *matHeaderCellDef mat-sort-header>Remain On Route?</mat-header-cell>
           <mat-cell *matCellDef="let camp">
-            <input type="checkbox" [(ngModel)]="camp.remain_on_route" />
+            <input type="checkbox" [(ngModel)]="camp.remain_on_route" (ngModelChange)="onCampChanged(camp)" />
           </mat-cell>
         </ng-container>
 
@@ -45,13 +49,15 @@
         <mat-row *matRowDef="let camp; columns: displayedColumns"></mat-row>
       </mat-table>
 
-      <mat-paginator [pageSizeOptions]="[50, 25, 75, 100]"></mat-paginator>
+      <mat-paginator [length]="totalCamps" [pageSize]="50" [pageSizeOptions]="[25, 50, 75, 100]"></mat-paginator>
     </div>
   </div>
   <div class="card-footer">
     <button routerLink="/adminHome" class="btn btn-primary" style="float: left" (click)="back()">
       <fa-icon [icon]="backIcon"></fa-icon> Don't Save
     </button>
-    <button class="btn btn-primary" style="float: right" (click)="submitCamp()">Save</button>
+    <div *ngIf="saveError" class="alert alert-danger" style="float: right">{{ saveError }}</div>
+    <button class="btn btn-primary" style="float: right" (click)="submitCamp()"
+      [disabled]="isSaving || !hasUnsavedChanges">{{ isSaving ? 'Saving...' : 'Save' }}</button>
   </div>
 </div>

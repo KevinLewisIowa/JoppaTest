@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Heater } from '../models/heater';
 import { HeaterType } from '../models/heater-type';
 import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
@@ -6,18 +6,21 @@ import { MainService } from '../services/main.service';
 import { Router } from '@angular/router';
 import { HeaterStatus } from '../models/heater-status';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-create-heating-unit',
   templateUrl: './create-heating-unit.component.html',
   styleUrls: ['./create-heating-unit.component.css']
 })
-export class CreateHeatingUnitComponent implements OnInit {
+export class CreateHeatingUnitComponent implements OnInit, OnDestroy {
   theHeater: Heater;
   heaterForm: UntypedFormGroup;
   heaterTypes: HeaterType[];
   heaterStatuses: HeaterStatus[];
   backIcon = faChevronLeft;
+  private destroy$ = new Subject<void>();
 
 
   constructor(private mainService: MainService, private fb: UntypedFormBuilder,
@@ -40,15 +43,19 @@ export class CreateHeatingUnitComponent implements OnInit {
   }
 
   getHeaterTypes(): void {
-    this.mainService.getHeaterTypes().subscribe(heaterTypes => {
-      this.heaterTypes = heaterTypes;
-    }, err => {console.log(err)});
+    this.mainService.getHeaterTypes()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(heaterTypes => {
+        this.heaterTypes = heaterTypes;
+      }, err => {console.log(err)});
   }
 
   getHeaterStatuses(): void {
-    this.mainService.getHeaterStatuses().subscribe(heaterStatuses => {
-      this.heaterStatuses = heaterStatuses;
-    }, err => {console.log(err)});
+    this.mainService.getHeaterStatuses()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(heaterStatuses => {
+        this.heaterStatuses = heaterStatuses;
+      }, err => {console.log(err)});
   }
 
   back() {
@@ -60,12 +67,18 @@ export class CreateHeatingUnitComponent implements OnInit {
     this.theHeater.heater_type_id = this.heaterForm.get('heater_type_id').value;
     this.theHeater.heater_status_id = 1;
     this.theHeater.is_active = true;
-    this.mainService.insertHeater(this.theHeater).subscribe(data => {
-      this.router.navigate([`adminHome`]);
-    }, error => {
-      console.log(error);
-      alert('Error creating heater.  There may already be a heater with the same serial number.  Please verify this heater has not already been entered.');
-    });
+    this.mainService.insertHeater(this.theHeater)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(data => {
+        this.router.navigate([`adminHome`]);
+      }, error => {
+        console.log(error);
+        alert('Error creating heater.  There may already be a heater with the same serial number.  Please verify this heater has not already been entered.');
+      });
   }
 
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 }

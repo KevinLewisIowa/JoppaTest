@@ -1,23 +1,28 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ClientService } from '../../services/client.service';
 import { Client } from 'app/models/client';
 import { Appearance } from 'app/models/appearance';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 @Component({
   selector: 'app-new-clients-report',
   templateUrl: './new-clients-report.component.html',
   styleUrls: ['./new-clients-report.component.css']
 })
-export class NewClientsReportComponent implements OnInit {
+export class NewClientsReportComponent implements OnInit, OnDestroy {
   clients: any[] = [];
+  private destroy$ = new Subject<void>();
   constructor(private service: ClientService) { };
   backIcon = faChevronLeft;
 
   ngOnInit() {
-    this.service.getClientsNewToCamps().subscribe(data => {
-      this.clients = data;
-      console.log(JSON.stringify(data));
-    }, error => {console.log(error)});
+    this.service.getClientsNewToCamps()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(data => {
+        this.clients = data;
+        console.log(JSON.stringify(data));
+      }, error => {console.log(error)});
   }
 
   confirm(theClient: Client) {
@@ -33,8 +38,16 @@ export class NewClientsReportComponent implements OnInit {
     }
     theClient.previous_camp_id = theClient.current_camp_id;
 
-    this.service.updateClient(theClient).subscribe(data => {
-      this.clients = this.clients.filter(w => w.id !== theClient.id);
-    });
+    this.service.updateClient(theClient)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(data => {
+        this.clients = this.clients.filter(w => w.id !== theClient.id);
+      });
   }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
 }

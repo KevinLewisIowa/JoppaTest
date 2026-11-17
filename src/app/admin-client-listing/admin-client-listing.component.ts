@@ -1,83 +1,91 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { ClientService } from 'app/services/client.service';
 import { Router } from '@angular/router';
 import { MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-paginator';
 import { MatSort } from '@angular/material/sort';
-import { MatLegacyTableDataSource as MatTableDataSource, MatLegacyTable as MatTable } from '@angular/material/legacy-table';
-import { faChevronLeft, faPlus, faFlag, faCamera } from '@fortawesome/free-solid-svg-icons';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
+import { faChevronLeft, faPlus, faFlag, faCamera, faFire } from '@fortawesome/free-solid-svg-icons';
 import { Client } from 'app/models/client';
-import { Note } from 'app/models/note';
+import { Subscription, Subject, EMPTY } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, switchMap, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-admin-client-listing',
   templateUrl: './admin-client-listing.component.html',
   styleUrls: ['./admin-client-listing.component.css']
 })
-export class AdminClientListingComponent implements OnInit {
-  displayedColumns = ['first_name', 'middle_name', 'last_name', 'preferred_name', 'phone', 'birth_date', 'route_name', 'camp_name', 'status', 'household_id', 'updated_at'];
-  clients: any[] = [];
-  dataSource: MatTableDataSource<any>;
+export class AdminClientListingComponent implements OnInit, AfterViewInit, OnDestroy {
+  displayedColumns = ['id', 'first_name', 'middle_name', 'last_name', 'preferred_name', 'phone', 'birth_date', 'route_name', 'camp_name', 'status', 'household_id', 'updated_at'];
+  clients: Client[] = [];
+  dataSource = new MatTableDataSource<Client>([]);
+  totalClients = 0;
+  isLoading = false;
+  loadError = '';
   backIcon = faChevronLeft;
   flagIcon = faFlag;
+  fireIcon = faFire;
   cameraIcon = faCamera;
   pastDate: Date = new Date();
   createIcon = faPlus;
+  private destroy$ = new Subject<void>();
+  private filterInput$ = new Subject<string>();
+  private loadRequests$ = new Subject<void>();
+  private filterValue = '';
+  private sortBy = 'updated_at';
+  private sortDirection = 'desc';
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
 
   constructor(private clientService: ClientService, private router: Router) {
     window.localStorage.removeItem('routeId');
-
-    // this.clientService.seenAndServicedReport('2024-01-01', '2024-11-17').subscribe(data => {
-    //   console.log('seenAndServiced ' + JSON.stringify(data));
-    // });
-
-    this.clientService.getClientsByName('').subscribe(data => {
-      console.log('Number of clients: ' + data.length)
-      this.clients = data;
-
-      // Set hasAttentionNote for each client, throttled in batches of 15
-      (async () => {
-        await this.processClientsInBatches(this.clients, 25);
-      })();
-
-      this.dataSource = new MatTableDataSource(this.clients);
-      this.dataSource.sort = this.sort;
-      this.sort.active = "updated_at";
-      this.sort.direction = "desc";
-      this.dataSource.sortingDataAccessor = (item, property) => {
-        switch (property) {
-          case 'updated_at':
-            return new Date(item.last_interaction_date);
-          default: return item[property];
-        }
-      };
-      this.dataSource.paginator = this.paginator;
-
-      // displayedColumns = ['first_name', 'last_name', 'preferred_name', 'phone', 'birth_date', 'route_name', 'camp_name', 'status', 'household_id', 'updated_at'];
-      this.dataSource.filterPredicate = (data, filter: string) => {
-        const filterValue = filter.trim().toLowerCase();
-        const firstLastName = `${data.first_name} ${data.last_name}`.toLowerCase();
-        const firstMiddleLastName = `${data.first_name} ${data.middle_name} ${data.last_name}`.toLowerCase();
-        const preferredLastName = `${data.preferred_name} ${data.last_name}`.toLowerCase();
-        return firstLastName.includes(filterValue) ||
-          firstMiddleLastName.includes(filterValue) ||
-          preferredLastName.includes(filterValue) ||
-          (data.phone != null && data.phone.toLowerCase().includes(filterValue)) ||
-          (data.birth_date != null && data.birth_date.toLowerCase().includes(filterValue)) ||
-          (data.route_name != null && data.route_name.toLowerCase().includes(filterValue)) ||
-          (data.camp_name != null && data.camp_name.toLowerCase().includes(filterValue)) ||
-          (data.status != null && data.status.toLowerCase().includes(filterValue)) ||
-          (data.updated_at != null && data.updated_at.toLowerCase().includes(filterValue)) ||
-          (data.last_name != null && data.last_name.toLowerCase().includes(filterValue)) ||
-          (data.middle_name != null && data.middle_name.toLowerCase().includes(filterValue))
-      };
-    }, error => console.log(error));
   }
 
   ngOnInit() {
     this.pastDate.setDate(this.pastDate.getDate() - 60);
+
+    this.filterInput$
+      .pipe(debounceTime(300), distinctUntilChanged(), takeUntil(this.destroy$))
+      .subscribe(filterValue => {
+        this.filterValue = filterValue;
+        if (this.paginator) this.paginator.pageIndex = 0;
+        this.loadRequests$.next();
+      });
+
+    this.loadRequests$
+      .pipe(
+        switchMap(() => {
+          this.isLoading = true;
+          this.loadError = '';
+          return this.clientService.getPaginatedClients(
+            this.filterValue,
+            (this.paginator ? this.paginator.pageIndex : 0) + 1,
+            this.paginator ? this.paginator.pageSize : 50,
+            this.sortBy,
+            this.sortDirection
+          ).pipe(
+            catchError(error => {
+              console.error('Unable to load clients', error);
+              this.loadError = 'Unable to load clients. Please try again.';
+              this.isLoading = false;
+              return EMPTY;
+            })
+          );
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(response => {
+        this.clients = response.clients;
+        this.clients.forEach(client => {
+          client.hasAttentionNote = !!client.has_attention_note;
+          client.hasHeatingEquipment = !!client.has_heating_equipment;
+          client.hasHeatingEquipmentChecked = true;
+        });
+        this.dataSource.data = this.clients;
+        this.totalClients = response.total;
+        if (this.paginator) this.paginator.length = response.total;
+        this.isLoading = false;
+      });
   }
 
   isOverMonthOld(date: string) {
@@ -89,10 +97,8 @@ export class AdminClientListingComponent implements OnInit {
     this.router.navigate(['/serviceClient']);
   }
 
-
-
   applyFilter(filterValue: string) {
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+    this.filterInput$.next(filterValue.trim());
   }
 
   createClient() {
@@ -104,33 +110,37 @@ export class AdminClientListingComponent implements OnInit {
     this.router.navigate(['/adminHome']);
   }
 
-  // Throttle processClient calls in batches
-  async processClientsInBatches(clients: Client[], batchSize: number = 5) {
-    for (let i = 0; i < clients.length; i += batchSize) {
-      const batch = clients.slice(i, i + batchSize);
-      await Promise.all(batch.map(client => this.processClientAsync(client)));
+  private paginatorSub: Subscription;
+
+  private sortSub: Subscription;
+
+  ngAfterViewInit() {
+    this.sort.active = this.sortBy;
+    this.sort.direction = this.sortDirection as 'asc' | 'desc';
+
+    if (this.paginator) {
+      this.paginatorSub = this.paginator.page.subscribe(() => {
+        this.loadRequests$.next();
+      });
     }
+
+    if (this.sort) {
+      this.sortSub = this.sort.sortChange.subscribe(() => {
+        this.sortBy = this.sort.active;
+        this.sortDirection = this.sort.direction || 'asc';
+        if (this.paginator) this.paginator.pageIndex = 0;
+        this.loadRequests$.next();
+      });
+    }
+
+    this.loadRequests$.next();
   }
 
-  // Promise-based version of processClient
-  processClientAsync(client: Client): Promise<void> {
-    return new Promise((resolve) => {
-      client.hasAttentionNote = !!(client.admin_notes && client.admin_notes.trim() !== '');
-      if (!client.hasAttentionNote) {
-        this.clientService.hasPinnedOrWarningNote(client.id).subscribe(
-          data => {
-            client.hasAttentionNote = data.hasPinnedOrWarningNote;
-            resolve();
-          },
-          error => {
-            console.log(error);
-            resolve();
-          }
-        );
-      } else {
-        resolve();
-      }
-    });
+  ngOnDestroy() {
+    if (this.paginatorSub) this.paginatorSub.unsubscribe();
+    if (this.sortSub) this.sortSub.unsubscribe();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
 }

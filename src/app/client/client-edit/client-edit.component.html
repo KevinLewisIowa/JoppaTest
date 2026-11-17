@@ -208,13 +208,6 @@
           </div>
         </div>
         <div class="form-group row">
-          <label for="dm" class="col-6 col-form-label">Date Moved (Date must be MM/DD/YYYY): </label>
-          <div class="col-6">
-            <input id="dm" type="date" class="form-control" placeholder="mm/dd/yyyy" formControlName="date_moved"
-              style="float:right;" />
-          </div>
-        </div>
-        <div class="form-group row">
           <label for="needs_translation" class="col-6 col-form-label">Needs Translation?</label>
           <div class="col-6">
             <input id="needs_translation" type="checkbox" style="float:right;" formControlName="needs_translation" />
@@ -409,7 +402,9 @@
           <div class="col-6">
             <select id="what_brought_to_des_moines" class="form-control" formControlName="what_brought_to_des_moines"
               #bdm style="float:right;" (change)="onReasonForDesMoinesChange(bdm.value)">
+              <option value="Data Not Collected">Data Not Collected</option>
               <option value="Better Homeless Services">Better Homeless Services</option>
+              <option value="Client Refused">Client Refused</option>
               <option value="Didn’t Share">Didn’t Share</option>
               <option value="Family">Family</option>
               <option value="Fresh Start">Fresh Start</option>
@@ -418,6 +413,7 @@
               <option value="School">School</option>
               <option value="Significant Other">Significant Other</option>
               <option value="Treatment">Treatment</option>
+              <option value="Unknown">Unknown</option>
               <option value="Work/Job">Work/Job</option>
               <option value="Other">Other</option>
             </select>
@@ -507,6 +503,32 @@
           <div class="col-6">
             <textarea id="admin-notes" type="text" class="form-control" rows="3" placeholder="admin notes"
               style="float:right;" formControlName="admin_notes"></textarea>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-12">
+            <h5>Background</h5>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="hometown" class="col-6 col-form-label">Hometown:</label>
+          <div class="col-6">
+            <input id="hometown" type="text" class="form-control" style="float:right;" placeholder="Hometown"
+              formControlName="hometown" />
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="city-grew-up-in" class="col-6 col-form-label">City Grew Up In:</label>
+          <div class="col-6">
+            <input id="city-grew-up-in" type="text" class="form-control" style="float:right;" placeholder="City grew up in"
+              formControlName="city_grew_up_in" />
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="family-currently-lives-in" class="col-6 col-form-label">Family Currently Lives In:</label>
+          <div class="col-6">
+            <input id="family-currently-lives-in" type="text" class="form-control" style="float:right;" placeholder="Family currently lives in"
+              formControlName="family_currently_lives_in" />
           </div>
         </div>
         <div class="form-group row">

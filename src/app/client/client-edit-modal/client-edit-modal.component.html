@@ -306,6 +306,32 @@
         </div>
       </div>
       <div class="form-group row">
+        <div class="col-12">
+          <h5>Background</h5>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="hometown" class="col-6 col-form-label">Hometown:</label>
+        <div class="col-6">
+          <input id="hometown" type="text" class="form-control" style="float:right;" placeholder="Hometown"
+            formControlName="hometown" />
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="city-grew-up-in" class="col-6 col-form-label">City Grew Up In:</label>
+        <div class="col-6">
+          <input id="city-grew-up-in" type="text" class="form-control" style="float:right;" placeholder="City grew up in"
+            formControlName="city_grew_up_in" />
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="family-currently-lives-in" class="col-6 col-form-label">Family Currently Lives In:</label>
+        <div class="col-6">
+          <input id="family-currently-lives-in" type="text" class="form-control" style="float:right;" placeholder="Family currently lives in"
+            formControlName="family_currently_lives_in" />
+        </div>
+      </div>
+      <div class="form-group row">
         <img [src]="url" *ngIf="url != '' && url != null">
         <label for="client-picture" class="col-6 col-form-label">Image:</label>
         <div class="col-6" style="display:flex; align-items:center; justify-content:flex-end">

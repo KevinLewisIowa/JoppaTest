@@ -5,4 +5,5 @@ export class ClientMailbox {
 	verification_type?: string;
 	created_at: Date;
 	updated_at: Date;
+	notes: string;
 }

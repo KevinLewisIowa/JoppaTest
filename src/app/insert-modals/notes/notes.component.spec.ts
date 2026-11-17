@@ -1,3 +1,5 @@
+/// <reference types="jasmine" />
+
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { NotesComponent } from './notes.component';

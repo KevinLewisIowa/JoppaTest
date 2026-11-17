@@ -6,4 +6,5 @@ export class ClientIncome {
     what_income_from: string = undefined;
     created_at: Date = undefined;
     updated_at: Date = undefined;
+    notes: string = undefined;
 }
